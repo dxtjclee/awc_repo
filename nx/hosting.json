@@ -1,0 +1,53 @@
+{
+  "postHandshakeModules": [
+    {
+      "module": "js/hostedNxUtils",
+      "condition": true
+    }
+  ],
+  "queries": {
+    "com.siemens.splm.client.nx.IsOpenInNxSupported": {
+      "commandId": "Awn0NXOpenHosted"
+    },
+    "com.siemens.splm.client.nx.IsAddComponentSupported": {
+      "commandId": "Awn0NXAddComponentHosted"
+    },
+    "com.siemens.splm.client.nx.IsOpenInRelationBrowserSupported": {
+      "commandId": "Awn0NXOpenRelationBrowser"
+    },
+    "com.siemens.splm.client.nx.IsOpenInRequirementLinksSupported": {
+      "commandId": "Awn0NXOpenRequirementLinksHosted"
+    },
+    "com.siemens.splm.client.nx.IsSetDefaultFolderSupported": {
+      "commandId": "Awn0NXSetDefaultFolderHosted"
+    },
+    "com.siemens.splm.client.nx.IsAssociateToNxSupported": {
+      "commandId": "Nxs0AssociateToNX"
+    },
+    "com.siemens.splm.client.nx.IsDisassociateFromNxSupported": {
+      "commandId": "Nxs0DisassociateFromNX"
+    },
+    "com.siemens.splm.client.nx.IsDisassociateItemRevFromNxSupported": {
+      "commandId": "Nxs0DisassociateItemRevFromNX"
+    },
+    "com.siemens.splm.client.nx.IsOpenOldDatasetVersionSupported": {
+      "commandId": "Awn0NXOpenDatasetVersionPanelHosted"
+    }
+  },
+  "hostedComponents": {
+    "com.siemens.splm.client.fileSelect.published.FileSelect": {
+      "componentLocation": "fileSelectComponent"
+    }
+  },
+  "nxCommandsList": [
+    "Awn0NXOpenHosted",
+    "Awn0NXAddComponentHosted",
+    "Awn0NXOpenDatasetVersionPanelHosted",
+    "Awn0NXOpenRequirementLinksHosted",
+    "Awn0NXOpenRelationBrowser",
+    "Awn0NXSetDefaultFolderHosted",
+    "Nxs0AssociateToNX",
+    "Nxs0DisassociateFromNX",
+    "Nxs0DisassociateItemRevFromNX"
+  ]
+}

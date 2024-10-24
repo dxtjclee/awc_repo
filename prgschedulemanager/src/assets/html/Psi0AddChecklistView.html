@@ -1,0 +1,26 @@
+<aw-command-panel caption="i18n.addButtonTitle" context="subPanelContext">
+    <div class="aw-layout-flexColumn" show-when="conditions.isActiveStateAddPanel">
+        <aw-add target-object="ctx.xrtSummaryContextObject" auto-select-on-unique-type="true"
+            include-types="Psi0Checklist" type-filter="Psi0Checklist"
+            visible-tabs="new,palette,search"
+            add-panel-state="fields.addPanelState"
+            sub-panel-context="{...subPanelContext}"
+            active-state="data.activeState"
+            xrt-state="data.xrtState"
+            edit-handler="editHandlers.addPanelEditHandler"
+            project-state="data.projectState">
+        </aw-add>
+        <aw-panel-footer>
+            <!-- panel-footer button for New tab -->
+            <aw-button default="true" action="createObject" visible-when="conditions.isNewTabAddButtonVisible" enable-when="conditions.isNewTabAddButtonEnable && formProp.attributes.valid">
+                <aw-i18n>i18n.addButtonTitle</aw-i18n>
+            </aw-button>
+            <!-- panel-footer button for Palette and Search tab -->
+            <aw-button default="true" action="addChecklist" visible-when="conditions.isPaletteSearchAddButtonVisible" Enable-when="formProp.attributes.valid && conditions.isPaletteSearchTabAddButtonEnable">
+                <aw-i18n>i18n.addButtonTitle</aw-i18n>
+            </aw-button>
+        </aw-panel-footer>
+    </div>
+
+    <aw-add-navigate active-state="data.activeState" project-state="data.projectState" action="actions.setActiveView"></aw-add-navigate>
+</aw-command-panel>

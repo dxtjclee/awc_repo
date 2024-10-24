@@ -1,0 +1,30 @@
+<aw-command-panel caption="i18n.qa0Add" context="subPanelContext">
+    <div class="aw-layout-flexColumn" show-when="data.activeState.value.activeView ==='qa0AddQualityAuditToAuditPlan'">
+        <aw-add 
+            target-object="ctx.selected" 
+            relation-map="data._relationMap"
+            relations="Qa0QualityAuditPlanRel" 
+            auto-select-on-unique-type="true" 
+            include-types="Qa0QualityAudit" 
+            type-filter="Qa0QualityAudit"  
+            visible-tabs="new,palette,search"
+            active-state="data.activeState"
+            add-panel-state="fields.addPanelState"
+            xrt-state="data.xrtState"
+            project-state="data.projectState"
+            edit-handler="editHandlers.addPanelEditHandler"
+            sub-panel-context="{ ...subPanelContext, triggerCreate: data.triggerCreate }">
+        </aw-add>
+        <aw-panel-footer>
+            <!-- panel-footer button for New tab -->
+            <aw-button default="true" action="createObject" enable-when="!ctx.addItemEventProgressing && formProp.attributes.valid" visible-when="conditions.isNewTabAddButtonVisible">
+                <aw-i18n>i18n.qa0Add</aw-i18n>
+            </aw-button>
+            <!-- panel-footer button for Palette and Search tab -->
+            <aw-button default="true" action="createRelationForPaletteOrSearch" visible-when="conditions.isPaletteSearchTabAddButtonVisible">
+                <aw-i18n>i18n.qa0Add</aw-i18n>
+            </aw-button>
+        </aw-panel-footer>
+    </div>
+    <aw-add-navigate active-state="data.activeState" project-state="data.projectState" action="actions.setActiveView"></aw-add-navigate>
+</aw-command-panel>

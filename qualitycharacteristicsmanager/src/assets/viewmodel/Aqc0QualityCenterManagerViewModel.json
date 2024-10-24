@@ -1,0 +1,60 @@
+{
+    "schemaVersion" : "1.0.0",
+    "data":{
+        "_provider": {
+            "priority": 0,
+            "label": {
+                "source": "/i18n/qualitycentermanagerMessages",
+                "key": "summary"
+            },
+            "clientScopeURI": "",
+            "nameToken": "com.siemens.splm.client.qualityCenterManager:qualityCenterMasterDataSummary",
+            "viewModes": {
+                "ListView": {
+                    "primaryWorkArea": "list",
+                    "secondaryWorkArea": false
+                }
+            },
+            "defaultDisplayMode": "ListView",
+            "context": {
+                "search": {
+                    "provider": "Aqc0QualityBaseProvider",
+                    "criteria": {
+                        "parentGUID": "",
+                        "searchStatus": "true",
+                        "catalogueObjectType": ""
+                    },
+                    "activeFilterMap": {
+                        "WorkspaceObject.object_type": [
+                            {
+                                "searchFilterType": "StringFilter",
+                                "stringValue": "Qc0Failure"
+                            },
+                            {
+                                "searchFilterType": "StringFilter",
+                                "stringValue": "Qfm0FunctionEleSpec"
+                            },
+                            {
+                                "searchFilterType": "StringFilter",
+                                "stringValue": "Qfm0SystemEleSpec"
+                            },
+                            {
+                                "searchFilterType": "StringFilter",
+                                "stringValue": "Qc0ChecklistSpecification"
+                            }
+                        ]
+                    },
+                    "sortCriteria": [
+                        {
+                            "fieldName": "object_name",
+                            "sortDirection": "ASC"
+                        }
+                    ],
+                    "maxToLoad": 110,
+                    "maxToReturn": 110
+                }
+            },
+            "viewBase": "Aqc0QualityCenterManager"
+        }
+    }
+}

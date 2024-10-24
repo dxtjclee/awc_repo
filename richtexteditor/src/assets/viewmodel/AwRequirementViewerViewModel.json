@@ -1,0 +1,61 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "actions": {
+        "render": {
+            "method": "awRequirementViewerRenderFn",
+            "deps": "js/AwRequirementViewerService",            
+            "options": {
+                "elementRefList": [
+                    "reqViewerRef"
+                ]
+            }
+        },
+        "onMount": {
+            "actionType": "JSFunction",
+            "method": "awRequirementViewerOnMount",
+            "inputData": {
+                "viewerData": "{{props.data}}",
+                "viewModel": "{{data}}"
+            },
+            "outputData": {
+                "data": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "documentViewer.getRequirementContent"
+                } ]
+            },
+            "deps": "js/AwRequirementViewerService"
+        },
+        "onUnMount": {
+            "actionType": "JSFunction",
+            "method": "awRequirementViewerOnUnMount",
+            "inputData": {
+                "viewModel": "{{data}}"
+            },
+            "deps": "js/AwRequirementViewerService"
+        }
+    },
+    "onEvent": [
+
+    ],
+    "functions":
+    {
+    },
+    "messages": {
+    },
+    "conditions": {
+    },
+    "lifecycleHooks": {
+        "render": "render",
+        "onMount": "onMount",
+        "onUnmount": "onUnMount"
+    },
+    "i18n": {},
+    "props": {
+        "data": {
+            "type": "object"
+        }
+    }
+}

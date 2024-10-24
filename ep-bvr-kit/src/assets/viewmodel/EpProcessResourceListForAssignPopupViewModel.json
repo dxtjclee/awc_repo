@@ -1,0 +1,149 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data": {
+        "operations": "{{subPanelContext.operations}}"
+    },
+    "actions": {
+        "getStationAndProcessResourceList": {
+            "actionType": "JSFunction",
+            "method": "getStationAndProcessResourceList",
+            "inputData": {
+                "inputObj": "{{subPanelContext.inputObj}}",
+                "operations": "{{subPanelContext.operations}}"
+            },
+            "outputData": {
+                "station": "station",
+                "prList": "prList"
+            },
+            "deps": "js/epProcessResourceListForAssignPopupService"
+        },
+        "doDataProvider": {
+            "actionType": "dataProvider",
+            "method": "processResourceDataProvider"
+        },
+        "assignOperations": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "assignOperationAction",
+                    "condition": "conditions.itemSelectedInList && !conditions.selectedTypeIsProcessOrOperation"
+                },
+                {
+                    "action": "getSelectedOperationsAllocatedTime",
+                    "condition": "conditions.selectedTypeIsProcessOrOperation"
+                },
+                {
+                    "action": "updateAssignToAnotherPRVisibility",
+                    "condition": "conditions.selectedTypeIsProcessOrOperation"
+                },
+                {
+                    "action": "closePRListPopup",
+                    "condition": "conditions.itemSelectedInList"
+                }
+            ]
+        },
+        "closePRListPopup": {
+            "actionType": "JSFunction",
+            "method": "close",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/declpopupService"
+        },
+        "updateAssignToAnotherPRVisibility": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInAtomicData",
+            "deps": "js/mfeViewModelUtils",
+            "inputData": {
+                "targetAtomicData": "{{props.subPanelContext.balancingData}}",
+                "updatedValues": {
+                    "selectionData.sharePr": {
+                        "isShareToAnotherPRVisible": true,
+                        "selectedOperations": "{{subPanelContext.operations}}",
+                        "totalAllocatedTime": "{{data.totalAllocatedTime}}",
+                        "station": "{{data.station}}"
+                    }
+                }
+            }
+        },
+        "assignOperationAction": {
+            "actionType": "JSFunction",
+            "method": "assignOperationsToProcessResource",
+            "inputData": {
+                "processResource": "{{data.dataProviders.processResourceDataProvider.selectedObjects[0]}}",
+                "operations": "{{subPanelContext.operations}}"
+            },
+            "deps": "js/epProcessResourceListForAssignPopupService"
+        },
+        "getSelectedOperationsAllocatedTime": {
+            "actionType": "JSFunction",
+            "method": "calculateSelectedOperationsTotalTime",
+            "inputData": {
+                "operations": "{{subPanelContext.operations}}"
+            },
+            "outputData": {
+                "totalAllocatedTime": ""
+            },
+            "deps": "js/epProcessResourceListForAssignPopupService"
+        }
+    },
+    "conditions": {
+        "itemSelectedInList": {
+            "expression": {
+                "$source": "data.dataProviders.processResourceDataProvider.selectedObjects.length",
+                "$query": {
+                    "$gt": 0
+                }
+            }
+        },
+        "selectedTypeIsProcessOrOperation": {
+            "expression": {
+                "$or": [
+                    {
+                        "$source": "data.dataProviders.processResourceDataProvider.selectedObjects[0]",
+                        "$query": {
+                            "$typeOf": "Mfg0BvrOperation"
+                        }
+                    },
+                    {
+                        "$source": "data.dataProviders.processResourceDataProvider.selectedObjects[0]",
+                        "$query": {
+                            "$typeOf": "Mfg0BvrProcess"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "dataProviders": {
+        "processResourceDataProvider": {
+            "action": "getStationAndProcessResourceList",
+            "response": "{{data.prList}}",
+            "totalFound": "{{data.prList.length}}"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "doDataProvider",
+        "onUpdate": [
+            {
+                "action": "assignOperations",
+                "observers": [
+                    "viewModel.dataProviders.processResourceDataProvider.selectedObjects"
+                ]
+            }
+        ]
+    },
+    "i18n": {
+        "unassign": [
+            "BalancingMessages"
+        ],
+        "assignToAnotherProcessResource": [
+            "BalancingMessages"
+        ]
+    }
+}

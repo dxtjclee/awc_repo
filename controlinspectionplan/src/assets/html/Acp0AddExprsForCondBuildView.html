@@ -1,0 +1,23 @@
+<aw-command-panel caption="i18n.commandPanelTitle" panel-id="Acp0AddExprsForCondBuild" context="subPanelContext">
+    <aw-panel-body>
+        <aw-panel-section caption="i18n.propertiesForAddExpr">
+             <div exist-when="conditions.ncVisibleOnPanel">
+                <aw-widget prop="data.acp0NamingConvention"></aw-widget>
+             </div>
+             <div exist-when="conditions.isWithOperatorPanelVisible">
+                <aw-widget prop="data.operator"></aw-widget>
+             </div>
+            <aw-widget prop="data.sourceAttribute"></aw-widget>
+            <aw-widget prop="data.relation"></aw-widget>
+            <aw-textbox prop="data.attributeValue"></aw-textbox>
+        </aw-panel-section>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button action="createCondAndAddExpr" exist-when="ctx.selected.type === 'Acp0Rule'" enable-when="formProp.attributes.valid">
+            <aw-i18n>i18n.commandPanelTitle</aw-i18n>
+        </aw-button>
+        <aw-button action="addExprInCond" exist-when="ctx.selected.type === 'Acp0RuleCondition'" enable-when="formProp.attributes.valid">
+            <aw-i18n>i18n.commandPanelTitle</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

@@ -1,0 +1,15 @@
+<aw-row height="fill">
+    <aw-column width="fill" height="fill">
+        <aw-row width="fill" height="fill">
+            <ase0-architecture-graph page-state="fields.pageState" sub-panel-context="subPanelContext" primary-selection="fields.primarySelectionData"></ase0-architecture-graph>
+        </aw-row>
+        <aw-splitter direction="HORIZONTAL" exist-when="fields.pageState.splitPanelLocation === 'bottom'"></aw-splitter>
+        <aw-row width="fill" height="30%" exist-when="fields.pageState.splitPanelLocation === 'bottom'">
+            <ase0-architecture-secondary sub-panel-context="subPanelContext" page-state="fields.pageState" primary-selection="fields.primarySelectionData" secondary-selection="fields.secondarySelectionData"></ase0-architecture-secondary>
+        </aw-row>
+    </aw-column>
+    <aw-splitter exist-when="fields.pageState.splitPanelLocation === 'right'"></aw-splitter>
+    <aw-column width="30%" height="fill" exist-when="fields.pageState.splitPanelLocation === 'right'">
+        <ase0-architecture-secondary sub-panel-context="subPanelContext" page-state="fields.pageState" primary-selection="fields.primarySelectionData" secondary-selection="fields.secondarySelectionData"></ase0-architecture-secondary>
+    </aw-column>
+</aw-row>

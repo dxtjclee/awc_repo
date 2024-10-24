@@ -1,0 +1,138 @@
+// Copyright 2020 Siemens Product Lifecycle Management Software Inc.
+/* begin ckeditor */
+
+// lighten orange
+$Charting_Orange_8: lighten($Charting_Orange_Base, 20%); // #F0C3A5
+
+.aw-requirementsCkeditor-panel {
+
+    .aw-requirement-header[selected='true'],
+    .aw-requirement-header:hover {
+        background-color: $cell_list_item_selected;
+    }
+
+    .aw-requirement-content span[contenteditable="true"] {
+        outline-color: $aw_gray_23;
+    }
+
+    .aw-requirement-crossRefLink {
+        color: $AW_Blue;
+    }
+
+    // Consistant style with ckeditor4
+    .ck.ck-content {
+        color: initial;
+    }
+
+    .aw-requirements-readOnly {
+        border-color: $Status_Gray_Base  //#8c8c8c
+    }
+    .aw-requirements-editable {
+        border-color: $Siemens_Yellow_17  //#FFB900
+    }
+    .aw-requirements-masterChanged {
+        border-color: $Siemens_Yellow_11  //#eb780a;
+    }
+    .aw-requirements-frozenToLatest{
+        border-color: $Siemens_Blue_17  // #50bed7;
+    }
+
+    .aw-requirement-content {
+        a[name] {
+            color: unset;
+        }
+        a[name]:hover {
+            color: unset;
+        }
+    }
+
+    .ck.ck-button-action.ck-button-find {
+        background-color: $default_main_button_background;
+        border-color: $default_main_button_border;
+        &:hover {
+            background-color: $default_main_button_background_hover;
+            box-shadow: $default_main_button_hover_shadow;
+        }
+    }
+
+    .ck.ck-button.ck-switchbutton.ck-on .ck-button__toggle {
+        background: $aw_accent_7a;
+        &:hover {
+            background: $aw_accent_7a;
+        }
+    }
+
+    .aw-requirements-readOnlyRequirementContent {
+        background-color: $aw_gray_25;
+    }
+}
+
+.aw-requirementsCkeditor-panel, .ck.ck-balloon-panel {
+    --ck-user-avatar-background: #{$avatar_background_color};          //PL Black 25
+    --ck-user-avatar-color:#{$avatar_text_color};                      //PL Black 8
+    --ck-color-base-text: #{$avatar_text_color};                       //PL Black 8
+
+    --ck-user-colors--0: #{$Charting_Grey_8};              // lighten Grey (30%) - #b0b7be
+    --ck-user-colors--0-alpha: #{$Charting_Grey_8};
+    --ck-user-colors--1: #{$Charting_Teal_Base};            // Teal Base
+    --ck-user-colors--1-alpha: #{$Charting_Teal_Base};
+    --ck-user-colors--2: #{$Charting_Orange_Base};          // Orange Base
+    --ck-user-colors--2-alpha: #{$Charting_Orange_Base};
+    --ck-user-colors--3: #{$Charting_Brown_Base};           // Brown Base
+    --ck-user-colors--3-alpha: #{$Charting_Brown_Base};
+    --ck-user-colors--4: #{$Charting_Purple_7};             // lighten Purple (40%) - #D8B9C9
+    --ck-user-colors--4-alpha: #{$Charting_Purple_7};
+    --ck-user-colors--5: #{$Charting_Yellow_5};             // Dark Yellow (10%) - #deb020
+    --ck-user-colors--5-alpha: #{$Charting_Yellow_5};
+    --ck-user-colors--6: #{$Charting_Orange_8};             // lighten Orange (20%)- #F0C3A5
+    --ck-user-colors--6-alpha: #{$Charting_Orange_8};
+    --ck-user-colors--7: #{$Charting_Brown_9};             //  lighten Brown (30%)- #e0d8cd
+    --ck-user-colors--7-alpha: #{$Charting_Brown_9};        
+      
+    .ck .ck-user__bg-color--8 {
+        background-color: $Charting_Teal_7;                 // lighten Teal (20%) - #BFD8D5
+    }
+
+    .ck .ck-user__bg-color--9 {
+        background-color: $Status_Red_10;                   // lighten Red (50%) - fadfdf
+    }
+
+    .ck .ck-user__selection--8 {
+        background-color: $Charting_Teal_7;
+    }
+    
+    .ck .ck-user__selection--9 {
+        background-color: $Status_Red_10;
+    }
+
+    .ck .ck-user__marker--8 {
+        .ck-user__marker-line{
+            border: 1px solid $Charting_Teal_7;
+        }
+        .ck-user__marker-dot, &:after{
+                background-color: $Charting_Teal_7;
+        }
+    }
+    
+    .ck .ck-user__marker--9 {
+        .ck-user__marker-line{
+            border: 1px solid $Status_Red_10;
+        }
+        .ck-user__marker-dot, &:after{
+            background-color: $Status_Red_10; 
+        }
+    }
+}
+
+
+.aw-requirements-xrtRichText {
+    .page-break {
+        &:before,
+        &:after {
+            border-bottom-color: $brand_secondary_border;
+        }
+        .page-break__label {
+            border-color: $brand_secondary_border;
+        }
+    }
+}

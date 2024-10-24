@@ -1,0 +1,8 @@
+<aw-command-panel caption="i18n.Aqc0Add" context="subPanelContext" >
+    <div class="aw-layout-flexColumn" show-when="data.activeState.value.activeView==='Aqc0AddChecklistEvaluationRuleSub'">
+        <aw-command-sub-panel aw-init="data.activeView='Aqc0AddChecklistEvaluationRuleSub'" panel-id="Aqc0AddChecklistEvaluationRuleSub" sub-panel-context="{ ...subPanelContext, activeState: data.activeState, addPanelState: fields.addPanelState }" ></aw-command-sub-panel>
+    </div>
+    <div class="aw-layout-flexColumn" exist-when="data.activeState.value.activeView==='Aqc0AddEvaluationCondition'">
+        <aw-navigate-panel title="i18n.Aqc0Add" pre-panel-id="Aqc0AddChecklistEvaluationRuleSub" panel-id="Aqc0AddEvaluationCondition" action="setActiveView" sub-panel-context="{ ...subPanelContext, addPanelState: fields.addPanelState, activeState: data.activeState }" active-state="data.activeState"></aw-navigate-panel>
+    </div>
+</aw-command-panel>

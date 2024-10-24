@@ -1,0 +1,10 @@
+<div class="aw-requirements-changeTypePopup">
+    <aw-textbox prop="data.ruleName" isRequired="true">
+    </aw-textbox>
+    <aw-checkbox prop="data.globalScopeCheck"></aw-checkbox>
+    <div class="align-bottom sw-button-group sw-column">
+        <aw-button size="auto" class="aw-requirement-mappingRuleButton" action="saveRule" enable-when="conditions.isSaveButtonVisible" visible-when="!conditions.isExportConfigSaveButtonVisible && !conditions.isImportReqIFSaveMappingButtonVisible">{{i18n.save}}</aw-button>
+        <aw-button size="auto" class="aw-requirement-mappingRuleButton" action="saveExportReqIFConfiguration" enable-when="conditions.isSaveButtonVisible" visible-when="conditions.isExportConfigSaveButtonVisible">{{i18n.save}}</aw-button>
+        <aw-button size="auto" class="aw-requirement-mappingRuleButton" action="saveImportReqIFMapping" enable-when="conditions.isSaveButtonVisible" visible-when="conditions.isImportReqIFSaveMappingButtonVisible">{{i18n.save}}</aw-button>
+    </div>
+</div>

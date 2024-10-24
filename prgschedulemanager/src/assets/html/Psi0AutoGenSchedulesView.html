@@ -1,0 +1,17 @@
+<aw-command-panel caption="i18n.GenerateSchedule" context="subPanelContext">
+    <aw-panel-body>
+        <aw-panel-section caption="i18n.SetParameters">
+            <aw-listbox prop="data.sourceTypeDeliverable" list="data.lovListArray" visible-when="conditions.isDeliverableSelected"></aw-listbox>
+            <aw-label prop="data.sourceTypeChange" visible-when="conditions.isChangeSelected"></aw-label>
+            <aw-label prop="data.cardinality" visible-when="conditions.isChangeOrDeliverableInstancesSelected"></aw-label>
+            <aw-label prop="data.selection" visible-when="conditions.isChangeOrDeliverableInstancesSelected"></aw-label>
+            <aw-radiobutton prop="data.scheduleMethod"></aw-radiobutton>
+            <aw-datetime prop="data.referenceDate"></aw-datetime>
+        </aw-panel-section>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button action="generateSchedules" enable-when="formProp.attributes.valid">
+            <aw-i18n>i18n.GenerateSchedule</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

@@ -1,0 +1,206 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "reveal": {
+            "actionType": "dataProvider",
+            "method": "customWorkCard"
+        },
+        "loadWorkCardTypes": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2016-03-Finder",
+            "method": "performSearch",
+            "inputData": {
+                "searchInput": {
+                    "maxToLoad": 25,
+                    "maxToReturn": 25,
+                    "providerName": "Awp0TypeSearchProvider",
+                    "searchCriteria": {
+                        "searchString": "",
+                        "typeSelectorId": "",
+                        "listOfIncludeObjectTypes": "SSP0WorkCard",
+                        "loadSubTypes": "true"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "startIndex": "{{data.dataProviders.performSearch.startIndex}}",
+                    "attributesToInflate": [
+                        "parent_types",
+                        "type_name"
+                    ]
+                }
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "workCardList": "{{function:workCardList}}"
+            },
+            "deps": "js/ssp0CreateWorkCardService"
+        },
+        "AddWorkCardBatchJob": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "AddWorkCard"
+                },
+                {
+                    "action": "ClosePopUpAction"
+                }
+            ]
+        },
+        "AddWorkCard": {
+            "actionType": "JSFunction",
+            "method": "getCreateInput",
+            "inputData": {
+                "data": "{{data}}",
+                "createType": "{{data.selectedType.dbValue}}"
+            },
+            "deps": "js/ssp0CreateObjectService"
+        },
+        "ClosePopUpAction": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        },
+        "setSelectedType": {
+            "actionType": "JSFunction",
+            "method": "changeAction",
+            "inputData": {
+                "data": "{{data}}",
+                "fields": "{{fields}}"
+            },
+            "outputData": {
+                "selectedType": "selectedType"
+            },
+            "deps": "js/ssp0CreateWorkCardService"
+        },
+        "setWorkCardDataBatchJob": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "setWorkCardDbValueData"
+                },
+                {
+                    "action": "setWorkCardUiValueData",
+                    "condition": "conditions.isTotalLengthOne"
+                },
+                {
+                    "action": "setSelectedType"
+                }
+            ]
+        },
+        "setWorkCardDbValueData": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "propertyToUpdate": "dbValue",
+                "value": "{{data.eventMap['ssp0CreateWorkCard.updateCurrentWorkCard'].currentWorkCardType.propInternalValue}}",
+                "dataToUpdate": "{{data.currentWorkCard}}"
+            },
+            "outputData": {
+                "currentWorkCard": ""
+            },
+            "deps": "js/ssp0CreateObjectService"
+        },
+        "setWorkCardUiValueData": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "propertyToUpdate": "uiValue",
+                "value": "{{data.eventMap['ssp0CreateWorkCard.updateCurrentWorkCard'].currentWorkCardType.propDisplayValue}}",
+                "dataToUpdate": "{{data.currentWorkCard}}"
+            },
+            "outputData": {
+                "currentWorkCard": ""
+            },
+            "deps": "js/ssp0CreateObjectService"
+        }
+    },
+    "conditions": {
+        "isTotalLengthOne": {
+            "expression": "data.dataProviders.customWorkCard.viewModelCollection.loadedVMObjects.length ===1"
+        },
+        "requiredFieldsEntered": {
+            "expression": "(data.object_name.dbValue && data.object_name.dbValue !='')"
+        }
+    },
+    "lifecycleHooks": {
+        "onInit": "reveal"
+    },
+    "onEvent": [
+        {
+            "eventId": "awlinkPopup.selected",
+            "action": "setSelectedType"
+        },
+        {
+            "eventId": "ssp0CreateWorkCard.updateCurrentWorkCard",
+            "action": "setWorkCardDataBatchJob",
+            "cacheEventData": true
+        }
+    ],
+    "functions": {
+        "workCardList": {
+            "functionName": "workCardList",
+            "parameters": [
+                "{{data}}"
+            ]
+        }
+    },
+    "data": {
+        "workCardTitle": {
+            "type": "STRING",
+            "displayName": "{{i18n.currentWorkCard}}",
+            "isRequired": "false",
+            "dbValue": ""
+        },
+        "currentWorkCard": {
+            "type": "STRING",
+            "displayName": "{{i18n.currentWorkCard}}",
+            "isRequired": "false",
+            "dbValue": ""
+        },
+        "selectedType": {
+            "type": "STRING",
+            "dbValue": ""
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "dataProviders": {
+        "customWorkCard": {
+            "dataProviderType": "TcLOV",
+            "action": "loadWorkCardTypes",
+            "response": "{{data.workCardList}}",
+            "totalFound": "{{data.totalFound}}"
+        }
+    },
+    "i18n": {
+        "addWorkCard": [
+            "ServicePlannerConstants"
+        ],
+        "Cancel": [
+            "ssp0Messages"
+        ],
+        "Add": [
+            "ssp0Messages"
+        ],
+        "currentWorkCard": [
+            "ServicePlannerConstants"
+        ]
+    }
+}

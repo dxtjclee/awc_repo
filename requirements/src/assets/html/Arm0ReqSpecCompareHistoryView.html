@@ -1,0 +1,39 @@
+<aw-scrollpanel visible-when="data.compareHtmlData">
+    <aw-advanced-bar type="TOOLBAR" negative="true">
+        <aw-flex-row height="12" justify="space-between" wrap-style="wrap">
+            <aw-flex-column width="0.1" justify="center">
+                <aw-command-bar anchor="aw_requirementHistoryContentViewer" alignment="HORIZONTAL"></aw-command-bar>
+            </aw-flex-column>
+            <aw-flex-column justify="center" >
+                <h5>
+                    {{ctx.Arm0RequirementHistoryContextCompareToMsg}}
+                </h5>
+            </aw-flex-column>
+            <aw-flex-column justify="center" width="0.5" align-content="center">
+                <aw-server-visibility-command-bar anchor="aw_toolbarRight" alignment="HORIZONTAL"></aw-server-visibility-command-bar>
+            </aw-flex-column>
+        </aw-flex-row>
+
+    </aw-advanced-bar>
+    <aw-break></aw-break>
+
+    <div class="aw-requirement-chip">
+    <aw-flex-row>
+        <div class="aw-requirement-legendItem">
+                    <div class="aw-requirement-legendItemMarker added"></div>
+                    <div class="aw-requirement-legendItemLabel"><aw-i18n>i18n.added</aw-i18n></div>
+                </div>
+
+                <div class="aw-requirement-legendItem">
+                    <div class="aw-requirement-legendItemMarker removed"></div>
+                    <div class="aw-requirement-legendItemLabel"><aw-i18n>i18n.removed</aw-i18n></div>
+                </div>
+
+                <div class="aw-requirement-legendItem">
+                    <div class="aw-requirement-legendItemMarker modified"></div>
+                    <div class="aw-requirement-legendItemLabel"><aw-i18n>i18n.modified</aw-i18n></div>
+                </div>
+    </aw-flex-row>
+</div>
+    <div class='aw-requirements-compareHistory aw-richtexteditor-documentPaper aw-richtexteditor-document aw-richtexteditor-documentPanel'></div>
+</aw-scrollpanel>

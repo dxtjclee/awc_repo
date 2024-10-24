@@ -1,0 +1,73 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "enabledTooltip": {
+            "extendedTooltip": {
+                "title": "{{i18n.sendToViewMakerCmdTitle}}",
+                "messages": [ "{{i18n.sendToViewMakerTooltipMsg}}" ]
+            }
+        },
+        "disabledTooltip": {
+            "extendedTooltip": {
+                "title": "{{i18n.sendToViewMakerCmdTitle}}",
+                "messages": [ "{{i18n.sendToViewMakerDisabledTooltipMsg}}" ]
+            }
+        },
+        "isMounted": false
+    },
+    "actions": {
+        "setIsMounted": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": true
+            },
+            "outputData": {
+                "isMounted": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        }
+    },
+    "conditions": {
+        "canSendToViewMaker": {
+            "expression": {
+                "$source": "ctx.ngp.scopeObject",
+                "$query": {
+                    "$or": [ {
+                            "$source": "props.mpr0numberOfAssignedParts.dbValues[0]",
+                            "$query": {
+                                "$gt": 0
+                            }
+                        },
+                        {
+                            "$source": "props.mpr0numberOfAssignedFeatures.dbValues[0]",
+                            "$query": {
+                                "$gt": 0
+                            }
+                        },
+                        {
+                            "$source": "props.mpr0predecessors.dbValues.length",
+                            "$query": {
+                                "$gt": 0
+                            }
+                        },
+                        {
+                            "$source": "status.hasBackgroundElements",
+                            "$query": {
+                                "$eq": true
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "setIsMounted"
+    },
+    "i18n": {
+        "sendToViewMakerCmdTitle": [ "NgpModelViewsMessages" ],
+        "sendToViewMakerTooltipMsg": [ "NgpModelViewsMessages" ],
+        "sendToViewMakerDisabledTooltipMsg": [ "NgpModelViewsMessages" ]
+    }
+}

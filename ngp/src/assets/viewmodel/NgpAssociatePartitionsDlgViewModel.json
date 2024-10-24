@@ -1,0 +1,498 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data": {
+        "revisionRuleLabel": {
+            "displayName": "{{i18n.revisionRuleLabel}}",
+            "type": "STRING",
+            "hasLov": "true",
+            "readOnly": "true",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        },
+        "intentLabel": {
+            "displayName": "{{i18n.intentLabel}}",
+            "type": "STRING",
+            "hasLov": "true",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        },
+        "partitionSchemeLabel": {
+            "displayName": "{{i18n.partitionSchemeLabel}}",
+            "type": "STRING",
+            "hasLov": "true",
+            "readOnly": "true",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        },
+        "availablePartitionsLabel": {
+            "displayName": "{{i18n.availablePartitionsTitle}}",
+            "type": "STRING",
+            "dispValue": ""
+        },
+        "partitionsToAssociateLabel": {
+            "displayName": "{{i18n.partitionsToAssociate}}",
+            "type": "STRING",
+            "dispValue": ""
+        },
+        "tableColumnPreferenceName": "NGPPartitionTreeColumnConfiguration",
+        "messages": {
+            "noPartitionsSelected": [ {
+                "text": "{{i18n.noPartitionsSelected}}"
+            } ],
+            "noPartitionsForScheme": [ {
+                "text": "{{i18n.noPartitionsForScheme}}"
+            } ]
+        },
+        "associatePartitionsBtnDisabled": true,
+        "shouldShowIntent": false,
+        "finishedLoadingAvailablePartitions": false
+    },
+    "conditions":{
+        "hasSubsetDefObject" :{
+            "expression": {
+                "$source": "data.subsetDefinition.uid.length",
+                "$query": {
+                    "$gt": 0
+                }
+            }
+        },
+        "shouldDisplayAssociatedPartitionsTable": {
+            "expression": {
+                "$source": "data.dataProviders.partitionsToAssociateTableDataProvider.viewModelCollection.loadedVMObjects.length",
+                "$query": {
+                    "$gt": 0
+                }
+            }
+        },
+        "shouldDisablePartitionSchemeList": {
+            "expression": {
+                "$or": [{
+                        "$source": "data.partitionSchemeList.length",
+                        "$query": {
+                            "$lte": 1
+                        }
+                    },
+                    {
+                        "$source": "data.dataProviders.partitionsToAssociateTableDataProvider.viewModelCollection.loadedVMObjects.length",
+                        "$query": {
+                            "$gt": 0
+                        }
+                    }
+                ]
+            }
+        },
+        "shouldShowAvailablePartitionsTable": {
+            "expression": {
+                "$and":[
+                    {
+                        "$source":"conditions.finishedLoadingAvailablePartitions",
+                        "$query": {
+                            "$eq": true
+                        }
+                    },
+                    {
+                        "$source": "data.dataProviders.availablePartitionsTableDataProvider.viewModelCollection.loadedVMObjects.length",
+                        "$query": {
+                            "$gt": 0
+                        }
+                    }
+                ]
+            }
+        },
+        "shouldDisplayNoAvailablePartitionsMsg": {
+            "expression": {
+                "$and":[
+                    {
+                        "$source":"conditions.finishedLoadingAvailablePartitions",
+                        "$query": {
+                            "$eq": true
+                        }
+                    },
+                    {
+                        "$source": "data.dataProviders.availablePartitionsTableDataProvider.viewModelCollection.loadedVMObjects.length",
+                        "$query": {
+                            "$eq": 0
+                        }
+                    }
+                ]
+            }
+        },
+        "shouldDisableAssociatePartitionBtn":{
+            "expression": {
+                "$or":[
+                    {
+                        "$source": "data.associatePartitionsBtnDisabled",
+                        "$query": {
+                            "$eq": true
+                        }
+                    },
+                    {
+                        "$source":"conditions.shouldDisplayAssociatedPartitionsTable",
+                        "$query": {
+                            "$eq": false
+                        }
+                    }
+                ]
+            }
+        },
+        "shouldShowIntent":{
+            "expression": {
+                "$source": "data.shouldShowIntent",
+                "$query": {
+                    "$eq": true
+                }
+            }
+        },
+        "finishedCreatingPartitionSchemeList":{
+            "expression":{
+                "$source":"data.partitionSchemeList.length",
+                "$query":{
+                    "$gt": 0
+                }
+            }
+        },
+        "finishedFirstPartitionsLoad":{
+            "expression":{
+                "$source":"data.finishedFirstPartitionsLoad",
+                "$query":{
+                    "$eq": true
+                }
+            }
+        },
+        "finishedLoadingAvailablePartitions":{
+            "expression":{
+                "$source":"data.finishedLoadingAvailablePartitions",
+                "$query":{
+                    "$eq": true
+                }
+            }
+        },
+        "showRemoveProductScopeBtn":{
+            "expression": {
+                "$source": "data.currentlyAssociatedPartitions.length",
+                "$query": {
+                    "$gt": 0
+                }
+            }
+        }
+    },
+    "actions": {
+        "closeDialog": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        },
+        "createColumnsAvailablePartitionsTable": {
+            "actionType": "JSFunction",
+            "method": "createColumns",
+            "inputData": {
+                "partitionsDataProvider":"{{data.dataProviders.partitionsToAssociateTableDataProvider}}",
+                "preferenceName": "{{data.tableColumnPreferenceName}}",
+                "dataProvider": "{{data.dataProviders.availablePartitionsTableDataProvider}}",
+                "columnProvider": {},
+                "additionalPolicyObjects": {},
+                "tableCmdColumnPropName":"",
+                "tableTreeNavColumnPropName":"object_string"
+            },
+            "deps": "js/services/ngpAssociatePartitionsService"
+        },
+        "createColumnsPartitionsToAssociateTable": {
+            "actionType": "JSFunction",
+            "method": "createColumns",
+            "inputData": {
+                "preferenceName": "{{data.tableColumnPreferenceName}}",
+                "dataProvider": "{{data.dataProviders.partitionsToAssociateTableDataProvider}}"
+            },
+            "deps": "js/mfeTableService"
+        },
+        "registerPolicyAndLoadAvailablePartitionsTableData":{
+            "actionType":"batchJob",
+            "steps":[
+                {
+                    "action":"registerPolicy"
+                },
+                {
+                    "action":"loadAvailablePartitionsTableData"
+                }
+            ]
+        },
+        "registerPolicy":{
+            "actionType":"JSFunction",
+            "method":"register",
+            "inputData":{
+                "name":"ngpAssociatePartitionsDialogPolicy",
+                "policyObj":"{{data.dataProviders.availablePartitionsTableDataProvider.policy}}"
+            },
+            "deps":"js/mfePolicyService"
+        },
+        "unregisterPolicy":{
+            "actionType":"JSFunction",
+            "method":"unregister",
+            "inputData":{
+                "name":"ngpAssociatePartitionsDialogPolicy"
+            },
+            "deps":"js/mfePolicyService"
+        },
+        "loadAvailablePartitionsTableData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadAvailablePartitionsTableData",
+            "inputData": {
+                "treeLoadInput": "{{data.treeLoadInput}}",
+                "planningScopeModelObject": "{{props.subPanelContext.context}}",
+                "currentPartitionScheme": "{{data.partitionSchemeLabel.dbValue}}",
+                "policy": "{{data.dataProviders.availablePartitionsTableDataProvider.policy}}"
+
+            },
+            "outputData": {
+                "finishedLoadingAvailablePartitions":true,
+                "finishedFirstPartitionsLoad": true
+            },
+            "deps": "js/services/ngpAssociatePartitionsService"
+        },
+        "getCurrentlyAssociatedPartitionsAndPartitionScheme": {
+            "actionType": "JSFunctionAsync",
+            "method": "getCurrentlyAssociatedPartitionsAndPartitionScheme",
+            "inputData": {
+                "planningScopeModelObject": "{{props.subPanelContext.context}}"
+            },
+            "outputData": {
+                "currentlyAssociatedPartitions": "currentlyAssociatedPartitions",
+                "currentPartitionScheme": "currentPartitionScheme",
+                "subsetDefinition" : "subsetDefinition",
+                "relation": "relation"
+            },
+            "deps": "js/services/ngpAssociatePartitionsService"
+        },
+        "initDataForDialog": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action":"getCurrentlyAssociatedPartitionsAndPartitionScheme"
+                },
+                {
+                    "action": "getRevisionRuleList"
+                },
+                {
+                    "action": "getPartitionSchemeList"
+                }
+            ]
+        },
+        "getPartitionSchemeList": {
+            "actionType": "JSFunction",
+            "method": "createPartitionsSchemesList",
+            "inputData": {
+                "partitionSchemes": "{{props.subPanelContext.partitionSchemes}}",
+                "currentPartitionScheme":"{{data.currentPartitionScheme}}"
+            },
+            "outputData": {
+                "partitionSchemeList": ""
+            },
+            "deps": "js/services/ngpAssociatePartitionsService"
+        },
+        "getRevisionRuleList": {
+            "actionType": "JSFunction",
+            "method": "getRevisionRuleList",
+            "inputData": {
+                "subsetDefinitions":["{{data.subsetDefinition}}"],
+                "defaultRevRulePref":"{{ctx.preferences.NGP_Default_Product_Revision_Rule}}"
+            },
+            "outputData": {
+                "revisionRuleList": ""
+            },
+            "deps": "js/services/ngpAssociatePartitionsService"
+        },
+        "onPartitionSchemeChange": {
+            "actionType":"batchJob",
+            "steps":[
+                {
+                    "action":"toggleLoadingAvailablePartitions",
+                    "condition":"data.finishedFirstPartitionsLoad"
+                },
+                {
+                    "action":"reloadAvailablePartitionsTable",
+                    "condition":"data.finishedFirstPartitionsLoad"
+                }
+            ]
+        },
+        "toggleLoadingAvailablePartitions":{
+            "actionType":"JSFunction",
+            "method":"getToggledBoolean",
+            "inputData":{
+                "booleanToToggle":"{{data.finishedLoadingAvailablePartitions}}"
+            },
+            "outputData":{
+                "finishedLoadingAvailablePartitions":""
+            },
+            "deps":"js/mfeViewModelUtils"
+        },
+        "reloadAvailablePartitionsTable":{
+            "actionType": "JSFunction",
+            "method": "reloadTable",
+            "inputData": {
+                "tableId": "ngpAvailablePartitionsTable"
+            },
+            "deps": "js/mfeTableService"
+        },
+        "associatePartitions": {
+            "actionType": "JSFunctionAsync",
+            "method": "createOrUpdateProductSubsetsFromPartitions",
+            "inputData": {
+                "planningScopeModelObject":["{{props.subPanelContext.context}}"],
+                "partitions": "{{data.dataProviders.partitionsToAssociateTableDataProvider.viewModelCollection.loadedVMObjects}}",
+                "revisionRule": "{{data.revisionRuleLabel.dbValue}}",
+                "intentValue":"{{data.intentLabel.uiValue}}"
+            },
+            "outputData":{
+                "successfullyAssociatedPartitions":""
+            },
+            "deps": "js/services/ngpProductScopeService"
+        },
+        "associatePartitionsAndCloseDlg": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "associatePartitions"
+                },
+                {
+                    "action": "ngpSubsetDefinitionUpdateEvent",
+                    "condition":"data.successfullyAssociatedPartitions === true"
+                },
+                {
+                    "action": "closeDialog",
+                    "condition":"data.successfullyAssociatedPartitions === true"
+                }
+            ]
+        },
+        "ngpSubsetDefinitionUpdateEvent": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "ngp.subsetDefinitionUpdate",
+                        "eventData": {
+                            "planningScopeModelObject": ["{{props.subPanelContext.context}}"],
+                            "subsetDefinition" : "{{data.subsetDefinition}}"
+                        },
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            }
+        },
+        "updateAfterChangeInTables": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "updateAssociatePartitionsBtnVisibility"
+                },
+                {
+                    "action": "refreshTable"
+                }
+            ]
+        },
+        "updateAssociatePartitionsBtnVisibility":{
+            "actionType": "JSFunction",
+            "method": "doArraysContainSameValues",
+            "inputData": {
+                "array1":"{{data.currentlyAssociatedPartitions}}",
+                "array2": "{{data.dataProviders.partitionsToAssociateTableDataProvider.viewModelCollection.loadedVMObjects}}"
+            },
+            "outputData": {
+                "associatePartitionsBtnDisabled": ""
+            },
+            "deps": "js/utils/ngpDataUtils"
+        },
+        "refreshTable": {
+            "actionType": "JSFunction",
+            "method": "refreshTable",
+            "inputData": {
+                "tableId": "ngpAvailablePartitionsTable"
+            },
+            "deps": "js/mfeTableService"
+        },
+        "removeProductScope": {
+            "actionType": "JSFunctionAsync",
+            "method": "removeProductScope",
+            "inputData": {
+                "planningScopeModelObject":"{{props.subPanelContext.context}}",
+                "subsetDef": "{{data.subsetDefinition}}",
+                "relation": "{{data.relation}}"
+            },
+            "deps": "js/services/ngpAssociatePartitionsService"
+        }
+    },
+    "grids": {
+        "ngpAvailablePartitionsTable": {
+            "dataProvider": "availablePartitionsTableDataProvider",
+            "columnProvider": "availablePartitionsTableColumnDataProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "enableExpansionStateCaching": false
+            }
+        },
+        "ngpPartitionsToAssociateTable":{
+            "dataProvider": "partitionsToAssociateTableDataProvider",
+            "columnProvider": "partitionsToAssociateTableColumnDataProvider",
+            "addIconColumn": false
+        }
+    },
+    "columnProviders": {
+        "availablePartitionsTableColumnDataProvider": {
+            "loadColumnAction": "createColumnsAvailablePartitionsTable",
+            "frozenColumnIndex": -1
+        },
+        "partitionsToAssociateTableColumnDataProvider": {
+            "loadColumnAction": "createColumnsPartitionsToAssociateTable",
+            "frozenColumnIndex": -1
+        }
+    },
+    "dataProviders": {
+        "availablePartitionsTableDataProvider": {
+            "initializeAction": "registerPolicyAndLoadAvailablePartitionsTableData",
+            "nextAction": "loadAvailablePartitionsTableData",
+            "previousAction": "loadAvailablePartitionsTableData",
+            "focusAction": "loadAvailablePartitionsTableData",
+            "treeLoadResult": "action.result.treeLoadResult",
+            "selectionModelMode": "multiple",
+            "treePageSize": 10000,
+            "inputData": {
+                "accessMode": "tree"
+            }
+        },
+        "partitionsToAssociateTableDataProvider": {
+            "dataProviderType": "Static",
+            "selectionModelMode": "multiple",
+            "response":"{{data.currentlyAssociatedPartitions}}",
+            "totalFound":"{{data.currentlyAssociatedPartitions.length}}"
+        }
+    },
+    "onEvent": [ {
+            "eventId": "ngpAssociatePartitions.associatePartitionsListChanged",
+            "action": "updateAfterChangeInTables"
+        },
+        {
+            "eventId": "ngp.productScopeRemoved",
+            "action": "closeDialog"
+        }
+    ],
+    "lifecycleHooks": {
+        "onInit": "initDataForDialog",
+        "onUnmount":"unregisterPolicy"
+    },
+    "i18n": {
+        "associatePartitionsDialogTitle": [ "NgpAssociatePartitionsMessages" ],
+        "revisionRuleLabel": [ "NgpAssociatePartitionsMessages" ],
+        "intentLabel": [ "NgpAssociatePartitionsMessages" ],
+        "partitionSchemeLabel":[ "NgpAssociatePartitionsMessages" ],
+        "availablePartitionsTitle":[ "NgpAssociatePartitionsMessages" ],
+        "partitionsToAssociate":[ "NgpAssociatePartitionsMessages" ],
+        "noPartitionsSelected":[ "NgpAssociatePartitionsMessages" ],
+        "noPartitionsForScheme":[ "NgpAssociatePartitionsMessages" ],
+        "cancel": [ "NgpAssociatePartitionsMessages" ],
+        "done": [ "NgpAssociatePartitionsMessages" ],
+        "removeProductScope": [ "NgpAssociatePartitionsMessages" ]
+    }
+}

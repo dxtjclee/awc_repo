@@ -1,0 +1,308 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "actions": {
+        "reveal": {
+            "actionType": "JSFunction",
+            "method": "getCurrentType",
+            "inputData": {},
+            "events": {
+                "success": [
+                    {
+                        "name": "aqc0.updateCharLibTreeviewPWA"
+                    }
+                ]
+            },
+            "deps": "js/Aqc0CharManagerUtils"
+        },
+        "updateCharLibTreeviewPWA": {
+            "actionType": "dataProvider",
+            "method": "charLibraryDataProvider"
+        },
+        "loadData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableData",
+            "inputData": {
+                "treeLoadInput": "request.treeLoadInput",
+                "dataProvider": "{{data.dataProviders.charLibraryDataProvider}}",
+                "delayTimeTree": "{{data.delayTimeTree}}",
+                "maxTreeLevel": "{{data.maxTreeLevel}}",
+                "sortCriteria": "{{data.columnProviders.charLibraryColumnProvider.sortCriteria}}",
+                "searchState": "{{subPanelContext.searchState}}",
+                "i18n": "{{data.i18n}}",
+                "pwaSelectionModel": "{{props.subPanelContext.selectionModel}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "aqc0.updateSelectionInPWA"
+                    }
+                ]
+            },
+            "outputData": {
+                "totalFound": "result.treeLoadResult.totalFound",
+                "totalLoaded": "result.treeLoadResult.totalLoaded",
+                "searchResults": "result.treeLoadResult.childNodes",
+                "dataProviders.charLibraryDataProvider.columnConfig": "result.colDefs",
+                "treeLoadResult": "result.treeLoadResult"
+            },
+            "deps": "js/Aqc0CharLibraryTreeTableService"
+        },
+        "loadColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableColumns",
+            "inputData": {
+                "i18n": "{{data.i18n}}",
+                "dataProvider": "{{data.dataProviders.charLibraryDataProvider}}"
+            },
+            "outputData": {
+                "dataProviders.charLibraryDataProvider.columnConfig": "columns"
+            },
+            "deps": "js/Aqc0CharLibraryTreeTableService"
+        },
+        "loadProperties": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableProperties",
+            "inputData": {
+                "propertyLoadInput": "request.propertyLoadInput",
+                "delayTimeProperty": "{{data.delayTimeProperty}}"
+            },
+            "deps": "js/Aqc0CharLibraryTreeTableService"
+        },
+        "updateSelectionInPWA": {
+            "actionType": "JSFunction",
+            "method": "processPWASelection",
+            "inputData": {
+                "searchState": "{{props.subPanelContext.searchState}}",
+                "pwaSelectionModel": "{{props.subPanelContext.selectionModel}}",
+                "pinUnpinnedFlag": "{{subPanelContext.searchState.pinUnpinnedFlag}}",
+                "dataProvider": "{{data.dataProviders.charLibraryDataProvider}}"
+            },
+            "deps": "js/Aqc0CharManagerUtils"
+        },
+        "addNewlyCreatedElement": {
+            "actionType": "JSFunction",
+            "method": "addNewlyCreatedElement",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.charLibraryDataProvider}}",
+                "treeLoadResult":"{{data.treeLoadResult}}",
+                "subPanelContext": "{{props.subPanelContext}}",
+                "data": "{{data}}"
+
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "aqc0.updateTreeNodeStates"
+                    },
+                    {
+                        "name":"aqc0.updateSelectionInPWA"
+                    }
+                ]
+            },
+            "outputData": {
+
+            },
+            "deps": "js/Aqc0CharLibraryTreeTableService"
+        },
+        "selectNewlyAddedElement": {
+            "actionType": "JSFunction",
+            "method": "selectNewlyAddedElement",
+            "inputData": {
+                "data": "{{data}}",
+                "subPanelContext": "{{subPanelContext}}"
+            },
+            "outputData": {},
+            "deps": "js/Aqc0CharLibraryTreeTableService"
+        },
+        "selectionChanged": {
+            "actionType": "JSFunction",
+            "method": "selectionChanged",
+            "inputData": {
+                "data": "{{data}}",
+                "selectionModel": "{{props.subPanelContext.selectionModel}}",
+                "dataProvider": "{{data.dataProviders.charLibraryDataProvider}}"
+            },
+            "deps": "js/Aqc0CharLibraryTreeTableService"
+        },
+        "charLibraryExpandTreeNodeAction": {
+            "actionType": "JSFunction",
+            "method": "charLibraryExpandTreeNode",
+            "deps": "js/Aqc0CharLibraryTreeTableService"
+        },
+
+        "clearMapOfCharGroupAndSpecificationAction": {
+            "actionType": "JSFunction",
+            "method": "clearMapOfCharGroupAndSpecification",
+            "deps": "js/Aqc0CharLibraryTreeTableService"
+        },
+        "updateTreeNodeStates": {
+            "actionType": "JSFunction",
+            "method": "updateTreeNodeStates",
+            "inputData": {
+                "vmNodes": "{{data.dataProviders.charLibraryDataProvider.viewModelCollection.loadedVMObjects}}",
+                "data": "{{data}}",
+                "subPanelContext": "{{props.subPanelContext}}",
+                "i18n": "{{data.i18n}}",
+                "dataProvider": "{{data.dataProviders.charLibraryDataProvider}}"
+            },
+            "deps": "js/Aqc0CharLibraryTreeTableService"
+        }
+      },
+        "functions": {
+              "processPWASelection": {
+              "functionName": "processPWASelection",
+              "parameters": [
+                   "{{props.subPanelContext.searchState}}",
+                   "{{props.subPanelContext.selectionModel}}",
+                   "{{parameters.commandActionExecutor}}"
+           ]
+        }
+      },
+    "data": {
+        "delayTimeTree": {
+            "displayName": "",
+            "type": "INTEGER",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "20",
+            "dispValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        },
+        "maxTreeLevel": {
+            "displayName": "",
+            "type": "INTEGER",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "100",
+            "dispValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        }
+    },
+    "dataProviders": {
+        "charLibraryDataProvider": {
+            "action": "loadData",
+            "initializeAction": "loadData",
+            "nextAction": "loadData",
+            "previousAction": "loadData",
+
+            "treeLoadResult": "action.result.treeLoadResult",
+            "selectionModelMode": "multiple",
+            "treePageSize": 50,
+            "inputData": {
+                "accessMode": "tree",
+                "selectionModel": "{{props.subPanelContext.selectionModel}}",
+                "selectionData": "{{subPanelContext.selectionData}}",
+                "topNodeUid": "top"
+            }
+        },
+        "charLibraryPropertyProvider": {
+            "action": "loadProperties",
+            "propertyLoadResult": "action.result.propertyLoadResult"
+        }
+    },
+    "columnProviders": {
+        "charLibraryColumnProvider": {
+            "soaEnabled": false,
+            "sortCriteria": [
+                {
+                    "fieldName": "creation_date",
+                    "sortDirection": "DESC"
+                }
+            ]
+        }
+    },
+    "grids": {
+        "charLibraryTree": {
+            "dataProvider": "charLibraryDataProvider",
+            "propertyProvider": "charLibraryPropertyProvider",
+            "columnProvider": "charLibraryColumnProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "enableGridMenu": true,
+                "enablePinning": true
+            }
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "charLibraryDataProvider.selectionChangeEvent",
+            "cacheEventData": false,
+            "action": "selectionChanged"
+        },
+        {
+            "eventId": "charLibraryExpandTreeNodeEvent",
+            "action": "charLibraryExpandTreeNodeAction"
+        },
+
+        {
+            "eventId": "aqc0NullMapEvent",
+            "action": "clearMapOfCharGroupAndSpecificationAction"
+        },
+        {
+            "eventId": "aqc0.updateTreeNodeStates",
+            "action": "updateTreeNodeStates"
+        },
+        {
+            "eventId": "aqc0.updateSelectionInPWA",
+            "action": "updateSelectionInPWA"
+        },
+        {
+            "eventId": "aqc0.selectNewlyAddedElement",
+            "action": "selectNewlyAddedElement"
+        },
+        {
+            "eventId": "charLibraryDataProvider.treeNodesLoaded",
+            "action": "selectNewlyAddedElement",
+            "condition": "!subPanelContext.searchState.pinUnpinnedFlag"
+        },
+        {
+            "eventId": "aqc0.loadData",
+            "action": "loadData"
+        }
+    ],
+    "lifecycleHooks": {
+        "onMount": "reveal",
+        "onUpdate": [{
+            "action": "updateCharLibTreeviewPWA",
+            "observers": [
+                "props.subPanelContext.searchState.criteria.Type",
+                "props.subPanelContext.searchState.criteria.searchString",
+                "props.subPanelContext.searchState.filterString"
+            ]},
+            {
+                "action": "addNewlyCreatedElement",
+                "observers": [
+                    "props.subPanelContext.searchState.newlyCreatedObjectFromCharLib",
+                    "props.subPanelContext.pageContext.sublocationState.newlyCreatedObjectFromCharLib"
+            ]}
+       ]
+
+    },
+    "i18n": {
+        "Aqc0CharGroup": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Aqc0RuleTitle": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Aqc0NamingConventionTitle": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "CharacteristicType": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Description": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Type": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Name": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "ReleaseStatus": [
+            "qualitycharacteristicsmanagerMessages"
+        ]
+    }
+}

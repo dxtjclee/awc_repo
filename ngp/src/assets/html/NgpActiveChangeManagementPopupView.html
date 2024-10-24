@@ -1,0 +1,24 @@
+<aw-panel class="aw-ngp-activeMcnPopupContent">
+    <mfe-loading-message exist-when="!data.finishedLoading"></mfe-loading-message>
+    <aw-panel-body scrollable="false" show-when="conditions.displayRelatedEcnsPanel">
+        <aw-link prop="data.historyOfChangeLinkData" action="changeMcnPanelViews" class="aw-ngp-mcnHistoryOfChangeLink" exist-when="conditions.hasHistoryOfMcns"></aw-link>
+        <div class="aw-ngp-activeMcnPanel">
+            <aw-i18n class="aw-ngp-mcnActiveMcnHeader">i18n.activeManufacturingChangeHeader</aw-i18n>
+            <aw-list dataprovider="data.dataProviders.activeMcnDataProvider" class="aw-ngp-activeMcnTile">
+                <aw-default-cell vmo="item"></aw-default-cell>
+            </aw-list>
+        </div>
+        <div class="aw-ngp-relatedEcnsPanel" exist-when="conditions.hasRelatedEcns">
+            <aw-i18n class="aw-ngp-mcnRelatedEcnsHeader">i18n.listOfEcnsHeader</aw-i18n>
+            <div class="aw-ngp-relatedEcnTiles">
+                <aw-list dataprovider="data.dataProviders.relatedEcnsDataProvider">
+                    <aw-default-cell vmo="item"></aw-default-cell>
+                </aw-list>
+            </div>
+        </div>
+    </aw-panel-body>
+    <aw-panel-body show-when="conditions.displayHistoryOfMcnsPanel" class="aw-ngp-historyOfMcnsPanel">
+        <aw-link prop="data.backToChangeManagementLinkData" action="changeMcnPanelViews" class="aw-ngp-mcnChangeManagementLink"></aw-link>
+        <ngp-mcn-history-of-change-list scope-object="props.subPanelContext.scopeObject"></ngp-mcn-history-of-change-list>
+    </aw-panel-body>
+</aw-panel>

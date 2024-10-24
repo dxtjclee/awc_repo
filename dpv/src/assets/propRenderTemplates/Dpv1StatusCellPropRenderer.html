@@ -1,0 +1,38 @@
+<% var status = vmo.props && vmo.props.Status ? vmo.props.Status.uiValues[0] : null;
+
+var imagePath = basePath +'/image/';
+var toolTip = vmo.props && vmo.props.ErrorMessage ? vmo.props.ErrorMessage.uiValues[0] : null;
+
+if(status == null)
+{
+    imagePath += "indicatorFlagWhite16.svg";
+}
+else
+{
+    switch( status )
+    {
+        case "Succeeded":
+            imagePath += "indicatorStatusReady16.svg"
+            break
+        case "Completed":
+            imagePath += "indicatorStatusReady16.svg"
+            break
+        case "Failed":
+            imagePath += "indicatorStatusFailed16.svg"
+            break
+        case "Processing":
+            imagePath += "indicatorInProgress16.svg"
+            break
+        case "Deleted":
+            imagePath += "indicatorAbandoned16.svg"
+            break
+        case "Cancelled":
+            imagePath += "indicatorCancelled16.svg"
+            break
+        default:
+            imagePath += "indicatorFlagWhite16.svg"
+    }
+}
+%>
+    <img src ="<%=imagePath%>" title="<%=toolTip%>" alt="<%=toolTip%>" class="aw-visual-indicator">
+    <label><%=status%></label>

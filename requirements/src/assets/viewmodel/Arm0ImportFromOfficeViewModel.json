@@ -1,0 +1,90 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "actions": {
+        "unregisterImportRelatedCtx": {
+            "actionType": "JSFunction",
+            "method": "unregisterImportRelatedCtx",
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "backActionForRule":{
+            "actionType": "JSFunction",
+            "method": "backActionForRule",
+            "inputData": {
+                "sharedData": "{{data.sharedData}}"
+            },
+            "outputData": {
+                "sharedData":""
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "backActionForPropRule":{
+            "actionType": "JSFunction",
+            "method": "backActionForPropRule",
+            "inputData": {
+                "sharedData": "{{data.sharedData}}",
+                "ctx": "{{ctx.preferences.REQ_Microservice_Installed}}"
+            },
+            "outputData": {
+                "sharedData":""
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "Arm0AddPropertiesSubbackAction":{
+            "actionType": "JSFunction",
+            "method": "Arm0AddPropertiesSubbackAction",
+            "inputData": {
+                "sharedData": "{{data.sharedData}}"
+            },
+            "outputData": {
+                "sharedData":""
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "awsidenav.openClose",
+            "action": "unregisterImportRelatedCtx"
+        },
+        {
+            "eventId": "ImportPreview.contentUnloaded",
+            "action": "unregisterImportRelatedCtx"
+        }
+    ],
+    "data": {
+        "sharedData": {
+            "initialValues": {
+                "activeView": "Arm0ImportFromOfficeSub"
+            },
+            "meta": {}
+        }
+    },
+    "ctx": {
+        "occmgmtContext": null,
+        "isArm0ImportFromWordSubPanelActive": null,
+        "isArm0ImportFromPDFSubPanelActive": null,
+        "compareAndPreviewBtnClicked": null,
+        "locationContext": null,
+        "preferences": null,
+        "isArm0ImportFromExcelSubPanelActive": null,
+        "isArm0ImportFromReqIFSubPanelActive":null
+     },
+    "functions": {},
+    "conditions": {},
+    "messages": {},
+    "i18n": {
+        "importLabelTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "selectFile": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "addRules": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "showAdvanceOptionsLabel": [
+            "RequirementsCommandPanelsMessages"
+        ]
+    }
+}

@@ -1,0 +1,846 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-panel-body.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive",
+        "js/aw-command-panel.directive",
+        "js/aw-radiobutton.directive",
+        "js/aw-i18n.directive",
+        "js/aw-checkbox.directive",
+        "js/aw-listbox.directive",
+        "js/aw-list.directive",
+        "js/aw-command-panel-section.directive",
+        "js/aw-list-filter.directive",
+        "js/enable-when.directive",
+        "js/visible-when.directive"
+    ],
+    "lifecycleHooks": {
+        "onMount": "mountAction",
+        "onUpdate": [
+            {
+                "action": "actionFilterListForType",
+                "observers": [
+                    "viewModel.data.filterBoxForType.dbValue"
+                ]
+            },
+            {
+                "action": "addOverride",
+                "observers": [
+                    "props.subPanelContext.sharedData.newOverrideType"
+                ]
+            },
+            {
+                "action": "removeOverride",
+                "observers": [
+                    "props.subPanelContext.sharedData.removeOverrideType"
+                ]
+            },
+            {
+                "action": "loadCells",
+                "observers": [
+                    "viewModel.overrideTypes"
+                ]
+            }
+        ]
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data": {
+        "sharedData": {
+            "initialValues": {
+                "activeView": "Arm0ExportToOfficeAppSub"
+            },
+            "meta": {}
+        },
+        "exportCommands": "arm0_exportCommands",
+        "fieldLabel": {
+            "displayName": "{{i18n.fieldLabel}}"
+        },
+        "exportType": {
+            "type": "STRING",
+            "vertical": true,
+            "dbValue": "readOnly",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "layout": {
+            "displayName": "{{i18n.layoutLabel}}",
+            "type": "STRING",
+            "dbValue": "horizontal",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        },
+        "ckEditorIdWaterMark": "ckeditor_createWaterMark",
+        "exportTypeValues": {
+            "type": "STRING",
+            "dbValue": [
+                {
+                    "propDisplayValue": "{{i18n.readOnlyLabel}}",
+                    "propInternalValue": "readOnly"
+                },
+                {
+                    "propDisplayValue": "{{i18n.editableLabel}}",
+                    "propInternalValue": "editable"
+                }
+            ]
+        },
+        "layoutValues": {
+            "type": "STRING",
+            "dbValue": [ {
+                    "propDisplayValue": "{{i18n.horizontalLabel}}",
+                    "propInternalValue": "horizontal"
+                },
+                {
+                    "propDisplayValue": "{{i18n.diagonalLabel}}",
+                    "propInternalValue": "diagonal"
+                }
+            ]
+        },
+        "withoutComment": {
+            "displayName": "{{i18n.withoutCommentLabel}}",
+            "dbValue": false,
+            "type": "BOOLEAN",
+            "dispValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "includeParagraphNumbering": {
+            "displayName": "{{i18n.includeParagraphNumberingLabel}}",
+            "dbValue": true,
+            "type": "BOOLEAN",
+            "dispValue": "{{i18n.includeParagraphNumberingLabel}}",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "addWaterMark": {
+            "displayName": "{{i18n.addWaterMarkLabel}}",
+            "dbValue": false,
+            "type": "BOOLEAN",
+            "dispValue": "{{i18n.addWaterMarkLabel}}",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "isLockBodyContent": {
+            "displayName": "{{i18n.LockReqContent}}",
+            "dbValue": false,
+            "type": "BOOLEAN",
+            "dispValue": "{{i18n.LockReqContent}}",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "isEditStructure":{
+            "displayName": "{{i18n.Arm0EditStructure}}",
+            "dbValue": false,
+            "type": "BOOLEAN",
+            "dispValue": "{{i18n.Arm0EditStructure}}",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "isIncludeTOC":{
+            "displayName": "{{i18n.includeTOC}}",
+            "dbValue": false,
+            "type": "BOOLEAN",
+            "dispValue": "{{i18n.includeTOC}}",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "isIncludeTOI":{
+            "displayName": "{{i18n.includeTOI}}",
+            "dbValue": false,
+            "type": "BOOLEAN",
+            "dispValue": "{{i18n.includeTOI}}",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "isIncludeLOT":{
+            "displayName": "{{i18n.includeLOT}}",
+            "dbValue": false,
+            "type": "BOOLEAN",
+            "dispValue": "{{i18n.includeLOT}}",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "idForObjects": {
+            "displayName": "{{i18n.id}}",
+            "dbValue": false,
+            "type": "BOOLEAN",
+            "dispValue": "{{i18n.id}}",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "severityOfRule": {
+            "displayName": "{{i18n.severitylabel}}",
+            "dbValue": true,
+            "type": "BOOLEAN",
+            "dispValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "configurationSetting": {
+            "displayName": "{{i18n.configurationSettingLabel}}",
+            "dbValue": false,
+            "type": "BOOLEAN",
+            "dispValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "filterBoxForType": {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "false",
+            "requiredText": "{{i18n.filter}}",
+            "dbValue": ""
+        },
+        "label": {
+            "displayName": "{{i18n.label}}"
+        },
+        "objectTypeList": {
+            "type": "STRING",
+            "dbValue": [
+                {
+                    "propDisplayValue": "Requirement Specification",
+                    "dispValue": "",
+                    "propInternalValue": "RequirementSpec"
+                }
+            ]
+        },
+        "objectType": {
+            "displayName": "{{i18n.objectType}}",
+            "type": "STRING",
+            "hasLov": "true",
+            "labelPosition": "PROPERTY_LABEL_AT_TOP"
+        },
+        "headerFooterList": {
+            "type": "STRING",
+            "dbValue": [
+                {
+                    "propDisplayValue": "",
+                    "dispValue": "",
+                    "propInternalValue": ""
+                }
+            ]
+        },
+        "headerFooter": {
+            "displayName": "{{i18n.headerFooterTemplate}}",
+            "type": "STRING",
+            "hasLov": "true",
+            "labelPosition": "PROPERTY_LABEL_AT_TOP"
+        },
+        "exportOption": {
+            "displayName": "{{i18n.properties}}",
+            "vertical": true,
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "export_as_seen",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        },
+        "exportOptionValues": {
+            "type": "STRING",
+            "dbValue": [
+                {
+                    "propDisplayValue": "{{i18n.export_as_seen}}",
+                    "propInternalValue": "export_as_seen"
+                },
+                {
+                    "propDisplayValue": "{{i18n.export_properties}}",
+                    "propInternalValue": "export_properties"
+                },
+                {
+                    "propDisplayValue": "{{i18n.export_Add_Override}}",
+                    "propInternalValue": "export_Add_Override"
+                }
+            ]
+        }
+    },
+    "actions": {
+        "createInstanceWatermark": {
+            "actionType": "JSFunction",
+            "method": "createInstanceWatermark",
+            "inputData": {
+                "ckEditorIdWaterMark": "{{data.ckEditorIdWaterMark}}",
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "ckEditorInstance": ""
+            },
+            "deps": "js/Arm0RequirementCkeditor5Service"
+        },
+        "addOverride": {
+            "actionType": "JSFunction",
+            "method": "addOverride",
+            "inputData": {
+                "overrideTypes": "{{data.overrideTypes}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "outputData": {
+                "overrideTypes": ""
+            },
+            "deps": "js/Arm0ExportToOfficeApp"
+        },
+        "removeOverride": {
+            "actionType": "JSFunction",
+            "method": "removeOverride",
+            "inputData": {
+                "overrideTypes": "{{data.overrideTypes}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "outputData": {
+                "overrideTypes": ""
+            },
+            "deps": "js/Arm0ExportToOfficeApp"
+        },
+        "loadCells": {
+            "actionType": "dataProvider",
+            "method": "overrideTypeList"
+        },
+        "updateCtxAndExportToWord": {
+            "actionType": "JSFunction",
+            "method": "updateExportToWordRoundTripEventValue",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "isExportToWordRoundTripEventProgressing": ""
+            },
+            "deps": "js/Arm0ExportToRoundTripWordDocument",
+            "events": {
+                "success": [ {
+
+                    "condition": "data.isExportToWordRoundTripEventProgressing === true",
+                    "name": "Arm0ReuseRequirement.GenerateRoundTripWordDocument"
+                }
+            ]
+
+            }
+        },
+        "mountAction": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AwReqMgmtSe-2019-12-SpecNavigation",
+            "method": "getSpecificationMetadata",
+            "inputData": {
+                "input": {
+                    "inputCtxt": "{{function:getInputContext}}",
+                    "selectedObjects": [ "{{function:getTopSelectedObjects}}" ],
+                    "typePropMap": {},
+                    "options": []
+                }
+            },
+            "outputData": {
+                "getSpecificationMetadataResponse": ""
+            },
+            "events": {
+                "success": [ {
+
+                    "name": "Arm0ExportToRoundTripWordDocument.exportToWordRoundTripBatchJob"
+                } ]
+
+            },
+            "deps": "js/requirementsACEUtils"
+        },
+        "exportToWordRoundTripBatchJob": {
+            "actionType": "batchJob",
+            "steps": [ {
+
+                    "action": "setSpecificationMetadata"
+                },
+                {
+                    "action": "updateObjectTypeList"
+                },
+                {
+                    "action": "fetchHeaderFooterTemplates"
+                }
+            ]
+        },
+        "fetchHeaderFooterTemplates": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "clientScopeURI": ""
+                },
+                "inflateProperties": true,
+                "searchInput": {
+                    "maxToLoad": 150,
+                    "maxToReturn": 150,
+                    "providerName": "Awp0SavedQuerySearchProvider",
+                    "searchCriteria": {
+                        "queryName": "Item Revision...",
+                        "searchID": "TRANSL_OFFICE_QUERY",
+                        "typeOfSearch": "ADVANCED_SEARCH",
+                        "utcOffset": "0",
+                        "lastEndIndex": "0",
+                        "object_name": "*",
+                        "Type": "Arm0HeaderFooterRevision"
+                    },
+                    "attributesToInflate": [
+                        "object_name",
+                        "body_text",
+                        "arm0IsGlobal",
+                        "owning_user",
+                        "owning_group"
+                    ],
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "searchFilterMap6": {},
+                    "searchSortCriteria": [],
+                    "startIndex": 0
+                }
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}"
+            },
+
+            "events": {
+
+                "success": [ {
+
+                    "name": "Arm0ExportToRoundTripWordDocument.initHeadeFooterList"
+                } ]
+
+            },
+            "deps": "js/Arm0ExportToRoundTripWordDocument"
+        },
+        "initHeadeFooterList": {
+            "actionType": "JSFunction",
+            "method": "initHeadeFooterList",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "outputData": {
+                "headerFooterList.dbValues": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "CreateTracelink.refreshTracelinkedItemList"
+                } ]
+            },
+            "deps": "js/Arm0ExportToRoundTripWordDocument"
+        },
+
+        "updateObjectTypeList": {
+            "actionType": "JSFunction",
+            "method": "updateObjectTypeList",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "objectTypeList": ""
+            },
+            "deps": "js/Arm0ExportToRoundTripWordDocument"
+        },
+        "activateExportToWordDocumentPanel": {
+            "actionType": "JSFunction",
+            "method": "activateCommandPanel",
+            "deps": "js/commandPanel.service",
+            "inputData": {
+                "commandId": "Arm0ExportToRoundTripWordDocumentMain",
+                "location": "aw_toolsAndInfo"
+            }
+        },
+        "generateRoundTripWordDocument": {
+
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                        "name": "progress.start"
+                    },
+                    {
+                        "name": "Arm0ExportToRoundTripWordDocument.loadContentFromServer"
+                    }
+                ]
+            }
+        },
+        "loadContentFromServer": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceReqMgmt-2022-12-SpecNavigation",
+            "method": "getSpecificationContents3",
+            "inputData": {
+                "inputData": "{{function:getSpecificationContentWithHTMLObjectInput}}"
+            },
+            "outputData": {
+                "htmlContents":"htmlContent",
+                "markUpData":"markUpData",
+                "headerFooterData":"specInfo.HeaderFooterTemplate"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0ExportToRoundTripWordDocument.exportToWord"
+                    }
+                ]
+                },
+            "deps": "js/Arm0ExportToRoundTripWordDocument"
+        },
+        "exportToWord": {
+
+            "actionType": "RESTService",
+            "serviceName": "",
+            "method": "POST",
+            "inputData": {
+                "request": {
+                    "method": "POST",
+                    "url": "{{function:getMicroserviceURL}}",
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "data": {
+                        "htmlContents": "{{data.htmlContents}}",
+                        "exportAsPDF": "false",
+                        "exportType": "{{data.exportType.dbValue}}",
+                        "includeComments": "{{data.withoutComment.dbValue}}",
+                        "markupObjects": "{{data.markUpData}}",
+                        "exportMode": "{{data.exportOption.dbValue}}",
+                        "includeParagraphNumbering": "{{data.includeParagraphNumbering.dbValue}}",
+                        "headerFooter": "{{data.headerFooterData}}",
+                        "isLockBodyContent":"{{data.isLockBodyContent.dbValue}}",
+                        "isEditStructure":"{{data.isEditStructure.dbValue}}",
+                        "isIncludeTOC":"{{data.isIncludeTOC.dbValue}}",
+                        "tocLabel": "{{data.i18n.tableOfContents}}",
+                        "isIncludeTOI":"{{data.isIncludeTOI.dbValue}}",
+                        "toiLabel":"{{data.i18n.tableOfImages}}",
+                        "isIncludeLOT":"{{data.isIncludeLOT.dbValue}}",
+                        "lotLabel":"{{data.i18n.listOfTables}}",
+                        "waterMarkInformation": "{{function:getWaterMarkInformation}}"
+                    }
+
+                }
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "progress.end"
+                    },
+                    {
+                        "name": "Arm0ExportToRoundTripWordDocument.updateCtxAndExportToWord"
+                    },
+                    {
+                        "name": "Arm0ExportToRoundTripWordDocument.activateExportToWordDocumentPanel"
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+
+                ],
+                "failure": [
+                    {
+                        "name": "progress.end"
+                    },
+                    {
+                        "name": "Arm0ExportToRoundTripWordDocument.updateCtxAndExportToWord"
+                    },
+                    {
+                        "name": "Arm0ExportToRoundTripWordDocument.activateExportToWordDocumentPanel"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "message": "ExportFailedError"
+                    }
+                ]
+            },
+            "outputData": {
+                "searchTCObjects": "{{function:processResponse}}"
+            },
+            "deps": "js/Arm0RequirementDocumentationACE"
+        },
+        "getPropertiesFromReqType": {
+            "actionType": "JSFunction",
+            "method": "resetTypePropertiesFilter",
+            "inputData": {},
+            "outputData": {
+                "filterBoxForType.displayName": "",
+                "filterBoxForType.dbValue": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "Arm0ExportToRoundTripWordDocument.refreshdataProviderForTypeProperties"
+                } ]
+
+            },
+            "deps": "js/Arm0ExportToRoundTripWordDocument"
+        },
+        "checkOrUncheckTypeProperties":{
+            "actionType": "JSFunction",
+            "method": "checkOrUncheckTypeProperties",
+            "inputData": {
+                "data": "{{data}}",
+                "subType": "{{data.objectType.dbValue}}"
+            },
+            "outputData": {
+                "propertiesSelected":"propertiesSelected"
+            },
+            "deps": "js/Arm0ExportToRoundTripWordDocument"
+        },
+        "refreshdataProviderForTypeProperties": {
+            "actionType": "dataProvider",
+            "method": "dataProviderForTypeProperties"
+        },
+        "actionFilterListForType": {
+            "actionType": "JSFunction",
+            "method": "actionFilterListForType",
+            "inputData": {
+                "data": "{{data}}",
+                "subType": "{{data.objectType.dbValue}}"
+            },
+            "outputData": {
+                "typePropertiesToSelect": "typePropertiesToSelect"
+            },
+            "deps": "js/Arm0ExportToRoundTripWordDocument"
+        },
+        "setSpecificationMetadata": {
+            "actionType": "JSFunction",
+            "method": "setSpecificationMetadata",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "typePropInfosToAddProperties": "typePropInfosToAddProperties",
+                "typePropInfos": "typePropInfos",
+                "objectPropInfos": "objectPropInfos",
+                "traceLinkPropInfos": "traceLinkPropInfos"
+            },
+            "deps": "js/Arm0ExportToRoundTripWordDocument"
+        },
+        "closePanelDialog":{
+            "actionType": "JSFunction",
+            "method": "closeDialog",
+            "deps": "js/dialogService",
+            "inputData": {
+                "editeContext": "INFO_PANEL_CONTEXT",
+                "popopId": "{{subPanelContext.popupOptions.popupId}}"
+            }
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "Arm0ExportToRoundTripWordDocument.exportToWord",
+            "action": "exportToWord"
+        },
+        {
+            "eventId": "Arm0ExportToRoundTripWordDocument.activateExportToWordDocumentPanel",
+            "action": "activateExportToWordDocumentPanel"
+        },
+        {
+            "eventId": "Arm0ExportToRoundTripWordDocument.loadContentFromServer",
+            "action": "loadContentFromServer"
+        },
+        {
+            "eventId": "Arm0ExportToRoundTripWordDocument.refreshdataProviderForTypeProperties",
+            "action": "refreshdataProviderForTypeProperties"
+        },
+        {
+            "eventId": "Arm0ExportToRoundTripWordDocument.initHeadeFooterList",
+            "action": "initHeadeFooterList"
+        },
+        {
+            "eventId": "Arm0ReuseRequirement.GenerateRoundTripWordDocument",
+            "action": "generateRoundTripWordDocument"
+        },
+        {
+            "eventId": "Arm0ExportToRoundTripWordDocument.exportToWordRoundTripBatchJob",
+            "action": "exportToWordRoundTripBatchJob"
+        },
+        {
+            "eventId":"Arm0ExportToRoundTripWordDocument.closeDialog",
+            "action":"closePanelDialog"
+        }
+    ],
+
+    "dataProviders": {
+        "overrideTypeList": {
+            "commandsAnchor": "arm0_export_overridetype_cellCommands",
+            "response": "{{data.overrideTypes}}",
+            "selectionModelMode": "single"
+        },
+        "dataProviderForTypeProperties": {
+            "action": "actionFilterListForType",
+            "response": "{{data.typePropertiesToSelect}}",
+            "totalFound": "{{data.typePropertiesToSelect.length}}",
+            "deps": "js/Arm0ImportFromOffice"
+        }
+    },
+    "functions": {
+        "getWaterMarkInformation": {
+            "functionName": "getWaterMarkInformation",
+            "parameters": [
+                "{{data}}"
+            ]
+
+        },
+        "findSubBusinessObjectsAndInvokeSearch": {
+            "functionName": "findSubBusinessObjectsAndInvokeSearch",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getMicroserviceURL": {
+            "functionName": "getMicroserviceURL",
+            "parameters": [
+                "{{data}}",
+                "{{ctx}}"
+            ],
+            "deps": "js/Arm0RequirementDocumentationACE"
+
+        },
+        "getSpecificationContentInput": {
+            "functionName": "getSpecificationContentInput",
+            "parameters": [
+                "{{data}}",
+                "{{ctx}}"
+            ],
+            "deps": "js/Arm0ExportToRoundTripWordDocument"
+
+        },
+        "getSpecificationContentWithHTMLObjectInput": {
+            "functionName": "getSpecificationContentWithHTMLObjectInput",
+            "parameters": [
+                "{{data}}",
+                "{{ctx}}"
+            ],
+            "deps": "js/Arm0ExportToRoundTripWordDocument"
+
+        },
+        "processResponse": {
+            "functionName": "processResponse",
+            "deps": "js/Arm0RequirementDocumentationACE"
+        },
+        "processResponseOfSpecNavigation": {
+            "functionName": "processResponseOfSpecNavigation",
+            "deps": "js/Arm0ExportToRoundTripWordDocument"
+        },
+        "getInputContext": {
+            "functionName": "getInputContext"
+        },
+        "getTopSelectedObjects": {
+            "functionName": "getTopSelectedObject",
+            "parameters": [ "{{ctx}}" ]
+        }
+    },
+    "conditions": {
+        "toVisibleOverrideTypes": {
+            "expression": "data.exportOption.dbValue === 'export_Add_Override'"
+        },
+        "isCheckboxChecked": {
+            "expression": "data.addWaterMark.dbValue"
+        },
+        "visibleExportPropertyOption": {
+            "expression": "data.exportOption.dbValue === 'export_properties'"
+        }
+    },
+    "i18n": {
+        "overrideTypeTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "exportToOfficeTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "exportPanelTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "label": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "layoutLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "addWaterMarkLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "horizontalLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "diagonalLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "id": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "configurationSettingLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "withoutCommentLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "includeParagraphNumberingLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "fieldLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "readOnlyLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "editableLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "ExportFailedError": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "export_as_seen": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "export_properties": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "export_Add_Override": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "export_options": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "objectType": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "properties": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "headerFooterTemplate": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "LockReqContent": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "Arm0EditStructure":[
+            "RequirementsCommandPanelsMessages"
+        ],
+        "MicroserviceInstallationError": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "includeTOC": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "tableOfContents": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "filter": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "includeTOI":[
+            "RequirementsCommandPanelsMessages"
+        ],
+        "tableOfImages":[
+            "RequirementsCommandPanelsMessages"
+        ],
+        "includeLOT":[
+            "RequirementsCommandPanelsMessages"
+        ],
+        "listOfTables":[
+            "RequirementsCommandPanelsMessages"
+        ]
+    },
+    "messages": {
+        "RequestFailureMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.requestFailureMsg}}"
+        },
+        "ExportFailedError": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.MicroserviceInstallationError}}",
+            "messageTextParams": [
+                "{{data.i18n.exportToOfficeTitle}}"
+            ]
+        }
+    }
+}

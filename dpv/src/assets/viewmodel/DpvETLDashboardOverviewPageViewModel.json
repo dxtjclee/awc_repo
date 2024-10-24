@@ -1,0 +1,122 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "_provider": {
+            "label": {
+                "source": "/i18n/DpvMessages",
+                "key": "etlDashboard"
+            },
+            "isXrtApplicable": false,
+            "clientScopeURI": "",
+            "nameToken": "com.siemens.splm.client.dpv:etlDashboard",
+            "viewModes": {
+                "DetailsView": {
+                    "primaryWorkArea": "details",
+                    "secondaryWorkArea": true
+                }
+            },
+            "pwaViewModes":["details"],
+            "secondaryWorkarea": true,
+            "defaultDisplayMode": "DetailsView",
+            "defaultLayout":{
+                "layout":{
+                    "row":[
+                        {"secondaryWorkarea":true},
+                        {"pwaViewMode":"details"}
+                    ]
+                },
+                "layoutId":"Awp0TwoViewLayoutHorizontal"
+            },
+            "context": {
+                "search": {
+                    "isFilteringEnabled": false,
+                    "hideInContentSearchBox": true,
+                    "sortType": "Priority",
+                    "maxToLoad": 50,
+                    "maxToReturn": 50
+                }
+            },
+            "viewBase": "Dpv1ETL",
+            "awSubLocationPref": {
+                "orientation": "HORIZONTAL",
+                "flipLayout": true
+            }
+        },
+        "searchState": {
+            "initialValues": {
+                "availableETLServers": [],
+                "selectedETLServer": "",
+                "plantNametoIDMap": {},
+                "selectedPlants": [],
+                "healthInfo": {
+                    "deviceName": "",
+                    "deviceId": "",
+                    "plantName": "",
+                    "failedCount": -1,
+                    "successCount": -1,
+                    "partialSuccessCount": -1,
+                    "selectedFileReports": [],
+                    "fileType": -1,
+                    "lastSelectedRowIndex": -1,
+                    "refreshInitiated": false
+                },
+                "deviceAgentInfo": {
+                    "plantId": "",
+                    "deviceAgent": "",
+                    "plantName": "",
+                    "selectedStatOption": "hourly",
+                    "showGraph": true
+                }
+            },
+            "meta": {}
+        }
+    },
+    "actions": {
+        "loadETLOverviewDataBatchAction": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "loadAvailablePlants"
+                },
+                {
+                    "action": "loadETLServerList"
+                },
+                {
+                    "action": "initSearchState"
+                }
+            ]
+        },
+        "loadETLServerList":{
+            "actionType": "JSFunctionAsync",
+            "method": "loadETLServerList",
+            "inputData": {},
+            "outputData": {
+                "availableServers": ""
+            },
+            "deps": "js/Dpv1ETLDashboardService"
+        },
+        "loadAvailablePlants":{
+            "actionType": "JSFunctionAsync",
+            "method": "loadAvailablePlants",
+            "inputData": {},
+            "outputData": {
+                "plantNametoIDMap": ""
+            },
+            "deps": "js/Dpv1ETLDashboardService"
+        },
+        "initSearchState": {
+            "actionType": "JSFunction",
+            "method": "initSearchState",
+            "inputData": {
+                "searchStateAtomicData": "{{data.atomicDataRef.searchState}}",
+                "searchStateUpdater": "{{data.updateAtomicData}}",
+                "availableServers": "{{data.availableServers}}",
+                "plantNametoIDMap": "{{data.plantNametoIDMap}}"
+            },
+            "deps": "js/Dpv1ETLDashboardService"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "loadETLOverviewDataBatchAction"
+    }
+}

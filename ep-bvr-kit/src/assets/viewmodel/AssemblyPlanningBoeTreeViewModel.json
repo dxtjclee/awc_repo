@@ -1,0 +1,173 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "view-path": {
+            "type": "object"
+        },
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "actions": {
+
+        "getValueInViewModel": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "tabData": "{{subPanelContext}}"
+            },
+            "outputData": {
+                "boeTreeContext.tabContext": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        }
+    },
+
+    "data": {
+        "isLoading": true,
+        "boeTreeContext": {
+            "objectUid": "{{ctx.epPageContext.loadedObject.uid}}",
+            "isTopNode": false,
+            "preferenceName": "EP_BoeTreeTableColumnConfiguration",
+            "loadTypes": "CommonExpand",
+            "rootAdditionalLoadParams": [
+                {
+                    "tagName": "expandType",
+                    "attributeName": "type",
+                    "attributeValue": "ExpandResourcesDetailedPlanning"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "level",
+                    "attributeValue": "TOP_WITH_CHILDREN"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "rootsProperty",
+                    "attributeValue": "associatedResources"
+                }
+            ],
+            "childLoadTypes": "CommonExpand",
+            "childAdditionalLoadParams": [{
+                    "tagName": "expandType",
+                    "attributeName": "type",
+                    "attributeValue": "ExpandResourcesDetailedPlanning"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "level",
+                    "attributeValue": "CHILDREN"
+                }
+            ],
+            "additionalPolicyObjects": {
+                "types": [{
+                    "name": "BOMLine",
+                    "properties": [
+                        {
+                            "name": "bl_has_children"
+                        }
+                    ]
+                }]
+            },
+            "relatedObjectMapKey": ["childAssembly", "associatedResources"],
+            "relationName": ["Mfg0assigned_workarea"],
+            "isScopeOrTarget": "Target",
+            "treeNavigationColumnIndex": 1,
+            
+            "customColumns":
+            [
+                {
+                    "clientColumn": true,
+                    "name": "graphicVisibility",
+                    "propertyDisplayName": "{{i18n.GraphicVisibilityColumnName}}"
+                }
+            ],
+            "enableSorting": true,
+            "noBoeStructure": [{
+                    "text": "{{i18n.noBoeStructure}}"
+                }],
+            "alwaysVisibleColumns":["object_string"],
+            "enableArrangeColumn": true
+        },
+        "boeTreeRootNodeContext": {
+            "objectUid": "{{ctx.epPageContext.rootPlant.uid}}",
+            "preferenceName": "EP_BoeTreeTableColumnConfiguration",
+            "loadTypes": "CommonExpand",
+            "isTopNode": true,
+            "rootAdditionalLoadParams": [
+                {
+                    "tagName": "expandType",
+                    "attributeName": "type",
+                    "attributeValue": "ExpandResourcesDetailedPlanning"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "level",
+                    "attributeValue": "TOP_WITH_CHILDREN"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "rootsProperty",
+                    "attributeValue": "RootObject"
+                }
+            ],
+            "childAdditionalLoadParams": [
+                {
+                    "tagName": "expandType",
+                    "attributeName": "type",
+                    "attributeValue": "ExpandResourcesDetailedPlanning"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "level",
+                    "attributeValue": "CHILDREN"
+                }
+            ],
+            "additionalPolicyObjects": {
+                "types": [
+                    {
+                        "name": "BOMLine",
+                        "properties": [
+                            {
+                                "name": "bl_has_children"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "relatedObjectMapKey": ["childAssembly"],
+            "relationName": ["Mfg0assigned_workarea"],
+            "isScopeOrTarget": "Target",
+            "treeNavigationColumnIndex": 1,
+            "customColumns": [
+                {
+                    "clientColumn": true,
+                    "name": "graphicVisibility",
+                    "propertyDisplayName": "{{i18n.GraphicVisibilityColumnName}}"
+                }
+            ],
+            "messages": {
+                "noBoeStructure": [
+                    {
+                        "text": "{{i18n.noBoeStructure}}"
+                    }
+                ]
+            }
+        }
+    },
+
+    "conditions": {
+        "isPlantAvailable": {
+            "expression": "ctx.epTaskPageContext.rootPlant && ctx.epTaskPageContext.rootPlant.uid"
+        },
+        "isShowFullBOEInResourcesEnabled": {
+            "expression": "ctx.preferences.EP_ShowFullBOEInResources && ctx.preferences.EP_ShowFullBOEInResources[0] === 'true'"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "getValueInViewModel"
+    },
+    "i18n": {
+        "noBoeStructure": [ "AssemblyMessages" ]
+    }
+}

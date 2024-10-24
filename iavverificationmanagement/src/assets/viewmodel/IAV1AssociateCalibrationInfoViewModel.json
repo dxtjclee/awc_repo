@@ -1,0 +1,152 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/aw-add.directive",
+        "js/aw-list.directive",
+        "js/aw-break.directive",
+        "js/aw-default-cell.directive"
+        ],
+
+    "data": {
+        "filterBox":{
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "false",
+            "dbValue": ""
+        }
+    },
+
+    "dataProviders": {
+        "calibInfoDataProvider": {
+            "action": "calibInfoDataProviderAction",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}"
+        }
+
+
+    },
+
+    "actions": {
+        "initiateDataProvider":
+        {
+            "actionType": "dataProvider",
+            "method": "calibInfoDataProvider"
+        },
+        "calibInfoDataProviderAction":{
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "searchInput": {
+                    "attributesToInflate": [],
+                    "internalPropertyName": "",
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "IAV1CalibrationObjProvider",
+                    "searchCriteria": {
+                      "searchString": "{{function:getSearchCriteria}}",
+                      "forceThreshold": "true",
+                      "listOfExpandedCategories": "",
+                      "limitedFilterCategoriesEnabled": "false"
+                    },
+                    "searchFilterFieldSortType": "Priority",
+                    "searchSortCriteria": [],
+                    "inflateProperties": false,
+                    "columnFilters": [],
+                    "focusObjUid": "",
+                    "pagingType": "",
+                    "startIndex": "{{data.dataProviders.programsImageDataProvider.startIndex}}"
+                  }
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}"
+            },
+            "deps": "js/IAV1AssociateCalibInfo"
+        },
+
+        "createRelationForPaletteOrSearch": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "createRelations",
+            "inputData": {
+                "input": "{{function:getCreateRelationInputForCalibInfo}}"
+            },
+            "deps": "js/IAV1AssociateCalibInfo",
+            "events": {
+                "success": [ {
+                        "name": "closeDialog"
+                    }
+                ],
+                "failure": [ {
+                        "name": "closeDialog"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "calibInfoAssociationFailed"
+                } ]
+            }
+        },
+        "closePanelDialog": {
+            "actionType": "JSFunction",
+            "method": "closeDialog",
+            "inputData": {
+                "editContext": "INFO_PANEL_CONTEXT",
+                "popupId": "{{subPanelContext.popupOptions.popupId}}"
+            },
+            "deps": "js/dialogService"
+        }
+    },
+    "functions": {
+        "getCreateRelationInputForCalibInfo": {
+            "functionName": "getCreateRelationInputForCalibInfo",
+            "parameters": [
+                "{{subPanelContext.selectionData.selected[0]}}",
+                "{{data.dataProviders.calibInfoDataProvider.selectedObjects}}"
+            ]
+        },
+        "getSearchCriteria": {
+            "functionName": "getSearchStringValue",
+            "parameters": ["{{data}}"]
+        }
+    },
+    "lifecycleHooks": {
+        "onMount" : "initiateDataProvider"
+    },
+    "onEvent": [ {
+        "eventId": "closeDialog",
+        "action": "closePanelDialog"
+    }
+],
+    "ctx":{
+        "panelContext": null
+    },
+    "conditions": {
+    },
+    "messages":{
+        "calibInfoAssociationFailed": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "i18n": {
+        "AssociateCalibInfoPanelTitle": [
+            "verificationMgmtmMessages"
+        ],
+        "AssociateCalibInfoButton": [
+            "verificationMgmtmMessages"
+        ],
+        "TitleTo": [
+            "verificationMgmtmMessages"
+        ],
+        "CalibrationMessage": [
+            "verificationMgmtmMessages"
+        ]
+    }
+}

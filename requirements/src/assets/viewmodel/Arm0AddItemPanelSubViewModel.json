@@ -1,0 +1,204 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [ ],
+    "actions": {
+        "addFromStructure": {
+            "actionType": "JSFunction",
+            "method": "addFromStructure",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Arm0AddFromStructure"
+        },
+        "addInList": {
+            "actionType": "JSFunction",
+            "method": "addInItemList",
+            "inputData": {
+                "data": "{{data}}",
+                "newObjs": "{{function:getSelectionAddPanel}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "condition": "data.errorManyToManyTracelink",
+                        "message": "notificationManytoManyTracelinkCreation"
+                    }
+                ]
+            },
+            "deps": "js/Arm0CreateTraceLink"
+        },
+        "reqPaletteSelectionChangeEvent": {
+            "actionType": "JSFunction",
+            "method": "handlePaletteSelection",
+            "inputData": {
+                "ctx": "{{ctx}}",
+                "data": "{{data}}",
+                "dataProviderId": "{{data.eventData.dataProviderId}}",
+                "context": "{{data.eventData.context}}"
+            },
+            "outputData":
+            {
+                "paletteSelection": "paletteSelection"
+            },
+            "deps": "js/Arm0CreateTraceLink"
+        },
+        "handleRecentPaletteSelection": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "reqPaletteTabPage.selectionChangeEvent",
+                        "eventData": {
+                            "dataProviderId": "getRecentObjsProvider",
+                            "context": "{{data.eventData}}"
+                        }
+                    }
+                ]
+            }
+        },
+        "handleFavoritePaletteSelection": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "reqPaletteTabPage.selectionChangeEvent",
+                        "eventData": {
+                            "dataProviderId": "getFavoriteProvider",
+                            "context": "{{data.eventData}}"
+                        }
+                    }
+                ]
+            }
+        },
+        "handleClipboardPaletteSelection": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "reqPaletteTabPage.selectionChangeEvent",
+                        "eventData": {
+                            "dataProviderId": "getClipboardProvider",
+                            "context": "{{data.eventData}}"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "data": {
+        "addPanelState": {
+            "initialValues": {
+                "creationType": "",
+                "selectedTab": "",
+                "sourceObjects":"",
+                "targetObject":""
+            },
+            "meta": {}
+        }
+    },
+    "functions": {
+        "getSelectionAddPanel": {
+            "functionName": "getSelectionAddPanel",
+            "parameters": [
+                "{{data}}"
+            ]
+        }
+    },
+    "ctx": {
+        "panelContext.title": {
+            "type": "string"
+        },
+        "panelContext.text": {
+            "type": "string"
+        }
+    },
+    "dataProviders": {},
+    "onEvent": [
+        {
+            "eventId": "getClipboardProvider.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "handleClipboardPaletteSelection"
+        },
+        {
+            "eventId": "getFavoriteProvider.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "handleFavoritePaletteSelection"
+        },
+        {
+            "eventId": "getRecentObjsProvider.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "handleRecentPaletteSelection"
+        },
+        {
+            "eventId": "reqPaletteTabPage.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "reqPaletteSelectionChangeEvent"
+        }
+    ],
+    "conditions": {
+        "isAddButtonVisible": {
+            "expression": "ctx.panelContext.title && (conditions.isPaletteTabAddButtonVisible || conditions.isSearchTabAddButtonVisible)"
+        },
+        "isPaletteTabAddButtonVisible": {
+            "expression": "conditions.isPaletteTabSelected && addPanelState.sourceObjects && addPanelState.sourceObjects.length > 0"
+        },
+        "isSearchTabAddButtonVisible": {
+            "expression": "!conditions.isPaletteTabSelected && addPanelState.sourceObjects && addPanelState.sourceObjects.length > 0"
+        },
+        "isPaletteTabSelected": {
+            "expression": "addPanelState.selectedTab.view === 'PaletteTabPageSub'"
+        },
+        "isInsertButtonVisible": {
+            "expression": "ctx.panelContext.text && (conditions.isPaletteTabAddButtonVisible || conditions.isSearchTabAddButtonVisible)"
+        }
+    },
+    "messages": {
+        "notificationManytoManyTracelinkCreation": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.notificationManytoManyTracelinkCreation}}"
+        }
+    },
+    "i18n": {
+        "notificationManytoManyTracelinkCreation": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "Add": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "paletteTabTitle": [
+            "awAddDirectiveMessages"
+        ],
+        "searchText": [
+            "UIMessages"
+        ],
+        "openInView": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "openSplitViewLabel": [
+            "RequirementsCommandPanelsMessages"
+        ]
+    }
+}

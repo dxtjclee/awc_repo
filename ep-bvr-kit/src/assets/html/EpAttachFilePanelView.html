@@ -1,0 +1,24 @@
+<aw-command-panel caption="i18n.attachFile">
+    <aw-add
+        exist-when="data.relationMap"
+        target-object="data.targetObject"
+        include-types="Dataset"
+        auto-select-on-unique-type="true"
+        visible-tabs="new"
+        type-filter="Dataset"
+        relation-map="data.relationMap"
+        add-panel-state="fields.addPanelState"
+        xrt-state="data.xrtState"
+        edit-handler="editHandlers.addPanelEditHandler"
+        is-custom-dataset-action="true"
+        sub-panel-context="{ ...subPanelContext, showDataSetUploadPanel: true, hideAddCommand: true }">
+    </aw-add>
+    <aw-panel-footer exist-when="conditions.isValid">
+        <aw-button button-type="base" action="closePanel" size="auto">
+            <aw-i18n>i18n.cancel</aw-i18n>
+        </aw-button>
+        <aw-button action="epCreateAttach" size="auto">
+            <aw-i18n>i18n.done</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

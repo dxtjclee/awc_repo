@@ -1,0 +1,76 @@
+{
+  "Ase1InterfacesColumnHeaderRenderer": {
+    "grids": [
+      "Ase1InterfacesGrid"
+    ],
+    "columns": [],
+    "tooltip": [],
+    "template": "",
+    "templateUrl": "",
+    "deps": "js/Ase1InterfacesGridService",
+    "dependentServices": [],
+    "headerComponent": "Ase1InterfacesGridHeader"
+  },
+  "Ase1InterfacesTableIconsRenderer": {
+    "grids": [
+      "primaryTable",
+      "inContextInterfacesTable",
+      "inContextExchangeItemsTable"
+    ],
+    "columns": [
+      "ase1PortObject",
+      "ase1ComponentObject"
+    ],
+    "template": "",
+    "templateUrl": "",
+    "renderFunction": "showInterfacesIconsRenderer",
+    "deps": "js/Ase1InterfacesShowIcons",
+    "dependentServices": []
+  },
+  "Ase1ConnectionsTableIconsRenderer": {
+    "grids": [
+      "connectionTable",
+      "inContextComponentExchangesTable",
+      "inContextFunctionalExchangesTable"
+    ],
+    "columns": [
+      "REF(awb0End2,Awb0Element).REF(awb0Parent,Awb0Element).awb0UnderlyingObject",
+      "REF(awb0End1,Awb0Element).REF(awb0Parent,Awb0Element).awb0UnderlyingObject",
+      "REF(awb0End2,Awb0Interface).awb0UnderlyingObject",
+      "REF(awb0End1,Awb0Interface).awb0UnderlyingObject"
+    ],
+    "template": "",
+    "templateUrl": "",
+    "renderFunction": "showConnectionsTableIconsRenderer",
+    "deps": "js/Ase1InterfacesShowIcons",
+    "dependentServices": []
+  },
+  "Ase1ExchangeItemsTableIconsRenderer": {
+    "grids": [
+      "exchangeItemsTable"
+    ],
+    "columns": [
+      "ase1PortObject"
+    ],
+    "template": "",
+    "templateUrl": "",
+    "renderFunction": "showInterfacesIconsRenderer",
+    "deps": "js/Ase1InterfacesShowIcons",
+    "dependentServices": []
+  },
+  "Ase1ConnectionsTableAlignmentColumnIconsRenderer": {
+    "grids": [
+      "connectionTable",
+      "inContextInterfacesTable"
+    ],
+    "columns": [
+      "ase1InterfaceAlignment",
+      "ase1Alignment"
+    ],
+    "template": "",
+    "templateUrl": "",
+    "renderFunction": "showInterfacesIconsRenderer",
+    "deps": "js/Ase1InterfacesShowIcons",
+    "dependentServices": []
+  }
+}

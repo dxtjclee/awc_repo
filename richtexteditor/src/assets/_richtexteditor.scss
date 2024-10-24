@@ -1,0 +1,1166 @@
+// Copyright 2018 Siemens Product Lifecycle Management Software Inc.
+/* begin richtexteditorjs */
+
+.aw-requirements-traceMatPopup .aw-popup-command-bar.aw-popup-command-bar .aw-widgets-cellListItem{
+    margin: 0;
+}
+
+.aw-requirements-mainPanel {
+    display: block;
+    outline-style: none;
+    width: 100%;
+    min-height:200px;
+    .aw-richtexteditor-editorContainer {
+        overflow: unset;
+    }
+}
+
+.aw-requirements-mentions {
+
+    max-height: 300px;
+
+    overflow-y: auto;
+
+    overflow-x: hidden;
+
+    overscroll-behavior: contain;
+
+}
+
+.aw-richtexteditor-freezepopup{
+    padding-bottom: 0;
+}
+
+/*
+ * Reset and overrides with scoping for the requirements document
+ * panel for getting correct formatting with the HTML output
+ * from the CKEditor and MSWord translation.
+ */
+
+.aw-richtexteditor-documentPanel {
+    display: block;
+}
+
+.aw-richtexteditor-documentPanel a,
+.aw-richtexteditor-documentPanel address,
+.aw-richtexteditor-documentPanel b,
+.aw-richtexteditor-documentPanel big,
+.aw-richtexteditor-documentPanel blockquote,
+.aw-richtexteditor-documentPanel br,
+.aw-richtexteditor-documentPanel caption,
+.aw-richtexteditor-documentPanel cite,
+.aw-richtexteditor-documentPanel code,
+.aw-richtexteditor-documentPanel dfn,
+.aw-richtexteditor-documentPanel div,
+.aw-richtexteditor-documentPanel em,
+.aw-richtexteditor-documentPanel h1,
+.aw-richtexteditor-documentPanel h2,
+.aw-richtexteditor-documentPanel h3,
+.aw-richtexteditor-documentPanel h4,
+.aw-richtexteditor-documentPanel h5,
+.aw-richtexteditor-documentPanel h6,
+.aw-richtexteditor-documentPanel hr,
+.aw-richtexteditor-documentPanel i,
+.aw-richtexteditor-documentPanel img,
+.aw-richtexteditor-documentPanel kbd,
+.aw-richtexteditor-documentPanel li,
+.aw-richtexteditor-documentPanel ol,
+.aw-richtexteditor-documentPanel p,
+.aw-richtexteditor-documentPanel q,
+.aw-richtexteditor-documentPanel samp,
+.aw-richtexteditor-documentPanel small,
+.aw-richtexteditor-documentPanel span,
+.aw-richtexteditor-documentPanel strong,
+.aw-richtexteditor-documentPanel sub,
+.aw-richtexteditor-documentPanel sup,
+.aw-richtexteditor-documentPanel table,
+.aw-richtexteditor-documentPanel tbody,
+.aw-richtexteditor-documentPanel td,
+.aw-richtexteditor-documentPanel tr,
+.aw-richtexteditor-documentPanel tt,
+.aw-richtexteditor-documentPanel ul,
+.aw-richtexteditor-documentPanel var {
+    display: block;
+}
+
+.aw-richtexteditor-documentPanel style {
+    display: none;
+}
+
+.aw-richtexteditor-documentPanel div,
+.aw-richtexteditor-documentPanel p {
+    font-size: $fontsize_normal;
+    margin: 5px 8px 5px 8px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+
+.aw-richtexteditor-documentPanel hr {
+    border-width: 1px 0 0;
+    border-style: solid none none;
+    height: 0;
+    line-height: 21px;
+    margin: 5px 8px 5px 8px;
+}
+
+.aw-richtexteditor-documentPanel .marker {
+    background: yellow;
+}
+
+.aw-richtexteditor-documentPanel em {
+    display: inline;
+    font-style: italic;
+}
+
+.aw-richtexteditor-documentPanel b,
+.aw-richtexteditor-documentPanel strong {
+    display: inline;
+    font-weight: bold;
+    font-size: inherit;
+}
+
+.aw-richtexteditor-documentPanel small {
+    font-size: $fontsize_small;
+}
+
+.aw-richtexteditor-documentPanel tt,
+.aw-richtexteditor-documentPanel code,
+.aw-richtexteditor-documentPanel kbd,
+.aw-richtexteditor-documentPanel samp {
+    display: inline;
+}
+
+$requirement_header_font_weight: 600;
+.aw-richtexteditor-documentPanel h1 {
+    font-size: $fontsize_3x_large;
+    min-height: 31px;
+    margin: 8px;
+    margin-top: 17px;
+    margin-bottom: 17px;
+    font-weight: $requirement_header_font_weight;
+}
+
+.aw-richtexteditor-documentPanel h2 {
+    font-size: $fontsize_x_large;
+    min-height: 24px;
+    margin: 8px;
+    margin-bottom: 16px;
+    font-weight: $requirement_header_font_weight;
+}
+
+.aw-richtexteditor-documentPanel h3 {
+    font-size: $fontsize_large;
+    min-height: 18px;
+    margin: 8px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-weight: $requirement_header_font_weight;
+}
+
+.aw-richtexteditor-documentPanel h4 {
+    font-size: $fontsize_normal;
+    min-height: 15px;
+    margin: 8px;
+    margin-top: 17px;
+    margin-bottom: 17px;
+    font-weight: $requirement_header_font_weight;
+}
+
+.aw-richtexteditor-documentPanel h5 {
+    font-size: $fontsize_small;
+    min-height: 13px;
+    margin: 8px;
+    margin-top: 18px;
+    margin-bottom: 18px;
+    font-weight: $requirement_header_font_weight;
+}
+
+.aw-richtexteditor-documentPanel h6 {
+    font-size: $fontsize_x_small;
+    min-height: 10px;
+    margin: 8px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-weight: $requirement_header_font_weight;
+}
+
+.aw-richtexteditor-documentPanel i,
+.aw-richtexteditor-documentPanel cite,
+.aw-richtexteditor-documentPanel var,
+.aw-richtexteditor-documentPanel address,
+.aw-richtexteditor-documentPanel dfn,
+.aw-richtexteditor-documentPanel em {
+    display: inline;
+    font-style: italic;
+}
+
+.aw-richtexteditor-documentPanel q {
+    display: inline;
+    quotes: '"' '"';
+}
+
+.aw-richtexteditor-documentPanel blockquote {
+    quotes: '"' '"';
+    font-style: italic;
+    padding: 2px 0;
+    border-style: solid;
+    border-width: 0;
+    padding-left: 20px;
+    padding-right: 8px;
+    border-left-width: 5px;
+    margin-left: 40px;
+}
+
+.aw-richtexteditor-documentPanel q:before {
+    content: open-quote;
+}
+
+.aw-richtexteditor-documentPanel q:after {
+    content: close-quote;
+}
+
+.aw-richtexteditor-documentPanel sub {
+    display: inline;
+    vertical-align: sub;
+    margin-left: 0;
+    font-size: $fontsize_small;
+}
+
+.aw-richtexteditor-documentPanel sup {
+    display: inline;
+    vertical-align: super;
+    margin-left: 0;
+    font-size: $fontsize_small;
+}
+
+.aw-richtexteditor-documentPanel big {
+    display: inline;
+    font-size: $fontsize_2x_large;
+}
+
+.aw-richtexteditor-documentPanel small {
+    display: inline;
+    font-size: $fontsize_small;
+}
+
+.aw-richtexteditor-documentPanel a {
+    display: inline;
+    text-decoration: underline;
+}
+
+.aw-richtexteditor-documentPanel q,
+.aw-richtexteditor-documentPanel br,
+.aw-richtexteditor-documentPanel img,
+.aw-richtexteditor-documentPanel span {
+    display: inline;
+}
+
+.aw-richtexteditor-documentPanel ul li,
+.aw-richtexteditor-documentPanel ol li {
+    display: list-item;
+    font-size: $fontsize_normal;
+    margin-left: 4em;
+    margin-right: 13px;
+}
+
+.aw-richtexteditor-documentPanel ul li {
+    list-style-type: disc;
+    list-style-position: inside;
+}
+
+.aw-richtexteditor-documentPanel ul ul li {
+    list-style-type: circle;
+}
+
+.aw-richtexteditor-documentPanel ul ul ul li {
+    list-style-type: square;
+}
+
+.aw-richtexteditor-documentPanel ol li {
+    list-style-type: unset;
+    list-style-position: inside;
+}
+
+.aw-richtexteditor-documentPanel caption {
+    display: table-caption;
+    text-align: center;
+}
+
+.aw-richtexteditor-documentPanel ol.aw-requirement-tocOl li {
+    list-style: none;
+}
+
+.aw-richtexteditor-documentPanel table {
+    display: table;
+    border-collapse: separate;
+    border-style: solid;
+    border-width: 1px;
+    padding: 0;
+    border-spacing: 1px;
+    max-width: 100%;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+.aw-richtexteditor-documentPanel .table {
+    max-width: 100%;
+}
+
+.aw-richtexteditor-documentPanel table,
+.aw-richtexteditor-documentPanel .table,
+.aw-richtexteditor-documentPanel .table table{
+    width: auto !important; //important is required to override inline style added by ckeditor
+}
+
+.aw-richtexteditor-documentPanel tbody {
+    display: table-row-group;
+    border-collapse: separate;
+    vertical-align: middle;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.aw-richtexteditor-documentPanel tr,
+.aw-richtexteditor-documentPanel td {
+    font-size: $fontsize_normal;
+    white-space: normal;
+}
+
+.aw-richtexteditor-documentPanel tr {
+    display: table-row;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.aw-richtexteditor-documentPanel td {
+    display: table-cell;
+    border-style: solid;
+    border-width: 1px;
+    padding: 1px;
+}
+
+.aw-richtexteditor-documentPanel table td,
+.aw-richtexteditor-documentPanel table th {
+    min-width: 2em;
+    padding: 0.4em;
+}
+
+.aw-richtexteditor-document {
+    font-size: $fontsize_normal;
+    line-height: 1.5;
+    cursor: text;
+    font-family: Arial, Helvetica, sans-serif;
+    word-wrap: break-word;
+}
+
+.aw-richtexteditor-document img {
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.aw-richtexteditor-document table img {
+    max-height: none;
+    max-width: none;
+}
+
+.aw-requirement-bodytext p, .aw-requirement-bodytext span{
+    z-index: auto !important; // Added to override negative z-index which causes loss of visibilty in viewer
+}
+
+.aw-richtexteditor-documentPaper {
+    max-width: 100%;
+    margin: 20px 40px 20px 40px;
+    border-width: 1px;
+    border-style: solid;
+}
+
+.aw-richtexteditor-documentPanel .aw-requirement-marker {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    max-width: 16px;
+    max-height: 16px;
+    float: left;
+    margin-left: -35px;
+}
+
+.aw-requirement-marker .aw-requirement-tracelinkCount {
+    margin-right: -30px;
+    position: relative;
+    top: -20px;
+    left: 8px;
+    font-size: $fontsize_small;
+    float: left;
+}
+
+.aw-richtexteditor-documentPanel .aw-requirement-marker img,
+.aw-richtexteditor-documentPanel .aw-requirement-marker svg {
+    height: 16px;
+    width: 16px;
+    display: block;
+    margin: auto;
+    margin-bottom: 5px;
+}
+
+.aw-richtexteditor-documentPanel .aw-requirement-header h1,
+.aw-richtexteditor-documentPanel .aw-requirement-header h2,
+.aw-richtexteditor-documentPanel .aw-requirement-header h3,
+.aw-richtexteditor-documentPanel .aw-requirement-header h4,
+.aw-richtexteditor-documentPanel .aw-requirement-header h5,
+.aw-richtexteditor-documentPanel .aw-requirement-header h6 {
+    margin-top: auto;
+    margin-bottom: auto;
+    word-break: break-word;
+}
+
+.aw-richtexteditor-documentPanel .aw-requirement-header {
+    overflow: hidden;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: flex-start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+}
+
+.aw-richtexteditor-documentPanel .aw-requirement-content {
+    overflow: hidden;
+}
+
+.aw-richtexteditor-documentPanel .aw-requirement-marker svg,
+.aw-richtexteditor-documentPanel .aw-requirement-marker img {
+    cursor: auto;
+}
+
+.aw-requirement-marker .aw-requirement-has-tracelink img,
+.aw-requirement-marker .aw-requirement-create-tracelink img {
+    cursor: pointer;
+    height: 16px;
+}
+
+.aw-richtexteditor-documentPanel .aw-requirement-header:hover {
+    cursor: pointer;
+}
+
+.aw-requirements-tracelinkPropertiesPanelSection {
+    max-height: 250px;
+}
+
+.aw-richtexteditor-editorPanel {
+    display: flex;
+    outline-style: none;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    .ck.ck-editor{
+        width: 100%;
+    }
+}
+
+.aw-richtexteditor-aceEditorPanel {
+    height: 100%;
+    .aw-base-scrollPanel:hover {
+        overflow-y: hidden;
+    }
+
+    .aw-layout-panelContent {
+        padding: 0;
+    }
+}
+
+.aw-requirements-mapping-chevron-icon .aw-widget-icon {
+    pointer-events: auto;
+}
+
+.aw-requirement-header .aw-layout-panelSectionTitleChevron {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.aw-requirement-header .aw-requirement-chevronCollapsed {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.aw-richtexteditor-updateMessageAdded {
+    word-break: break-word;
+}
+.aw-richtexteditor-updateMessageAdded .aw-requirement-title {
+    max-width: calc(100% - 35%);
+    vertical-align: middle;
+}
+
+.aw-richtexteditor-updateMessage{
+    float:right;
+    font-weight: normal;
+    padding-right: rem-calc(3);
+    padding-top: rem-calc(3);
+    vertical-align: middle;
+    font-size: $fontsize_normal;
+    max-width: 30%;
+    svg {
+        width: rem-calc(16);
+        height: rem-calc(16);
+        padding-top: rem-calc(3);
+    }
+}
+
+
+.aw-richtexteditor-tracelinkDashboard {
+    position: relative;
+}
+
+.aw-richtexteditor-tracelinkDashboard .filter-panel {
+    display: block;
+    margin-top: 10px;
+}
+
+.aw-richtexteditor-tracelinkDashboard .pagination,
+.page-item {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin-left: 3px;
+}
+
+.aw-richtexteditor-tracelinkDashboard .list-items {
+    margin-left: 50px;
+}
+
+.aw-richtexteditor-tracelinkDashboard .aw-checkbox-items {
+    margin-left: 50px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.aw-richtexteditor-tracelinkDashboard text.inactive {
+    font-weight: normal;
+}
+
+.aw-richtexteditor-tracelinkDashboard text.active {
+    font-weight: bold;
+}
+
+.aw-richtexteditor-tracelinkDashboard rect.active,
+path.active {
+    fill-opacity: 0.3;
+}
+
+.aw-richtexteditor-tracelinkDashboard .col-title {
+    display: none;
+    margin-left: auto;
+    text-align: -webkit-left;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.aw-richtexteditor-tracelinkDashboard nav {
+    margin-top: 10px;
+}
+
+.aw-richtexteditor-tracelinkDashboard .col_header_title {
+    display: inline-block;
+    margin-left: 15px;
+    margin-top: 10px;
+}
+
+.aw-richtexteditor-tracelinkDashboard .row-pagination {
+    text-align: center;
+    vertical-align: middle;
+    font-weight: normal;
+}
+
+.aw-richtexteditor-tracelinkDashboard .col-pagination {
+    display: inline-block;
+    margin-left: 100px;
+    font-weight: normal;
+}
+
+.aw-richtexteditor-tracelinkDashboard .pagination>.active>a {
+    text-decoration: underline;
+}
+
+.aw-richtexteditor-tracelinkDashboard .viz_container {
+    position: relative;
+}
+
+.aw-richtexteditor-tracelinkDashboard .top_left_box_text {
+    stroke: none;
+    font-weight: bold;
+}
+
+.aw-richtexteditor-tracelinkDashboard .breadcrumb {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    list-style: none;
+    padding-left: 1rem;
+}
+
+.aw-richtexteditor-tracelinkDashboard .breadcrumb-item>.parent-header::after {
+    display: inline-block;
+    padding-right: .5rem;
+    padding-left: .5rem;
+    content: ">";
+}
+
+.aw-richtexteditor-tracelinkDashboard .aw-table {
+    height: 28vh;
+}
+
+.aw-requirement-header.aw-widgets-cellListItem {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.aw-layout-column .aw-requirements-commandBarIcon {
+    display: inline-block;
+}
+
+.aw-requirements-xrtRichText {
+    overflow: unset;
+}
+
+.aw-requirement-tracelinkTooltip {
+    overflow: hidden;
+    width: 100%;
+}
+
+.aw-requirement-tracelinkTooltip .aw-widgets-cellListItem {
+    padding: 5px 0;
+}
+
+.aw-requirement-tracelinkTooltip .aw-layout-panelSectionTitle {
+    height: 24px;
+}
+
+.aw-requirement-tracelinkTooltip .aw-layout-panelSectionContent {
+    line-height: normal
+}
+
+.aw-requirement-tracelinkTooltip .aw-commands-commandIconButton {
+    padding: 0 0 0 5px;
+}
+
+.aw-requirement-tracelinkTooltip .aw-widgets-modelObjectList,
+.aw-requirement-tracelinkTooltip .aw-layout-panelSection {
+    margin: 0;
+}
+
+.aw-requirement-tracelinkTooltip .aw-requirement-tooltipMore {
+    font-weight: 600;
+    margin-left: 42px;
+}
+
+.aw-requirement-tracelinkTooltip .aw-widgets-cellListCellCommands {
+    display: none;
+}
+
+.aw-requirement-crossRefLink img,
+.aw-requirement-tooltipCell .aw-requirement-tooltipCellIcon {
+    padding: $padding_small $padding_small $padding_small 0;
+    width: rem-calc(38);
+    height: $table_command_cell_thumbnail_size;
+}
+
+.aw-requirement-tooltipCell .aw-requirement-tooltipCellIcon span,
+.aw-requirement-tooltipCell .aw-requirement-tooltipCellIcon svg{
+    height: inherit;
+}
+.aw-requirement-tooltipCell .aw-requirement-tooltipCellLabel {
+    width: -webkit-calc(100% - 40px);
+    width: -moz-calc(100% - 40px);
+    width: calc(100% - 40px);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    line-height: normal;
+    padding-left: $padding_normal;
+    padding-top: $padding_normal;
+}
+
+.aw-requirement-derivedObjectTooltip ul.aw-widgets-cellListWidget {
+    padding: 0;
+}
+
+.aw-requirement-derivedObjectTooltip .aw-widgets-modelObjectList {
+    margin: 0;
+}
+
+.aw-requirement-sidebar-icon:hover {
+    cursor: pointer !important;
+}
+
+.aw-requirement-traceLinkIconButton {
+    height: 20px;
+}
+
+/* end Requirement tracelink dashboard  */
+
+.aw-widgets-cellListCellImage.aw-requirements-markup-cellIndentation {
+    margin-left: 15px;
+}
+
+.aw-requirements-markup-cellContent {
+    @include flex(8 1 auto);
+}
+
+.aw-requirements-markup-groupCellTitle {
+    width: 100%;
+    text-overflow: ellipsis;
+}
+
+aw-requirements-markup-cell ul {
+    list-style: disc outside;
+}
+
+aw-requirements-markup-cell ol {
+    list-style: decimal outside;
+}
+
+.aw-requirement-tooltipCell .aw-richtexteditor-cellIcon {
+    padding: 2px 2px 0 0;
+    width: 14px;
+    height: 14px;
+    vertical-align: text-bottom;
+}
+
+.aw-requirements-matrixTypeHelpIcon {
+    width: 20px;
+    height: 20px;
+    float: right;
+    vertical-align: middle;
+    margin-left: 11px;
+}
+
+.aw-requirement-qualityDataPanel .aw-widgets-propertyLabelTopValueContainer {
+    min-width: 200px;
+}
+
+.aw-requirement-qualityDataPanel .aw-widgets-propertyContainer {
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+}
+
+.aw-requirement-qualityDataPanel .aw-layout-panelBody {
+    padding: 0;
+}
+
+.aw-requirement-qualityDataPanel .aw-layout-subPanelContent {
+  padding: 0;
+}
+
+.aw-richtexteditor-importPreviewPanel .aw-requirement-bodytext {
+    overflow: hidden;
+}
+
+.aw-requirement-tooltipCellIcon .aw-requirement-crossRefIcon{
+    display: contents;
+}
+.aw-requirement-tooltipCellIcon .aw-requirement-crossRefIcon img {
+    height: rem-calc(16);
+    display: inline-block;
+    padding-left: $padding_small;
+}
+
+.aw-requirement-tooltipCell .aw-requirement-crossRefInput{
+    width: auto;
+}
+
+.aw-layout-popup .aw-requirement-actionsPanel {
+    .aw-widgets-modelObjectList {
+        margin: 0;
+    }
+    .aw-widgets-cellListWidget {
+        padding: 0;
+        .aw-widgets-cellListItem {
+            padding: 6px;
+        }
+    }
+}
+
+.aw-requirement-markup .aw-markup-highlight .aw-xrt-thumbnailImagePanel .aw-base-icon{
+    width: 16px;
+    height: 16px;
+}
+
+.aw-richtexteditor-widePanelBody {
+    padding-bottom: 0;
+    .aw-layout-panelSection {
+        margin: 0;
+    }
+}
+
+.aw-splm-tableCellTop .aw-requirement-editIcon {
+    display: none;
+}
+
+.aw-splm-tableCellTop:hover .aw-requirement-editIcon{
+    display: block;
+    overflow: initial;
+}
+
+.ui-grid-row-selected .aw-requirement-editIcon{
+    display:block;
+    overflow: initial;
+}
+
+aw-traceability-matrix-widget {
+    overflow: auto;
+}
+
+.aw-relationshipmatrix-headerText {
+    cursor: pointer;
+    text-anchor: start;
+}
+
+.aw-relationshipmatrix-rowSizeControl {
+    cursor: row-resize;
+    stroke-width: 5px;
+    opacity: 0;
+}
+
+.aw-relationshipmatrix-colSizeControl {
+    cursor: col-resize;
+    stroke-width: 5px;
+    opacity: 0;
+}
+
+.aw-relationshipmatrix-sortControl {
+    width: 12px;
+    height: 12px;
+}
+
+.aw-relationshipmatrix-button {
+    cursor: pointer;
+}
+
+.aw-relationshipmatrix-navControl {
+    height: 16px;
+    width: 16px;
+    fill-opacity: 0;
+    stroke: none;
+}
+
+.aw-richtexteditor-tracelinkDashboard .row-pagination {
+    width: 158px;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: normal;
+}
+
+.aw-richtexteditor-tracelinkDashboard .col-pagination {
+    display: inline-block;
+    margin-left: 100px;
+    font-weight: normal;
+}
+
+.aw-richtexteditor-tracelinkDashboard .pagination>.active>a {
+    text-decoration: underline;
+}
+
+.aw-relationshipmatrix-cell text {
+    text-anchor: end;
+    font-size: $fontsize_large;
+    text-decoration: underline;
+}
+
+.aw-relationshipmatrix-totalCell text {
+    font-size: $fontsize_large;
+}
+
+.aw-relationshipmatrix-cell .selected-cell {
+    opacity: 1;
+}
+
+.aw-relationshipmatrix-mainSvg .highlight {
+    fill-opacity: 1;
+}
+
+.aw-richtexteditor-tracelinkDashboard .filter-panel {
+    display: block;
+    overflow: auto;
+}
+
+.aw-richtexteditor-tracelinkDashboard .col-title {
+    height: 27px;
+    display: block;
+}
+
+.aw-relationshipmatrix-link {
+    cursor: pointer;
+}
+
+.aw-relationshipmatrix-mainSvg{
+    .col_label_header, .row_label_header {
+        cursor: pointer;
+    }
+}
+
+.aw-relationshipmatrix-mainSvg {
+    stroke-width: 0.7;
+}
+
+.aw-relationshipmatrix-mainSvg text {
+    stroke: none;
+}
+
+.aw-relationshipmatrix-mainSvg text::selection,tspan::selection {
+    background: none;
+}
+
+.aw-relationshipmatrix-activeTlPage {
+    font-weight: bolder;
+    font-size: $fontsize_large;
+}
+
+.aw-requirements-commentsgroup.aw-layout-panelSection {
+    margin-bottom: 0;
+}
+
+aw-include .aw-requirement-tooltipCell.aw-layout-flexRowContainer {
+    min-width: inherit;
+    display: contents;
+}
+
+.aw-richtexteditor-aceEditorPanel {
+
+    .aw-richtexteditor-editorWithSidebar.narrow {
+        .ck.ck-editor {
+            width: calc(100% - 65px);
+        }
+
+        .aw-richtexteditor-editorSidebar {
+            width: 65px;    // Consistent width with CKeditor
+            .aw-richtexteditor-editorSidebarHeader {
+                display: none;
+            }
+        }
+    }
+
+    .aw-richtexteditor-editorWithSidebar {
+        .ck.ck-editor {
+            width: calc(100% - 300px);
+        }
+    }
+
+    .aw-richtexteditor-editorSidebar {
+        &.hidden {
+            display: none;
+        }
+        position: relative;
+        font-size: 20px;
+        padding: 0 10px;
+        border-left: 0;
+        overflow: hidden;
+        border-style: solid;
+        border-width: 1px;
+        width: 300px;   // Consistent width with CKeditor
+
+        .aw-richtexteditor-editorSidebarHeader {
+            .sw-section {
+                margin: 0;
+            }
+            .sw-tabSet {
+                padding: 0;
+            }
+            .sw-component {
+                margin-bottom: $margin_small;
+            }
+            .aw-commands-commandBarHorizontal .aw-commands-wrapper .aw-command {
+                float: right;
+            }
+            .aw-jswidget-tabContainer .aw-jswidget-tab a.aw-base-tabTitle,
+            .aw-jswidget-tabContainer .aw-jswidget-tab a.aw-base-tabTitleSelected {
+                font-size: $fontsize_normal;
+            }
+        }
+        .aw-richtexteditor-commentSidebar {
+            overflow: hidden;
+            height: 100%;
+            .ck-thread-top-bar {
+                .ck.ck-dropdown ul.ck-list{
+                    overflow: hidden;
+                }
+
+                .ck.ck-dropdown .ck-button.ck-dropdown__button span.ck-button__label {
+                    overflow: unset;
+                }
+            }
+           .ck .ck-user__notification{
+                display:none
+            }
+            .ck-comment__external{
+                display:none
+            }
+            .ck.ck-sidebar {
+                min-height: unset !important; // To override inline style added by CKEditor
+            }
+        }
+        div.ck-thread-top-bar  {
+            border-left: 3px solid;
+            .ck.ck-dropdown {
+                button {
+                    font-size: small;
+                }
+            }
+            div.ck.ck-reset.ck-dropdown__panel.ck-dropdown__panel_se.ck-dropdown__panel-visible {
+                width: -webkit-fill-available;
+                li.ck.ck-list__item {
+                    height: 25px;
+                    button.ck.ck-button.ck-off.ck-button_with-text {
+                        height: 25px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.aw-richtexteditor-relationshipmatrixHiddenObjectFilterbox {
+    max-height: rem-calc(165);
+    margin-bottom: $margin_small;
+    white-space: nowrap;
+}
+
+.aw-requirement-marker .aw-ckeditor-marker-element img.aw-base-icon.aw-aria-border {
+    height: 16px;
+}
+
+.aw-requirements-importOfficePanel .aw-file-upload-fileName{
+    margin: auto;
+}
+
+.aw-richtexteditor-matrixFilterPanelContextLabel {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: bold;
+    padding-bottom: $padding_xlarge;
+}
+
+.aw-panel .aw-richtexteditor-matrixDiscoveryFilterPanelBody .aw-panelBody {
+    margin-bottom: 0;
+}
+
+.aw-richtexteditor-traceLinkTooltipsub{
+    width: 100%;
+}
+.aw-richtexteditor-traceLinkTooltip .aw-base-scrollPanel{
+    overflow-y: hidden;
+}
+.aw-requirements-htmlHeaderFooterPreview{
+    height: calc( 100% - 45px );
+}
+
+.aw-richtexteditor-saveConflictError .sw-guidanceMessage {
+    border-top-width: 0;
+    border-bottom-width: 0;
+    .sw-guidanceMsg-container {
+        .sw-guidanceMsg-text {
+            margin-left: $margin_x_large;
+        }
+    }
+    &:first-child {
+        border-top-width: 1px;
+        .sw-guidanceMsg-container {
+            padding-top: $margin_normal;
+            .sw-guidanceMsg-text {
+                margin-left: 0;
+            }
+        }
+    }
+    &:last-child {
+        border-bottom-width: 1px;
+        .sw-guidanceMsg-container {
+            display: block;
+            .sw-guidanceMsg-text {
+                margin-left: $margin_x_large;
+            }
+            .flex-shrink {
+                float: right;
+                padding: 0 $padding_xlarge $padding_xlarge $padding_xlarge;
+                .sw-button {
+                    margin-left: $margin_normal;
+                }
+            }
+        }
+    }
+}
+
+.aw-richtexteditor-aceEditorPanel .aw-richtexteditor-editorContainer:not(:has(.ck-editor__main)),
+.aw-richtexteditor-aceEditorPanel .ck.ck-editor__main .ck.ck-content:not(:has(.aw-requirement-content)),
+.aw-richtexteditor-aceEditorPanel .ck.ck-editor__main .ck.ck-content:empty {
+    margin: auto;
+    width: 100%;
+    height: 800px;
+
+    background-repeat: repeat-y;
+
+    background-size:
+        64px 260px,
+
+        16px 260px, /* Sidebar icons */
+        16px 260px,
+        16px 260px,
+
+        calc(100% - 80px) 260px, /* Heading */
+
+        20% 260px, /* Content text */
+        40% 260px,
+        30% 260px,
+        25% 260px,
+        35% 260px,
+        45% 260px,
+        40% 260px,
+        30% 260px;
+
+    background-position:
+        -64px 0,
+
+        16px 8px, /* Sidebar icons */
+        16px 32px,
+        16px 56px,
+
+        40px 8px, /* Heading */
+
+        40px 48px, /* Content text */
+        40px 72px,
+        40px 96px,
+        40px 120px,
+        40px 144px,
+        40px 168px,
+        40px 192px,
+        40px 216px;
+
+    animation: richtexteditor-shine 2s infinite;
+}
+
+@keyframes richtexteditor-shine {
+    to {
+        background-position:
+            100% 0,
+
+            16px 8px, /* Sidebar icons */
+            16px 32px,
+            16px 56px,
+
+            40px 8px, /* Heading */
+
+            40px 48px, /* Content text */
+            40px 72px,
+            40px 96px,
+            40px 120px,
+            40px 144px,
+            40px 168px,
+            40px 192px,
+            40px 216px;
+    }
+}

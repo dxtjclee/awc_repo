@@ -1,0 +1,47 @@
+{
+    "schemaVersion": "1.0.0",
+    "props":{
+        "scope-object":{
+            "type":"object"
+        }
+    },
+    "actions": {
+        "initPreviousMcnsDataProvider": {
+            "actionType": "dataProvider",
+            "method": "previousMcnsDataProvider"
+        },
+        "loadPreviousMcns": {
+            "actionType": "JSFunctionAsync",
+            "method": "getPreviousMcns",
+            "inputData": {
+                "modelObject": "{{props.scopeObject}}"
+            },
+            "outputData": {
+                "previousMcns": ""
+            },
+            "deps": "js/services/ngpChangeManagementService"
+        }
+    },
+    "dataProviders": {
+        "previousMcnsDataProvider": {
+            "action": "loadPreviousMcns",
+            "response": "{{data.previousMcns}}",
+            "totalFound": "{{data.previousMcns.length}}",
+            "commandsAnchor": "ngp_changeManagementTile",
+            "selectionModelMode": "none"
+        }
+    },
+    "lifecycleHooks": {
+        "onInit": "initPreviousMcnsDataProvider"
+    },
+    "conditions":{
+        "hasPreviousMcns":{
+            "expression":{
+                "$source":"data.dataProviders.previousMcnsDataProvider.viewModelCollection.loadedVMObjects.length",
+                "$query":{
+                    "$gt": 0
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,129 @@
+{
+  "pasteHandlers": {
+    "dropHandlerForActiveFolder": {
+      "action": "blockDragDrop",
+      "activeWhen": {
+        "condition": "conditions.isMyActiveFolderOrActiveFolderBeingDraggedOrDropped"
+      }
+    }
+  },
+  "actions": {
+    "blockDragDrop": {
+      "actionType": "Event",
+      "method": "Event",
+      "inputData": {
+        "events": [
+          {}
+        ]
+      },
+      "actionMessages": {
+        "success": [
+          {
+            "message": "ActiveFolderDragDropDisabledMessage"
+          }
+        ]
+      }
+    }
+  },
+  "messages": {
+    "ActiveFolderDragDropDisabledMessage": {
+      "messageType": "WARNING",
+      "messageText": "{{i18n.dragDropDisabledMessage}}",
+      "messageTextParams": [
+        "{{pasteContext.sourceObject}}",
+        "{{pasteContext.targetObject}}"
+      ]
+    }
+  },
+  "conditions": {
+    "isMyActiveFolderOrActiveFolderBeingDraggedOrDropped": {
+      "expression": {
+        "$or": [
+          {
+            "$and": [
+              {
+                "$source": "pasteContext.targetObject",
+                "$query": {
+                  "$typeOf": "Fnd0HomeFolder"
+                }
+              },
+              {
+                "$or": [
+                  {
+                    "$source": "pasteContext.sourceObject",
+                    "$query": {
+                      "$typeOf": "Awp0MySearchFolder"
+                    }
+                  },
+                  {
+                    "$source": "pasteContext.sourceObject",
+                    "$query": {
+                      "$typeOf": "Awp0SearchFolder"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "$and": [
+              {
+                "$source": "pasteContext.targetObject",
+                "$query": {
+                  "$typeOf": "Awp0MySearchFolder"
+                }
+              },
+              {
+                "$or": [
+                  {
+                    "$source": "pasteContext.sourceObject",
+                    "$query": {
+                      "$typeOf": "Awp0MySearchFolder"
+                    }
+                  },
+                  {
+                    "$source": "pasteContext.sourceObject",
+                    "$query": {
+                      "$typeOf": "Awp0SearchFolder"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "$and": [
+              {
+                "$source": "pasteContext.targetObject",
+                "$query": {
+                  "$typeOf": "Awp0SearchFolder"
+                }
+              },
+              {
+                "$or": [
+                  {
+                    "$source": "pasteContext.sourceObject",
+                    "$query": {
+                      "$typeOf": "Awp0MySearchFolder"
+                    }
+                  },
+                  {
+                    "$source": "pasteContext.sourceObject",
+                    "$query": {
+                      "$typeOf": "Awp0SearchFolder"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "i18n": {
+    "dragDropDisabledMessage": [
+      "SearchMessages"
+    ]
+  }
+}

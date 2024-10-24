@@ -1,0 +1,17 @@
+<aw-panel-body>
+    <aw-add
+        include-types="Prg0AbsPlan"
+        visible-tabs="palette,search"
+        type-filter="Prg0AbsPlan"
+        search-filter="{{data.searchFilter}}"
+        load-sub-types="true"
+        add-panel-state="fields.addPanelState"
+        active-state="data.activeState"
+        sub-panel-context="{ ...subPanelContext, supportsAdvancedSearch: true }">
+    </aw-add>
+</aw-panel-body>
+<aw-panel-footer>
+    <aw-button enable-when="conditions.isAddButtonEnabled" action="addPlanAction">
+        <aw-i18n>i18n.addButtonCommandTitle</aw-i18n>
+    </aw-button>
+</aw-panel-footer>

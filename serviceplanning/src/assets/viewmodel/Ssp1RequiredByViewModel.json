@@ -1,0 +1,79 @@
+{
+    "data":{
+        "projectsAnchor": "RequiredByTableAnchor",
+        "attribute":"ssp0RequiredBy"
+    },
+    "dataProviders": {
+        "requiredByGridDataProvider": {
+            "action": "getRequirementDependancy",
+            "selectionModelMode": "single",
+            "response":"{{data.treeLoadResult.response}}",
+            "totalFound":"{{data.treeLoadResult.totalFound}}",
+            "editContext": "TABLE_CONTEXT"
+        }
+    },
+    "columnProviders": {
+        "requiredByColumnProvider": {
+            "loadColumnAction": "loadReqTableColumns",
+            "sortCriteria": [ {
+                "fieldName": "relation:object_name",
+                "sortDirection": "ASC"
+            } ]
+        }
+    },
+    "grids": {
+        "requiredByReqList": {
+            "dataProvider": "requiredByGridDataProvider",
+            "columnProvider": "requiredByColumnProvider",
+            "enableArrangeMenu": false,
+            "addIconColumn": true,
+            "gridOptions": {
+                "enableSorting": true,
+                "maxRowsToShow": 5
+            }
+        }
+    },
+    "actions": {
+        "getRequirementDependancy": {
+            "actionType": "JSFunctionAsync",
+            "method": "getProperties",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData":
+            {
+                "treeLoadResult":"{{function:setNodeProperties}}"
+            },
+            "deps": "js/Ssp1ServiceReqDependencyService"
+        },
+        "loadReqTableColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadRequirementColumns",
+            "inputData": {
+                "data":"{{data}}",
+                "dataProvider": "{{data.dataProviders.requiredByGridDataProvider}}",
+                "columnProvider": "{{data.columnProviders.requiredByColumnProvider}}"
+            },
+            "outputData": {
+                "dataProviders.requiredByGridDataProvider.columnConfig": "columnConfig"
+            },
+            "deps": "js/Ssp1ServiceReqDependencyService"
+        }
+
+    },
+    "functions": {
+        "getProperties": {
+            "functionName": "getProperties",
+            "parameters": ["{{data}}"]
+        },
+        "setNodeProperties":{
+            "functionName": "setNodeProperties",
+            "parameters":[]
+        }
+    },
+    "i18n": {
+        "RequiredBy": [ "ServicePlannerConstants" ],
+        "noResultsFound": [ "ServicePlannerConstants" ]
+
+    }
+}

@@ -1,0 +1,367 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "datasetName": {
+            "displayName": "{{i18n.name}}",
+            "type": "STRING",
+            "isRequired": "true"
+        },
+        "datasetDesc": {
+            "displayName": "{{i18n.description}}",
+            "type": "STRING"
+        },
+        "datasetType": {
+            "displayName": "{{i18n.type}}",
+            "type": "STRING",
+            "hasLov": true,
+            "isRequired": "true"
+        },
+        "listOfDatasetTypes": {
+            "type": "STRING",
+            "dbValue": []
+        },
+        "creationRelation": {
+            "displayName": "{{i18n.relation}}",
+            "type": "STRING",
+            "hasLov": true,
+            "isRequired": "true"
+        },
+        "relationList": {
+            "type": "STRING",
+            "dbValue": []
+        },
+        "dataset": "dataset",
+        "createDatasetInProgress": false
+    },
+    "actions": {
+        "defineDataForAttachmentAction": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "startProgressIndicator"
+                },
+                {
+                    "action": "initiateDatasetWithRelationDefinition"
+                },
+                {
+                    "action": "initDSCreateParams"
+                },
+                {
+                    "action": "endProgressIndicator"
+                }
+            ]
+        },
+        "initiateDatasetWithRelationDefinition": {
+            "actionType": "JSFunctionAsync",
+            "method": "initiateDatasetWithRelationDefinition",
+            "inputData": {
+                "fileName": "{{parameters.fileName}}",
+                "scopeObject": "{{subPanelContext.scopeObject}}"
+            },
+            "outputData":{
+                "listOfDatasetTypes":"listOfDatasetTypes",
+                "relationList":"relationList",
+                "fileExt":"fileExt",
+                "selectedDatasetIndex":"selectedDatasetIndex",
+                "datasetType.dbValue": "valueForDatasetTypesListBox",
+                "datasetType.uiValue": "valueForDatasetTypesListBox",
+                "referenceName":"referenceName",
+                "datasetDBName":"datasetDBName"
+            },
+            "deps": "js/services/ngpAttachFileService"
+        },
+        "initDSCreateParams": {
+            "actionType": "JSFunctionAsync",
+            "method": "initDSCreateParams",
+            "inputData": {
+                "data": "{{data}}",
+                "datasetInfo": {
+                    "fileName": "{{parameters.fileName}}",
+                    "fileNameNoExt": "{{parameters.fileNameNoExt}}",
+                    "fileExt": "{{parameters.fileExt}}",
+                    "formData": "{{parameters.formData}}",
+                    "validFile": true
+                }
+            },
+            "outputData": {
+                "datasetName": "{{function:updateDatasetName}}",
+                "datasetDesc": "datasetDesc",
+                "datasetType": "datasetType",
+                "fileName": "fileName",
+                "formData": "formData"
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "onDatasetSelectionChange": {
+            "actionType": "JSFunction",
+            "method": "onDatasetSelectionChange",
+            "inputData": {
+                "currentValue": "{{data.datasetType.dbValue}}",
+                "fileExtension": "{{data.fileExt}}",
+                "currentSelectedDatasetIndex": "{{data.selectedDatasetIndex}}"
+             },
+             "outputData":{
+                "relationList":"relationList",
+                "selectedDatasetIndex":"selectedDatasetIndex",
+                "referenceName":"referenceName",
+                "datasetDBName":"datasetDBName"
+            },
+            "deps": "js/services/ngpAttachFileService"
+        },
+        "createDatasetWithFileAndAttach": {
+            "actionType": "batchJob",
+            "steps": [{
+                    "action": "setCreateDatasetInProgress"
+                },
+                {
+                    "action": "createDatasetWithFile"
+                },
+                {
+                    "action": "updateFormData",
+                    "condition": "!data.createDatasetError"
+                },
+                {
+                    "action": "uploadFile",
+                    "condition": "!data.createDatasetError"
+                },
+                {
+                    "action": "commitDatasetFiles",
+                    "condition": "!data.createDatasetError"
+                },
+                {
+                    "action": "createRelation",
+                    "condition": "conditions.createRelationCond"
+                },
+                {
+                    "action": "deleteDataset",
+                    "condition": "conditions.deleteDatasetCond"
+                },
+                {
+                    "action": "sendAttachFileSuccessEvent",
+                    "condition": "conditions.sendAttachFileSuccessCond"
+                },
+                {
+                    "action": "endProgressIndicator"
+                },
+                {
+                    "action":"closePopupWindow"
+                }
+            ]
+        },
+        "setCreateDatasetInProgress": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": true
+            },
+            "outputData":{
+                "createDatasetInProgress": ""
+            },
+            "deps": "js/mfeViewModelUtils",
+            "events": {
+                "success": [{
+                    "name": "progress.start"
+                }]
+            }
+        },
+        "createDatasetWithFile": {
+            "actionType": "JSFunctionAsync",
+            "method": "createDatasetWithFile",
+            "inputData": {
+                "fileName": "{{data.fileName}}",
+                "datasetName": "{{data.datasetName.dbValue}}",
+                "description": "{{data.datasetDesc.dbValue}}",
+                "datasetTypeName": "{{data.datasetDBName}}",
+                "relationTypeName": "{{data.creationRelation.dbValue}}",
+                "referenceName": "{{data.referenceName}}"
+            },
+            "outputData":{
+                "ticket": "ticket",
+                "datasetOutput": "datasetOutput",
+                "relationObject": "relationObject",
+                "createDatasetError": "createDatasetErrors"
+            },
+            "deps": "js/services/ngpAttachFileService"
+        },
+        "updateFormData": {
+            "actionType": "JSFunction",
+            "method": "updateFormData",
+            "inputData": {
+                "viewModelData":"{{data}}"
+            },
+            "deps": "js/services/ngpAttachFileService"
+        },
+        "uploadFile": {
+            "actionType": "RESTService",
+            "serviceName": "",
+            "method": "POST",
+            "inputData": {
+                "request": {
+                    "method": "POST",
+                    "url": "{{Constants.fmsUrl}}",
+                    "headers": {
+                        "Content-type": "undefined"
+                    },
+                    "data": "{{data.formData}}"
+                }
+            },
+            "events": {
+                "failure": [ {
+                    "name": "UploadFileError"
+                } ]
+            },
+            "actionMessages": {
+                "failure":[
+                  {
+                      "message": "uploadFileError"
+                  }
+                ]
+            }
+        },
+        "commitDatasetFiles": {
+            "actionType": "JSFunctionAsync",
+            "method": "commitDatasetFiles",
+            "inputData": {
+                "datasetOutput":
+                    "{{data.datasetOutput}}"
+            },
+            "outputData":{
+                "commitDatasetFilesError":"commitDatasetFilesError"
+            },
+            "deps": "js/services/ngpAttachFileService"
+        },
+        "createRelation": {
+            "actionType": "JSFunctionAsync",
+            "method": "createRelation",
+            "inputData": {
+                "primaryObject": "{{subPanelContext.scopeObject}}",
+                "secondaryObject": "{{data.datasetOutput.dataset}}",
+                "relationTypeName": "{{data.creationRelation.dbValue}}"
+            },
+            "outputData":{
+                "createRelationError":"createRelationError"
+            },
+            "deps": "js/services/ngpAttachFileService"
+        },
+        "sendAttachFileSuccessEvent":{
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events":[{
+                    "name": "ngp.datasetCreated",
+                    "excludeLocalDataCtx": true,
+                    "eventData": {
+                        "dataset": "{{data.datasetOutput.dataset}}",
+                        "connectedToObject": "{{subPanelContext.scopeObject[0]}}"
+                    }
+                }]
+            }
+        },
+        "deleteDataset":{
+            "actionType": "JSFunction",
+            "method": "deleteDataset",
+            "inputData": {
+                "modelObject": "{{subPanelContext.scopeObject}}",
+                "datasetObj": "{{data.datasetOutput.dataset}}",
+                "relationTypeName": "{{data.creationRelation.dbValue}}"
+             },
+           "deps": "js/services/ngpAttachFileService"
+        },
+        "closePopupWindow": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        },
+        "startProgressIndicator":{
+            "actionType":"Event",
+            "method": "Event",
+            "inputData": {
+                "events":[
+                    {
+                        "name": "progress.start"
+                    }
+                ]
+            }
+        },
+        "endProgressIndicator":{
+            "actionType":"Event",
+            "method": "Event",
+            "inputData": {
+                "events":[
+                    {
+                        "name": "progress.end"
+                    }
+                ]
+            }
+        },
+        "handleUploadFileError" :{
+            "actionType": "batchJob",
+            "steps": [{
+                    "action": "deleteDataset"
+                },
+                {
+                    "action": "endProgressIndicator"
+                },
+                {
+                    "action":"closePopupWindow"
+                }
+            ]
+        }
+     },
+    "functions": {
+        "updateDatasetName": {
+            "functionName": "updateDatasetName",
+            "parameters": [
+                "{{fields.datasetName}}"
+            ],
+            "deps": "js/services/ngpAttachFileService"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "invalidFileSelected",
+            "message": "invalidFileWarning"
+        },
+        {
+            "eventId": "UploadFileError",
+            "action": "handleUploadFileError"
+        }
+    ],
+    "conditions": {
+        "validFile": {
+            "expression": "data.fileName && data.listOfDatasetTypes"
+        },
+        "createRelationCond": {
+            "expression": "!data.createDatasetError && !data.commitDatasetFilesError"
+        },
+        "deleteDatasetCond": {
+                "expression": "data.createDatasetError || data.createRelationError || data.commitDatasetFilesError"
+        },
+        "sendAttachFileSuccessCond": {
+            "expression": "!data.createRelationError && !data.commitDatasetFilesError && !data.createDatasetError"
+        }
+    },
+    "messages": {
+        "invalidFileWarning": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.invalidFileWarningMsg}}"
+        },
+        "uploadFileError": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.uploadFileError}}"
+        }
+    },
+    "i18n": {
+        "name": ["ngpInformationMessages"],
+        "description": ["ngpInformationMessages"],
+        "type": ["ngpInformationMessages"],
+        "relation": ["ngpInformationMessages"],
+        "cancel": ["ngpInformationMessages"],
+        "done": ["ngpInformationMessages"],
+        "invalidFileWarningMsg": ["ngpInformationMessages"],
+        "uploadFileError": ["ngpInformationMessages"]
+    }
+}

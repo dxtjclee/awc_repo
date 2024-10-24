@@ -1,0 +1,512 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+
+    "dataProviders": {
+        "addPropConditionListProvider": {
+            "commandsAnchor": "arm0_export_addPropRuleRemove_cellCommands",
+            "response": "{{fields.conditionPropRules.conditionPropRulesVMOs}}"
+        }
+    },
+    "actions": {
+        "addRuleListAction": {
+            "actionType": "dataProvider",
+            "method": "addPropConditionListProvider"
+        },
+        "addPropRule": {
+            "actionType": "JSFunction",
+            "method": "addPropRule",
+            "inputData": {
+                "data": "{{data}}",
+                "ruleConditionList": "{{fields.conditionPropRules.conditionPropRulesVMOs.value}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "ImportFromOffice.refreshPropRuleList"
+                } ]
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "updatePropRule": {
+            "actionType": "JSFunction",
+            "method": "updatePropRule",
+            "inputData": {
+                "data": "{{data}}",
+                "ruleConditionList": "{{fields.conditionPropRules.conditionPropRulesVMOs.value}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "ImportFromOffice.refreshPropRuleList"
+                } ]
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+
+        "revealPropRule": {
+            "actionType": "JSFunction",
+            "method": "revealArm0AddPropRules",
+            "inputData": {
+                "data": "{{data}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "outputData": {
+                "addPropConditionList": "",
+                "conditionPropRules.conditionPropRulesVMOs": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "ImportFromOffice.addRuleListAction"
+                } ]
+            },
+
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "addPropCondition": {
+            "actionType": "JSFunction",
+            "method": "addConditionForProp",
+            "deps": "js/Arm0ImportFromWord",
+            "inputData": {
+                "conditionPropRulesVMOs": "{{fields.conditionPropRules.conditionPropRulesVMOs.value}}",
+                "data":"{{data}}"
+            },
+            "outputData": {
+                "addPropConditionList": "",
+                "conditionPropRules.conditionPropRulesVMOs": ""
+
+            },
+            "events": {
+                "success": [ {
+                    "name": "ImportFromOffice.refreshPropConditionListProvider"
+                } ]
+            }
+        },
+        "removePropCondition": {
+            "actionType": "JSFunction",
+            "method": "removeConditionForProp",
+            "inputData": {
+                "addConditionList": "{{fields.conditionPropRules.conditionPropRulesVMOs.value}}",
+                "selectedRule": "{{data.eventData.vmo}}",
+                "sharedData": "{{subPanelContext.sharedData}}",
+                "conditionPropRulesVMOs":"{{fields.conditionPropRules.conditionPropRulesVMOs.value}}"
+            },
+            "outputData": {
+                "addPropConditionList": "",
+                "conditionPropRules.conditionPropRulesVMOs": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "ImportFromOffice.refreshPropConditionListProvider"
+                } ]
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "changeFiledTypes": {
+            "actionType": "JSFunction",
+            "method": "changeFiledTypes",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "addConditionProcessing": {
+            "actionType": "JSFunction",
+            "method": "addConditionProcessing",
+            "inputData": {
+                "data": "{{data}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "outputData": {
+                "addPropConditionList": "",
+                "conditionPropRules.conditionPropRulesVMOs":""
+            },
+            "events": {
+                "success": [ {
+                    "name": "ImportFromOffice.refreshPropConditionListProvider"
+                } ]
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "getTypeDescriptions": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AwReqMgmtSe-2019-12-SpecNavigation",
+            "method": "getSpecificationMetadata",
+            "inputData": {
+                "input": { "typePropMap": "{{function:getInputForAddPropRules}}" }
+            },
+
+            "outputData": {
+                "outputTypeDescriptionsList": "typePropInfos"
+            },
+
+            "events": {
+                "success": [ {
+                    "name": "importSpecification.gotTypeDescriptions"
+                } ]
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "populateTypeDescriptions": {
+            "actionType": "JSFunction",
+            "method": "populateTypeDescriptions",
+            "inputData": {
+                "data": "{{data}}",
+                "outputTypeDescriptionsList": "{{data.outputTypeDescriptionsList}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "outputData": {
+                "setFieldTypeList": "setFieldTypeList",
+                "mapOfTypeDescriptions": "mapOfTypeDescriptions",
+                "tempPropRuleArray": "tempPropRuleArray"
+            },
+            "events": {
+                "success": [ {
+                    "name": "importSpecification.getConditionListForAddedPropRules"
+                } ]
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "getConditionListForAddedPropRules": {
+            "actionType": "JSFunction",
+            "method": "getConditionListForAddedPropRules",
+            "inputData": {
+                "data": "{{data}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "outputData": {
+                "addPropConditionList": "addPropConditionList",
+                "setFieldTypeTextValue": "setFieldTypeTextValue",
+                "advanceConditionProcessingType": "advanceConditionProcessingType",
+                "setFieldType": "setFieldType",
+                "setFieldTypeValue": "setFieldTypeValue",
+                "conditionPropRules.conditionPropRulesVMOs":"conditionPropRulesVMOs"
+            },
+            "events": {
+                "success": [ {
+                    "name": "ImportFromOffice.refreshPropConditionListProvider"
+                } ]
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "getInitialLOVValues": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2013-05-LOV",
+            "method": "getInitialLOVValues",
+            "inputData": {
+                "initialData": {
+                    "propertyName": "{{data.eventMap['importSpecification.getInitialLOVValues'].propertyName}}",
+                    "lovInput": {
+                        "operationName": "Create",
+                        "boName": "{{data.eventMap['importSpecification.getInitialLOVValues'].boName}}"
+                    }
+                }
+            },
+            "outputData": {
+                "fieldTypeValue": "{{function:getLOVList}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "importSpecification.dispplayFieldTypeValue"
+                } ]
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "dispplayFieldTypeValue": {
+            "actionType": "JSFunction",
+            "method": "dispplayFieldTypeValue",
+            "inputData": {
+                "data": "{{data}}",
+                "fieldTypeValueList": "{{data.fieldTypeValue}}"
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "showAddPropRuleError": {
+            "actionType": "Event",
+            "method": "Event",
+            "actionMessages": {
+                "success": [ {
+                    "message": "showAddPropRuleError"
+                } ]
+            }
+        }
+    },
+
+    "lifecycleHooks": {
+        "onMount": "revealPropRule"
+    },
+
+    "onEvent": [ {
+            "eventId": "ImportFromOffice.addRuleListAction",
+            "action": "addRuleListAction"
+        },
+        {
+            "eventId": "importSpecification.removeAddRuleCondition",
+            "action": "removePropCondition",
+            "cacheEventData": true,
+            "condition":"subPanelContext.sharedData.activeView === 'Arm0AddPropertyRuleSub'"
+        },
+        {
+            "eventId": "ImportFromOffice.refreshPropConditionListProvider",
+            "action": "addPropConditionListProvider"
+        },
+        {
+            "eventId": "importSpecification.getTypeDescriptions",
+            "action": "getTypeDescriptions"
+        },
+        {
+            "eventId": "importSpecification.gotTypeDescriptions",
+            "action": "populateTypeDescriptions"
+        },
+        {
+            "eventId": "importSpecification.getConditionListForAddedPropRules",
+            "action": "getConditionListForAddedPropRules"
+        },
+        {
+            "eventId": "importSpecification.getInitialLOVValues",
+            "cacheEventData": true,
+            "action": "getInitialLOVValues"
+        },
+        {
+            "eventId": "importSpecification.dispplayFieldTypeValue",
+            "action": "dispplayFieldTypeValue"
+        },
+        {
+            "eventId": "importSpecification.showAddPropRuleError",
+            "action": "showAddPropRuleError"
+        }
+    ],
+
+    "data": {
+        "addPropCondition": {
+            "action": "addPropCondition",
+            "iconName": "Add",
+            "tooltip": "{{i18n.addCondition}}"
+        },
+        "advanceConditionProcessingType": {
+            "displayName": "{{i18n.criteria}}",
+            "type": "STRING",
+            "isRequired": "",
+            "hasLov": "true"
+        },
+        "advanceCProcessingTypeList": {
+            "type": "STRING",
+            "dbValue": [
+                { "propDisplayValue": "{{i18n.alwaysConditionLabel}}", "dispValue": "{{i18n.alwaysConditionLabel}}", "propInternalValue": "ALWAYS" },
+                { "propDisplayValue": "{{i18n.anyConditionLabel}}", "dispValue": "{{i18n.anyConditionLabel}}", "propInternalValue": "ANY" },
+                { "propDisplayValue": "{{i18n.allConditionLabel}}", "dispValue": "{{i18n.allConditionLabel}}", "propInternalValue": "ALL" }
+            ]
+        },
+        "setFieldType": {
+            "displayName": "{{i18n.setFieldTypelabel}}",
+            "type": "STRING",
+            "isRequired": "",
+            "hasLov": "true"
+        },
+        "setFieldTypeList": {
+            "isArray": "true",
+            "dbValue": []
+        },
+        "setFieldTypeValue": {
+            "displayName": "{{i18n.toValueLabel}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "hasLov": "true"
+        },
+        "setFieldTypeValueList": {
+            "type": "STRING",
+            "dbValue": []
+        },
+        "setFieldTypeTextValue": {
+            "displayName": "{{i18n.toValueLabel}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "isEditable": "true",
+            "dbValue": ""
+
+        },
+        "advanceOptionsList": {
+            "isArray": "true",
+            "dbValue": []
+        },
+        "addAdvanceConditionList": {
+            "isArray": "true",
+            "dbValue": []
+        },
+        "propertyDescriptorList": {
+            "isArray": "true",
+            "dbValue": []
+        },
+        "operationTypeValues": {
+            "type": "STRING",
+            "dbValue": [
+                { "propDisplayValue": "{{i18n.wordContainsExactMatch}}", "dispValue": "{{i18n.wordContainsExactMatch}}", "propInternalValue": "WORD_EXACT_MATCH" },
+                { "propDisplayValue": "{{i18n.wordContainsPartialMatch}}", "dispValue": "{{i18n.wordContainsPartialMatch}}", "propInternalValue": "WORD_PARTIAL_MATCH" },
+                { "propDisplayValue": "{{i18n.doesNotContainWord}}", "dispValue": "{{i18n.doesNotContainWord}}", "propInternalValue": "DOES_NOT_CONTAIN_WORD" },
+                { "propDisplayValue": "{{i18n.hasStyle}}", "dispValue": "{{i18n.hasStyle}}", "propInternalValue": "Has_Style" },
+                { "propDisplayValue": "{{i18n.sentenceBeginOnNewLine}}", "dispValue": "{{i18n.sentenceBeginOnNewLine}}", "propInternalValue": "SENTENCE_BEGIN_ON_NEW_LINE" }
+            ]
+        },
+        "operationCheckboxValues": {
+            "displayName": "{{i18n.importHeader}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "dbValue": false,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "conditionPropRules": {
+            "initialValues": {
+                "conditionPropRulesVMOs": []
+            },
+            "meta": {
+                "conditionPropRulesVMOs": [ {
+                    "field": "true",
+                    "type": "viewModelObject"
+                } ]
+            }
+        },
+        "_conditionVMOTemplate": {
+            "uid": "AAAAAAAAAAAAAA",
+            "alternateID": "AddRuleVMO",
+            "type": "AddRuleVMO",
+            "modelType": {},
+            "props": {
+                "operationType": {
+                    "propertyDisplayName": "When",
+                    "type": 8,
+                    "isArray": false,
+                    "isModifiable": true,
+                    "isRequired": true,
+                    "hasLOV": true
+                },
+                "style": {
+                    "propertyDisplayName": "",
+                    "type": 8,
+                    "isArray": false,
+                    "isModifiable": true,
+                    "isRequired": true,
+                    "hasLOV": true
+                },
+                "operationValues": {
+                    "propertyDisplayName": "",
+                    "type": 8,
+                    "isArray": false,
+                    "isModifiable": true,
+                    "isRequired": true
+                },
+                "operationCheckboxValues": {
+                    "propertyDisplayName": "Import all headers as separate items",
+                    "type": 6,
+                    "isArray": false,
+                    "isModifiable": true,
+                    "isRequired": false,
+                    "dbValue": false,
+                    "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+                }
+            }
+        }
+    },
+    "functions": {
+        "getExclusions": {
+            "functionName": "getExclusions",
+            "parameters": [
+
+            ]
+        },
+        "getInputForAddPropRules": {
+            "functionName": "getInputForAddPropRules",
+            "parameters": [
+                "{{data}}"
+            ]
+        }
+    },
+    "conditions": {
+        "isAddPropRuleEnable": {
+            "expression": "data.setFieldTypeTextValue.dbValue.length > 0"
+        },
+        "isAddPropRuleVisibilityCond": {
+            "expression": "!subPanelContext.sharedData.value.PROP_RULE_CONST"
+        },
+        "isUpdatePropRuleVisible": {
+            "expression": "subPanelContext.sharedData.value.PROP_RULE_CONST && subPanelContext.sharedData.activeView === 'Arm0AddPropertyRuleSub' && subPanelContext.sharedData.activeView !== 'Arm0AddAdvanceRulesSub'"
+        },
+        "isAddPropRuleDisabled": {
+            "expression": "data.setFieldTypeTextValue.dbValue || (data.mapOfTypeDescriptions[data.setFieldType.dbValue] && data.setFieldTypeValue.dbValue)"
+        },
+        "isTextBoxEmpty": {
+            "expression": {
+                "$and": [ {
+                        "$source": "data.advanceConditionProcessingType.dbValue",
+                        "$query": {
+                            "$ne": "ALWAYS"
+                        }
+                    },
+                    {
+                        "$source": "data.conditionPropRules.conditionPropRulesVMOs",
+                        "$query": {
+                            "$and": [ {
+                                "$source": "props.operationType.dbValue",
+                                "$query": {
+                                    "$in": [ "WORD_EXACT_MATCH",
+                                        "WORD_PARTIAL_MATCH",
+                                        "DOES_NOT_CONTAIN_WORD"
+                                    ]
+                                }
+                            }, {
+                                "$source": "props.operationValues.dbValue",
+                                "$query": {
+                                    "$isNull": true
+                                }
+                            } ]
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "messages": {
+        "showAddPropRuleError": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.showAddPropRuleError}}",
+            "navigationOptions": [ {
+                "option": "Cancel",
+                "text": "{{i18n.CancelText}}"
+            } ]
+        }
+    },
+    "i18n": {
+        "criteria": [ "RequirementsCommandPanelsMessages" ],
+        "Add": [ "RequirementsCommandPanelsMessages" ],
+        "ImportType": [ "RequirementsCommandPanelsMessages" ],
+        "If": [ "RequirementsCommandPanelsMessages" ],
+        "operationValuesTitle": [ "RequirementsCommandPanelsMessages" ],
+        "wordContains": [ "RequirementsCommandPanelsMessages" ],
+        "hasStyle": [ "RequirementsCommandPanelsMessages" ],
+        "doesNotContainWord": [ "RequirementsCommandPanelsMessages" ],
+        "sentenceBeginOnNewLine": [ "RequirementsCommandPanelsMessages" ],
+        "exactMatch": [ "RequirementsCommandPanelsMessages" ],
+        "partialMatch": [ "RequirementsCommandPanelsMessages" ],
+        "update": [ "RequirementsCommandPanelsMessages" ],
+        "wordContainsExactMatch": [ "RequirementsCommandPanelsMessages" ],
+        "wordContainsPartialMatch": [ "RequirementsCommandPanelsMessages" ],
+        "conditionLabel": [ "RequirementsCommandPanelsMessages" ],
+        "addCondition": [ "RequirementsCommandPanelsMessages" ],
+        "removeCondition": [ "RequirementsCommandPanelsMessages" ],
+        "showAddPropRuleError": [ "RequirementsCommandPanelsMessages" ],
+        "performActionLabel": [ "RequirementsCommandPanelsMessages" ],
+        "executeLabel": [ "RequirementsCommandPanelsMessages" ],
+        "anyConditionLabel": [ "RequirementsCommandPanelsMessages" ],
+        "allConditionLabel": [ "RequirementsCommandPanelsMessages" ],
+        "alwaysConditionLabel": [ "RequirementsCommandPanelsMessages" ],
+        "setFieldTypelabel": [ "RequirementsCommandPanelsMessages" ],
+        "toValueLabel": [ "RequirementsCommandPanelsMessages" ],
+        "createTraceLink": [ "RequirementsCommandPanelsMessages" ],
+        "alsoLabel": [ "RequirementsCommandPanelsMessages" ],
+        "propertyRulesCaption": [ "RequirementsCommandPanelsMessages" ],
+        "ruleLabel": [ "RequirementsCommandPanelsMessages" ],
+        "removePropertyRuleLabel": [ "RequirementsCommandPanelsMessages" ],
+        "paragraphRuleCaption": [ "RequirementsCommandPanelsMessages" ],
+        "CancelText": [ "RequirementsCommandPanelsMessages" ],
+        "importHeader": ["RequirementsCommandPanelsMessages"]
+    }
+}

@@ -1,0 +1,11 @@
+<div class="sw-column h-4" exist-when="conditions.showConnectionTableAtBottomCondition">
+    <aw-advanced-bar type="TOOLBAR" negative='true'>
+        <aw-command-bar context="{ context:props.subPanelContext, pageState:props.pageState, selection:data.selection? data.selection:[] }" anchor="ase1_interfacesShowDetailsCmd" alignment="HORIZONTAL" class="aw-commands-commandBarHorizontalRight"></aw-command-bar>
+    </aw-advanced-bar>
+    <ase1-connection-details page-state="props.pageState" primary-selection="props.primarySelection"
+    sub-panel-context="props.subPanelContext" interfaces-primary-selection="fields.primarySelectionData"></ase1-connection-details>
+</div>
+<aw-splitter exist-when="conditions.isInterfaceDetailsPanelVisible" direction="HORIZONTAL"></aw-splitter>
+<div exist-when="conditions.isInterfaceDetailsPanelVisible" class="sw-row h-8">
+    <ase1-show-details-for-interfaces sub-panel-context="{...props.subPanelContext,selection:data.selection? data.selection:[], selectionData:fields.secondarySelectionData}"></ase1-show-details-for-interfaces>
+</div>

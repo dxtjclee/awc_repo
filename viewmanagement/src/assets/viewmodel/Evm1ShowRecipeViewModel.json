@@ -1,0 +1,46 @@
+{
+    "schemaVersion": "1.0.0",
+
+    "actions": {
+        "executeRBRecipe": {
+            "actionType": "JSFunction",
+            "method": "executeShowRecipe",
+            "inputData": {
+                "selectedObject": "{{data.executeRecipeState.selectedObject}}",
+                "graphActionState": "{{subPanelContext.actionState}}",
+                "graphSelections": "{{ports.inputSelection.syncObject.nodes}}"
+            },
+            "deps": "js/Evm1ShowRecipeService"
+        }
+    },
+
+    "data": {
+        "executeRecipeState": {
+            "initialValues": {
+                "selectedObject":{}
+            },
+            "meta": {}
+        }
+    },
+
+    "dataProviders": {},
+    "lifecycleHooks": {
+        "onUpdate": [ {
+            "action": "executeRBRecipe",
+            "observers": [ "viewModel.atomicData.executeRecipeState.selectedObject" ]
+        }]
+    },
+    "ports": {
+        "inputSelection": {
+            "syncObject": {}
+        }
+    },
+    "i18n": {
+        "showRecipe": [
+            "RecipeCommandPanelsMessages"
+        ],
+        "execute": [
+            "RecipeCommandPanelsMessages"
+        ]
+    }
+}

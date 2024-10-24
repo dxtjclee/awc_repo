@@ -1,0 +1,250 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-splm-table.directive"
+    ],
+    "actions": {
+        "setTreeViewType": {
+            "actionType": "JSFunction",
+            "method": "setTreeViewType",
+            "deps": "js/Evm1RecipeTableService",
+            "inputData": {
+                "recipeState": "{{props.recipeState}}"
+            }
+        },
+        "executeTreeDataProvider": {
+            "actionType": "dataProvider",
+            "method": "recipeSearchDataProvider"
+        },
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/columnArrangeService"
+        },
+        "loadTreeTableProperties": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableProperties",
+            "inputData": {
+                "propertyLoadInput": "request.propertyLoadInput"
+            },
+            "outputData": {},
+            "deps": "js/Evm1RecipeTreeService"
+        },
+        "loadRecipeSearchTreeData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadRecipeSearchTreeData",
+            "inputData": {
+                "treeLoadInput": "request.treeLoadInput",
+                "data": "{{data}}",
+                "recipeState": "{{props.recipeState}}"
+            },
+            "outputData": {
+                "recipeResultProxyObjects": "recipeResultProxyObjects",
+                "totalFound": "recipeResultProxyObjects.length"
+            },
+            "deps": "js/Evm1RecipeTreeService"
+        },
+        "loadRecipeSearchChildData": {
+            "actionType": "JSFunction",
+            "method": "loadRecipeSearchChildData",
+            "inputData": {
+                "treeLoadInput": "request.treeLoadInput",
+                "recipeResultProxyObjects": "{{data.recipeResultProxyObjects}}",
+                "recipeState": "{{props.recipeState}}"
+            },
+            "outputData": {},
+            "deps": "js/Evm1RecipeTreeService"
+        },
+        "loadTreeTableColumns": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "getOrResetUIColumnConfigs4",
+            "inputData": {
+                "getOrResetUiConfigsIn": [ {
+                    "scope": "LoginUser",
+                    "scopeName": "",
+                    "clientName": "AWClient",
+                    "resetColumnConfig": false,
+                    "columnConfigQueryInfos": [ {
+                        "clientScopeURI": "Evm1RecipeResults",
+                        "operationType": "union",
+                        "typeNames": "{{data.dataProviders.recipeSearchDataProvider.columnConfig.typesForArrange}}",
+                        "columnsToExclude": []
+                    } ],
+                    "businessObjects": [ {} ]
+                } ]
+            },
+            "outputData": {
+                "dataProviders.recipeSearchDataProvider.columnConfig": "{{function:populateAwColumns}}"
+            },
+            "deps": "js/Evm1RecipeTreeService"
+        },
+        "loadDataForSavedColumnConfig": {
+            "actionType": "JSFunctionAsync",
+            "method": "getTableViewModelProperties",
+            "deps": "js/tcViewModelObjectService",
+            "inputData": {
+                "vmNodes": "{{data.dataProviders.recipeSearchDataProvider.viewModelCollection.loadedVMObjects}}",
+                "context": {
+                    "clientScopeURI": "Evm1RecipeResults",
+                    "clientName": "AWClient"
+                }
+            },
+            "events": {
+                "success": [ {
+                    "name": "recipetreetable.plTable.clientRefresh"
+                } ]
+            }
+        },
+        "saveColumnConfig": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "saveUIColumnConfigs2",
+            "deps": "js/Evm1RecipeTreeService",
+            "inputData": {
+                "columnConfigurations": [ {
+                    "clientScopeURI": "Evm1RecipeResults",
+                    "columnConfigId": "recipeResultsColConfig",
+                    "columns": "{{data.dataProviders.recipeSearchDataProvider.newColumns}}",
+                    "scope": "LoginUser",
+                    "scopeName": ""
+                } ]
+            },
+            "outputData": {},
+            "events": {
+                "success": [ {
+                    "name": "recipeSearchDataProvider.saved"
+                } ]
+            }
+        },
+        "resetColumnConfig": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "getOrResetUIColumnConfigs4",
+            "deps": "js/Evm1RecipeTreeService",
+            "inputData": {
+                "getOrResetUiConfigsIn": [ {
+                    "scope": "LoginUser",
+                    "scopeName": "",
+                    "clientName": "AWClient",
+                    "resetColumnConfig": true,
+                    "columnConfigQueryInfos": [ {
+                        "clientScopeURI": "Evm1RecipeResults",
+                        "operationType": "union",
+                        "typeNames": "{{data.dataProviders.recipeSearchDataProvider.columnConfig.typesForArrange}}",
+                        "columnsToExclude": []
+                    } ],
+                    "businessObjects": [ {} ]
+                } ]
+            },
+            "outputData": {
+                "dataProviders.recipeSearchDataProvider.columnConfig": "{{function:populateAwColumns}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "recipeSearchDataProvider.saved"
+                } ]
+            }
+        }
+    },
+
+    "functions": {
+        "populateAwColumns": {
+            "functionName": "populateAwColumns",
+            "parameters": [
+                "{{data.dataProviders.recipeSearchDataProvider.columnConfig.typesForArrange}}"
+            ]
+        },
+        "filterForProxy": {
+            "functionName": "filterForProxy",
+            "parameters": [
+                "{{data.dataProviders.recipeSearchDataProvider.viewModelCollection.loadedVMObjects}}"
+            ]
+        }
+    },
+    "props": {
+        "recipe-state": {
+            "type": "object"
+        },
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data": {
+        "showTable": false,
+        "recipeResultProxyObjects": []
+    },
+    "dataProviders": {
+        "recipeSearchDataProvider": {
+            "initializeAction": "loadRecipeSearchTreeData",
+            "nextAction": "loadRecipeSearchChildData",
+            "treeLoadResult": "action.result.treeLoadResult",
+            "inputData": {
+                "accessMode": "tree",
+                "selectionModel": "{{subPanelContext.selectionModel}}",
+                "selectionData": "{{subPanelContext.selectionData}}"
+            },
+            "selectionModelMode": "multiple"
+        },
+        "recipeSearchPropertyProvider": {
+            "action": "loadTreeTableProperties",
+            "propertyLoadResult": "action.result.propertyLoadResult"
+        }
+    },
+    "columnProviders": {
+        "recipeSearchColumnProvider": {
+            "loadColumnAction": "loadTreeTableColumns",
+            "saveColumnAndLoadAction": "saveColumnConfig",
+            "saveColumnAction": "saveColumnConfig",
+            "resetColumnAction": "resetColumnConfig",
+            "sortCriteria": [],
+            "id": "Evm1RecipeResults"
+        }
+    },
+    "grids": {
+        "recipetreetable": {
+            "dataProvider": "recipeSearchDataProvider",
+            "propertyProvider": "recipeSearchPropertyProvider",
+            "columnProvider": "recipeSearchColumnProvider",
+            "enableArrangeMenu": true,
+            "addIconColumn": false,
+            "gridOptions": {
+                "enableSorting": true,
+                "isFilteringEnabled": true,
+                "enablePinning": false,
+                "useStaticFirstCol": true,
+                "maxRowsToShow": 13
+            }
+        }
+    },
+    "onEvent": [ {
+            "eventId": "recipeSearchDataProvider.saved",
+            "action": "loadDataForSavedColumnConfig"
+        },
+        {
+            "eventId": "Evm1RecipeResultsTree.contentLoaded",
+            "action": "setTreeViewType"
+        },
+        {
+            "eventId": "view.executeRecipeTree",
+            "action": "executeTreeDataProvider"
+        },
+        {
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        }
+    ],
+    "i18n": {
+        "NoResults": [ "RecipeCommandPanelsMessages" ]
+    },
+    "conditions": {
+        "noResultsFound": {
+            "expression": "data.totalFound === 0"
+        }
+    }
+}

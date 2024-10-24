@@ -1,0 +1,160 @@
+{
+    "schemaVersion": "1.0.0",
+    "ctx": {
+        "panelContext": null
+    },
+    "data": {
+        "pinnedToForm": {
+            "type": "BOOLEAN",
+            "dbValue": true
+        },
+        "unpinnedToForm": {
+            "type": "BOOLEAN",
+            "dbValue": false
+        },
+        "addPanelState": {
+            "initialValues": {
+                "xrtTypeLoaded": ""
+            },
+            "meta": {}
+        },
+        "triggerCreate": {
+            "dbValue": false,
+            "type": "BOOLEAN"
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "AddObjectPrimarySub",
+                "context": {}
+            },
+            "meta": {}
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "actions": {
+        "revealAction": {
+            "actionType": "JSFunction",
+            "method": "updateAddObjectData",
+            "inputData": {
+                "inputData": "{{ctx.panelContext}}",
+                "addObject": "{{data.addObject}}"
+            },
+            "outputData": {
+                "panelContext": ""
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "createObject": {
+            "actionType": "JSFunction",
+            "method": "updateCreateTrigger",
+            "inputData": {
+                "triggerCreate": "{{data.triggerCreate}}",
+                "value": true
+            },
+            "outputData": {
+                "triggerCreate": "triggerCreate"
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "closePanel":
+        {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData":
+            {
+                 "events":
+                 [
+                    {
+                        "name": "awPanel.loadNextValues",
+                        "condition": "subPanelContext.panelPinned"
+                    },
+                    {
+                        "name": "complete",
+                        "condition": "!subPanelContext.panelPinned",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+
+                 ]
+            }
+        },
+        "populateDefaultValuesForPDR": {
+            "actionType": "JSFunction",
+            "method": "populateDefaultValuesFromEvent",
+            "inputData": {
+                "revision__psi0DueDate": "{{data.revision__psi0DueDate}}",
+                "psi0TargetDate": "{{data.psi0TargetDate}}",
+                "psi0DueDate": "{{data.psi0DueDate}}",
+                "selectionData": "{{props.subPanelContext.selectionData}}",
+                "createType": "{{addPanelState.creationType.props.type_name.dbValues[0]}}",
+                "editHandler": "{{editHandlers.addPanelEditHandler}}"
+            },
+            "deps": "js/Psi0CreatePanelService"
+        },
+        "performPostProcessingAfterXRTLoaded": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "populateDefaultValuesForPDR",
+                    "condition": "conditions.isXRTTypeLoaded"
+                }
+            ]
+        }
+    },
+    "conditions" : {
+        "isPaletteSearchTabAddButtonVisible": {
+            "expression": "data.addPanelState.selectedTab.view != 'NewTabPageSub' && data.addPanelState.sourceObjects.length > 0"
+        },
+        "isNewTabAddButtonVisible": {
+            "expression": "data.addPanelState.selectedTab.view == 'NewTabPageSub' && data.addPanelState.creationType"
+        },
+        "isXRTTypeLoaded": {
+            "expression": "data.xrtState.xrtTypeLoaded"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "revealAction",
+        "onUpdate": {
+            "action": "performPostProcessingAfterXRTLoaded",
+            "observers": [ "viewModel.atomicData.xrtState.xrtTypeLoaded" ]
+        }
+    },
+    "onEvent":[
+        {
+            "eventId": "psi0SetPinEvent",
+            "cacheEventData": true,
+            "action": "psi0SetPin"
+        },
+        {
+            "eventId": "psi0SetUnPinEvent",
+            "cacheEventData": true,
+            "action": "psi0SetUnPin"
+        },
+        {
+            "eventId": "cdm.relatedModified",
+            "action": "closePanel"
+        }
+    ],
+    "i18n": {
+        "addButtonTitle":[
+            "PrgScheduleManagerMessages"
+        ]
+    }
+}

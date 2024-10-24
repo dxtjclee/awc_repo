@@ -1,0 +1,121 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "reveal": {
+            "actionType": "dataProvider",
+            "method": "datasetItemRevisionSearch"
+        },
+        "searchDatasetItemRevision": {
+          "actionType": "TcSoaService",
+            "serviceName": "Query-2014-11-Finder",
+            "method": "performSearch",
+            "inputData":
+            {
+                "searchInput": {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Psi0ScheduleSearchProvider",
+                    "searchCriteria": {
+                        "searchContentType": "DeliverableAttachments",
+                        "searchProperty": "object_name",
+                        "searchString": "{{data.filterBox.dbValue}}",
+                        "parentUid": "{{ctx.mselected['0'].uid}}"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "searchFilterMap": {},
+                    "searchSortCriteria": [],
+
+                    "startIndex": "{{data.dataProviders.datasetItemRevisionSearch.dataProvider.startIndex}}"
+                    }
+            },
+            "events": {
+                "failure": [{
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                }]
+            },
+            "outputData": {
+                "searchResults": "searchResults",
+                "totalFound": "totalFound",
+                "totalLoaded": "totalLoaded"
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            }
+
+        }
+    },
+    "dataProviders": {
+        "datasetItemRevisionSearch": {
+            "action": "searchDatasetItemRevision",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "totalLoaded": "{{data.totalLoaded}}",
+            "selectionModelMode": "single",
+            "commands": {
+                "Awp0ShowObjectCell": {
+                    "id": "cmdOpen",
+                    "areas": [
+                        "com.siemens.splm.clientfx.ui.modelObjectListActionCommands"
+                    ],
+                    "priorities": [
+                        300
+                    ],
+                    "dependencies": [
+                        "js/showObjectCommandHandler"
+                    ],
+                    "displayOption": "ON_HOVER_AND_SELECTION",
+                    "position": "TOP_RIGHT"
+                },
+                "Awp0ShowObjectCellDataset": {
+                    "id": "cmdOpen",
+                    "areas": [
+                        "com.siemens.splm.clientfx.ui.modelObjectListActionCommands"
+                    ],
+                    "priorities": [ 300 ],
+                    "dependencies": [ "js/showObjectDatasetCommandHandler" ],
+                    "displayOption": "ON_HOVER_AND_SELECTION",
+                    "position": "TOP_RIGHT"
+                }
+            }
+        }
+    },
+    "data": {
+        "filterBox": {
+            "displayName": "",
+            "type": "STRING",
+            "dbValue": ""
+        }
+    },
+    "onEvent": [
+        
+    ],
+    "lifecycleHooks": {
+        "onMount": "reveal"
+    },
+    "functions":
+    {
+      "getDataSetItemRevision":
+        {
+            "functionName": "getDataSetItemRevision",
+            "parameters":
+            [
+                "{{data}}",
+                "{{ctx}}"
+            ]
+        }
+    },
+    "messages": {
+        "SOAFailureMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "i18n": {
+    }
+
+}

@@ -1,0 +1,19 @@
+<aw-panel-header>
+    <aw-tab-set tabs="data.tabsEditModel.dbValue" visible-when="data.allowFill || data.allowLine"></aw-tab-set>
+</aw-panel-header>
+<aw-panel-body>
+    <div >
+        <div>
+            <textarea id="mrkeditor" name="mrkeditor" title="mrkeditor"></textarea><br/>
+        </div>
+        <div visible-when="data.markup.status==='open' && data.markup.type==='2d'">
+            <aw-listbox prop="data.showOnPage" list="data.showOnPageValues.dbValue" action="showOnPageChanged" ></aw-listbox>
+        </div>
+        <div visible-when="data.markup.status!=='open'">
+            <aw-listbox prop="data.status" list="data.statusValues.dbValue" ></aw-listbox>
+        </div>
+    </div>
+</aw-panel-body>
+<aw-panel-footer>
+    <aw-button action="saveMarkupEdit">{{data.saveButtonText}}</aw-button>
+</aw-panel-footer>

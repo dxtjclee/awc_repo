@@ -1,0 +1,116 @@
+{
+    "actions": {
+        "openDatasetVersion": {
+            "actionType": "JSFunction",
+            "method": "nxTcXmlCommandHandler",
+            "inputData": {
+                "sourceObjects": "{{data.subPanelContext.selected}}"
+            },
+            "deps": "js/nxCommandHandlers"
+        },
+        "openDatasetVersionHosted": {
+            "actionType": "JSFunction",
+            "method": "openVersionWithInHost",
+            "inputData": {
+                "versionObject": "{{data.subPanelContext.selected}}",
+                "datasetObject": "{{ctx.selected}}"
+            },
+            "deps": "js/nxCommandHandlers"
+        },
+        "onTableSelectionChange": {
+            "actionType": "batchJob",
+            "steps": [ {
+                "action": "updateSubPanelContext"
+            } ]
+        },
+        "onSelectionChange": {
+            "actionType": "batchJob",
+            "steps": [ {
+                "action": "updateSubPanelContext"
+            }, {
+                "action": "notifyVmoChange"
+            } ]
+        },
+        "updateSubPanelContext": {
+            "actionType": "JSFunction",
+            "deps": "js/fileVersion.service",
+            "method": "updateSelectedSubPanelContext",
+            "inputData": {
+                "ctxSelected": "{{ctx.selected}}",
+                "eventSelection": "{{data.eventData}}"
+            },
+            "outputData": {
+                "subPanelContext.selected": ""
+            }
+        },
+        "notifyVmoChange": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "datasetVersionsToRenderUpdate",
+                    "excludeLocalDataCtx": true,
+                    "eventData": {}
+                } ]
+            }
+        }
+    },
+    "conditions": {
+        "canOpenDatasetVersionHosted": {
+            "expression": "data.subPanelContext.selected && ctx.selected.modelType.typeHierarchyArray.indexOf( 'Dataset' ) > -1 && ctx.aw_host_type === 'NX' && ctx.preferences.AWC_NX_OpenOldDatasetVersionIsEnabled[0] === 'true' && ctx.preferences.AWC_NX_OpenSupportedTypes.indexOf(ctx.selected.type) > -1 && ctx.nxVisiblity_Awn0NXOpenDatasetVersionPanelHosted"
+        },
+        "canOpenDatasetVersionStandalone": {
+            "expression": "data.subPanelContext.selected && ctx.selected.modelType.typeHierarchyArray.indexOf( 'Dataset' ) > -1 && ctx.aw_host_type !== 'NX' && ctx.preferences.AWC_NX_OpenOldDatasetVersionIsEnabled[0] === 'true' && ctx.preferences.AWC_NX_OpenSupportedTypes.indexOf(ctx.selected.type) > -1"
+        },
+        "canOpenDatasetVersionStandalone12334": {
+            "expression": "data.subPanelContext.selected && ctx.selected.modelType.typeHierarchyArray.indexOf( 'Dataset' ) > -1 && ctx.aw_host_type !== 'NX' && ctx.preferences.AWC_NX_OpenOldDatasetVersionIsEnabled[0] === 'true' && ctx.preferences.AWC_NX_OpenSupportedTypes.indexOf(ctx.selected.type) > -1"
+        }
+
+    },
+    "ctx": {
+        "selected": {
+            "type": "Object"
+        }
+    },
+    "data": {
+        "subPanelContext": {
+            "vmo": "{{ctx.selected}}",
+            "selected": "",
+            "columnsToShow": [ "object_string", "revision_number" ]
+        }
+    },
+    "i18n": {
+        "datasetObjectString": [
+            "NXConstants"
+        ],
+        "versionNumber": [
+            "NXConstants"
+        ],
+        "openDatasetVersionButton": [
+            "NXConstants"
+        ],
+        "openDatasetVersionPanelName": [
+            "NXConstants"
+        ],
+        "openDatasetVersionsSection": [
+            "NXConstants"
+        ]
+    },
+    "imports": [
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/aw-row.directive",
+        "js/aw-include.directive"
+    ],
+    "onEvent": [ {
+        "eventId": "appCtx.register",
+        "condition": "name === 'mselected'",
+        "action": "onSelectionChange"
+    }, {
+        "eventId": "gridDataProviderDHWS.selectionChangeEvent",
+        "action": "onTableSelectionChange",
+        "cacheEventData": true
+    } ],
+    "schemaVersion": "1.0.0"
+}

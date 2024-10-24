@@ -1,0 +1,84 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+
+    ],
+
+    "data": {
+        "interfacesPageState": {
+            "initialValues": {
+                "showInterfaceDetailsPanel": false
+            },
+            "meta": {}
+        },
+        "primarySelectionData": {
+            "initialValues": {
+            },
+            "meta": {}
+        },
+        "secondarySelectionData": {
+            "initialValues": {
+            },
+            "meta": {}
+        },
+        "selection":[]
+    },
+
+    "actions": {
+        "processSelectionChange": {
+            "actionType": "JSFunction",
+            "method": "processSelectionChange",
+            "inputData": {
+                "primarySelectionData": "{{data.primarySelectionData}}",
+                "secondarySelectionData": "{{data.secondarySelectionData}}",
+                "selectionData": "{{subPanelContext.selectionData}}"
+            },
+            "deps": "js/Ase1InterfacesUtilService"
+        },
+        "getInterfacesSelection": {
+            "actionType": "JSFunctionAsync",
+            "method": "getAdaptedObjects",
+            "inputData": {
+                "sourceObjects": "{{data.primarySelectionData.selected}}"
+            },
+            "outputData": {
+                "selection": ""
+            },
+            "deps": "js/adapterService"
+        }
+    },
+
+    "dataProviders": {},
+
+    "columnProviders": {},
+
+    "functions": {},
+
+    "grids": {},
+
+    "dataParseDefinitions": {},
+
+    "lifecycleHooks": {
+        "onUpdate": [ {
+            "action": "processSelectionChange",
+            "observers": [ "viewModel.atomicData.primarySelectionData", "viewModel.atomicData.secondarySelectionData" ]
+        },
+        {
+            "action": "getInterfacesSelection",
+            "observers": [ "viewModel.atomicData.primarySelectionData.selected" ]
+        }]
+    },
+
+    "onEvent": [],
+
+    "conditions": {
+        "toggleInterfaceDetailsPanelCond": {
+            "expression": "data.interfacesPageState.showInterfaceDetailsPanel"
+        }
+    },
+
+    "i18n": {},
+
+    "messages": {}
+}
+

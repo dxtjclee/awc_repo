@@ -1,0 +1,134 @@
+{
+  "actions": {
+    "listDragStart": {
+      "actionType": "syncFunction",
+      "method": "listDragStart",
+      "inputData": {
+        "eventType": "listDragStart"
+      },
+      "deps": "js/ssp0DragAndDropOnCells"
+    },
+    "dragOverTreeTable": {
+      "actionType": "syncFunction",
+      "method": "dragOverTreeTable",
+      "deps": "js/ssp0DragAndDropOnCells"
+    },
+    "dropOnTreeTable": {
+      "actionType": "syncFunction",
+      "method": "dropOnTreeTable",
+      "deps": "js/ssp0DragAndDropOnCells"
+    },
+    "partsTreeViewDragOver": {
+      "actionType": "syncFunction",
+      "method": "partsTreeViewDragOver",
+      "deps": "js/ssp0DragAndDropOnCells"
+    },
+    "partsTreeViewDragDrop": {
+      "actionType": "syncFunction",
+      "method": "partsTreeViewDragDrop",
+      "deps": "js/ssp0DragAndDropOnCells"
+    },
+    "mfeMessageViewDragEnter": {
+      "actionType": "syncFunction",
+      "method": "mfeMessageViewDragEnter",
+      "deps": "js/ssp0DragAndDropOnCells"
+    },
+    "mfeMessageViewDragLeave": {
+      "actionType": "syncFunction",
+      "method": "mfeMessageViewDragLeave",
+      "deps": "js/ssp0DragAndDropOnCells"
+    },
+    "mfeMessageViewDragOver": {
+      "actionType": "syncFunction",
+      "method": "mfeMessageViewDragOver",
+      "inputData": {
+        "eventType": "mfeMessageViewDragOver"
+      },
+      "deps": "js/ssp0DragAndDropOnCells"
+    },
+    "mfeMessageViewDragDrop": {
+      "actionType": "syncFunction",
+      "method": "mfeMessageViewDragDrop",
+      "inputData": {
+        "eventType": "mfeMessageViewDragDrop"
+      },
+      "deps": "js/ssp0DragAndDropOnCells"
+    }
+  },
+  "dragHandlers": {
+    "dragHandlerForSBOM": {
+      "views": [
+        "Ssp0SbomTree"
+      ],
+      "dragActions": {
+        "dragStart": "listDragStart"
+      }
+    },
+    "dragHandlerForParts": {
+      "views": [
+        "Ssp0PartsTree"
+      ],
+      "dragActions": {
+        "dragStart": "listDragStart"
+      }
+    },
+    "dragHandlerForTools": {
+      "views": [
+        "Ssp0ToolsTree"
+      ],
+      "dragActions": {
+        "dragStart": "listDragStart"
+      }
+    }
+  },
+  "dropHandlers": {
+    "dropHandlerForSPTreeTable": {
+      "views": [
+        "Ssp0ServicePlanTree"
+      ],
+      "dropActions": {
+        "dragOver": "dragOverTreeTable",
+        "drop": "dropOnTreeTable"
+      }
+    },
+    "dropHandlerForPartsTreeTable": {
+      "activeWhen": true,
+      "views": [
+        "Ssp0PartsTree"
+      ],
+      "dropActions": {
+        "dragOver": "partsTreeViewDragOver",
+        "drop": "partsTreeViewDragDrop"
+      }
+    },
+    "dropHandlerForToolsTreeTable": {
+      "activeWhen": true,
+      "views": [
+        "Ssp0ToolsTree"
+      ],
+      "dropActions": {
+        "dragOver": "partsTreeViewDragOver",
+        "drop": "partsTreeViewDragDrop"
+      }
+    },
+    "dropHandlerForMfeMessage": {
+      "activeWhen": {
+        "condition": "conditions.isSubLocationServicePlanning"
+      },
+      "views": [
+        "MfeMessage"
+      ],
+      "dropActions": {
+        "dragEnter": "mfeMessageViewDragEnter",
+        "dragLeave": "mfeMessageViewDragLeave",
+        "dragOver": "mfeMessageViewDragOver",
+        "drop": "mfeMessageViewDragDrop"
+      }
+    }
+  },
+  "conditions": {
+    "isSubLocationServicePlanning": {
+      "expression": "ctx.locationContext['ActiveWorkspace:SubLocation'] === 'servicePlanning'"
+    }
+  }
+}

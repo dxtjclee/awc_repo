@@ -1,0 +1,88 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "initializeDataProvider": {
+            "actionType": "dataProvider",
+            "methods": [
+                "epImpactHandledDataProvider"
+            ]
+        },
+        "loadImpactHandledData": {
+            "actionType": "JSFunction",
+            "method": "getProperty",
+            "inputData": {
+                "name": "{{ctx.epPageContext.loadedObject.uid}}",
+                "propertyName": "ImpactHandledObjects"
+            },
+            "outputData": {
+                "impactHandled": ""
+            },
+            "deps": "js/epObjectPropertyCacheService"
+        },
+        "updateCommandContext": {
+            "actionType": "JSFunction",
+            "method": "setCommandContext",
+            "inputData": {
+                "tabModel": "{{subPanelContext}}",
+                "commandContext": {
+                    "selection": "{{parameters.eventData.selectedObjects}}"
+                }
+            },
+            "deps": "js/mfeContentPanelUtil"
+        },
+        "clearSelectionFromCommandContext": {
+            "actionType": "JSFunction",
+            "method": "setCommandContext",
+            "inputData": {
+                "tabModel": "{{subPanelContext}}",
+                "commandContext": {
+                    "selection": ""
+                }
+            },
+            "deps": "js/mfeContentPanelUtil"
+        },
+        "epImpactHandledDataProviderBatchAction": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "initializeDataProvider"
+                },
+                {
+                    "action": "clearSelectionFromCommandContext"
+                }
+            ]
+        }
+    },
+    "dataProviders": {
+        "epImpactHandledDataProvider": {
+            "action": "loadImpactHandledData",
+            "response": "{{data.impactHandled}}",
+            "totalFound": "{{data.impactHandled.length}}",
+            "selectionModelMode": "multiple"
+        }
+    },
+    "conditions": {
+        "hasImpactIgnored": {
+            "expression": "data.impactHandled.length > 0"
+        }
+    },
+    "onEvent": [ {
+            "eventId": "ep.publishAssignmentIndicationChange",
+            "action": "epImpactHandledDataProviderBatchAction"
+        },
+        {
+            "eventId": "epImpactHandledDataProvider.selectionChangeEvent",
+            "action": "updateCommandContext",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            }
+        },
+        {
+            "eventId": "epObjectPropertyCache.ImpactHandledObjectsUpdated",
+            "action": "epImpactHandledDataProviderBatchAction"
+        }
+    ],
+    "lifecycleHooks": {
+        "onMount": "initializeDataProvider"
+    }
+}

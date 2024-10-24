@@ -1,0 +1,92 @@
+{
+    "schemaVersion" : "1.0.0",
+    "props": {
+        "sub-panel-context":{
+            "type": "object"
+        },
+        "item":{
+            "type": "object"
+        }
+    },
+    "actions":
+    {
+        "toggleType": {
+            "actionType": "JSFunction",
+            "method": "toggleType",
+            "inputData": {
+                "vmo": "{{props.item}}",
+                "data": "{{data}}"
+            },
+            "outputData":
+            {
+                "item": "vmobj",
+                "buttonItem": "buttonItem"
+            },
+            "deps": "js/Arm0CreateTraceLinkPopupService"
+        },
+        "removeFromEndItems": {
+            "actionType": "JSFunction",
+            "method": "removeFromEndItems",
+            "inputData":
+            {
+                "data": "{{subPanelContext}}",
+                "obj": "{{data.selectedCell}}"
+            },
+            "deps": "js/Arm0CreateTraceLink"
+        },
+        "attachVMO":
+        {
+            "actionType": "JSFunction",
+            "method": "attachVMOToItemLists",
+            "inputData":
+            {
+                "data": "{{data}}",
+                "isStartItemList": false
+            },
+            "outputData":
+            {
+                "vmo": "vmo"
+            },
+            "deps": "js/Arm0CreateTraceLink"
+        }
+    },
+    "data":
+    {
+        "icon": {
+            "dbValue": "{{props.item.typeIconURL}}"
+        },
+        "buttonItem": {
+            "tracelinkIcon": "CreateOccurrence"
+        },
+        "CreateOccurrenceCommand": {
+            "action": "toggleType",
+            "tooltip": "{{i18n.occurrenceTooltip}}",
+            "iconName": "CreateOccurrence"
+        },
+        "CreateRevisionCommand": {
+            "action": "toggleType",
+            "tooltip": "{{i18n.revisionTooltip}}",
+            "iconName": "CreateRevision"
+        }
+    },
+    "conditions": {
+        "isAwb0Element": {
+            "expression": "props.item.modelType.typeHierarchyArray.includes('Awb0Element') && props.item.props.awb0Parent.dbValue && props.item.props.awb0UnderlyingObject.dbValue"
+        },
+        "isCreateOccurrence": {
+            "expression": "data.buttonItem.tracelinkIcon === 'CreateOccurrence'"
+        }
+    },
+    "i18n":
+    {
+        "Remove":
+        [
+          "RequirementsCommandPanelsMessages"
+        ],
+        "revisionTooltip": ["requirementscommandpanelsjsTooltipMessages"],
+        "occurrenceTooltip": ["requirementscommandpanelsjsTooltipMessages"]
+    },
+    "lifecycleHooks" : {
+        "onMount": "attachVMO"
+    }
+}

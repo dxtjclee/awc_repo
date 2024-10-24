@@ -1,0 +1,385 @@
+{
+    "schemaVersion" : "1.0.0",
+    "imports":
+    [
+    ],
+
+    "actions":
+    {
+        "reveal":
+        {
+            "actionType": "JSFunction",
+            "method": "getMapAttributeSearchInput",
+            "deps": "js/Att1AttrMappingTableMapService",
+            "inputData":{
+                "parametersTable": "{{ctx.panelContext.parametersTable}}",
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "columnConfigInput": "columnConfigInput",
+                "searchCriteria": "searchCriteria",
+                "selectedParameters": "selectedParameters",
+                "providerName": "providerName"
+            },
+            "events": {
+                "success": [{
+                    "name": "invokeSearch"
+                }]
+            }
+        },
+
+        "invokeSearch":
+        {
+            "actionType": "dataProvider",
+            "method": "performSearch"
+        },
+
+        "closeMapAttribPanel":
+        {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData":
+            {
+                "events":
+                [
+                    {
+                        "name": "Att1MapAttribute.panelCloseSuccessful"
+                    },
+                    {
+                        "name": "complete",
+                        "eventData":
+                        {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            }
+        },
+        "search":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": "{{data.columnConfigInput}}",
+                "searchInput": {
+                    "internalPropertyName": "",
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "{{data.providerName}}",
+                    "searchCriteria": {
+                        "openedObjectUid": "{{ctx.panelContext.parametersTable.openedObject.uid}}",
+                        "parentUids":"{{data.searchCriteria.parentUids}}",
+                        "searchString": "{{data.filterBox.dbValue}}",
+                        "productContextUids": "{{data.searchCriteria.productContextUids}}",
+                        "rootElementUids": "{{data.searchCriteria.rootElementUids}}",
+                        "separator": "{{ctx.panelContext.parametersTable.seperatorStr}}"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "searchFilterMap6": {},
+                    "searchSortCriteria": [],
+                    "startIndex": "{{data.dataProviders.performSearch.startIndex}}"
+                }
+            },
+           "policy":
+            {
+                "types":
+                [
+                    {
+                        "name": "Att1AttributeAlignmentProxy",
+                        "properties":
+                        [
+                            {
+                                "name": "att1SourceAttribute",
+                                "modifiers": [ {
+                                    "name": "withProperties",
+                                    "Value": "true"
+                                } ]
+                            },
+                            {
+                                "name": "att1SourceDirection"
+                            },
+                            {
+                                "name": "att1SourceElement"
+                            },
+                            {
+                                "name": "att1TargetAttribute"
+                            },
+                            {
+                                "name": "att1TargetDirection"
+                            },
+                            {
+                                "name": "att1TargetElement"
+                            },
+                            {
+                                "name": "att1ContextObject",
+                                "modifiers": [ {
+                                    "name": "withProperties",
+                                    "Value": "true"
+                                } ]
+                            },
+                            {
+                                "name":"att1AttrContext"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Att0MeasurableAttributeDbl",
+                        "properties": [
+                            {
+                                "name": "att0AttrDefRev",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "att0Uom"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Att0MeasurableAttributeInt",
+                        "properties": [
+                            {
+                                "name": "att0AttrDefRev",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "att0Uom"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Att0MeasurableAttributeStr",
+                        "properties": [
+                            {
+                                "name": "att0AttrDefRev",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "att0Uom"
+                            }
+                        ]
+                    }
+                ]
+            },
+
+            "outputData":
+            {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}",
+                "searchResultObjects": "ServiceData.modelObjects"
+            }
+        },
+        "mapAttributes":
+        {
+            "actionType": "JSFunction",
+            "method": "mapAttributes",
+            "inputData":
+            {
+                "inputProxyObjects": "{{data.selectedParameters}}",
+                "selectedProxyObjects": "{{data.dataProviders.performSearch.selectedObjects}}",
+                "parametersTable": "{{ctx.panelContext.parametersTable}}"
+            },
+            "outputData":
+            {
+                "mapObjectAttributeInput": "mapObjectAttributeInput",
+                "nonMappableObjects": "nonMappableObjects"
+            },
+            "events": {
+                "success": [{
+                    "name": "Att1MapAttribute.mapAttributesSOA"
+                }]
+            },
+            "deps": "js/Att1AttrMappingTableMapService"
+        },
+
+        "proxyListSelection":
+        {
+            "actionType": "JSFunction",
+            "method": "proxyListSelection",
+            "inputData":
+            {
+                "selectedProxyObjects": "{{data.dataProviders.performSearch.selectedObjects}}"
+            },
+            "outputData":
+            {
+                "selectedListAlignmentObjectsModifiable": "selectedListAlignmentObjectsModifiable"
+            },
+
+            "deps": "js/Att1AttrMappingTableSelectService"
+        },
+
+        "mapAttributesSOA":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "AttrTargetMgmtAW-2017-12-AttributeTargetManagement",
+            "method": "mapMeasurableAttributes",
+            "inputData":
+            {
+                "inputs": "{{data.mapObjectAttributeInput}}",
+                "pref":
+                {
+                    "mapObjType": "Att0AttributeMapping",
+                    "alignmentObjType": "Att0AttributeAlignment",
+                    "toDeleteUnalignment": false,
+                    "toCreateResultAttr": false
+                }
+
+            },
+            "outputData": {
+                "createMappingResp": "",
+                "mapMessages":"{{function:processPartialErrorForMapping}}"
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "gridDataProvider.resetState"
+                    },
+                    {
+                        "name": "displayErrorMessage",
+                        "condition": "data.nonMappableObjects.nonModifialbleAttributesList.length > 0"
+                    },
+                    {
+                        "condition": "data.nonMappableObjects.nonModifialbleAttributesList.length > 0",
+                        "name": "updateAttrMapping"
+                    },
+                    {
+                        "condition": "!subPanelContext.panelPinned",
+                        "name": "closeAttrMapping"
+                    },
+                    {
+                        "condition": "subPanelContext.panelPinned",
+                        "name": "updateAttrMapping"
+                    },
+                    {
+                        "name": "uniformParamTable.reloadTable",
+                        "eventData": {
+                            "requestId": "{{ctx.panelContext.parametersTable.requestId}}",
+                            "reusable": "{{ctx.panelContext.reusableParamTable}}"
+                        }
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "message": "mapFailureMessage"
+                    }
+                ]
+            },
+            "deps": "js/Att1ParameterMgmtUtilService"
+        }
+    },
+
+    "data":
+    {
+        "filterBox":
+        {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "false",
+            "dbValue": ""
+        }
+    },
+
+    "dataProviders":
+    {
+        "performSearch":
+        {
+            "action": "search",
+            "response":"{{data.searchResults}}",
+            "totalFound":"{{data.totalFound}}",
+            "selectionModelMode": "{{ctx.panelContext.selectionMode}}"
+        }
+    },
+
+    "conditions":
+    {
+        "isValidToShowMapButton":
+        {
+            "expression": "data.dataProviders.performSearch.selectedObjects.length>0  && data.selectedListAlignmentObjectsModifiable"
+        }
+    },
+
+    "onEvent":
+    [
+        {
+            "eventId": "updateAttrMapping",
+            "action": "reveal"
+        },
+
+        {
+            "eventId": "closeAttrMapping",
+            "action": "closeMapAttribPanel"
+        },
+
+        {
+            "eventId": "performSearch.selectionChangeEvent",
+            "action": "proxyListSelection"
+        },
+
+        {
+            "eventId": "Att1MapAttribute.mapAttributesSOA",
+            "action": "mapAttributesSOA"
+        },
+        {
+            "eventId":"uniformParamTable.selectionChanged",
+            "cacheEventData": true,
+            "action": "reveal"
+        },
+        {
+            "eventId": "invokeSearch",
+            "action": "invokeSearch"
+        }
+     ],
+     "functions":
+     {
+         "processPartialErrorForMapping": {
+             "functionName": "processPartialErrorForComplexData",
+             "parameters": [
+                 "{{createMappingResp}}"
+             ]
+         }
+     },
+     "messages":
+     {
+         "mapFailureMessage": {
+             "messageType": "ERROR",
+             "messageText": "{{i18n.att1FailureMessage}}",
+             "messageTextParams": [
+                 "{{data.mapMessages}}"
+             ]
+         }
+    },
+    "i18n":
+    {
+       "map": [ "Att1AttrMappingMessages"],
+       "multipleMappingSuccessful": ["Att1AttrMappingMessages"],
+       "mapFailure": ["Att1AttrMappingMessages"],
+       "att1FailureMessage" : ["Att1AttrMappingMessages"]
+    }
+}

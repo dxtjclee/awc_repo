@@ -1,0 +1,6 @@
+<aw-panel-body visible-when="data.isTableDataReady">
+    <div class="sw-column flex-auto">
+        <aw-widget prop="data.palList" visible-when="conditions.isPrivileged" action="processAssignmentListsValueChanged"></aw-widget>
+    </div>
+    <aw-splm-table id="treeTasks" gridid="taskTreeTable" use-tree="true" show-context-menu="true" command-context="{assignmentState:props.assignmentState, isPanelMode: props.subPanelContext.isPanelMode}"></aw-splm-table>
+</aw-panel-body>

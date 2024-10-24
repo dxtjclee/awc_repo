@@ -1,0 +1,89 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+
+    "actions": {
+        "createLabelsList": {
+            "actionType": "JSFunction",
+            "method": "populateLabelList",
+            "inputData": {
+                "labelProperties": "{{subPanelContext.pageState.LabelProperties}}"
+            },
+            "outputData": {
+                "labelArray": ""
+            },
+            "deps": "js/Ase1ShowLabelViewService"
+        },
+
+        "applyLabel": {
+            "actionType": "JSFunction",
+            "deps": "lodash",
+            "method": "invoke",
+            "inputData": {
+                "0": "{{subPanelContext.actionState}}",
+                "1": "update",
+                "2": {
+                    "applyLabel": {
+                        "name": "{{data.labelsList.dbValue}}",
+                        "dispName": "{{data.labelsList.uiValue}}"
+                    }
+                }
+            },
+            "events": {
+                "success": [ {
+                        "name": "aw.closePopup",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            }
+        },
+        "closePopupWindow": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        }
+    },
+
+    "data": {
+        "labelsList": {
+            "displayName": "{{i18n.label}}",
+            "name": "labelsList",
+            "type": "STRING",
+            "isRequired": true,
+            "isEditable": true,
+            "isEnabled": true,
+            "dbValue": "{{subPanelContext.pageState.selectedLabelProperty.name}}",
+            "uiValue": "{{subPanelContext.pageState.selectedLabelProperty.dispName}}",
+            "dataProvider": "labelsListDataProvider"
+        }
+    },
+
+    "dataProviders": {
+        "labelsListDataProvider": {
+            "action": "createLabelsList",
+            "response": "{{data.labelArray}}"
+        }
+    },
+
+    "onEvent": [ {
+        "eventId": "aw.closePopup",
+        "action": "closePopupWindow"
+    } ],
+
+    "i18n": {
+        "showLabels": [
+            "SystemModelerConstants"
+        ],
+        "apply": [
+            "SystemModelerConstants"
+        ],
+        "label": [
+            "SystemModelerConstants"
+        ]
+    }
+}

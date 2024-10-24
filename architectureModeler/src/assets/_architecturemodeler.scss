@@ -1,0 +1,451 @@
+// Copyright 2018 Siemens Product Lifecycle Management Software Inc.
+/* architecturemodeler */
+
+.aw-architectureModeler-relationsPanel {
+    width: fit-content;
+}
+
+.aw-architectureModeler-settingsPanel {
+    flex-grow: 1;
+    width: 100%;
+    height: rem-calc(800);
+}
+
+.aw-architectureModeler-architecturePage {
+    width: 100%;
+    overflow: hidden;
+}
+
+.aw-architectureModeler-topPanel {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.aw-architectureModeler-contentArea {
+    height: inherit;
+}
+
+.aw-architectureModeler-loadingLabel {
+    font-size: $fontsize_small;
+}
+
+.aw-architectureModeler-mainPanel {
+    height: 98%;
+    width: 100%;
+}
+
+.aw-architectureModeler-matrixPanel {
+    height: inherit;
+}
+
+/* Object Relations Tabs */
+
+.aw-architectureModeler-tabs {
+    padding-bottom: 0;
+    float: left;
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* Object Relations panel section */
+
+.aw-architectureModeler-objectRelationsPanel .aw-layout-panelSection {
+    box-sizing: border-box;
+}
+
+/* Default height for Object Relations view. */
+
+.aw-architectureModeler-objectRelationsPanel .aw-layout-panelSectionContentComplete {
+    height: 600px;
+}
+
+/* Style to apply when Incoming/Outgoing relations are collapsed */
+
+.aw-architectureModeler-objectRelationsPanel .aw-layout-panelSectionContentHidden {
+    height: 10px;
+}
+
+/* Style to apply when Incoming/Outgoing relations are expanded */
+
+.aw-architectureModeler-objectRelationsPanel .aw-layout-panelSectionContentExpanded {
+    height: 400px;
+}
+
+.aw-architectureModeler-defaultNodeOpacity {
+    fill-opacity: 1;
+    stroke-opacity: 1;
+}
+
+/* Associated Signal panel */
+
+.aw-architectureModeler-signalPanel {
+    margin-left: 10px;
+    line-height: 32px;
+}
+
+/* Associated Signal content panel */
+
+.aw-architectureModeler-panelSection {
+    margin-top: 10px;
+}
+
+/* Opposite selection button */
+
+.aw-architectureModeler-objectRelationsPanel .aw-architectureModeler-oppositeSelectionButton {
+    margin-right: 7px;
+    height: 30px;
+    width: 40px;
+    border: 0;
+    cursor: pointer;
+}
+
+/*matrix header style for Map*/
+
+.aw-architectureModeler-columnMatrixHeader {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transform: translate(22px, 1px) rotate(-90deg);
+    width: 150px;
+    height: 160px;
+    cursor: context-menu;
+}
+
+.aw-architectureModeler-matrixRowheaderIcon img {
+    float: left;
+    width: 24px;
+    height: 24px;
+    padding-left: 3px;
+    padding-right: 3px;
+    padding-top: 4px;
+}
+
+.aw-architectureModeler-matrixColheaderIcon img {
+    width: 24px;
+    height: 24px;
+    transform: translate(-11px, 0px) rotate(0);
+    position: relative;
+    left: 50%;
+}
+
+.aw-architectureModeler-row-matrixHeader {
+    padding-top: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    float: inherit;
+    height: 25px;
+    cursor: context-menu;
+}
+
+.aw-architectureModeler-SVGLayout {
+    margin: 0 10px;
+    height: 30px;
+    width: 40px;
+    border: 0;
+    cursor: pointer;
+}
+
+.aw-architectureModeler-SVGNodeCommands,
+.aw-architectureModeler-nodeThumbnailTargetSvg {
+    cursor: pointer;
+    fill: none;
+    stroke-width: 1px;
+}
+
+.aw-architectureModeler-nodeThumbnailTargetSvg:hover {
+    cursor: pointer;
+    fill: none;
+    stroke-width: 2px;
+}
+
+/* Style applied on the filter breadcrum labels*/
+
+.aw-architectureModeler-topPanel div.aw-architectureModeler-filterStatusLabel {
+    padding: 2px 10px;
+    font-size: $fontsize_normal;
+    float: right;
+}
+
+/* Style applied on the  filter panel*/
+
+.aw-architectureModeler-filterPanel {
+    padding-bottom: 5px;
+    min-height: 15px;
+}
+
+/* Style applied on the resizable panel*/
+
+.aw-architectureModeler-bottomPanel {
+    min-height: 30%;
+    max-height: 70%;
+    margin-top: 0;
+}
+
+.aw-architectureModeler-detailsPanel {
+    padding: 10px 5px 0 5px;
+    width: 100%;
+    height: 100%;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+
+.aw-architectureModeler-detailsPanel .aw-xrt-tabsContainer {
+    padding: 0;
+}
+
+.aw-architectureModeler-rightPanel {
+    min-width: 30%;
+    max-width: 70%;
+    margin-left: 0;
+}
+
+.aw-architectureModeler-rightDetailsPanel {
+    padding: 10px 5px 0 5px;
+    height: 100%;
+    width: 100%;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+
+.aw-architectureModeler-row {
+    flex-basis: 0;
+    -webkit-flex-basis: 0;
+    height: inherit;
+}
+
+.aw-architectureModeler-row .aw-architectureModeler-resizable {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 30%;
+    -ms-flex: 0 0 30%;
+    flex: 0 0 30%;
+}
+
+.aw-architectureModeler-resizable {
+    position: relative;
+}
+
+.aw-architectureModeler-floatDialog {
+    width: 65%;
+    height: 65%;
+    border-style: solid;
+    border-width: 1px;
+    padding: 1px 1px;
+    z-index: 10;
+    /* prevents text selection when dialog is resized */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.aw-architectureModeler-floatDialog .Caption {
+    height: 34px;
+    cursor: move;
+}
+
+.aw-architectureModeler-floatTopPanel {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-left: 7px;
+}
+
+.aw-architectureModeler-floatMiddlePanel {
+    width: 100%;
+    height: 100%;
+    margin-top: 1px;
+}
+
+.aw-architectureModeler-floatBottomPanel {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: 5px;
+}
+
+.aw-architectureModeler-floatDiagramTitle {
+    float: right;
+    padding-top: 9px;
+    padding-right: 10px;
+}
+
+.aw-architectureModeler-floatDiagramTitle:hover {
+    cursor: pointer;
+}
+
+.aw-architectureModeler-floatDiagramTitle-disable {
+    float: right;
+    padding-top: 9px;
+    padding-right: 10px;
+}
+
+.aw-architectureModeler-floatDiagramTitle-disable:hover {
+    cursor: default;
+}
+
+.aw-architectureModeler-floatListBox {
+    float: right;
+    padding-right: 2px;
+}
+
+.aw-architectureModeler-floatCloseButton {
+    float: right;
+    width: 36px;
+    margin-top: 3px;
+    border-width: 0;
+    font-weight: bold;
+}
+
+.aw-architectureModeler-floatOpenGroupButton {
+    float: right;
+    width: 32px;
+    border-width: 0;
+    position: relative;
+}
+
+.aw-architectureModeler-floatOpenGroupIcon {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    left: 2px;
+    bottom: 8px;
+}
+
+.aw-architectureModeler-floatPreviewButton {
+    float: right;
+    margin-left: 7px;
+}
+
+.aw-architectureModeler-panel-thumbnail {
+    border-style: none;
+    margin: 0 5px 0 5px;
+    padding-left: 24px;
+    line-height: normal;
+    vertical-align: text-bottom;
+    text-align: left;
+    position: relative;
+    float: left;
+    width: 99%;
+}
+
+.aw-architectureModeler-panel-thumbnail .aw-widgets-cellListCellTitle {
+    max-width: none;
+}
+
+.aw-architectureModeler-panel-thumbnail .aw-widgets-propertyLabel {
+    max-width: none;
+}
+
+.aw-architectureModeler-panel-thumbnail .aw-widgets-propertyValue {
+    max-width: none;
+    display: inline;
+}
+
+.aw-architectureModeler-panel-thumbnail .aw-widgets-cellListCellTitle {
+    text-overflow: ellipsis;
+}
+
+.aw-architectureModeler-panel-thumbnail-placement {
+    height: -webkit-calc(100% - 85px);
+    height: -moz-calc(100% - 85px);
+    height: calc(100% - 85px);
+    position: absolute;
+    overflow: auto;
+    grid-gap: 10px;
+    width: 98%
+}
+
+.aw-architectureModeler-panel-thumbnail-image {
+    width: 160px;
+    height: 160px;
+}
+
+.aw-architectureModeler-floatBreadCrumbOuter {
+    display: flex;
+}
+
+.aw-architectureModeler-floatBreadCrumbInner {
+    display: flex;
+    direction: rtl;
+    overflow: hidden;
+    padding-right: 400px;
+}
+
+.aw-architectureModeler-floatBreadCrumb {
+    display: flex;
+    flex-shrink: 0;
+    float: left;
+    border-width: 0;
+    padding-top: 9px;
+    padding-left: 10px;
+    direction: ltr;
+}
+
+.aw-architectureModeler-floatBreadCrumb .aw-base-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.aw-architectureModeler-floatBreadCrumb:hover {
+    cursor: pointer;
+}
+
+.aw-architectureModeler-floatBreadCrumb-disable {
+    display: flex;
+    flex-shrink: 0;
+    float: left;
+    border-width: 0;
+    padding-top: 9px;
+    padding-left: 10px;
+    direction: ltr;
+}
+
+.aw-architectureModeler-floatBreadCrumb-disable .aw-base-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.aw-architectureModeler-floatBreadCrumb-disable:hover {
+    cursor: default;
+}
+
+.aw-architectureModeler-bottomPanel aw-table {
+    overflow: visible;
+}
+
+.aw-architectureModeler-bottomPanel .aw-layout-panelBody,
+.aw-architectureModeler-bottomPanel .aw-layout-flexbox {
+    overflow: visible;
+}
+
+.aw-architectureModeler-tablePanel {
+    height: 100%;
+    width: 100%;
+}
+
+.aw-architectureModeler-tablePanel>aw-table {
+    height: 100%;
+}
+
+.aw-architectureModeler-tablePanel>aw-splm-table {
+    height: 100%;
+}
+
+.aw-architecture-portFilter {
+    stroke-width: 1
+}
+
+.aw-architecture-portFilterHover {
+    stroke-width: 2
+}
+
+.aw-architecture-portFilterSelected {
+    stroke-width: 2
+}
+

@@ -1,0 +1,289 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {},
+    "data": {
+        "searchString": {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "true",
+            "dbValue": ""
+        },
+        "searchBoxPlaceHolder": {
+            "displayName": "{{i18n.searchBoxPlaceHolder}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "dbValue": "{{i18n.searchBoxPlaceHolder}}"
+        },
+        "searchLabel": {
+            "dispValue": "{{i18n.searchLabel}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "false"
+        }
+    },
+    "i18n": {
+        "fileSelect": [
+            "NXConstants"
+        ],
+        "searchBoxPlaceHolder": [
+            "NXConstants"
+        ],
+        "searchLabel": [
+            "NXConstants"
+        ],
+        "open":[
+            "NXConstants"
+        ],
+        "cancel":[
+            "NXConstants"
+        ],
+        "search":[
+            "NXConstants"
+        ]
+    },
+    "actions": {
+        "init":{
+            "actionType": "JSFunction",
+            "method": "init",
+            "deps":"js/Awn0FileSelect"
+        },
+        "search": {
+            "actionType": "dataProvider",
+            "method": "searchDataProvider"
+        },
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/columnArrangeService"
+        },
+        "selectInHost":{
+            "actionType": "JSFunction",
+            "method":"selectInHost",
+            "deps":"js/Awn0FileSelect"
+        },
+        "cancelSelection":{
+            "actionType": "JSFunction",
+            "method":"cancelSelection",
+            "deps":"js/Awn0FileSelect"
+        },
+        "handleSelectionChangeSearch":{
+            "actionType": "JSFunction",
+            "method": "handleSelectionChange",
+            "inputData": {
+                "dataProvider": "{{data.eventMap['searchDataProvider.selectionChangeEvent']}}"
+            },
+            "deps": "js/Awn0FileSelect"
+        },
+        "handleSelectionChangeFolderBrowse":{
+            "actionType": "JSFunction",
+            "method": "handleSelectionChange",
+            "inputData": {
+                "dataProvider": "{{data.eventMap['gridDataProvider.selectionChangeEvent']}}"
+            },
+            "deps": "js/Awn0FileSelect"
+        },
+        "loadTableData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTableData",
+            "inputData": {
+                "0": "{{data.treeLoadInput.parentNode}}",
+                "1":"{{data.columnProviders.exampleColumnProvider.sortCriteria}}"
+            },
+            "outputData": {
+                "treeLoadResult": "treeLoadResult",
+                "data.dataproviders.columnConfig":"treeloadResult.columnConfig"
+            },
+            "deps":"js/Awn0FileSelect"
+        },
+        "saveColumnConfigData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "saveUIColumnConfigs2",
+            "inputData": {
+                "columnConfigurations": [ {
+                    "clientScopeURI": "Awp0ObjectNavigation",
+                    "columnConfigId": "{{data.dataProviders.gridDataProvider.columnConfig.columnConfigId}}",
+                    "columns": "{{data.dataProviders.gridDataProvider.cols}}",
+                    "scope": "LoginUser",
+                    "scopeName": ""
+                } ]
+            },
+            "outputData": {}
+        },
+        "saveColumnConfigLoadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "saveUIColumnConfigs2",
+            "inputData": {
+                "columnConfigurations": [ {
+                    "clientScopeURI": "Awp0ObjectNavigation",
+                    "columnConfigId": "{{data.dataProviders.gridDataProvider.columnConfig.columnConfigId}}",
+                    "columns": "{{data.dataProviders.gridDataProvider.columnConfig.columns}}",
+                    "scope": "LoginUser",
+                    "scopeName": ""
+                } ]
+            },
+            "outputData": {}
+        },
+        "loadDataForSavedColumnConfig": {
+            "actionType": "JSFunctionAsync",
+            "method": "getTableViewModelProperties",
+            "deps": "js/tcViewModelObjectService",
+            "inputData": {
+                "vmNodes": "{{data.dataProviders.gridDataProvider.viewModelCollection.loadedVMObjects}}",
+                "context": {
+                    "clientName": "AWClient",
+                    "clientScopeURI": "{{subPanelContext.provider.clientScopeURI}}",
+                    "typesForArrange": "{{data.dataProviders.gridDataProvider.columnConfig.typesForArrange}}",
+                    "columnsToExclude": []
+                }
+            },
+            "outputData": {
+                "newColumnConfig": "result.output.columnConfig"
+            },
+            "events": {
+                "success": [ {
+                    "name": "objNavTree.updateTreeTableColumns"
+                } ]
+            }
+        },
+        "loadTreeColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadColumns",
+            "inputData": {},
+            "outputData": {
+                "dataProviders.gridDataProvider.columnConfig": "columnConfig"
+            },
+            "deps": "js/Awn0FileSelect"
+        },
+        "loadTreeTablePropertiesOnInitialLoad": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTablePropertiesOnInitialLoad",
+            "deps": "js/Awn0FileSelect",
+            "inputData": {
+                "vmNodes": "{{data.dataProviders.gridDataProvider.viewModelCollection.loadedVMObjects}}",
+                "declViewModel": "{{data}}",
+                "uwDataProvider": "{{data.dataProviders.gridDataProvider}}",
+                "context": {
+                    "clientName": "AWClient",
+                    "clientScopeURI": "Awp0ObjectNavigation",
+                    "typesForArrange": "{{data.dataProviders.gridDataProvider.columnConfig.typesForArrange}}"
+                },
+                "contextKey": "fileSelectGrid"
+            },
+            "outputData": {
+                "dataProviders.gridDataProvider.columnConfig": "result.propertyLoadResult.columnConfig",
+                "ctx.searchResponseInfo.columnConfig": "result.propertyLoadResult.columnConfig"
+            }
+        },
+        "doSearch": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2016-03-Finder",
+            "method": "performSearch",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "clientScopeURI": "Awp0SearchResults"
+                },
+                "searchInput": {
+                    "attributesToInflate": [
+                        "object_name",
+                        "checked_out_user",
+                        "object_desc",
+                        "release_status_list",
+                        "fnd0InProcess"
+                    ],
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Awp0FullTextSearchProvider",
+                    "searchCriteria": {
+                        "searchString": "{{data.searchString.dbValue}}"
+                    },
+                    "startIndex": "{{data.dataProviders.searchDataProvider.startIndex}}",
+                    "searchFilterMap": {}
+                }
+            },
+            "outputData": {
+                "searchResults": "searchResults",
+                "totalFound": "totalFound"
+            },
+            "deps": "js/nxCommandHandlers"
+        }
+    },
+    "ctx": {
+        "selected": null,
+        "file_select_process_candidates": null
+    },
+    "conditions":{
+        "isHostedMode": {
+            "expression": "ctx.file_select_process_candidates && ctx.file_select_process_candidates.IsEmbeddedComponent"
+        },
+        "isSubmitBtnVisible":{
+            "expression": "ctx.selected !== null && ctx.selected !== undefined && ctx.selected.type === \"ItemRevision\""
+        }
+    },
+    "lifecycleHooks":{
+        "onMount": "init"
+    },
+    "dataProviders": {
+        "gridDataProvider": {
+            "initializeAction": "loadTableData",
+            "action": "loadTableData",
+            "treeLoadResult": "{{data.treeLoadResult}}",
+            "inputData": {
+                "accessMode": "tree",
+                "topNodeUid": "top"
+            },
+            "selectionModelMode": "multiple"
+        },
+        "searchDataProvider": {
+            "action": "doSearch",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "selectionModelMode": "single"
+        }
+    },
+    "columnProviders": {
+        "exampleColumnProvider": {
+            "frozenColumnIndex": -1,
+            "resetColumnAction":"saveColumnConfigData",
+            "loadColumnAction": "loadTreeColumns",
+            "saveColumnAndLoadAction": "saveColumnConfigData",
+            "saveColumnAction":"saveColumnConfigData",
+            "columns": "{{gridDataProvider.columnConfig.columns}}"
+        }
+    },
+    "grids": {
+        "gridView": {
+            "dataProvider": "gridDataProvider",
+            "columnProvider": "exampleColumnProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "enableGridMenu": false,
+                "enablePinning": false,
+                "enableSorting": true
+            }
+        }
+    },
+    "onEvent":[
+    {
+        "eventId": "columnArrange",
+        "cacheEventData": true,
+        "action": "doArrangeEvent"
+    },
+    {
+        "eventId": "searchDataProvider.selectionChangeEvent",
+        "action": "handleSelectionChangeSearch",
+        "cacheEventData": true
+    },
+    {
+        "eventId": "gridDataProvider.selectionChangeEvent",
+        "action": "handleSelectionChangeFolderBrowse",
+        "cacheEventData": true
+    }
+]
+}

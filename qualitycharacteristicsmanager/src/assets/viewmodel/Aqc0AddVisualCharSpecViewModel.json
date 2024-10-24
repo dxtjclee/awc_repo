@@ -1,0 +1,361 @@
+{
+    "schemaVersion": "1.0.0",
+    "lifecycleHooks": {
+        "onInit": "getPropertiesforSelectedObject",
+        "onUpdate":[{
+            "observers": [
+                "viewModel.ctx.isTC13_2OnwardsSupported"
+            ],
+            "action": "changeFieldRequired"
+        }]
+    },
+
+    "actions": {
+        "changeFieldRequired":{
+            "actionType": "JSFunction",
+            "method": "changeFieldRequired",
+            "inputData": {
+                "data" : "{{data}}"
+            },
+            "outputData":{
+                "objectName": ""
+            },
+            "deps": "js/Aqc0CharManagerUtils2"
+        },
+        "getPropertiesforSelectedObject": {
+            "actionType": "JSFunction",
+            "method": "setTC132VersionSpecificPropTitle",
+            "inputData": {
+                "data": "{{data}}",
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "outputData": {
+                "qc0Criticality": "qc0Criticality",
+                "qc0Context": "qc0Context"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "varCharSpecLoaded"
+                    }
+                ]
+            },
+            "deps": "js/Aqc0CharManagerUtils2"
+        },
+        "loadClassificationValues": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2013-05-LOV",
+            "method": "getInitialLOVValues",
+            "inputData": {
+                "initialData": {
+                    "propertyName": "qc0Criticality",
+                    "lovInput": {
+                        "operationName": "Edit",
+                        "boName": "Qc0MasterCharSpec"
+                    }
+                }
+            },
+            "outputData": {
+                "qc0CriticalityList": "{{function:getClassificationLOVList}}"
+            },
+            "deps": "js/Aqc0CharManagerUtils2"
+        },
+        "loadContextValues": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2013-05-LOV",
+            "method": "getInitialLOVValues",
+            "inputData": {
+                "initialData": {
+                    "propertyName": "qc0Context",
+                    "lovInput": {
+                        "operationName": "Edit",
+                        "boName": "Qc0MasterCharSpec"
+                    }
+                }
+            },
+            "outputData": {
+                "contextTypeList": "{{function:getLOVList}}"
+            },
+            "deps": "js/Aqc0CharManagerUtils"
+        },
+        "editEventAction": {
+            "actionType": "JSFunction",
+            "method": "processEditData",
+            "inputData": {
+                "data": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/Aqc0CharManagerUtils"
+        },
+        "CreateVisualCharSpec": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2008-06-DataManagement",
+            "method": "createObjects",
+            "inputData": {
+                "input": [
+                    {
+                        "clientId": "",
+                        "data": {
+                            "boName": "Qc0VisualCharSpec",
+                            "stringProps": {
+                                "qc0Criticality": "{{data.qc0Criticality.dbValue}}",
+                                "qc0Context": "{{data.qc0Context.dbValue}}",
+                                "object_name": "{{data.objectName.dbValue}}",
+                                "object_desc": "{{data.object_desc.dbValue}}"
+                            },
+                            "tagProps": {
+                                "qc0GroupReference": {
+                                    "uid": "{{ctx.charGroupUid}}",
+                                    "type": "{{ctx.charGroupObjName}}"
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "outputData": {
+                "createdObject": "output[0].objects[0]",
+                "ctx.createdObjectForTreeFromAddAction": "output[0].objects[0]"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "charSpecCreated",
+                        "condition": "!subPanelContext.panelPinned"
+                    },
+                    {
+                        "name": "awPanel.loadNextValuesFCS",
+                        "condition": "subPanelContext.panelPinned"
+                    },
+                    {
+                        "name": "aqc0.executePostVersionEventActionsForSpecifications",              
+                        "condition" : "conditions.IsTreeViewOrGroupOpened"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "condition": "ctx.sublocation.nameToken === 'characteristicslibrary' && ctx.ViewModeContext.ViewModeContext != 'TreeSummaryView'",
+                        "message": "Aqc0CharSpecificationCreatedMessage"
+                    }
+                ]
+            },
+            "deps": "js/Aqc0CharManagerUtils"
+        },
+        "closePanelHeader": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            }
+        },
+        "generateNextValuesFCS": {
+            "actionType": "JSFunction",
+            "method": "autoAssignAllProperties",
+            "inputData": {
+                "data": "{{data}}",
+                "operationType": "CREATE",
+                "createType": null,
+                "editHandler": "{{editHandlers.addPanelEditHandler}}"
+            },
+            "deps": "js/autoAssignService"
+        },
+        "generateNextValuesAndSubmit": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2015-07-DataManagement",
+            "method": "generateNextValuesForProperties",
+            "inputData": {
+                "propertyNamingRuleInfo": [
+                    {
+                        "clientId": "",
+                        "operationType": 1,
+                        "businessObjectTypeName": "{{ctx.charSpecType}}",
+                        "propertyNameAttachedPattern": {
+                            "object_name": "XX\"-\"XXX\"-\"nnnnnn"
+                        }
+                    }
+                ]
+            },
+            "outputData": {
+                "objectName.dbValue": "generatedValues[0].generatedValues.object_name.nextValue"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "CreateVisualCharSpec"
+                    }
+                ]
+            }
+        },
+        "executePostVersionEventActionsForSpecifications": {
+            "actionType": "JSFunction",
+            "method": "executePostVersionEventActionsForSpecifications",
+            "inputData": {
+                "data": "{{data.createdObject}}",
+                "subPanelContext": "{{props.subPanelContext}}",
+                "removeOrEditActionflag": false,
+                "pinUnpinnedFlag": "{{subPanelContext.panelPinned}}"
+            },
+            "deps": "js/Aqc0CharLibraryUtilService"
+        },
+        "closeSpecCreationPanel": {
+            "actionType": "JSFunction",
+            "method": "closeSpecCreationPanel",
+            "inputData": {},
+            "deps": "js/Aqc0CharLibraryTreeTableService"
+        }
+    },
+    "data": {
+        "objectName": {
+            "displayName": "{{i18n.Name}}",
+            "type": "String",
+            "isRequired": "false",
+            "isEditable": "true"
+        },
+        "stateData": {
+            "initialValues": {
+                "objectName": ""
+            },
+            "meta": {}
+        },
+        "qc0Criticality": {
+            "type": "STRING",
+            "isRequired": "true",
+            "hasLov": "true",
+            "dbValue": "{{ctx.selected.props.qc0Criticality.dbValues[0]}}"
+        },
+        "object_desc": {
+            "displayName": "{{i18n.Description}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "true"
+        },
+        "qc0Context": {
+            "type": "STRING",
+            "isRequired": "true",
+            "hasLov": "true",
+            "uiValue": "{{ctx.selected.props.qc0Context.uiValues[0]}}",
+            "dbValue": "{{ctx.selected.props.qc0Context.dbValues[0]}}"
+        }
+    },
+    "ctx": {
+        "isTC13_2OnwardsSupported": {
+            "type": "boolean"
+        },
+        "isTC13_1OnwardsSupported": {
+            "type": "boolean"
+        },
+        "charSpecType": {
+            "type": "string"
+        },
+        "charGroupUid": {
+            "type": "string"
+        },
+        "charGroupObjName": {
+            "type": "string"
+        }
+    },
+    "messages": {
+        "Aqc0CharSpecificationCreatedMessage": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.Aqc0CharSpecificationCreated}}",
+            "messageTextParams": [
+                "{{data.createdObject.props.object_name.dbValues[0]}}"
+            ]
+        }
+    },
+    "conditions": {
+        "isRefreshRequired": {
+            "expression": "ctx.addObject.refreshFlag && !subPanelContext.panelPinned"
+        },
+        "aqc0IsCharLibrarySubLocation": {
+            "expression": "ctx.sublocation.nameToken === 'characteristicslibrary' && ctx.selected && ctx.selected.modelType.typeHierarchyArray.indexOf( 'Qc0CharacteristicsGroup' ) > -1"
+        },
+        "IsTreeViewOrGroupOpened":{
+            "expression": "ctx.ViewModeContext.ViewModeContext === 'TreeSummaryView' || (ctx.ViewModeContext.ViewModeContext === 'SummaryView' && ctx.locationContext['ActiveWorkspace:Location'] === 'com.siemens.splm.clientfx.tcui.xrt.showObjectLocation')"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "charSpecCreated",
+            "action": "closePanelHeader"
+        },
+        {
+            "eventId": "addCharSpecPanel.Aqc0SetPin",
+            "cacheEventData": true,
+            "action": "Aqc0SetPin"
+        },
+        {
+            "eventId": "addCharSpecPanel.Aqc0SetUnPin",
+            "cacheEventData": true,
+            "action": "Aqc0SetUnPin"
+        },
+        {
+            "eventId": "awPanel.loadNextValuesFCS",
+            "action": "generateNextValuesFCS"
+        },
+        {
+            "eventId": "CreateVisualCharSpec",
+            "action": "CreateVisualCharSpec"
+        },
+        {
+            "eventId": "primaryWorkArea.selectionChangeEvent",
+            "action": "closeSpecCreationPanel"
+        },
+        {
+            "eventId": "editHandlerStateChange",
+            "cacheEventData": true,
+            "action": "editEventAction"
+        },
+        {
+            "eventId": "aqc0.executePostVersionEventActionsForSpecifications",
+            "action": "executePostVersionEventActionsForSpecifications"
+        },
+        {
+            "eventId": "varCharSpecLoaded",
+            "action": "loadClassificationValues"
+        },
+        {
+            "eventId": "varCharSpecLoaded",
+            "action": "loadContextValues"
+        }
+    ],
+    "i18n": {
+        "addButtonTitle": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Aqc0AddCharSpecificationTitle": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Aqc0CharSpecificationCreated": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "ClassificationType": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Context": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Criticality": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Description": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Type": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Name": [
+            "qualitycharacteristicsmanagerMessages"
+        ]
+
+    }
+}

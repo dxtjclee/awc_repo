@@ -1,0 +1,29 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-command-sub-panel.directive"
+    ],
+    "data": {
+        "activeView": "Aqc0AddChildFailureSpec"
+    },
+    "actions": {
+        "setAddElementInputParentElementToSelectedElement": {
+            "actionType": "JSFunction",
+            "method": "setAddElementInputParentElementToSelectedElement",
+            "inputData": {
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "outputData": {},
+            "deps": "js/Aqc0FailureManagerUtils"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "setAddElementInputParentElementToSelectedElement"               
+    },
+    "i18n": {
+        "Aqc0Add": [
+            "qualityfailuremanagerMessages"
+        ]
+    }
+}

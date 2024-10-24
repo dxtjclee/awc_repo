@@ -1,0 +1,93 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-splm-table.directive"
+    ],
+    "actions": {
+        "loadTreeData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableData",
+            "inputData": {
+                "treeLoadInput": "request.treeLoadInput",
+                "dataProvider": "{{data.dataProviders.branchGridDataProvider}}"
+            },
+            "outputData": {
+                "ctx.search.totalFound": "result.treeLoadResult.totalChildCount",
+                "ctx.search.totalLoaded": "result.treeLoadResult.childNodes.length",
+                "searchResults": "result.treeLoadResult.childNodes"
+            },
+            "deps": "js/Eda0CollaboratingDesignsService"
+        },
+        "loadEdaTreeColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableColumns",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.gridDataProvider}}",
+                "data": "{{data}}"
+            },
+            "deps": "js/Eda0CollaboratingDesignsService"
+        },
+        "loadTreeTableProperties": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableProperties",
+            "inputData": {
+                "propertyLoadInput": "request.propertyLoadInput"
+            },
+            "outputData": {
+                "dataProviders.gridDataProvider.columnConfig": "result.propertyLoadResult.columnConfig"
+            },
+            "deps": "js/Eda0CollaboratingDesignsService"
+        },
+        "edaExpandTreeNodeAction": {
+            "actionType": "JSFunction",
+            "method": "expandTreeNode",
+            "deps": "js/Eda0CollaboratingDesignsService"
+        }
+    },
+    "dataProviders": {
+        "gridDataProvider": {
+            "initializeAction": "loadTreeData",
+            "nextAction": "loadTreeData",
+            "previousAction": "loadTreeData",
+            "editContext": "TABLE_CONTEXT",
+            "treeLoadResult": "action.result.treeLoadResult",
+            "selectionModelMode": "single",
+            "inputData": {
+                "selectionModel": "{{subPanelContext.selectionModel}}",
+                "accessMode": "tree",
+                "topNodeUid": "{{ctx.selected.uid}}"
+            }
+        },
+        "GridTreePropertyProvider":
+        {
+            "action": "loadTreeTableProperties",
+            "propertyLoadResult": "action.result.propertyLoadResult"
+        }
+    },
+    "columnProviders": {
+        "edaColumnProvider": {
+            "loadColumnAction": "loadEdaTreeColumns",
+            "columns": "{{data.columns}}",
+            "enableSorting" : false,
+            "id": "Eda0CollaboratingDesignsTable"
+        }
+    },
+    "grids": {
+        "collabDesignsGrid": {
+            "dataProvider": "gridDataProvider",
+            "columnProvider": "edaColumnProvider",
+            "propertyProvider": "GridTreePropertyProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "enableSorting": false,
+                "isFilteringEnabled": false
+            }
+        }
+    },
+    "onEvent": [ {
+        "eventId": "edaExpandCollabObject",
+        "action": "edaExpandTreeNodeAction"
+    }
+]
+
+}

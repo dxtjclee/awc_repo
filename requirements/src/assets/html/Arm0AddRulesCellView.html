@@ -1,0 +1,14 @@
+<div class="aw-requirement-ruleProcessor">
+    <div class="sw-row">
+        <label class="aw-requirements-addRuleLabels">
+            <aw-i18n>i18n.conditionLabel</aw-i18n>
+        </label>
+        <div class="aw-requirements-removeButton">
+            <aw-icon-button button-type="button" class="aw-layout-right" command="data.removeConditionCmd" ></aw-icon-button>
+        </div>
+    </div>
+    <aw-listbox prop="props.vmo.props.operationType" list="props.options.operationTypeValues.dbValue"></aw-listbox>
+    <aw-listbox prop="props.vmo.props.style" list="data.styleValues.dbValue" visible-when="props.vmo.props.operationType.value === 'Has_Style'"></aw-listbox>
+    <aw-textbox prop="props.vmo.props.operationValues" visible-when="props.vmo.props.operationType.value === 'WORD_PARTIAL_MATCH' || props.vmo.props.operationType.value === 'WORD_EXACT_MATCH' || props.vmo.props.operationType.value === 'DOES_NOT_CONTAIN_WORD'"></aw-textbox>
+    <aw-checkbox prop="props.vmo.props.operationCheckboxValues" visible-when="props.vmo.props.operationType.value === 'SENTENCE_BEGIN_ON_NEW_LINE'"></aw-checkbox>
+</div>

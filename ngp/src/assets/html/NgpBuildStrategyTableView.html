@@ -1,0 +1,6 @@
+<mfe-loading-message exist-when="conditions.showLoading"></mfe-loading-message>
+<mfe-message-panel exist-when="conditions.noContentElementsUnderActivity" messages-data="{messageLines: data.noContentElementsUnderActivityMsg}"></mfe-message-panel>
+<mfe-message-panel exist-when="conditions.noContentElementsUnderBuildElement" messages-data="{messageLines: data.noContentElementsUnderBuildElementMsg}"></mfe-message-panel>
+<div show-when="conditions.hasContentElements" class="aw-ngp-table">
+    <aw-splm-table command-context="{tableSettings: data.tableSettings, ...props.subPanelContext}" gridid="ngpBuildStrategyTable" use-tree="true" show-decorators="true" show-context-menu="true"></aw-splm-table>
+</div>

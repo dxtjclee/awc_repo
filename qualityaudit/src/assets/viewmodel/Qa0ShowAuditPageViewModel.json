@@ -1,0 +1,44 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "_showQualityAuditProvider": {
+            "breadcrumbConfig": {
+                "vm": "AwSearchBreadcrumb"
+            },
+            "viewModes": {
+                "ListView": {
+                    "primaryWorkArea": "list"
+                },
+                "SummaryView": {
+                    "primaryWorkArea": "list",
+                    "secondaryWorkArea": true
+                }
+            },
+            "defaultDisplayMode": "SummaryView",
+            "priority": 1,
+            "label": {
+                "source": "/i18n/qualityauditMessages",
+                "key": "qa0SublocationNameAudit"
+            },
+            "clientScopeURI": "",
+            "nameToken": "com.siemens.splm.client.qualityaudit:Qa0ShowAuditPage",
+            "viewBase": "Awp0Base",
+            "context": {
+                "search": {
+                    "provider": "Qa0AuditAssessmentProvider",
+                    "criteria": {
+                        "searchContentType": "Qa0QualityAudit"
+                    },
+                    "sortType": "Priority",
+                    "chartTitle": {
+                        "source": "/i18n/qualityauditMessages",
+                        "key": "qa0FilterResultsChartTitle"
+                    },
+                    "isFilteringEnabled": true,
+                    "maxToLoad": 50,
+                    "maxToReturn": 50
+                }
+            }
+        }       
+    }
+}

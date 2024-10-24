@@ -1,0 +1,98 @@
+<aw-advanced-bar type="TOOLBAR" negative="true" visible-when="data.compareData && !data.compareHtmlData">
+    <div class="sw-row justify-justified">
+        <div class="sw-column align-self-center justify-center">
+            <aw-command-bar anchor="aw_requirementHistoryViewer" alignment="HORIZONTAL"></aw-command-bar>
+        </div>
+        <div class="sw-row align-self-center justify-right aw-requirements-requiementHistoryContent">
+            <div class="aw-requirement-legendItem">
+                <div class="aw-requirement-legendItemMarker added"></div>
+                <div class="aw-requirement-legendItemLabel">
+                    <aw-i18n>i18n.added</aw-i18n>
+                </div>
+            </div>
+
+            <div class="aw-requirement-legendItem">
+                <div class="aw-requirement-legendItemMarker removed"></div>
+                <div class="aw-requirement-legendItemLabel">
+                    <aw-i18n>i18n.removed</aw-i18n>
+                </div>
+            </div>
+
+            <div class="aw-requirement-legendItem">
+                <div class="aw-requirement-legendItemMarker modified"></div>
+                <div class="aw-requirement-legendItemLabel">
+                    <aw-i18n>i18n.modified</aw-i18n>
+                </div>
+            </div>
+        </div>
+        <div class="sw-column align-self-center justify-center">
+            <aw-server-visibility-command-bar anchor="aw_toolbarRight,aw_fullScreen" alignment="HORIZONTAL" context="{fullScreenState:subPanelContext.fullScreenState}">
+            </aw-server-visibility-command-bar>
+        </div>
+    </div>
+
+</aw-advanced-bar>
+<aw-panel>
+    <div class="aw-requirements-compareHistory">
+
+        <aw-list dataprovider="data.dataProviders.fullTextCompareDataList"
+            visible-when="data.compareData && !data.compareHtmlData">
+            <aw-include name="Arm0RequirementHistoryCell" sub-panel-context="item"> </aw-include>
+            <aw-break></aw-break>
+        </aw-list>
+
+    </div>
+</aw-panel>
+
+
+<aw-scrollpanel exist-when="data.compareHtmlData">
+    <aw-advanced-bar type="TOOLBAR" negative="true">
+        <div class="sw-row justify-justified">
+            <div class="sw-row align-self-center justify-center">
+                <aw-command-bar anchor="aw_requirementHistoryContentViewer" alignment="HORIZONTAL"></aw-command-bar>
+                <div class="sw-column align-self-center justify-center">
+                    <h5>
+                        {{ctx.Arm0RequirementHistoryContextCompareToMsg}}
+                    </h5>
+                </div>
+
+            </div>
+            <div>
+            </div>
+            <div class="sw-column align-self-center justify-center">
+                <aw-server-visibility-command-bar anchor="aw_toolbarRight,aw_fullScreen" alignment="HORIZONTAL" context="{fullScreenState:subPanelContext.fullScreenState}">
+                </aw-server-visibility-command-bar>
+            </div>
+        </div>
+        <div class="aw-requirement-chip">
+            <div class="sw-row">
+                <div class="aw-requirement-legendItem">
+                    <div class="aw-requirement-legendItemMarker added"></div>
+                    <div class="aw-requirement-legendItemLabel">
+                        <aw-i18n>i18n.added</aw-i18n>
+                    </div>
+                </div>
+
+                <div class="aw-requirement-legendItem">
+                    <div class="aw-requirement-legendItemMarker removed"></div>
+                    <div class="aw-requirement-legendItemLabel">
+                        <aw-i18n>i18n.removed</aw-i18n>
+                    </div>
+                </div>
+
+                <div class="aw-requirement-legendItem">
+                    <div class="aw-requirement-legendItemMarker modified"></div>
+                    <div class="aw-requirement-legendItemLabel">
+                        <aw-i18n>i18n.modified</aw-i18n>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </aw-advanced-bar>
+    <aw-break></aw-break>
+
+    <div
+        class='aw-requirements-compareHistory aw-richtexteditor-documentPaper aw-richtexteditor-document aw-richtexteditor-documentPanel'>
+    </div>
+</aw-scrollpanel>

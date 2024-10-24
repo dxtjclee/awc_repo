@@ -1,0 +1,90 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports":
+    [
+        "js/aw-splm-table.directive"
+    ],
+
+    "actions": {
+        "loadPatternExamplesData": {
+            "actionType": "JSFunction",
+            "method": "filterPatternExamplesResult",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "patternExamplesResult": ""
+            },
+            "deps": "js/Arm0RequirementQualityService"
+        },
+         "refreshPatternExamplesData":
+        {
+            "actionType": "dataProvider",
+            "method": "patternExamplesDataProvider"
+        }
+    },
+
+    "data": {
+        
+    },
+
+    "columnProviders": {
+        "patternExamplesColumnProvider": {
+            "frozenColumnIndex": -1,
+            "columns": [
+                {
+                    "name": "patternName",
+                    "displayName": "{{i18n.patternNameLabel}}",
+                    "minWidth": 100,
+                    "width": 300,
+                    "enableSorting": false
+                },
+                {
+                    "name": "examples",
+                    "displayName": "{{i18n.examplesLabel}}",
+                    "minWidth": 100,
+                    "width": 500,
+                    "enableSorting": false
+                }
+            ]
+        }
+    },
+    "dataProviders": {
+        "patternExamplesDataProvider": {
+            "action": "loadPatternExamplesData",
+            "response": "{{data.patternExamplesResult}}",
+            "totalFound": "{{data.patternExamplesResult.length}}",
+            "commandsAnchor": "aw_splmTableCellMenu",
+            "selectionModelMode": "none"
+        }
+    },
+
+    "grids": {
+        "PatternExamples": {
+            "dataProvider": "patternExamplesDataProvider",
+            "columnProvider": "patternExamplesColumnProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "enablePinning": false,
+                "enableSorting": true,
+                "enableRowSelection": false
+            }
+        }
+    },
+
+    "onEvent": [ 
+        {
+            "eventId": "requirementDocumentation.refreshPatternExamplesData",
+            "action": "refreshPatternExamplesData"
+        }
+    ],
+    "i18n":
+    {
+        "patternNameLabel": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "examplesLabel": [
+            "RichTextEditorCommandPanelsMessages"
+        ]
+    }
+}

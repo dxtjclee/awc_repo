@@ -1,0 +1,228 @@
+{
+    "schemaVersion": "1.0.0",
+    "ctx":{
+        "selected":{
+            "type" :"object"
+        },
+        "pselected":{
+            "type": "object"
+        }
+    },
+    "actions": {        
+        "loadRuleObject": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadRatingRuleObjectWithProps",
+            "inputData": {
+                "ctx": "{{ctx}}"
+            },
+            "outputData":{
+                "ratingObject": "result.ratingObject"
+            },
+            "deps": "js/Aqc0ChecklistSpecService"
+        },             
+        "loadDefaultAnswersInLOV":{
+            "actionType": "JSFunctionAsync",
+            "method": "loadDefaultAnswersInLOV",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "defaultAnswers": "result.defaultAnswers",
+                "defaultAnswerPreferenceValue": "result.defaultAnswerPreferenceValue"
+            },
+            "deps": "js/Aqc0ChecklistSpecAnswerOptionsConfigService"
+        }, 
+        "changeAnswer": {
+            "actionType": "JSFunction",
+            "method": "changeAnswerAction",
+            "inputData": {                                    
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "answerValue": ""
+            },       
+            "deps": "js/Aqc0ChecklistSpecAnswerOptionsConfigService"
+        },   
+        "checkForDuplicate": {
+            "actionType": "JSFunction",
+            "method": "checkForDuplicateAnswer",
+            "inputData": {           
+                "ctx": "{{ctx}}",                           
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "isDuplicate": "result.duplicateFlag",
+                "answer": "result.answer"
+            },  
+            "events": {
+                "success": [  
+                    {
+                        "name": "addAnswer",
+                        "condition": "!data.isDuplicate"
+                    }  
+                ]
+            },          
+            "deps": "js/Aqc0ChecklistSpecAnswerOptionsConfigService"
+        },            
+        "addAnswer": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-09-DataManagement",
+            "method": "setProperties",
+            "inputData": {
+                "info": "{{function:addNewAnswerWithValueAndReturnInputData}}" 
+            },
+            "outputData": {
+                "createdObject": "output[0].objects[0]",
+                "serviceData": "ServiceData",                                
+                "errorMessage": "{{function:populateErrorString}}"  
+            },
+            "events": {
+                "success": [  
+                    {
+                        "name": "checklistAnswerConfigGrid.plTable.reload",
+                        "condition": "ctx.selected.type === 'Qc0ChecklistSpecification'"
+                    },                                  
+                    {
+                        "name": "complete",          
+                        "condition": "!subPanelContext.panelPinned",              
+                        "eventData":
+                        {
+                            "source": "toolAndInfoPanel"
+                        }
+                    },
+                    {
+                        "name": "clearAndRefreshDataEvent",          
+                        "condition": "subPanelContext.panelPinned"
+                    }
+                ]
+            },
+            "actionMessages": {               
+                "failure": [
+                    {
+                        "condition": "data.serviceData.partialErrors.length > 0",
+                        "message": "displayError"
+                    }
+                ]
+            },         
+            "deps": "js/Aqc0ChecklistSpecAnswerOptionsConfigService"
+        },
+        "clearAndRefreshData": {
+            "actionType": "JSFunctionAsync",
+            "method": "clearAndRefreshData",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "outputData": {
+                "defaultAnswers": "result.defaultAnswers",
+                "defaultAnswerPreferenceValue": "result.defaultAnswerPreferenceValue"
+            },
+            "deps": "js/Aqc0ChecklistSpecAnswerOptionsConfigService"
+        },    
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            }
+        }
+    },    
+    "data": {
+        "answerText": {
+            "displayName": "{{i18n.Aqc0ChecklistAnswerTableColumnName}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "hasLov": true,
+            "dbValue": "",
+            "isSelectOnly": false,
+            "dataProvider": "answerLovProvider"
+        },       
+        "answerValue": {
+            "displayName": "{{i18n.Aqc0ChecklistAnswerValueTableColumnName}}",
+            "type": "INTEGER",
+            "isRequired": "true",
+            "hasLov": false,
+            "dbValue": ""
+        }
+    },   
+    "conditions": {
+        "showAddCommand": {
+            "expression": "!ctx.AnswerOptionEditContext && data.answerText.dbValue && (data.answerValue.dbValue === 0 || data.answerValue.dbValue > 0)"
+        },
+        "showGuidanceMessageForDuplicateError": {
+            "expression": "data.isDuplicate === true"
+        }
+    },
+    "functions": {          
+        "addNewAnswerWithValueAndReturnInputData":{
+            "functionName": "addNewAnswerWithValueAndReturnInputData",
+            "parameters":
+            [                
+                "{{ctx}}",
+                "{{data}}"
+            ]
+        }
+    },
+    "dataProviders": {
+        "answerLovProvider": {
+            "initializeAction": "loadDefaultAnswersInLOV",
+            "nextAction": "loadDefaultAnswersInLOV",
+            "response": "{{data.defaultAnswers}}"
+        }
+    },
+    "lifecycleHooks":{
+        "onMount": "loadRuleObject",
+        "onUpdate": {
+            "action": "changeAnswer",
+            "observers": [ "viewModel.answerText" ]
+        }
+    },
+    "onEvent": [         
+        {
+            "eventId": "clearAndRefreshDataEvent",
+            "action": "clearAndRefreshData"
+        },
+        {
+            "eventId": "addAnswer",
+            "action": "addAnswer"
+        }
+    ],
+    "messages": {       
+        "displayError": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.Aqc0PartialError}}",
+            "messageTextParams": [
+                "{{data.errorMessage}}"
+            ]
+        },
+        "duplicateAnswerErrorMsg": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.Aqc0AnswerAleadyExistErrorMsg}}",
+            "messageTextParams": [
+                "{{data.answer}}"
+            ]
+        }
+    },
+    "i18n": {              
+        "Aqc0Add": [
+            "qualitycentermanagerMessages"
+        ],
+        "Aqc0PartialError": [
+            "qualitycentermanagerMessages"
+        ],       
+        "Aqc0ChecklistAnswerTableColumnName": [
+            "qualitycentermanagerMessages"
+        ],
+        "Aqc0ChecklistAnswerValueTableColumnName": [
+            "qualitycentermanagerMessages"
+        ],
+        "Aqc0AnswerAleadyExistErrorMsg": [
+            "qualitycentermanagerMessages"
+        ]
+    }
+}

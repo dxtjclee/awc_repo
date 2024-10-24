@@ -1,0 +1,26 @@
+{
+  "slots": {
+    "hostedAwAppLogoSlot": {
+      "name": "aw_appLogo",
+      "view": "HostedAwAppLogo",
+      "activeWhen": {
+        "condition": "conditions.showLogoInHost"
+      }
+    },
+    "hostedNxLiteModeAvatarSlot": {
+      "name": "aw_avatar",
+      "view": "commonAvatar",
+      "activeWhen": {
+        "condition": "conditions.hideAvatarForNxLiteMode"
+      }
+    }
+  },
+  "conditions": {
+    "showLogoInHost": {
+      "expression": "(ctx.aw_host_type === 'NX' && !ctx.state.urlAttributes.room)"
+    },
+    "hideAvatarForNxLiteMode": {
+      "expression": "ctx.aw_hosting_config !== undefined && ctx.aw_hosting_config.HideAvatar !== undefined && ctx.aw_hosting_config.HideAvatar === true"
+    }
+  }
+}

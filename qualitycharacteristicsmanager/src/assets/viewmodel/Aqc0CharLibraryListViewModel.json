@@ -1,0 +1,124 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "actions": {
+        "reveal": {
+            "actionType": "dataProvider",
+            "method": "listDataProvider"
+        },
+        "performSearch": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2016-03-Finder",
+            "method": "performSearch",
+            "inputData": {
+                "searchInput": {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Acp0CharsRulesAndNCProvider",
+                    "searchCriteria": {
+                        "type": "{{function:getCurrentType}}",
+                        "searchString": "{{subPanelContext.searchState.criteria.searchString}}"
+                    },
+                    "searchSortCriteria": [
+                        {
+                            "fieldName": "creation_date",
+                            "sortDirection": "DESC"
+                        }
+                    ],
+                    "startIndex": "{{data.dataProviders.listDataProvider.startIndex}}"
+                }
+            },
+            "policy":"{{function:getPopertyPolicyInCharLib}}",
+            "outputData": {
+                "searchResults": "searchResults",
+                "totalLoaded": "totalLoaded",
+                "totalFound": "totalFound"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "aqc0.processPWASelectionInCharLib"
+                    },
+                    {
+                        "name": "aqc0.updateTotalFoundInSearchstate"
+                    }
+                ]
+            },
+            "deps": "js/Aqc0CharManagerUtils"
+        },
+        "updateSelectionInPWA": {
+            "actionType": "JSFunction",
+            "method": "processPWASelection",
+            "inputData": {
+                "searchState":"{{props.subPanelContext.searchState}}",
+                "pwaSelectionModel":"{{props.subPanelContext.selectionModel}}",
+                "pinUnpinnedFlag" : "{{subPanelContext.searchState.pinUnpinnedFlag}}"
+            },
+            "deps": "js/Aqc0CharManagerUtils"
+        },
+        "updateTotalFoundInSearchstate":{
+            "actionType": "JSFunction",
+            "method": "updateTotalFoundInSearchstate",
+            "inputData": {
+                "searchState":"{{props.subPanelContext.searchState}}",
+                "data": "{{data}}"
+            },
+            "deps": "js/Aqc0CharManagerUtils2"
+        },
+        "selectionChanged": {
+            "actionType": "JSFunction",
+            "method": "selectionChangedForListWithSummary",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Aqc0CharLibraryTreeTableService"
+        }
+    },
+    "data": {},
+    "dataProviders": {
+        "listDataProvider": {
+            "action": "performSearch",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "inputData": {
+                "selectionModel": "{{subPanelContext.selectionModel}}"
+            },
+            "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectObjectNavigationCellListActionCommands"
+        }
+    },
+    "functions": {
+        "getCurrentType": {
+            "functionName": "getCurrentType"
+        },
+        "getPopertyPolicyInCharLib": {
+            "functionName": "getPopertyPolicyInCharLib"
+        }
+    },
+    "lifecycleHooks": {
+        "onUpdate": {
+            "action": "reveal",
+            "observers": [
+                "props.subPanelContext.searchState.criteria.searchString",
+                "props.subPanelContext.searchState.filterString",
+                "props.subPanelContext.searchState.criteria.Type",
+                "props.subPanelContext.searchState.newlyCreatedObjectFromCharLib"          ]
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "aqc0.processPWASelectionInCharLib",
+            "cacheEventData": true,
+            "action": "updateSelectionInPWA"
+        },
+        {
+            "eventId": "listDataProvider.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "selectionChanged"
+        },
+        {
+            "eventId": "aqc0.updateTotalFoundInSearchstate",
+            "cacheEventData": true,
+            "action": "updateTotalFoundInSearchstate"
+        }
+    ]
+}

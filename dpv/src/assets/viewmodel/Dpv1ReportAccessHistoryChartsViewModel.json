@@ -1,0 +1,141 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "getMostAccessedRepChartData": {
+            "actionType": "JSFunction",
+            "method": "createChart",
+            "inputData": {
+                "type": "mostAccessed",
+                "startDate": "{{data.startDate.dbValue}}",
+                "endDate": "{{data.endDate.dbValue}}"
+            },
+            "outputData": {
+                "chartProviders.mostAccessedRepChartProvider.chartPoints": ""
+            },
+            "deps": "js/Dpv1GraphicalReportService"
+        },
+        "getLeastAccessedRepChartData": {
+            "actionType": "JSFunction",
+            "method": "createChart",
+            "inputData": {
+                "type": "leastAccessed",
+                "startDate": "{{data.startDate.dbValue}}",
+                "endDate": "{{data.endDate.dbValue}}"
+            },
+            "outputData": {
+                "chartProviders.leastAccessedRepChartProvider.chartPoints": ""
+            },
+            "deps": "js/Dpv1GraphicalReportService"
+        },
+        "setDateRange": {
+            "actionType": "JSFunction",
+            "method": "setDateRange",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "startDate": "startDate",
+                "endDate": "endDate"
+            },
+            "deps": "js/Dpv1GraphicalReportService"
+        },
+        "updateGraphs": {
+            "actionType": "batchJob",
+            "steps":[
+                {
+                    "action":"getMostAccessedRepChartData"
+                },
+                {
+                    "action":"getLeastAccessedRepChartData"
+                }
+            ]
+        }
+    },
+    "data": {
+        "startDate": {
+            "displayName": "{{i18n.startDate}}",
+            "type": "DATE",
+            "isRequired": false,
+            "isEditable": true,
+            "dispValue": "",
+            "dbValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_TOP"
+        },
+        "endDate": {
+            "displayName": "{{i18n.endDate}}",
+            "type": "DATE",
+            "isRequired": false,
+            "isEditable": true,
+            "dispValue": "",
+            "dbValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_TOP"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "setDateRange"
+    },
+    "chartProviders": {
+        "mostAccessedRepChartProvider": {
+            "title": "{{i18n.mostAccessedRepChartTitle}}",
+            "chartType": "column",
+            "loadDataAction": "getMostAccessedRepChartData",
+            "chartConfig": {
+                "isChartZoomable": true,
+                "xAxisLabel": "",
+                "yAxisLabel": "",
+                "isDataLabelOnChartEnabled": true
+            }
+        },
+        "leastAccessedRepChartProvider": {
+            "title": "{{i18n.leastAcessedRepChartTitle}}",
+            "chartType": "column",
+            "loadDataAction": "getLeastAccessedRepChartData",
+            "chartConfig": {
+                "isChartZoomable": true,
+                "xAxisLabel": "",
+                "yAxisLabel": "",
+                "isDataLabelOnChartEnabled": true
+            }
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "condition.expressionValueChanged",
+            "action": "updateGraphs",
+            "criteria": {
+                "condition": "conditions.startDateChange"
+            }
+        },
+        {
+            "eventId": "condition.expressionValueChanged",
+            "action": "updateGraphs",
+            "criteria": {
+                "condition": "conditions.endDateChange"
+            }
+        }
+    ],
+    "conditions": {
+        "startDateChange": {
+            "expression": "data.startDate.dbValue",
+            "trackValues": true
+        },
+        "endDateChange": {
+            "expression": "data.endDate.dbValue",
+            "trackValues": true
+        }
+    },
+    "i18n": {
+        "mostAccessedRepChartTitle": [
+            "DpvMessages"
+        ],
+        "leastAcessedRepChartTitle": [
+            "DpvMessages"
+        ],
+        "startDate": [
+            "DpvMessages"
+        ],
+        "endDate": [
+            "DpvMessages"
+        ]
+    }
+}

@@ -1,0 +1,82 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "isMounted": false,
+        "noDiscontinuedSubElements": {
+            "extendedTooltip": {
+                "title": "{{i18n.submitToWorkflowCmdTitle}}",
+                "messages": [ "" ]
+            }
+        },
+        "hasDiscontinuedSubElements": {
+            "extendedTooltip": {
+                "title": "{{i18n.submitToWorkflowCmdTitle}}",
+                "messages": [ "" ],
+                "information": {
+                    "text": "{{i18n.submitToWorkflowInformationMsg}}",
+                    "params": [
+                        "{{subPanelContext.status.amountOfDiscontinuedSubElements}}"
+                    ]
+                },
+                "className": "aw-ngp-submitToWorkflowTooltip"
+            }
+        }
+    },
+    "conditions": {
+        "hasDiscontinuedSubElements": {
+            "expression": {
+                "$source": "ctx.ngp.scopeObject.status.amountOfDiscontinuedSubElements",
+                "$query": {
+                    "$gt": 0
+                }
+            }
+        }
+    },
+    "actions": {
+        "setIsMounted": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": true
+            },
+            "outputData": {
+                "isMounted": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "formatTooltipMessages": {
+            "actionType": "JSFunction",
+            "method": "applyMessagesParams",
+            "inputData": {
+                "messagesData": [{
+                    "text": "{{i18n.submitToWorkflowTooltipMsg}}",
+                    "textParams": [ "{{ctx.ngp.scopeObject.modelType.uiDisplayName.lowerCase}}" ]
+                }]
+            },
+            "outputData":{
+                "noDiscontinuedSubElements.extendedTooltip.messages.0": "0.text",
+                "hasDiscontinuedSubElements.extendedTooltip.messages.0": "0.text"
+             },
+            "deps": "js/mfeMessagesService"
+        },
+        "initialize": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "formatTooltipMessages"
+                },
+                {
+                    "action": "setIsMounted"
+                }
+            ]
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "initialize"
+    },
+    "i18n": {
+        "submitToWorkflowCmdTitle": [ "NgpDataMgmtMessages" ],
+        "submitToWorkflowTooltipMsg": [ "NgpDataMgmtMessages" ],
+        "submitToWorkflowInformationMsg": [ "NgpDataMgmtMessages" ]
+    }
+}

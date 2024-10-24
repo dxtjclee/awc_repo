@@ -1,0 +1,230 @@
+{
+    "schemaVersion": "1.0.0",
+    "ports": {
+        "getNoticesTreeData": {
+            "onChangeAction": "reloadNoticesTree",
+            "syncObject": {}
+        }
+    },
+    "actions": {
+        "loadNoticesTableColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadRequirementColumns",
+            "inputData": {
+                "resetFlag": false
+                 },
+            "outputData": {
+                "dataProviders.noticesTreeDataProvider.columnConfig": "columnConfig"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "reloadNoticesTree"
+                    }
+                ]
+            },
+            "deps": "js/ssp0CreateOrAssignNoticeService"
+        },
+        "resetNoticesTableColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadRequirementColumns",
+            "inputData": {
+                "resetFlag": true
+                 },
+            "outputData": {
+                "dataProviders.noticesTreeDataProvider.columnConfig": "columnConfig"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "reloadNoticesTree"
+                    }
+                ]
+            },
+            "deps": "js/ssp0CreateOrAssignNoticeService"
+        },
+        "reloadNoticesTree": {
+            "actionType": "JSFunction",
+            "method": "reloadNoticesTree",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.noticesTreeDataProvider}}",
+                "selection": "{{ports.getNoticesTreeData.syncObject.selection}}"
+            },
+            "deps": "js/ssp0CreateOrAssignNoticeService"
+        },
+        "selectVMOinTree": {
+            "actionType": "JSFunction",
+            "method": "selectVMOinTree",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.noticesTreeDataProvider}}"
+            },
+            "deps": "js/ssp0CreateOrAssignNoticeService"
+        },
+        "saveColumnConfigLoadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "saveUIColumnConfigs2",
+            "inputData": {
+                "columnConfigurations": [
+                    {
+                        "clientScopeURI": "Ssp0NoticesTableManagement",
+                        "columnConfigId": "{{data.dataProviders.noticesTreeDataProvider.columnConfig.columnConfigId}}",
+                        "columns": "{{data.dataProviders.noticesTreeDataProvider.newColumns}}",
+                        "scope": "LoginUser",
+                        "scopeName": ""
+                    }
+                ]
+            },
+            "outputData": {},
+            "events": {
+                "success": [
+                    {
+                        "name": "slm.noticesTableColumnConfig.saved"
+                    }
+                ]
+            }
+        },
+        "loadDataForSavedColumnConfig":{
+            "actionType": "JSFunctionAsync",
+            "method": "getTableViewModelProperties",
+            "deps": "js/tcViewModelObjectService",
+            "inputData": {
+                "vmNodes": "{{data.dataProviders.noticesTreeDataProvider.viewModelCollection.loadedVMObjects}}",
+                "context": {
+                    "clientScopeURI": "Ssp0NoticesTableManagement",
+                    "clientName": "AWClient",
+                    "columnConfigId": "Ssp0NoticesTableManagement",
+                    "columnsToExclude": "{{ctx.sbomProductContext.columnsToExclude}}",
+                    "operationType": "{{eventData.operationType}}"
+                }
+            },
+            "outputData": {
+                "newColumnConfig": "result.output.columnConfig"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "ssp0NoticesTableManagement.saved"
+                    }
+                ]
+            }
+        },
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/columnArrangeService"
+        }
+    },
+    "functions": {
+        "getResponseAndTotalFound": {
+            "functionName": "getResponseAndTotalFound",
+            "parameters": [
+            ]
+        },
+        "getCreateInput": {
+            "functionName": "getCreateInput",
+            "parameters": ["{{data}}"]
+        },
+        "setNodeProperties":{
+            "functionName": "setNodeProperties",
+            "parameters":[]
+        },
+        "postResetFunction": {
+            "functionName": "postResetFunction",
+            "parameters": [
+                "{{data.dataProviders.noticesTreeDataProvider.columnConfig}}"
+            ]
+        }
+    },
+    "data": {
+        "messages": {
+            "noAssigned": [
+                {
+                    "text": "{{i18n.noAssignedNotices}}",
+                    "iconId": "cmdAdd"
+                }
+            ]
+        }
+    },
+    "dataProviders": {
+        "noticesTreeDataProvider": {
+            "response": "{{ports.getNoticesTreeData.syncObject.treeLoadResult.response}}",
+            "totalFound": "{{ports.getNoticesTreeData.syncObject.treeLoadResult.totalFound}}",
+            "selectionModelMode": "multiple"
+        }
+    },
+    "columnProviders": {
+        "noticesTreeColumnProvider": {
+            "loadColumnAction": "loadNoticesTableColumns",
+            "saveColumnAndLoadAction": "saveColumnConfigLoadData",
+            "resetColumnAction": "resetNoticesTableColumns",
+            "columns": "{{data.columns}}",
+            "frozenColumnIndex": -1
+        }
+    },
+    "grids": {
+        "noticesTree": {
+            "dataProvider": "noticesTreeDataProvider",
+            "columnProvider": "noticesTreeColumnProvider",
+            "enableArrangeMenu": true,
+            "addIconColumn": true,
+            "gridOptions": {
+
+                "useStaticFirstCol": true,
+                "enableExpandAndPaginationInEdit": true
+            }
+        }
+    },
+    "i18n": {
+        "noAssignedNotices": [
+            "ssp0Messages"
+        ],
+        "nameValueColumn": [
+            "ssp0Messages"
+        ],
+        "noticesTypeValueColumn": [
+            "ssp0Messages"
+        ],
+        "longDescriptionValueColumn": [
+            "ssp0Messages"
+        ]
+    },
+    "conditions": {
+        "areNoticesAssigned": {
+            "expression": "ports.getNoticesTreeData.syncObject.treeLoadResult.totalFound > 0"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "Ssp0NoticesTree.selectVMOinTree",
+            "action": "selectVMOinTree",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "Ssp0NoticesTree.triggerFunction",
+            "action": "reloadNoticesTree"
+        },
+        {
+            "eventId": "reloadNoticesTree",
+            "action": "reloadNoticesTree"
+        },
+        {
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        },
+        {
+            "eventId": "slm.noticesTableColumnConfig.saved",
+            "cacheEventData": true,
+            "action": "loadDataForSavedColumnConfig"
+        },
+        {
+            "eventId": "ssp0NoticesTableManagement.saved",
+            "action": "loadNoticesTableColumns"
+        }
+    ]
+}

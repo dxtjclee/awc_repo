@@ -1,0 +1,23 @@
+{
+  "slots": {
+    "vrContentHeaderTitle": {
+      "name": "aw_headerTitle",
+      "view": "Crt1VRContentHeader",
+      "activeWhen": {
+        "condition": "conditions.isVrContentTabView"
+      }
+    },
+    "vrContentTaskBar": {
+      "name": "aw_taskBar",
+      "view": "Crt1VRContentTaskBar",
+      "activeWhen": {
+        "condition": "conditions.isVrContentTabView"
+      }
+    }
+  },
+  "conditions": {
+    "isVrContentTabView": {
+      "expression": "context.subLocationTabCond.currentTab === 'VRContent' || context.subLocationTabCond.currentTab === 'VRExecute'"
+    }
+  }
+}

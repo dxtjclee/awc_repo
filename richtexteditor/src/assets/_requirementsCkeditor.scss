@@ -1,0 +1,421 @@
+// Copyright 2020 Siemens Product Lifecycle Management Software Inc.
+/* begin ckeditor */
+
+.aw-requirementsCkeditor-panel {
+
+
+    h3 {
+        display: block;
+        font-size: 1.17em;
+        margin-block-start: 1em;
+        margin-block-end: 1em;
+        margin-inline-start: 0px;
+        margin-inline-end: 0px;
+        font-weight: bold;
+    }
+
+    tr th {
+        text-transform: inherit;
+    }
+
+    .requirement {
+        position: relative;
+        margin-left: rem-calc(40);
+        margin-right: rem-calc(40);
+        margin-bottom: rem-calc(30);
+        display: block;
+    }
+
+    .aw-requirement-header h3 {
+        margin-top: auto;
+        margin-bottom: auto;
+        flex: 1;
+    }
+
+    .aw-requirement-marker {
+        position: absolute;
+        left: rem-calc(-41);
+        width: rem-calc(30);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .aw-requirement-marker > * {
+        margin: auto;
+    }
+
+    .aw-requirement-a4SizePaper {
+        padding: rem-calc(20);
+        padding-left: rem-calc(40);
+        padding-right: rem-calc(40);
+        width: rem-calc(700);
+        margin: auto;
+        border: 1px solid;
+        border-right: 2px solid;
+        border-bottom: 2px solid;
+    }
+
+    .ck.ck-editor {
+        width: 100%;
+    }
+
+    .aw-requirement-marker svg,
+    .aw-requirement-marker img {
+        width: rem-calc(16);
+        height: rem-calc(16);
+        cursor: pointer;
+    }
+
+    .aw-requirement-properties {
+        height: 100%;
+        padding: rem-calc(2);
+        -webkit-appearance: textfield;
+        cursor: text;
+        min-width: rem-calc(100);
+        display: inline-block;
+    }
+
+    .aw-requirement-content span[contenteditable="true"] {
+        outline: 2px solid;
+    }
+
+    // important is required to override inline style added by ckeditor
+    .aw-requirement-bodytext {
+        outline: none;
+        min-height: rem-calc(20);
+        cursor: auto !important;
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+    }
+
+    .ck-content .aw-requirement-bodytext .table,
+    .ck-content .aw-requirement-bodytext .table table {
+        max-width: 100%;
+        word-wrap: break-word;
+        word-break: break-word;
+        width: auto !important; //important is required to override inline style added by ckeditor
+    }
+
+    .ck-content .aw-requirement-bodytext .table table tr td {
+        white-space: normal;
+        overflow: inherit;
+    }
+
+    .ck-content .aw-requirement-bodytext .table table tr td .image > img {
+        min-width: 50px;
+    }
+
+    .ck-widget__type-around {
+        display: none;
+    }
+
+    figure .ck-widget__type-around {
+        display: block;
+    }
+
+    .ck-content .aw-requirement-oleImage.image.image_resized > figcaption {
+        display: none;
+    }
+
+    .ck-focused .aw-requirement-oleImage.ck-widget_with-resizer.ck-widget_selected > .ck-widget__resizer {
+        display: none;
+    }
+
+    .ck-content .aw-requirement-oleImage.image {
+        margin: unset;
+    }
+
+    .ck .aw-requirement-oleImage.ck-widget_selected,
+    .ck .aw-requirement-oleImage.ck-widget_selected:hover,
+    .ck .aw-requirement-oleImage:hover {
+        outline: none;
+    }
+
+    .aw-requirement-headerNonEditable {
+        cursor: pointer;
+    }
+
+    a {
+        display: inline;
+    }
+    .aw-requirement-marker .aw-requirement-tracelinkCount {
+        margin-right: rem-calc(-39);
+        position: relative;
+        top: rem-calc(7);
+        left: rem-calc(13);
+        font-size: $fontsize_small;
+        float: left;
+    }
+
+    .aw-requirement-crossRefLink img {
+        padding: 2px 4px 2px 0;
+        width: rem-calc(16);
+        height: rem-calc(16);
+    }
+
+    .aw-requirement-crossRefLink {
+        cursor:pointer;
+        text-decoration:underline;
+    }
+
+    .pen-red {
+        font-weight: bold;
+    }
+    .aw-requirement-tocsettings svg {
+        height: 16px;
+        width: 16px;
+        cursor: pointer;
+    }
+    .aw-requirement-tocsettings{
+        display: flex;
+        flex-wrap: wrap;
+        max-width: 16px;
+        max-height: 16px;
+        float: left;
+        margin-left: -37px;
+        margin-top: 17px;
+        cursor: pointer;
+    }
+    .aw-requirement-tocUnderlineOnHover:hover {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+    .aw-requirement-tocFont{
+        font-style:italic;
+        margin-top: 35px;
+    }
+    .ck.ck-content .aw-requirement-toconHover ol {
+        list-style-type: none;
+        margin-block-start: auto;
+        font-size: inherit;
+        padding-left: 0;
+        overflow: unset;
+    }
+
+    // Consistant style with ckeditor4
+    .ck.ck-content {
+        font-size: 13px;
+        line-height: 1.5;
+        font-family: Arial, Helvetica, sans-serif;
+        height: 100%;
+        img {
+            font-family: inherit;
+            max-width: 100%;
+        }
+        div, span, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em,  ins, small, strike, strong, sub, sup, b, u, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tfoot, thead, tr, th, td, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, section, summary, time, mark, button {
+            font-family: inherit;
+        }
+
+        p {
+            margin: 5px 0 5px 0;
+        }
+    }
+
+    // Consistant style with ckeditor4
+    .aw-requirement-bodytext,
+    .aw-requirement-properties {
+        font-size: 14px;
+    }
+    .aw-requirements-readOnly,
+    .aw-requirements-masterChanged,
+    .aw-requirements-editable,
+    .aw-requirements-frozenToLatest {
+        border-left-width: 5px;
+        margin-left: -40px;
+        height: 100%;
+        position: absolute;
+    }
+    .aw-requirements-readOnly {
+        border-style: dotted;
+    }
+    .aw-requirements-masterChanged,
+    .aw-requirements-frozenToLatest{
+        border: dashed;
+    }
+    .aw-requirements-editable {
+        border-style: outset;
+    }
+
+    .aw-requirement-lovProperties select{
+        font-size: $fontsize_normal;
+    }
+    .aw-requirement-lovProperties select:focus{
+        border-color: none;
+    }
+}
+
+.aw-requirementsCkeditor-panel.aw-requirementsCkeditor-collaborationMode {
+    .ck.ck-sticky-panel {
+        min-width: calc(100% - 240px);
+    }
+    .ck.ck-editor__top {
+        display: flex;
+        .aw-richtexteditor-presenceList {
+            display: flex;
+            align-self: center;
+            margin-left: auto;
+            --ck-user-avatar-size: #{$avatar_small_icon_size};
+            .ck.ck-user__name {
+                --ck-font-size-base: #{$fontsize_large};
+            }
+            .ck.ck-user__img {
+                border: 0;
+            }
+        }
+    }
+}
+
+.ck.ck-presence-list__dropdown-list-item {
+    .ck.ck-user {
+        --ck-user-avatar-size: #{$avatar_small_icon_size};
+        --ck-font-size-base: #{$fontsize_large};
+        .ck.ck-user__img {
+            border: 0;
+        }
+    }
+}
+
+.aw-richtexteditor-widePanelBody .aw-requirementsCkeditor-panel {
+    .ck .ck-widget,
+    .ck .ck-widget_selected,
+    .ck .ck-widget:hover,
+    .ck .ck-widget_selected:hover,
+    .aw-requirement-bodytext.ck-editor__editable.ck-editor__nested-editable.ck-editor__nested-editable_focused {
+        outline: none;
+        border: none;
+        box-shadow: none;
+    }
+
+    .ck.ck-content {
+        div{
+            outline: none;
+            border: none;
+        }
+    }
+
+    .ck.ck-editor__main>.ck-editor__editable:not(.ck-focused),
+    .ck.ck-editor__main>.ck-editor__editable:not(.ck-editor__nested-editable).ck-focused {
+        box-shadow: none;
+    }
+}
+
+// important is required to override inline style added by ckeditor
+.ck.ck-balloon-panel{
+    z-index: 1000000 !important;
+}
+
+.aw-requirement-content {
+    a[name]:hover {
+        cursor: default;
+    }
+}
+
+.aw-requirements-xrtRichText {
+    .page-break {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &:before,
+        &:after {
+            content: '';
+            border-bottom: 2px dashed;
+            width: 100%;
+        }
+        .page-break__label {
+            padding: $padding_small;
+            text-transform: uppercase;
+            border: 1px solid;
+            user-select: none;
+            font-size: $fontsize_small;
+            font-weight: $bold_font_weight;
+            white-space: nowrap;
+        }
+    }
+}
+
+// Override styles added by ckeditor on track changed data
+.aw-richtexteditor-trackChangeNoMarkups {
+    .ck-content {
+        .ck-suggestion-marker-insertion {
+            border-top: unset;
+            border-bottom: unset;
+            background: unset;
+            &.ck-suggestion-marker--active {
+                border-color: unset;
+                background: unset;
+            }
+        }
+        .ck-suggestion-marker-deletion {
+            display: none;
+        }
+        .ck-suggestion-marker-formatInline {
+            border-top: unset;
+            border-bottom: unset;
+        }
+        .ck-comment-marker {
+            background: unset;
+            border-top: unset;
+            border-bottom: unset;
+        }
+        .ck-suggestion-marker-split:after {
+            border-top: unset;
+            border-bottom: unset;
+            background: unset;
+            color: unset;
+            content: "\a";
+            white-space: pre;
+        }
+        .ck-suggestion-marker-merge:after {
+            border-top: unset;
+            border-bottom: unset;
+            text-decoration: unset;
+            text-decoration-color: unset;
+            background: unset;
+            color: unset;
+            content: "";
+        }
+    }
+}
+
+.aw-richtexteditor-trackChangeshowOriginal {
+    .ck-content {
+        .ck-suggestion-marker-insertion {
+            display: none;
+        }
+        .ck-suggestion-marker-deletion {
+            border-top: unset;
+            border-bottom: unset;
+            text-decoration: unset;
+            text-decoration-color: unset;
+            text-decoration-thickness: unset;
+            background: unset;
+            &.ck-suggestion-marker--active {
+                border-color: unset;
+                background: unset;
+            }
+        }
+        .ck-suggestion-marker-formatInline {
+            border-top: unset;
+            border-bottom: unset;
+        }
+        .ck-suggestion-marker-split:after {
+            border-top: unset;
+            border-bottom: unset;
+            background: unset;
+            color: unset;
+            content: "";
+        }
+        .ck-suggestion-marker-merge:after {
+            border-top: unset;
+            border-bottom: unset;
+            text-decoration: unset;
+            text-decoration-color: unset;
+            background: unset;
+            color: unset;
+            content: "\a";
+            white-space: pre;
+        }
+    }
+}

@@ -1,0 +1,36 @@
+{
+  "dangled_connection": {
+    "iconName": "DangledConnection",
+    "tooltip": {
+      "showPropDisplayName": false,
+      "propNames": [
+        "ase0ConnectedState"
+      ]
+    },
+    "modelTypes": [
+      "Awb0Connection"
+    ],
+    "conditions": {
+      "ase0ConnectedState": {
+        "$eq": "ase0Disconnected"
+      }
+    }
+  },
+  "orphan_connection": {
+    "iconName": "DangledConnection",
+    "tooltip": {
+      "showPropDisplayName": false,
+      "propNames": [
+        "ase0ConnectedState"
+      ]
+    },
+    "modelTypes": [
+      "Awb0Connection"
+    ],
+    "conditions": {
+      "ase0ConnectedState": {
+        "$eq": "ase0Dangling"
+      }
+    }
+  }
+}

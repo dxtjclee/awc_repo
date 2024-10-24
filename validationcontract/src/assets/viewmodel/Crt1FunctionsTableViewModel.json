@@ -1,0 +1,460 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-splm-table.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-chart.directive",
+        "js/aw-row.directive",
+        "js/aw-column.directive",
+        "js/aw-i18n.directive",
+        "js/aw-command-bar.directive",
+        "js/aw-am-table-panel.directive"
+    ],
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "lifecycleHooks": {
+        "onUnmount": "removePieChartData",
+        "onUpdate": [ {
+            "action": "createPieChartForDynamicTables",
+            "observers": [ "props.subPanelContext.context.vrSublocationState.pieChartData.vrTables.requirementsTableProvider.chartData" ]
+        },
+        {
+
+            "action": "redrawFunctionsPieChart",
+            "observers": [ "props.subPanelContext.context.vrSublocationState.pieChartData.vrTables.functionsTableProvider.redrawFunctionPieAsDoubleFilter" ]
+        },
+        {
+            "action": "handleSelectionChange",
+            "observers": [ "viewModel.atomicData.selectionData" ]
+        } ]
+
+    },
+    "actions": {
+        "handleSelectionChange": {
+            "actionType": "JSFunction",
+            "method": "handleSelectionChange",
+            "inputData": {
+                "data": "{{data.dataProviders.functionsTableProvider}}",
+                "subPanelContext": "{{subPanelContext}}"
+            },
+            "outputData": {},
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "redrawFunctionsPieChart": {
+            "actionType": "JSFunction",
+            "method": "redrawSecondaryPieCharts",
+            "inputData": {
+                "input": "{{data}}"
+            },
+            "outputData": {
+                "pieChartForFunctionsProvider_chartPoints": ""
+            },
+            "deps": "js/Crt1VROverviewTablesService",
+            "events": {
+                "success": [ {
+                    "name": "redrawPieChartForFunctionsTable"
+                } ]
+            }
+        },
+        "removePieChartData": {
+            "actionType": "JSFunction",
+            "method": "removePieChartData",
+            "inputData": {
+                "pieChartData": "{{props.context.vrSublocationState.subPanelContext.pieChartData}}",
+                "table": "functionsTableProvider",
+                "pieClickedFlag": "functionPieClicked",
+                "pieDedrawFlag": "redrawFunctionPieAsDoubleFilter",
+                "subPanelContext": "{{subPanelContext}}",
+                "dataProvider": "{{data.dataProviders.functionsTableProvider}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "editEventAction": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "plTable.editStateChange",
+                        "eventData": {
+                            "state": "{{data.eventData.state}}",
+                            "dataSource": {
+                                "dataProviders": "{{data.dataProviders}}"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "handleVMCollectionUpdate": {
+            "actionType": "JSFunction",
+            "method": "handleHtmlPanelVMCollection",
+            "deps": "js/xrtUtilities",
+            "inputData": {
+                "callback": "{{subPanelContext.callback.updateVMCollectionCallback}}",
+                "response": {
+                    "dataProvider": "{{data.dataProviders.functionsTableProvider}}"
+                }
+            }
+        },
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/dynamicTableUtils"
+        },
+        "saveColumnConfigLoadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "operationType": "as_arranged",
+                    "clientScopeURI":  "{{subPanelContext.context.vrSublocationState.scopeURI.get('Functionality')}}"
+                },
+                "saveColumnConfigData": {
+                    "clientScopeURI":  "{{subPanelContext.context.vrSublocationState.scopeURI.get('Functionality')}}",
+                    "columnConfigId": "{{subPanelContext.context.vrSublocationState.columnConfig.get('Functionality')}}",
+                    "columns": "{{data.dataProviders.functionsTableProvider.newColumns}}",
+                    "scope": "LoginUser",
+                    "scopeName": ""
+                },
+                "searchInput": {
+                    "maxToLoad": 30,
+                    "maxToReturn": 30,
+                    "providerName": "Crt1AnalysisRequestInProvider",
+                    "attributesToInflate":["crt1SourceObject"],
+                    "searchCriteria": {
+                        "parentUid": "{{function:getParentUid}}",
+                        "dcpSortByDataProvider": "true",
+                        "tableUID":"Functionality"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "searchSortCriteria": "{{data.columnProviders.functionsTableColumnProvider.sortCriteria}}",
+                    "startIndex": "{{data.dataProviders.functionsTableProvider.startIndex}}",
+                    "columnFilters": "{{function:getColumnFiltersForDynamicTables}}"
+                },
+                "inflateProperties": true
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}",
+                "dataProviders.functionsTableProvider.columnConfig": "{{function:getColumnDataForDynamicTables}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "resetColumnConfig": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "getOrResetUIColumnConfigs4",
+            "inputData": {
+                "getOrResetUiConfigsIn": [
+                    {
+                        "scope": "LoginUser",
+                        "scopeName": "",
+                        "clientName": "AWClient",
+                        "resetColumnConfig": true,
+                        "columnConfigQueryInfos": [
+                            {
+                                "clientScopeURI": "{{subPanelContext.context.vrSublocationState.scopeURI.get('Functionality')}}",
+                                "operationType": "configured",
+                                "typeNames": [
+                                    "WorkspaceObject"
+                                ],
+                                "columnsToExclude": []
+                            }
+                        ],
+                        "businessObjects": [
+                            {}
+                        ]
+                    }
+                ]
+            },
+            "outputData": {
+                "dataProviders.functionsTableProvider.resetColumnConfigs": "{{function:getColumnDataForDynamicTables}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "functionsTable.plTable.reload"
+                } ]
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "loadDataForFunctions": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "clientScopeURI":  "{{subPanelContext.context.vrSublocationState.scopeURI.get('Functionality')}}",
+                    "operationType": "as_configured"
+                },
+                "searchInput": {
+                    "maxToLoad": 30,
+                    "maxToReturn": 30,
+                    "providerName": "Crt1AnalysisRequestInProvider",
+                    "attributesToInflate":["crt1SourceObject"],
+                    "searchCriteria": {
+                        "parentUid": "{{function:getParentUid}}",
+                        "dcpSortByDataProvider": "true",
+                        "tableUID":"Functionality"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "searchSortCriteria": "{{data.columnProviders.functionsTableColumnProvider.sortCriteria}}",
+                    "startIndex": "{{data.dataProviders.functionsTableProvider.startIndex}}",
+                    "columnFilters": "{{function:getColumnFiltersForDynamicTables}}"
+                },
+                "inflateProperties": true
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}",
+                "dataProviders.functionsTableProvider.columnConfig": "{{function:getColumnDataForDynamicTables}}"
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMsg"
+                } ]
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "createPieChartForDynamicTables": {
+            "actionType": "JSFunction",
+            "method": "createPieChartForDynamicTables",
+            "inputData": {
+                "input": "{{data}}",
+                "tableColumnFilters": "functionTableColumnFilters",
+                "redrawFlag": "redrawFunctionPieAsDoubleFilter",
+                "chartData": "{{props.subPanelContext.context.vrSublocationState.pieChartData.vrTables.functionsTableProvider}}",
+                "seriesName": "{{data.i18n.Functions}}",
+                "subPanelContext": "{{props.subPanelContext.context.vrSublocationState.pieChartData}}",
+                "table": "functionsTableProvider"
+            },
+            "outputData": {
+                "pieChartForFunctionsProvider_chartPoints": ""
+            },
+            "deps": "js/Crt1PieChartsService"
+        },
+        "checkAndReloadFunctionsChart": {
+            "actionType": "JSFunction",
+            "method": "checkAndReloadFunctionsChart",
+            "inputData": {
+                "data": "{{data}}",
+                "chartProp": "{{props.subPanelContext.context.vrSublocationState.pieChartData}}"
+            },
+            "deps": "js/Crt1FunctionsTableService"
+        },
+        "filterFunctionsTable": {
+            "actionType": "JSFunction",
+            "method": "filterFunctionsTable",
+            "inputData": {
+                "data": "{{data}}",
+                "chartProp": "{{props.subPanelContext.context.vrSublocationState}}"
+            },
+            "deps": "js/Crt1FunctionsTableService"
+        },
+        "displayAllFunctions": {
+            "actionType": "JSFunction",
+            "method": "displayAllFunctions",
+            "inputData": {
+                "data": "{{data}}",
+                "chartProp": "{{props.subPanelContext.context.vrSublocationState}}"
+            },
+            "deps": "js/Crt1FunctionsTableService"
+        },
+        "modelObjectsLoaded": {
+            "actionType": "JSFunction",
+            "method": "modelObjectsLoaded",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.functionsTableProvider}}",
+                "eventMap":"{{data.eventMap}}",
+                "scopeSel": "{{props.subPanelContext.context.vrSublocationState.mselected[0]}}",
+                "subPanleCtx": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "modelObjectEdited": {
+            "actionType": "JSFunction",
+            "method": "modelObjectEdited",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.functionsTableProvider}}",
+                "scopeSel": "{{props.subPanelContext.context.vrSublocationState.mselected[0]}}",
+                "subPanleCtx": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        }
+    },
+    "functions": {
+        "getColumnFiltersForDynamicTables": {
+            "functionName": "getColumnFiltersForDynamicTables",
+            "parameters": [
+                "{{data.columnProviders.functionsTableColumnProvider}}",
+                "{{props.subPanelContext.context.vrSublocationState.pieChartData.vrTables.functionsTableProvider.functionTableColumnFilters}}",
+                "{{props.subPanelContext.context.vrSublocationState.pieChartData.vrTables.topPieChart.testResultColumnFilters}}"
+            ]
+        },
+        "getColumnDataForDynamicTables": {
+            "functionName": "getColumnDataForDynamicTables",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getParentUid": {
+            "functionName": "getParentUid",
+            "parameters": [
+                "{{subPanelContext}}"
+            ]
+        }
+    },
+    "columnProviders": {
+        "functionsTableColumnProvider": {
+            "saveColumnAndLoadAction": "saveColumnConfigLoadData",
+            "resetColumnAction": "resetColumnConfig",
+            "sortCriteria": []
+        }
+    },
+    "dataProviders": {
+        "functionsTableProvider": {
+            "action": "loadDataForFunctions",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "selectionModelMode": "multiple",
+            "editContext": "NONE",
+            "commandsAnchor": "Open_Content_command",
+            "contextMenuCommandsAnchor": "aw_functionsTable_contextMenu",
+            "inputData": {
+                "selectionData": "{{fields.selectionData}}"
+            }
+        }
+    },
+    "grids": {
+        "functionsTable": {
+            "columnProvider": "functionsTableColumnProvider",
+            "dataProvider": "functionsTableProvider",
+            "enableArrangeMenu": true,
+            "gridOptions": {
+                "enableSorting": true,
+                "maxRowsToShow": 10,
+                "isFilteringEnabled": true
+            }
+        }
+    },
+    "data": {
+        "chartProviders" : {
+            "pieChartForFunctionsProvider": {
+                "chartType": "pie",
+                "chartColorOverrideClass":"aw-verificationManagement-chartStatusColor",
+                "chartConfig": {
+                    "isChartZoomable": true,
+                    "isYAxisLinearOrLogarithmic": "logarithmic",
+                    "xAxisLabel": "",
+                    "yAxisLabel": "",
+                    "isDataLabelOnChartEnabled": true
+                }
+            }
+        },
+        "primaryActiveTabId": {
+            "dbValue": "",
+            "type": "OBJECT"
+        },
+        "selectionData": {
+            "initialValues": {},
+            "meta": {}
+        }
+    },
+    "messages": {
+        "SOAFailureMsg": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "redrawPieChartForFunctionsTable",
+            "action": "createPieChartForDynamicTables"
+        },
+        {
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        },
+        {
+            "eventId": "functionsTableProvider.modelObjectsUpdated",
+            "cacheEventData": true,
+            "action": "modelObjectsLoaded"
+        },
+        {
+            "eventId": "functionsTableProvider.modelObjectsEdited",
+            "cacheEventData": true,
+            "action": "modelObjectEdited"
+        },
+        {
+            "eventId": "functionsTableProvider.modelObjectsUpdated",
+            "cacheEventData": true,
+            "action": "handleVMCollectionUpdate"
+        },
+        {
+            "eventId": "editHandlerStateChange",
+            "cacheEventData": true,
+            "action": "editEventAction"
+        },
+        {
+            "eventId": "undefined.selected",
+            "cacheEventData": true,
+            "action": "filterFunctionsTable"
+        },
+        {
+            "eventId": "undefined.unselected",
+            "cacheEventData": true,
+            "action": "displayAllFunctions"
+        },
+        {
+            "eventId": "plTable.editStateChange",
+            "action": "checkAndReloadFunctionsChart"
+        },
+        {
+            "eventId": "resetPieChart",
+            "action": "redrawFunctionsPieChart"
+        }
+    ],
+    "conditions": {
+        "showFunctionMessageString": {
+            "expression": "data.pieChartForFunctionsProvider_chartPoints[0].keyValueDataForChart[0].value === 0 && data.pieChartForFunctionsProvider_chartPoints[0].keyValueDataForChart[1].value === 0 && data.pieChartForFunctionsProvider_chartPoints[0].keyValueDataForChart[2].value === 0 && data.pieChartForFunctionsProvider_chartPoints[0].keyValueDataForChart[3].value === 0 && data.pieChartForFunctionsProvider_chartPoints[0].keyValueDataForChart[4].value === 0"
+        },
+        "showFunctionChart" : {
+            "expression": "data.pieChartForFunctionsProvider_chartPoints && data.pieChartForFunctionsProvider_chartPoints[0] && data.pieChartForFunctionsProvider_chartPoints[0].keyValueDataForChart[0].value != -1"
+        }
+    },
+    "i18n": {
+        "NoResult": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Fail": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Pass": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Functions":[
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "noFunctionsToDisplayChart":[
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Caution": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Blocked": [
+            "AnalysisRequestCommandPanelsMessages"
+        ]
+    }
+}

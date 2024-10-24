@@ -1,0 +1,13 @@
+<aw-command-panel caption="i18n.insertTable">
+    <aw-panel-body>
+        <aw-panel-section>
+        <div></div>
+            <aw-file-upload  file-change-action="initDSCreateParams" type-filter=".xlsx,.xlsm"  is-required="true"></aw-file-upload>
+        </aw-panel-section>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button visible-when="data.fileExt ==='xlsm' || data.fileExt === 'xlsx'" action="getTransientFileTickets">
+        <aw-i18n>i18n.insert</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

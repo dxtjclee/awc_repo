@@ -1,0 +1,6 @@
+{
+  "postInit": [
+    "import('js/eventBus').then(function(eventBus){eventBus.subscribe('prgSchedule.checkPsi0ModuleLoaded',function(){import('js/Psi0MoveObjectsOnGanttAndTimelineService').then(function(Psi0MoveObjectsOnGanttAndTimelineService){Psi0MoveObjectsOnGanttAndTimelineService.invokePsi0Module();});});});",
+    "import('js/eventBus').then(function(eventBus){eventBus.subscribe('prgSchedule.registerListenersOnGanttForProgramEvents',function(){import('js/ShowEventsOnScheduleGanttService').then(function(ShowEventsOnScheduleGanttService){ShowEventsOnScheduleGanttService.registerListenersOnGanttForProgramEventsCommand();});});});"
+  ]
+}

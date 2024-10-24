@@ -1,0 +1,33 @@
+<aw-panel>
+    <aw-command-panel-section caption="i18n.ruleBuilderTitle" collapsed="false" anchor="data.helpAnchor">
+        <div class="aw-xrt-objectSetToolbar">
+            <aw-server-visibility-toolbar first-anchor="" second-anchor="aw_CondBuildExprsCmd" orientation="HORIZONTAL" class="aw-xrt-objectSetToolbar aw-controlinspectionplan-justifycommandbar"  context="{addedChildOrSiblingState:data.addedChildOrSiblingState,dataProviders:data.dataProviders,treeLoadResult:data.treeLoadResult}"></aw-server-visibility-toolbar>
+        </div>
+        <aw-splm-table id="condExprSplmGridId" gridid="condExprGrid" use-tree="true" show-decorators="true" visible-when="conditions.gridTableHideWithNoConds"></aw-splm-table>
+        <div align-content="center" exist-when="!conditions.gridTableHideWithNoConds">
+            <div class="aw-splm-table aw-jswidgets-grid aw-layout-flexColumn aw-widgets-droppable aw-jswidgets-selectionEnabled" id='noAwSplmTable'>
+                <div class="aw-splm-tableHeaderRow">
+                    <div class="aw-splm-tableColumnDefAnchor aw-splm-tableCellContents aw-splm-tableClearfix aw-splm-tableHeaderCellContents aw-splm-tableColumnMenuEnabled">
+                        <div class="aw-splm-tableHeaderCellLabel aw-splm-tableHeaderCellInner">
+                            <aw-i18n>i18n.expressiontoolbarTitle</aw-i18n>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <aw-break></aw-break>
+                    <aw-break></aw-break>
+                    <aw-flex-row height="12" align-content="center" width="auto" justify="center">
+                       <aw-command-panel-section  collapsed="false" anchor="data.helpAnchor">
+                            <div class="aw-xrt-objectSetToolbar">
+                                {{i18n.noExpressionHere}}  {{i18n.buttonToAdd}}
+                                <aw-server-visibility-toolbar first-anchor="" second-anchor="aw_AddExprsForCondBuildCmd"  orientation="VERTICAL" class="aw-xrt-objectSetToolbar" context="{addedChildOrSiblingState:data.addedChildOrSiblingState,dataProviders:data.dataProviders,treeLoadResult:data.treeLoadResult}"></aw-server-visibility-toolbar>
+                            </div>
+                        </aw-command-panel-section>
+                    </aw-flex-row>
+                    <aw-break></aw-break>
+                    <aw-break></aw-break>
+                </div>
+            </div>
+        </div>
+    </aw-command-panel-section>
+</aw-panel>

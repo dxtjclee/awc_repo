@@ -1,0 +1,478 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-splm-table.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-chart.directive",
+        "js/aw-row.directive",
+        "js/aw-column.directive",
+        "js/aw-i18n.directive",
+        "js/aw-command-bar.directive",
+        "js/aw-am-table-panel.directive"
+    ],
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "lifecycleHooks": {
+        "onUnmount": "removePieChartData",
+        "onUpdate": [ {
+            "action": "createPieChartForDynamicTables",
+            "observers": [ "props.subPanelContext.context.vrSublocationState.pieChartData.vrTables.configTableSixProvider.chartData" ]
+        },
+        {
+
+            "action": "redrawConfigTableSixPieChart",
+            "observers": [ "props.subPanelContext.context.vrSublocationState.pieChartData.vrTables.configTableSixProvider.redrawConfigTableSixPieAsDoubleFilter" ]
+        },
+        {
+            "action": "handleSelectionChange",
+            "observers": [ "viewModel.atomicData.selectionData" ]
+        } ]
+
+    },
+    "actions": {
+        "handleSelectionChange": {
+            "actionType": "JSFunction",
+            "method": "handleSelectionChange",
+            "inputData": {
+                "data": "{{data.dataProviders.configTableSixProvider}}",
+                "subPanelContext": "{{subPanelContext}}"
+            },
+            "outputData": {},
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "redrawConfigTableSixPieChart": {
+            "actionType": "JSFunction",
+            "method": "redrawSecondaryPieCharts",
+            "inputData": {
+                "input": "{{data}}"
+            },
+            "outputData": {
+                "pieChartForConfigTableSixProvider_chartPoints": ""
+            },
+            "deps": "js/Crt1VROverviewTablesService",
+            "events": {
+                "success": [ {
+                    "name": "redrawPieChartForDynamicTables"
+                } ]
+            }
+        },
+        "removePieChartData": {
+            "actionType": "JSFunction",
+            "method": "removePieChartData",
+            "inputData": {
+                "vrSublocationState": "{{subPanelContext.context.vrSublocationState}}",
+                "table": "configTableSixProvider",
+                "pieClickedFlag": "configTableSixPieClicked",
+                "pieDedrawFlag": "redrawConfigTableSixPieAsDoubleFilter",
+                "subPanelContext": "{{subPanelContext}}",
+                "dataProvider": "{{data.dataProviders.configTableSixProvider}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "editEventAction": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "plTable.editStateChange",
+                        "eventData": {
+                            "state": "{{data.eventData.state}}",
+                            "dataSource": {
+                                "dataProviders": "{{data.dataProviders}}"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "handleVMCollectionUpdate": {
+            "actionType": "JSFunction",
+            "method": "handleHtmlPanelVMCollection",
+            "deps": "js/xrtUtilities",
+            "inputData": {
+                "callback": "{{subPanelContext.callback.updateVMCollectionCallback}}",
+                "response": {
+                    "dataProvider": "{{data.dataProviders.configTableSixProvider}}"
+                }
+            }
+        },
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/dynamicTableUtils"
+        },
+        "saveColumnConfigLoadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "operationType": "as_arranged",
+                    "clientScopeURI": "{{subPanelContext.context.vrSublocationState.scopeURI.get('ConfigTableSix')}}"
+                },
+                "saveColumnConfigData": {
+                    "clientScopeURI": "{{subPanelContext.context.vrSublocationState.scopeURI.get('ConfigTableSix')}}",
+                    "columnConfigId": "{{subPanelContext.context.vrSublocationState.columnConfig.get('ConfigTableSix')}}",
+                    "columns": "{{data.dataProviders.configTableSixProvider.newColumns}}",
+                    "scope": "LoginUser",
+                    "scopeName": ""
+                },
+                "searchInput": {
+                    "maxToLoad": 30,
+                    "maxToReturn": 30,
+                    "providerName": "Crt1AnalysisRequestInProvider",
+                    "attributesToInflate":["crt1SourceObject"],
+                    "searchCriteria": {
+                        "parentUid": "{{function:getParentUid}}",
+                        "dcpSortByDataProvider": "true",
+                        "tableUID":"ConfigTableSix"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "searchSortCriteria": "{{data.columnProviders.configTableSixColumnProvider.sortCriteria}}",
+                    "startIndex": "{{data.dataProviders.configTableSixProvider.startIndex}}",
+                    "columnFilters": "{{function:getColumnFiltersForDynamicTables}}"
+                },
+                "inflateProperties": true
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}",
+                "dataProviders.configTableSixProvider.columnConfig": "{{function:getColumnDataForDynamicTables}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "resetColumnConfig": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "getOrResetUIColumnConfigs4",
+            "inputData": {
+                "getOrResetUiConfigsIn": [
+                    {
+                        "scope": "LoginUser",
+                        "scopeName": "",
+                        "clientName": "AWClient",
+                        "resetColumnConfig": true,
+                        "columnConfigQueryInfos": [
+                            {
+                                "clientScopeURI": "{{subPanelContext.context.vrSublocationState.scopeURI.get('ConfigTableSix')}}",
+                                "operationType": "configured",
+                                "typeNames": [
+                                    "WorkspaceObject"
+                                ],
+                                "columnsToExclude": []
+                            }
+                        ],
+                        "businessObjects": [
+                            {}
+                        ]
+                    }
+                ]
+            },
+            "outputData": {
+                "dataProviders.configTableSixProvider.resetColumnConfigs": "{{function:getColumnDataForDynamicTables}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "configTableSix.plTable.reload"
+                } ]
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "loadDataForConfigTableSix": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "clientScopeURI": "{{subPanelContext.context.vrSublocationState.scopeURI.get('ConfigTableSix')}}",
+                    "operationType": "as_configured"
+                },
+                "searchInput": {
+                    "maxToLoad": 30,
+                    "maxToReturn": 30,
+                    "providerName": "Crt1AnalysisRequestInProvider",
+                    "attributesToInflate":["crt1SourceObject"],
+                    "searchCriteria": {
+                        "parentUid": "{{function:getParentUid}}",
+                        "dcpSortByDataProvider": "true",
+                        "tableUID":"ConfigTableSix"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "searchSortCriteria": "{{data.columnProviders.configTableSixColumnProvider.sortCriteria}}",
+                    "startIndex": "{{data.dataProviders.configTableSixProvider.startIndex}}",
+                    "columnFilters": "{{function:getColumnFiltersForDynamicTables}}"
+                },
+                "inflateProperties": true
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}",
+                "dataProviders.configTableSixProvider.columnConfig": "{{function:getColumnDataForDynamicTables}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "createPieChartForDynamicTables": {
+            "actionType": "JSFunction",
+            "method": "createPieChartForDynamicTables",
+            "inputData": {
+                "input": "{{data}}",
+                "tableColumnFilters": "configTableSixColumnFilters",
+                "redrawFlag": "redrawConfigTableSixPieAsDoubleFilter",
+                "chartData": "{{subPanelContext.context.vrSublocationState.pieChartData.vrTables.configTableSixProvider}}",
+                "seriesName": "{{data.i18n.ConfigTable6}}",
+                "subPanelContext": "{{subPanelContext.pieChartData}}",
+                "table": "configTableSixProvider"
+            },
+            "outputData": {
+                "pieChartForConfigTableSixProvider_chartPoints": ""
+            },
+            "deps": "js/Crt1PieChartsService"
+        },
+        "checkAndReloadConfigTableChart": {
+            "actionType": "JSFunction",
+            "method": "checkAndReloadConfigTableChart",
+            "inputData": {
+                "data": "{{data}}",
+                "subPanelContext": "{{subPanelContext.context.vrSublocationState}}"
+            },
+            "deps": "js/Crt1ConfigTableService",
+            "events": {
+                "success": [ {
+                    "name": "configTableSixProvider.modelObjectsEdited"
+                } ]
+            }
+        },
+        "filterConfigTable": {
+            "actionType": "JSFunction",
+            "method": "filterConfigTable",
+            "inputData": {
+                "data": "{{data}}",
+                "chartProp": "{{subPanelContext.context.vrSublocationState}}",
+                "provider": "configTableSixProvider",
+                "pieClicked": "configTableSixPieClicked",
+                "configTableColumnFilter": "configTableSixColumnFilters",
+                "seriesName": "{{data.i18n.ConfigTable6}}"
+
+            },
+            "deps": "js/Crt1ConfigTableService",
+            "events": {
+                "success": [ {
+                    "name": "configTableSix.plTable.reload"
+                } ]
+            }
+        },
+        "displayAllConfigTable": {
+            "actionType": "JSFunction",
+            "method": "displayAllConfigTable",
+            "inputData": {
+                "data": "{{data}}",
+                "chartProp": "{{subPanelContext.context.vrSublocationState}}",
+                "provider": "configTableSixProvider",
+                "pieClicked": "configTableSixPieClicked",
+                "configTableColumnFilter": "configTableSixColumnFilters",
+                "seriesName": "{{data.i18n.ConfigTable6}}"
+            },
+            "deps": "js/Crt1ConfigTableService",
+            "events": {
+                "success": [ {
+                    "name": "configTableSix.plTable.reload"
+                } ]
+            }
+        },
+        "modelObjectsLoaded": {
+            "actionType": "JSFunction",
+            "method": "modelObjectsLoaded",
+            "inputData": {
+                "dataProviders": "{{data.dataProviders.configTableSixProvider}}",
+                "eventMap": "{{data.eventMap}}",
+                "scopeSel": "{{props.subPanelContext.context.vrSublocationState.mselected[0]}}",
+                "subPanleCtx": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "modelObjectEdited": {
+            "actionType": "JSFunction",
+            "method": "modelObjectEdited",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.configTableSixProvider}}",
+                "scopeSel": "{{props.subPanelContext.context.vrSublocationState.mselected[0]}}",
+                "subPanleCtx": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        }
+    },
+    "functions": {
+        "getColumnFiltersForDynamicTables": {
+            "functionName": "getColumnFiltersForDynamicTables",
+            "parameters": [
+                "{{data.columnProviders.configTableSixColumnProvider}}",
+                "{{subPanelContext.context.vrSublocationState.pieChartData.vrTables.configTableSixProvider.configTableColumnFilter}}",
+                "{{subPanelContext.context.vrSublocationState.pieChartData.vrTables.topPieChart.testResultColumnFilters}}"
+            ]
+        },
+        "getColumnDataForDynamicTables": {
+            "functionName": "getColumnDataForDynamicTables",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getParentUid": {
+            "functionName": "getParentUid",
+            "parameters": [
+                "{{subPanelContext}}"
+            ]
+        }
+    },
+    "columnProviders": {
+        "configTableSixColumnProvider": {
+            "saveColumnAndLoadAction": "saveColumnConfigLoadData",
+            "resetColumnAction": "resetColumnConfig",
+            "sortCriteria": []
+        }
+    },
+    "dataProviders": {
+        "configTableSixProvider": {
+            "action": "loadDataForConfigTableSix",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "selectionModelMode": "multiple",
+            "editContext": "NONE",
+            "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectCellListActionCommands",
+            "contextMenuCommandsAnchor": "aw_configTableSix_contextMenu",
+            "inputData": {
+                "selectionData": "{{fields.selectionData}}"
+            }
+        }
+    },
+    "grids": {
+        "configTableSix": {
+            "columnProvider": "configTableSixColumnProvider",
+            "dataProvider": "configTableSixProvider",
+            "enableArrangeMenu": true,
+            "gridOptions": {
+                "enableSorting": true,
+                "maxRowsToShow": 10,
+                "isFilteringEnabled": true
+            }
+        }
+    },
+    "data": {
+        "chartProviders" : {
+            "pieChartForConfigTableSixProvider": {
+                "chartType": "pie",
+                "chartColorOverrideClass":"aw-verificationManagement-chartStatusColor",
+                "chartConfig": {
+                    "isChartZoomable": true,
+                    "isYAxisLinearOrLogarithmic": "logarithmic",
+                    "xAxisLabel": "",
+                    "yAxisLabel": "",
+                    "isDataLabelOnChartEnabled": true
+                }
+            }
+        },
+        "primaryActiveTabId": {
+            "dbValue": "",
+            "type": "OBJECT"
+        },
+        "selectionData": {
+            "initialValues": {},
+            "meta": {}
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        },
+        {
+            "eventId": "configTableSixProvider.modelObjectsUpdated",
+            "cacheEventData": true,
+            "action": "modelObjectsLoaded"
+        },
+        {
+            "eventId": "configTableSixProvider.modelObjectsEdited",
+            "cacheEventData": true,
+            "action": "modelObjectEdited"
+        },
+        {
+            "eventId": "configTableSixProvider.modelObjectsUpdated",
+            "cacheEventData": true,
+            "action": "handleVMCollectionUpdate"
+        },
+        {
+            "eventId": "editHandlerStateChange",
+            "cacheEventData": true,
+            "action": "editEventAction"
+        },
+        {
+            "eventId": "plTable.editStateChange",
+            "action": "checkAndReloadConfigTableChart"
+        },
+        {
+            "eventId": "undefined.selected",
+            "cacheEventData": true,
+            "action": "filterConfigTable"
+        },
+        {
+            "eventId": "undefined.unselected",
+            "cacheEventData": true,
+            "action": "displayAllConfigTable"
+        },
+        {
+            "eventId": "Crt1ConfigTable.drawPieChart",
+            "action": "loadDataForConfigTableSixAfterEdit"
+        },
+        {
+            "eventId": "redrawPieChartForDynamicTables",
+            "action": "createPieChartForDynamicTables"
+        },
+        {
+            "eventId": "resetPieChart",
+            "action": "redrawConfigTableSixPieChart"
+        }
+
+    ],
+    "conditions": {
+        "showConfigTableSixMessageString": {
+            "expression": "data.pieChartForConfigTableSixProvider_chartPoints[0].keyValueDataForChart[0].value === 0 && data.pieChartForConfigTableSixProvider_chartPoints[0].keyValueDataForChart[1].value === 0 && data.pieChartForConfigTableSixProvider_chartPoints[0].keyValueDataForChart[2].value === 0 && data.pieChartForConfigTableSixProvider_chartPoints[0].keyValueDataForChart[3].value === 0 && data.pieChartForConfigTableSixProvider_chartPoints[0].keyValueDataForChart[4].value === 0"
+        },
+        "showConfigTableSixChart" : {
+            "expression": "data.pieChartForConfigTableSixProvider_chartPoints && data.pieChartForConfigTableSixProvider_chartPoints[0] && data.pieChartForConfigTableSixProvider_chartPoints[0].keyValueDataForChart[0].value != -1"
+        }
+    },
+    "i18n": {
+        "NoResult": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Fail": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Pass": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "ConfigTable6":[
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "noDataToDisplayChart":[
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Caution": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Blocked": [
+            "AnalysisRequestCommandPanelsMessages"
+        ]
+    }
+}

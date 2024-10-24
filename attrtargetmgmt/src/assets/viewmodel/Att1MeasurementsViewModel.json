@@ -1,0 +1,1246 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+    ],
+    "actions": {
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/columnArrangeService"
+        },
+        "handleColumnCopyFill": {
+            "actionType": "JSFunction",
+            "method": "handleColumnCopyFill",
+            "inputData": {
+                "engrTable": "{{data.engrTable}}"
+            },
+            "outputData": {
+                "engrTable":"engrTable"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "updateLineChartTitle": {
+            "actionType": "JSFunction",
+            "method": "setChartTitle",
+            "inputData": {
+                "engrTable": "{{data.chartTitle}}",
+                "xAxisLabel":"{{data.engrTable.chartSeriesData.xAxisLabel}}"
+            },
+            "deps": "js/Att1ChartService"
+        },
+        "handleGoalRangeToggleInOnlyChartView":{
+            "actionType": "JSFunction",
+            "method": "handleGoalRangeToggleInOnlyChartView",
+            "inputData": {
+                "engrTable": "{{fields.engrTable}}",
+                "isShowGoal":"{{data.engrTable['valueTable'].showGoal}}",
+                "isShowRange": "{{data.engrTable['valueTable'].showRange}}"
+            },
+            "deps": "js/Att1ChartService"
+        },
+        "showLogarithmicScale": {
+            "actionType": "JSFunction",
+            "method": "showLogarithmicScale",
+            "inputData": {
+                "engrTable": "{{data.engrTable}}"
+            },
+            "outputData": {
+                "engrTable.isLogarithmicScale": "isLogarithmicScale"
+            },
+            "deps": "js/Att1ChartService"
+        },
+        "selectChartPoint": {
+            "actionType": "JSFunction",
+            "method": "selectChartPoint",
+            "inputData": {
+                "selection":"{{data.eventData.selection}}",
+                "isShowGoal":"{{data.engrTable['valueTable'].showGoal}}",
+                "isShowRange": "{{data.engrTable['valueTable'].showRange}}",
+                "isCrossProbing":"{{data.eventData.isCrossProbing}}"
+            },
+            "deps": "js/Att1ChartService"
+        },
+        "getChartData": {
+            "actionType": "JSFunction",
+            "method": "getChartData",
+            "inputData": {
+                "engrTable": "{{fields.engrTable}}"
+            },
+            "outputData": {
+                "chartProviders.lineChartDataProvider.chartPoints": ""
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "Att1MeasurementsView.updateLineChartTitle"
+                    },
+                    {
+                        "name": "Att1MeasurementsView.handleGoalRangeToggleInOnlyChartView",
+                        "condition":"(data.isShowValuesTable===false || data.isShowValuesTable===undefined)  && data.isShowChart===true"
+                    }
+                ]
+            },
+            "deps": "js/Att1ChartService"
+        },
+        "handleChartPointSelection": {
+            "actionType": "JSFunction",
+            "method": "handleChartPointSelection",
+            "inputData": {
+                "eventData": "{{data.eventData}}",
+                "engrTable": "{{data.engrTable}}"
+            },
+            "outputData": {
+                "chartProviders.lineChartDataProvider.chartPoints": ""
+            },
+            "deps": "js/Att1ChartService"
+        },
+        "hideChartView": {
+            "actionType": "JSFunction",
+            "method": "hideChartView",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "isShowChart":"isShowChart",
+            "isShowValuesTable":"isShowValuesTable"
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "engrTable.refresh",
+                        "eventData":
+                        {
+                            "tableData":"{{data.engrTable.network_data}}",
+                            "tableName":"valueTable"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Att1MeasurementService"
+        },
+        "hideValuesTableView": {
+            "actionType": "JSFunction",
+            "method": "hideValuesTableView",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "isShowChart":"isShowChart",
+                "isShowValuesTable":"isShowValuesTable"
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "engrTable.refresh",
+                        "eventData":
+                        {
+                            "tableData":"{{data.engrTable.network_data}}",
+                            "tableName":"valueTable"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Att1MeasurementService"
+        },
+        "showValuesTableAndChartView": {
+            "actionType": "JSFunction",
+            "method": "showValuesTableAndChartView",
+            "inputData": {
+            },
+            "outputData": {
+                "isShowChart":"isShowChart",
+                "isShowValuesTable":"isShowValuesTable"
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "engrTable.refresh",
+                        "eventData":
+                        {
+                            "tableData":"{{data.engrTable.network_data}}",
+                            "tableName":"valueTable"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Att1MeasurementService"
+        },
+        "selectCell": {
+            "actionType": "JSFunction",
+            "method": "selectCell",
+            "inputData": {
+                "row": "{{data.eventMap['Att1MeasurementsView.selectCell'].row}}",
+                "col": "{{data.eventMap['Att1MeasurementsView.selectCell'].col}}",
+                "isDataSelection": "{{data.eventMap['Att1MeasurementsView.selectCell'].isDataSelection}}",
+                "isCrossProbing":"{{data.eventMap['Att1MeasurementsView.selectCell'].isCrossProbing}}",
+                "engrTable": "{{data.engrTable}}"
+            },
+            "outputData": {
+                "chartProviders.lineChartDataProvider.chartPoints": ""
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "updateTabData": {
+            "actionType": "JSFunction",
+            "method": "updateTabData",
+            "inputData": {
+                "data":"{{data}}"
+            },
+            "outputData": {
+                "selectedParameter":"selectedParameter"
+            },
+            "deps": "js/Att1MeasurementService"
+        },
+        "updateSelection": {
+            "actionType": "JSFunction",
+            "method": "updateSelection",
+            "inputData": {
+                "engrTable":"{{data.engrTable}}",
+                "cells": "{{data.eventMap['engrTable.updateSelection'].selection}}",
+                "dragType": "{{data.eventData.dragType}}",
+                "minCol": "{{data.eventData.minCol}}",
+                "maxCol": "{{data.eventData.maxCol}}",
+                "isShowChart":"{{data.isShowChart}}",
+                "isCrossProbing": "{{data.eventData.isCrossProbing}}"
+            },
+            "outputData": {
+                "engrTable":"engrTable"
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "Att1MeasurementsView.updateLineChartWithSelection",
+                        "eventData":
+                        {
+                            "selection":"{{data.eventData.selection}}",
+                            "isCrossProbing": "{{data.eventData.isCrossProbing}}"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "editCellCallBack": {
+            "actionType": "JSFunction",
+            "method": "editCellCallBack",
+            "inputData": {
+                "cell": "{{data.eventData.cell}}",
+                "multi": "{{data.eventData.multi}}",
+                "value": "{{data.eventData.value}}",
+                "engrTable":"{{fields.engrTable}}"
+            },
+            "outputData": {
+                "engrTable":"engrTable"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "showGMMEditPopup": {
+            "actionType": "JSFunction",
+            "method": "showPopup",
+            "inputData": {
+                "d": "{{data.eventData.d}}",
+                "engrTable":"{{data.engrTable}}"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "removeAttachedFileContents": {
+            "actionType": "JSFunction",
+            "method": "removeAttachedFileContents",
+            "inputData":{
+                "data": "{{data}}"
+            },
+            "deps": "js/Att1MeasurementService"
+        },
+
+        "updateEngrContext": {
+            "actionType": "JSFunction",
+            "method": "updateEngrContext",
+            "inputData": {
+                "eventData": "{{data.eventMap['Att1EngrTable.updateEngrContext']}}",
+                "engrTable":"{{data.engrTable}}"
+            },
+            "outputData": {
+                "engrTable":"engrTable"
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "engrTable.refresh",
+                        "eventData":
+                        {
+                            "tableData":"{{data.engrTable.network_data}}"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "showContextMenuPopup":{
+            "actionType": "JSFunction",
+            "method": "showContextMenuPopup",
+            "inputData": {
+                "event": "{{data.eventData.event}}",
+                "selection": "{{data.eventData.selection}}",
+                "engrTable":"{{fields.engrTable}}",
+                "isShowValuesTable":"{{data.isShowValuesTable}}"
+            },
+            "outputData": {
+                "engrTable":"engrTable"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "selectFirstElement":{
+            "actionType": "JSFunction",
+            "method": "selectFirstElement",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.Att1MeasuredValuesDataProvider}}"
+            },
+            "deps": "js/Att1MeasurementService"
+        },
+        "updateCtxDeleteAttachedFile": {
+            "actionType": "JSFunction",
+            "method": "updateCtxDeleteAttachedFile",
+            "inputData": {
+                "datasetObject": "{{data.eventData.datasetObject}}",
+                "engrTable": "{{fields.engrTable}}"
+            },
+            "deps": "js/Att1MeasurementService"
+        },
+        "deleteAttachedFile": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2019-06-DataManagement",
+            "method": "unlinkAndDeleteObjects",
+            "inputData": {
+                "deleteInput": [ {
+                    "container": {
+                        "type": "{{fields.engrTable.measurementTable.selectedMeasurement.type}}",
+                        "uid": "{{fields.engrTable.measurementTable.selectedMeasurement.uid}}"
+                    },
+                    "objectsToDelete": [ {
+                        "uid": "{{fields.engrTable.measurementTable.selectedMeasurementDatasetUid}}",
+                        "type": "{{fields.engrTable.measurementTable.selectedMeasurementDatasetType}}"
+                    } ],
+                    "property": "Att0HasMeasurementFile",
+                    "unlinkAlways": false
+                } ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "condition":"ctx.MEASUREMENT_EDIT_HANDLER._editing===false",
+                        "name": "MeasurementsTable.plTable.reload"
+                    },
+                    {
+                        "condition":"ctx.MEASUREMENT_EDIT_HANDLER._editing===true",
+                        "name": "Att1MeasurementsTable.removeAttachedFileContents"
+
+                    }
+                ]
+            }
+        },
+        "initializeMeasurementTable":{
+            "actionType": "JSFunction",
+            "method": "initializeMeasurementTable",
+            "inputData": {
+                "data":"{{data}}",
+                "subPanelContext":"{{subPanelContext}}"
+            },
+            "outputData": {
+                "goalPropValue":"goalPropValue",
+                "minPropValue":"minPropValue",
+                "maxPropValue":"maxPropValue",
+                "isShowGMMProps":"isShowGMMProps",
+                "isShowChart":"isShowChart",
+                "chartTitle":"chartTitle",
+                "isPlotCommandClicked":"isPlotCommandClicked",
+                "isShowValuesTable":"isShowValuesTable",
+                "propertyDisplayNames":"propertyDisplayNames"
+            },
+            "deps": "js/Att1MeasurementService"
+        },
+        "addEventDataToNativeData": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "nativeDataLoadEvent",
+                    "eventData": {
+                        "viewModelObjects": "{{data.dataProviders.Att1MeasuredValuesDataProvider.viewModelCollection.loadedVMObjects}}"
+                    }
+                } ]
+            }
+        },
+        "editEventAction": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "plTable.editStateChange",
+                        "eventData": {
+                            "state": "{{data.eventData.state}}",
+                            "dataSource": {
+                                "dataProviders": "{{data.dataProviders}}"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "loadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "clientScopeURI": "{{function:getMeasurementsTableClientScopeUri}}"
+                },
+                "searchInput": {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Att1MeasuredValuesProvider",
+                    "searchCriteria": {
+                        "parentUid": "{{function:getSelectedObjectUid}}",
+                        "showAllValues": "true"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "searchSortCriteria": "{{data.columnProviders.Att1MeasuredValuesColumnProvider.sortCriteria}}",
+                    "startIndex": "{{data.dataProviders.Att1MeasuredValuesDataProvider.startIndex}}",
+                    "columnFilters": "{{data.columnProviders.Att1MeasuredValuesColumnProvider.columnFilters}}"
+                },
+                "inflateProperties": true
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}",
+                "dataProviders.Att1MeasuredValuesDataProvider.columnConfig": "columnConfig"
+            },
+            "deps": "js/Att1MeasurementService"
+        },
+        "saveColumnConfigLoadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "operationType": "as_arranged",
+                    "clientScopeURI": "{{function:getMeasurementsTableClientScopeUri}}"
+                },
+                "saveColumnConfigData": {
+                    "clientScopeURI": "{{function:getMeasurementsTableClientScopeUri}}",
+                    "columnConfigId": "{{data.dataProviders.Att1MeasuredValuesDataProvider.columnConfig.columnConfigId}}",
+                    "columns": "{{data.dataProviders.Att1MeasuredValuesDataProvider.newColumns}}",
+                    "scope": "LoginUser",
+                    "scopeName": ""
+                },
+                "searchInput": {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Att1MeasuredValuesProvider",
+                    "searchCriteria": {
+                        "parentUid": "{{function:getSelectedObjectUid}}",
+                        "showAllValues": "true"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "searchSortCriteria": "{{data.columnProviders.Att1MeasuredValuesColumnProvider.sortCriteria}}",
+                    "startIndex": "{{data.dataProviders.Att1MeasuredValuesDataProvider.startIndex}}",
+                    "columnFilters": "{{data.columnProviders.Att1MeasuredValuesColumnProvider.columnFilters}}"
+                },
+                "inflateProperties": true
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}",
+                "dataProviders.Att1MeasuredValuesDataProvider.columnConfig": "columnConfig"
+            },
+            "deps": "js/Att1MeasurementService"
+        },
+        "saveColumnConfigData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "saveUIColumnConfigs2",
+            "inputData": {
+                "columnConfigurations": [ {
+                    "clientScopeURI": "{{function:getMeasurementsTableClientScopeUri}}",
+                    "columnConfigId": "{{data.dataProviders.Att1MeasuredValuesDataProvider.columnConfig.columnConfigId}}",
+                    "columns": "{{data.dataProviders.Att1MeasuredValuesDataProvider.newColumns}}",
+                    "scope": "LoginUser",
+                    "scopeName": ""
+                } ]
+            },
+            "outputData": {}
+        },
+        "resetColumnConfig": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "getOrResetUIColumnConfigs4",
+            "inputData": {
+                "getOrResetUiConfigsIn": [
+                    {
+                        "scope": "LoginUser",
+                        "scopeName": "",
+                        "clientName": "AWClient",
+                        "resetColumnConfig": true,
+                        "columnConfigQueryInfos": [
+                            {
+                                "clientScopeURI": "{{function:getMeasurementsTableClientScopeUri}}",
+                                "operationType": "configured",
+                                "typeNames": [
+                                    "WorkspaceObject"
+                                ],
+                                "columnsToExclude": []
+                            }
+                        ],
+                        "businessObjects": [
+                            {}
+                        ]
+                    }
+                ]
+            },
+            "outputData": {
+                "dataProviders.Att1MeasuredValuesDataProvider.columnConfigs": "columnConfigurations[0].columnConfigurations[0]"
+            },
+            "deps": "js/Att1MeasurementService"
+        },
+        "refreshTable": {
+            "actionType": "JSFunction",
+            "method": "refreshMatrix",
+            "inputData": {
+                "eventData": "{{data.eventData}}",
+                "data": "{{data}}"
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "loadEngrTableCtx"
+                    },
+                    {
+                        "name":"Att1MeasurementsView.updateLineChart",
+                        "condition":"data.isShowChart === true"
+                    }
+                ]
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "loadEngrTableCtx": {
+            "actionType": "JSFunction",
+            "method": "loadEngrTableCtx",
+            "inputData": {
+                "engrTable": "{{data.engrTable}}"
+            },
+            "outputData": {
+                "engrTable":"engrTable"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "getAttributeComplexData": {
+            "actionType": "TcSoaService",
+            "serviceName": "AttrTargetMgmt-2018-11-AttributeTargetManagement",
+            "method": "getAttributeComplexData",
+            "inputData":{
+                "inputs":"{{function:getAttributeComplexDataInput}}"
+            },
+            "outputData": {
+                "complexDataResponse" : ""
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "Att1MeasurementsService.processGetAttributeComplexDataResponse"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "condition": "data.complexDataResponse.ServiceData.partialErrors",
+                    "message": "showGetAttributeComplexDataError"
+               } ]
+            },
+            "deps": "js/Att1ComplexDataService"
+        },
+        "processGetAttributeComplexDataResponse":{
+            "actionType": "JSFunction",
+            "method": "processGetAttributeComplexDataResponse",
+            "inputData": {
+                "parameter": "parameter",
+                "measureValue": "measureValue",
+                "response":"{{data.complexDataResponse}}",
+                "engrTable": "{{data.engrTable}}",
+                "subPanelContext": "{{subPanelContext}}",
+                "GMMlocale": "{{data.i18n}}"
+            },
+            "outputData":{
+                "engrTable":"engrTable"
+            },
+            "deps": "js/Att1ComplexDataService"
+        },
+        "createMeasurement": {
+            "actionType": "TcSoaService",
+            "serviceName": "AttrTargetMgmt-2021-12-AttributeTargetManagement",
+            "method": "updateParameters2",
+            "inputData":
+            {
+               "inputs": "{{function:getUpdateParameters2Input}}"
+            },
+            "outputData": {
+                "createMeasurementResponse" : ""
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "MeasurementsTable.plTable.reload"
+                    },
+                    {
+                        "name":"uniformParamTable.updateMeasurementsIfUpdated",
+                        "condition":"subPanelContext.parametersTable && subPanelContext.parametersTable.isParameterWidePanelOpen"
+                    },
+                    {
+                        "name":"Att1ParametersWidePanel.refreshParameters",
+                        "condition":"subPanelContext.parametersTable && subPanelContext.parametersTable.isParameterWidePanelOpen"
+                    },
+                    {
+                        "name":"Att1MeasurementsView.updateLineChart",
+                        "condition":"data.isShowChart === true"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "message": "showCreateMeasurementError"
+                    }
+                ]
+            },
+            "deps": "js/Att1MeasurementService"
+        },
+        "resolveSizeMismatch": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                        "name": "ConfirmationMessage",
+                        "condition": "subPanelContext.openedObject.modelType.typeHierarchyArray.indexOf( 'Att0MeasurableAttribute' ) > -1"
+                    },
+                    {
+                        "name": "ConfirmationMessageForWidePanel",
+                        "condition": "subPanelContext.parametersTable.selectedUnderlyingObjects[0].modelType.typeHierarchyArray.indexOf( 'Att0MeasurableAttribute' ) > -1"
+                    }
+                ]
+            }
+        },
+        "restructureMeasurement": {
+            "actionType": "JSFunction",
+            "method": "restructureMeasurement",
+            "inputData": {
+                "engrTable": "{{data.engrTable}}"
+            },
+            "deps": "js/Att1ComplexDataService"
+        },
+        "processReadOnlyTable": {
+            "actionType": "JSFunction",
+            "method": "processReadOnlyTable",
+            "inputData": {
+                "engrTable": "{{data.engrTable}}"
+            },
+            "deps": "js/Att1ComplexDataService"
+        },
+        "saveChangesForMeasurementsTable": {
+            "actionType": "JSFunction",
+            "method": "saveChangesForMeasurementsTable",
+            "inputData": {
+                "table": "{{data.eventData}}",
+                "engrTable" : "{{data.engrTable}}"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "saveEdits":{
+            "actionType": "JSFunction",
+            "method": "saveEditEngrTable",
+            "inputData": {
+                "data":"{{data.engrTable}}"
+            },
+            "outputData": {
+                "engrTable":"engrTable"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "saveAttributeComplexMeasurementSoaCall": {
+            "actionType": "TcSoaService",
+            "serviceName": "AttrTargetMgmt-2021-12-AttributeTargetManagement",
+            "method": "updateParameters2",
+            "inputData":
+            {
+               "inputs": [{
+                    "clientId": "AWClient",
+                    "parameters":[
+                    {
+                        "clientId": "String",
+                        "parameter": "{{function:getSelectedParameter}}",
+                        "valueInputs": [{
+                            "measureValue": "{{function:getSelectedMeasurement}}",
+                            "valueTableInput": {
+                                "operation": "Create",
+                                "jsonString": "{{data.engrTable.valueTable.tableName}}"
+                            }
+                        }]
+                    }
+                    ]
+                }]
+            },
+            "outputData": {
+                "complexDataResponse" : ""
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "MeasurementsTable.plTable.reload",
+                        "condition": "data.eventData.refresh === true"
+                    },
+                    {
+                        "name": "Att1ParametersWidePanel.refreshParameters"
+                    },
+                    {
+                        "name":"Att1MeasurementsView.updateLineChart"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "condition": "data.complexDataResponse.ServiceData.partialErrors",
+                        "message": "errorMessageOnAction"
+                    }
+                ]
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "saveCellUpdates": {
+            "actionType": "TcSoaService",
+            "serviceName": "AttrTargetMgmt-2021-12-AttributeTargetManagement",
+            "method": "updateParameters2",
+            "inputData":
+            {
+               "inputs": "{{data.eventMap['Att1MeasurementsView.saveCellUpdates'].SOAInput}}"
+            },
+            "outputData": {
+                "complexDataResponse" : ""
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "Att1ParametersWidePanel.refreshParameters"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "condition": "data.complexDataResponse.ServiceData.partialErrors",
+                        "message": "errorMessageOnAction"
+                    }
+                ]
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "removeListeners": {
+            "actionType": "JSFunction",
+            "method": "removeListeners",
+            "deps": "js/Att1EngrTableService"
+        },
+        "redrawTable": {
+            "actionType": "JSFunction",
+            "method": "redrawTable",
+            "inputData": {
+                "data": "{{data.engrTable}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "updateUndo": {
+            "actionType": "JSFunction",
+            "method": "updateUndo",
+            "inputData":
+            {
+               "engrTable" : "{{data.engrTable}}",
+               "event": "{{data.eventData}}"
+            },
+            "outputData": {
+                "engrTable":"engrTable"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "resizeColumn": {
+            "actionType": "JSFunction",
+            "method": "resizeColumn",
+            "inputData": {
+                "resizeStart": "{{data.eventData.resizeStart}}",
+                "resizeData": "{{data.eventData.resizeData}}",
+                "offset": "{{data.eventData.offset}}",
+                "range": "{{data.eventData.range}}",
+                "index": "{{data.eventData.index}}",
+                "tableData":"{{data.eventData.tableData}}",
+                "engrTable":"{{data.engrTable}}"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "dblresizeColumn": {
+            "actionType": "JSFunction",
+            "method": "dblresizeColumn",
+            "inputData": {
+                "tableData": "{{data.eventData.tableData}}",
+                "engrTable":"{{data.engrTable}}"
+            },
+            "deps": "js/Att1EngrTableService"
+        }
+    },
+    "data": {
+        "goalButton": {
+            "displayName": "{{i18n.Att1Goal}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": false,
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        },
+        "rangeButton": {
+            "displayName": "{{i18n.Att1Range}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": false,
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        },
+        "engrTable": {
+            "initialValues": {
+            },
+            "meta": {
+            }
+        },
+        "chartTitle":""
+    },
+    "dataProviders": {
+        "Att1MeasuredValuesDataProvider": {
+            "action": "loadData",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "selectionModelMode": "multiple",
+            "commandsAnchor": "aw_MeasurementsTable",
+            "editContext": "MEASUREMENT_EDIT_HANDLER",
+            "inputData": {
+                "selectionData": "{{subPanelContext.selectionData}}"
+            }
+        }
+    },
+    "lifecycleHooks": {
+        "onInit": "initializeMeasurementTable",
+        "onUnmount": "removeListeners"
+    },
+    "functions": {
+        "getSelectedObjectUid": {
+            "functionName": "getSelectedObjectUid",
+            "parameters": [
+                "{{subPanelContext}}"
+            ]
+        },
+        "getMeasurementsTableClientScopeUri":{
+            "functionName": "getMeasurementsTableClientScopeUri",
+            "parameters": [
+                "{{subPanelContext}}"
+            ]
+        },
+        "getSelectedParameter": {
+            "functionName": "getSelectedParameter",
+            "parameters": []
+        },
+        "createJson": {
+            "functionName": "createJson",
+            "parameters": []
+        },
+        "getAttributeComplexDataInput":{
+            "functionName": "getAttributeComplexDataInput",
+            "parameters": [
+                "{{data}}",
+                "parameter",
+                "{{subPanelContext}}",
+                "measureValue",
+                "{{data.dataProviders.Att1MeasuredValuesDataProvider.selectedObjects}}"
+            ]
+        },
+        "getSelectedMeasurement": {
+            "functionName": "getSelectedMeasurement",
+            "parameters": []
+        },
+        "getUpdateParameters2Input":{
+            "functionName":"getUpdateParameters2Input",
+            "parameters": [
+                "{{data}}",
+                "{{subPanelContext}}"
+            ]
+        }
+    },
+    "props": {
+        "sub-panel-context":{
+            "type":"object"
+        }
+    },
+    "columnProviders": {
+        "Att1MeasuredValuesColumnProvider": {
+            "saveColumnAndLoadAction": "saveColumnConfigLoadData",
+            "resetColumnAction": "resetColumnConfig",
+            "saveColumnAction": "saveColumnConfigData",
+            "sortCriteria":[ {
+                "fieldName": "att0DateMeasured",
+                "sortDirection": "DESC"
+            } ]
+        }
+    },
+    "grids": {
+        "MeasurementsTable": {
+            "dataProvider": "Att1MeasuredValuesDataProvider",
+            "columnProvider": "Att1MeasuredValuesColumnProvider",
+            "addIconColumn": true,
+            "enableArrangeMenu": true,
+            "gridOptions": {
+                "enableSorting": true,
+                "isFilteringEnabled": true,
+                "maxRowsToShow":4
+            }
+        }
+    },
+    "chartProviders": {
+        "lineChartDataProvider": {
+            "title": "{{data.chartTitle}}",
+            "chartType": "line",
+            "loadDataAction": "getChartData",
+            "chartConfig": {
+                "isDataLabelOnChartEnabled": false,
+                "isChartZoomable": true,
+                "xAxisLabel": "X-Axis",
+                "yAxisLabel": "Y-Axis",
+                "xAxis": {
+                    "crosshair": true
+                },
+                "yAxis": {
+                    "crosshair": true
+                },
+                "legend":{
+                    "maxHeight":75
+                }
+            }
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "Att1MeasurementsView.showLogarithmicScale",
+            "action": "showLogarithmicScale",
+            "condition":"data.isShowChart === true"
+        },
+        {
+            "eventId": "MeasurementsTable.updateParamTreeColumns",
+            "action": "updateParamTreeColumns"
+        },
+        {
+            "eventId": "MeasurementsTable.columnConfigSaved",
+            "cacheEventData": true,
+            "action": "loadDataForSavedColumnConfig",
+            "condition": "ctx.NONE && !ctx['NONE']._editing"
+        },
+        {
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        },
+        {
+            "eventId": "Att1MeasurementsView.updateLineChartTitle",
+            "action": "updateLineChartTitle",
+            "condition":"data.isShowChart === true"
+        },
+        {
+            "eventId": "Att1MeasurementsView.updateLineChart",
+            "action": "getChartData",
+            "condition":"data.isShowChart === true"
+        },
+        {
+            "action": "selectChartPoint",
+            "eventId": "Att1MeasurementsView.updateLineChartWithSelection",
+            "condition":"data.isShowChart === true",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "lineChartDataProvider.selected",
+            "action": "handleChartPointSelection",
+            "cacheEventData": true,
+            "condition":"data.isShowChart === true"
+        },
+        {
+            "eventId": "Att1MeasurementsView.selectCell",
+            "action": "selectCell",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "Att1MeasuredValuesDataProvider.modelObjectsUpdated",
+            "cacheEventData": true,
+            "action": "addEventDataToNativeData"
+        },
+        {
+            "eventId": "editHandlerStateChange",
+            "cacheEventData": true,
+            "action": "editEventAction"
+        },
+        {
+            "eventId": "engrTable.refresh",
+            "cacheEventData": true,
+            "action": "refreshTable",
+            "condition":"data.isShowValuesTable===true"
+        },
+        {
+            "eventId": "Att1MeasuredValuesDataProvider.selectionChangeEvent",
+            "action": "getAttributeComplexData"
+        },
+        {
+            "eventId": "Att1MeasuredValuesDataProvider.selectionChangeEvent",
+            "action": "initializeMeasurementTable"
+        },
+        {
+            "eventId": "Att1MeasurementsView.deleteAttachedFile",
+            "action": "deleteAttachedFile"
+        },
+        {
+            "eventId": "Att1MeasurementsView.updateCtxDeleteAttachedFile",
+            "cacheEventData": true,
+            "action": "updateCtxDeleteAttachedFile"
+        },
+        {
+            "eventId": "valueTable.sizeMismatch",
+            "cacheEventData": true,
+            "action": "resolveSizeMismatch"
+        },
+        {
+            "eventId": "ConfirmationMessage",
+            "message": "measurementConfirmationMessage"
+        },
+        {
+            "eventId": "ConfirmationMessageForWidePanel",
+            "message": "measurementConfirmationMessageWidePanel"
+        },
+        {
+            "eventId": "engrTable.restructureMeasurement",
+            "cacheEventData": true,
+            "action": "saveChangesForMeasurementsTable"
+        },
+        {
+            "eventId":"MeasurementsTable.plTable.loadMorePages",
+            "action":"selectFirstElement"
+        },
+        {
+            "eventId":"Att1MeasurementsService.processGetAttributeComplexDataResponse",
+            "action":"processGetAttributeComplexDataResponse"
+        },
+        {
+            "eventId":"Att1MeasurementsService.createMeasurement",
+            "cacheEventData": true,
+            "action":"createMeasurement"
+        },
+        {
+            "eventId": "Att1MeasurementsView.saveCellUpdates",
+            "cacheEventData": true,
+            "action": "saveCellUpdates"
+        },
+        {
+            "eventId":"saveAttributeComplexMeasurementSoaCall",
+            "cacheEventData": true,
+            "action":"saveAttributeComplexMeasurementSoaCall"
+        },
+        {
+            "eventId":"loadEngrTableCtx",
+            "action":"loadEngrTableCtx"
+        },
+        {
+            "eventId":"engrTable.updateSelection",
+            "cacheEventData": true,
+            "action":"updateSelection"
+        },
+        {
+            "eventId":"Att1EngrTable.updateTabData",
+            "cacheEventData": true,
+            "action":"updateTabData"
+        },
+        {
+            "eventId":"engrTable.editCell",
+            "cacheEventData": true,
+            "action":"editCellCallBack"
+        },
+        {
+            "eventId":"Att1EngrTable.saveEdits",
+            "cacheEventData": true,
+            "action":"saveEdits"
+        },
+        {
+            "eventId":"engrTable.showContextMenuPopup",
+            "cacheEventData": true,
+            "action":"showContextMenuPopup"
+        },
+        {
+            "eventId":"Att1EngrTable.updateEngrContext",
+            "cacheEventData": true,
+            "action":"updateEngrContext"
+        },
+        {
+            "eventId":"engrTable.showGMMEditPopup",
+            "cacheEventData": true,
+            "action":"showGMMEditPopup"
+        },
+        {
+            "eventId":"Att1MeasurementsTable.removeAttachedFileContents",
+            "cacheEventData": true,
+            "action":"removeAttachedFileContents"
+        },
+        {
+            "eventId":"engrTable.renderTable",
+            "cacheEventData": true,
+            "action":"redrawTable"
+        },
+        {
+            "eventId":"engrTable.updateUndo",
+            "cacheEventData": true,
+            "action":"updateUndo"
+        },
+        {
+            "eventId":"Att1MeasurementsView.hideChartView",
+            "action":"hideChartView"
+        },
+        {
+            "eventId":"Att1MeasurementsView.hideValuesTableView",
+            "action":"hideValuesTableView"
+        },
+        {
+            "eventId":"Att1MeasurementsView.showValuesTableAndChartView",
+            "action":"showValuesTableAndChartView"
+        },
+        {
+            "eventId":"Att1ArrayParameter.handleColumnCopyFill",
+            "action":"handleColumnCopyFill"
+        },
+        {
+            "eventId":"engrTable.resizeColumn",
+            "cacheEventData": true,
+            "action":"resizeColumn"
+        },
+        {
+            "eventId":"engrTable.dblcolumnResize",
+            "cacheEventData": true,
+            "action":"dblresizeColumn"
+        },
+        {
+            "eventId":"Att1MeasurementsView.handleGoalRangeToggleInOnlyChartView",
+            "action":"handleGoalRangeToggleInOnlyChartView"
+        }
+    ],
+    "messages": {
+        "errorMessageOnAction": {
+            "messageType": "ERROR",
+            "messageText": "{{data.complexDataResponse.ServiceData.partialErrors[0].errorValues[0].message}}"
+        },
+        "measurementConfirmationMessage": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.measurementConfMessage}}",
+            "messageTextParams": [
+                "{{subPanelContext.openedObject.props.object_name.dbValues[0]}}"
+            ],
+            "navigationOptions": [ {
+                    "option": "Cancel",
+                    "text": "{{i18n.cancel}}",
+                    "action": "processReadOnlyTable"
+                },
+                {
+                    "option": "restructureMeasurement",
+                    "text": "{{i18n.restructureMeasurement}}",
+                    "action": "restructureMeasurement"
+                }
+            ]
+        },
+        "measurementConfirmationMessageWidePanel": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.measurementConfMessage}}",
+            "messageTextParams": [
+                "{{subPanelContext.parametersTable.selectedUnderlyingObjects[0].props.object_name.dbValues[0]}}"
+            ],
+            "navigationOptions": [ {
+                    "option": "Cancel",
+                    "text": "{{i18n.cancel}}",
+                    "action": "processReadOnlyTable"
+                },
+                {
+                    "option": "restructureMeasurement",
+                    "text": "{{i18n.restructureMeasurement}}",
+                    "action": "restructureMeasurement"
+                }
+            ]
+        },
+        "showGetAttributeComplexDataError": {
+            "messageType": "ERROR",
+            "messageText": "{{data.complexDataResponse.ServiceData.partialErrors[0].errorValues[0].message}}"
+        },
+        "showCreateMeasurementError": {
+            "messageType": "ERROR",
+            "messageText": "{{data.createMeasurementResponse.ServiceData.partialErrors[0].errorValues[0].message}}"
+        }
+    },
+    "conditions": {
+    },
+    "i18n": {
+        "Measurements": ["Att1Messages"],
+        "Values":["Att1Messages"],
+        "goalTitle": ["Att1AttrMappingMessages"],
+        "Att1Range":["Att1Messages"],
+        "Att1Goal":["Att1Messages"],
+        "ValueTitle": [ "Att1Messages"],
+        "MethodTitle": [ "Att1Messages"],
+        "DateTitle": [ "Att1Messages"],
+        "CommentsTitle": ["Att1Messages"],
+        "Measurement": ["Att1Messages"],
+        "Goal": ["Att1Messages"],
+        "Min": ["Att1Messages"],
+        "Max": ["Att1Messages"],
+        "cancel": ["Att1Messages"],
+        "measurementConfMessage": ["Att1Messages"],
+        "restructureMeasurement": ["Att1Messages"],
+        "ValuesAndCharts": ["Att1Messages"]
+    }
+}

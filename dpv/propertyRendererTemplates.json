@@ -1,0 +1,73 @@
+{
+  "dpv_status_template": {
+    "grids": [
+      "repJobExecution",
+      "repExecHistory"
+    ],
+    "columns": [
+      "Status"
+    ],
+    "tooltip": [
+      "ErrorMessage"
+    ],
+    "template": "",
+    "templateUrl": "/propRenderTemplates/Dpv1StatusCellPropRenderer.html",
+    "renderFunction": "",
+    "deps": "",
+    "dependentServices": []
+  },
+  "dpv_routineRev_template": {
+    "grids": [
+      "routineRevisionsTable"
+    ],
+    "columns": [
+      "item_id",
+      "item_revision_id",
+      "object_name",
+      "object_type",
+      "owning_user"
+    ],
+    "tooltip": [],
+    "template": "",
+    "templateUrl": "",
+    "renderFunction": "secondLatestRoutineRevRender",
+    "deps": "propRenderTemplates/Dpv1ClusterGroupRenderer",
+    "dependentServices": []
+  },
+  "dpv_curr_clsgrpRev_template": {
+    "grids": [
+      "currRoutineRevClsGrpTable"
+    ],
+    "columns": [
+      "item_id",
+      "item_revision_id",
+      "object_name",
+      "object_type",
+      "owning_user"
+    ],
+    "tooltip": [],
+    "template": "",
+    "templateUrl": "",
+    "renderFunction": "clsGrpRevCurrRender",
+    "deps": "propRenderTemplates/Dpv1ClusterGroupRenderer",
+    "dependentServices": []
+  },
+  "dpv_sel_clsgrpRev_template": {
+    "grids": [
+      "selRoutineRevClsGrpTable"
+    ],
+    "columns": [
+      "item_id",
+      "item_revision_id",
+      "object_name",
+      "object_type",
+      "owning_user"
+    ],
+    "tooltip": [],
+    "template": "",
+    "templateUrl": "",
+    "renderFunction": "clsGrpRevSelRender",
+    "deps": "propRenderTemplates/Dpv1ClusterGroupRenderer",
+    "dependentServices": []
+  }
+}

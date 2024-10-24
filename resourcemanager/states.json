@@ -1,0 +1,105 @@
+{
+  "com_siemens_splm_mrl:showMRMLandingPage": {
+    "data": {
+      "headerTitle": {
+        "source": "/i18n/mrmMessages",
+        "key": "showMRMLandingPageTitle"
+      }
+    },
+    "parent": "root",
+    "type": "location"
+  },
+  "showMRMLandingPage": {
+    "data": {
+      "context": {
+        "hideRightWall": true
+      },
+      "breadcrumbConfig": {
+        "type": "notNeeded"
+      },
+      "priority": 1,
+      "label": {
+        "source": "/i18n/mrmMessages",
+        "key": "showMRMLandingPageTitle"
+      },
+      "nameToken": "com_siemens_splm_mrl:showMRMLandingPage",
+      "selectionMode": "single"
+    },
+    "parent": "com_siemens_splm_mrl:showMRMLandingPage",
+    "type": "subLocation",
+    "view": "showMRMLandingPage",
+    "url": "/showMRMLandingPage"
+  },
+  "com_siemens_splm_client_mrm_manageResourcesLocation": {
+    "data": {
+      "browserSubTitle": {
+        "source": "/i18n/mrlMessages",
+        "key": "MrlTitle"
+      },
+      "headerTitle": {
+        "source": "/i18n/mrlMessages",
+        "key": "MrlTitle"
+      },
+      "propertyPolicy": "/policies/searchObjectPropertyPolicy.json"
+    },
+    "view": "AwSearchLocation",
+    "parent": "root"
+  },
+  "manageResources": {
+    "data": {
+      "priority": 1,
+      "label": {
+        "source": "/i18n/SearchMessages",
+        "key": "resultsText"
+      }
+    },
+    "parent": "com_siemens_splm_client_mrm_manageResourcesLocation",
+    "url": "/manageResources",
+    "view": "manageResourcesDashboard",
+    "params": {
+      "searchCriteria": "\"Classification Class Id\":\"MRM\"",
+      "secondaryCriteria": "",
+      "filter": "",
+      "chartBy": "",
+      "savedSearchUid": ""
+    }
+  },
+  "mrlNewResources": {
+    "data": {
+      "priority": 2,
+      "label": {
+        "source": "/i18n/mrlMessages",
+        "key": "mrlNewResourcesText"
+      }
+    },
+    "parent": "com_siemens_splm_client_mrm_manageResourcesLocation",
+    "url": "/mrlNewResources",
+    "view": "mrlNewResourcesDashboard",
+    "params": {
+      "cmdId": null,
+      "filter": null,
+      "searchCriteria": null,
+      "sortCriteria": null
+    }
+  },
+  "manageResourcesSavedSearch": {
+    "data": {
+      "priority": 3,
+      "label": {
+        "source": "/i18n/mrlMessages",
+        "key": "mrlSavedSearches"
+      }
+    },
+    "parent": "com_siemens_splm_client_mrm_manageResourcesLocation",
+    "url": "/manageResourcesSavedSearch",
+    "params": {
+      "filter": ""
+    },
+    "view": "MrlSavedSearch"
+  },
+  "ctx": {
+    "mrlDashboard": {
+      "mrlNewResourcesFolderUid": "null"
+    }
+  }
+}

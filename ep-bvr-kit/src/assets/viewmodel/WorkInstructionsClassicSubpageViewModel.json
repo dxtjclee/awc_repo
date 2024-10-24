@@ -1,0 +1,865 @@
+{
+    "schemaVersion": "1.0.0",
+    "ports": {
+        "WiClassicSubPage_updateIndicationContextPort": {
+            "syncObject": {}
+        }
+    },
+    "data": {
+        "missingInSourceTableContext": {
+            "tabs": []
+        },
+        "provider": {
+            "label": "{{i18n.WorkInstructionsTitle}}",
+            "priority": 3,
+            "name": "workInstructions",
+            "clientScopeURI": "workInstructions",
+            "nameToken": "workInstructions"
+        },
+        "awSubLocationPref": {
+            "hideRightWall": true
+        },
+        "occContext": {
+            "initialValues": {
+                "selectedModelObjects": [],
+                "viewKey": "",
+                "productContextInfo": null,
+                "elementToPCIMapCount": null,
+                "supportedFeatures": null,
+                "skipReloadOnConfigParamChange": true
+            },
+            "meta": {}
+        },
+        "sharedSelectionData": {
+            "initialValues": {
+                "isIndicationToggleOn": null
+            },
+            "meta": {}
+        },
+        "configurationChipsData": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "epNavigationTabsConfigForClassicBOP": {
+            "tabs": [ {
+                    "name": "{{i18n.assemblyTitle}}",
+                    "tabKey": "EpAssemblyTree"
+                },
+                {
+                    "name": "{{i18n.processTitle}}",
+                    "tabKey": "WiProcessTree"
+                },
+                {
+                    "name": "{{i18n.backgroundPartsTitle}}",
+                    "tabKey": "EpBackgroundPartsTree"
+                }
+            ]
+        },
+        "epNavigationTabsConfigForPlantBOP": {
+            "tabs": [ {
+                    "name": "{{i18n.assemblyTitle}}",
+                    "tabKey": "EpAssemblyTree"
+                },
+                {
+                    "name": "{{i18n.processTitle}}",
+                    "tabKey": "WiProcessTree"
+                }
+            ],
+            "cmdDisplayOption": "toolbarBelowTabs"
+        },
+        "detailsTabsConfig": {
+            "tabs": [ {
+                    "name": "{{i18n.partTitle}}",
+                    "tabKey": "WiPartsTable",
+                    "loadInputObject": {
+                        "propertiesToLoad": [ "Mfg0all_material" ]
+                    }
+                },
+                {
+                    "name": "{{i18n.resourcesTitle}}",
+                    "tabKey": "WiResourcesTable",
+                    "loadInputObject": {
+                        "propertiesToLoad": [ "Mfg0used_equipment" ]
+                    }
+                },
+                {
+                    "name": "{{i18n.workareaTitle}}",
+                    "tabKey": "WiWorkareaTable",
+                    "loadInputObject": {
+                        "propertiesToLoad": [ "Mfg0assigned_workarea" ]
+                    }
+                },
+                {
+                    "name": "{{i18n.assignedPmisTitle}}",
+                    "tabKey": "WiAssignedPmiTable",
+                    "loadInputObject": {
+                        "propertiesToLoad": [ "epw0Inspections" ]
+                    }
+                },                
+                {
+                    "name": "{{i18n.summaryTitle}}",
+                    "tabKey": "EpInformation",
+                    "xrtType": "SUMMARY",
+                    "noElementSelectedMessageForXRT": [ {
+                        "text": "{{i18n.epInformationNoSelectionMessage}}"
+                    } ]
+                },
+                {
+                    "name": "{{i18n.filesTitle}}",
+                    "tabKey": "EpFiles",
+                    "xrtType": "SUMMARY",
+                    "loadInputObject": {
+                        "propertiesToLoad": [ "mbc0AttachedFiles" ]
+                    }
+                },
+                {
+                    "name": "{{i18n.documentsTitle}}",
+                    "tabKey": "EpDocuments",
+                    "xrtType": "SUMMARY",
+                    "loadInputObject": {
+                        "loadTypes": [ "GetWeblinks" ],
+                        "propertiesToLoad": [ "mbc0AssignedDocuments" ],
+                        "loadedObjectMapKeys": [ "WebLink" ]
+                    }
+                },
+                {
+                    "name": "{{i18n.externalFlowsTitle}}",
+                    "namePrefix": "{{i18n.externalFlowsTitle}}",
+                    "tabKey": "EpExternalFlows",
+                    "loadInputObject": {
+                        "loadTypes": [
+                            "GetScopeFlows"
+                        ],
+                        "relatedObjectMapKey": [
+                            "ExternalPredecessors",
+                            "ExternalSuccessors"
+                        ]
+                    }
+                },
+                {
+                    "name": "{{i18n.inspectionTitle}}",
+                    "tabKey": "EpInspectionDefinitionsTable",
+                    "loadTypes": [ "GetInspectionDefinition" ],
+                    "relatedObjectMapKey": [ "InspectionDefinitions" ],
+                    "loadInputObject": {
+                        "loadTypes": [ "GetInspectionDefinition" ],
+                        "relatedObjectMapKey": [
+                            "InspectionDefinitions"
+                        ]
+                    }
+                },
+                {
+                    "name": "{{i18n.dcdsTitle}}",
+                    "tabKey": "EpDCDsTable",
+                    "loadInputObject": {
+                        "propertiesToLoad": [ "mes0DCDNodes" ]
+                    }
+                }
+            ]
+        }
+    },
+    "actions": {
+        "getIndicationsData": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "getImpactHandledData"
+                },
+                {
+                    "action": "getMissingInSrcData"
+                },
+                {
+                    "action": "showAllTabs",
+                    "condition": "conditions.epShowAllTabs"
+                },
+                {
+                    "action": "showMissingInSourceTabOnly",
+                    "condition": "conditions.epShowMissingTabOnly"
+                },
+                {
+                    "action": "showImpactHandledTabOnly",
+                    "condition": "conditions.epShowImpactHandledTabOnly"
+                },
+                {
+                    "action": "showNoTab",
+                    "condition": "conditions.epShowNoTab"
+                }
+            ]
+        },
+        "getMissingInSrcData": {
+            "actionType": "JSFunction",
+            "method": "getProperty",
+            "inputData": {
+                "name": "{{ctx.epPageContext.loadedObject.uid}}",
+                "propertyName": "accountabilityResponse"
+            },
+            "outputData": {
+                "missingInSrc": "result.missingInSrc",
+                "isMissingInSourceTabVisible": "result.missingInSrc.length"
+            },
+            "deps": "js/epObjectPropertyCacheService"
+        },
+        "showNoTab": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "missingInSourceTableContext": {
+                    "tabs": []
+                }
+            },
+            "outputData": {
+                "missingInSourceTableContext": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "getImpactHandledData": {
+            "actionType": "JSFunction",
+            "method": "getProperty",
+            "inputData": {
+                "name": "{{ctx.epPageContext.loadedObject.uid}}",
+                "propertyName": "ImpactHandledObjects"
+            },
+            "outputData": {
+                "impactHandled": "",
+                "isImpactHandledTabVisible": ""
+            },
+            "deps": "js/epObjectPropertyCacheService"
+        },
+        "updateMissingInSourceTableContext": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "missingInSourceTableContext": {
+                    "tabs": "{{props.missingInSourceTabsConfig.tabs}}",
+                    "cmdDisplayOption": "menu"
+                }
+            },
+            "outputData": {
+                "missingInSourceTableContext": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "clearImpactHandledCache": {
+            "actionType": "JSFunction",
+            "method": "clearPropertyKeyCache",
+            "inputData": {
+                "name": "{{ctx.epPageContext.loadedObject.uid}}",
+                "propertyName": "ImpactHandledObjects"
+            },
+            "deps": "js/epObjectPropertyCacheService"
+        },
+        "showAllTabs": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "missingInSourceTableContext": {
+                    "tabs": [ {
+                            "name": "{{i18n.missingInSource}}",
+                            "tabKey": "EpMissingInSource"
+                        },
+                        {
+                            "name": "{{i18n.impactsHandled}}",
+                            "tabKey": "EpImpactHandled"
+                        }
+                    ]
+                }
+            },
+            "outputData": {
+                "missingInSourceTableContext": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "showMissingInSourceTabOnly": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "missingInSourceTableContext": {
+                    "tabs": [ {
+                        "name": "{{i18n.missingInSource}}",
+                        "tabKey": "EpMissingInSource"
+                    } ]
+                }
+            },
+            "outputData": {
+                "missingInSourceTableContext": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "showImpactHandledTabOnly": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "missingInSourceTableContext": {
+                    "tabs": [ {
+                        "name": "{{i18n.impactsHandled}}",
+                        "tabKey": "EpImpactHandled"
+                    } ]
+                }
+            },
+            "outputData": {
+                "missingInSourceTableContext": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "clearOccContextNClosePanelCommandAction": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "clearOccContext"
+                },
+                {
+                    "action": "unRegisterPanelContext"
+                },
+                {
+                    "action": "closeSetEffectivityPanel"
+                }
+            ]
+        },
+        "unRegisterPanelContext": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "deps": "js/appCtxService",
+            "inputData": {
+                "path": "panelContext"
+            }
+        },
+        "clearOccContext": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInAtomicData",
+            "inputData": {
+                "targetAtomicData": "{{fields.occContext}}",
+                "updatedValues": {
+                    "selectedModelObjects": [
+                        ""
+                    ]
+                }
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "closeSetEffectivityPanel": {
+            "actionType": "JSFunction",
+            "method": "closeSetEffectivityPanel",
+            "inputData": {
+                "id": "aw_toolsAndInfo"
+            },
+            "deps": "js/epSetEffectivityService"
+        },
+        "occEffectivityFailureSubscribeAction": {
+            "actionType": "JSFunction",
+            "method": "processPartialErrorsFromSOA",
+            "inputData": {
+                "value": "{{parameters.eventData.effResp.ServiceData}}"
+            },
+            "deps": "js/epLoadService"
+        },
+        "setSelectionInOccContextForEffectivitySubscribe": {
+            "actionType": "JSFunctionAsync",
+            "method": "initOccContext",
+            "inputData": {
+                "occContext": "{{fields.occContext}}",
+                "value": [
+                    "{{parameters.eventData.selectionForSetEffectivity}}"
+                ]
+            },
+            "deps": "js/epSetEffectivityService"
+        },
+        "init": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "registerLeaveHandler"
+                },
+                {
+                    "action": "initializeEPPage"
+                },
+                {
+                    "action": "updateSharedSelectionPort"
+                },
+                {
+                    "action": "initialiseConfigurationChips"
+                },
+                {
+                    "action": "showBackgroundTab",
+                    "condition": "conditions.isTCPlatformValidForDIPA"
+                },
+                {
+                    "action": "epPageInitializeComplete"
+                }
+            ]
+        },
+
+        "epPageInitializeComplete":{
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+               "initialize":true
+            },
+            "outputData": {
+                "pageIntializeComplete": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+
+        "initializeEPPage": {
+            "actionType": "JSFunctionAsync",
+            "method": "initializeEPPage",
+            "inputData": {
+                "provider": "{{data.provider}}"
+            },
+            "outputData": {
+                "stateContext": "stateContext",
+                "propertyPolicyId": "propertyPolicyId"
+            },
+            "deps": "js/epInitializationService"
+        },
+        "registerLeaveHandler": {
+            "actionType": "JSFunction",
+            "method": "init",
+            "deps": "js/epLeavePlaceHandler"
+        },
+        "destroy": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "destroyHandler"
+                },
+                {
+                    "action": "clearImpactHandledCache"
+                }
+            ]
+        },
+        "destroyHandler": {
+            "actionType": "JSFunction",
+            "method": "destroy",
+            "deps": "js/epLeavePlaceHandler"
+        },
+        "updateSharedSelectionPort": {
+            "actionType": "Sync",
+            "inputData": {
+                "port": "WiClassicSubPage_updateIndicationContextPort",
+                "syncObject": "{{fields.sharedSelectionData}}"
+            }
+        },
+        "initialiseConfigurationChips": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInAtomicData",
+            "inputData": {
+                "targetContext": "{{fields.configurationChipsData}}",
+                "updatedValues": {
+                    "ebomStructure": "{{ctx.epPageContext.ebomStructure}}",
+                    "ebomPCI": "{{ctx.epTaskPageContext.ebomPCI}}",
+                    "ebomStructureConfigFlags": "{{ctx.epTaskPageContext.ebomStructureConfigFlags}}",
+                    "mbomStructure": "{{ctx.epPageContext.mbomStructure}}",
+                    "mbomPCI": "{{ctx.epTaskPageContext.mbomPCI}}",
+                    "mbomStructureConfigFlags": "{{ctx.epTaskPageContext.mbomStructureConfigFlags}}",
+                    "processStructure": "{{ctx.epPageContext.processStructure}}",
+                    "processPCI": "{{ctx.epTaskPageContext.processPCI}}",
+                    "processStructureConfigFlags": "{{ctx.epTaskPageContext.processStructureConfigFlags}}",
+                    "rootPlant": "{{ctx.epPageContext.rootPlant}}",
+                    "plantPCI": "{{ctx.epTaskPageContext.plantPCI}}",
+                    "rootPlantConfigFlags": "{{ctx.epTaskPageContext.rootPlantConfigFlags}}",
+                    "functionalPlan":"{{ctx.epTaskPageContext.functionalPlan}}",
+                    "functionalPlanPCI":"{{ctx.epTaskPageContext.functionalPlanPCI}}",
+                    "functionalPlanConfigFlags":"{{ctx.epTaskPageContext.functionalPlanConfigFlags}}"
+                }
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "handleProcessTabIcon": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "getChangeIndicationData"
+                },
+                {
+                    "action": "getMissingInSrcData"
+                },
+                {
+                    "action": "setMissingInSrcIconOnProcessTab",
+                    "condition": "data.affectedUIds === '' &&  data.missingInSrc.length > 0 && data.sharedSelectionData.isIndicationToggleOn === true"
+                },
+                {
+                    "action": "setMissingInSrcIconOnProcessTabForPlantBOP",
+                    "condition": "data.affectedUIds === '' &&  data.missingInSrc.length > 0 && data.sharedSelectionData.isIndicationToggleOn === true && ctx.ep.scopeObject.modelType.typeHierarchyArray[0].includes('Mfg0BvrProcessStation')"
+                },
+                {
+                    "action": "setImpactIconOnProcessTab",
+                    "condition": "data.sharedSelectionData.isIndicationToggleOn === true &&  data.affectedUIds !== '' && ctx.state.params.tracking_cn !== null && ctx.state.params.tracking_cn !== undefined"
+                },
+                {
+                    "action": "setImpactIconOnProcessTabForPlantBOP",
+                    "condition": "data.affectedUIds !== ''  && ctx.ep.scopeObject.modelType.typeHierarchyArray[0].includes('Mfg0BvrProcessStation')"
+                },
+                {
+                    "action": "resetChangeIndicationIconVisibility",
+                    "condition": "data.sharedSelectionData.isIndicationToggleOn === false || (data.affectedUIds === '' && data.missingInSrc.length == 0 && !ctx.ep.scopeObject.modelType.typeHierarchyArray[0].includes('Mfg0BvrProcessStation'))"
+                },
+                {
+                    "action": "resetChangeIndicationIconVisibilityForPlantBOP",
+                    "condition": "data.sharedSelectionData.isIndicationToggleOn === false || (data.affectedUIds === '' && data.missingInSrc.length == 0 && ctx.ep.scopeObject.modelType.typeHierarchyArray[0].includes('Mfg0BvrProcessStation'))"
+                }
+            ]
+        },
+        "getChangeIndicationData": {
+            "actionType": "JSFunction",
+            "method": "getProperty",
+            "inputData": {
+                "name": "{{ctx.epTaskPageContext.loadedObject.uid}}",
+                "propertyName": "ChangeLoadedProcessIndication"
+            },
+            "outputData": {
+                "affectedUIds": ""
+            },
+            "deps": "js/epObjectPropertyCacheService"
+        },
+        "setMissingInSrcIconOnProcessTab": {
+            "actionType": "JSFunction",
+            "method": "setIconOnTab",
+            "inputData": {
+                "contentPanelData": "{{data.epNavigationTabsConfigForClassicBOP}}",
+                "tabKey": "WiProcessTree",
+                "shouldBeVisible": "{{data.sharedSelectionData.isIndicationToggleOn === true && data.missingInSrc.length > 0 && data.affectedUIds === '' }}",
+                "iconName": "indicatorPanelContainsMissingInSource16"
+            },
+            "outputData": {
+                "epNavigationTabsConfigForClassicBOP": ""
+            },
+            "deps": "js/epTabsService"
+        },
+        "setMissingInSrcIconOnProcessTabForPlantBOP": {
+            "actionType": "JSFunction",
+            "method": "setIconOnTab",
+            "inputData": {
+                "contentPanelData": "{{data.epNavigationTabsConfigForPlantBOP}}",
+                "tabKey": "WiProcessTree",
+                "shouldBeVisible": "{{data.sharedSelectionData.isIndicationToggleOn === true && data.missingInSrc.length > 0 && data.affectedUIds === '' }}",
+                "iconName": "indicatorPanelContainsMissingInSource16"
+            },
+            "outputData": {
+                "epNavigationTabsConfigForPlantBOP": ""
+            },
+            "deps": "js/epTabsService"
+        },
+        "setImpactIconOnProcessTab": {
+            "actionType": "JSFunction",
+            "method": "setIconOnTab",
+            "inputData": {
+                "contentPanelData": "{{data.epNavigationTabsConfigForClassicBOP}}",
+                "tabKey": "WiProcessTree",
+                "shouldBeVisible": true,
+                "iconName": "indicatorImpacted"
+            },
+
+            "outputData": {
+                "epNavigationTabsConfigForClassicBOP": ""
+            },
+            "deps": "js/epTabsService"
+        },
+        "setImpactIconOnProcessTabForPlantBOP": {
+            "actionType": "JSFunction",
+            "method": "setIconOnTab",
+            "inputData": {
+                "contentPanelData": "{{data.epNavigationTabsConfigForPlantBOP}}",
+                "tabKey": "WiProcessTree",
+                "shouldBeVisible": "{{data.sharedSelectionData.isIndicationToggleOn === true &&  data.affectedUIds !== '' && ctx.state.params.tracking_cn !== null && ctx.state.params.tracking_cn !== undefined}}",
+                "iconName": "indicatorImpacted"
+            },
+
+            "outputData": {
+                "epNavigationTabsConfigForPlantBOP": ""
+            },
+            "deps": "js/epTabsService"
+        },
+        "resetChangeIndicationIconVisibility": {
+            "actionType": "JSFunction",
+            "method": "setIconOnTab",
+            "inputData": {
+                "contentPanelData": "{{data.epNavigationTabsConfigForClassicBOP}}",
+                "tabKey": "WiProcessTree",
+                "shouldBeVisible": false
+            },
+            "outputData": {
+                "epNavigationTabsConfigForClassicBOP": ""
+            },
+            "deps": "js/epTabsService"
+        },
+        "resetChangeIndicationIconVisibilityForPlantBOP": {
+            "actionType": "JSFunction",
+            "method": "setIconOnTab",
+            "inputData": {
+                "contentPanelData": "{{data.epNavigationTabsConfigForPlantBOP}}",
+                "tabKey": "WiProcessTree",
+                "shouldBeVisible": false
+            },
+            "outputData": {
+                "epNavigationTabsConfigForPlantBOP": ""
+            },
+            "deps": "js/epTabsService"
+        },
+        "showBackgroundTab": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "epNavigationTabsConfigForPlantBOP": {
+                    "tabs": [ {
+                            "name": "{{i18n.assemblyTitle}}",
+                            "tabKey": "EpAssemblyTree"
+                        },
+                        {
+                            "name": "{{i18n.processTitle}}",
+                            "tabKey": "WiProcessTree"
+                        },
+
+                        {
+                            "name": "{{i18n.backgroundPartsTitle}}",
+                            "tabKey": "EpDynamicInProcessAssemblyTree"
+                        }
+                    ],
+                    "cmdDisplayOption": "toolbarBelowTabs"
+                }
+            },
+            "outputData": {
+                "epNavigationTabsConfigForPlantBOP": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        }
+    },
+    "onEvent": [ {
+            "eventId": "setSelectionInOccContextForEffectivity",
+            "action": "setSelectionInOccContextForEffectivitySubscribe",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            }
+        },
+        {
+            "eventId": "failedToAuthorEffectivityEvent",
+            "action": "occEffectivityFailureSubscribeAction",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            }
+        },
+        {
+            "eventId": "complete",
+            "action": "clearOccContextNClosePanelCommandAction"
+        },
+        {
+            "eventId": "ep.pageContext.changed",
+            "action": "initialiseConfigurationChips"
+        },
+        {
+            "eventId": "epObjectPropertyCache.ImpactHandledObjectsUpdated",
+            "action": "getIndicationsData"
+        },
+        {
+            "eventId": "ep.publishAssignmentIndicationChange",
+            "action": "getIndicationsData"
+        },
+        {
+            "eventId": "epObjectPropertyCache.accountabilityResponseUpdated",
+            "action": "getIndicationsData"
+        },
+        {
+            "eventId": "epObjectPropertyCache.ChangeLoadedProcessIndicationUpdated",
+            "action": "handleProcessTabIcon"
+        }
+    ],
+    "conditions": {
+        "isPlantBOPScope": {
+            "expression": "ctx.ep.scopeObject.modelType.typeHierarchyArray.includes('Mfg0BvrProcessArea')"
+        },
+        "epShowAllTabs": {
+            "expression": "data.missingInSrc.length > 0 && data.impactHandled.length > 0 && conditions.hasTracking_cn && conditions.checkPreferenceEPC_RemoveChangeImpactIndications"
+        },
+        "epShowMissingTabOnly": {
+            "expression": "data.missingInSrc.length > 0 && ( !data.impactHandled || (data.impactHandled && data.impactHandled.length < 1) )"
+        },
+        "epShowImpactHandledTabOnly": {
+            "expression": "data.missingInSrc.length < 1 && data.impactHandled.length > 0 && conditions.hasTracking_cn && conditions.checkPreferenceEPC_RemoveChangeImpactIndications"
+        },
+        "epShowNoTab": {
+            "expression": "data.missingInSrc.length < 1 && data.impactHandled.length < 1"
+        },
+        "checkPreferenceEPC_RemoveChangeImpactIndications": {
+            "expression": "ctx.preferences.EPC_RemoveChangeImpactIndications[0] === 'true'"
+        },
+        "hasTracking_cn": {
+            "expression": "ctx.state.params.tracking_cn && ctx.state.params.tracking_cn !== '' && ctx.state.params.tracking_cn !== 'undefined'"
+        },
+        "isSyncedWithViewer": {
+            "expression": "ctx.epWiSelectionMode === 'GRAPHICS'"
+        },
+        "isSyncedWithEditor": {
+            "expression": "ctx.epWiSelectionMode === 'EDITOR'"
+        },
+        "isActivitiesOpen": {
+            "expression": "ctx.epPageContext.showActivities === 'time'"
+        },
+        "shouldShowActivitiesOrValidationPanel": {
+            "expression": {
+                "$or": [ {
+                        "$source": "ctx.epPageContext.showActivities",
+                        "$query": {
+                            "$eq": "time"
+                        }
+                    },
+                    {
+                        "$source": "ctx.epPageContext.showValidationPanel",
+                        "$query": {
+                            "$eq": true
+                        }
+                    }
+                ]
+            }
+        },
+        "isValidationMode": {
+            "expression": {
+                "$source": "ctx.epPageContext.showValidationPanel",
+                "$query": {
+                    "$eq": true
+                }
+            }
+        },
+        "hasIndicationToggleOn": {
+            "expression": "data.sharedSelectionData.isIndicationToggleOn === true"
+        },
+        "showIndicatorOnProcessTab": {
+            "expression": "conditions.hasIndicationToggleOn && conditions.epShowMissingTabOnly"
+        },
+        "isTCMajorVersionGreaterThan14": {
+            "expression": {
+                "$source": "ctx.tcSessionData.tcMajorVersion",
+                "$query": {
+                    "$gt": "14"
+                }
+            }
+        },
+        "isTCMajorVersionEqualTo14": {
+            "expression": {
+                "$source": "ctx.tcSessionData.tcMajorVersion",
+                "$query": {
+                    "$eq": "14"
+                }
+            }
+        },
+        "isTCMinorVersionGreaterThan2": {
+            "expression": {
+                "$source": "ctx.tcSessionData.tcMinorVersion",
+                "$query": {
+                    "$gt": "2"
+                }
+            }
+        },
+        "isTCMinorVersionEqualTo2": {
+            "expression": {
+                "$source": "ctx.tcSessionData.tcMinorVersion",
+                "$query": {
+                    "$eq": "2"
+                }
+            }
+        },
+        "isTCQRMNumberGreaterThanOrEqual1": {
+            "expression": {
+                "$source": "ctx.tcSessionData.tcQRMNumber",
+                "$query": {
+                    "$gte": "1"
+                }
+            }
+        },
+        "isReadOnlyMode": {
+            "expression": "ctx.mfgReadOnlyMode.readOnlyMode"
+        },
+        "isTCPlatformValidForDIPA": {
+            "expression": {
+                "$or": [ {
+                        "$source": "conditions.isTCMajorVersionGreaterThan14",
+                        "$query": {
+                            "$eq": true
+                        }
+                    },
+                    {
+                        "$source": "conditions.isTCVersionGreaterThan_14_2",
+                        "$query": {
+                            "$eq": true
+                        }
+                    },
+                    {
+                        "$source": "conditions.isTCVersionGreaterThanOrEqualTo_14_2_0_1",
+                        "$query": {
+                            "$eq": true
+                        }
+                    }
+                ]
+            }
+        },
+        "isTCVersionGreaterThan_14_2": {
+            "expression": {
+                "$and": [ {
+                        "$source": "conditions.isTCMajorVersionEqualTo14",
+                        "$query": {
+                            "$eq": true
+                        }
+                    },
+                    {
+                        "$source": "conditions.isTCMinorVersionGreaterThan2",
+                        "$query": {
+                            "$eq": true
+                        }
+                    }
+                ]
+            }
+        },
+        "isTCVersionGreaterThanOrEqualTo_14_2_0_1": {
+            "expression": {
+                "$and": [ {
+                        "$source": "conditions.isTCMajorVersionEqualTo14",
+                        "$query": {
+                            "$eq": true
+                        }
+                    },
+                    {
+                        "$source": "conditions.isTCMinorVersionEqualTo2",
+                        "$query": {
+                            "$eq": true
+                        }
+                    },
+                    {
+                        "$source": "conditions.isTCQRMNumberGreaterThanOrEqual1",
+                        "$query": {
+                            "$eq": true
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "init",
+        "onUnmount": "destroy",
+        "onUpdate": [ {
+                "action": "updateMissingInSourceTableContext",
+                "observers": [
+                    "props.missingInSourceTabsConfig"
+                ]
+            },
+            {
+                "action": "handleProcessTabIcon",
+                "observers": [
+                    "viewModel.atomicData.sharedSelectionData.isIndicationToggleOn"
+                ]
+            }
+        ]
+    },
+    "i18n": {
+        "assemblyTitle":["InstructionsMessages"],
+        "processTitle":["InstructionsMessages"],
+        "backgroundPartsTitle":["BackgroundPartsMessages"],
+        "partTitle":["DetailsMessages"],
+        "resourcesTitle":["DetailsMessages"],
+        "workareaTitle":["DetailsMessages"],
+        "summaryTitle":["DetailsMessages"],
+        "filesTitle":["DetailsMessages"],
+        "documentsTitle":["DetailsMessages"],
+        "externalFlowsTitle":["DetailsMessages"],
+        "inspectionTitle":["DetailsMessages"],
+        "assignedPmisTitle":["DetailsMessages"],
+        "dcdsTitle":["DetailsMessages"],
+        "impactsHandled": [ "InstructionsMessages" ],
+        "missingInSource": [ "assignmentIndicationMessages" ]
+    }
+}

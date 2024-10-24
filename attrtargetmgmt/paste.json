@@ -1,0 +1,104 @@
+{
+  "schemaVersion": "1.0.0",
+  "pasteHandlers": {
+    "pasteHandlerForAtt1ParameterPrjElement": {
+      "action": "aceDefaultPasteAction",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForAtt1ParameterPrjElement"
+      }
+    },
+    "pasteHandlerForAtt1ParameterSetElement": {
+      "action": "aceDefaultPasteAction",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForAtt1ParameterSetElement"
+      }
+    },
+    "pasteHandlerForAtt1ParameterPrjRevision": {
+      "action": "aceDefaultPasteAction",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForAtt1ParameterPrjRevision"
+      }
+    },
+    "pasteHandlerForAtt1ParameterSetRevision": {
+      "action": "aceDefaultPasteAction",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForAtt1ParameterSetRevision"
+      }
+    }
+  },
+  "actions": {},
+  "conditions": {
+    "isPasteHandlerActiveForAtt1ParameterPrjElement": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Att1ParameterPrjElement"
+            }
+          },
+          {
+            "$source": "pasteContext.sourceObject",
+            "$query": {
+              "$typeOf": "Att1ParameterSetElement"
+            }
+          }
+        ]
+      }
+    },
+    "isPasteHandlerActiveForAtt1ParameterSetElement": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Att1ParameterSetElement"
+            }
+          },
+          {
+            "$source": "pasteContext.sourceObject",
+            "$query": {
+              "$typeOf": "Att1ParameterSetElement"
+            }
+          }
+        ]
+      }
+    },
+    "isPasteHandlerActiveForAtt1ParameterPrjRevision": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Att1ParameterPrjElement"
+            }
+          },
+          {
+            "$source": "pasteContext.sourceObject",
+            "$query": {
+              "$typeOf": "Att0ParameterSetRevision"
+            }
+          }
+        ]
+      }
+    },
+    "isPasteHandlerActiveForAtt1ParameterSetRevision": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Att1ParameterSetElement"
+            }
+          },
+          {
+            "$source": "pasteContext.sourceObject",
+            "$query": {
+              "$typeOf": "Att0ParameterSetRevision"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

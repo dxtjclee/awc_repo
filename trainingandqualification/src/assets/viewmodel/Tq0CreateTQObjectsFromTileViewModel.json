@@ -1,0 +1,156 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "addPanelState": {
+            "initialValues": {
+                "creationType": "",
+                "createdObject": "",
+                "sourceObjects": "",
+                "selectedTab": ""
+            },
+            "meta": {}
+        },
+        "selectedType":
+        {
+            "type": "STRING",
+            "dbValue": ""   
+                        
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "AddObjectPrimarySub",
+                "context": {}
+            },
+            "meta": {}
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "actions": {
+        "createtqObjects": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2008-06-DataManagement",
+            "method": "createObjects",
+            "inputData": {
+                "input":"{{function:getCreateObjectInfo}}"
+            },
+            "deps": "js/tq0ManageUtils",
+            "outputData": {
+                "createdObject": "output[0].objects[0]",
+                "serviceData": "ServiceData",
+                "selectedNodes": "output[0].objects"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "complete",
+                        "condition": "!subPanelContext.panelPinned",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    },
+                    {
+                        "name": "awPanel.loadNextValues",
+                        "condition": "subPanelContext.panelPinned"
+                    },
+                    {
+                        "name": "primaryWorkarea.reset"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "condition": "data.createdObject && data.createdObject.props.object_string.dbValues[0]",
+                        "message": "createObjectSuccess"
+                    }
+                ],
+                "failure": [
+                    {
+                        "condition": "data.serviceData.partialErrors.length>0",
+                        "message": "createObjectFailureMessage"
+                    }
+                ]
+            }
+        },
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            }
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "conditions": {
+        "isPanelPinned": {
+            "expression": "!subPanelContext.panelPinned"
+        },
+        "isNewTabAddButtonVisible": {
+            "expression": "addPanelState.selectedTab.view ==='NewTabPageSub' && addPanelState.creationType && xrtState.xrtTypeLoaded"
+        }
+    },
+    "messages": {
+        "createObjectSuccess": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.pasteSuccessful}}",
+            "messageTextParams": [
+                "{{data.createdObject.props.object_string.dbValues[0]}}"
+            ]
+        },
+        "createObjectFailureMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.tq0PartialError}}",
+            "messageTextParams": [
+                "{{data.serviceData.partialErrors[0].errorValues[0].message}}"
+            ]
+        }
+    },
+    "i18n": {
+        "pasteSuccessful": [
+            "awAddDirectiveMessages"
+        ],
+
+        "tq0PartialError": [
+            "trainingandqualificationMessages"
+        ],
+        "add": [
+            "trainingandqualificationMessages"
+        ]
+    },
+    "functions": {
+        "getCreateObjectInfo": {
+            "functionName": "getCreateObjectInfo",
+            "parameters": [
+                "{{data}}",
+                "",
+                "",
+                "{{editHandlers.addPanelEditHandler}}"
+            ]
+        }
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    }
+}

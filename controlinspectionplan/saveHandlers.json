@@ -1,0 +1,69 @@
+[
+  {
+    "conditions": {
+      "$and": [
+        {
+          "editInProgress": {
+            "$eq": true
+          }
+        },
+        {
+          "$or": [
+            {
+              "selected.modelType.typeHierarchyArray": {
+                "$in": [
+                  "Acp0SPCCheckRevision"
+                ]
+              }
+            },
+            {
+              "selected.modelType.typeHierarchyArray": {
+                "$in": [
+                  "Acp0SPCCheckElement"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "target": {
+      "method": "getSaveHandler",
+      "deps": "js/Acp0IndustryRuleService"
+    }
+  },
+  {
+    "conditions": {
+      "$and": [
+        {
+          "selected.modelType.typeHierarchyArray": {
+            "$in": [
+              "Acp0NamingConvention"
+            ]
+          }
+        }
+      ]
+    },
+    "target": {
+      "method": "getNamingConventionSaveHandler",
+      "deps": "js/Acp0NamingConventionBuilderService"
+    }
+  },
+  {
+    "conditions": {
+      "$and": [
+        {
+          "selected.modelType.typeHierarchyArray": {
+            "$in": [
+              "Acp0Rule"
+            ]
+          }
+        }
+      ]
+    },
+    "target": {
+      "method": "getRuleSaveHandler",
+      "deps": "js/Acp0DefaultNamingConventionsService"
+    }
+  }
+]

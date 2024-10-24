@@ -1,0 +1,155 @@
+// @<COPYRIGHT>@
+// ==================================================
+// Copyright 2020.
+// Siemens Product Lifecycle Management Software Inc.
+// All Rights Reserved.
+// ==================================================
+// @<COPYRIGHT>@
+
+/*=========================================================================*/
+/*========================== PMI ==========================================*/
+/*=========================================================================*/
+
+.aw-epInstructionsPmi-guidanceMessage{
+    border-style: solid;
+    border-top-width: rem-calc(1);
+    border-bottom-width: rem-calc(1);
+    width: 100%;
+    padding: $padding_small 0;
+    margin: 0;
+    min-height: rem-calc(30);
+}
+
+.aw-epInstructionsPmi-guidanceMessageIcon{
+    margin: $margin_xsmall $margin_normal;
+    width: $icon_button_width;
+    height: $icon_button_height;
+}
+
+.aw-epInstructionsPmi-methodContainer,
+button.aw-epInstructionsPmi-methodContainer,
+button.aw-epInstructionsPmi-methodContainer.disabled{
+    border-style: none;
+    padding-left: $padding_normal;
+    text-align: left;
+    border-radius: 0;
+    min-height: rem-calc(32);
+    box-shadow: none;
+}
+
+button .aw-epInstructionsPmi-methodRow{
+    display: inline;
+}
+
+button .aw-epInstructionsPmi-methodDetail{
+    padding-left: $padding_small;
+    font-weight: 400;
+}
+
+div.aw-epInstructionsPmi-methodGroup{
+    font-weight: 700;
+    margin: rem-calc(12) 0 $margin_small 0;
+    padding-left: $padding_normal;
+    width: 100%;
+}
+
+.aw-epInstructionsPmi-methodMenuContainer{
+    margin: 0;
+    z-index: auto;
+    position: absolute;
+    button.sw-button.disabled{
+        opacity: 0.45;
+        background-color: transparent;
+    }
+    button.sw-button:not(.disabled):not(.aw-widgets-staticChip):hover{
+        box-shadow: none;
+    }
+}
+
+button.aw-epInstructionsPmi-methodDropDownIconButton{
+    margin: 0;
+    padding: $padding_small 0 0 0;
+    height: rem-calc(10);
+    width: rem-calc(10);
+    border: none;
+    .sw-button-icon{
+        height: rem-calc(10);
+        width: rem-calc(10);
+    }
+}
+
+button.aw-epInstructionsPmi-methodIconButton{
+    margin: 0 $margin_normal 0 0;
+    padding: 0;
+}
+
+.aw-epInstructionsPmi-highlightedText{
+    font-weight: $bold_font_weight;
+}
+
+.aw-ep-pmiTable,
+.aw-epInstructionsPmi-connectedPartsTable,
+.aw-epInstructionsPmi-refDatumsTable{
+    .aw-splm-table {
+        height: 100%;
+        border-width: 0;
+        .aw-splm-tableHeaderCellInner {
+            margin-left: -rem-calc(1);
+            .aw-visual-indicator {
+                margin-left: -rem-calc(2);
+                vertical-align: middle;
+                padding-right: 0;
+            }
+        }
+    }
+}
+
+.aw-epInstructionsPmi-refDatumsMessage{
+    border: $default_border;
+    min-height: rem-calc(125);
+    max-height: rem-calc(125);
+}
+
+.aw-epInstructionsPmi-messageText{
+    margin-left: $margin_normal;
+    padding-top: $padding_xsmall;
+    @include ellipsis;
+}
+
+.aw-epInstructionsPmi-pmiInfoPanel{
+    padding: $padding_xlarge;
+    .aw-epInstructionsPmi-pmiInfoLabel{
+        margin-bottom: $margin_normal;
+    }
+    .aw-epInstructionsPmi-connectedPartsTable{
+        margin-bottom: $margin_large;
+    }
+    .aw-epInstructionsPmi-connectedPartsTable,
+    .aw-epInstructionsPmi-refDatumsTable{
+        min-height: rem-calc(125);
+        max-height: rem-calc(125);
+        aw-splm-table{
+            display: contents;
+            .aw-splm-table {
+                border-width: rem-calc(1);
+                overflow-y: auto;
+                box-sizing: border-box;
+                width: 100%;
+            }
+        }
+    }
+    .aw-epInstructionsPmi-notes{
+        padding: $padding_small;
+        label{
+            .sw-property-name{
+                width: 0;
+                min-width: 0;
+                margin: 0;
+            }
+        }
+    }
+    .aw-epInstructionsPmi-notesArea{
+        min-height: rem-calc(312);
+        max-height: rem-calc(312);
+    }
+}

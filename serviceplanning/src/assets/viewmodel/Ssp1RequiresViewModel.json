@@ -1,0 +1,93 @@
+{
+    "data":{
+        "projectsAnchor": "RequiresTableAnchor",
+        "relation":"SSP0Requires"
+    },
+    "dataProviders": {
+        "requiresGridDataProvider": {
+            "action": "getRequirementDependancy",
+            "selectionModelMode": "single",
+            "response":"{{data.treeLoadResult.response}}",
+            "totalFound":"{{data.treeLoadResult.totalFound}}",
+            "editContext": "TABLE_CONTEXT"
+        }
+    },
+    "columnProviders": {
+        "requiresColumnProvider": {
+            "loadColumnAction": "loadReqTableColumns",
+            "sortCriteria": [ {
+                "fieldName": "relation:object_name",
+                "sortDirection": "ASC"
+            } ]
+        }
+    },
+    "grids": {
+        "requiresReqList": {
+            "dataProvider": "requiresGridDataProvider",
+            "columnProvider": "requiresColumnProvider",
+            "enableArrangeMenu": false,
+            "addIconColumn": true,
+            "gridOptions": {
+                "enableSorting": true,
+                "maxRowsToShow": 5
+            }
+        }
+    },
+    "actions": {
+        "getRequirementDependancy": {
+            "actionType": "JSFunctionAsync",
+            "method": "getCreateInput",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData":
+            {
+                "treeLoadResult":"{{function:setNodeProperties}}"
+            },
+            "deps": "js/Ssp1ServiceReqDependencyService"
+        },
+        "loadReqTableColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadRequirementColumns",
+            "inputData": {
+                "data":"{{data}}",
+                "dataProvider": "{{data.dataProviders.requiresGridDataProvider}}",
+                "columnProvider": "{{data.columnProviders.requiresColumnProvider}}"
+            },
+            "outputData": {
+                "dataProviders.requiresGridDataProvider.columnConfig": "columnConfig"
+            },
+            "deps": "js/Ssp1ServiceReqDependencyService"
+        },
+        "selectionChanged": {
+            "actionType": "JSFunction",
+            "method": "saveRequiredVMOInCtx",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.requiresGridDataProvider.selectedObjects[0]}}"            },
+            "deps": "js/Ssp1ServiceReqDependencyService"
+        }
+
+    },
+    "functions": {
+        "getCreateInput": {
+            "functionName": "getCreateInput",
+            "parameters": ["{{data}}"]
+        },
+        "setNodeProperties":{
+            "functionName": "setNodeProperties",
+            "parameters":[]
+        }
+    },
+    "i18n": {
+        "Requires": [ "ServicePlannerConstants" ],
+        "noResultsFound": [ "ServicePlannerConstants" ]
+
+    },
+    "onEvent": [
+        {
+            "eventId": "requiresGridDataProvider.selectionChangeEvent",
+            "action": "selectionChanged",
+            "cacheEventData": true
+        }
+    ]
+}

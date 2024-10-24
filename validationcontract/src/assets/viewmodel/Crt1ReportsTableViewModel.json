@@ -1,0 +1,299 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-splm-table.directive",
+        "js/aw-command-bar.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-am-table-panel.directive",
+        "js/aw-panel-body.directive"
+    ],
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "lifecycleHooks": {
+        "onUnmount": "removeSelection"
+    },
+    "actions": {
+        "removeSelection": {
+            "actionType": "JSFunction",
+            "method": "removeSelectionIfany",
+            "inputData": {
+                "subPanelContext": "{{subPanelContext}}",
+                "dataProvider": "{{data.dataProviders.reportTableProvider}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "editEventAction": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "plTable.editStateChange",
+                        "eventData": {
+                            "state": "{{data.eventData.state}}",
+                            "dataSource": {
+                                "dataProviders": "{{data.dataProviders}}"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "handleVMCollectionUpdate": {
+            "actionType": "JSFunction",
+            "method": "handleHtmlPanelVMCollection",
+            "deps": "js/xrtUtilities",
+            "inputData": {
+                "callback": "{{subPanelContext.callback.updateVMCollectionCallback}}",
+                "response": {
+                    "dataProvider": "{{data.dataProviders.reportTableProvider}}"
+                }
+            }
+        },
+         "refreshReoprtTable": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "reportTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            }
+        },
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/columnArrangeService"
+        },
+        "saveColumnConfigLoadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "operationType": "as_arranged",
+                    "clientScopeURI": "Crt1ReportTable"
+                },
+                "saveColumnConfigData": {
+                    "clientScopeURI": "Crt1ReportTable",
+                    "columnConfigId": "{{data.dataProviders.reportTableProvider.columnConfig.columnConfigId}}",
+                    "columns": "{{data.dataProviders.reportTableProvider.newColumns}}",
+                    "scope": "LoginUser",
+                    "scopeName": ""
+                },
+                "searchInput": {
+                    "maxToLoad": 10,
+                    "maxToReturn": 10,
+                    "providerName": "Awp0ObjectSetRowProvider",
+                    "attributesToInflate":["crt1SourceObject"],
+                    "searchCriteria": {
+                        "parentUid": "{{subPanelContext.selected.uid}}",
+                        "objectSet": "{{function:getObjectStringForReportTable}}"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "searchSortCriteria": "{{data.columnProviders.reportColumnProvider.sortCriteria}}",
+                    "startIndex": "{{data.dataProviders.reportTableProvider.startIndex}}",
+                    "columnFilters":"{{data.columnProviders.reportColumnProvider.columnFilters}}"
+                },
+                "inflateProperties": true
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}",
+                "dataProviders.reportTableProvider.columnConfig": "columnConfig"
+            },
+            "deps": "js/Crt1ReportsService"
+        },
+        "resetColumnConfig": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "getOrResetUIColumnConfigs4",
+            "inputData": {
+                "getOrResetUiConfigsIn": [
+                    {
+                        "scope": "LoginUser",
+                        "scopeName": "",
+                        "clientName": "AWClient",
+                        "resetColumnConfig": true,
+                        "columnConfigQueryInfos": [
+                            {
+                                "clientScopeURI": "Crt1ReportTable",
+                                "operationType": "configured",
+                                "typeNames": [
+                                    "Prg0AbsEvent"
+                                ],
+                                "columnsToExclude": []
+                            }
+                        ],
+                        "businessObjects": [
+                            {}
+                        ]
+                    }
+                ]
+            },
+            "outputData": {
+                "dataProviders.reportTableProvider.columnConfig": "columnConfigurations[0].columnConfigurations[0]"
+            }
+        },
+        "loadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "clientScopeURI": "Crt1ReportTable",
+                    "operationType": "as_configured"
+                },
+                "searchInput": {
+                    "maxToLoad": 10,
+                    "maxToReturn": 10,
+                    "providerName": "Awp0ObjectSetRowProvider",
+                    "searchCriteria": {
+                        "parentUid": "{{subPanelContext.selected.uid}}",
+                        "objectSet": "{{function:getObjectStringForReportTable}}"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "searchSortCriteria": "{{data.columnProviders.reportColumnProvider.sortCriteria}}",
+                    "startIndex": "{{data.dataProviders.reportTableProvider.startIndex}}",
+                    "columnFilters":"{{data.columnProviders.reportColumnProvider.columnFilters}}"
+                },
+                "inflateProperties": true
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}",
+                "dataProviders.reportTableProvider.columnConfig": "columnConfig"
+            },
+            "events": {
+
+            },
+            "deps": "js/Crt1ReportsService"
+        },
+        "changeSelectionForReportTable":{
+            "actionType": "JSFunction",
+            "method": "changeSelectionForReportTable",
+            "inputData": {
+                "data":"{{data}}",
+                "currentScopeSel":"{{subPanelContext.selObj}}",
+                "subPanelContext":"{{subPanelContext}}"
+            },
+            "deps": "js/Crt1ReportsService"
+        },
+        "unregisterReportCtx":{
+            "actionType": "JSFunction",
+            "method": "unregisterReportCtx",
+            "deps": "js/Crt1ReportsService"
+        },
+        "modelObjectsLoaded": {
+            "actionType": "JSFunction",
+            "method": "modelObjectsLoaded",
+            "inputData": {
+                "dataProviders": "{{data.dataProviders.reportTableProvider}}",
+                "eventMap": "{{data.eventMap}}",
+                "scopeSel": "{{props.subPanelContext.context.vrSublocationState.mselected[0]}}",
+                "subPanleCtx": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        }
+    },
+    "columnProviders": {
+        "reportColumnProvider": {
+            "saveColumnAndLoadAction": "saveColumnConfigLoadData",
+            "resetColumnAction": "resetColumnConfig",
+            "sortCriteria": [],
+            "columnConfigId": "Crt1ReportTable",
+            "enableSorting": true
+        }
+    },
+    "dataProviders": {
+        "reportTableProvider": {
+            "action": "loadData",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "selectionModelMode": "multiple",
+            "editContext": "TABLE_CONTEXT",
+            "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectCellListActionCommands",
+            "contextMenuCommandsAnchor": "aw_reportsTable_contextMenu",
+            "inputData": {
+                "selectionData": "{{fields.selectionData}}"
+            }
+        }
+    },
+    "data": {
+        "selectionData": {
+            "initialValues": {},
+            "meta": {}
+        }
+    },
+    "grids": {
+        "reportTable": {
+            "columnProvider": "reportColumnProvider",
+            "dataProvider": "reportTableProvider",
+            "enableArrangeMenu": true,
+            "gridOptions": {
+                "enableSorting": true,
+                "maxRowsToShow": 6,
+                "isFilteringEnabled": true
+            }
+        }
+    },
+    "functions": {
+        "getObjectStringForReportTable": {
+            "functionName": "getObjectStringForReportTable",
+            "parameters": [
+                "{{subPanelContext.selected}}"
+            ]
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        },
+        {
+            "eventId": "reportTableProvider.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "changeSelectionForReportTable"
+        },
+        {
+            "eventId": "complete",
+            "action": "refreshReoprtTable"
+        },
+        {
+            "eventId" : "unregisterReportCtx",
+            "action" : "unregisterReportCtx"
+        },
+        {
+            "eventId": "editHandlerStateChange",
+            "cacheEventData": true,
+            "action": "editEventAction"
+        },
+        {
+            "eventId": "reportTableProvider.modelObjectsUpdated",
+            "cacheEventData": true,
+            "action": "handleVMCollectionUpdate"
+        },
+        {
+            "eventId": "reportTableProvider.modelObjectsUpdated",
+            "cacheEventData": true,
+            "action": "modelObjectsLoaded"
+        }
+    ],
+
+    "i18n": {
+
+    }
+}

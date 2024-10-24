@@ -1,0 +1,32 @@
+<aw-form  class="aw-ngp-createObjectForm" name="createObjectCommandPanelForm">
+    <mfe-loading-message exist-when="conditions.showLoading"></mfe-loading-message>
+    <mfe-three-dots-animation-message exist-when="conditions.showCreating" text={{data.creatingObjectMessage.text}}></mfe-three-dots-animation-message>
+    <aw-panel-body class="aw-ngp-createObjectTypeList" exist-when="conditions.showList">
+        <aw-panel-section caption="{{i18n.selectType}}" collapsed="disabled">
+            <aw-list dataprovider="data.dataProviders.allowedTypesToCreateDataProvider">
+                <aw-type-cell vmo="item"></aw-type-cell>
+            </aw-list>
+        </aw-panel-section>
+    </aw-panel-body>
+    <aw-panel-body class="aw-ngp-createObjectPanel"  visible-when="conditions.showXrt">
+        <aw-panel-section aw-repeat="XRTformKey : data.XRTFormsInfo" caption={{XRTformKey.title}} exist-when="XRTformKey.showXrt" collapsed="disabled">
+            <aw-xrt type="CREATE" object-type="{{XRTformKey.name}}"  exist-when="XRTformKey.showXrt" xrt-state="data.xrtState"></aw-xrt>
+        </aw-panel-section >
+    </aw-panel-body>
+</aw-form>
+<aw-panel-footer>
+    <aw-flex-row>
+        <div class="sw-column w-2 justify-center">
+            <aw-link  prop="data.backButtonTitle" action="showPreviousFormAndClearSelection" exist-when="conditions.showPreviousButton"></aw-link>
+        </div>
+        <div class="sw-column w-10 align-self-right">
+            <div class="sw-row justify-right">
+                <aw-button size="auto" action="closeCreateObjectDialog" button-type="base">{{i18n.cancel}}</aw-button>
+                <aw-button size="auto" action="showNextXRTForm" button-type="base" exist-when="conditions.showXrt && conditions.showNextButton" enable-when="conditions.enableNextButton  && formProp.attributes.valid">{{i18n.next}}</aw-button>
+                <aw-button size="auto" action="creataObjectAndAddMore" button-type="base" exist-when="conditions.showXrt" enable-when="conditions.xrtWasLoaded && formProp.attributes.valid">{{i18n.creataAndAddMore}}</aw-button>
+                <aw-button size="auto" action="creataObject" exist-when="conditions.showXrt" enable-when="conditions.xrtWasLoaded && conditions.isDisplayingLastXRTForm && formProp.attributes.valid">{{i18n.create}}</aw-button>
+            </div>
+        </div>
+    </aw-flex-row>
+</aw-panel-footer>
+

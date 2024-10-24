@@ -1,0 +1,506 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "lifecycleHooks": {
+        "onUpdate": [ {
+            "action": "reloadExistingTlTable",
+            "observers": [ "viewModel.ctx.selected"
+            ]
+        } ],
+        "onUnmount": "unsetData"
+    },
+    "actions": {
+        "getAllExistingTraceLinks":
+        {
+            "actionType": "JSFunctionAsync",
+            "method": "getAllExistingTraceLinks",
+            "inputData": {
+                "treeLoadInput": "request.treeLoadInput",
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "totalFoundTree": "result.existingTlResult.length",
+                "existingTlResult": "result.existingTlResult",
+                "treeLoadResult": "result.treeLoadResult",
+                "dataProviders.existingTlDataProvider.columnConfig": "result.columnConfig"
+            },
+            "events": {
+                "success": [ {
+                        "name": "existingTlGrid.plTable.loadProps",
+                        "eventData": {
+                            "VMOs": []
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Arm0ExistingTraceLink"
+        },
+        "updateTreeColumns": {
+            "actionType": "JSFunction",
+            "method": "updateExistingTreeColumns",
+            "inputData": {
+                "data": "{{data.newColumnConfig}}",
+                "dataProvider": "{{data.dataProviders.existingTlDataProvider}}"
+            },
+            "deps": "js/Arm0ExistingTraceLink"
+        },
+        "tlModelUpdated": {
+            "actionType": "JSFunction",
+            "method": "updateExistingTreeColumns",
+            "inputData": {
+                "data": "{}",
+                "dataProvider": "{{data.dataProviders.existingTlDataProvider}}"
+            },
+            "deps": "js/Arm0ExistingTraceLink"
+        },
+        "loadDataForSavedColumnConfig": {
+            "actionType": "JSFunctionAsync",
+            "method": "getTableViewModelProperties",
+            "deps": "js/tcViewModelObjectService",
+            "inputData": {
+                "vmNodes": "{{data.dataProviders.existingTlDataProvider.viewModelCollection.loadedVMObjects}}",
+                "context": {
+                    "clientScopeURI": "ExistingTraceLinkTable",
+                    "clientName": "AWClient"
+                }
+            },
+            "outputData": {
+                "newColumnConfig": "result.output.columnConfig"
+            },
+            "events": {
+                "success": [ {
+                    "name": "ExistingTLTable.updateTreeColumns"
+                } ]
+            }
+        },
+        "saveColumnConfigLoadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "saveUIColumnConfigs2",
+            "inputData": {
+                "columnConfigurations": [ {
+                    "clientScopeURI": "ExistingTraceLinkTable",
+                    "columnConfigId": "{{data.dataProviders.existingTlDataProvider.columnConfig.columnConfigId}}",
+                    "columns": "{{data.dataProviders.existingTlDataProvider.newColumns}}",
+                    "scope": "LoginUser",
+                    "scopeName": ""
+                } ]
+            },
+            "outputData": {},
+            "events": {
+                "success": [ {
+                    "name": "ExistingTable.columnConfigSaved"
+                } ]
+            },
+            "deps": "js/Arm0ExistingTraceLink"
+        },
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/columnArrangeService"
+        },
+        "resetColumnConfig": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "getOrResetUIColumnConfigs4",
+            "inputData": {
+                "getOrResetUiConfigsIn": [ {
+                    "scope": "LoginUser",
+                    "scopeName": "",
+                    "clientName": "AWClient",
+                    "resetColumnConfig": true,
+                    "columnConfigQueryInfos": [ {
+                        "clientScopeURI": "ExistingTraceLinkTable",
+                        "operationType": "configured",
+                        "typeNames": "{{data.dataProviders.existingTlDataProvider.columnConfig.typesForArrange}}",
+                        "columnsToExclude": []
+                    } ],
+                    "businessObjects": [
+                        {}
+                    ]
+                } ]
+            },
+            "outputData": {
+                "dataProviders.existingTlDataProvider.columnConfig": "{{function:postResetFunction}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "ExistingTLTable.updateTreeColumns"
+                } ]
+            },
+            "deps": "js/tcarrange.service"
+        },
+        "deleteTraceLinkInTree":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "deleteObjects",
+           "inputData":
+            {
+                "objects": "{{function:getInputDeleteTraceLinkInTree}}"
+            },
+
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "cdm.updated",
+                        "eventData": {
+
+                            "updatedObjects": "{{data.refreshObjects}}",
+                            "elementsInDeleteTracelink":"{{data.elementsInDeleteTracelink}}"
+                        }
+                    },
+                    {
+                        "name": "Arm0ExistingTracelinkTree.tracelinkDeleted",
+                        "eventData": {
+                            "elementsInDeleteTracelink":"{{data.elementsInDeleteTracelink}}"
+                        }
+                    },
+                    {
+                        "name": "requirementDocumentation.deleteTracelinkFromTooltipInAce",
+                        "condition": "deletedTracelinkedObject && deletedTracelinkedObject.length > 0"
+                    },
+                    {
+                        "name": "requirementDocumentation.deleteTracelinkFromTooltipInAceOverview"
+                    },
+                    {
+                        "name": "aceSecondaryWorkArea.refreshTabs",
+                        "condition": "ctx.selected.modelType.typeHierarchyArray.indexOf('Wbs0ConditionalElement') > -1"
+                    },
+                    {
+                        "name": "Arm0ExistingTracelinkTree.reloadTable"
+                    },
+                    {
+                        "name": "Arm0RequirementSummaryTable.updateTableContent"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "condition": "data.deleteObjectsPartialErrors.length>0",
+                    "message": "getMessageFromTLDeleteFailure"
+                } ],
+                "success": [
+                    {
+                        "condition": "data.deletedTracelinkedObject.length>0",
+                        "message": "notificationTracelinkDeletedSuccess"
+                    }
+                ]
+            },
+            "outputData":
+            {
+                "deletedTracelinkedObject": "deleted",
+                "deleteObjectsPartialErrors": "partialErrors"
+            },
+            "deps": "js/Arm0ExistingTraceLink"
+        },
+
+        "reloadExistingTlTable":
+        {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name":"existingTlGrid.plTable.reload"
+                    }
+                ]
+            }
+        },
+
+        "postTracelinkDeletion":
+        {
+            "actionType": "JSFunction",
+            "method": "postTracelinkDeletion",
+            "inputData":
+             {
+                "elementsInDeleteTracelink":"{{data.elementsInDeleteTracelink}}"
+             },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+
+        "refreshTracelinkedObjects":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2007-01-DataManagement",
+            "method": "refreshObjects",
+            "inputData": {
+                "objects": "{{data.refreshObjects}}"
+            }
+        },
+
+        "showDeleteTracelinkWarning":
+        {
+            "actionType": "JSFunction",
+            "method": "showDeleteTracelinkWarning",
+            "inputData":
+             {
+                "data":"{{data}}",
+                "vmo" : "{{data.eventMap['Arm0ExistingTracelinkTree.showDeleteTracelinkWarning'].vmo}}"
+
+             },
+            "deps": "js/Arm0ExistingTraceLink"
+        },
+        "unsetData":
+        {
+            "actionType": "JSFunction",
+            "method": "unsetData",
+            "deps": "js/Arm0ExistingTraceLink"
+
+        },
+        "plTreeClientRefresh": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "existingTlGrid.plTable.clientRefresh"
+                    }
+                ]
+            }
+        },
+        "loadTreeProperties": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadExistingTlTreeProperties",
+            "inputData": {
+                "propertyLoadInput": "request.propertyLoadInput"
+            },
+            "outputData": {
+                "dataProviders.existingTlDataProvider.columnConfig": "result.propertyLoadResult.columnConfig",
+                "dataProviders.existingTlDataProvider.updatedNodes": "result.propertyLoadResult.updatedNodes",
+                "propertyLoadResult": "result.propertyLoadResult"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "existingTlTable.tableLoaded",
+                        "eventData":
+                        {
+                            "dataProvider": "{{data.dataProviders.existingTlDataProvider}}"
+                        },
+                        "condition":"data.dataProviders.existingTlDataProvider.viewModelCollection.totalObjectsLoaded > 0"
+                    }
+                ]
+            },
+            "deps": "js/Arm0ExistingTraceLink"
+        },
+        "editEventAction": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "plTable.editStateChange",
+                        "eventData": {
+                            "state": "{{data.eventData.state}}",
+                            "dataSource": {
+                                "dataProviders": "{{data.dataProviders}}"
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    },
+
+    "onEvent": [
+        {
+            "eventId": "Arm0ExistingTracelinkTree.showDeleteTracelinkWarning",
+            "cacheEventData": true,
+            "action": "showDeleteTracelinkWarning"
+        },
+        {
+            "eventId": "Arm0ExistingTracelinkTree.deleteExistingTracelinkInTree",
+            "cacheEventData": true,
+            "action": "deleteTraceLinkInTree"
+        },
+        {
+            "eventId": "Arm0ExistingTracelinkTree.reloadTable",
+            "cacheEventData": true,
+            "action": "reloadExistingTlTable"
+        },
+        {
+            "eventId": "Arm0ExistingTracelinkTree.refreshTracelinkedObjects",
+            "action": "refreshTracelinkedObjects"
+        },
+        {
+            "eventId": "Arm0ExistingTracelinkTree.tracelinkDeleted",
+            "action" : "postTracelinkDeletion"
+        },
+        {
+            "eventId": "Arm0Traceability.showTracelinksPopup",
+            "action": "reloadExistingTlTable",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "Arm0ExistingTracelinkTree.refreshTable",
+            "action": "plTreeClientRefresh"
+        },
+        {
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        },
+        {
+            "eventId": "ExistingTable.columnConfigSaved",
+            "cacheEventData": true,
+            "action": "loadDataForSavedColumnConfig"
+        },
+        {
+            "eventId": "ExistingTLTable.updateTreeColumns",
+            "action": "updateTreeColumns"
+        },
+        {
+            "eventId": "editHandlerStateChange",
+            "cacheEventData": true,
+            "action": "editEventAction"
+        },
+        {
+            "eventId": "existingTlDataProvider.modelObjectsUpdated",
+            "action": "tlModelUpdated"
+        }
+    ],
+    "grids": {
+        "existingTlGrid": {
+            "dataProvider": "existingTlDataProvider",
+            "columnProvider": "existingTlColumnProvider",
+            "propertyProvider": "existingTlPropertyProvider",
+            "enableArrangeMenu": true,
+            "addIconColumn": false,
+            "gridOptions": {
+                "enablePinning": true,
+                "enableSorting": true,
+                "isFilteringEnabled": false,
+                "enableExpansionStateCaching": false,
+                "maxRowsToShow":25
+            }
+        }
+    },
+    "columnProviders": {
+        "existingTlColumnProvider": {
+            "saveColumnAndLoadAction": "saveColumnConfigLoadData",
+            "resetColumnAction": "resetColumnConfig",
+            "sortCriteria": []
+        }
+
+    },
+    "data": {},
+    "dataProviders": {
+        "existingTlDataProvider": {
+            "initializeAction": "getAllExistingTraceLinks",
+            "action": "getAllExistingTraceLinks",
+            "treeLoadResult":"{{data.treeLoadResult}}",
+            "totalFound":"{{data.totalFound}}",
+            "selectionModelMode": "multiple",
+            "commandsAnchor": "aw_reqExistingTLCmds",
+            "editContext": "TLTABLE_EDIT_HANDLER",
+            "inputData": {
+                "accessMode": "tree"
+            }
+        },
+        "existingTlPropertyProvider": {
+            "action": "loadTreeProperties",
+            "propertyLoadResult": "action.result.propertyLoadResult"
+        }
+    },
+    "messages": {
+        "getMessageFromTLDeleteFailure": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.PartialError}}",
+            "messageTextParams": [
+                "{{data.deleteObjectsPartialErrors[0].errorValues[0].message}}"
+            ]
+        },
+        "notificationTracelinkDeletedSuccess":{
+            "messageType": "INFO",
+            "messageText": "{{i18n.tracelinkDeletedMessage}}"
+        }
+    },
+    "functions": {
+        "getInputDeleteTraceLinkInTree":
+        {
+            "functionName": "getInputDeleteTraceLinkInTree",
+            "parameters":
+            [
+                "{{data}}",
+                "{{data.eventMap['Arm0ExistingTracelinkTree.showDeleteTracelinkWarning'].vmo}}"
+            ]
+        },
+        "postResetFunction": {
+            "functionName": "postResetFunction",
+            "parameters": [
+                "{{data.dataProviders.existingTlDataProvider.columnConfig}}"
+            ]
+        }
+    },
+    "i18n": {
+        "revisionNameColumn":[
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "TracelinkDirection": [
+            "MatrixMessages"
+        ],
+        "TracelinkType": [
+            "MatrixMessages"
+        ],
+        "revisionToRevisionTypeTitle":
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "revisionToOccurrenceTypeTitle":
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "occurrenceToRevisionTypeTitle":
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "occurrenceToOccurrenceTypeTitle":
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "complyingTracelinkTitle":
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "definingTracelinkTitle":
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "direction":
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "linkedItemTypes":
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "PartialError":
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "tracelinkDeletedMessage" :
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "deleteTracelinkConfirmation" :
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "delete": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "cancel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "deleteMultipleTracelinkConfirmation": [
+            "RequirementsCommandPanelsMessages"
+        ]
+    }
+}

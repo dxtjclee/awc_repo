@@ -1,0 +1,92 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions":
+    {
+
+        "loadValidationRule":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Query-2014-11-Finder",
+            "method": "performSearch",
+            "inputData":
+            {
+                "searchInput":
+                {
+                    "maxToLoad": 20,
+                    "maxToReturn": 20,
+                    "providerName": "Fnd0ConfigBaselineProvider",
+                    "searchCriteria": {
+                        "baselineType": "{{subPanelContext.fields.selected.properties.fnd0ConfigBaselineType.value}}"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "searchFilterMap": {},
+                    "searchSortCriteria": [],
+                    "attributesToInflate": [],
+                    "internalPropertyName": "",
+                    "startIndex": 0
+                }
+            },
+            "outputData":
+            {
+                "validationRuleListResponse": "{{function:getPagedValidationRuleList}}",
+                "totalRules": "totalFound"
+            },
+            "deps": "js/configurationBaselineService"
+        },
+        "updateDataSource": {
+            "actionType": "JSFunction",
+            "method": "addHtmlPanelInDataSource",
+            "inputData": {
+                "data": "{{data}}",
+                "type": "{{data.subPanelContext.xrtType}}",
+                "panelID": "Awb0ConfigurationBaselineCustomPanel"
+            },
+            "deps": "js/addObjectUtils"
+        }
+    },
+    "data":{
+        "fnd0ValidationRule": {
+            "displayName": "{{i18n.validationRule}}",
+            "type": "STRING",
+            "isRequired": false,
+            "dataProvider": "validationRuleForBaselineProvider",
+            "uiValue": "",
+            "dbValue": "",
+            "emptyLOVEntry": false
+        }
+    },
+    "dataProviders":
+    {
+        "validationRuleForBaselineProvider":
+        {
+            "initializeAction": "loadValidationRule",
+            "response": "{{data.validationRuleListResponse.validationRuleList}}",
+            "totalFound": "{{data.totalRules}}",
+            "selectionModelMode": "single",
+            "moreValuesExist": "{{data.validationRuleListResponse.moreValuesExist}}"
+        }
+    },
+    "lifecycleHooks": {
+        "onUpdate": [ {
+            "action": "updateDataSource",
+            "observers": [ "viewModel.data.fnd0ValidationRule.dbValue" ]
+        }
+        ]
+    },
+    "functions":
+    {
+        "getPagedValidationRuleList":
+        {
+            "functionName": "getPagedValidationRuleList",
+            "parameters":
+            [
+                "{{data}}"
+            ]
+        }
+    },
+    "i18n": {
+        "validationRule": [
+            "OccMgmtConfigBaselineConstants"
+        ]
+    }
+}

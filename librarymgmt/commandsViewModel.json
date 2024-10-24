@@ -1,0 +1,149 @@
+{
+  "commands": {},
+  "commandHandlers": {
+    "Lbr0ShowObjectCommandHandler": {
+      "id": "Awp0ShowObject",
+      "action": "Lbr0IsDirty",
+      "activeWhen": {
+        "condition": "conditions.Lbr0ShowObjectActiveCondition"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Lbr0ShowObjectActiveCondition"
+      }
+    },
+    "LbrShowDelegateObjectCommandHandler": {
+      "id": "Awp0ShowObjectCell",
+      "action": "LbrShowObjectListAction",
+      "activeWhen": {
+        "condition": "conditions.lbrOpenObjectCondition"
+      },
+      "visibleWhen": {
+        "condition": "conditions.lbrOpenObjectCondition"
+      }
+    }
+  },
+  "commandPlacements": {},
+  "actions": {
+    "Lbr0ShowObjectAction": {
+      "actionType": "Navigate",
+      "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+      "navigationParams": {
+        "uid": "{{ctx.selected.uid}}"
+      }
+    },
+    "LbrShowObjectListAction": {
+      "actionType": "Navigate",
+      "navigateTo": "lbr1_LibraryResultsSubLocation",
+      "navigationParams": {
+        "uid": "{{commandContext.vmo.uid}}",
+        "searchCriteria": "*",
+        "filter": "Lbr0LibraryElement.lbr0Ancestors=0/{{commandContext.vmo.uid}}~",
+        "nameToken": "lbr1.LibraryResultsSubLocation"
+      }
+    },
+    "Lbr0IsDirty": {
+      "actionType": "JSFunctionAsync",
+      "method": "isDirty",
+      "outputData": {
+        "dirty": "isDirty"
+      },
+      "events": {
+        "success": [
+          {
+            "condition": "!data.dirty",
+            "name": "libMgmt.Lbr0CheckEditInProgress"
+          },
+          {
+            "condition": "data.dirty",
+            "name": "libMgmt.Lbr0LeaveConfirmationSuccess"
+          }
+        ]
+      },
+      "deps": "js/editHandlerService"
+    },
+    "Lbr0CheckEditInProgress": {
+      "actionType": "JSFunction",
+      "method": "editInProgress",
+      "outputData": {
+        "editInProgress": "editInProgress"
+      },
+      "events": {
+        "success": [
+          {
+            "condition": "!data.editInProgress",
+            "name": "libMgmt.Lbr0ShowObjectAction"
+          },
+          {
+            "condition": "data.editInProgress",
+            "name": "libMgmt.Lbr0CancelEdits"
+          }
+        ]
+      },
+      "deps": "js/editHandlerService"
+    },
+    "Lbr0LeaveConfirmation": {
+      "actionType": "JSFunctionAsync",
+      "method": "leaveConfirmation",
+      "events": {
+        "success": [
+          {
+            "name": "libMgmt.Lbr0ShowObjectAction"
+          }
+        ]
+      },
+      "deps": "js/editHandlerService"
+    },
+    "Lbr0CancelEdits": {
+      "actionType": "JSFunction",
+      "method": "cancelEdits",
+      "events": {
+        "success": [
+          {
+            "name": "libMgmt.Lbr0ShowObjectAction"
+          }
+        ]
+      },
+      "deps": "js/editHandlerService"
+    }
+  },
+  "onEvent": [
+    {
+      "eventId": "libMgmt.Lbr0CheckEditInProgress",
+      "action": "Lbr0CheckEditInProgress"
+    },
+    {
+      "eventId": "libMgmt.Lbr0LeaveConfirmationSuccess",
+      "action": "Lbr0LeaveConfirmation"
+    },
+    {
+      "eventId": "libMgmt.Lbr0CancelEdits",
+      "action": "Lbr0CancelEdits"
+    },
+    {
+      "eventId": "libMgmt.Lbr0ShowObjectAction",
+      "action": "Lbr0ShowObjectAction"
+    }
+  ],
+  "conditions": {
+    "Lbr0ShowObjectActiveCondition": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "ctx.selected",
+            "$query": {
+              "$source": "modelType.typeHierarchyArray",
+              "$query": {
+                "$in": [
+                  "Lbr0Library"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "lbrOpenObjectCondition": {
+      "expression": "commandContext.vmo.type === 'Lbr0Library'"
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "grids": {
+        "assignmentFailuresGrid": {
+            "dataProvider": "assignmentFailuresDataProvider",
+            "columnProvider": "assignmentFailuresColumnProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "enablePinning": true,
+                "enableSorting": false
+            }
+         }
+    },
+    "dataProviders": {
+        "assignmentFailuresDataProvider": {
+            "dataProviderType": "Static",
+            "response": "{{subPanelContext.rows}}",
+            "totalFound": "{{subPanelContext.rows.length}}"
+        }
+    },
+    "columnProviders": {
+        "assignmentFailuresColumnProvider": {
+            "frozenColumnIndex": -1,
+            "columns": [ {
+                    "name": "object",
+                    "displayName": "{{i18n.object}}",
+                    "width": 350,
+                    "enableColumnMenu": false
+                },
+                {
+                    "name": "purpose",
+                    "displayName": "{{i18n.purpose}}",
+                    "width": 100,
+                    "enableColumnMenu": false
+                }, {
+                    "name": "assignedTo",
+                    "displayName": "{{i18n.assignedTo}}",
+                    "width": 450,
+                    "enableColumnMenu": false
+                }
+            ]
+        }
+    },
+    "i18n": {
+        "object": [ "NgpDataMgmtMessages" ],
+        "purpose": [ "NgpDataMgmtMessages" ],
+        "assignedTo": [ "NgpDataMgmtMessages" ]
+    }
+}

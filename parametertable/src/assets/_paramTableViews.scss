@@ -1,0 +1,52 @@
+/* Copyright 2019 Siemens Product Lifecycle Management Software Inc. */
+aw-parameter-view-table {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+div.aw-parameter-view-table {
+    position: relative;
+}
+
+div.aw-parameter-view-table,
+div.aw-parameter-view-table .aw-parameter-view-table-main-cols-flex,
+div.aw-parameter-view-table .aw-parameter-view-table-variable-cols-flex,
+div.aw-parameter-view-table .aw-parameter-view-table-row {
+    @include flexbox();
+    @include flex-direction(row);
+}
+
+div.aw-parameter-view-table {
+    max-height: 100%;
+    overflow: hidden;
+}
+
+
+.aw-comparisoncontext-list ul {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-left: 20px;
+}
+.aw-comparisoncontext-cell li {
+    max-width: 320px;
+}
+div.aw-comparisoncontext-taskbarContent {
+    margin-left: 10px;
+}
+span.aw-comparisoncontext-subTitle
+{
+    display: inline;
+    margin-bottom: 0px;
+    font-size: 12px;
+}
+span.aw-comparisoncontext-title
+{
+    font-size: 20px;
+}
+div.aw-parameter-view-table .aw-parameter-highlightDifference {
+    border-width: 1px;
+    border-style: solid;
+}

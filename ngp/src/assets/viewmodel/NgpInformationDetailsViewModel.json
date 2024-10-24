@@ -1,0 +1,75 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "commandContext": {
+            "cmdObjects": []
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "ports": {
+        "input_ngpInformationDetails": {
+            "onChangeAction": "onInputChange",
+            "syncObject": {}
+        }
+    },
+    "actions": {
+        "onInputChange": {
+            "actionType": "batchJob",
+            "steps": [{
+                    "action": "updateCmdContext"
+                },
+                {
+                    "action": "updateSelectedCtx"
+                }
+            ]
+        },
+        "updateCmdContext": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInViewModelUsingPath",
+            "inputData": {
+                "object": "{{data.commandContext}}",
+                "path": "cmdObjects",
+                "value": "{{ports.input_ngpInformationDetails.syncObject}}"
+            },
+            "outputData":{
+                "commandContext": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "updateSelectedCtx": {
+            "actionType": "JSFunction",
+            "method": "updateCtx",
+            "inputData": {
+                "name": "selected",
+                "value": "{{ports.input_ngpInformationDetails.syncObject[0]}}"
+            },
+            "deps": "js/appCtxService"
+        }
+    },
+    "editHandlers": {
+        "summaryPanelEditHandler": {
+            "context": "NONE",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "conditions":{
+        "hadValidContext":{
+            "expression":{
+                "$source":"data.commandContext.cmdObjects.length",
+                "$query":{
+                    "$gt":0
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,910 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "view-path": {
+            "type": "object"
+        },
+        "view-id": {
+            "type": "string"
+        },
+        "sub-panel-context": {
+            "type": "object"
+        },
+        "context-info": {
+            "type": "object"
+        },
+        "selection-data": {
+            "type": "object"
+        },
+        "disable-tab-counter": {
+            "type": "boolean"
+        },
+        "to-sort-by-client": {
+            "type": "boolean"
+        }
+    },
+    "ports": {
+        "EpDetails_inputObject": {
+            "onChangeAction": "handleInput",
+            "syncObject": {}
+        },
+        "EpDetailsTable_setSelection": {
+            "onChangeAction": "setSelectionFromPort",
+            "syncObject": {}
+        },
+        "EpDetailsTable_updateTabContentCountPort": {
+            "syncObject": {}
+        }
+    },
+    "data": {
+        "selectedMissingInSourcePart": [],
+        "messages": "{{subPanelContext.messages}}",
+        "isTableEditable": "{{subPanelContext.isTableEditable}}",
+        "isInputObjectAvailableInSubpanelContext": "{{subPanelContext.inputObject.uid}}",
+        "selectionData": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "isLoading": true,
+        "columnsData": {
+            "initialValues": {
+                "value": false
+            },
+            "meta": {}
+        }
+    },
+    "actions": {
+        "rowRenderByPropertyValue": {
+            "actionType": "JSFunction",
+            "method": "rowRenderByPropertyValue",
+            "inputData": {
+                "columns": "{{data.dataProviders.epDetailsTableDataProvider.columnConfig.columns}}",
+                "conditions": "{{data.subPanelContext.rowRenderByPropertyValue.conditions}}",
+                "classes": "{{data.subPanelContext.rowRenderByPropertyValue.classes}}"
+            },
+            "deps": "js/mfeTableService"
+        },
+        "handleInit": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "clearEpDetailsTableDataModel"
+                },
+                {
+                    "action": "loadFromSubPanelInput",
+                    "condition": "conditions.isSubpanelContextAvailable && !conditions.isSyncObjectAvailable"
+                }
+            ]
+        },
+        "loadFromSubPanelInput": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "startLoadingIndicator"
+                },
+                {
+                    "action": "saveInitInputToData"
+                },
+                {
+                    "action": "doGridDataProvider"
+                }
+            ]
+        },
+        "handleInput": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "isNewInputObjectAndExistingAreSame"
+                },
+                {
+                    "action": "startLoadingIndicator",
+                    "condition": "conditions.isNewInputObject"
+                },
+                {
+                    "action": "clearEpDetailsTableDataModel",
+                    "condition": "conditions.isNewInputObject"
+                },
+                {
+                    "action": "saveInputToData",
+                    "condition": "conditions.isNewInputObject"
+                },
+                {
+                    "action": "doGridDataProvider",
+                    "condition": "conditions.isNewInputObject"
+                }
+            ]
+        },
+        "handleLoadInputChange": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "saveSelectionFromPortToData",
+                    "condition": "conditions.isObjectToSelectAvailableInPort"
+                },
+                {
+                    "action": "startLoadingIndicator"
+                },
+                {
+                    "action": "clearEpDetailsTableDataModel"
+                },
+                {
+                    "action": "saveInputToData"
+                },
+                {
+                    "action": "doGridDataProvider"
+                }
+            ]
+        },
+        "saveSelectionFromPortToData": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": "{{ports.EpDetailsTable_setSelection.syncObject}}"
+            },
+            "outputData": {
+                "selectionFromPort": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "isSelectionFromPortAlreadySelected": {
+            "actionType": "JSFunction",
+            "method": "isObjectArraySubsetofOtherObjectArray",
+            "inputData": {
+                "newInput": "{{data.selectionFromPort}}",
+                "existingInput": "{{data.dataProviders.epDetailsTableDataProvider.selectedObjects}}"
+            },
+            "outputData": {
+                "selectionFromPortAlreadySelected": ""
+            },
+            "deps": "js/epTableService"
+        },
+        "clearValueOfSelectionFromPortAsSelectionIsDone": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": ""
+            },
+            "outputData": {
+                "selectionFromPort": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "getLoadedObjectCount": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInAtomicData",
+            "inputData": {
+                "targetObj": "{{subPanelContext}}",
+                "sourceObj": {
+                    "contentCount": "{{data.dataProviders.epDetailsTableDataProvider.viewModelCollection.loadedVMObjects.length}}"
+                }
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "isNewInputObjectAndExistingAreSame": {
+            "actionType": "JSFunction",
+            "method": "isObjectArraySubsetofOtherObjectArray",
+            "inputData": {
+                "objectArray1": "{{data.inputObject}}",
+                "objectArray2": "{{ports.EpDetails_inputObject.syncObject}}"
+            },
+            "outputData": {
+                "areSyncObjectAndCurrentInputEqual": ""
+            },
+            "deps": "js/epTableService"
+        },
+        "initRowSelectionAndUpdateDisplayNameQuantity": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "clearSelectionFromCommandContext",
+                    "condition": "!data.selectionFromPort.uid && !data.selectionFromPort[0].uid && !data.dataProviders.epDetailsTableDataProvider.selectedObjects.length > 0"
+                },
+                {
+                    "action": "updateCountInCommandContext",
+                    "condition": "!data.selectionFromPort.uid && !data.selectionFromPort[0].uid"
+                },
+                {
+                    "action": "setSelection",
+                    "condition": "data.selectionFromPort.uid || data.selectionFromPort[0].uid"
+                },
+                {
+                    "action": "setSelectionFromSubPanelContextForFindInPending",
+                    "condition": "props.subPanelContext.findIn.selectedFindInPending"
+                },
+                {
+                    "action": "getLoadedObjectCount",
+                    "condition": "!conditions.isCounterForTabDisabled"
+                },
+                {
+                    "action": "updateTabDisplayNameQuantity",
+                    "condition": "!conditions.isCounterForTabDisabled"
+                },
+                {
+                    "action": "updateTabContentCount",
+                    "condition": "!conditions.isCounterForTabDisabled"
+                },
+                {
+                    "action": "stopLoadingIndicator"
+                },
+                {
+                    "action": "isSelectionFromPortAlreadySelected"
+                },
+                {
+                    "action": "clearValueOfSelectionFromPortAsSelectionIsDone",
+                    "condition": "data.selectionFromPortAlreadySelected === true"
+                }
+            ]
+        },
+        "clearEpDetailsTableDataModel": {
+            "actionType": "JSFunction",
+            "method": "emptyDataProvider",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.epDetailsTableDataProvider}}"
+            },
+            "deps": "js/mfeTableService"
+        },
+        "startLoadingIndicator": {
+            "actionType": "JSFunction",
+            "method": "setLoadingIndicator",
+            "inputData": {
+                "isLoading": true
+            },
+            "outputData": {
+                "isLoading": ""
+            },
+            "deps": "js/mfeMessagesService"
+        },
+        "stopLoadingIndicator": {
+            "actionType": "JSFunction",
+            "method": "setLoadingIndicator",
+            "inputData": {
+                "isLoading": false
+            },
+            "outputData": {
+                "isLoading": ""
+            },
+            "deps": "js/mfeMessagesService"
+        },
+        "saveInputToData": {
+            "actionType": "JSFunction",
+            "method": "getValidInputForDetailsTable",
+            "inputData": {
+                "portsEpDetailsInputObject": "{{ports.EpDetails_inputObject.syncObject}}",
+                "typesToExclude": "{{subPanelContext.excludeInputTypes}}"
+            },
+            "outputData": {
+                "inputObject": ""
+            },
+            "deps": "js/epTableService"
+        },
+        "saveInitInputToData": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": "{{subPanelContext.inputObject}}"
+            },
+            "outputData": {
+                "inputObject": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "doGridDataProvider": {
+            "actionType": "dataProvider",
+            "method": "epDetailsTableDataProvider"
+        },
+        "createColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "createColumns",
+            "inputData": {
+                "preferenceName": "{{subPanelContext.preferenceName}}",
+                "dataProvider": "{{data.dataProviders.epDetailsTableDataProvider}}",
+                "columnProvider": {
+                    "enableSorting": true,
+                    "clientColumns": "{{subPanelContext.customColumns}}",
+                    "alwaysVisibleColumns": "{{props.subPanelContext.alwaysVisibleColumns}}"
+                },
+                "additionalPolicyObjects": "",
+                "tableCmdColumnPropName": "{{subPanelContext.tableCommandColumnName}}"
+            },
+            "outputData": {
+                "dataProviders.epDetailsTableDataProvider.columnConfig": "columnConfig",
+                "dataProviders.epDetailsTableDataProvider.policy": "policy"
+            },
+            "deps": "js/mfeTableService"
+        },
+        "addIconColumn": {
+            "actionType": "JSFunction",
+            "method": "addIconColumn",
+            "inputData": {
+                "columns": "{{data.dataProviders.epDetailsTableDataProvider.columnConfig.columns}}"
+            },
+            "outputData": {
+                "dataProviders.epDetailsTableDataProvider.columnConfig.columns": ""
+            },
+            "deps": "js/mfeTableService"
+        },
+        "loadColumnsData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadColumnsData",
+            "inputData": {
+                "objUid": "{{data.inputObject?data.inputObject.uid:data.inputObject}}",
+                "loadInputObject": "{{subPanelContext.loadInputObject}}",
+                "toSortByClient": "{{props.toSortByClient}}"
+            },
+            "outputData": {
+                "rowsObjects": "rowsObjects",
+                "totalRows": "totalRows"
+            },
+            "events": {
+                "success": [ {
+                        "name": "epDetailsTableDataProvider.dataProviderLoaded"
+                    }
+
+                ]
+            },
+            "deps": "js/epTableService"
+        },
+        "getSortedNodesIfSortCriteriaGiven": {
+            "actionType": "JSFunction",
+            "method": "getSortedNodesIfSortCriteriaGiven",
+            "inputData": {
+                "loadedTreeNodes": "{{data.rowsObjects}}",
+                "sortCriteria": "{{data.columnProviders.epDetailsColumnProvider.sortCriteria}}"
+            },
+            "outputData": {
+                "loadedTreeNodes": "loadedTreeNodes",
+                "isLoading": false
+            },
+            "deps": "js/epTableService"
+        },
+        "setInputAndSelectionToMyContext": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "areSyncObjectsAndSelectedObjectsSame"
+                },
+                {
+                    "action": "setCommandContext"
+                },
+                {
+                    "action": "updateSelectionPort",
+                    "condition": "conditions.updatePortCondition"
+                },
+                {
+                    "action": "setSelectedObjectInOccContext"
+                }
+            ]
+        },
+        "areSyncObjectsAndSelectedObjectsSame": {
+            "actionType": "JSFunction",
+            "method": "isObjectArraySubsetofOtherObjectArray",
+            "inputData": {
+                "objectArray1": "{{props.selectionData.selected}}",
+                "objectArray2": "{{data.selectionFromPort}}"
+            },
+            "outputData": {
+                "areSyncObjectAndSelectionEqual": ""
+            },
+            "deps": "js/epTableService"
+        },
+        "setSelectedObjectInOccContext": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInAtomicData",
+            "inputData": {
+                "targetAtomicData": "{{subPanelContext.occContext}}",
+                "updatedValues": {
+                    "selectedModelObjects": "{{data.dataProviders.epDetailsTableDataProvider.selectedObjects}}"
+                }
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "setCommandContext": {
+            "actionType": "JSFunction",
+            "method": "setCommandContext",
+            "inputData": {
+                "tabModel": "{{subPanelContext.tabContext}}",
+                "commandContext": {
+                    "inputObject": "{{data.inputObject}}",
+                    "selection": "{{data.dataProviders.epDetailsTableDataProvider.selectedObjects}}"
+                }
+            },
+            "deps": "js/mfeContentPanelUtil"
+        },
+        "updateSelectionPort": {
+            "actionType": "Sync",
+            "inputData": {
+                "port": "EpDetailsTable_setSelection",
+                "syncObject": "{{data.dataProviders.epDetailsTableDataProvider.selectedObjects}}"
+            }
+        },
+        "clearSelectionFromCommandContext": {
+            "actionType": "JSFunction",
+            "method": "setCommandContext",
+            "inputData": {
+                "tabModel": "{{subPanelContext.tabContext}}",
+                "commandContext": {
+                    "inputObject": "{{data.inputObject}}",
+                    "selection": "{{[]}}",
+                    "tableId": "EpDetailsTable"
+                }
+            },
+            "deps": "js/mfeContentPanelUtil"
+        },
+        "updateCountInCommandContext": {
+            "actionType": "JSFunction",
+            "method": "setCommandContext",
+            "inputData": {
+                "tabModel": "{{subPanelContext.tabContext}}",
+                "commandContext": {
+                    "contentCount": "{{data.dataProviders.epDetailsTableDataProvider.viewModelCollection.loadedVMObjects.length}}",
+                    "tableId": "EpDetailsTable"
+                }
+            },
+            "deps": "js/mfeContentPanelUtil"
+        },
+        "initTableRowsSelectionBasedOnSaveEvent": {
+            "actionType": "JSFunction",
+            "method": "initTableRowsSelectionBasedOnSaveEvents",
+            "inputData": {
+                "subPanelContext": "{{subPanelContext}}",
+                "commandContext": {
+                    "inputObject": "{{data.inputObject}}",
+                    "selection": "{{[]}}",
+                    "contentCount": "{{data.dataProviders.epDetailsTableDataProvider.viewModelCollection.loadedVMObjects.length}}"
+                },
+                "saveEvents": "{{data.eventData}}"
+            },
+            "deps": "js/epTableService"
+        },
+        "updateTabDisplayNameQuantity": {
+            "actionType": "JSFunction",
+            "method": "setTabDisplayNameWithQuantity",
+            "inputData": {
+                "tabData": "{{subPanelContext}}"
+            },
+            "outputData": {
+                "tabData": ""
+            },
+            "deps": "js/epTabsService"
+        },
+        "handleSaveEvents": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "handleAddRemoveSaveEvents"
+                },
+                {
+                    "action": "updateSelectionFromPortToSelectionFromSave"
+                },
+                {
+                    "action": "setSelection",
+                    "condition": "data.selectionFromPort.uid || data.selectionFromPort[0].uid"
+                },
+                {
+                    "action": "initTableRowsSelectionBasedOnSaveEvent"
+                },
+                {
+                    "action": "updateTabDisplayNameQuantity",
+                    "condition": "!conditions.isCounterForTabDisabled"
+                },
+                {
+                    "action": "updateTabContentCount",
+                    "condition": "!conditions.isCounterForTabDisabled"
+                },
+                {
+                    "action": "setCommandContext"
+                },
+                {
+                    "action": "updateLoadedObjectToContextInfoAfterSaveEvent"
+                },
+                {
+                    "action": "isSelectionFromPortAlreadySelected"
+                },
+                {
+                    "action": "clearValueOfSelectionFromPortAsSelectionIsDone",
+                    "condition": "data.selectionFromPortAlreadySelected === true"
+                }
+            ]
+        },
+        "handleAddRemoveSaveEvents": {
+            "actionType": "JSFunction",
+            "method": "handleAddRemoveSaveEvents",
+            "inputData": {
+                "saveEvents": "{{parameters.eventData}}",
+                "relationName": "{{subPanelContext.relationName}}",
+                "dataProvider": "{{data.dataProviders.epDetailsTableDataProvider}}",
+                "inputObjectUid": "{{data.inputObject.uid}}"
+            },
+            "outputData": {
+                "objectsToBeSelected": ""
+            },
+            "deps": "js/epTableService"
+        },
+        "updateSelectionFromPortToSelectionFromSave": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": "{{data.objectsToBeSelected}}"
+            },
+            "outputData": {
+                "selectionFromPort": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "saveAndArrangeColumns": {
+            "actionType": "JSFunction",
+            "method": "saveResizedColumnsWidth",
+            "inputData": {
+                "preferenceName": "{{subPanelContext.preferenceName}}",
+                "columns": "{{fields.columnsData.columns}}",
+                "dataProvider": "{{data.dataProviders.epDetailsTableDataProvider}}"
+            },
+            "outputData": {
+                "dataProviders.epDetailsTableDataProvider.columnConfig.columns": ""
+            },
+            "deps": "js/mfeTableService"
+        },
+        "registerPolicy": {
+            "actionType": "JSFunction",
+            "method": "register",
+            "inputData": {
+                "name": "EpDetailsTable",
+                "policyObj": "{{data.dataProviders.epDetailsTableDataProvider.policy}}"
+            },
+            "deps": "js/mfePolicyService"
+        },
+        "unregisterPolicy": {
+            "actionType": "JSFunction",
+            "method": "unregister",
+            "inputData": {
+                "name": "EpDetailsTable"
+            },
+            "deps": "js/mfePolicyService"
+        },
+        "createColumnsAndRegisterPolicy": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "createColumns"
+                },
+                {
+                    "action": "rowRenderByPropertyValue",
+                    "condition": "props.subPanelContext.rowRenderByPropertyValue"
+                },
+                {
+                    "action": "registerPolicy"
+                },
+                {
+                    "action": "renderCutIndicationWithDashedOutline"
+                },
+                {
+                    "action": "addIconColumn"
+                }
+            ]
+        },
+        "loadColumnDataAndContextInfo": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "loadColumnsData"
+                },
+                {
+                    "action": "getSortedNodesIfSortCriteriaGiven"
+                },
+                {
+                    "action": "updateLoadedObjectToContextInfo"
+                }
+            ]
+        },
+        "clientTableRefresh": {
+            "actionType": "JSFunction",
+            "method": "refreshTable",
+            "inputData": {
+                "tableId": "EpDetailsTable"
+            },
+            "deps": "js/mfeTableService"
+        },
+        "clientTableReload": {
+            "actionType": "JSFunction",
+            "method": "reloadTable",
+            "inputData": {
+                "tableId": "EpDetailsTable"
+            },
+            "deps": "js/mfeTableService"
+        },
+        "updateTabContentCount": {
+            "actionType": "Sync",
+            "inputData": {
+                "port": "EpDetailsTable_updateTabContentCountPort",
+                "syncObject": {
+                    "tabName": "{{data.tabData.name}}",
+                    "tabKey": "{{data.tabData.tabKey}}",
+                    "namePrefix": "{{data.tabData.namePrefix}}"
+                }
+            }
+        },
+        "setSelection": {
+            "actionType": "JSFunction",
+            "method": "setSelection",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.epDetailsTableDataProvider}}",
+                "objectsToSelect": "{{data.selectionFromPort}}",
+                "unselectIfEmpty": true
+            },
+            "deps": "js/mfeSyncUtils"
+        },
+        "setSelectionFromPort": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "saveSelectionFromPortToData"
+                },
+                {
+                    "action": "setSelection"
+                }
+            ]
+        },
+        "checkCellForEdit": {
+            "actionType": "JSFunction",
+            "method": "checkAutoRevise",
+            "inputData": {
+                "vmo": "{{parameters.eventData.vmo}}"
+            },
+            "deps": "js/epReviseHelper"
+        },
+        "updateLoadedObjectToContextInfo": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInAtomicData",
+            "inputData": {
+                "target": "{{props.contextInfo}}",
+                "updatedValue": {
+                    "loadedObjects": "{{data.loadedTreeNodes}}"
+                }
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "updateLoadedObjectToContextInfoAfterSaveEvent": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInAtomicData",
+            "inputData": {
+                "target": "{{props.contextInfo}}",
+                "updatedValue": {
+                    "loadedObjects": "{{data.dataProviders.epDetailsTableDataProvider.viewModelCollection.loadedVMObjects}}"
+                }
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "updateSelectedObjectToContextInfo": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInAtomicData",
+            "inputData": {
+                "target": "{{props.contextInfo}}",
+                "updatedValue": {
+                    "selectedObjects": "{{props.selectionData.selected}}"
+                }
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "setSelectionFromSubPanelContextForFindIn": {
+            "actionType": "JSFunction",
+            "method": "setSelection",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.epDetailsTableDataProvider}}",
+                "objectsToSelect": "{{props.subPanelContext.findIn.selectedFindIn}}",
+                "unselectIfEmpty": true
+            },
+            "deps": "js/mfeSyncUtils"
+        },
+        "setSelectionFromSubPanelContextForFindInPending": {
+            "actionType": "JSFunction",
+            "method": "setSelection",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.epDetailsTableDataProvider}}",
+                "objectsToSelect": "{{props.subPanelContext.findIn.selectedFindInPending}}",
+                "unselectIfEmpty": true
+            },
+            "deps": "js/mfeSyncUtils"
+        },
+        "renderCutIndicationWithDashedOutline": {
+            "actionType": "JSFunction",
+            "method": "renderCutIndicationWithDashedOutline",
+            "inputData": {
+                "columns": "{{data.dataProviders.epDetailsTableDataProvider.columnConfig.columns}}"
+            },
+            "deps": "js/epTableService"
+        },
+        "removeExistingCutIndication": {
+            "actionType": "JSFunction",
+            "method": "removeExistingCutIndication",
+            "deps": "js/epCutCopyService"
+        },
+        "destroy": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "unregisterPolicy"
+                },
+                {
+                    "action": "removeExistingCutIndication"
+                }
+            ]
+        },
+        "updateCellPropNonEditable": {
+            "actionType": "JSFunction",
+            "method": "updateCellPropNonEditable",
+            "inputData": {
+                "eventData": "{{parameters.eventData}}",
+                "nonEditableProps": "{{subPanelContext.nonEditableProps}}"
+            },
+            "deps": "js/epTableService"
+        }
+    },
+    "columnProviders": {
+        "epDetailsColumnProvider": {
+            "loadColumnAction": "createColumnsAndRegisterPolicy",
+            "columns": "{{epDetailsTableDataProvider.columnConfig.columns}}",
+            "resetColumnAction": "saveAndArrangeColumns",
+            "saveColumnAndLoadAction": "saveAndArrangeColumns",
+            "frozenColumnIndex": -1
+        }
+    },
+    "dataProviders": {
+        "epDetailsTableDataProvider": {
+            "action": "loadColumnDataAndContextInfo",
+            "response": "{{data.loadedTreeNodes}}",
+            "totalFound": "{{data.totalRows}}",
+            "selectionModelMode": "multiple",
+            "editContext": "{{subPanelContext.editContext}}",
+            "commandsAnchor": "{{subPanelContext.epDetailsTableCommandAnchor ? subPanelContext.epDetailsTableCommandAnchor:''}}",
+            "inputData": {
+                "selectionData": "{{props.selectionData}}"
+            }
+        }
+    },
+    "grids": {
+        "EpDetailsTable": {
+            "dataProvider": "epDetailsTableDataProvider",
+            "columnProvider": "epDetailsColumnProvider",
+            "addIconColumn": false,
+            "enableArrangeMenu": "{{subPanelContext.enableArrangeColumn}}",
+            "gridOptions": {
+                "enableSaveSortCriteria": false
+            }
+        }
+    },
+    "conditions": {
+        "isNewInputObject": {
+            "expression": "data.areSyncObjectAndCurrentInputEqual === false"
+        },
+        "updatePortCondition": {
+            "expression": "data.areSyncObjectAndSelectionEqual === false"
+        },
+        "hasInput": {
+            "expression": "data.inputObject && data.inputObject.uid"
+        },
+        "hasAssignments": {
+            "expression": "data.dataProviders.epDetailsTableDataProvider.viewModelCollection.loadedVMObjects.length > 0"
+        },
+        "hasNoAssignments": {
+            "expression": "data.dataProviders.epDetailsTableDataProvider.noResults"
+        },
+        "isLoading": {
+            "expression": "data.isLoading === true && conditions.hasInput"
+        },
+        "noAssigned": {
+            "expression": "data.isLoading === false && conditions.hasInput && conditions.hasNoAssignments"
+        },
+        "showTable": {
+            "expression": "data.isLoading === false && conditions.hasInput && conditions.hasAssignments"
+        },
+        "isTableEditable": {
+            "expression": "subPanelContext.isTableEditable !== 'false'"
+        },
+        "isSubpanelContextAvailable": {
+            "expression": "subPanelContext.inputObject && subPanelContext.inputObject.uid"
+        },
+        "isSyncObjectAvailable": {
+            "expression": "ports.EpDetails_inputObject.syncObject && ports.EpDetails_inputObject.syncObject.uid"
+        },
+        "subPanelContextHasInputObject": {
+            "expression": "subPanelContext.inputObject.uid"
+        },
+        "isSelectedObjectPresentInEventData": {
+            "expression": "data.eventData.selectedObjects.length > 0"
+        },
+        "isCounterForTabDisabled": {
+            "expression": "props.disableTabCounter === true"
+        }
+    },
+    "onEvent": [ {
+            "eventId": "epDetailsTableDataProvider.selectionChangeEvent",
+            "action": "setInputAndSelectionToMyContext"
+        },
+        {
+            "eventId": "ep.multipleAddRemoveEvents",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            },
+            "action": "handleSaveEvents"
+        },
+        {
+            "eventId": "ep.deleteEvents",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            },
+            "action": "handleSaveEvents"
+        },
+        {
+            "eventId": "EpDetailsTable.plTable.cellNotEditable",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            },
+            "action": "checkCellForEdit",
+            "condition": "conditions.isTableEditable"
+        },
+        {
+            "eventId": "ep.sequenceChanged",
+            "action": "clientTableReload"
+        },
+        {
+            "eventId": "ep.allocationIndicationEvents",
+            "action": "clientTableRefresh"
+        },
+        {
+            "eventId": "epObjectPropertyCache.ImpactHandledObjectsUpdated",
+            "action": "clientTableRefresh"
+        },
+        {
+            "eventId": "epDetailsTableDataProvider.dataProviderLoaded",
+            "action": "initRowSelectionAndUpdateDisplayNameQuantity"
+        },
+        {
+            "eventId": "epDetailsTableDataProvider.modelObjectsUpdated",
+            "action": "initRowSelectionAndUpdateDisplayNameQuantity"
+        },
+        {
+            "eventId": "epObjectPropertyCache.inputObjectForSelectedVmoUpdated",
+            "action": "clientTableRefresh"
+        },
+        {
+            "eventId": "ep.postProductVariantChanged",
+            "action": "clientTableReload"
+        },
+        {
+            "eventId": "EpDetailsTable.cellStartEdit",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            },
+            "action": "updateCellPropNonEditable"
+        }
+    ],
+    "lifecycleHooks": {
+        "onMount": "handleInit",
+        "onUnmount": "destroy",
+        "onUpdate": [ {
+                "action": "clientTableRefresh",
+                "observers": [
+                    "props.subPanelContext.sharedSelectionData.isIndicationToggleOn"
+                ]
+            },
+            {
+                "action": "clientTableRefresh",
+                "observers": [
+                    "props.subPanelContext.sharedSelectionData.isAllocationIndicationOn"
+                ]
+            },
+            {
+                "action": "setSelectionFromSubPanelContextForFindIn",
+                "observers": [
+                    "props.subPanelContext.findIn.selectedFindIn"
+                ]
+            },
+            {
+                "action": "handleLoadInputChange",
+                "observers": [
+                    "props.subPanelContext.loadInputObject"
+                ]
+            },
+            {
+                "action": "saveAndArrangeColumns",
+                "observers": [ "fields.columnsData.columns" ]
+            },
+            {
+                "action": "doGridDataProvider",
+                "observers": [
+                    "props.subPanelContext.reloadTable"
+                ]
+            }
+        ]
+    }
+}

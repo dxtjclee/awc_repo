@@ -1,0 +1,68 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "actions": {
+        "clearPWASelection": {
+            "actionType": "JSFunction",
+            "method": "clearPWASelection",
+            "deps": "js/Att1ConfigureVariantService"
+        }
+    },
+    "data": {
+        "_sublocation": {
+            "name": "com.siemens.splm.client.attrtarget.paramProjectSubLocation",
+            "label": "Declarative Navigate",
+            "clientScopeURI": "Att1ProjectNavigation",
+            "nameToken": "com.siemens.splm.client.attrtarget.paramProjectSubLocation:Att1ParamProjectSubLocation",
+            "context": {
+                "search": {
+                    "provider": "Att1ParametersProvider",
+                    "sortType": "Alphabetical"
+                }
+            },
+            "viewBase": "Att1ParamProjectNavigation",
+            "defaultDisplayMode": "TreeSummaryView",
+            "viewModes": {
+                "TreeView": {
+                    "primaryWorkArea": "tree",
+                    "secondaryWorkArea": false
+                },
+                "TreeSummaryView": {
+                    "primaryWorkArea": "tree",
+                    "secondaryWorkArea": true
+                }
+            },
+            "policy": {
+                "types": [ {
+                    "name": "BusinessObject",
+                    "properties": [ {
+                        "name": "object_string"
+                    } ]
+                } ]
+            }
+        },
+        "subPanelHeaderData": {
+            "initialValues": {
+                "activeRevisionRule":"",
+                "activeVariantRule":""
+            },
+            "meta": {}
+        }
+    },
+    "ctx":{
+        "xrtSummaryContextObject":{
+            "type" :"object"
+        },
+        "locationContext":{
+            "type" :"object"
+        }
+    },
+    "lifecycleHooks": {
+    },
+    "onEvent": [
+        {
+            "eventId": "Att1ParamProjectNavigation.clearPWASelection",
+            "action": "clearPWASelection"
+        }
+    ]
+}

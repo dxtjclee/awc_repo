@@ -1,0 +1,3 @@
+<ep-boe-tree-table exist-when="!conditions.isShowFullBOEInResourcesEnabled" view-id="AssemblyPlanningBoeTree_EpBoeTreeTable" sub-panel-context="{...data.boeTreeContext, ...props.subPanelContext}"></ep-boe-tree-table>
+<ep-boe-tree-table exist-when="conditions.isShowFullBOEInResourcesEnabled && conditions.isPlantAvailable" view-id="AssemblyPlanningBoeTree_EpBoeTreeTable" sub-panel-context="{...data.boeTreeRootNodeContext, ...props.subPanelContext}"></ep-boe-tree-table>
+<mfe-message sub-panel-context="data.messages.noBoeStructure" exist-when="conditions.isShowFullBOEInResourcesEnabled && !conditions.isPlantAvailable"></mfe-message>

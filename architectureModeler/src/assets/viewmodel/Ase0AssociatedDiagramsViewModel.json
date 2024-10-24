@@ -1,0 +1,75 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "actions": {
+        "navigateDiagramsPanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "awPanel.navigate",
+                        "eventData": {
+                            "destPanelId": "showAssociatedDiagramsSub",
+                            "recreatePanel": "false"
+                        }
+                    }
+                ]
+            }
+        },
+        "closeDiagramsPanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            }
+        },
+
+        "openNewDiagram": {
+            "actionType": "Navigate",
+            "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+            "navigationParams": {
+                "uid": "{{data.eventMap['CreateDiagramSub.CreateDiagramProcessSuccess'].diagramUid}}",
+                "spageId": "{{data.i18n.architectureModelerPageTitle}}"
+            }
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "complete.subPanel",
+            "criteria": {
+                "source": "createDiagramSub"
+            },
+            "action": "navigateDiagramsPanel"
+        },
+        {
+            "eventId": "Ase0ArchitecturePrimary.contentUnloaded",
+            "action": "closeDiagramsPanel"
+        },
+        {
+            "eventId":"CreateDiagramSub.CreateDiagramProcessSuccess",
+            "cacheEventData": true,
+            "action":"openNewDiagram",
+            "condition": "toOpen === true"
+        }
+    ],
+    "i18n": {
+        "diagramsPanelTitle": [
+            "ArchitectureModelerConstants"
+        ],
+        "architectureModelerPageTitle": [
+            "ArchitectureModelerConstants"
+        ]
+    },
+    "data": {
+        "activeView": "showAssociatedDiagramsSub",
+        "isLicence":"{{ctx.panelContext.pageState.hasSystemModelerLicense}}"
+    }
+}

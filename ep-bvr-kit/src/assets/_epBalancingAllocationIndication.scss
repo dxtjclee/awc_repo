@@ -1,0 +1,59 @@
+// @<COPYRIGHT>@
+// ==================================================
+// Copyright 2023.
+// Siemens Product Lifecycle Management Software Inc.
+// All Rights Reserved.
+// ==================================================
+// @<COPYRIGHT>@
+
+.aw-epBalancingComparePanel-container {
+    gap: $margin_normal;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    overflow-y: auto;
+
+    .aw-epBalancingComparePanel-heading {
+        padding: rem-calc(12);
+        height: rem-calc(40);
+        font-size: $fontsize_large;
+        font-weight: 600;
+        position: sticky;
+        top: 0;
+    }
+
+    .aw-epBalancingComparePanel-propertyRow {
+        display: contents;
+
+        .aw-epBalancingComparePanel-propertyName {
+            font-weight: 600;
+            height: rem-calc(25);
+        }
+
+        >div {
+            padding: 0 rem-calc(12);
+        }
+    }
+
+    .aw-epBalancingComparePanel-contentAndOr {
+        font-style: italic;
+        font-weight: bold;
+    }
+}
+
+.aw-epBalancingComparePanel-multipleOverrideWarning {
+    height: rem-calc(30);
+    display: flex;
+    padding: $padding_small $padding_normal;
+    box-sizing: border-box;
+    align-items: center;
+
+    .aw-epBalancingComparePanel-multipleOverrideWarningIcon {
+        height: rem-calc(16);
+        width: rem-calc(16);
+        margin-right: $margin_normal;
+    }
+}
+
+.aw-allocationIndication-assignedPopup {
+    padding: $padding_small;
+}

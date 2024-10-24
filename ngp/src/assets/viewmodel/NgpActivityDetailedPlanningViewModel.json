@@ -1,0 +1,147 @@
+{
+    "schemaVersion": "1.0.0",
+    "ports":{
+        "scopeObject_input":{
+            "syncObject":{},
+            "onChangeAction":"onInputChange"
+        }
+    },
+    "data":{
+        "panelsInfo":{
+            "contentElementsPanelData":{
+                "tabs":[{
+                    "name": "{{i18n.processesTabTitle}}",
+                    "tabKey": "NgpContentElementsTable",
+                    "input": null,
+                    "tableSettings":{
+                        "columnConfigPreference":"NGPWorkUnitListViewColumns",
+                        "tableObjectsBaseTypes": ["Mpr0ProcessElementBase"],
+                        "fixedColumns":["object_string"],
+                        "clientColumns":[
+                            {
+                                "propertyName": "MasterStatus",
+                                "displayName": "{{i18n.master}}",
+                                "typeName": "MasterStatus",
+                                "drawnWidth": 55,
+                                "alternateID":"MasterStatus.MasterStatus"
+                            },
+                            {
+                                "propertyName": "CloneStatus",
+                                "displayName": "{{i18n.clone}}",
+                                "typeName": "CloneStatus",
+                                "drawnWidth": 55,
+                                "alternateID":"CloneStatus.CloneStatus"
+                            },
+                            {
+                                "propertyName":"hasDependency",
+                                "displayName": "{{i18n.externalPredecessors}}",
+                                "typeName": "hasDependency",
+                                "drawnWidth": 55,
+                                "alternateID":"hasDependency.hasDependency"
+                            },
+                            {
+                                "propertyName":"successorDependency",
+                                "displayName": "{{i18n.externalSuccessors}}",
+                                "typeName": "successorDependency",
+                                "drawnWidth": 55,
+                                "alternateID":"successorDependency.successorDependency"
+                            },
+                            {
+                                "propertyName":"mismatchOrMissing",
+                                "displayName": "{{i18n.mismatchOrMissing}}",
+                                "typeName": "mismatchOrMissing",
+                                "drawnWidth": 55,
+                                "alternateID":"mismatchOrMissing.mismatchOrMissing"
+                            }
+                        ]
+                    },
+                    "noContentElementsMessage":[
+                        {
+                            "iconId":"miscDropIndication",
+                            "className":"aw-ngp-emptyContentElementsDropIndication"
+                        },
+                        {
+                            "text":"{{i18n.emptyActivityContentElementsMsg}}",
+                            "iconId":"cmdAdd",
+                            "className":"aw-ngp-emptyContentElementsAddIndication"
+                        }
+                    ],
+                    "tablePolicy": {
+                        "types": [ {
+                            "name": "Mpr0ProcessElementBase",
+                            "properties": [ {
+                                    "name": "mpr0numOfCrossActivitySuccs"
+                                },
+                                {
+                                    "name": "mpr0numOfCrossActivityPreds"
+                                }
+                            ]
+                        }]
+                    }
+                }]
+            },
+            "contentElementDetailsPanelData":{
+                "tabs":[{
+                    "name": "{{i18n.informationSubpageTitle}}",
+                    "tabKey": "MfeLoadingMessage",
+                    "input": null
+                },
+                {
+                    "name": "{{i18n.partsTabTitle}}",
+                    "tabKey": "NgpAssignedParts",
+                    "input": null,
+                    "invalidInputMsg":[{
+                        "text":"{{i18n.selectProcessToSeeAssignments}}"
+                    }]
+                },
+                {
+                    "name": "{{i18n.featuresTabTitle}}",
+                    "tabKey": "NgpAssignedFeatures",
+                    "input": null,
+                    "invalidInputMsg":[{
+                        "text":"{{i18n.selectProcessToSeeAssignments}}"
+                    }]
+                },
+                {
+                    "name": "{{i18n.operationsTabTitle}}",
+                    "tabKey": "NgpProcessOperationsTable",
+                    "input": null
+                },
+                {
+                    "name": "{{i18n.dependenciesTabTitle}}",
+                    "tabKey": "NgpProcessDependenciesTable",
+                    "input": null
+                }]
+            }
+        }
+    },
+    "actions":{
+        "onInputChange":{
+            "actionType":"JSFunction",
+            "method":"getValueInViewModel",
+            "inputData":{
+                "value":"{{ports.scopeObject_input.syncObject}}"
+            },
+            "outputData":{
+                "scopeObject":"",
+                "panelsInfo.contentElementsPanelData.tabs.0.input":""
+            },
+            "deps":"js/mfeViewModelUtils"
+        }
+    },
+    "i18n":{
+        "partsTabTitle":["NgpDetailedPlanningMessages"],
+        "featuresTabTitle":["NgpDetailedPlanningMessages"],
+        "processesTabTitle":["NgpDetailedPlanningMessages"],
+        "operationsTabTitle":["NgpDetailedPlanningMessages"],
+        "informationSubpageTitle":["NgpSubpagesMessages"],
+        "dependenciesTabTitle":["NgpDetailedPlanningMessages"],
+        "emptyActivityContentElementsMsg":["NgpDetailedPlanningMessages"],
+        "selectProcessToSeeAssignments":["NgpDetailedPlanningMessages"],
+        "master": [ "NgpCloneMgmtMessages" ],
+        "clone": [ "NgpCloneMgmtMessages" ],
+        "externalPredecessors": ["NgpTableMessages"],
+        "externalSuccessors": ["NgpTableMessages"],
+        "mismatchOrMissing": ["NgpTableMessages"]
+    }
+}

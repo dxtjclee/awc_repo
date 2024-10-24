@@ -1,0 +1,118 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "getQPListOnReveal": {
+            "actionType": "dataProvider",
+            "method": "getQualificationProfileList"
+        },
+        "searchQualificationProfile": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "clientScopeURI": ""
+                },
+                "inflateProperties": false,
+                "saveColumnConfigData": {},
+                "searchInput": {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Tq0TrainingQualProvider",
+                    "searchCriteria": {
+                        "searchContentType": "Tq0QualificationProfile",
+                        "tq0IsActive": "true"
+                    },
+                    "searchSortCriteria": [ {
+                        "fieldName": "object_name",
+                        "sortDirection": "ASC"
+                    } ]
+                }
+            },
+            "outputData": {
+                "searchResults": "{{json:searchResultsJSON}}",
+                "totalFound": "totalFound",
+                "totalLoaded": "totalLoaded"
+            },
+            "deps": "js/awSearchService"
+        },
+        "assign": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-09-DataManagement",
+            "method": "setProperties",
+            "inputData": {
+                "info": "{{function:addProfileToQPG}}"
+            },
+            "events": {
+                "success": [ {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{ctx.selected}}"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/tq0AddProfilesToQPGPanelService"
+        },
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            }
+        }
+    },
+    "data": {
+        "filterBox": {
+            "displayName": "{{i18n.filterBox}}",
+            "type": "STRING",
+            "dbValue": ""
+        }
+    },
+    "dataProviders": {
+        "getQualificationProfileList": {
+            "action": "searchQualificationProfile",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "totalLoaded": "{{data.totalLoaded}}",
+            "selectionModelMode": "multiple",
+            "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectCellListActionCommands"
+        }
+    },
+    "onEvent": [ {
+        "eventId": "primaryWorkArea.selectionChangeEvent",
+        "action": "closePanel"
+    } ],
+    "functions": {
+        "addProfileToQPG": {
+            "functionName": "addProfileToQPG",
+            "parameters": [
+                "{{dataProviders}}",
+                "{{ctx}}"
+            ]
+        }
+    },
+    "messages": {},
+    "lifecycleHooks": {
+        "onInit": "getQPListOnReveal"
+    },
+    "i18n": {
+        "filterBox": [ "trainingandqualificationMessages" ],
+        "tq0QualificationProfilesSecTitle": [ "trainingandqualificationMessages" ],
+        "add": [ "trainingandqualificationMessages" ]
+    }
+}

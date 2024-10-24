@@ -1,0 +1,82 @@
+{
+    "schemaVersion": "1.0.0",
+    "data":{
+        "tableSettings": {
+            "columnConfigPreference": "NGPWorkUnitAssignedFeaturesColumns",
+            "tableObjectsBaseTypes":["Cpd0DesignFeature"],
+            "fixedColumns":["object_string"],
+            "clientColumns":[
+                {
+                    "propertyName": "AssignmentType",
+                    "displayName": "{{i18n.assignmentType}}",
+                    "typeName": "assignmentType",
+                    "drawnWidth": 110,
+                    "alternateID":"AssignmentType.AssignmentType"
+                },
+                {
+                    "propertyName": "mismatchOrMissing",
+                    "displayName": "{{i18n.mismatchOrMissing}}",
+                    "typeName": "mismatchOrMissing",
+                    "drawnWidth": 55,
+                    "alternateID":"mismatchOrMissing.mismatchOrMissing"
+                },
+                {
+                    "propertyName": "AssignmentInContextAttributeGroups",
+                    "displayName": "{{i18n.assignmentInContextAttributeGroups}}",
+                    "typeName": "assignmentInContextAttributeGroups",
+                    "drawnWidth": 55,
+                    "alternateID":"AssignmentInContextAttributeGroups.AssignmentInContextAttributeGroups"
+                },
+                {
+                    "propertyName": "AssignedToProcess",
+                    "displayName": "{{i18n.assignedToProcess}}",
+                    "typeName": "assignedToProcess",
+                    "drawnWidth": 55,
+                    "alternateID":"AssignedToProcess.AssignedToProcess"
+                },
+                {
+                    "propertyName": "AssignedToOperation",
+                    "displayName": "{{i18n.assignedToOperation}}",
+                    "typeName": "assignedToOperation",
+                    "drawnWidth": 55,
+                    "alternateID":"AssignedToOperation.AssignedToOperation"
+                },
+                {
+                    "propertyName": "UsedInActivity",
+                    "displayName": "{{i18n.usedInActivity}}",
+                    "typeName": "usedInActivity",
+                    "drawnWidth": 55,
+                    "alternateID":"UsedInActivity.UsedInActivity"
+                }
+            ]
+        },
+        "messagesTypes": {
+            "noAssignmentsMsg":[{
+                "text":"{{i18n.noFeaturesAssigned}}"
+            }],
+            "invalidInputMsg": "{{props.subPanelContext.invalidInputMsg}}"
+        }
+    },
+    "actions": {
+        "unregisterPolicy":{
+            "actionType": "JSFunction",
+            "method": "unregister",
+            "inputData": {
+                "name": "NgpAssignedObjectsTable"
+            },
+            "deps": "js/mfePolicyService"
+        }
+    },
+    "lifecycleHooks":{
+        "onUnmount": "unregisterPolicy"
+    },
+    "i18n":{
+        "noFeaturesAssigned":["NgpDetailedPlanningMessages"],
+        "assignmentType":["NgpTableMessages"],
+        "mismatchOrMissing":["NgpTableMessages"],
+        "assignmentInContextAttributeGroups":["NgpTableMessages"],
+        "assignedToProcess":["NgpTableMessages"],
+        "assignedToOperation":["NgpTableMessages"],
+        "usedInActivity":["NgpTableMessages"]
+    }
+}

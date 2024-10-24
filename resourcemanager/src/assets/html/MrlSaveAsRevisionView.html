@@ -1,0 +1,25 @@
+<aw-panel-body>
+    <aw-break></aw-break>
+    <aw-label prop="data.revisionOf"></aw-label>
+    <div>
+        <aw-xrt type="REVISE" vmo="ctx.panelContext.SelectedObjects[0]" xrt-state="data.xrtState" revise-saveas-info="subPanelContext.reviseSaveAsInfo"
+        active-state="subPanelContext.activeState"></aw-xrt>
+        <aw-panel-section caption="i18n.ownProjectSectionTitle">
+            <aw-list dataprovider="data.dataProviders.getOwningProjectsProvider" exist-when="ctx.userSession.props.project.dbValues[0] !== ''">
+                    <aw-default-cell vmo="item"></aw-default-cell>
+            </aw-list>
+        </aw-panel-section>
+        <aw-command-panel-section anchor="data.widgetProjectSectionCommands" caption="i18n.projectsSectionTitle" context="subPanelContext.activeState">
+            <aw-list dataprovider="data.dataProviders.getAssignedProjectsProvider" has-floating-cell-commands="false">
+                <aw-default-cell vmo="item"></aw-default-cell>
+            </aw-list>
+        </aw-command-panel-section>
+    </div>
+
+</aw-panel-body>
+<aw-checkbox prop="data.openReviseRevisionInNewTab"></aw-checkbox>
+<aw-panel-footer>
+    <aw-button size="auto" action="revise" visible-when="formProp.attributes.valid">
+        <aw-i18n>i18n.save</aw-i18n>
+    </aw-button>
+</aw-panel-footer>

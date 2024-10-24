@@ -1,0 +1,78 @@
+{
+    "schemaVersion":"1.0.0",
+    "imports":[
+        "js/aw-scrollpanel.directive",
+        "js/aw-image-cell.directive",
+        "js/aw-list.directive"
+    ],
+    "actions":{
+        "reveal":{
+            "actionType":"dataProvider",
+            "method":"listDataProvider"
+        },
+        "getSpecifications":{
+            "actionType": "JSFunctionAsync",
+            "method": "loadObjects",
+            "deps": "js/Aqc0CharManagerUtils",
+            "inputData": {
+
+            },
+            "outputData": {
+                "specificationsList": "totalLoaded",
+                "ctx.search.totalFound": "totalLoaded.length",
+                "ctx.search.totalLoaded": "totalLoaded.length"
+            },
+            "events":
+            {
+            "success":
+            [
+                {
+                    "name": "processPWASelection"
+                }
+            ]
+           }
+        },
+        "updateSelectionInPWA": {
+            "actionType": "JSFunction",
+            "method": "processPWASelection",
+            "inputData": {
+               "results": "{{data.specificationsList}}",
+               "selectionModel": "{{data.dataProviders.listDataProvider.selectionModel}}"
+            },
+            "deps": "js/Aqc0CharManagerUtils"
+        }
+
+
+    },
+    "dataProviders":{
+        "listDataProvider":{
+            "action":"getSpecifications",
+            "response":"{{data.specificationsList}}",
+            "totalFound":"{{data.totalFound}}",
+            "inputData": {
+                "selectionModel": "{{subPanelContext.selectionModel}}"
+            },
+            "commands":{
+                "Awp0ShowObjectCell": {
+                    "id": "cmdOpen",
+                    "title": "Open",
+                    "areas": ["aw_oneStep"],
+                    "priorities": [300],
+                    "dependencies": ["js/showObjectCommandHandler"],
+                    "displayOption": "ON_HOVER_AND_SELECTION",
+                    "position": "TOP_RIGHT"
+                }
+            }
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "reveal"
+    },
+    "onEvent":[
+        {
+            "eventId": "processPWASelection",
+            "cacheEventData": true,
+            "action": "updateSelectionInPWA"
+        }
+    ]
+}

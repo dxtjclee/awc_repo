@@ -1,0 +1,9 @@
+<div class="sw-column">
+    <aw-include name="OccMgmtConfigurationBaselineTaskbar" sub-panel-context="{provider:data._configurationBaselineLocation, occContext:data.occContext,contextKey:data._configurationBaselineLocation.contextKey, selectionQueryParamKey : data._configurationBaselineLocation.selectionQueryParamKey }"></aw-include>
+    <!-- <occmgmt-breadcrumb class="aw-configurationBaseline-breadcrumb" occ-context="subPanelContext.occContext ? subPanelContext.occContext : data.occContext"></occmgmt-breadcrumb> -->
+    <aw-sublocation sub-panel-context="{provider:data._configurationBaselineLocation,occContext:data.occContext}" sub-location-preference="data._configurationBaselineLocation.awSubLocationPref">
+        <div class="sw-row h-12 afx-content-background">
+            <aw-data-navigator sub-panel-context="{provider:data._configurationBaselineLocation, occContext:data.occContext,contextKey:data._configurationBaselineLocation.contextKey, selectionQueryParamKey : data._configurationBaselineLocation.selectionQueryParamKey }" provider="data._configurationBaselineLocation" contextKey="data._configurationBaselineLocation.contextKey" baseSelection="ctx.modelObjectsToOpen[0]"></aw-data-navigator>
+        </div>
+    </aw-sublocation>
+</div>

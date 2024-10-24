@@ -1,0 +1,176 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive",
+        "js/aw-listbox.directive",
+        "js/aw-i18n.directive",
+        "js/visible-when.directive"
+    ],
+
+    "actions": {
+        "reveal": {
+            "actionType": "TcSoaService",
+            "serviceName": "Reports-2008-06-CrfReports",
+            "method": "getReportDefinitions",
+            "inputData": {
+                "inputCriteria": [
+                    {
+                        "category": "ItemReports",
+                        "clientId": "",
+                        "contextObjects":[
+                             
+                        ],
+                        "reportDefinitionId": "",
+                        "reportDefinitionName": "",
+                        "source": "Teamcenter",
+                        "status": ""
+                    }
+                ]
+            },
+            "policy": {
+                "types": [
+                    {
+                        "name": "ReportDefinition",
+                        "properties": [
+                            {
+                                "name": "rd_name"
+                            },
+                            {
+                                "name": "rd_style_sheets",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Folder",
+                        "properties": [
+                            {
+                                "name": "contents",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Dataset",
+                        "properties": [
+                            {
+                                "name": "object_name"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "outputData": {
+                "printTemplateList": "{{function:getPrintStylesheets}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Cip0Print.generateList"
+                    }
+                ]
+            },
+            "deps": "js/Cip0PrintService"
+        },
+        "normalPrintAction": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ControlPlan-2019-12-ControlPlanManagement",
+            "method": "generateControlPlanNormDoc",
+            "inputData": {
+                "reportGenerationInput": "{{function:createSOAInput}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "refreshLocationFlag": true,
+                            "relatedModified": [
+                                "{{ctx.selected}}"
+                            ]
+                        }
+                    },
+                    {
+                        "name":"fileReplace.success"
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ],
+                "failure": [ {
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            },
+            "deps": "js/Cip0PrintService"
+        },
+        "convertToList": {
+            "actionType": "JSFunction",
+            "method": "createListModelObjects",
+            "inputData": {
+                "input": "{{data.printTemplateList}}",
+                "propName": "props.object_string"
+            },
+            "outputData": {
+                "printTemplateVmList": ""
+            },
+            "deps": "js/listBoxService"
+        }
+    },
+
+    "onEvent": [
+        {
+            "eventId": "Cip0Print.generateList",
+            "action": "convertToList"
+        }
+    ],
+
+    "conditions": {
+        "toCreateNormalControlPlanReport": {
+            "expression": "data.printTemplates.uiValue.length>0"
+        }
+    },
+
+    "data": {
+        "printTemplates": {
+            "type": "STRING",
+            "isRequired": "true",
+            "hasLov": true,
+            "labelPosition": "PROPERTY_LABEL_AT_TOP"
+        }
+    },
+
+    "functions": {
+        "createSOAInput": {
+            "functionName": "createSOAInput",
+            "parameters": [
+                "{{data}}"
+            ]
+        }
+    },
+
+    "i18n": {
+        "printName": [
+            "ControlInspectionPlanMessages"
+        ]
+    }
+}

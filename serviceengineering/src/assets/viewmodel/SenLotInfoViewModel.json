@@ -1,0 +1,258 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data": {
+        "messages": {
+            "lotIsFalse": [ {
+                "text": "{{i18n.isLotIsFalse}}"
+            } ],
+            "lotTrueNoLot": [ {
+                "text": "{{i18n.lotIsTrueNoLot}}"
+            } ]
+        }
+    },
+    "actions": {
+        "loadDataNewLot": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "senLotInfoTable.plTable.reload"
+                } ]
+            }
+        },
+        "loadLotTable": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "getLotValueForSelectedObject"
+                },
+                {
+                    "action": "loadPropertiesForNeutral",
+                    "condition": "conditions.showLotTable"
+                },
+                {
+                    "action": "loadLotColumns",
+                    "condition": "conditions.showLotTable"
+                }
+            ]
+        },
+        "getLotValueForSelectedObject": {
+            "actionType": "JSFunction",
+            "method": "getLotValueForSelectedObject",
+            "inputData": {
+                "selectedObjectUid": "{{ctx.sbomContext.selectedModelObjects[0].uid}}",
+                "MROSRUidList": "{{ctx.MROSRUidList}}",
+                "MROPartsList": "{{ctx.MROPartList}}"
+            },
+            "outputData": {},
+            "deps": "js/senLotInfoViewerService"
+        },
+        "loadPropertiesForNeutral": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadLotsOnNeutralPart",
+            "inputData": {
+                "neutralPartRevUid": "{{ctx.sbomContext.selectedModelObjects[0].props.awb0UnderlyingObject.dbValues[0]}}"
+            },
+            "outputData": {
+                "lotsOnSelectedNeutralObject": ""
+            },
+            "deps": "js/senLotInfoViewerService"
+        },
+        "loadLotColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "getTableViewModelProperties",
+            "deps": "js/tcViewModelObjectService",
+            "inputData": {
+                "vmNodes": "{{data.lotsOnSelectedNeutralObject}}",
+                "context": {
+                    "clientScopeURI": "Sen1Lot",
+                    "clientName": "AWClient",
+                    "operationType": "union"
+                }
+            },
+            "outputData": {
+                "dataProviders.senLotInfoGridDataProvider.columnConfig": "output.columnConfig"
+            }
+        },
+        "saveColumnConfigLoadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "saveUIColumnConfigs2",
+            "inputData": {
+                "columnConfigurations": [ {
+                    "clientScopeURI": "Sen1Lot",
+                    "columnConfigId": "{{data.dataProviders.senLotInfoGridDataProvider.columnConfig.columnConfigId}}",
+                    "columns": "{{data.dataProviders.senLotInfoGridDataProvider.newColumns}}",
+                    "scope": "LoginUser",
+                    "scopeName": ""
+                } ]
+            },
+            "outputData": {},
+            "events": {
+                "success": [ {
+                    "name": "sen.lotColumnConfig.saved"
+                } ]
+            }
+        },
+        "loadDataForSavedColumnConfig": {
+            "actionType": "JSFunctionAsync",
+            "method": "getTableViewModelProperties",
+            "deps": "js/tcViewModelObjectService",
+            "inputData": {
+                "vmNodes": "{{data.lotsOnSelectedNeutralObject}}",
+                "context": {
+                    "clientScopeURI": "Sen1Lot",
+                    "clientName": "AWClient",
+                    "operationType": "union"
+                }
+            },
+            "outputData": {
+                "newColumnConfig": "result.output.columnConfig"
+            }
+        },
+        "resetColumnConfig": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "getOrResetUIColumnConfigs4",
+            "inputData": {
+                "getOrResetUiConfigsIn": [ {
+                    "scope": "LoginUser",
+                    "scopeName": "",
+                    "clientName": "AWClient",
+                    "resetColumnConfig": true,
+                    "columnConfigQueryInfos": [ {
+                        "clientScopeURI": "Sen1Lot",
+                        "operationType": "union",
+                        "columnsToExclude": []
+                    } ],
+                    "businessObjects": [
+                        {}
+                    ]
+                } ]
+            },
+            "outputData": {
+                "dataProviders.senLotInfoGridDataProvider.columnConfig": "{{function:postResetFunction}}"
+            },
+            "deps": "js/tcarrange.service"
+        },
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/columnArrangeService"
+        },
+        "reloadLotTable": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "updateCtxOnSelection"
+                },
+                {
+                    "action": "loadDataNewLot"
+                }
+            ]
+        },
+        "updateCtxOnSelection": {
+            "actionType": "JSFunction",
+            "method": "registerCtx",
+            "inputData": {
+                "name": "showLotTable",
+                "value": true
+            },
+            "deps": "js/appCtxService"
+        }
+    },
+    "dataProviders": {
+        "senLotInfoGridDataProvider": {
+            "action": "loadLotTable",
+            "inputData": {
+                "selectionData": "{{subPanelContext.selectionData}}"
+            },
+            "editContext": "TABLE_CONTEXT",
+            "response": "{{data.lotsOnSelectedNeutralObject}}",
+            "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectCellListActionCommands",
+            "selectionModelMode": "single"
+        }
+
+    },
+    "columnProviders": {
+        "senLotInfoColumnProvider": {
+            "loadColumnAction": "loadLotColumns",
+            "columns": "{{data.columns}}",
+            "saveColumnAndLoadAction": "saveColumnConfigLoadData",
+            "resetColumnAction": "resetColumnConfig",
+            "frozenColumnIndex": -1
+        }
+    },
+    "grids": {
+        "senLotInfoTable": {
+            "dataProvider": "senLotInfoGridDataProvider",
+            "columnProvider": "senLotInfoColumnProvider",
+            "enableArrangeMenu": true,
+            "addIconColumn": true,
+            "gridOptions": {
+                "enableSorting": false
+            }
+        }
+    },
+    "functions": {
+        "postResetFunction": {
+            "functionName": "postResetFunction",
+            "parameters": [
+                "{{data.dataProviders.serviceEventGridDataProvider.columnConfig}}"
+            ]
+        }
+    },
+    "i18n": {
+        "isLotIsFalse": [
+            "senMessages"
+        ],
+        "lotIsTrueNoLot": [
+            "senMessages"
+        ]
+    },
+    "onEvent": [ {
+            "eventId": "sen.lotColumnConfig.saved",
+            "cacheEventData": true,
+            "action": "loadDataForSavedColumnConfig",
+            "condition": "!ctx.editInProgress"
+        },
+        {
+
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        },
+        {
+            "eventId": "createLotCommand.operationCompleted",
+            "cacheEventData": true,
+            "action": "loadDataNewLot"
+
+        },
+        {
+            "eventId": "sbomDataProvider.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "reloadLotTable"
+        }
+    ],
+    "conditions": {
+        "showLotTable": {
+            "expression": "ctx.showLotTable"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "getLotValueForSelectedObject"
+    },
+    "ctx": {
+        "showLotTable": {
+            "type": "object"
+        }
+    }
+}

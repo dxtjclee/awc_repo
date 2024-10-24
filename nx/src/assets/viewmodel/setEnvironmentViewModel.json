@@ -1,0 +1,81 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports":
+    [
+        "js/aw-link-with-popup-menu.directive",
+        "js/aw-property-label.directive",
+        "js/aw-column.directive"
+    ],
+
+    "actions":
+    {
+
+        "CreateTCNXEnvironmentVMOsAction":
+        {
+            "actionType": "JSFunction",
+            "method": "CreateTCNXEnvOrAppVMOsAction",
+            "inputData":
+            {
+                "envOrAppPref": "{{ctx.preferences.TC_NX_Environments}}"
+            },
+            "outputData":
+            {
+                "TC_NX_EnvironmentVMOs": "TC_NX_EnvOrAppVMOs"
+            },
+            "deps": "js/setApplicationAndEnvironment"
+        },
+        "TCNXsetEnvironmentAction":
+        {
+            "actionType": "JSFunction",
+            "method": "setEnvironment",
+            "inputData": {
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/setApplicationAndEnvironment"
+        }
+    },
+    "conditions":
+    {
+
+    },
+
+    "data":{
+        "environmentInfo":
+        {
+            "displayName": "{{ctx.preferences.TC_NX_Current_Environment[0]}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "dbValue": "{{ctx.preferences.TC_NX_Current_Environment[0]}}"
+        },
+        "environment":
+        {
+            "isNull": false,
+            "propertyDisplayName": "{{i18n.environment}}",
+            "uiValue": "{{i18n.environment}}"
+        }
+    },
+    "i18n":
+    {
+        "environment": [ "NXConstants" ]
+    },
+
+    "onEvent":
+    [
+        {
+            "eventId": "awlinkPopup.selected",
+            "cacheEventData": true,
+            "action": "TCNXsetEnvironmentAction"
+        }
+    ],
+
+    "dataProviders":
+    {
+        "environmentLink":
+        {
+            "dataProviderType": "Action",
+            "action": "CreateTCNXEnvironmentVMOsAction",
+            "response": "{{data.TC_NX_EnvironmentVMOs}}",
+            "totalFound": "{{ctx.preferences.TC_NX_Environments.length}}"
+        }
+    }
+}

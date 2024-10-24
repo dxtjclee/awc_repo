@@ -1,0 +1,236 @@
+// Copyright 2019 Siemens Product Lifecycle Management Software Inc.
+// mixins
+@import 'mixins/mixins';
+
+.aw-controlinspectionplan-rulesContainer {
+    margin-top: 0;
+    width: 80%;
+}
+.aw-controlinspectionplan-hr {
+    border: solid 1px;
+    width: 100%;
+    margin: 0;
+    border-bottom: none;
+    height: 0;
+}
+.aw-controlinspectionplan-ruleText .aw-widgets-propertyContainer{
+    margin: 4px;
+    @include flexbox();
+}
+
+.aw-controlinspectionplan-ruleText .aw-widgets-innerWidget {
+    width: 60px;
+}
+.aw-controlinspectionplan-ruleLabel .aw-widgets-propertyContainer{
+    margin: 4px;
+}
+.aw-controlinspectionplan-rulesTitle {
+    border: 1px;
+    padding:10px 0;
+    text-align : center;
+    font-weight: bold;
+}
+.aw-controlinspectionplan-rulesText {
+    font-weight: bold;
+    margin: 4px;
+}
+.aw-controlinspectionplan-ruleChekbox .aw-widgets-propertyContainer{
+    margin-bottom: 0px;
+}
+.aw-controlinspectionplan-ruleChekbox .aw-widgets-innerWidget .disabled {
+    opacity: 1;
+}
+.aw-controlinspectionplan-ruleChekbox .aafx-checkbox .disabled {
+    opacity: .5;
+}
+.aw-controlinspectionplan-ruleChekboxWithText .afx-checkbox{
+    padding-left: 7px;
+}
+.aw-controlinspectionplan-ruleTextDisable .propertyLabelTopContainer, .aw-controlinspectionplan-ruleTextDisable .aw-widgets-innerWidget {
+    opacity: 0.5;
+}
+.aw-controlinspectionplan-ruleText .propertyLabelTopContainer .aw-widgets-propertyLabelTop {
+    font-weight: 400;
+}
+
+.aw-controlinspectionplan-listWidget  {
+    .aw-widgets-propertyContainer {
+        display: flex;
+        margin-bottom: 5px;
+    }
+    .aw-widgets-propertyContainer > aw-property-label {
+        -webkit-box-flex: 0;
+        -webkit-flex: 0;
+        flex: 0;
+        max-width: 100%;
+    }
+}
+/* Third Party BCT bct-inspector-viewer-2d*/
+.aw-controlinspectionplan-bctinspectordrawing {
+    @include flex(2 2 auto);
+    display: block;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    .leaflet-container {
+        width: 100%;
+        height: 100%;
+    }
+    .balloon {
+        fill-opacity: 0.5;
+        stroke-width: 6;
+        cursor: pointer;
+        &[aria-selected="true"] {
+            fill-opacity: 0.6;
+            stroke-width: 10px;
+        }
+        text {
+            fill-opacity: 5;
+            stroke: none;
+            font-weight: 600;
+            font-size: 55px;
+        }
+        .border-filler {
+            fill-opacity: 1;
+            stroke-width: 10px;
+        }
+    }
+    .balloon.imported {
+        fill-opacity: 0.6;
+        &[aria-selected="true"] {
+            stroke-width: 10px;
+            fill-opacity: 0.7;
+        }
+    }
+    .balloon.importedUpdated {
+        fill-opacity: 0.6;
+        &[aria-selected="true"] {
+            stroke-width: 10px;
+            fill-opacity: 0.7;
+        }
+    }
+    .loader {
+        margin: auto;
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+        border: 16px solid;
+        border-top: 16px solid;
+    }
+    .loaderMessage {
+        margin: auto;
+        text-align: center;
+
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    .inspector-viewer-3d {
+        width:100%;
+        height:100%;
+    }
+    .inspector-viewer-2d {
+        width:100%;
+        height:100%;
+    }
+}
+/*Third Party BCT bct-inspector-viewer-table*/
+.aw-controlinspectionplan-bctinspectorchxtable {
+    border-spacing: 0;
+    border: 1px solid;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    text-overflow: ellipsis;
+    thead {
+        font-size: 0.75rem;
+        font-weight: bold;
+    }
+    th, td {
+        padding: .1em .5em;
+        font-size: 0.75rem;
+    }
+    th > button {
+        background: transparent;
+        border: none;
+        color: inherit;
+        width: 100%;
+        height: 100%;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-align: left;
+        padding: 0 0;
+    }
+    tr {
+        &[aria-selected="true"] {
+            font-weight: 600;
+        }
+    }
+    .imported {
+        &[aria-selected="true"] {
+            font-weight: 600;
+        }
+    }
+    .importedUpdated {
+        &[aria-selected="true"] {
+            font-weight: 600;
+        }
+    }
+}
+
+.aw-controlinspectionplan-refPartsHeight {
+    overflow: hidden;
+    .aw-layout-panelMain .aw-layout-panelBody .aw-layout-panelSectionContent {
+        width: 100%;
+    }
+    .aw-xrt-objectSetToolbar {
+        overflow: hidden;
+        width: calc(100% + 28px);
+        margin-left: -12px;
+    }
+}
+
+.aw-controlinspectionplan-partsToInspectHeight {
+    overflow: hidden;
+    width: 115%;
+    margin-left: -12px;
+}
+
+.aw-controlinspectionplan-justifycommandbar .aw-commandBars.aw-commandBar-horizontal {
+    justify-content: flex-end;
+}
+
+.aw-controlinspectionplan-partsToInspectButton .sw-button {
+    width: fit-content;
+	float: right;
+}
+
+.aw-controlinspectionplan-layout-panelContent .aw-layout-panelContent {
+    padding: 0;
+}
+
+.aw-controlinspectionplan-drawingNameTitle {
+    padding-left: rem-calc(3);
+    padding-right: rem-calc(5);
+}
+
+.aw-controlinspectionplan-drawingTypeTitle {
+    padding-right: rem-calc(5);
+}
+
+.aw-controlinspectionplan-drawingName {
+    padding-right: rem-calc(20);
+}
+
+.aw-controlinspectionplan-drawingHeight {
+    height: 100%;
+    min-height: 0;
+}
+
+.aw-controlinspectionplan-tableHeight {
+    height: 100%;
+    min-height: 0;
+}
+

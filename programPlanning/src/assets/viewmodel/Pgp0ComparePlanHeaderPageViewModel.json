@@ -1,0 +1,48 @@
+{
+    "data": {
+        "sourceObj": ""
+    },
+    "lifecycleHooks": {
+        "onMount" : "initializeHeaderTitle"
+    },
+    "actions": {
+        "initializeHeaderTitle": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "ensureObjectPropsLoaded"
+                },
+                {
+                    "action": "fetchSourceObject"
+                }
+            ]
+        },
+        "fetchSourceObject": {
+            "actionType": "JSFunction",
+            "method": "getObject",
+            "deps": "soa/kernel/clientDataModel",
+            "inputData": {
+                "uid": "{{ctx.state.params.uid}}"
+            },
+            "outputData": {
+                "sourceObj": ""
+            }
+        },
+        "ensureObjectPropsLoaded": {
+            "actionType": "JSFunctionAsync",
+            "method": "getProperties",
+            "deps": "soa/dataManagementService",
+            "inputData": {
+                "uids": ["{{ctx.state.params.uid}}"],
+                "propNames": [
+                    "object_name"
+                ]
+            }
+        }
+    },
+    "i18n": {
+        "Pgp0ComparePlans": [
+            "ProgramPlanningCommandPanelsMessages"
+        ]
+    }
+}

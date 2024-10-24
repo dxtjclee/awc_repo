@@ -1,0 +1,9 @@
+<mfe-loading-message exist-when="conditions.isLoading"></mfe-loading-message>
+<mfe-message exist-when="conditions.noInput" sub-panel-context="subPanelContext.noElementSelectedMessageForXRT">
+</mfe-message>
+
+<aw-scrollpanel class="aw-epInformation-summary" exist-when="conditions.showXrt">
+    <aw-xrt type="{{data.inputForXRT.xrtType}}" vmo="data.inputForXRT.scopeObject" xrt-state="data.xrtState" selection-data="subPanelContext.selectionData" sub-panel-context="subPanelContext"></aw-xrt>
+    <aw-xrt exist-when="conditions.isValidInputAvailableForAwElementXrt" type="{{data.inputForAwElementXRT.xrtType}}"
+        vmo="data.inputForAwElementXRT.scopeObject" xrt-state="data.awElementXrtState"></aw-xrt>
+</aw-scrollpanel>

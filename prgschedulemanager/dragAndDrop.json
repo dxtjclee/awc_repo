@@ -1,0 +1,28 @@
+{
+  "dropHandlers": {
+    "dropHandlerForListViewInPrgScheduleMangr": {
+      "activeWhen": true,
+      "views": [
+        "Psi0AuthorDependenciesCreateSub"
+      ],
+      "dropActions": {
+        "dragOver": "dragOverFunc",
+        "drop": "dropActionFunc"
+      }
+    }
+  },
+  "actions": {
+    "dragOverFunc": {
+      "actionType": "syncFunction",
+      "method": "panelViewDragOver",
+      "inputData": {},
+      "deps": "js/Psi0AuthorDependencies"
+    },
+    "dropActionFunc": {
+      "actionType": "syncFunction",
+      "method": "panelViewDropOver",
+      "inputData": {},
+      "deps": "js/Psi0AuthorDependencies"
+    }
+  }
+}

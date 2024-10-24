@@ -1,0 +1,8 @@
+<aw-command-panel caption="i18n.exportTitle" context="subPanelContext" >
+    <aw-command-sub-panel panel-id="Arm0ExportToOfficeAppSub" sub-panel-context="{...subPanelContext, sharedData:fields.sharedData}"
+        show-when="data.sharedData.activeView==='Arm0ExportToOfficeAppSub'">
+    </aw-command-sub-panel>
+    <aw-navigate-panel title="i18n.Arm0AddOverrideTypes" sub-panel-context="{sharedData:fields.sharedData,previousActivePage:'Arm0ExportToOfficeAppSub'}"
+      show-when="data.sharedData.activeView==='Arm0AddOverrideTypeSub'" panel-id="Arm0AddOverrideTypeSub" action="backAction">
+    </aw-navigate-panel>
+</aw-command-panel>

@@ -1,0 +1,66 @@
+<aw-sublocation sub-location-preference="data._awSublocationPref">
+    <aw-sublocation-body>
+        <aw-column class="aw-requirementsmanager-dashboard aw-layout-panelBody">
+            <aw-flex-row class="aw-requirementsmanager-tiles" show-when="subPanelContext.fullScreenState.value !== true">
+                <aw-tile-canvas tile-groups="data.tileGroups"></aw-tile-canvas>
+            </aw-flex-row>
+            <aw-splitter direction="HORIZONTAL" class="aw-requirementsmanager-splitter" show-when="subPanelContext.fullScreenState.value !== true"></aw-splitter>
+            <aw-flex-row>
+                <aw-column width="35f" class="aw-requirementsmanager-primarySection" show-when="subPanelContext.fullScreenState.value !== true">
+                    <div class="aw-layout-panelSectionTitle">
+                        <label>{{i18n.context}}</label>
+                    </div>
+                    <aw-flex-row class="aw-requirementsmanager-contextSection">
+                        <aw-column>
+                            <aw-listbox prop="data.subTypes" list="data.objectSubTypes.dbValue" action="setSubType">
+                            </aw-listbox>
+                            <aw-textbox prop="data.filterBox"></aw-textbox>
+                            <aw-scrollpanel>
+                                <label exist-when="data.dataProviders.recentDataProvider && data.dataProviders.recentDataProvider.getLength()==0">{{i18n.noResultsFound}}</label>
+                                <aw-list visible-when="data.searchResults.objects.length > 0"
+                                    dataprovider="data.dataProviders.recentDataProvider">
+                                    <aw-default-cell vmo="item"></aw-default-cell>
+                                </aw-list>
+                            </aw-scrollpanel>
+                        </aw-column>
+                    </aw-flex-row>
+                </aw-column>
+                <aw-splitter class="aw-requirementsmanager-verticalSplitter" show-when="subPanelContext.fullScreenState.value !== true"> </aw-splitter>
+                <label exist-when="data.dataProviders.recentDataProvider.getLength()==0">{{i18n.noResultsFound}}</label>
+                <aw-column visible-when="data.dataProviders.recentDataProvider.getLength()>0">
+                    <aw-advanced-bar type="TOOLBAR" negative="true">
+                        <aw-flex-row height="3f">
+                            <div class="aw-layout-headerProperty" visible-when="subPanelContext.fullScreenState.value === true">
+                                <span class="aw-widgets-propertyLabelTop">{{data.selectionTitle}}</span>
+                            </div>
+                            <aw-flex-column justify="right" align-content="end">
+                                <aw-command-bar context="{...data.selectionData, ...props.subPanelContext}"
+                                    anchor="aw_reqDashboardCommandbar,aw_fullScreen" alignment="HORIZONTAL"></aw-command-bar>
+                            </aw-flex-column>
+                        </aw-flex-row>
+                    </aw-advanced-bar>
+                    <div class="aw-requirementsmanager-chartSection sw-row">
+                        <aw-column>
+                            <aw-chip-list dataprovider="data.dataProviders.filtersDataProvider" action="removeFilterAction"
+                                ui-icon-action="removeFilterAction"></aw-chip-list>
+                            <label class="aw-widgets-propertyLabel aw-base-small">{{i18n.totalObjectsFound}}:&nbsp;
+                                 {{data.totalObjectsFound}}</label>
+                            <div exist-when="ctx.reqDashboardTable" class="aw-requirementsmanager-chartDivison sw-row">
+                                <aw-chart chart-provider="data.chartProviders.pieChartWorkflowProvider"
+                                    class="aw-requirementsmanager-chart" exist-when="ctx.reqDashboardTable"></aw-chart>
+                                <aw-chart chart-provider="data.chartProviders.pieChartTestCasesProvider"
+                                    class="aw-requirementsmanager-chart" exist-when="ctx.reqDashboardTable" visible-when="data.chartProviders.pieChartTestCasesProvider.chartPoints[0].keyValueDataForChart.length!==0"></aw-chart>
+                                <aw-chart chart-provider="data.chartProviders.pieChartCommentsProvider"
+                                    class="aw-requirementsmanager-chart" exist-when="ctx.reqDashboardTable"></aw-chart>
+                            </div>
+                        </aw-column>
+                    </div>
+                    <aw-splitter direction="HORIZONTAL"></aw-splitter>
+                    <aw-flex-row class="aw-requirementsmanager-tableSection">
+                        <arm0-requirement-dashboard-table sub-panel-context="{selectionData:fields.selectionData}" exist-when="ctx.selected"></arm0-requirement-dashboard-table>
+                    </aw-flex-row>
+                </aw-column>
+            </aw-flex-row>
+        </aw-column>
+    </aw-sublocation-body>
+</aw-sublocation>

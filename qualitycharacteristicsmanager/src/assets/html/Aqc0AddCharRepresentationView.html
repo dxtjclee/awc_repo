@@ -1,0 +1,29 @@
+<aw-command-panel caption="i18n.Aqc0AddCharRepresentationTitle"
+    context="subPanelContext">
+    <aw-panel-body show-when="data.sharedData.activeView === 'Aqc0AddCharRepresentation'"
+        sub-panel-context='{sharedData:data.sharedData}'>
+        <aw-xrt type="CREATE" object-type="Aqc0CharElement" sub-panel-context='{sharedData:data.sharedData}'
+        xrt-state="data.xrtState"></aw-xrt>
+    </aw-panel-body>
+    <aw-panel-footer visible-when="data.sharedData.activeView === 'Aqc0AddCharRepresentation'">
+        <aw-button action="createRepresentationObjects"
+            visible-when="conditions.isCreateRepresentaionVisible && ctx.selected.type!=='Qfm0FunctionElement' && formProp.attributes.valid">
+            <aw-i18n>i18n.addButtonTitle</aw-i18n>
+        </aw-button>
+        <aw-button action="createInspectionDefinition"
+            visible-when="ctx.selected.type==='Qfm0FunctionElement' && conditions.isCreateRepresentaionVisible && formProp.attributes.valid">
+            <aw-i18n>i18n.addButtonTitle</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+    <aw-navigate-panel title='i18n.backButtontitle'
+        show-when="data.sharedData.activeView === 'Aqc0AddSpecificationsToRepresentation'"
+        pre-panel-id='Aqc0AddCharRepresentation' panel-id='Aqc0AddSpecificationsToRepresentation'
+        sub-panel-context='{sharedData:data.sharedData}' action="aqc0NavigateBackToAqc0AddCharRepresentaion">
+    </aw-navigate-panel>
+    <aw-navigate-panel title='i18n.backButtontitle'
+        show-when="data.sharedData.activeView === 'Aqc0ShowSpecificationsList'"
+        pre-panel-id='Aqc0AddSpecificationsToRepresentation' panel-id='Aqc0ShowSpecificationsList'
+        sub-panel-context='{sharedData:data.sharedData}'
+        action="aqc0NavigateBackToAqc0AddSpecificationsToRepresentation">
+    </aw-navigate-panel>
+</aw-command-panel>

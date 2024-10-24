@@ -1,0 +1,55 @@
+<aw-scrollpanel class="aw-clsadmin-classes">
+    <aw-toolbar second-anchor="aw_summaryHeader" exist-when="conditions.isSummaryHeaderHidden" context="props.subPanelContext.context"></aw-toolbar>
+    <div class="aw-clsadmin-classes-properties" >
+        <aw-command-panel-section caption="{{i18n.propertiesTitle}}" visible-when="data.currentSecData.length > 0"
+            collapsed="false" context="props.subPanelContext.context"
+            class="sw-column aw-clsadmin-class-properties" aw-class="{'w-6': data.hasImages}">
+            <div class="aw-clspadmin-prop-section" aw-repeat="item : data.currentSecData" visible-when="item.value !== '' || conditions.showAllProp">
+                <aw-widget prop="item"  ></aw-widget>
+            </div>
+        </aw-command-panel-section>
+
+        <aw-command-panel-section caption="i18n.preview" visible-when="data.hasImages === true" class="sw-column w-6">
+            <aw-full-screen include-component-name="Ics1ClassificationTabUniViewerInternal" header-title="i18n.preview" header-path='{{subPanelContext.activeTab.name ? subPanelContext.activeTab.name : subPanelContext.showObjectContext.activeTab.name}}' header-context-title='{{subPanelContext.selected.props.object_string.uiValues[0]}}' context='data.selectedUid'>
+            </aw-full-screen>
+        </aw-command-panel-section>
+    </div>
+
+    <div class="aw-clsadmin-class-attributes" >
+        <div aw-class="[conditions.supported ? 'w-12': 'w-6 sw-column']" class="h-12">
+            <aw-panel-section class="w-12" caption="{{i18n.multiSite}}" visible-when="data.multiSiteData.length > 0" collapsed="false">
+                <div class="aw-clspadmin-prop-section" aw-repeat="item : data.multiSiteData" visible-when="item.value !== '' || conditions.showAllProp">
+                    <aw-widget prop="item"></aw-widget>
+                </div>
+            </aw-panel-section>
+            <aw-panel-section caption="{{i18n.optionsTitle}}" class="aw-clsadmin-attributes" exist-when="data.hasOptions" collapsed="true">
+                <div class="aw-clspadmin-prop-section" aw-repeat="item : data.options" visible-when="item.value !== '' || conditions.showAllProp">
+                    <aw-widget prop="item"></aw-widget>
+                </div>
+            </aw-panel-section>
+            <aw-panel-section caption="{{i18n.aliasTitle}}" class="aw-clsadmin-attributes" exist-when="data.hasAlias" collapsed="true">
+                <div class="aw-clspadmin-prop-section" aw-repeat="item : data.alias" visible-when="item.value !== '' || conditions.showAllProp">
+                    <aw-widget prop="item"></aw-widget>
+                </div>
+            </aw-panel-section>
+            <aw-panel-section caption="{{i18n.attributes}}" class="aw-clsadmin-attributes" exist-when="data.hasClassAttributes && !conditions.supported" collapsed="false">
+                <aw-splm-table gridid="entryGrid" show-decorators="true"></aw-splm-table>
+            </aw-panel-section>
+        </div>
+        <div class="sw-column w-6 h-12" exist-when="data.hasClassAttributes && !conditions.supported">
+            <aw-panel-section caption="{{i18n.associations}}"  class="aw-clsadmin-associations" visible-when="data.attrSelected" collapsed="false">
+                <div class="aw-base-scrollPanel" exist-when="data.attrprop.length">
+                    <aw-widget prop="item" aw-repeat="item : data.attrprop" ></aw-widget>
+                    <aw-panel-section caption="{{i18n.metric}}" visible-when="data.dataTypeMetric.length > 0" collapsed="false">
+                        <aw-widget prop="item" aw-repeat="item : data.dataTypeMetric"></aw-widget>
+                    </aw-panel-section>
+                    <aw-panel-section caption="{{i18n.nonMetric}}" visible-when="data.dataTypeNonMetric.length > 0" collapsed="false">
+                        <aw-widget prop="item" aw-repeat="item : data.dataTypeNonMetric"></aw-widget>
+                    </aw-panel-section>
+                    <aw-link prop="data.reference" action="selectLink"></aw-link>
+                </div>
+            </aw-panel-section>
+        </div>
+    </div>
+
+</aw-scrollpanel>

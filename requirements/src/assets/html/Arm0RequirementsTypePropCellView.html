@@ -1,0 +1,12 @@
+<!-- Cell list content -->
+<div class="aw-requirements-typePropertiesCellContent aw-requirements-removeButton">
+    <div class="aw-widgets-cellListCellContent">
+        <div class="aw-widgets-cellListCellTitleBlock">
+            <h3 title="{{subPanelContext.selectedTypeDispName}}" class="aw-widgets-cellListCellTitle" cell-title-id="CellTitle">{{subPanelContext.selectedObjectDispName}}</h3>
+            <div id="propInfos" aw-repeat="cellProp : subPanelContext.propInfos" class="aw-requirements-cellTitle">
+                <label class="aw-widgets-cellListCellItemType aw-base-small">{{cellProp.propertyDisplayName}}</label>
+                <label exist-when="cellProp.propertyName !== subPanelContext.propInfos[subPanelContext.propInfos.length-1].propertyName" class="aw-widgets-cellListCellItemType aw-base-small">,&nbsp;</label>
+            </div>
+        </div>
+    </div>
+</div>

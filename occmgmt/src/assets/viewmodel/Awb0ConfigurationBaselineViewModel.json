@@ -1,0 +1,259 @@
+{
+    "schemaVersion" : "1.0.0",
+    "data":
+    {
+        "addPanelState": {
+            "initialValues": {
+                "creationType": "",
+                "selectedTab": "",
+                "xrtTypeLoaded": ""
+            },
+            "meta": {}
+        },
+        "baselineDescription": {
+            "type": "STRING",
+            "displayName": "{{i18n.datasetDesc}}"
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "AddObjectPrimarySub",
+                "context": {}
+            },
+            "meta": {}
+        },
+        "topLine": {
+            "type": "STRING",
+            "dbValue": ""
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "actions":
+    {
+        "populateBackingObject": {
+            "actionType": "JSFunction",
+            "method": "getBackingObject",
+            "inputData": {
+                "modelObject": "{{props.subPanelContext.occContext.selectedModelObjects[0]}}",
+                "data":"{{data}}"
+            },
+            "deps": "js/configurationBaselineService"
+        },
+        "createConfigurationBaselineAction": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2023-06-DataManagement",
+            "method": "createObjects",
+            "inputData": {
+                "createInputs": "{{function:createInputForCreateConfigurationBaselineSOA}}",
+                "runInBackground": false
+            },
+            "outputData": {
+                "createdWorkingContext": "",
+                "selectedObject": "output[0].objects[0].uid"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "configurationBaselineCreationSuccess"
+                    }
+                ]
+            },
+            "actionMessages":
+            {
+                "failure": [
+                    {
+                        "message": "configurationBaselineCreationFailure"
+                    }
+                ]
+            },
+            "deps": "js/configurationBaselineService"
+        },
+        "configurationBaselineCreationSuccessAction" : {
+            "actionType": "JSFunction",
+            "method": "configurationBaselineCreationSuccessMessage",
+            "inputData": {
+                "createdWorkingContext": "{{data.createdWorkingContext}}"
+            },
+            "outputData": {
+                "configBaselineName" : ""
+            },
+            "actionMessages":
+            {
+                "success": [
+                    {
+                        "message": "configurationBaselineCreatedSuccessfully"
+                    }
+                ]
+            },
+            "deps": "js/configurationBaselineService"
+        },
+        "initializePanel" :{
+            "actionType": "batchJob",
+            "steps":[
+                {
+                    "action":"populateBackingObject"
+
+                }
+            ]
+        },
+        "createConfigurationBaselineBactchJob" :{
+            "actionType": "batchJob",
+            "steps":[
+                {
+                    "action":"createConfigurationBaselineAction"
+                },
+                {
+                    "action":"updateWorkingContextAction"
+                },
+                {
+                    "action":"showSavedWorkingContext"
+                }
+            ]
+        },
+
+        "showSavedWorkingContext": {
+            "actionType": "JSFunction",
+            "method": "go",
+            "inputData": {
+                "showObject": "com_siemens_splm_client_configbaseline",
+                "toParams": {
+                    "uid": "{{data.createdWorkingContext.output[0].objects[0].uid}}"
+                },
+                "option": {
+                    "inherit": false
+                }
+            },
+            "deps": "js/locationNavigation.service"
+        },
+        "updateWorkingContextAction" :
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceBom-2020-05-OccurrenceManagement",
+            "method": "updateWorkingContext",
+            "inputData": {
+                "input":
+                    [{
+                        "productInfo": "{{props.subPanelContext.occContext.productContextInfo}}",
+                        "workingContext": {
+                            "type": "Fnd0ConfigurationBaseline",
+                            "uid": "{{data.createdWorkingContext.output[0].objects[0].uid}}"
+                        },
+                        "saveResult": true,
+                        "operation": "Create"
+                    }]
+            },
+            "outputData": {
+                "partialErrors": "partialErrors",
+                "errorMessages": "{{partialErrors[0].errorValues[0].message}}"
+            }
+        },
+        "prePopulateNameField":{
+            "actionType": "JSFunction",
+            "method": "prePopulateNameField",
+            "inputData":
+            {
+                "createType": "{{addPanelState.creationType.props.type_name.dbValues[0]}}",
+                "containerName":"{{i18n.createConfigurationBaselinePrefix}}",
+                "xrtType":"CREATE",
+                "editHandler": "{{editHandlers.addPanelEditHandler}}",
+                "occContext":"{{props.subPanelContext.occContext}}"
+            },
+            "deps": "js/configurationBaselineService"
+        },
+        "performPostProcessingAfterXRTLoaded": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "prePopulateNameField",
+                    "condition": "conditions.isXRTTypeLoaded"
+                }
+            ]
+        },
+        "setActiveView":{
+            "actionType": "JSFunction",
+            "method": "resetActiveView",
+            "inputData": {
+                "stateName": "{{data.activeState}}",
+                "destPanelId": "AddObjectPrimarySub"
+            },
+            "outputData": {
+                "activeState": ""
+            },
+            "deps": "js/addObjectUtils"
+        }
+    },
+    "functions":
+    {
+        "createInputForCreateConfigurationBaselineSOA": {
+            "functionName": "createInputForCreateConfigurationBaselineSOA",
+            "parameters": [
+                "{{data.addPanelState.creationType.props.type_name.dbValues[0]}}",
+                "{{data.topLine}}",
+                "{{data.editHandlers.addPanelEditHandler}}"
+            ]
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "configurationBaselineCreationSuccess",
+            "action": "configurationBaselineCreationSuccessAction"
+        }
+    ],
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "conditions": {
+        "isXRTTypeLoaded": {
+            "expression": "xrtState.xrtTypeLoaded"
+        }
+    },
+    "messages":
+    {
+        "configurationBaselineCreatedSuccessfully":
+        {
+            "messageType": "INFO",
+            "messageText": "{{i18n.creationOfConfigurationBaselineSuccessful}}",
+            "messageTextParams": [
+                "{{data.configBaselineName}}",
+                "{{props.subPanelContext.occContext.rootElement.props.object_string.dbValues[0]}}"
+            ]
+        },
+        "configurationBaselineCreationFailure":
+        {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "i18n":
+    {
+        "createConfigurationBaseline": [ "OccMgmtConfigBaselineConstants" ],
+        "addElementBtn": [ "OccMgmtConfigBaselineConstants" ],
+        "creationOfConfigurationBaselineSuccessful": [ "OccMgmtConfigBaselineMessages" ],
+        "createConfigurationBaselinePrefix":[ "OccMgmtConfigBaselineMessages" ],
+        "datasetDesc": ["awAddDirectiveMessages"]
+    },
+    "lifecycleHooks": {
+        "onUpdate": {
+            "action": "performPostProcessingAfterXRTLoaded",
+            "observers": [ "viewModel.atomicData.xrtState.xrtTypeLoaded" ]
+        },
+        "onMount": "initializePanel"
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    }
+}

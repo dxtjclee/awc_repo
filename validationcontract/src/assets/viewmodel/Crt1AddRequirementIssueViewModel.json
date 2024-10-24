@@ -1,0 +1,314 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/aw-add.directive",
+        "js/visible-when.directive",
+        "js/aw-form.directive",
+        "js/aw-checkbox.directive",
+        "js/aw-panel-body.directive"
+    ],
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "setSelectedType"
+    },
+    "actions": {
+        "openOnCreate": {
+            "actionType": "JSFunction",
+            "method": "openObject",
+            "inputData": {
+                "data": "{{data.createdObject.uid}}"
+            },
+            "outputData": {
+                "selectedType": "selectedType"
+            },
+            "deps": "js/Crt1AddToVRService"
+        },
+        "setSelectedType": {
+            "actionType": "JSFunction",
+            "method": "setObjToDisplayPanelForIssue",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "selectedType": "selectedType"
+            },
+            "deps": "js/Crt1AddToVRService"
+        },
+        "createObject": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2016-09-DataManagement",
+            "method": "createAttachAndSubmitObjects",
+            "inputData": {
+                "inputs": "{{function:getCreateInput}}"
+            },
+            "outputData": {
+                "createdObject": "output[0].objects[2]"
+            },
+            "events": {
+                "success": [ {
+                        "name": "awPanel.loadNextValues",
+                        "condition": "subPanelContext.panelPinned"
+                    },
+                    {
+                        "name": "addIssue.openOnCreate",
+                        "condition": "data.openOnCreate.dbValue === true"
+                    },
+                    {
+                        "name": "Crt1AddIssue.postProcess"
+                    }
+                ]
+            },
+            "deps": "js/Crt1AddToVRService"
+        },
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            }
+        },
+        "generateNextValues": {
+            "actionType": "JSFunction",
+            "method": "autoAssignAllProperties",
+            "inputData": {
+                "data": "{{data}}",
+                "operationType": "CREATE",
+                "createType": "{{data.selType.dbValue}}",
+                "editHandler": "{{editHandlers.addPanelEditHandler}}"
+            },
+            "deps": "js/autoAssignService"
+        },
+        "setActiveView": {
+            "actionType": "JSFunction",
+            "method": "resetActiveView",
+            "inputData": {
+                "stateName": "{{data.activeState}}",
+                "destPanelId": "AddObjectPrimarySub"
+            },
+            "outputData": {
+                "activeState": ""
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "addIssueToVRContent": {
+            "actionType": "JSFunction",
+            "method": "addIssueToVRContent",
+            "inputData": {
+                "endItems": [ "{{data.createdObject}}" ],
+                "sourceObject": "{{subPanelContext}}",
+                "parentScopeObject": "{{ctx.panelContext}}",
+                "action": "addIssue"
+            },
+            "outputData": {
+                "activeState": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementsTable.plTable.clientRefresh"
+                    },
+                    {
+                        "name": "closePanel",
+                        "condition": "!subPanelContext.panelPinned"
+                    }
+                ]
+            },
+            "deps": "js/Crt1AddToVRService"
+        },
+        "createRelationForPaletteOrSearch": {
+            "actionType": "JSFunction",
+            "method": "addIssueToVRContent",
+            "inputData": {
+                "endItems": "{{addPanelState.sourceObjects}}",
+                "sourceObject": "{{subPanelContext}}",
+                "parentScopeObject": "{{ctx.panelContext}}",
+                "action": "addIssue"
+            },
+            "outputData": {
+                "activeState": ""
+            },
+            "events": {
+                "success": [ {
+                        "name": "requirementsTable.plTable.clientRefresh"
+                    },
+                    {
+                        "name": "closePanel",
+                        "condition": "!subPanelContext.panelPinned"
+                    }
+                ]
+            },
+            "deps": "js/Crt1AddToVRService"
+        },
+        "updateCreationType": {
+            "actionType": "JSFunctionAsync",
+            "method": "onTypeSelected",
+            "inputData": {
+                "data": "{{data.eventData}}",
+                "addPanelState": "{{subPanelContext.addPanelState}}"
+            },
+            "outputData": {
+                "creationType": "creationType"
+            },
+            "deps": "js/addObjectUtils"
+        }
+    },
+    "onEvent": [
+
+        {
+            "eventId": "awTypeSelector.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "updateCreationType"
+        },
+        {
+            "eventId": "awPanel.loadNextValues",
+            "action": "generateNextValues"
+        },
+        {
+            "eventId": "addIssue.openOnCreate",
+            "action": "openOnCreate"
+        },
+        {
+            "eventId": "closePanel",
+            "action": "closePanel"
+        },
+        {
+            "eventId": "Crt1AddIssue.postProcess",
+            "action": "addIssueToVRContent"
+        }
+    ],
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "data": {
+        "triggerCreate": {
+            "dbValue": false,
+            "type": "BOOLEAN"
+        },
+        "createObj": "IssueReport",
+        "preferredType": "IssueReport",
+        "typeFilter": "IssueReport,IssueReportRevision",
+        "openOnCreate": {
+            "displayName": "{{i18n.openonCreate}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": false,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "selectedType": {
+            "type": "STRING",
+            "dbValue": ""
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "AddObjectPrimarySub",
+                "context": {}
+            },
+            "meta": {}
+        },
+        "addPanelState": {
+            "initialValues": {
+                "creationType": "",
+                "createdObject": "",
+                "sourceObjects": "",
+                "selectedTab": ""
+            },
+            "meta": {}
+        },
+        "projectState": {
+            "initialValues": {
+                "selectedProjects": [],
+                "triggerAssign": false
+            },
+            "meta": {
+                "selectedProjects": {
+                    "field": "true",
+                    "type": "OBJECT"
+                },
+                "triggerAssign": {
+                    "field": "true",
+                    "type": "BOOLEAN"
+                }
+            }
+        }
+    },
+    "functions": {
+        "getCreateInput": {
+            "functionName": "getCreateInput",
+            "parameters": [
+                "{{data}}",
+                "{{editHandlers.addPanelEditHandler}}"
+            ]
+        }
+    },
+    "conditions": {
+        "isNewTabAddButtonVisible": {
+            "expression": "addPanelState.selectedTab.view==='NewTabPageSub' && addPanelState.selectedTab.view!='PaletteTabPageSub' && addPanelState.selectedTab.tabKey!='search' && ( addPanelState.creationType ) && ( !conditions.isClipboardObject && !conditions.isFavoriteObject && !conditions.isRecentObject )"
+        },
+        "isPalatteTabSelection": {
+            "expression": "addPanelState.selectedTab.view==='PaletteTabPageSub' && ( conditions.isClipboardObject || conditions.isFavoriteObject || conditions.isRecentObject )"
+        },
+        "isSearchTabSelection": {
+            "expression": "addPanelState.selectedTab.view!='NewTabPageSub' && addPanelState.selectedTab.view!='PaletteTabPageSub'"
+        },
+        "isClipboardObject": {
+            "expression": "addPanelState.sourceObjects.length > 0"
+        },
+        "isFavoriteObject": {
+            "expression": "addPanelState.sourceObjects.length > 0"
+        },
+        "isRecentObject": {
+            "expression": "addPanelState.sourceObjects.length > 0"
+        },
+        "isObjectCreated": {
+            "expression": "addPanelState.createdObject"
+        }
+    },
+    "ctx": {
+        "panelContext": null
+    },
+    "i18n": {
+        "createIssue": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "openonCreate": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "CreateButtonText": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "AddIssue": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "ADD_BUTTON_TITLE": [
+            "BaseMessages"
+        ]
+    }
+}

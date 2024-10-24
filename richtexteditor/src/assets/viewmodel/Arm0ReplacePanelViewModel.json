@@ -1,0 +1,99 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-panel-body.directive",
+        "js/aw-search-box.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-tab-set.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive",
+        "js/aw-command-panel.directive",
+        "js/aw-radiobutton.directive",
+        "js/aw-i18n.directive",
+        "js/enable-when.directive"
+    ],
+    "data": {
+        "typeFilter": "ItemRevision",
+        "keyWord": {
+            "displayName": "{{i18n.keywordsLabel}}",
+            "type": "STRING",
+            "isEditable": "false",
+            "labelPosition": "PROPERTY_LABEL_AT_TOP",
+            "dispValue": "{{ctx.KeyWordsString}}"
+        },
+        "replaceType": {
+            "type": "BOOLEAN",
+            "propertyRadioTrueText": "{{i18n.row}}",
+            "propertyRadioFalseText": "{{i18n.column}}",
+            "dbValue": false
+        },
+       "addPanelState": {
+            "initialValues": {
+                "sourceObjects": ""
+            },
+            "meta": {}
+        }
+    },
+    "actions": {
+        "handleSearchSelection": {
+            "actionType": "JSFunction",
+            "method": "handleSearchSelection",
+            "inputData": {
+                "data": "{{data}}",
+                "selectedObjects": "{{data.eventData.selectedUids}}"
+            },
+            "outputData":{
+                "selectedObject":""
+            },
+            "deps": "js/Arm0ReplacePanel"
+        },
+        "generateTraceabilityMatrix": {
+            "actionType": "JSFunction",
+            "method": "generateTraceabilityMatrix",
+            "inputData": {
+                "replaceType": "{{data.replaceType.dbValue}}",
+                "selectedObject": "{{data.addPanelState.sourceObjects[0].uid}}",
+                "ctx": "{{ctx}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "searchListDataProvider.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "handleSearchSelection"
+        }
+    ],
+    "functions": {
+    },
+    "conditions": {
+        "replaceButtonEnabled": {
+            "expression": "data.addPanelState.sourceObjects.length > 0"
+        }
+    },
+    "i18n": {
+        "keywordsLabel": [
+            "awAddDirectiveMessages"
+        ],
+        "row": [
+            "MatrixMessages"
+        ],
+        "column": [
+            "MatrixMessages"
+        ],
+        "replace": [
+            "ReplaceFileMessages"
+        ]
+    }
+}

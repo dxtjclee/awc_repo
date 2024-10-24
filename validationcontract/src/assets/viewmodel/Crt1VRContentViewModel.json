@@ -1,0 +1,173 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "_vrContntView": {
+            "contextKey": "occmgmtContext",
+            "tabSetId": "occmgmtContext",
+            "dataProviderName": "occDataProvider",
+            "gridId": "occTreeTable",
+            "name": "com.siemens.splm.client.occmgmt:OccurrenceManagementSubLocation",
+            "label": {
+                "source": "/i18n/OccurrenceManagementConstants",
+                "key": "occMgmtTitle"
+            },
+            "requestPref": {
+                "savedSessionMode": "ignore",
+                "showMarkup": [
+                    "false"
+                ]
+            },
+            "clientScopeURI": "Awb0OccurrenceManagement",
+            "nameToken": "com.siemens.splm.client.occmgmt:OccurrenceManagementSubLocation",
+            "policy": "/policies/occMgmtPropertyPolicy.json",
+            "viewBase": "occMgmt",
+            "editContext": "occDataProvider",
+            "selectionQueryParamKey": "c_uid",
+            "editSupportParamKeys": [
+                "c_uid",
+                "o_uid",
+                "spageId",
+                "pci_uid"
+            ],
+            "viewModes": {
+                "TreeSummaryView": {
+                    "primaryWorkArea": "tree",
+                    "secondaryWorkArea": true
+                },
+                "TreeView": {
+                    "primaryWorkArea": "tree",
+                    "secondaryWorkArea": false
+                }
+            },
+            "context": {
+                "commandContextParameters": [
+                    "filter",
+                    "recipe",
+                    "uid"
+                ],
+                "search": {
+                    "hideInContentSearchBox": true
+                }
+            },
+            "breadcrumbConfig": {
+                "type": "navigate",
+                "vm": "occMgmtBreadcrumb",
+                "chevronDataProvider": "breadCrumbDataProvider",
+                "crumbDataProvider": "aceBreadCrumbDataProvider",
+                "noUpdate": true,
+                "popuplist": "/html/occMgmtBreadcrumblist.html",
+                "id": "occmgmtContext",
+                "displayProperty": "object_string"
+            },
+            "urlParams": {
+                "selectionQueryParamKey": "c_uid",
+                "openStructureQueryParamKey": "o_uid",
+                "rootQueryParamKey": "uid",
+                "productContextQueryParamKey": "pci_uid",
+                "csidQueryParamKey": "c_csid",
+                "secondaryPageIdQueryParamKey": "spageId",
+                "topElementQueryParamKey": "t_uid",
+                "pageIdQueryParamKey": "pageId",
+                "recipeParamKey": "recipe",
+                "subsetFilterParamKey": "filter"
+            },
+            "headerPreference": {
+                "hideGlobalSearch": true,
+                "hideLogo": true
+            },
+            "awSubLocationPref": {
+                "hideNavigationArea": true,
+                "hideRightWall": true,
+                "hideToolsAndInfoArea": true,
+                "hideFooter": true,
+                "orientation": "VERTICAL"
+            }
+        },
+        "view": {
+            "keys": [
+                "occmgmtContext"
+            ]
+        },
+        "occContext": {
+            "initialValues": {
+                "configContext": {},
+                "displayToggleOptions": {},
+                "supportedFeatures": {},
+                "productContextInfo": {},
+                "currentState": {},
+                "previousState": {},
+                "transientRequestPref": {},
+                "persistentRequestPref": {
+                    "defaultClientScopeUri": "Awb0OccurrenceManagement"
+                },
+                "disabledFeatures": [],
+                "viewKey": "occmgmtContext"
+            },
+            "meta": {}
+        },
+        "selectionData": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "pageContext": {
+            "primaryActiveTabId": "tc_xrt_Content"
+        }
+    },
+    "actions": {
+        "initializeVRContentView": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "initializeOccMgmtVRContentView"
+                },
+                {
+                    "action": "synchronizeViewStateWithURL"
+                }
+            ]
+        },
+        "synchronizeViewStateWithURL": {
+            "actionType": "JSFunctionAsync",
+            "method": "synchronizeViewStateWithURL",
+            "deps": "js/Crt1VRContentService",
+            "inputData": {
+                "objectsToOpen": "{{data.objectsToOpen}}",
+                "activeState": "{{data.activeState}}",
+                "occContext": "{{fields.occContext}}",
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "objectsToOpen": "objectsToOpen",
+                "activeState": "activeState"
+            }
+        },
+        "initializeOccMgmtVRContentView": {
+            "actionType": "JSFunction",
+            "method": "initializeOccMgmtVRContentView",
+            "deps": "js/Crt1VRContentService",
+            "inputData": {
+                "viewKeys": "{{data.view.keys}}"
+            },
+            "outputData": {
+                "activateView": ""
+            }
+        },
+        "destroyOccmgmtVRContentView": {
+            "actionType": "JSFunction",
+            "method": "destroyOccmgmtVRContentView",
+            "deps": "js/Crt1VRContentService",
+            "inputData": {
+                "subPanelContext": "{{data}}"
+            }
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "initializeVRContentView",
+        "onUnmount": "destroyOccmgmtVRContentView"
+    },
+    "onEvent": [],
+    "ctx": {
+        "aceActiveContext": {
+            "key": "occmgmtContext"
+        }
+    }
+}

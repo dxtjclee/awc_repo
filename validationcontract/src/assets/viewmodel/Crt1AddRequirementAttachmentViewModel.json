@@ -1,0 +1,205 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-command-panel-section.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-add.directive",
+        "js/aw-form.directive",
+        "js/visible-when.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive"
+    ],
+    "lifecycleHooks": {
+        "onMount": "initDataProvider"
+    },
+    "data": {
+        "addPanelState": {
+            "initialValues": {
+                "creationType": "",
+                "sourceObjects": "",
+                "selectedTab": ""
+            },
+            "meta": {}
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "AddObjectPrimarySub",
+                "context": {}
+            },
+            "meta": {}
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        },
+        "projectState": {
+            "initialValues": {
+                "selectedProjects": [],
+                "triggerAssign": false
+            },
+            "meta": {}
+        },
+        "triggerCreate": {
+            "dbValue": false,
+            "type": "BOOLEAN"
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "ctx": {
+        "panelContext": null
+    },
+    "actions": {
+        "createObject": {
+            "actionType": "JSFunction",
+            "method": "updateCreateTrigger",
+            "inputData": {
+                "triggerCreate": "{{data.triggerCreate}}",
+                "value": true
+            },
+            "outputData": {
+                "triggerCreate": "triggerCreate"
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "createRelationForPaletteOrSearch": {
+            "actionType": "JSFunction",
+            "method": "addIssueToVRContent",
+            "inputData": {
+                "endItems": "{{addPanelState.sourceObjects}}",
+                "sourceObject": "{{subPanelContext}}",
+                "parentScopeObject": "{{ctx.panelContext}}",
+                "action": "addAttachment"
+            },
+            "outputData": {
+                "activeState": ""
+            },
+            "events": {
+                "success": [ {
+                        "name": "requirementsTable.plTable.clientRefresh"
+                    },
+                    {
+                        "name": "closePanel",
+                        "condition": "!subPanelContext.panelPinned"
+                    }
+                ]
+            },
+            "deps": "js/Crt1AddToVRService"
+        },
+        "addAttachmentToVRContent": {
+            "actionType": "JSFunction",
+            "method": "addAttachmentToVRContent",
+            "inputData": {
+                "sourceObject": "{{subPanelContext}}",
+                "parentScopeObject": "{{ctx.panelContext}}",
+                "action": "addAttachment",
+                "eventMap": "{{data.eventMap}}"
+            },
+            "events": {
+                "success": [ {
+                        "name": "requirementsTable.plTable.clientRefresh"
+                    },
+                    {
+                        "name": "closePanel",
+                        "condition": "!subPanelContext.panelPinned"
+                    }
+                ]
+            },
+            "deps": "js/Crt1AddToVRService"
+        },
+        "setActiveView": {
+            "actionType": "JSFunction",
+            "method": "resetActiveView",
+            "inputData": {
+                "stateName": "{{data.activeState}}",
+                "destPanelId": "AddObjectPrimarySub"
+            },
+            "outputData": {
+                "activeState": ""
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "setSelectedType": {
+            "actionType": "JSFunction",
+            "method": "getObjectSelectedInTable",
+            "inputData": {
+                "subPanelContext": "{{ctx.panelContext}}"
+            },
+            "outputData": {
+                "tableSelection": ""
+            },
+            "deps": "js/Crt1AddToVRService"
+        },
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            }
+        },
+        "initDataProvider": {
+            "actionType": "dataProvider",
+            "method": "attachTargets"
+        }
+    },
+    "dataProviders": {
+        "attachTargets": {
+            "action": "setSelectedType",
+            "response": "{{data.tableSelection}}",
+            "totalFound": "{{data.tableSelection.length}}"
+        }
+    },
+    "onEvent":
+    [
+       {
+            "eventId": "cdm.updated",
+            "cacheEventData": true,
+            "action": "addAttachmentToVRContent"
+        },
+        {
+            "eventId": "closePanel",
+            "action": "closePanel"
+        }
+    ],
+    "conditions": {
+        "isPaletteSearchTabAddButtonVisible": {
+            "expression": "addPanelState.selectedTab.view!='NewTabPageSub' && addPanelState.sourceObjects.length>0"
+        }
+    },
+    "i18n": {
+        "attachFile": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "to": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "CreateButtonText": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "ADD_BUTTON_TITLE": [
+            "BaseMessages"
+        ]
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    }
+}

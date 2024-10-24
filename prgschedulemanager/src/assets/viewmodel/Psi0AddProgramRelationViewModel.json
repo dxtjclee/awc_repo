@@ -1,0 +1,330 @@
+{
+    "schemaVersion" : "1.0.0",
+    "data": {
+        "addPanelState": {
+            "initialValues": {
+                "creationType": "",
+                "sourceObjects": "",
+                "selectedTab": "",
+                "xrtTypeLoaded": ""
+            },
+            "meta": {}
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "AddObjectPrimarySub",
+                "context": {}
+            },
+            "meta": {}
+        },
+        "projectState": {
+            "initialValues": {
+                "selectedProjects": [],
+                "triggerAssign": false
+            },
+            "meta": {
+                "selectedProjects": {
+                    "field": "true",
+                    "type": "OBJECT"
+                },
+                "triggerAssign": {
+                    "field": "true",
+                    "type": "BOOLEAN"
+                }
+            }
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "actions": {
+        "revealAction": {
+            "actionType": "JSFunction",
+            "method": "populateValidIncludeTypes",
+            "inputData": {
+                "includeTypes": "{{data.includeTypes}}",
+                "typeFilter": "{{data.typeFilter}}",
+                "ctx":"{{ctx}}"
+            },
+            "outputData": {
+                "includeTypes": "includeTypes",
+                "typeFilter": "typeFilter"
+            },
+            "deps": "js/Psi0ProgramRelationService"
+        },
+        "getSelectedObject": {
+            "actionType": "JSFunction",
+            "method": "getSelectedObject",
+            "inputData": {
+                "eventMap": "{{data.eventMap}}",
+                "selectedObject": "{{data.selectedObject}}"
+            },
+            "deps": "js/Psi0ProgramRelationService"
+        },
+        "createAndRelateObject": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-Core-2012-10-DataManagement",
+            "method": "createRelateAndSubmitObjects",
+            "inputData":
+            {
+                "inputs": "{{function:getProgramObjectCreateInput}}"
+            },
+            "outputData":
+            {
+                "response": "",
+                "createdObject": "{{function:getCreatedObject}}"
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "addRelationToNewObject.callSoa"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            },
+            "deps": "js/Psi0ProgramRelationService"
+        },
+        "addRelationToNewObject": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "createRelations",
+            "inputData":
+            {
+                "input":
+                [
+                    {
+                        "primaryObject": "{{ctx.selected}}",
+                        "secondaryObject": "{{data.createdObject}}",
+                        "relationType": "Psi0ProgramRelation",
+                        "clientId": "CreateObject",
+                        "userData": ""
+                    },
+                    {
+                        "primaryObject": "{{ctx.pselected}}",
+                        "secondaryObject": "{{data.createdObject}}",
+                        "relationType":"{{function:populateValidRelationTypes}}",
+                        "clientId": "CreateObject",
+                        "userData": ""
+                    }
+                ]
+            },
+            "events":{
+                "success":
+                [
+                    {
+                        "name": "navigateProgramRelationPanel"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            },
+            "deps": "js/Psi0ProgramRelationService"
+        },
+        "Psi0ProgramRelationPanel": {
+            "actionType": "activateCommandPanel",
+            "inputData": {
+                "commandId": "Psi0ProgramRelation",
+                "location": "aw_toolsAndInfo"
+            }
+        },
+        "addRelationFromPaletteAndSearch": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "createRelations",
+            "inputData": {
+                "input":
+                [
+                    {
+                        "primaryObject": "{{ctx.selected}}",
+                        "secondaryObject": "{{addPanelState.sourceObjects[0]}}",
+                        "relationType": "Psi0ProgramRelation",
+                        "clientId": "",
+                        "userData": ""
+                    }
+                ]
+            },
+            "events": {
+                "success":
+                [
+                    {
+                        "name": "navigateProgramRelationPanel"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            }
+        },
+        "populateDefaultValuesForPDR": {
+            "actionType": "JSFunction",
+            "method": "populateDefaultValuesFromEvent",
+            "inputData": {
+                "revision__psi0DueDate": "{{data.revision__psi0DueDate}}",
+                "psi0TargetDate": "{{data.psi0TargetDate}}",
+                "psi0DueDate": "{{data.psi0DueDate}}",
+                "selectionData": "{{props.subPanelContext.selectionData}}",
+                "createType": "{{addPanelState.creationType.props.type_name.dbValues[0]}}",
+                "editHandler": "{{editHandlers.addPanelEditHandler}}"
+            },
+            "deps": "js/Psi0CreatePanelService"
+        },
+        "performPostProcessingAfterXRTLoaded": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "populateDefaultValuesForPDR",
+                    "condition": "conditions.isXRTTypeLoaded"
+                }
+            ]
+        },
+        "setActiveView":{
+            "actionType": "JSFunction",
+            "method": "resetActiveView",
+            "inputData": {
+                "stateName": "activeState",
+                "destPanelId": "AddObjectPrimarySub"
+            },
+            "outputData": {
+                "activeState": "activeState"
+            },
+            "deps": "js/addObjectUtils"
+        }
+    },
+    "onEvent" : [
+        {
+            "eventId": "addRelationToNewObject.callSoa",
+            "action": "addRelationToNewObject"
+        },
+        {
+            "eventId": "awPanel.reveal",
+             "action": "revealAction"
+        },
+        {
+            "eventId": "awTypeSelector.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "getSelectedObject"
+        },
+        {
+            "eventId": "getRecentTypesProvider.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "getSelectedObject"
+        },
+        {
+            "eventId": "navigateProgramRelationPanel",
+             "action": "Psi0ProgramRelationPanel"
+        }
+    ],
+    "functions":
+    {
+        "getCreateInput":
+        {
+            "functionName": "getCreateInput",
+            "parameters":
+            [
+                "{{data}}",
+                "",
+                "",
+                "{{editHandlers.addPanelEditHandler}}"
+            ]
+        },
+        "getCreatedObject":
+        {
+            "functionName": "getCreatedObject",
+            "parameters": [
+
+               "{{outputData.response}}"
+            ]
+
+        },
+        "populateValidRelationTypes":
+        {
+            "functionName": "populateValidRelationTypes",
+            "parameters":
+            [
+                "{{data.createdObject}}",
+                "{{ctx.pselected}}"
+            ]
+        },
+        "getProgramObjectCreateInput" :
+        {
+            "functionName": "getProgramObjectCreateInput",
+            "parameters":
+            [
+                "{{data}}",
+                "{{addPanelState.creationType}}",
+                "{{editHandlers.addPanelEditHandler}}"
+            ]
+        }
+    },
+    "conditions":
+    {
+        "isNewTabAddButtonVisible":
+        {
+          "expression":"addPanelState.selectedTab.view==='NewTabPageSub' && addPanelState.creationType"
+        },
+        "isPaletteTabAddButtonVisible":
+        {
+          "expression":"addPanelState.selectedTab.view==='PaletteTabPageSub' && addPanelState.sourceObjects.length > 0"
+        },
+        "isSearchTabAddButtonVisible":
+        {
+          "expression":"addPanelState.selectedTab.view!='NewTabPageSub' && addPanelState.selectedTab.view!='PaletteTabPageSub' && addPanelState.sourceObjects.length > 0"
+        },
+        "isXRTTypeLoaded": {
+            "expression": "xrtState.xrtTypeLoaded"
+        },
+        "isActiveStateAddPanel": {
+            "expression": "data.activeState.activeView ==='AddObjectPrimarySub'"
+        }
+    },
+    "messages": {
+        "SOAFailureMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "i18n":
+     {
+        "programRelation":
+        [
+            "PrgScheduleManagerMessages"
+        ],
+        "addButtonTitle" :
+        [
+            "PrgScheduleManagerMessages"
+        ]
+
+     },
+     "lifecycleHooks": {
+        "onUpdate": {
+            "action": "performPostProcessingAfterXRTLoaded",
+            "observers": [ "viewModel.atomicData.xrtState.xrtTypeLoaded" ]
+        }
+    }
+
+}

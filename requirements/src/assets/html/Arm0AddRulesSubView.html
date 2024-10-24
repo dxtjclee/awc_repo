@@ -1,0 +1,26 @@
+<aw-panel-body>
+    <aw-listbox prop="data.operationType" list="data.operationTypeValues.dbValue"></aw-listbox>
+
+        <aw-listbox prop="data.operationSubType" list="data.operationSubTypeValues.dbValue" visible-when="conditions.isWordContainsRule"></aw-listbox>
+        <aw-textbox prop="data.operationValues" visible-when="conditions.isWordContainsRule"></aw-textbox>
+
+        <aw-listbox prop="data.style" list="data.styleValues.dbValue" visible-when="conditions.isHasStyleRule || conditions.isHasStyleUpdateRule"></aw-listbox>
+
+    <aw-listbox prop="data.importType"  list="subPanelContext.sharedData.reqSpecEleTypeList"></aw-listbox>
+
+</aw-panel-body>
+
+<aw-panel-footer>
+    <aw-button action="addRuleWordMatch" visible-when="conditions.isWordContainsAddRuleVisible" enable-when="conditions.isWordContainsAddRuleEnableCond">
+        <aw-i18n>i18n.Add</aw-i18n>
+    </aw-button>
+    <aw-button action="addRuleStyleMatch" visible-when="conditions.isHasStyleRule">
+        <aw-i18n>i18n.Add</aw-i18n>
+    </aw-button>
+    <aw-button action="updateRuleWordMatch" visible-when="conditions.isWordContainsUpdateRuleVisible" enable-when="conditions.isWordContainsUpdateRuleEnableCond">
+        <aw-i18n>i18n.update</aw-i18n>
+    </aw-button>
+    <aw-button action="updateRuleStyleMatch" visible-when="conditions.isHasStyleUpdateRule">
+        <aw-i18n>i18n.update</aw-i18n>
+    </aw-button>
+</aw-panel-footer>

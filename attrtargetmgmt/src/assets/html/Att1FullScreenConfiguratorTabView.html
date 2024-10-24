@@ -1,0 +1,8 @@
+<aw-panel>
+    <aw-panel-body exist-when="props.subPanelContext.context.parameterState.showFSC">
+        <pca0-full-screen-configuration sub-panel-context="subPanelContext"></pca0-full-screen-configuration>
+    </aw-panel-body>
+    <aw-panel-body exist-when="!props.subPanelContext.context.parameterState.showFSC">
+        <aw-i18n>i18n.noConfigContextFound</aw-i18n>
+    </aw-panel-body>
+</aw-panel>

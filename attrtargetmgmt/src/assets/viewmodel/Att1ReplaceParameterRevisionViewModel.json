@@ -1,0 +1,197 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "reveal": {
+            "actionType": "dataProvider",
+            "method": "paramRevisionListProvider"
+        },
+        "getParameterRevisions": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "clientScopeURI": "{{ctx.sublocation.clientScopeURI}}"
+                },
+                "searchInput": {
+                    "maxToLoad": 20,
+                    "maxToReturn": 50,
+                    "providerName": "Att1ParameterRevsProvider",
+                    "searchCriteria": {
+                        "parentUid": "{{subPanelContext.parametersTable.selectedUnderlyingObjects[0].uid}}",
+                        "includeParent": "false"
+                    },
+                    "searchSortCriteria": [],
+                    "startIndex": "{{data.dataProviders.paramRevisionListProvider.startIndex}}"
+                }
+            },
+            "outputData": {
+                "searchResults": "{{json:searchResultsJSON}}",
+                "totalFound": "totalFound"
+            },
+            "policy": {
+                "types": [
+                    {
+                        "name": "Att0MeasurableAttribute",
+                        "properties": [
+                            {
+                                "name": "fnd0RevisionId"
+                            },
+                            {
+                                "name": "release_status_list"
+                            },
+                            {
+                                "name": "last_mod_date"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "ReplaceParameterSOA": {
+            "actionType": "TcSoaService",
+            "serviceName": "AttrTargetMgmtAW-2019-12-AttributeTargetManagement",
+            "method": "replaceParameters",
+            "inputData": {
+                "inputs": "{{function:getInputForReplaceRevision}}"
+            },
+            "outputData": {
+                "reviseReplaceResponse": "",
+                "replaceParametersPartialErrors": "partialErrors"
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "replaceRevisionSuccessMsg"
+                    }
+                ],
+                "failure": [
+                    {
+                        "message": "replaceRevisionFailureMsg"
+                    }
+                ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Att1ReplaceRevision.refreshRespectiveParameterTable"
+                    },
+                    {
+                        "name": "uniformParamTable.reloadTable",
+                        "eventData": {
+                            "requestId": "{{subPanelContext.parametersTable.requestId}}",
+                            "reusable": "{{subPanelContext.parametersTable.reusableParamTable}}"
+                        }
+                    },
+                    {
+                        "name": "closeReplaceRevisionPanel"
+                    }
+                ]
+            },
+            "deps": "js/Att1ReviseReplaceParameterService"
+        },
+        "refreshRespectiveParameterTable": {
+            "actionType": "JSFunction",
+            "method": "refreshParameterTable",
+            "inputData": {
+                "reviseReplaceResponse": "{{data.reviseReplaceResponse}}"
+            },
+            "deps": "js/Att1ParameterMgmtUtilService"
+        },
+        "closeReplaceRevisionPanel":
+        {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData":
+            {
+                "events":
+                [
+                    {
+                        "name": "complete",
+                        "eventData":
+                        {
+                            "source": "toolAndInfoPanel"
+                        }
+                    },
+                    {
+                        "name": "closeDialog"
+                    }
+                ]
+            }
+        },
+        "closeDialogPanel":
+        {
+            "actionType": "JSFunction",
+            "method": "closeDialog",
+            "inputData": {
+                "editContext": "INFO_PANEL_CONTEXT",
+                "popupId": "{{subPanelContext.popupOptions.popupId}}"
+            },
+            "deps": "js/dialogService"
+        }
+    },
+    "data": {},
+    "onEvent": [
+        {
+            "eventId": "Att1ReplaceRevision.refreshRespectiveParameterTable",
+            "action": "refreshRespectiveParameterTable"
+        },
+        {
+            "eventId": "closeReplaceRevisionPanel",
+            "action": "closeReplaceRevisionPanel"
+        },
+        {
+            "eventId": "closeDialog",
+            "action": "closeDialogPanel"
+        }
+    ],
+    "functions": {
+        "getInputForReplaceRevision": {
+            "functionName": "getInputForReplaceRevision",
+            "parameters": [
+                "{{data}}",
+                "{{subPanelContext.parametersTable}}",
+                "{{subPanelContext.openedObject}}"
+            ]
+         }
+    },
+    "dataProviders": {
+        "paramRevisionListProvider": {
+            "action": "getParameterRevisions",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "selectionModelMode": "single"
+        }
+    },
+    "messages": {
+        "replaceRevisionSuccessMsg": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.replaceRevisionSuccessMsg}}",
+            "messageTextParams": [
+                "{{data.dataProviders.paramRevisionListProvider.selectedObjects[0].props.object_name.uiValues[0]}}",
+                "{{data.dataProviders.paramRevisionListProvider.selectedObjects[0].props.fnd0RevisionId.uiValues[0]}}"
+            ]
+        },
+        "replaceRevisionFailureMsg": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "conditions": {
+        "isReplaceButtonVisible": {
+            "expression": " data.dataProviders.paramRevisionListProvider.selectedObjects.length > 0 "
+        }
+    },
+    "i18n": {
+        "replaceRevisionTitle": [
+            "Att1AttrMappingMessages"
+        ],
+        "noParameterRevisionFound": [
+            "Att1AttrMappingMessages"
+        ],
+        "replaceRevisionSuccessMsg":[
+            "Att1AttrMappingMessages"
+        ]
+    }
+}

@@ -1,0 +1,143 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {     
+    },
+    "actions": {        
+        "loadRulesets": {
+            "actionType": "JSFunctionAsync",
+            "method": "queryRulesets",
+            "inputData": {},
+            "outputData": {
+                "totalFound": "totalFound",
+                "rulesetList": "rulesetList"
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "message": "failureShowingRulelsets"
+                    }
+                ]
+            },
+            "deps": "js/Dpv1ImportFtrDataService"
+        },
+        "reveal": {
+            "actionType": "dataProvider",
+            "method": "dataProviderRulesets"
+        },
+        "createRelBwDsRoutineRev": {
+            "actionType": "TcSoaService",
+            "serviceName": "ProductionManagement-2011-06-EngineeringDataLoad",
+            "method": "createRelBwDsRoutineRev",
+            "inputData": {
+                "xlsbDs": "{{dataProviders.dataProviderRulesets.selectedObjects[0]}}",
+                "routineRev": "{{function:getSelectedObject}}"
+            },
+            "events": {
+                "success": [                   
+                    {
+                        "name": "createRelBwDsRoutineRev.closePanel"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "createRelBwDsRoutineRev.closePanel"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success":[
+                    {
+                        "message": "applyCustomRuleSetSuccess"
+                    }
+                ],
+                "failure": [
+                    {
+                        "message": "applyCustomRuleSetFail"
+                    }
+                ]
+            },
+            "deps": "js/Dpv1ImportFtrDataService"
+        },
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            }
+        }  
+    },
+    "dataProviders": {
+        "dataProviderRulesets": {
+            "action": "loadRulesets",
+            "response": "{{data.rulesetList}}",
+            "totalFound": "{{data.totalFound}}",
+            "selectionModelMode": "single",
+            "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectCellListActionCommands"
+        }
+    },
+    "functions":{
+        "getSelectedObject": {
+            "functionName": "getSelectedObject",
+            "parameters": []
+        }    
+    },    
+    "conditions":{
+        "isValidToShowApplyButton": {
+            "expression": "data.dataProviders.dataProviderRulesets.selectedObjects.length > 0 "
+        }
+    },
+    "messages": {
+        "applyCustomRuleSetFail": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.applyCustomRuleSetFail}}",
+            "messageTextParams": [
+            ]
+        },
+        "failureShowingRulelsets": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.failureShowingRulelsets}}",
+            "messageTextParams": [
+            ]
+        },
+        "applyCustomRuleSetSuccess": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.applyCustomRuleSetSuccess}}",
+            "messageTextParams": [
+            ]
+        }    
+    },
+    "i18n":{
+        "Dpv1ApplyCustomRuleSetTitle":[
+            "DpvMessages"
+        ],
+        "availableRuleSets":[
+            "DpvMessages"
+        ],
+        "apply":[
+            "DpvMessages"
+        ],
+        "applyCustomRuleSetFail": [
+            "DpvMessages"
+        ],
+        "applyCustomRuleSetSuccess": [
+            "DpvMessages"            
+        ],
+        "failureShowingRulelsets":[
+            "DpvMessages"            
+        ]
+    },    
+    "onEvent": [
+        {
+            "eventId": "createRelBwDsRoutineRev.closePanel",
+            "action": "closePanel"
+        }
+    ],
+    "lifecycleHooks": {
+        "onMount": "reveal"
+    }
+}

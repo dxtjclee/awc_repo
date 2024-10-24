@@ -1,0 +1,500 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+    ],
+    "actions": {
+        "reveal": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AwReqMgmtSe-2019-06-SpecNavigation",
+            "method": "getSpecificationSegment",
+            "inputData": {
+                "inputData": "{{function:getSpecificationSegmentInput}}"
+            },
+            "outputData": {
+                "content": "output"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.initContent"
+                    }
+                ]
+            },
+            "deps": "js/Arm0RequirementDocumentationACE"
+        },
+        "initContent": {
+            "actionType": "JSFunction",
+            "method": "initContent",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "deps": "js/Arm0RequirementDocumentationACE"
+        },
+        "doExportDocument": {
+            "actionType": "JSFunction",
+            "method": "openFile",
+            "inputData": {
+                "data": "{{data.fileTickets[0]}}"
+            },
+            "deps": "js/fmsUtils"
+        },
+        "addObjectToTracelinkPanel": {
+            "actionType": "JSFunction",
+            "method": "addObjectToTracelinkPanel",
+            "inputData": {
+                "panelContext": "{{data.eventData}}"
+            },
+            "deps": "js/Arm0CreateTraceLink"
+        },
+        "refreshMarkersOnObjectModified": {
+            "actionType": "JSFunction",
+            "method": "refreshMarkersOnObjectModified",
+            "inputData": {
+                "modifiedObjects": "{{data.eventData.modifiedObjects}}"
+            },
+            "deps": "js/Arm0RequirementDocumentationACE"
+        },
+        "setTooltipContentData": {
+            "actionType": "JSFunction",
+            "method": "setTooltipContentData",
+            "inputData": {
+                "data": "{{data}}",
+                "selectedOccurrenceUid": "{{data.eventMap['requirementDocumentation.setTooltipContentData'].sourceObject}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0TracelinkTooltip.closeExistingTracelinkTooltip",
+                        "condition": "ctx.Arm0TraceLinkTooltipBalloonPopupVisible && data.popupheight"
+                    },
+                    {
+                        "name": "requirementDocumentation.showTracelinkTooltip",
+                        "condition": "!ctx.Arm0TraceLinkTooltipBalloonPopupVisible && data.popupheight"
+                    }
+                ]
+            },
+            "deps": "js/requirementsTooltipService"
+        },
+        "closeExistingTracelinkTooltip": {
+            "actionType": "JSFunction",
+            "method": "closeExistingTracelinkTooltip",
+            "inputData": {
+                "ctx": "{{ctx}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.showTracelinkTooltip",
+                        "condition": "data.popupheight"
+                    }
+                ]
+            },
+            "deps": "js/requirementsTooltipService"
+        },
+        "closeExistingTracelinkTooltipWithoutHoverCheck": {
+            "actionType": "JSFunction",
+            "method": "closeExistingTracelinkTooltip",
+            "inputData": {
+                "ctx": "{{ctx}}",
+                "noHoverCheck": true
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "showActionPopup.close"
+                    }
+                ]
+            },
+            "deps": "js/requirementsTooltipService"
+        },
+        "closePopupWindow": {
+            "actionType": "JSFunction",
+            "method": "close",
+            "inputData": {},
+            "deps": "js/declpopupService"
+        },
+        "showTracelinkTooltip": {
+            "actionType": "JSFunction",
+            "method": "show",
+            "inputData": {
+                "options": {
+                    "view": "Arm0TraceLinkTooltip",
+                    "clickOutsideToClose": true,
+                    "commandDimension": "{{data.eventData.commandDimension}}",
+                    "reference": "{{data.eventMap['requirementDocumentation.setTooltipContentData'].targetElement}}",
+                    "placement": "right",
+                    "hasArrow": true
+                },
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "popupId": "id",
+                "popupElement": "panelEl"
+            },
+            "deps": "js/popupService"
+        },
+        "closeTracelinkTooltip": {
+            "actionType": "JSFunction",
+            "method": "closeExistingTracelinkTooltip",
+            "inputData": {
+                "ctx": "{{ctx}}"
+            },
+            "deps": "js/requirementsTooltipService"
+        },
+        "removeTracelink": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "deleteObjects",
+            "deps": "js/requirementsTooltipService",
+            "inputData": {
+                "objects": "{{function:getCutTracelinkInput}}"
+            },
+            "outputData": {
+                "deletedTracelinkedObject": "deleted",
+                "deletedChildObject": "{{function:getSelectedTracelinkedObject}}",
+                "delectedParentObject": "{{function:getSelectedTooltipObject}}",
+                "deleteObjectsPartialErrors": "partialErrors"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "refreshLocationFlag": true,
+                            "relatedModified": "{{function:getTracelinkedObjects}}"
+                        }
+                    },
+                    {
+                        "name": "requirementDocumentation.deleteTracelinkFromTooltip",
+                        "condition": "deletedTracelinkedObject && deletedTracelinkedObject.length > 0"
+                    },
+                    {
+                        "name": "Arm0TracelinkTooltip.closeExistingTracelinkTooltipWithoutHoverCheck",
+                        "condition": "ctx.Arm0TraceLinkTooltipBalloonPopupVisible"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "condition": "data.deleteObjectsPartialErrors.length>0",
+                    "message": "getMessageFromTLDeleteFailure"
+                } ],
+                "success": [
+                    {
+                        "condition": "deletedTracelinkedObject && deletedTracelinkedObject.length > 0",
+                        "message": "notificationTracelinkDeletedSuccess"
+                    }
+                ]
+            }
+        },
+        "addToAwClipboard": {
+            "actionType": "JSFunction",
+            "method": "setContents",
+            "deps": "js/tcClipboardService",
+            "inputData": {
+                "uid": [
+                    "{{data.deletedChildObject.uid}}"
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "cutSingleSuccessful"
+                    }
+                ]
+            }
+        },
+        "deleteTracelinkFromTooltip": {
+            "actionType": "JSFunction",
+            "method": "deleteTracelinkFromTooltip",
+            "deps": "js/requirementsTooltipService"
+        },
+        "downloadOLEObjectFromDataSet": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData": {
+                "objects": "{{data.oleObjectDS}}",
+                "attributes": [
+                    "IMAN_specification"
+                ]
+            },
+            "outputData": {
+                "response": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.setOLEObjectToDownload"
+                    }
+                ]
+            }
+        },
+        "downloadOLEObject": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-FileManagement",
+            "method": "getFileReadTickets",
+            "inputData": {
+                "files": "{{data.oleObjsToDownload}}"
+            },
+            "outputData": {
+                "fileTickets": "tickets[1]"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.doExportDocumentEvent"
+                    }
+                ]
+            }
+        },
+        "setOLEObjectToDownload": {
+            "actionType": "JSFunction",
+            "method": "setOLEObjectToDownload",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.downloadOLEObject",
+                        "condition": "data.oleObjsToDownload.length > 0"
+                    }
+                ]
+            },
+            "deps": "js/Arm0RequirementOLEDownloadService"
+        },
+        "showActionsPanel": {
+            "actionType": "JSFunction",
+            "method": "openBalloonPopup",
+            "inputData": {
+                "view": "Arm0ShowActionsPanel",
+                "commandDimension": "{{data.eventData.commandDimension}}",
+                "popuporientation": "RIGHT_CENTER",
+                "popupheight": "120px",
+                "popupwidth": "160px",
+                "popupclosebutton": "false"
+            },
+            "deps": "js/balloonPopupService"
+        },
+        "pageContentUnloaded": {
+            "actionType": "JSFunction",
+            "method": "pageContentUnloaded",
+            "inputData": {},
+            "deps": "js/Arm0RequirementDocumentationACE"
+        },
+        "showDeleteTracelinkWarning":
+        {
+            "actionType": "JSFunction",
+            "method": "showDeleteTracelinkWarning",
+            "inputData":
+             {
+                "data":"{{data}}",
+                "vmo" : "{{data.eventMap['requirementDocumentation.showDeleteTracelinkWarning'].sourceObject}}"
+
+             },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "deleteTracelinkFromTooltipInAceOverview":
+        {
+            "actionType": "JSFunction",
+            "method":"deleteTracelinkFromTooltipInAceOverview",
+            "inputData":{
+                "data":"{{data}}"
+            },
+            "deps": "js/Arm0RequirementDocumentationACE"
+        }
+    },
+    "data": {},
+    "functions": {
+        "getSpecificationSegmentInput": {
+            "functionName": "getSpecificationSegmentInput",
+            "parameters": [
+                "{{data}}",
+                "{{ctx}}"
+            ]
+        },
+        "getCutTracelinkInput": {
+            "functionName": "getCutTracelinkInput",
+            "parameters": [
+                "{{data.eventMap['requirementDocumentation.showDeleteTracelinkWarning'].sourceObject}}"
+            ]
+        },
+        "getTracelinkedObjects": {
+            "functionName": "getTracelinkedObjects",
+            "parameters": []
+        },
+        "getSelectedTracelinkedObject": {
+            "functionName": "getTracelinkedObjects",
+            "parameters": []
+        },
+        "getSelectedTooltipObject": {
+            "functionName": "getTracelinkedObjects",
+            "parameters": []
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "requirementDocumentation.initContent",
+            "cacheEventData": true,
+            "action": "initContent"
+        },
+        {
+            "eventId": "requirementDocumentation.doExportDocumentEvent",
+            "action": "doExportDocument"
+        },
+        {
+            "eventId": "requirementDocumentation.addObjectToTracelinkPanel",
+            "cacheEventData": true,
+            "action": "addObjectToTracelinkPanel"
+        },
+        {
+            "eventId": "requirementDocumentation.setTooltipContentData",
+            "action": "setTooltipContentData",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementDocumentation.showTracelinkTooltip",
+            "action": "showTracelinkTooltip",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "Arm0TracelinkTooltip.closeExistingTracelinkTooltipWithoutHoverCheck",
+            "action": "closeExistingTracelinkTooltipWithoutHoverCheck"
+        },
+        {
+            "eventId": "Arm0TracelinkTooltip.closeExistingTracelinkTooltip",
+            "action": "closeExistingTracelinkTooltip"
+        },
+        {
+            "eventId": "Arm0TracelinkTooltip.closeTracelinkTooltip",
+            "action": "closeTracelinkTooltip"
+        },
+        {
+            "eventId": "requirementDocumentation.removeTracelink",
+            "action": "removeTracelink",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementDocumentation.showDeleteTracelinkWarning",
+            "cacheEventData": true,
+            "action": "showDeleteTracelinkWarning"
+        },
+        {
+            "eventId": "requirementDocumentation.deleteTracelinkFromTooltip",
+            "action": "deleteTracelinkFromTooltip"
+        },
+        {
+            "eventId": "requirementDocumentation.addToAwClipboard",
+            "action": "addToAwClipboard"
+        },
+        {
+            "eventId": "requirementDocumentation.showActionsPanel",
+            "action": "showActionsPanel",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementDocumentation.refreshDocPageOnMove",
+            "cacheEventData": true,
+            "action": "reveal"
+        },
+        {
+            "eventId": "requirementDocumentation.refreshDocumentationTab",
+            "action": "reveal"
+        },
+        {
+            "eventId": "requirementDocumentation.refreshTracelinkMarkers",
+            "action": "refreshMarkersOnObjectModified",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementDocumentation.downloadOLEObjectFromDataSet",
+            "action": "downloadOLEObjectFromDataSet"
+        },
+        {
+            "eventId": "requirementDocumentation.downloadOLEObject",
+            "action": "downloadOLEObject"
+        },
+        {
+            "eventId": "requirementDocumentation.setOLEObjectToDownload",
+            "action": "setOLEObjectToDownload"
+        },
+        {
+            "eventId": "Arm0RequirementDocumentationACE.contentUnloaded",
+            "action": "pageContentUnloaded"
+        },
+        {
+            "eventId": "showActionPopup.close",
+            "action": "closePopupWindow"
+        },
+        {
+            "eventId": "requirementDocumentation.deleteTracelinkFromTooltipInAceOverview",
+            "action": "deleteTracelinkFromTooltipInAceOverview"
+        }
+    ],
+    "conditions": {},
+    "messages": {
+        "cutSingleSuccessful": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.cutSingleSuccessful}}",
+            "messageTextParams": [
+                "{{data.deletedChildObject.props.object_string.uiValues[0]}}",
+                "{{data.delectedParentObject}}"
+            ]
+        },
+        "notificationTracelinkDeletedSuccess":{
+            "messageType": "INFO",
+            "messageText": "{{i18n.tracelinkDeletedMessage}}"
+        },
+        "getMessageFromTLDeleteFailure": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.PartialError}}",
+            "messageTextParams": [
+                "{{data.deleteObjectsPartialErrors[0].errorValues[0].message}}"
+            ]
+        }
+    },
+    "i18n": {
+        "SERVER_ERROR": [
+            "BaseMessages"
+        ],
+        "cutSingleSuccessful": [
+            "ZeroCompileCommandMessages"
+        ],
+        "createTraceLinkTitle": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "reviewSuspectTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "openMasterReqTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "openRequirementsTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "Remove": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "delete": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "tracelinkDeletedMessage" :
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "cancel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "deleteTracelinkConfirmation": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "PartialError": [
+            "RequirementsCommandPanelsMessages"
+        ]
+    },
+    "lifecycleHooks": {
+        "onMount": "reveal"
+    }
+}

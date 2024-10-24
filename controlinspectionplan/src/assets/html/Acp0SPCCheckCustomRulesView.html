@@ -1,0 +1,30 @@
+<aw-flex-column>
+    <div class="aw-controlinspectionplan-rulesTitle">{{i18n.acp0OutOfRules}}</div>
+    <aw-flex-row height="4f" visible-when="data.trendProperty.length">
+        <aw-widget class="aw-controlinspectionplan-ruleChekboxWithText" prop="data.trendProperty[0]"> </aw-widget>
+        <aw-widget class="aw-controlinspectionplan-ruleText" prop="data.trendProperty[1]"
+            enable-when="data.trendProperty[0].dbValue === true && data.trendProperty[0].isEnabled === true">
+        </aw-widget>
+    </aw-flex-row>
+    <hr class="aw-controlinspectionplan-hr" />
+    <aw-flex-row height="4f" visible-when="data.runProperty.length">
+        <aw-widget class="aw-controlinspectionplan-ruleChekboxWithText" prop="data.runProperty[0]"> </aw-widget>
+        <aw-widget class="aw-controlinspectionplan-ruleText" prop="data.runProperty[1]"
+            enable-when="data.runProperty[0].dbValue === true && data.runProperty[0].isEnabled === true"> </aw-widget>
+    </aw-flex-row>
+    <hr class="aw-controlinspectionplan-hr" />
+    <div aw-repeat="prop:data.ruleProperties ">
+        <aw-widget
+            visible-when="((prop.propertyName == 'acp0LessThanPercentage' || prop.propertyName == 'acp0MoreThanPercentage' || prop.propertyName == 'acp0SamplesSize') && data.ruleProperties[0].dbValue === true) || (prop.propertyName != 'acp0LessThanPercentage' && prop.propertyName != 'acp0MoreThanPercentage' && prop.propertyName != 'acp0SamplesSize')"
+            class="{{prop.type == 'BOOLEAN' ? 'aw-controlinspectionplan-ruleChekbox' : prop.isEnabled == true ? 'aw-controlinspectionplan-ruleText' : 'aw-controlinspectionplan-ruleText aw-controlinspectionplan-ruleTextDisable' }}"
+            prop="prop"> </aw-widget>
+        <hr visible-when="((prop.propertyName == 'acp0LessThanPercentage' || prop.propertyName == 'acp0MoreThanPercentage' || prop.propertyName == 'acp0SamplesSize') && data.ruleProperties[0].dbValue === true) || (prop.propertyName != 'acp0LessThanPercentage' && prop.propertyName != 'acp0MoreThanPercentage' && prop.propertyName != 'acp0SamplesSize')"
+            class="aw-controlinspectionplan-hr" />
+    </div>
+    <div aw-repeat="prop:data.westingHoueRuleProperties ">
+        <aw-widget
+            class="{{prop.type == 'BOOLEAN' ? 'aw-controlinspectionplan-ruleChekbox' : prop.isEnabled == true ? 'aw-controlinspectionplan-ruleText' : 'aw-controlinspectionplan-ruleText aw-controlinspectionplan-ruleTextDisable' }}"
+            prop="prop"> </aw-widget>
+        <hr class="aw-controlinspectionplan-hr" />
+    </div>
+</aw-flex-column>

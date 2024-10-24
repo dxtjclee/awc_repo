@@ -1,0 +1,20 @@
+<aw-command-panel caption="{{ctx.panelContext.title?ctx.panelContext.title:ctx.panelContext.text}}">
+    <aw-panel-body class="aw-requirements-tracelinkAddPanelBodyContainer">
+        <aw-add max-recent-count='7'
+                visible-tabs="palette,search"
+                add-panel-state="fields.addPanelState">
+        </aw-add>
+    </aw-panel-body>
+
+    <aw-panel-footer>
+        <aw-button action="addInList" visible-when="conditions.isAddButtonVisible">
+            <aw-i18n>i18n.Add</aw-i18n>
+        </aw-button>
+
+        <label visible-when="conditions.isInsertButtonVisible" >{{i18n.openSplitViewLabel}}</label>
+        <aw-button action="addFromStructure" visible-when="conditions.isInsertButtonVisible" >
+            <aw-i18n>i18n.openInView</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>
+

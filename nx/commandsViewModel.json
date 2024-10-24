@@ -1,0 +1,2882 @@
+{
+  "commandHandlers": {
+    "ASBPasteNotAllowedOnAssemblyCompOverrideHandler": {
+      "id": "Awp0Paste",
+      "action": "pasteContentsFromClipboard",
+      "activeWhen": {
+        "condition": "conditions.isASBPasteNotAllowedOnAssembly"
+      },
+      "visibleWhen": false
+    },
+    "awp0PrintCommandHandlerHosted": {
+      "id": "Awp0Print",
+      "action": "activatePrintPanel",
+      "activeWhen": {
+        "condition": "conditions.isHostNx"
+      },
+      "visibleWhen": false
+    },
+    "AMObjectExpandCommandHandler": {
+      "id": "AMObjectExpand",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.isExpandAndCollapseEnabled"
+      },
+      "enableWhen": {
+        "condition": "conditions.isExpandAndCollapseEnabled"
+      }
+    },
+    "AMObjectExpandBelowCommandHandler": {
+      "id": "AMObjectExpandBelow",
+      "action": "amExpandBelow",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.isExpandAndCollapseEnabled"
+      },
+      "enableWhen": {
+        "condition": "conditions.isExpandAndCollapseEnabled"
+      }
+    },
+    "AMObjectCollapseBelowCommandHandler": {
+      "id": "AMObjectCollapseBelow",
+      "action": "amCollapseBelow",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.isExpandAndCollapseEnabled"
+      },
+      "enableWhen": {
+        "condition": "conditions.isExpandAndCollapseEnabled"
+      }
+    },
+    "AMObjectExpandBelowCtxMenuCommandHandler": {
+      "id": "AMObjectExpandBelowCtxMenu",
+      "action": "amExpandBelow",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.isExpandAndCollapseEnabled"
+      },
+      "enableWhen": {
+        "condition": "conditions.isExpandAndCollapseEnabled"
+      }
+    },
+    "AMObjectCollapseBelowCtxMenuCommandHandler": {
+      "id": "AMObjectCollapseBelowCtxMenu",
+      "action": "amCollapseBelow",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.isExpandAndCollapseEnabled"
+      },
+      "enableWhen": {
+        "condition": "conditions.isExpandAndCollapseEnabled"
+      }
+    },
+    "hostedNxTestingCheckoutHandler": {
+      "id": "Awp0Checkout",
+      "action": "hostedNxTestingCheckout",
+      "activeWhen": {
+        "condition": "conditions.hostedNxCheckinCheckoutCommandTestActive"
+      },
+      "visibleWhen": {
+        "condition": "conditions.hostedNxCheckoutCommandTestVisibility "
+      }
+    },
+    "hostedNxTestingCheckinHandler": {
+      "id": "Awp0Checkin",
+      "action": "hostedNxTestingCheckin",
+      "activeWhen": {
+        "condition": "conditions.hostedNxCheckinCheckoutCommandTestActive"
+      },
+      "visibleWhen": {
+        "condition": "conditions.hostedNxCheckinCommandTestVisibility"
+      }
+    },
+    "hostedNxTestingCancelCheckoutHandler": {
+      "id": "Awp0CancelCheckout",
+      "action": "hostedNxTestingCancelCheckout",
+      "activeWhen": {
+        "condition": "conditions.hostedNxCheckinCheckoutCommandTestActive"
+      },
+      "visibleWhen": {
+        "condition": "conditions.hostedNxCancelCheckoutCommandTestVisibility"
+      }
+    },
+    "hostedNxTestingDatasetDelegate": {
+      "id": "Awp0ShowObjectCellDataset",
+      "action": "showHoveredObject",
+      "activeWhen": {
+        "condition": "conditions.hostedNxDatasetTestDelegateActive"
+      },
+      "visibleWhen": {
+        "condition": "conditions.cmdAwp0ShowObjectCellDatasetBaseVisibleCondition"
+      }
+    },
+    "Awn0NXTestingOpenHostedCellCommandHandler": {
+      "id": "Awn0NXOpenHostedCellCommand",
+      "action": "openInNxTesting",
+      "activeWhen": {
+        "condition": "conditions.awn0openinnxCommandTestVisibility"
+      },
+      "visibleWhen": {
+        "condition": "conditions.awn0openinnxCommandTestVisibility"
+      }
+    },
+    "Awn0NXTestingOpenHostedHandler": {
+      "id": "Awn0NXOpenHosted",
+      "action": "openInNxTesting",
+      "activeWhen": {
+        "condition": "conditions.awn0openinnxCommandTestVisibility"
+      },
+      "visibleWhen": {
+        "condition": "conditions.awn0openinnxCommandTestVisibility"
+      }
+    },
+    "Awn0NXTestingAddComponentHostedHandler": {
+      "id": "Awn0NXAddComponentHosted",
+      "action": "testingAddComponentToNx",
+      "activeWhen": {
+        "condition": "conditions.awn0addComponentCommandTestVisibility"
+      },
+      "visibleWhen": {
+        "condition": "conditions.awn0addComponentCommandTestVisibility"
+      }
+    },
+    "Awn0NXTestingOpenRelationBrowserHandler": {
+      "id": "Awn0NXOpenRelationBrowser",
+      "action": "testingOpenInNxRelationBrowser",
+      "activeWhen": {
+        "condition": "conditions.awn0openinnxRelationBrowserCommandTestVisibility"
+      },
+      "visibleWhen": {
+        "condition": "conditions.awn0openinnxRelationBrowserCommandTestVisibility"
+      }
+    },
+    "Awn0NXTestingOpenRequirementLinksHostedHandler": {
+      "id": "Awn0NXOpenRequirementLinksHosted",
+      "action": "testingOpenInNxRequirementsLinks",
+      "activeWhen": {
+        "condition": "conditions.awn0openinnxRequirementLinksCommandTestVisibility"
+      },
+      "visibleWhen": {
+        "condition": "conditions.awn0openinnxRequirementLinksCommandTestVisibility"
+      }
+    },
+    "Awn0NXTestingSetDefaultFolderHostedHandler": {
+      "id": "Awn0NXSetDefaultFolderHosted",
+      "action": "testingSetNxDefaultFolder",
+      "activeWhen": {
+        "condition": "conditions.awn0setNxDefaultFolderCommandTestVisibility"
+      },
+      "visibleWhen": {
+        "condition": "conditions.awn0setNxDefaultFolderCommandTestVisibility"
+      }
+    },
+    "nxs0TestingAssociateToNxHandler": {
+      "id": "Nxs0AssociateToNX",
+      "action": "nxs0TestingAssociateToNxAction",
+      "activeWhen": {
+        "condition": "conditions.nxs0AssociateToNxCommandTestVisibility"
+      },
+      "visibleWhen": {
+        "condition": "conditions.nxs0AssociateToNxCommandTestVisibility"
+      }
+    },
+    "nxs0TestingDisassociateToNxHandler": {
+      "id": "Nxs0DisassociateFromNX",
+      "action": "nxs0TestingDisassociateToNxAction",
+      "activeWhen": {
+        "condition": "conditions.nxs0DisassociateToNxCommandTestVisibility"
+      },
+      "visibleWhen": {
+        "condition": "conditions.nxs0DisassociateToNxCommandTestVisibility"
+      }
+    },
+    "nxs0TestingDisassociateToNxItemRevHandler": {
+      "id": "Nxs0DisassociateItemRevFromNX",
+      "action": "nxs0TestingDisassociateToNxItemRevAction",
+      "activeWhen": {
+        "condition": "conditions.nxs0DisassociateToNxCommandTestVisibility"
+      },
+      "visibleWhen": {
+        "condition": "conditions.nxs0DisassociateToNxCommandTestVisibility"
+      }
+    },
+    "NxTestingGroupCommandHandler": {
+      "id": "NxTestingGroupCommand",
+      "activeWhen": true
+    },
+    "Awp0OpenHostedHandlerNX": {
+      "id": "Awp0OpenHosted",
+      "action": "Awp0OpenHostedAction",
+      "activeWhen": {
+        "condition": "conditions.isHostNx"
+      },
+      "visibleWhen": false
+    },
+    "Awp0OpenNewViewHostedHandlerNX": {
+      "id": "Awp0OpenNewViewHosted",
+      "action": "Awp0OpenNewViewHostedAction",
+      "activeWhen": {
+        "condition": "conditions.isHostNx"
+      },
+      "visibleWhen": false
+    },
+    "Awp0AddComponentHostedHandlerNX": {
+      "id": "Awp0AddComponentHosted",
+      "action": "Awp0AddComponentHostedAction",
+      "activeWhen": {
+        "condition": "conditions.isHostNx"
+      },
+      "visibleWhen": false
+    },
+    "hostingLightThemeHandler": {
+      "id": "Awp0ShowLightTheme",
+      "activeWhen": {
+        "condition": "conditions.isHostNx"
+      },
+      "visibleWhen": {
+        "condition": "conditions.nxChangeThemeCommandVisibility"
+      }
+    },
+    "hostingDarkThemeHandler": {
+      "id": "Awp0ShowDarkTheme",
+      "action": "setDarkTheme",
+      "activeWhen": {
+        "condition": "conditions.isHostNx"
+      },
+      "visibleWhen": {
+        "condition": "conditions.nxChangeThemeCommandVisibility"
+      }
+    },
+    "hostedNxCheckoutHandler": {
+      "id": "Awp0Checkout",
+      "action": "hostedNxCheckout",
+      "activeWhen": {
+        "condition": "conditions.hostedNxCheckinCheckoutCommandActive"
+      },
+      "visibleWhen": {
+        "condition": "conditions.hostedNxCheckoutCommandVisibility"
+      }
+    },
+    "hostedNxCheckinHandler": {
+      "id": "Awp0Checkin",
+      "action": "hostedNxCheckin",
+      "activeWhen": {
+        "condition": "conditions.hostedNxCheckinCheckoutCommandActive"
+      },
+      "visibleWhen": {
+        "condition": "conditions.hostedNxCheckinCommandVisibility"
+      }
+    },
+    "hostedNxCancelCheckoutHandler": {
+      "id": "Awp0CancelCheckout",
+      "action": "hostedNxCancelCheckout",
+      "activeWhen": {
+        "condition": "conditions.hostedNxCheckinCheckoutCommandActive"
+      },
+      "visibleWhen": {
+        "condition": "conditions.hostedNxCancelCheckoutCommandVisibility"
+      }
+    },
+    "pidShowObjectHandler": {
+      "id": "Awp0ShowObject",
+      "action": "pidObjectsOpen",
+      "activeWhen": {
+        "condition": "conditions.hostedNxPIDOpenObjects"
+      },
+      "visibleWhen": {
+        "condition": "conditions.cmdOpenBaseVisibleCondition"
+      }
+    },
+    "pidShowObjectCellHandler": {
+      "id": "Awp0ShowObjectCell",
+      "action": "pidObjectsOpen",
+      "activeWhen": {
+        "condition": "conditions.hostedNxPIDOpenObjects"
+      },
+      "visibleWhen": {
+        "condition": "conditions.cmdAwp0ShowObjectCellBaseVisibleCondition"
+      }
+    },
+    "Nxp1FulfillmentParameterStartEditHandler": {
+      "id": "Awp0StartEdit",
+      "action": "nxtcxmlOpenEventActionTrigger",
+      "activeWhen": {
+        "condition": "conditions.nxp1FulfillmentParameterStartEditCondition"
+      },
+      "visibleWhen": false
+    },
+    "Awn0OpenNxTcXmlHandler": {
+      "id": "Awn0OpenNxTcXml",
+      "action": "nxtcxmlOpenEventActionTrigger",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.hostedNxOpenNxTcXml"
+      }
+    },
+    "Awn0OpenProductNxTcXmlHandler": {
+      "id": "Awn0OpenProductNxTcXml",
+      "action": "nxtcxmlOpenProductEventActionTrigger",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.hostedNxOpenProductNxTcXml"
+      }
+    },
+    "hostedNxDatasetDelegate": {
+      "id": "Awp0ShowObjectCellDataset",
+      "action": "showHoveredObject",
+      "activeWhen": {
+        "condition": "conditions.hostedNxDatasetDelegateActive"
+      },
+      "visibleWhen": {
+        "condition": "conditions.cmdAwp0ShowObjectCellDatasetBaseVisibleCondition"
+      }
+    },
+    "Awn0NXOpenHostedCellCommandHandler": {
+      "id": "Awn0NXOpenHostedCellCommand",
+      "action": "openInNxCell",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.awn0openinnxCellCommandVisibility"
+      }
+    },
+    "Awn0NXOpenHostedHandler": {
+      "id": "Awn0NXOpenHosted",
+      "action": "NxOpenEventActionTrigger",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.awn0openinnxCommandVisibility"
+      }
+    },
+    "Awn0NXOpenProductHostedHandler": {
+      "id": "Awn0NXOpenProductHosted",
+      "action": "NxOpenProductEventActionTrigger",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.awn0openproductinnxCommandVisibility"
+      }
+    },
+    "PidNXOpenHostedHandler": {
+      "id": "Awn0NXOpenHosted",
+      "action": "openFasadeObjectsInNx",
+      "activeWhen": {
+        "condition": "conditions.pidopeninnxCommandVisibility"
+      },
+      "visibleWhen": {
+        "condition": "conditions.awn0openinnxCommandVisibility"
+      }
+    },
+    "Awn0NXAddComponentHostedHandler": {
+      "id": "Awn0NXAddComponentHosted",
+      "action": "addComponentToNx",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.awn0addComponentCommandVisibility"
+      }
+    },
+    "Awn0NXOpenRelationBrowserHandler": {
+      "id": "Awn0NXOpenRelationBrowser",
+      "action": "openInNxRelationBrowser",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.awn0openinnxRelationBrowserCommandVisibility"
+      }
+    },
+    "Awn0NXOpenRequirementLinksHostedHandler": {
+      "id": "Awn0NXOpenRequirementLinksHosted",
+      "action": "openInNxRequirementsLinks",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.awn0openinnxRequirementLinksCommandVisibility"
+      }
+    },
+    "Awn0NXSetDefaultFolderHostedHandler": {
+      "id": "Awn0NXSetDefaultFolderHosted",
+      "action": "setNxDefaultFolder",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.awn0setNxDefaultFolderCommandVisibility"
+      }
+    },
+    "nxs0AssociateToNxHandler": {
+      "id": "Nxs0AssociateToNX",
+      "action": "nxs0AssociateToNxAction",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.nxs0AssociateToNxCommandVisibility"
+      }
+    },
+    "nxs0DisassociateToNxHandler": {
+      "id": "Nxs0DisassociateFromNX",
+      "action": "nxs0DisassociateToNxAction",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.nxs0DisassociateToNxCommandVisibility"
+      }
+    },
+    "nxs0DisassociateToNxItemRevHandler": {
+      "id": "Nxs0DisassociateItemRevFromNX",
+      "action": "nxs0DisassociateToNxItemRevAction",
+      "activeWhen": {
+        "condition": "conditions.nxs0DisassociateItemRevToNxCommandVisibility"
+      },
+      "visibleWhen": {
+        "condition": "conditions.nxs0DisassociateItemRevToNxCommandVisibility"
+      }
+    },
+    "NxGroupCommandHandler": {
+      "id": "NxGroupCommand",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.nxGroupCommandVisibility"
+      }
+    },
+    "fakeCommandToForceServerVisibilityAwn0NXOpenHostedHandler": {
+      "id": "fakeCommandToForceServerVisibilityAwn0NXOpenHosted",
+      "action": "",
+      "activeWhen": {
+        "condition": "conditions.Awn0NXOpenHosted"
+      },
+      "visibleWhen": false
+    },
+    "Awp0StartEditHostedHandlerNX": {
+      "id": "Awp0StartEdit",
+      "activeWhen": {
+        "condition": "conditions.isPIDObjectStartEdit"
+      },
+      "visibleWhen": false
+    },
+    "Awp0CutHostedHandlerNX": {
+      "id": "Awp0Cut",
+      "activeWhen": {
+        "condition": "condition.isPIDObjectCut"
+      },
+      "enableWhen": false
+    },
+    "Awp0CutCtxMenuHostedHandlerNX": {
+      "id": "Awp0CutContextMenu",
+      "activeWhen": {
+        "condition": "condition.isPIDObjectCut"
+      },
+      "visibleWhen": false
+    },
+    "Awn0NXOpenDatasetVersionHandler": {
+      "id": "Awn0NXOpenDatasetVersion",
+      "action": "openDatasetVersion",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.canOpenDatasetVersionStandalone"
+      }
+    },
+    "Awn0NXOpenDatasetVersionHostedHandler": {
+      "id": "Awn0NXOpenDatasetVersionHosted",
+      "action": "openDatasetVersionHosted",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.canOpenDatasetVersionHosted"
+      }
+    },
+    "Awn0NXOpenDatasetVersionPanelHandler": {
+      "id": "Awn0NXOpenDatasetVersionPanel",
+      "action": "openDatasetVersionPanel",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.canOpenDatasetVersionStandalone"
+      }
+    },
+    "Awn0NXOpenDatasetVersionPanelHostedHandler": {
+      "id": "Awn0NXOpenDatasetVersionPanelHosted",
+      "action": "openDatasetVersionPanelHosted",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.canOpenDatasetVersionHosted"
+      }
+    },
+    "Awn0NXTestingOpenDatasetVersionHostedHandler": {
+      "id": "Awn0NXOpenDatasetVersionHosted",
+      "action": "openDatasetVersionHostedTesting",
+      "activeWhen": {
+        "condition": "conditions.canOpenDatasetVersionHostedTest"
+      },
+      "visibleWhen": {
+        "condition": "conditions.canOpenDatasetVersionHostedTest"
+      }
+    },
+    "Awn0NXTestingOpenDatasetVersionPanelHostedHandler": {
+      "id": "Awn0NXOpenDatasetVersionPanelHosted",
+      "action": "openDatasetVersionPanelHostedTesting",
+      "activeWhen": {
+        "condition": "conditions.canOpenDatasetVersionHostedTest"
+      },
+      "visibleWhen": {
+        "condition": "conditions.canOpenDatasetVersionHostedTest"
+      }
+    },
+    "PabShowCreateObjectHandler": {
+      "id": "AMObjectAddPanel",
+      "action": "registerAMAddContext",
+      "activeWhen": {
+        "condition": "conditions.isPABObjectCreate"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isPABObjectCreate"
+      }
+    },
+    "Awp0OpenPABHandler": {
+      "id": "Awp0NavigateObject",
+      "action": "Awp0OpenPABBatchAction",
+      "activeWhen": {
+        "condition": "condition.isPABObjectOpen"
+      },
+      "visibleWhen": false
+    },
+    "Awp0CutPABHandler": {
+      "id": "Awp0Cut",
+      "action": "cutConfiguredRevs",
+      "activeWhen": {
+        "condition": "condition.Awp0CutPABActiveCond"
+      },
+      "visibleWhen": {
+        "condition": true
+      },
+      "enableWhen": {
+        "condition": "conditions.Awp0CutPABEnableCond"
+      }
+    },
+    "Awp0CutContextMenuPABHandler": {
+      "id": "Awp0Cut",
+      "action": "cutConfiguredRevs",
+      "activeWhen": {
+        "condition": "condition.isAMTemplateObjectSelected"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Awp0CutPABVisibleCond"
+      }
+    },
+    "AMSchemeOpenAndCheckLicenseHandler": {
+      "id": "Awp0ShowObject",
+      "action": "AMAPBOpenAndCheckLicense",
+      "activeWhen": {
+        "condition": "conditions.isAMSchemeObjectSelectedAndSaveAsNotInProgress"
+      },
+      "visibleWhen": {
+        "condition": "conditions.cmdOpenBaseVisibleCondition"
+      }
+    },
+    "AMSchemeCellOpenAndCheckLicenseHandler": {
+      "id": "Awp0ShowObjectCellForObjectNavigation",
+      "action": "AMAPBCellOpenAndCheckLicense",
+      "activeWhen": {
+        "condition": "conditions.isAMSchemeObjectInContext"
+      },
+      "visibleWhen": {
+        "condition": "conditions.cmdOpenBaseVisibleCondition"
+      }
+    },
+    "Awp0AddAMSchemeHandler": {
+      "id": "Awb0AddChildElementDeclarative",
+      "action": "launchAddChildElementPanel",
+      "activeWhen": {
+        "condition": "conditions.Awp0AddAMSchemeActiveCond"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Awp0AddAMSchemeVisibleCond"
+      }
+    },
+    "Awp0DuplicateAMSchemeHandler": {
+      "id": "Awb0ShowDuplicate",
+      "action": "enableDuplicateMode",
+      "activeWhen": {
+        "condition": "conditions.Awp0DuplicateAMSchemeActiveCond"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Awp0DuplicateAMSchemeVisibleCond"
+      },
+      "enableWhen": {
+        "condition": "conditions.Awp0DuplicateAMSchemeEnableCond"
+      }
+    },
+    "Awp0CutAMSchemeHandler": {
+      "id": "Awp0Cut",
+      "action": "aceCutContentsToClipboard",
+      "activeWhen": {
+        "condition": "conditions.Awp0CutAMSchemeActiveCond"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Awp0CutAMSchemeVisibleCond"
+      },
+      "enableWhen": {
+        "condition": "conditions.Awp0CutAMSchemeEnableCond"
+      }
+    },
+    "Awp0ExportNXAssemblyAMSchemeHandler": {
+      "id": "Awn0ExportNXData",
+      "action": "exportNXDataAction",
+      "activeWhen": {
+        "condition": "conditions.Awp0ExportNXAssemblyAMSchemeActiveCond"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Awp0ExportNXAssemblyAMSchemeVisibleCond"
+      },
+      "enableWhen": {
+        "condition": "conditions.Awp0ExportNXAssemblyAMSchemeEnableCond"
+      }
+    },
+    "Awp0SiblingAMSchemeHandler": {
+      "id": "Awb0AddSiblingElementDeclarative",
+      "action": "launchAddSiblingElementPanel",
+      "activeWhen": {
+        "condition": "condition.Awp0SiblingAMSchemeActiveCond"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Awp0SiblingAMSchemeVisibleCond"
+      }
+    },
+    "Awp0InsertLevelAMSchemeHandler": {
+      "id": "Awb0InsertParentElement",
+      "action": "getInfoForInsertLevelAndLaunchInsertLevelPanel",
+      "activeWhen": {
+        "condition": "condition.Awp0InsertLevelAMSchemeActiveCond"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Awp0InsertLevelAMSchemeVisibleCond"
+      }
+    },
+    "Awp0CreateSessionAMSchemeHandler": {
+      "id": "Awb0CreateSessionCommand",
+      "action": "Awb0CreateSessionCommandPanelAction",
+      "activeWhen": {
+        "condition": "condition.Awp0CreateSessionAMSchemeActiveCond"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Awp0CreateSessionAMSchemeVisibleCond"
+      }
+    },
+    "Awp0ImportAMSchemeHandler": {
+      "id": "Awb0ImportFromExcel",
+      "action": "launchImportFromExcelPanel",
+      "activeWhen": {
+        "condition": "conditions.Awp0ImportAMSchemeActiveCond"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Awp0ImportAMSchemeVisibleCond"
+      },
+      "enableWhen": {
+        "condition": "conditions.Awp0ImportAMSchemeEnableCond"
+      }
+    },
+    "Awp0SaveAsAndReplaceAMSchemeHandler": {
+      "id": "Awb0SaveAsAndReplaceElement",
+      "action": "launchSaveAsAndReplace",
+      "activeWhen": {
+        "condition": "condition.Awp0SaveAsAndReplaceAMSchemeActiveCond"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Awp0SaveAsAndReplaceAMSchemeVisibleCond"
+      }
+    },
+    "Awp0SaveAsAMSchemeHandler": {
+      "id": "Awp0ShowSaveAs",
+      "action": "saveAsContext",
+      "activeWhen": {
+        "condition": "condition.Awp0SaveAsAMSchemeActiveCond"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Awp0SaveAsOrReviseAMSchemeVisibleCond"
+      },
+      "enableWhen": {
+        "condition": "conditions.Awp0SaveAsAMSchemeEnableCond"
+      }
+    },
+    "Awp0ReviseAMSchemeHandler": {
+      "id": "Awp0ShowRevise",
+      "action": "reviseContext",
+      "activeWhen": {
+        "condition": "condition.Awp0ReviseAMSchemeActiveCond"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Awp0SaveAsOrReviseAMSchemeVisibleCond"
+      },
+      "enableWhen": {
+        "condition": "conditions.Awp0ReviseAMSchemeEnableCond"
+      }
+    },
+    "Awn0ExportNXDataHandler": {
+      "id": "Awn0ExportNXData",
+      "action": "exportNXDataAction",
+      "activeWhen": {
+        "condition": "conditions.isExportNXDataVisible"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isExportNXDataVisible"
+      },
+      "enableWhen": {
+        "condition": "conditions.isExportNXDataEnabled"
+      }
+    },
+    "SchmOpenInVisHandler": {
+      "id": "Awp0OpenVVI",
+      "activeWhen": {
+        "condition": "condition.isAMSchemeObjectSelected"
+      },
+      "visibleWhen": false
+    },
+    "SchmOpenInRACHandler": {
+      "id": "Awp0OpenInRAC",
+      "activeWhen": {
+        "condition": "condition.isAMSchemeObjectSelected"
+      },
+      "visibleWhen": false
+    },
+    "SchmOpenNxTcXml": {
+      "id": "Awn0OpenNxTcXml",
+      "activeWhen": {
+        "condition": "condition.isAMSchemeObjectSelected"
+      },
+      "visibleWhen": false
+    },
+    "SchmOpenInSEEC": {
+      "id": "Awp0OpenInSEEC",
+      "activeWhen": {
+        "condition": "condition.isAMSchemeObjectSelected"
+      },
+      "visibleWhen": false
+    },
+    "SchmopenInIllustrator": {
+      "id": "openInIllustrator",
+      "activeWhen": {
+        "condition": "condition.isAMSchemeObjectSelected"
+      },
+      "visibleWhen": false
+    },
+    "SchmAwb0SaveWorkingContext": {
+      "id": "Awb0SaveWorkingContext",
+      "activeWhen": {
+        "condition": "condition.isAMSchemeObjectSelected"
+      },
+      "visibleWhen": false
+    },
+    "SchmAqc0AddCharRepresentation": {
+      "id": "Aqc0AddCharRepresentation",
+      "activeWhen": {
+        "condition": "condition.isAMSchemeObjectSelected"
+      },
+      "visibleWhen": false
+    },
+    "SchmAwb0ShowDuplicate": {
+      "id": "Awb0ShowDuplicate",
+      "activeWhen": {
+        "condition": "condition.isAMSchemeObjectSelected"
+      },
+      "visibleWhen": false
+    },
+    "SchmCrt1CreateValidationContract": {
+      "id": "Crt1CreateValidationContract",
+      "activeWhen": {
+        "condition": "condition.isAMSchemeObjectSelected"
+      },
+      "visibleWhen": false
+    },
+    "SchmEvm1CreateRecipe": {
+      "id": "Evm1CreateRecipe",
+      "activeWhen": {
+        "condition": "condition.isAMSchemeObjectSelected"
+      },
+      "visibleWhen": false
+    },
+    "SchmSc1CreateLineItem": {
+      "id": "Sc1CreateLineItem",
+      "activeWhen": {
+        "condition": "condition.isAMSchemeObjectSelected"
+      },
+      "visibleWhen": false
+    },
+    "SchmSc1CreateExchange": {
+      "id": "Sc1CreateExchange",
+      "activeWhen": {
+        "condition": "condition.isAMSchemeObjectSelected"
+      },
+      "visibleWhen": false
+    },
+    "SchmArm0CreateTraceLink": {
+      "id": "Arm0CreateTraceLink",
+      "activeWhen": {
+        "condition": "condition.isAMSchemeObjectSelected"
+      },
+      "visibleWhen": false
+    },
+    "SchmArm0GenerateTraceabilityMatrix": {
+      "id": "Arm0GenerateTraceabilityMatrix",
+      "activeWhen": {
+        "condition": "condition.isAMSchemeObjectSelected"
+      },
+      "visibleWhen": false
+    },
+    "SchmArm0ImportFromOffice": {
+      "id": "Arm0ImportFromOffice",
+      "activeWhen": {
+        "condition": "condition.isAMSchemeObjectSelected"
+      },
+      "visibleWhen": false
+    },
+    "SchmCae1GenerateCAEStructure": {
+      "id": "Cae1GenerateCAEStructure",
+      "activeWhen": {
+        "condition": "condition.isAMSchemeObjectSelected"
+      },
+      "visibleWhen": false
+    },
+    "SchmAwp0InContextReports": {
+      "id": "Awp0InContextReports",
+      "activeWhen": {
+        "condition": "condition.isAMSchemeObjectSelected"
+      },
+      "visibleWhen": false
+    },
+    "SchmAwp0NewWorkflowProcess": {
+      "id": "Awp0NewWorkflowProcess",
+      "activeWhen": {
+        "condition": "condition.isAMSchemeObjectSelected"
+      },
+      "visibleWhen": false
+    },
+    "SchmEvm1ExecuteRecipe": {
+      "id": "Evm1ExecuteRecipe",
+      "activeWhen": {
+        "condition": "condition.isAMSchemeObjectSelected"
+      },
+      "visibleWhen": false
+    },
+    "SchmAwp0AssignProjects": {
+      "id": "Awp0AssignProjects",
+      "activeWhen": {
+        "condition": "condition.isAMSchemeObjectSelected"
+      },
+      "visibleWhen": false
+    },
+    "SchmAwp0ChangeOwner": {
+      "id": "Awp0ChangeOwner",
+      "activeWhen": {
+        "condition": "condition.isAMSchemeObjectSelected"
+      },
+      "visibleWhen": false
+    },
+    "SchmQfm0GenerateFmea": {
+      "id": "Qfm0GenerateFmea",
+      "activeWhen": {
+        "condition": "condition.isAMSchemeObjectSelected"
+      },
+      "visibleWhen": false
+    },
+    "SchmArm0ExistingTraceLink": {
+      "id": "Arm0ExistingTraceLink",
+      "activeWhen": {
+        "condition": "condition.isAMSchemeObjectSelected"
+      },
+      "visibleWhen": false
+    },
+    "SchmFsh1AssignFinish": {
+      "id": "Fsh1AssignFinish",
+      "activeWhen": {
+        "condition": "condition.isAMSchemeObjectSelected"
+      },
+      "visibleWhen": false
+    },
+    "SchmAwb0OccurrenceEffectivity": {
+      "id": "Awb0OccurrenceEffectivity",
+      "activeWhen": {
+        "condition": "condition.isAMSchemeObjectSelected"
+      },
+      "visibleWhen": false
+    },
+    "AMProdopenInIllustrator": {
+      "id": "openInIllustrator",
+      "activeWhen": {
+        "condition": "condition.isPABObjectOpen"
+      },
+      "visibleWhen": false
+    },
+    "AMProdSc1CreateExchange": {
+      "id": "Sc1CreateExchange",
+      "activeWhen": {
+        "condition": "condition.isPABObjectOpen"
+      },
+      "visibleWhen": false
+    },
+    "AMProdArm0CreateTraceLink": {
+      "id": "Arm0CreateTraceLink",
+      "activeWhen": {
+        "condition": "condition.isPABObjectOpen"
+      },
+      "visibleWhen": false
+    },
+    "AMProdArm0GenerateTraceabilityMatrix": {
+      "id": "Arm0GenerateTraceabilityMatrix",
+      "activeWhen": {
+        "condition": "condition.isPABObjectOpen"
+      },
+      "visibleWhen": false
+    },
+    "AMProdAwp0InContextReports": {
+      "id": "Awp0InContextReports",
+      "activeWhen": {
+        "condition": "condition.isPABObjectOpen"
+      },
+      "visibleWhen": false
+    },
+    "AMProdCm1ShowCreateChangeInContext": {
+      "id": "Cm1ShowCreateChangeInContext",
+      "activeWhen": {
+        "condition": "condition.isPABObjectOpen"
+      },
+      "visibleWhen": false
+    },
+    "AMaddChildElementCommandHandler": {
+      "id": "Awb0AddChildElementDeclarative",
+      "activeWhen": {
+        "condition": "conditions.isASBSelected"
+      },
+      "visibleWhen": false
+    },
+    "addAASChildElementCommandHandler": {
+      "id": "Awb0AddChildElementDeclarative",
+      "action": "launchAddAASChildElementPanel",
+      "activeWhen": {
+        "condition": "conditions.isASBSelectedAndLicensed"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isASBSelected"
+      },
+      "enableWhen": {
+        "condition": "conditions.isAMSchemeObjectSelected"
+      }
+    },
+    "AMPasteHandler": {
+      "id": "Awp0Paste",
+      "action": "pasteContentsFromClipboard",
+      "activeWhen": {
+        "condition": "conditions.AMPasteActiveCondition"
+      },
+      "visibleWhen": true,
+      "enableWhen": {
+        "condition": "conditions.AMPasteEnableCondition"
+      }
+    },
+    "AMAPBOpenAndCheckLicenseHandler": {
+      "id": "Awp0ShowObject",
+      "action": "AMAPBOpenAndCheckLicense",
+      "activeWhen": {
+        "condition": "conditions.isAMTemplateObjectSelected"
+      },
+      "visibleWhen": {
+        "condition": "conditions.cmdOpenBaseVisibleCondition"
+      }
+    },
+    "AMAPBCellOpenAndCheckLicenseHandler": {
+      "id": "Awp0ShowObjectCellForObjectNavigation",
+      "action": "AMAPBCellOpenAndCheckLicense",
+      "activeWhen": {
+        "condition": "conditions.isAMTemplateObjectInContext"
+      },
+      "visibleWhen": {
+        "condition": "conditions.cmdAwp0ShowObjectCellForObjectNavigationBaseVisibleCondition"
+      }
+    }
+  },
+  "actions": {
+    "amExpandBelow": {
+      "actionType": "Event",
+      "method": "Event",
+      "inputData": {
+        "events": [
+          {
+            "name": "appearanceManagementNavigationTree.expandBelow",
+            "eventData": {
+              "node": "{{commandContext.selectedData.selected[0]}}"
+            }
+          }
+        ]
+      }
+    },
+    "amCollapseBelow": {
+      "actionType": "Event",
+      "method": "Event",
+      "inputData": {
+        "events": [
+          {
+            "name": "appearanceManagementNavigationTree.collapseBelow",
+            "eventData": {
+              "node": "{{commandContext.selectedData.selected[0]}}"
+            }
+          }
+        ]
+      }
+    },
+    "AMAPBOpenAndCheckLicense": {
+      "actionType": "batchJob",
+      "steps": [
+        {
+          "action": "showObject"
+        },
+        {
+          "action": "CacheAMUserLicense"
+        }
+      ]
+    },
+    "Awp0OpenPABBatchAction": {
+      "actionType": "batchJob",
+      "steps": [
+        {
+          "action": "navigateHoveredFolder"
+        },
+        {
+          "action": "CacheAMUserLicense"
+        }
+      ]
+    },
+    "AMAPBCellOpenAndCheckLicense": {
+      "actionType": "batchJob",
+      "steps": [
+        {
+          "action": "showHoveredObject"
+        },
+        {
+          "action": "CacheAMUserLicense"
+        }
+      ]
+    },
+    "CacheAMUserLicense": {
+      "actionType": "JSFunction",
+      "method": "cacheAMUserLicense",
+      "deps": "js/nxCommandHandlers",
+      "inputData": {
+        "currentCache": "{{ctx.cachedAMUserLicense}}"
+      }
+    },
+    "registerAMAddContext": {
+      "actionType": "JSFunction",
+      "method": "updateAddAMObject",
+      "deps": "js/nxCommandHandlers",
+      "inputData": {
+        "0": {
+          "types": "{{ctx.state.params.cmdArg}}"
+        }
+      }
+    },
+    "launchAddAASChildElementPanel": {
+      "actionType": "JSFunction",
+      "method": "activateCommandPanel",
+      "deps": "js/commandPanel.service",
+      "inputData": {
+        "0": "AddAASChildElementDeclarative",
+        "1": "aw_toolsAndInfo",
+        "3": "{{commandContext}}"
+      }
+    },
+    "hostedNxTestingCheckin": {
+      "actionType": "JSFunction",
+      "method": "nxCheckinCheckoutCommandDelegate",
+      "inputData": {
+        "sourceObjects": "{{ctx.mselected}}",
+        "operation": 0
+      },
+      "deps": "js/nxCommandHandlersTest"
+    },
+    "hostedNxTestingCheckout": {
+      "actionType": "JSFunction",
+      "method": "nxCheckinCheckoutCommandDelegate",
+      "inputData": {
+        "sourceObjects": "{{ctx.mselected}}",
+        "operation": 1
+      },
+      "deps": "js/nxCommandHandlersTest"
+    },
+    "hostedNxTestingCancelCheckout": {
+      "actionType": "JSFunction",
+      "method": "nxCheckinCheckoutCommandDelegate",
+      "inputData": {
+        "sourceObjects": "{{ctx.mselected}}",
+        "operation": 2
+      },
+      "deps": "js/nxCommandHandlersTest"
+    },
+    "openInNxTesting": {
+      "actionType": "JSFunction",
+      "method": "openInNxHandler",
+      "inputData": {
+        "sourceObjects": {
+          "$adapt": "{{ctx.mselected}}"
+        }
+      },
+      "deps": "js/nxCommandHandlersTest"
+    },
+    "openDatasetVersionPanelHosted": {
+      "actionType": "JSFunction",
+      "method": "activateCommandPanel",
+      "inputData": {
+        "commandId": "Awn0NXOpenDatasetVersionPanelHosted",
+        "location": "aw_toolsAndInfo"
+      },
+      "deps": "js/commandPanel.service"
+    },
+    "openDatasetVersionPanel": {
+      "actionType": "JSFunction",
+      "method": "activateCommandPanel",
+      "inputData": {
+        "commandId": "Awn0NXOpenDatasetVersionPanel",
+        "location": "aw_toolsAndInfo"
+      },
+      "deps": "js/commandPanel.service"
+    },
+    "openDatasetVersion": {
+      "actionType": "JSFunction",
+      "method": "nxTcXmlCommandHandler",
+      "inputData": {
+        "sourceObjects": "{{data.selectedVersion.dbValue}}"
+      },
+      "deps": "js/nxCommandHandlers"
+    },
+    "openDatasetVersionHosted": {
+      "actionType": "JSFunction",
+      "method": "openVersionWithInHost",
+      "inputData": {
+        "versionObject": "{{data.selectedVersion.dbValue}}",
+        "datasetObject": "{{ctx.selected}}"
+      },
+      "deps": "js/nxCommandHandlers"
+    },
+    "openDatasetVersionPanelHostedTesting": {
+      "actionType": "JSFunction",
+      "method": "activateCommandPanel",
+      "inputData": {
+        "commandId": "Awn0NXOpenDatasetVersionPanelHosted",
+        "location": "aw_toolsAndInfo"
+      },
+      "deps": "js/commandPanel.service"
+    },
+    "openDatasetVersionHostedTesting": {
+      "actionType": "JSFunction",
+      "method": "openVersionWithInHost",
+      "inputData": {
+        "versionObject": "{{data.selectedVersion.dbValue}}",
+        "datasetObject": "{{ctx.selected}}"
+      },
+      "deps": "js/nxCommandHandlers"
+    },
+    "testingAddComponentToNx": {
+      "actionType": "JSFunction",
+      "method": "addComponentHandler",
+      "inputData": {
+        "sourceObjects": {
+          "$adapt": "{{ctx.mselected}}"
+        }
+      },
+      "deps": "js/nxCommandHandlersTest"
+    },
+    "testingOpenInNxRelationBrowser": {
+      "actionType": "JSFunction",
+      "method": "openWithContextHandler",
+      "inputData": {
+        "sourceObjects": "{{ctx.mselected}}",
+        "context": "com.siemens.splm.client.nx.hosted.internal.operations.OpenRelationBrowserHostedOperation"
+      },
+      "deps": "js/nxCommandHandlersTest"
+    },
+    "testingOpenInNxRequirementsLinks": {
+      "actionType": "JSFunction",
+      "method": "openWithContextHandler",
+      "inputData": {
+        "sourceObjects": "{{ctx.mselected}}",
+        "context": "com.siemens.splm.client.nx.hosted.internal.operations.OpenRequirementLinksHostedOperation"
+      },
+      "deps": "js/nxCommandHandlersTest"
+    },
+    "testingSetNxDefaultFolder": {
+      "actionType": "JSFunction",
+      "method": "openWithContextHandler",
+      "inputData": {
+        "sourceObjects": "{{ctx.mselected}}",
+        "context": "com.siemens.splm.client.nx.hosted.internal.operations.SetDefaultFolderHostedOperation"
+      },
+      "deps": "js/nxCommandHandlersTest"
+    },
+    "nxs0TestingAssociateToNxAction": {
+      "actionType": "JSFunction",
+      "method": "openWithInHost",
+      "inputData": {
+        "context": "com.siemens.splm.client.nx.hosted.internal.operations.AssociateToNxOperation",
+        "sourceObjects": "{{ctx.mselected}}"
+      },
+      "deps": "js/hosting/hostOpenService"
+    },
+    "nxs0TestingDisassociateToNxAction": {
+      "actionType": "JSFunction",
+      "method": "openWithInHost",
+      "inputData": {
+        "context": "com.siemens.splm.client.nx.hosted.internal.operations.DisassociateFromNxOperation",
+        "sourceObjects": "{{ctx.mselected}}"
+      },
+      "deps": "js/hosting/hostOpenService"
+    },
+    "nxs0TestingDisassociateToNxItemRevAction": {
+      "actionType": "JSFunction",
+      "method": "openWithInHost",
+      "inputData": {
+        "context": "com.siemens.splm.client.nx.hosted.internal.operations.DisassociateItemRevFromNxOperation",
+        "sourceObjects": "{{ctx.mselected}}"
+      },
+      "deps": "js/hosting/hostOpenService"
+    },
+    "hostedNxCheckin": {
+      "actionType": "JSFunction",
+      "method": "hostCheckinCheckout",
+      "inputData": {
+        "sourceObjects": "{{ctx.mselected}}",
+        "operation": 0
+      },
+      "deps": "js/hosting/hostCheckinCheckoutService"
+    },
+    "hostedNxCheckout": {
+      "actionType": "JSFunction",
+      "method": "hostCheckinCheckout",
+      "inputData": {
+        "sourceObjects": "{{ctx.mselected}}",
+        "operation": 1
+      },
+      "deps": "js/hosting/hostCheckinCheckoutService"
+    },
+    "hostedNxCancelCheckout": {
+      "actionType": "JSFunction",
+      "method": "hostCheckinCheckout",
+      "inputData": {
+        "sourceObjects": "{{ctx.mselected}}",
+        "operation": 2
+      },
+      "deps": "js/hosting/hostCheckinCheckoutService"
+    },
+    "pidObjectsOpen": {
+      "actionType": "Navigate",
+      "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+      "navigationParams": {
+        "uid": {
+          "$adapt": "{{ctx.selected}}",
+          "path": "uid"
+        }
+      }
+    },
+    "nxtcxmlOpenEventActionTrigger": {
+      "actionType": "Event",
+      "method": "Event",
+      "inputData": {
+        "events": [
+          {
+            "name": "nxtcxmlOpenEvent",
+            "eventData": {
+              "dataSource": "{{ctx.mselected}}"
+            }
+          }
+        ]
+      }
+    },
+    "nxtcxmlOpenProductEventActionTrigger": {
+      "actionType": "Event",
+      "method": "Event",
+      "inputData": {
+        "events": [
+          {
+            "name": "nxtcxmlOpenProductEvent"
+          }
+        ]
+      }
+    },
+    "NxOpenEventActionTrigger": {
+      "actionType": "Event",
+      "method": "Event",
+      "inputData": {
+        "events": [
+          {
+            "name": "NxOpenEvent",
+            "eventData": {
+              "dataSource": "{{ctx.mselected}}"
+            }
+          }
+        ]
+      }
+    },
+    "NxOpenProductEventActionTrigger": {
+      "actionType": "Event",
+      "method": "Event",
+      "inputData": {
+        "events": [
+          {
+            "name": "NxOpenProductEvent"
+          }
+        ]
+      }
+    },
+    "openNxTcXml": {
+      "actionType": "JSFunction",
+      "method": "nxTcXmlCommandHandler",
+      "inputData": {
+        "sourceObjects": "{{ctx.mselected}}"
+      },
+      "deps": "js/nxCommandHandlers"
+    },
+    "openProductInNxStandalone": {
+      "actionType": "JSFunction",
+      "method": "openProductInNX",
+      "inputData": {
+        "isHosted": false
+      },
+      "deps": "js/nxCommandHandlers"
+    },
+    "openNxTcXmlEventSelection": {
+      "actionType": "JSFunction",
+      "method": "nxTcXmlCommandHandler",
+      "inputData": {
+        "sourceObjects": "{{data.targetObject}}"
+      },
+      "deps": "js/nxCommandHandlers"
+    },
+    "downloadUgMasterPartFile": {
+      "actionType": "JSFunctionAsync",
+      "method": "getProperties",
+      "deps": "soa/dataManagementService",
+      "inputData": {
+        "uids": [
+          "{{ctx.selected.uid}}"
+        ],
+        "propNames": [
+          "ref_list",
+          "release_status_list"
+        ]
+      },
+      "events": {
+        "success": [
+          {
+            "condition": "ctx.selected.props.ref_list.dbValues",
+            "name": "dataset.getRefListModelObjectUG"
+          }
+        ]
+      }
+    },
+    "downloadPartFile": {
+      "actionType": "JSFunctionAsync",
+      "method": "downloadPartFile",
+      "inputData": {
+        "filesUiValues": [
+          {
+            "uid": "{{ctx.selected.props.ref_list.uiValues}}"
+          }
+        ],
+        "filesDbValues": [
+          {
+            "uid": "{{ctx.selected.props.ref_list.dbValues}}"
+          }
+        ]
+      },
+      "deps": "js/nxCommandHandlers"
+    },
+    "openInNx": {
+      "actionType": "JSFunction",
+      "method": "openInNX",
+      "inputData": {
+        "sourceObjects": {
+          "$adapt": "{{ctx.mselected}}"
+        }
+      },
+      "deps": "js/nxCommandHandlers"
+    },
+    "openProductInNxHosted": {
+      "actionType": "JSFunction",
+      "method": "openProductInNX",
+      "inputData": {
+        "isHosted": true
+      },
+      "deps": "js/nxCommandHandlers"
+    },
+    "openInNxEventSelection": {
+      "actionType": "JSFunction",
+      "method": "openInNX",
+      "inputData": {
+        "sourceObjects": {
+          "$adapt": "{{data.targetObject}}"
+        }
+      },
+      "deps": "js/nxCommandHandlers"
+    },
+    "openInNxCell": {
+      "actionType": "JSFunction",
+      "method": "openInHost",
+      "inputData": {
+        "sourceObjects": {
+          "$adapt": "{{commandContext.vmo}}"
+        }
+      },
+      "deps": "js/hosting/hostOpenService"
+    },
+    "openInNxCellEventSelection": {
+      "actionType": "JSFunction",
+      "method": "openInHost",
+      "inputData": {
+        "sourceObjects": {
+          "$adapt": "{{parameters.eventData.dataSource}}"
+        }
+      },
+      "deps": "js/hosting/hostOpenService"
+    },
+    "openFasadeObjectsInNx": {
+      "actionType": "JSFunction",
+      "method": "openInHost",
+      "inputData": {
+        "uid": {
+          "$adapt": "{{ctx.mselected}}",
+          "path": "",
+          "isFullyAdapted": true
+        }
+      },
+      "deps": "js/hosting/hostOpenService"
+    },
+    "addComponentToNx": {
+      "actionType": "JSFunction",
+      "method": "addComponentInHost",
+      "inputData": {
+        "sourceObjects": {
+          "$adapt": "{{ctx.mselected}}"
+        }
+      },
+      "deps": "js/hosting/hostOpenService"
+    },
+    "openInNxRelationBrowser": {
+      "actionType": "JSFunction",
+      "method": "openWithInHost",
+      "inputData": {
+        "context": "com.siemens.splm.client.nx.hosted.internal.operations.OpenRelationBrowserHostedOperation",
+        "sourceObjects": {
+          "$adapt": "{{ctx.mselected}}"
+        }
+      },
+      "deps": "js/hosting/hostOpenService"
+    },
+    "openInNxRequirementsLinks": {
+      "actionType": "JSFunction",
+      "method": "openWithInHost",
+      "inputData": {
+        "context": "com.siemens.splm.client.nx.hosted.internal.operations.OpenRequirementLinksHostedOperation",
+        "sourceObjects": {
+          "$adapt": "{{ctx.mselected}}"
+        }
+      },
+      "deps": "js/hosting/hostOpenService"
+    },
+    "setNxDefaultFolder": {
+      "actionType": "JSFunction",
+      "method": "openWithInHost",
+      "inputData": {
+        "context": "com.siemens.splm.client.nx.hosted.internal.operations.SetDefaultFolderHostedOperation",
+        "sourceObjects": "{{ctx.mselected}}"
+      },
+      "deps": "js/hosting/hostOpenService"
+    },
+    "nxs0AssociateToNxAction": {
+      "actionType": "JSFunction",
+      "method": "associateToNx",
+      "inputData": {
+        "parametersTable": "{{commandContext}}"
+      },
+      "deps": "js/nxCommandHandlers"
+    },
+    "nxs0DisassociateToNxAction": {
+      "actionType": "Event",
+      "method": "Event",
+      "inputData": {
+        "events": [
+          {
+            "name": "removeBothRelations",
+            "condition": ""
+          }
+        ]
+      }
+    },
+    "nxs0DisassociateToNxItemRevAction": {
+      "actionType": "JSFunction",
+      "method": "disassociateConsumingItemRev",
+      "inputData": {},
+      "deps": "js/nxCommandHandlers"
+    },
+    "exportNXDataAction": {
+      "actionType": "JSFunction",
+      "method": "activateCommandPanel",
+      "deps": "js/commandPanel.service",
+      "inputData": {
+        "commandId": "Awn0ExportNXData",
+        "location": "aw_toolsAndInfo"
+      }
+    },
+    "createAndOpenTempAppSessionNXTCXML": {
+      "actionType": "JSFunctionAsync",
+      "method": "createOrUpdateSavedSessionNXTCXML",
+      "inputData": {},
+      "deps": "js/nxCommandHandlers"
+    },
+    "createAndOpenTempAppSessionInNx": {
+      "actionType": "JSFunctionAsync",
+      "method": "createOrUpdateSavedSession",
+      "inputData": {},
+      "deps": "js/nxCommandHandlers"
+    },
+    "mapSessionUidToNxOpenObjectToOpen": {
+      "actionType": "JSFunction",
+      "method": "mapSessionUidToNxOpenObjectToOpen",
+      "inputData": {
+        "createdWorkingContext": "{{data.createdWorkingContext}}"
+      },
+      "deps": "js/nxCommandHandlers"
+    },
+    "nxs0RemoveFulfillingRelationfromNxAction": {
+      "actionType": "JSFunction",
+      "method": "openWithInHost",
+      "inputData": {
+        "context": "com.siemens.splm.client.nx.hosted.internal.operations.DisassociateFromNxOperation",
+        "sourceObjects": {
+          "$adapt": "{{ctx.mselected}}"
+        }
+      },
+      "deps": "js/hosting/hostOpenService"
+    },
+    "nxs0RemoveBothRelationsFromNxAction": {
+      "actionType": "JSFunction",
+      "method": "openWithInHost",
+      "inputData": {
+        "context": "com.siemens.splm.client.nx.hosted.internal.operations.DisassociateBothRelationsFromNxOperation",
+        "sourceObjects": {
+          "$adapt": "{{ctx.mselected}}"
+        }
+      },
+      "deps": "js/hosting/hostOpenService"
+    }
+  },
+  "functions": {
+    "getCreateInput": {
+      "functionName": "getCreateInput",
+      "parameters": [
+        "{{data}}"
+      ]
+    }
+  },
+  "messages": {
+    "sessionCreationSuccess": {
+      "messageType": "INFO",
+      "messageText": "{{i18n.creationOfSessionSuccessful}}",
+      "messageTextParams": [
+        "{{data.createdWorkingContext.props.object_string.dbValues[0]}}"
+      ]
+    },
+    "DisassociateToNxITemRevMessage": {
+      "messageType": "WARNING",
+      "messageText": "{{i18n.DisassociateToNxITemRevMessage}}",
+      "navigationOptions": [
+        {
+          "option": "Yes",
+          "text": "{{i18n.yes}}",
+          "action": "nxs0RemoveBothRelationsFromNxAction"
+        },
+        {
+          "option": "No",
+          "text": "{{i18n.no}}",
+          "action": "nxs0RemoveFulfillingRelationfromNxAction"
+        }
+      ]
+    }
+  },
+  "onEvent": [
+    {
+      "eventId": "ugmaster.downloadFile",
+      "action": "downloadPartFile"
+    },
+    {
+      "eventId": "dataset.getRefListModelObjectUG",
+      "action": "getRefListModelObject"
+    },
+    {
+      "eventId": "nxtcxmlOpenEvent",
+      "action": "createAndOpenTempAppSessionNXTCXML",
+      "condition": "conditions.shouldCreateTempAppSession"
+    },
+    {
+      "eventId": "nxtcxmlOpenEventSelectionEvent",
+      "action": "openNxTcXmlEventSelection"
+    },
+    {
+      "eventId": "NxOpenEvent",
+      "action": "createAndOpenTempAppSessionInNx",
+      "condition": "conditions.shouldCreateTempAppSession"
+    },
+    {
+      "eventId": "nxtcxmlOpenEvent",
+      "action": "openNxTcXml",
+      "condition": "conditions.shouldNotCreateTempAppSession"
+    },
+    {
+      "eventId": "NxOpenEvent",
+      "action": "openInNx",
+      "condition": "conditions.shouldNotCreateTempAppSession"
+    },
+    {
+      "eventId": "NxOpenEventSelectionEvent",
+      "action": "openInNxEventSelection"
+    },
+    {
+      "eventId": "nxtcxmlOpenProductEvent",
+      "action": "openProductInNxStandalone"
+    },
+    {
+      "eventId": "NxOpenProductEvent",
+      "action": "openProductInNxHosted"
+    },
+    {
+      "eventId": "primaryWorkArea.selectionChangeEvent",
+      "action": "CacheAMUserLicense"
+    },
+    {
+      "eventId": "removeBothRelations",
+      "message": "DisassociateToNxITemRevMessage"
+    }
+  ],
+  "conditions": {
+    "isASBPasteNotAllowedOnAssembly": {
+      "expression": "ctx.awClipBoardProvider[0].type === 'Clr0ProdAppSchm' && ( ctx.occmgmtContext.topElement !== ctx.selected && ctx.selected.modelType.typeHierarchyArray.indexOf( 'Awb0Element' ) > -1 )"
+    },
+    "userIsAMLicensed": {
+      "expression": "ctx.cachedAMUserLicense === 'true'"
+    },
+    "shouldCreateTempAppSession": {
+      "expression": "ctx.preferences.AWC_NX_Supports_TempSession && ctx.preferences.AWC_NX_Supports_TempSession[0] === 'true' && (ctx.occmgmtContext.topElement.type === 'Awb0PartElement' || (ctx.mselected[0] === ctx.occmgmtContext.topElement && ctx.occmgmtContext.productContextInfo.props.awb0FilterCount.dbValues[0]>0)) && (ctx.occmgmtContext.topElement.type !== 'Fnd0AppSession')"
+    },
+    "shouldNotCreateTempAppSession": {
+      "expression": "!conditions.shouldCreateTempAppSession"
+    },
+    "Awn0NXOpenHosted": {
+      "expression": "ctx.visibleServerCommands.Awn0NXOpenHosted"
+    },
+    "nxGroupCommandVisibility": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "commandContext.occContext.selectedModelObjects",
+            "$query": {
+              "$all": {
+                "$source": "modelType.typeHierarchyArray",
+                "$query": {
+                  "$notin": [
+                    "Fgf0PartitionElement"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "$source": "ctx.aw_host_type",
+            "$query": {
+              "$eq": "NX"
+            }
+          }
+        ]
+      }
+    },
+    "hostedNxDatasetTestDelegateActive": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "commandContext.vmo.modeltype.typeHierarchyArray",
+            "$query": {
+              "$in": "{{ctx.nxDatasetDelegateTypes}}"
+            }
+          },
+          {
+            "$source": "ctx.aw_host_type",
+            "$query": {
+              "$eq": "NX"
+            }
+          },
+          {
+            "$source": "ctx.isRunningTestMode",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "hostedNxCheckinCheckoutCommandTestActive": {
+      "expression": "ctx.aw_host_type === 'NX' && (ctx.mselected && ctx.mselected.length === 1 && ctx.mselected[0].type === 'UGMASTER')"
+    },
+    "hostedNxCheckoutCommandTestVisibility ": {
+      "expression": "ctx.visibleServerCommands.Awp0Checkout && ctx.sublocation.nameToken !== 'com.siemens.splm.client.search:SavedSearchSubLocation'"
+    },
+    "hostedNxCheckinCommandTestVisibility": {
+      "expression": "ctx.visibleServerCommands.Awp0Checkin === true"
+    },
+    "hostedNxCancelCheckoutCommandTestVisibility": {
+      "expression": "ctx.visibleServerCommands.Awp0CancelCheckout === true"
+    },
+    "awn0openinnxCommandTestVisibility": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.awn0openinnxCommandCommonVisibility",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "ctx.isRunningTestMode",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "awn0addComponentCommandTestVisibility": {
+      "expression": "ctx.visibleServerCommands.Awn0NXAddComponentHosted === true &&  ctx.aw_host_type === 'NX' && ctx.isRunningTestMode === true"
+    },
+    "awn0openinnxRelationBrowserCommandTestVisibility": {
+      "expression": "ctx.visibleServerCommands.Awn0NXOpenRelationBrowser === true && ctx.aw_host_type === 'NX' && ctx.isRunningTestMode === true && !(ctx.preferences.AWC_NX_OpenRelationBrowserUnsupportedTypes.indexOf(ctx.selected.type) > -1)"
+    },
+    "awn0openinnxRequirementLinksCommandTestVisibility": {
+      "expression": "!(ctx.preferences.AWC_NX_OpenRequirementLinksUnsupportedTypes.indexOf(ctx.selected.type) > -1) && ctx.visibleServerCommands.Awn0NXOpenRequirementLinksHosted === true && ctx.aw_host_type === 'NX' && ctx.isRunningTestMode === true"
+    },
+    "awn0setNxDefaultFolderCommandTestVisibility": {
+      "expression": "ctx.visibleServerCommands.Awn0NXSetDefaultFolderHosted === true && ctx.aw_host_type === 'NX' && ctx.isRunningTestMode === true"
+    },
+    "nxs0AssociateToNxCommandTestVisibility": {
+      "expression": "ctx.visibleServerCommands.Nxs0AssociateToNX && ctx.aw_host_type === 'NX' && ctx.mselected && conditions.isInAnalysisRequestContext === true && conditions.isArInAnalyzingState === true && ctx.isRunningTestMode === true"
+    },
+    "nxs0DisassociateToNxCommandTestVisibility": {
+      "expression": "ctx.visibleServerCommands.Nxs0DisassociateFromNX && ctx.aw_host_type === 'NX' && ctx.mselected && conditions.isInAnalysisRequestContext === true && ctx.isRunningTestMode === true"
+    },
+    "canOpenDatasetVersionHostedTest": {
+      "expression": "ctx.mselected.length === 1 && ctx.selected.modelType.typeHierarchyArray.indexOf( 'Dataset' ) > -1 && ctx.aw_host_type === 'NX' && ctx.preferences.AWC_NX_OpenOldDatasetVersionIsEnabled[0] === 'true' && ctx.preferences.AWC_NX_OpenSupportedTypes.indexOf(ctx.selected.type) > -1 && !(ctx.preferences.AWC_NX_OpenUnsupportedTypes.indexOf(ctx.selected.type) > -1) && ctx.isRunningTestMode === true"
+    },
+    "isHostNx": {
+      "expression": "ctx.aw_host_type === 'NX'"
+    },
+    "nxChangeThemeCommandVisibility": {
+      "expression": "ctx.aw_hosting_config.AllowThemeChange"
+    },
+    "isDatasetUGMaster": {
+      "expression": "ctx.mselected[0].type === 'UGMASTER' && ctx.aw_host_type !== 'NX' "
+    },
+    "hostedNxDatasetDelegateActive": {
+      "expression": {
+        "$and": [
+          {
+            "$source": {
+              "$adapt": "commandContext.vmo"
+            },
+            "$query": {
+              "$source": "modelType.typeHierarchyArray",
+              "$query": {
+                "$in": "{{ctx.nxDatasetDelegateTypes}}"
+              }
+            }
+          },
+          {
+            "$source": "ctx.aw_host_type",
+            "$query": {
+              "$eq": "NX"
+            }
+          }
+        ]
+      }
+    },
+    "hostedNxCheckinCheckoutCommandActive": {
+      "expression": "ctx.aw_host_type === 'NX' && ctx.aw_hosting_hostServices.HS_HOST_CHECKIN_CHECKOUT__VERSION_2016_03 && (ctx.mselected && ctx.mselected.length === 1 && ctx.mselected[0].type === 'UGMASTER')"
+    },
+    "nxp1FulfillmentParameterStartEditCondition": {
+      "expression": "conditions.isStartEditAllowed && ctx.mselected[0].type === 'Nxp1FulfillmentParameter'"
+    },
+    "hostedNxCheckoutCommandVisibility": {
+      "expression": "ctx.visibleServerCommands.Awp0Checkout && ctx.sublocation.nameToken !== 'com.siemens.splm.client.search:SavedSearchSubLocation'"
+    },
+    "hostedNxCheckinCommandVisibility": {
+      "expression": "ctx.visibleServerCommands.Awp0Checkin === true"
+    },
+    "hostedNxCancelCheckoutCommandVisibility": {
+      "expression": "ctx.visibleServerCommands.Awp0CancelCheckout === true"
+    },
+    "hostedNxPIDOpenObjects": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.cmdAwp0ShowObjectCellBaseVisibleCondition",
+            "$query": {
+              "$eq": true
+            }
+          },
+          "(ctx.selected.type === 'NXP0Sheet' || ctx.selected.type === 'NXP0Run' || ctx.selected.type === 'NXP0EquipmentElement' || ctx.selected.type === 'NXP0ConnectionElement')"
+        ]
+      }
+    },
+    "hostedNxOpenNxTcXml": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "ctx.selected.modelType.typeHierarchyArray",
+            "$query": {
+              "$notin": "{{ctx.preferences.AWC_NX_OpenUnsupportedTypes}}"
+            }
+          },
+          {
+            "$source": "ctx.selected.props.awb0UnderlyingObjectType.dbValues[0]",
+            "$query": {
+              "$notin": "{{ctx.preferences.AWC_NX_OpenUnsupportedTypes}}"
+            }
+          },
+          {
+            "$source": "conditions.isSessionWithWorksetOpen",
+            "$query": {
+              "$eq": false
+            }
+          },
+          {
+            "$and": [
+              {
+                "$source": "ctx.visibleServerCommands.Awn0OpenNxTcXml",
+                "$query": {
+                  "$eq": true
+                }
+              },
+              {
+                "$source": "ctx.aw_host_type",
+                "$query": {
+                  "$ne": "NX"
+                }
+              },
+              {
+                "$source": "ctx.isMobileOS",
+                "$query": {
+                  "$ne": true
+                }
+              }
+            ]
+          },
+          {
+            "$or": [
+              {
+                "$source": {
+                  "$adapt": "ctx.mselected"
+                },
+                "$query": {
+                  "$all": {
+                    "$source": "modelType.typeHierarchyArray",
+                    "$query": {
+                      "$notin": [
+                        "Fnd0AppSession"
+                      ]
+                    }
+                  }
+                }
+              },
+              {
+                "$and": [
+                  {
+                    "$source": "ctx.mselected.length",
+                    "$query": {
+                      "$eq": 1
+                    }
+                  },
+                  {
+                    "$source": {
+                      "$adapt": "ctx.mselected"
+                    },
+                    "$query": {
+                      "$all": {
+                        "$source": "modelType.typeHierarchyArray",
+                        "$query": {
+                          "$in": [
+                            "Fnd0AppSession"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "hostedNxOpenProductNxTcXml": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "ctx.aceActiveContext",
+            "$query": {
+              "$notNull": true
+            }
+          },
+          {
+            "$source": "conditions.hostedNxOpenNxTcXml",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "ctx.preferences.AWC_NX_OpenProductinNX",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "awn0openinnxCommandCommonVisibility": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "ctx.selected.modelType.typeHierarchyArray",
+            "$query": {
+              "$notin": "{{ctx.preferences.AWC_NX_OpenUnsupportedTypes}}"
+            }
+          },
+          {
+            "$source": "ctx.selected.props.awb0UnderlyingObjectType.dbValues[0]",
+            "$query": {
+              "$notin": "{{ctx.preferences.AWC_NX_OpenUnsupportedTypes}}"
+            }
+          },
+          {
+            "$source": "conditions.isSessionWithWorksetOpen",
+            "$query": {
+              "$eq": false
+            }
+          },
+          {
+            "$source": {
+              "$adapt": "ctx.mselected"
+            },
+            "$query": {
+              "$all": {
+                "$source": "modelType.typeHierarchyArray",
+                "$query": {
+                  "$notin": [
+                    "Fnd0HomeFolder"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "$and": [
+              {
+                "$source": "ctx.visibleServerCommands.Awn0NXOpenHosted",
+                "$query": {
+                  "$eq": true
+                }
+              },
+              {
+                "$source": "ctx.aw_host_type",
+                "$query": {
+                  "$eq": "NX"
+                }
+              }
+            ]
+          },
+          {
+            "$or": [
+              {
+                "$source": {
+                  "$adapt": "ctx.mselected"
+                },
+                "$query": {
+                  "$all": {
+                    "$source": "modelType.typeHierarchyArray",
+                    "$query": {
+                      "$notin": [
+                        "Fnd0AppSession"
+                      ]
+                    }
+                  }
+                }
+              },
+              {
+                "$and": [
+                  {
+                    "$source": "ctx.mselected.length",
+                    "$query": {
+                      "$eq": 1
+                    }
+                  },
+                  {
+                    "$source": {
+                      "$adapt": "ctx.mselected"
+                    },
+                    "$query": {
+                      "$all": {
+                        "$source": "modelType.typeHierarchyArray",
+                        "$query": {
+                          "$in": [
+                            "Fnd0AppSession"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "awn0openinnxCommandVisibility": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.awn0openinnxCommandCommonVisibility",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "ctx.nxVisiblity_Awn0NXOpenHosted",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "awn0openproductinnxCommandVisibility": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "ctx.aceActiveContext",
+            "$query": {
+              "$notNull": true
+            }
+          },
+          {
+            "$source": "conditions.awn0openinnxCommandCommonVisibility",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "ctx.preferences.AWC_NX_OpenProductinNX",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "pidopeninnxCommandVisibility": {
+      "expression": "ctx.selected.type === 'Nxp1Sheet'"
+    },
+    "awn0openinnxCellCommandVisibility": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "commandContext.vmo.modelType.typeHierarchyArray",
+            "$query": {
+              "$in": "{{ctx.preferences.AWC_NX_OpenSupportedTypes}}"
+            }
+          },
+          {
+            "$source": "commandContext.vmo.modelType.typeHierarchyArray",
+            "$query": {
+              "$notin": [
+                "Fnd0HomeFolder"
+              ]
+            }
+          },
+          {
+            "$source": "commandContext.vmo.modelType.typeHierarchyArray",
+            "$query": {
+              "$notin": "{{ctx.preferences.AWC_NX_OpenUnsupportedTypes}}"
+            }
+          },
+          {
+            "$source": "commandContext.vmo.props.awb0UnderlyingObjectType.dbValues[0]",
+            "$query": {
+              "$notin": "{{ctx.preferences.AWC_NX_OpenUnsupportedTypes}}"
+            }
+          },
+          {
+            "$source": "ctx.aw_host_type",
+            "$query": {
+              "$eq": "NX"
+            }
+          }
+        ]
+      }
+    },
+    "awn0addComponentCommandVisibility": {
+      "expression": "ctx.visibleServerCommands.Awn0NXAddComponentHosted === true && ctx.aw_host_type === 'NX' && ctx.nxVisiblity_Awn0NXAddComponentHosted === true && (ctx.selected.type || ctx.selected.props.awb0UnderlyingObjectType) && !((ctx.selected.type && ctx.preferences.AWC_NX_AddComponentUnsupportedTypes.indexOf(ctx.selected.type) > -1) || (ctx.selected.props.awb0UnderlyingObjectType && ctx.preferences.AWC_NX_AddComponentUnsupportedTypes.indexOf(ctx.selected.props.awb0UnderlyingObjectType.dbValues[0]) > -1))"
+    },
+    "awn0openinnxRelationBrowserCommandVisibility": {
+      "expression": "ctx.visibleServerCommands.Awn0NXOpenRelationBrowser === true && ctx.aw_host_type === 'NX' && ctx.nxVisiblity_Awn0NXOpenRelationBrowser === true && !(ctx.preferences.AWC_NX_OpenUnsupportedTypes.indexOf(ctx.selected.type) > -1 && ctx.preferences.AWC_NX_OpenUnsupportedTypes.indexOf(ctx.selected.props.awb0UnderlyingObjectType.dbValues[0]) > -1) && !(ctx.preferences.AWC_NX_OpenRelationBrowserUnsupportedTypes.indexOf(ctx.selected.type) > -1)"
+    },
+    "awn0openinnxRequirementLinksCommandVisibility": {
+      "expression": "ctx.visibleServerCommands.Awn0NXOpenRequirementLinksHosted === true && ctx.aw_host_type === 'NX' && ctx.nxVisiblity_Awn0NXOpenRequirementLinksHosted === true && !(ctx.preferences.AWC_NX_OpenUnsupportedTypes.indexOf(ctx.selected.type) > -1 && ctx.preferences.AWC_NX_OpenUnsupportedTypes.indexOf(ctx.selected.props.awb0UnderlyingObjectType.dbValues[0]) > -1) && !(ctx.preferences.AWC_NX_OpenRequirementLinksUnsupportedTypes.indexOf(ctx.selected.type) > -1) && !(ctx.preferences.AWC_NX_OpenRequirementLinksUnsupportedTypes.indexOf(ctx.selected.props.awb0UnderlyingObjectType.dbValues[0]) > -1)"
+    },
+    "awn0setNxDefaultFolderCommandVisibility": {
+      "expression": "ctx.visibleServerCommands.Awn0NXSetDefaultFolderHosted === true && ctx.aw_host_type === 'NX'"
+    },
+    "nxs0AssociateToNxCommandVisibility": {
+      "expression": "ctx.visibleServerCommands.Nxs0AssociateToNX === true && ctx.aw_host_type === 'NX' && ctx.mselected && ((conditions.isInAnalysisRequestContext === true && conditions.isArInAnalyzingState === true) || conditions.isInPullParameterContext === true ) && ctx.nxVisiblity_Nxs0AssociateToNX === true"
+    },
+    "nxs0DisassociateToNxCommandVisibility": {
+      "expression": "ctx.visibleServerCommands.Nxs0DisassociateFromNX === true && ctx.aw_host_type === 'NX' && ctx.mselected && conditions.isInAnalysisRequestContext === true && ctx.nxVisiblity_Nxs0DisassociateFromNX === true"
+    },
+    "nxs0DisassociateItemRevToNxCommandVisibility": {
+      "expression": "ctx.aw_host_type === 'NX' && ctx.mselected && ctx.selected.modelType.typeHierarchyArray.indexOf('Att0MeasurableAttribute') === -1 && ctx.nxVisiblity_Nxs0DisassociateItemRevFromNX === true"
+    },
+    "isPIDObjectStartEdit": {
+      "expression": "(ctx.selected.type === 'NXP0Sheet' || ctx.selected.type === 'NXP0Run' || ctx.selected.type === 'NXP0EquipmentElement' || ctx.selected.type === 'NXP0ConnectionElement') && ((ctx['NONE'].canEdit || ctx['TABLE_CONTEXT'].canEdit) && ((ctx.ViewModeContext.ViewModeContext === 'SummaryView') || (ctx.ViewModeContext.ViewModeContext === 'None')) && ((ctx.NONE && !ctx['NONE']._editing) || (ctx.TABLE_CONTEXT && !ctx['TABLE_CONTEXT']._editing)) && ctx.visibleServerCommands.Awp0StartEdit)"
+    },
+    "isInAnalysisRequestContext": {
+      "expression": "ctx.xrtSummaryContextObject.modelType.typeHierarchyArray.indexOf( 'Crt0VldnContractRevision' ) > -1 || ctx.xrtSummaryContextObject.modelType.typeHierarchyArray.indexOf( 'Crt0StudyRevision' ) > -1"
+    },
+    "isArInAnalyzingState": {
+      "expression": "ctx.openedARObject.props.crt0State.dbValues[0] === 'Analyzing' || ctx.xrtSummaryContextObject.props.crt0State.dbValues[0] === 'Analyzing'"
+    },
+    "isInPullParameterContext": {
+      "expression": "ctx.xrtSummaryContextObject.modelType.typeHierarchyArray.indexOf( 'Ase0LogicalElement' ) > -1 || ctx.xrtSummaryContextObject.modelType.typeHierarchyArray.indexOf( 'Arm0RequirementElement' ) > -1 || ctx.xrtSummaryContextObject.modelType.typeHierarchyArray.indexOf( 'Ase0FunctionalElement' ) > -1 || ctx.xrtSummaryContextObject.modelType.typeHierarchyArray.indexOf( 'Arm0RequirementSpecElement' ) > -1"
+    },
+    "isPIDObjectCut": {
+      "expression": "(ctx.selected.type === 'NXP0Sheet' || ctx.selected.type === 'NXP0Run' || ctx.selected.type === 'NXP0EquipmentElement' || ctx.selected.type === 'NXP0ConnectionElement' || ctx.relationContext.relationInfo[0].relationType ==='NXP0RefPartitionsProvider') && ((ctx.ViewModeContext.ViewModeContext === 'SummaryView') || (ctx.ViewModeContext.ViewModeContext === 'None'))"
+    },
+    "canOpenDatasetVersionHosted": {
+      "expression": "ctx.mselected.length === 1 && ctx.selected.modelType.typeHierarchyArray.indexOf( 'Dataset' ) > -1 && ctx.aw_host_type === 'NX' && ctx.preferences.AWC_NX_OpenOldDatasetVersionIsEnabled[0] === 'true' && ctx.preferences.AWC_NX_OpenSupportedTypes.indexOf(ctx.selected.type) > -1 && !(ctx.preferences.AWC_NX_OpenUnsupportedTypes.indexOf(ctx.selected.type) > -1) && ctx.nxVisiblity_Awn0NXOpenDatasetVersionPanelHosted"
+    },
+    "canOpenDatasetVersionStandalone": {
+      "expression": "ctx.selected.modelType.typeHierarchyArray.indexOf( 'Dataset' ) > -1 && ctx.aw_host_type !== 'NX' && ctx.preferences.AWC_NX_OpenOldDatasetVersionIsEnabled[0] === 'true' && ctx.preferences.AWC_NX_OpenSupportedTypes.indexOf(ctx.selected.type) > -1 && !(ctx.preferences.AWC_NX_OpenUnsupportedTypes.indexOf(ctx.selected.type) > -1) && ctx.mselected.length === 1"
+    },
+    "isPABObjectOpen": {
+      "expression": "ctx.sublocation.label === 'AM Breakdown Declarative Navigate' && (commandContext.vmo.modelType.typeHierarchyArray.indexOf( 'Clr0ProductAppBreakdown' ) != -1 || commandContext.vmo.modelType.typeHierarchyArray.indexOf( 'Clr0AppearanceAreaBreakdown' ) != -1 || commandContext.vmo.modelType.typeHierarchyArray.indexOf( 'Clr0AppearanceArea' ) != -1)"
+    },
+    "isPABObjectCreate": {
+      "expression": "conditions.userIsAMLicensed && ctx.sublocation.label === 'AM Breakdown Declarative Navigate' && ctx.selected.modelType.typeHierarchyArray.indexOf( 'Folder' ) === -1 && ( ctx.selected.modelType.typeHierarchyArray.indexOf( 'Clr0ProductAppBreakdown' ) != -1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'Clr0AppearanceAreaBreakdown' ) != -1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'Clr0AppearanceArea' ) != -1)"
+    },
+    "isAMSchemeObjectSelectedAndSaveAsNotInProgress": {
+      "expression": "ctx.sidenavCommandId !== 'Awp0ShowSaveAs' && (ctx.selected.modelType.typeHierarchyArray.indexOf( 'Col1AppearanceBreakdownSchm' ) > -1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'Col1AppearanceProductScheme' ) > -1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'Col1AreaAppSchmRevision' ) > -1) || ( ctx.selected.modelType.typeHierarchyArray.indexOf( 'Clr0ProdAppSchmRevision' )  > -1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'Clr0AppSchmBrkdnRevision' ) > -1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'Clr0AreaAppSchmRevision' ) > -1 )"
+    },
+    "isAMSchemeObjectSelected": {
+      "expression": "(ctx.selected.modelType.typeHierarchyArray.indexOf( 'Col1AppearanceBreakdownSchm' ) > -1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'Col1AppearanceProductScheme' ) > -1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'Col1AreaAppSchmRevision' ) > -1) || ( ctx.selected.modelType.typeHierarchyArray.indexOf( 'Clr0ProdAppSchmRevision' )  > -1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'Clr0AppSchmBrkdnRevision' ) > -1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'Clr0AreaAppSchmRevision' ) > -1 )"
+    },
+    "isAMSchemeObjectInContext": {
+      "expression": "(commandContext.vmo.modelType.typeHierarchyArray.indexOf( 'Col1AppearanceBreakdownSchm' ) > -1 || commandContext.vmo.modelType.typeHierarchyArray.indexOf( 'Col1AppearanceProductScheme' ) > -1 || commandContext.vmo.modelType.typeHierarchyArray.indexOf( 'Col1AreaAppSchmRevision' ) > -1) || ( commandContext.vmo.modelType.typeHierarchyArray.indexOf( 'Clr0ProdAppSchmRevision' )  > -1 || commandContext.vmo.modelType.typeHierarchyArray.indexOf( 'Clr0AppSchmBrkdnRevision' ) > -1 || commandContext.vmo.modelType.typeHierarchyArray.indexOf( 'Clr0AreaAppSchmRevision' ) > -1 )"
+    },
+    "isAMNonASBSchemeObjectSelected": {
+      "expression": "(ctx.selected.modelType.typeHierarchyArray.indexOf( 'Col1AppearanceProductScheme' ) > -1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'Col1AreaAppSchmRevision' ) > -1) || ( ctx.selected.modelType.typeHierarchyArray.indexOf( 'Clr0ProdAppSchmRevision' )  > -1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'Clr0AreaAppSchmRevision' ) > -1 )"
+    },
+    "isASBSelected": {
+      "expression": "ctx.selected.modelType.typeHierarchyArray.indexOf( 'Col1AppearanceBreakdownSchm' ) > -1"
+    },
+    "isASBSelectedAndLicensed": {
+      "expression": "conditions.userIsAMLicensed && ctx.selected.modelType.typeHierarchyArray.indexOf( 'Col1AppearanceBreakdownSchm' ) > -1"
+    },
+    "isExportNXDataVisible": {
+      "expression": "ctx.selected && !(ctx.selected.modelType.typeHierarchyArray.indexOf( 'Fgf0PartitionElement' ) > -1) && !(ctx.selected.modelType.typeHierarchyArray.indexOf( 'Cae1ModelDesignElement' ) > -1) && ctx.occmgmtContext.topElement.modelType.typeHierarchyArray.indexOf('Awb0SavedBookmark') === -1 && (ctx.selected.modelType.typeHierarchyArray.indexOf( 'Awb0ConditionalElement' ) > -1 || conditions.isNotEbomSession) && conditions.isNotEbomWorkset && !ctx.splitView.mode"
+    },
+    "isExportNXDataEnabled": {
+      "expression": "ctx.visibleServerCommands.Awn0ExportToNX || ctx.selected.modelType.typeHierarchyArray.indexOf( 'Fnd0AppSession' ) > -1"
+    },
+    "AMPasteActiveCondition": {
+      "expression": "ctx.awClipBoardProvider[0].type === 'Clr0AppearanceAreaBreakdown' || ctx.awClipBoardProvider[0].type === 'Clr0AppearanceArea' || ctx.awClipBoardProvider[0].type === 'Clr0AppearanceDesignator'"
+    },
+    "isNotEbomSession": {
+      "expression": "ctx.selected.modelType.typeHierarchyArray.indexOf('Fnd0AppSession') > -1 && ctx.selected.props.fnd0StructureTypesInSession.dbValues.length === 1 && ctx.selected.props.fnd0StructureTypesInSession.dbValues[0] === 'Design'"
+    },
+    "isNotEbomWorkset": {
+      "expression": "!ctx.selected.props.awb0UnderlyingObjectType || ctx.selected.props.awb0UnderlyingObjectType.dbValues.indexOf('Fnd0WorksetRevision') === -1 || ctx.selected.props.awb0UnderlyingObjectType.dbValues.indexOf('Fnd0WorksetRevision') > -1 && ctx.visibleServerCommands.Awn0ExportToNX"
+    },
+    "AMPasteEnableCondition": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "ctx.mselected.length",
+            "$query": {
+              "$eq": 1
+            }
+          },
+          {
+            "$source": "ctx.selected.props.is_modifiable.dbValues",
+            "$query": {
+              "$in": [
+                "1"
+              ]
+            }
+          },
+          {
+            "$source": "ctx.awClipBoardProvider.length",
+            "$query": {
+              "$gt": 0
+            }
+          },
+          {
+            "$source": "ctx.sublocation.clientScopeURI",
+            "$query": {
+              "$ne": "Awp0ShowObject"
+            }
+          },
+          {
+            "$source": "conditions.AMPasteEnableCondition2",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "AMPasteEnableCondition2": {
+      "expression": "conditions.userIsAMLicensed && ((ctx.awClipBoardProvider[0].type === 'Clr0AppearanceAreaBreakdown' && (ctx.selected.type === 'Clr0AppearanceAreaBreakdown' || ctx.selected.type === 'Clr0ProductAppBreakdown')) || (ctx.awClipBoardProvider[0].type === 'Clr0AppearanceArea' && ctx.selected.type === 'Clr0AppearanceAreaBreakdown') || (ctx.awClipBoardProvider[0].type === 'Clr0AppearanceDesignator' && ctx.selected.type === 'Clr0AppearanceArea'))"
+    },
+    "isAMTemplateObjectSelected": {
+      "expression": "( ctx.selected.modelType.typeHierarchyArray.indexOf( 'Clr0ProductAppBreakdown' ) != -1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'Clr0AppearanceAreaBreakdown' ) != -1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'Clr0AppearanceArea' ) != -1)"
+    },
+    "isAMTemplateObjectInContext": {
+      "expression": "( commandContext.vmo.modelType.typeHierarchyArray.indexOf( 'Clr0ProductAppBreakdown' ) != -1 || commandContext.vmo.modelType.typeHierarchyArray.indexOf( 'Clr0AppearanceAreaBreakdown' ) != -1 || commandContext.vmo.modelType.typeHierarchyArray.indexOf( 'Clr0AppearanceArea' ) != -1)"
+    },
+    "Awp0CutPABActiveCond": {
+      "expression": "conditions.isAMTemplateObjectSelected"
+    },
+    "Awp0AddAMSchemeActiveCond": {
+      "expression": "conditions.isAMNonASBSchemeObjectSelected"
+    },
+    "Awp0DuplicateAMSchemeActiveCond": {
+      "expression": "conditions.isAMSchemeObjectSelected && conditions.isAwb0DuplicateVisible"
+    },
+    "Awp0CutAMSchemeActiveCond": {
+      "expression": "conditions.isAMSchemeObjectSelected && conditions.awb0CutCommandActive"
+    },
+    "Awp0ExportNXAssemblyAMSchemeActiveCond": {
+      "expression": "conditions.isAMSchemeObjectSelected && conditions.isExportNXDataVisible"
+    },
+    "Awp0SiblingAMSchemeActiveCond": {
+      "expression": "conditions.isAMSchemeObjectSelected"
+    },
+    "Awp0InsertLevelAMSchemeActiveCond": {
+      "expression": "conditions.isAMSchemeObjectSelected"
+    },
+    "Awp0CreateSessionAMSchemeActiveCond": {
+      "expression": "conditions.isAMSchemeObjectSelected && conditions.isAwb0CreateSessionAllowed"
+    },
+    "Awp0ImportAMSchemeActiveCond": {
+      "expression": "conditions.isAMSchemeObjectSelected && conditions.enableImportBOMCommand"
+    },
+    "Awp0SaveAsAndReplaceAMSchemeActiveCond": {
+      "expression": "conditions.isAMSchemeObjectSelected && conditions.isSaveAsAndReplaceCommandSupported"
+    },
+    "Awp0SaveAsAMSchemeActiveCond": {
+      "expression": "conditions.isAMSchemeObjectSelected && conditions.showSaveAs"
+    },
+    "Awp0ReviseAMSchemeActiveCond": {
+      "expression": "conditions.isAMSchemeObjectSelected && conditions.showRevise"
+    },
+    "Awp0CutPABVisibleCond": {
+      "expression": "conditions.userIsAMLicensed"
+    },
+    "Awp0AddAMSchemeVisibleCond": {
+      "expression": "conditions.userIsAMLicensed"
+    },
+    "Awp0DuplicateAMSchemeVisibleCond": {
+      "expression": "conditions.userIsAMLicensed && conditions.isAwb0DuplicateVisible"
+    },
+    "Awp0CutAMSchemeVisibleCond": {
+      "expression": "conditions.userIsAMLicensed"
+    },
+    "Awp0ExportNXAssemblyAMSchemeVisibleCond": {
+      "expression": "conditions.userIsAMLicensed && conditions.isExportNXDataVisible"
+    },
+    "Awp0SiblingAMSchemeVisibleCond": {
+      "expression": "conditions.userIsAMLicensed && conditions.isAddSiblingCommandSupported"
+    },
+    "Awp0InsertLevelAMSchemeVisibleCond": {
+      "expression": "conditions.userIsAMLicensed && conditions.isInsertLevelSupported"
+    },
+    "Awp0CreateSessionAMSchemeVisibleCond": {
+      "expression": "conditions.userIsAMLicensed && conditions.isAwb0CreateSessionAllowed"
+    },
+    "Awp0ImportAMSchemeVisibleCond": {
+      "expression": "conditions.userIsAMLicensed && conditions.enableImportBOMCommand"
+    },
+    "Awp0SaveAsAndReplaceAMSchemeVisibleCond": {
+      "expression": "conditions.userIsAMLicensed && conditions.isSaveAsAndReplaceCommandSupported"
+    },
+    "Awp0SaveAsOrReviseAMSchemeVisibleCond": {
+      "expression": "conditions.userIsAMLicensed"
+    },
+    "Awp0CutPABEnableCond": {
+      "expression": "conditions.cutVisibility && conditions.userIsAMLicensed"
+    },
+    "Awp0DuplicateAMSchemeEnableCond": {
+      "expression": "conditions.isAwb0DuplicateVisible"
+    },
+    "Awp0CutAMSchemeEnableCond": {
+      "expression": "conditions.aceCutEnableCondition"
+    },
+    "Awp0ExportNXAssemblyAMSchemeEnableCond": {
+      "expression": "isExportNXDataEnabled"
+    },
+    "Awp0ImportAMSchemeEnableCond": {
+      "expression": "conditions.enableImportBOMCommand"
+    },
+    "Awp0SaveAsAMSchemeEnableCond": {
+      "expression": "conditions.showSaveAs"
+    },
+    "Awp0ReviseAMSchemeEnableCond": {
+      "expression": "conditions.showRevise"
+    },
+    "isExpandAndCollapseEnabled": {
+      "expression": "ctx.sublocation.label === 'AM Breakdown Declarative Navigate' && ( ctx.ViewModeContext.ViewModeContext === 'TreeView' || ctx.ViewModeContext.ViewModeContext === 'TreeSummaryView' )"
+    }
+  },
+  "i18n": {
+    "Awn0OpenNxTcXmlTitle": [
+      "NXConstants"
+    ],
+    "Awn0OpenProductNxTcXmlTitle": [
+      "NXConstants"
+    ],
+    "openHostedCommandTitle": [
+      "NXConstants"
+    ],
+    "openProductHostedCommandTitle": [
+      "NXConstants"
+    ],
+    "addComponentHostedCommandTitle": [
+      "NXConstants"
+    ],
+    "openRelationBrowserHostedCommandTitle": [
+      "NXConstants"
+    ],
+    "openRequirementLinksHostedCommandTitle": [
+      "NXConstants"
+    ],
+    "openDatasetVersionCommandTitle": [
+      "NXConstants"
+    ],
+    "openDatasetVersionHostedCommandTitle": [
+      "NXConstants"
+    ],
+    "openDatasetVersionPanelCommandTitle": [
+      "NXConstants"
+    ],
+    "openDatasetVersionPanelHostedCommandTitle": [
+      "NXConstants"
+    ],
+    "setDefaultFolderHostedCommandTitle": [
+      "NXConstants"
+    ],
+    "nxCommandGroupTitle": [
+      "NXConstants"
+    ],
+    "associateToNx": [
+      "NXConstants"
+    ],
+    "disassociateFromNx": [
+      "NXConstants"
+    ],
+    "DisassociateToNxITemRevMessage": [
+      "NXConstants"
+    ],
+    "yes": [
+      "NXConstants"
+    ],
+    "no": [
+      "NXConstants"
+    ],
+    "com.siemens.splm.clientfx.tcui.commands.modelObjectCellListActionCommands": [
+      "NXConstants"
+    ],
+    "com.siemens.splm.clientfx.ui.modelObjectDataGridActionCommands": [
+      "NXConstants"
+    ],
+    "openDatasetVersions": [
+      "NXConstants"
+    ],
+    "openDatasetVersionPanelName": [
+      "NXConstants"
+    ],
+    "exportNXData": [
+      "NXConstants"
+    ],
+    "Awn0NXOpenHostedDesc": [
+      "NXConstants"
+    ],
+    "Awn0NXOpenProductHostedDesc": [
+      "NXConstants"
+    ],
+    "Awn0NXAddComponentHostedDesc": [
+      "NXConstants"
+    ],
+    "Awn0NXOpenRelationBrowserDesc": [
+      "NXConstants"
+    ],
+    "Awn0NXOpenRequirementLinksHostedDesc": [
+      "NXConstants"
+    ],
+    "Awn0NXOpenDatasetVersionDesc": [
+      "NXConstants"
+    ],
+    "Awn0NXSetDefaultFolderHostedDesc": [
+      "NXConstants"
+    ],
+    "Nxs0AssociateToNXDesc": [
+      "NXConstants"
+    ],
+    "Nxs0DisassociateFromNXDesc": [
+      "NXConstants"
+    ],
+    "NxGroupCommandDesc": [
+      "NXConstants"
+    ],
+    "expandBelow": [
+      "NXConstants"
+    ],
+    "expandBelowDesc": [
+      "NXConstants"
+    ],
+    "collapseBelow": [
+      "NXConstants"
+    ],
+    "collapseBelowDesc": [
+      "NXConstants"
+    ],
+    "amObjectExpand": [
+      "NXConstants"
+    ],
+    "amObjectExpandDesc": [
+      "NXConstants"
+    ]
+  },
+  "commands": {
+    "AMObjectExpand": {
+      "iconId": "cmdExpandBelow",
+      "title": "{{i18n.amObjectExpand}}",
+      "isGroup": true,
+      "description": "{{i18n.amObjectExpandDesc}}"
+    },
+    "AMObjectExpandBelow": {
+      "iconId": "cmdExpandBelow",
+      "title": "{{i18n.expandBelow}}",
+      "description": "{{i18n.expandBelowDesc}}",
+      "isGroup": false
+    },
+    "AMObjectCollapseBelow": {
+      "iconId": "cmdCollapseBelow",
+      "title": "{{i18n.collapseBelow}}",
+      "description": "{{i18n.collapseBelowDesc}}",
+      "isGroup": false
+    },
+    "AMObjectExpandBelowCtxMenu": {
+      "iconId": "cmdExpandBelow",
+      "title": "{{i18n.expandBelow}}",
+      "description": "{{i18n.expandBelowDesc}}"
+    },
+    "AMObjectCollapseBelowCtxMenu": {
+      "iconId": "cmdCollapseBelow",
+      "title": "{{i18n.collapseBelow}}",
+      "description": "{{i18n.collapseBelowDesc}}"
+    },
+    "AMObjectAddPanel": {
+      "iconId": "cmdAdd",
+      "title": "{{i18n.Awp0NameValueCreateTitle}}"
+    },
+    "Awn0OpenNxTcXml": {
+      "iconId": "cmdOpen",
+      "title": "{{i18n.Awn0OpenNxTcXmlTitle}}",
+      "description": "{{i18n.Awn0NXOpenHostedDesc}}"
+    },
+    "Awn0OpenProductNxTcXml": {
+      "iconId": "cmdOpen",
+      "title": "{{i18n.Awn0OpenProductNxTcXmlTitle}}",
+      "description": "{{i18n.Awn0NXOpenProductHostedDesc}}"
+    },
+    "Awn0NXOpenHostedCellCommand": {
+      "iconId": "cmdOpenInNx",
+      "title": "{{i18n.openHostedCommandTitle}}",
+      "description": "{{i18n.Awn0NXOpenHostedDesc}}"
+    },
+    "Awn0NXOpenHosted": {
+      "iconId": "cmdOpenInNx",
+      "title": "{{i18n.openHostedCommandTitle}}",
+      "description": "{{i18n.Awn0NXOpenHostedDesc}}"
+    },
+    "Awn0NXOpenProductHosted": {
+      "iconId": "cmdOpenInNx",
+      "title": "{{i18n.openProductHostedCommandTitle}}",
+      "description": "{{i18n.Awn0NXOpenProductHostedDesc}}"
+    },
+    "Awn0NXAddComponentHosted": {
+      "iconId": "cmdOpenInNx",
+      "title": "{{i18n.addComponentHostedCommandTitle}}",
+      "description": "{{i18n.Awn0NXAddComponentHostedDesc}}"
+    },
+    "Awn0NXOpenRelationBrowser": {
+      "iconId": "cmdOpenInNx",
+      "title": "{{i18n.openRelationBrowserHostedCommandTitle}}",
+      "description": "{{i18n.Awn0NXOpenRelationBrowserDesc}}"
+    },
+    "Awn0NXOpenRequirementLinksHosted": {
+      "iconId": "cmdOpenInNx",
+      "title": "{{i18n.openRequirementLinksHostedCommandTitle}}",
+      "description": "{{i18n.Awn0NXOpenRequirementLinksHostedDesc}}"
+    },
+    "Awn0NXOpenDatasetVersion": {
+      "iconId": "cmdOpenInNx",
+      "title": "{{i18n.openDatasetVersionCommandTitle}}",
+      "description": "{{i18n.Awn0NXOpenDatasetVersionDesc}}"
+    },
+    "Awn0NXOpenDatasetVersionHosted": {
+      "iconId": "cmdOpenInNx",
+      "title": "{{i18n.openDatasetVersionHostedCommandTitle}}",
+      "description": "{{i18n.Awn0NXOpenDatasetVersionDesc}}"
+    },
+    "Awn0NXOpenDatasetVersionPanel": {
+      "iconId": "cmdOpenInNx",
+      "title": "{{i18n.openDatasetVersionPanelCommandTitle}}"
+    },
+    "Awn0NXOpenDatasetVersionPanelHosted": {
+      "iconId": "cmdOpenInNx",
+      "title": "{{i18n.openDatasetVersionPanelHostedCommandTitle}}"
+    },
+    "Awn0NXSetDefaultFolderHosted": {
+      "iconId": "cmdOpenInNx",
+      "title": "{{i18n.setDefaultFolderHostedCommandTitle}}",
+      "description": "{{i18n.Awn0NXSetDefaultFolderHostedDesc}}"
+    },
+    "Nxs0AssociateToNX": {
+      "iconId": "cmdLinktoNX",
+      "title": "{{i18n.associateToNx}}",
+      "description": "{{i18n.Nxs0AssociateToNXDesc}}"
+    },
+    "Nxs0DisassociateFromNX": {
+      "iconId": "cmdUnlinkfromNX",
+      "title": "{{i18n.disassociateFromNx}}",
+      "description": "{{i18n.Nxs0DisassociateFromNXDesc}}"
+    },
+    "Nxs0DisassociateItemRevFromNX": {
+      "iconId": "cmdUnlinkfromNX",
+      "title": "{{i18n.disassociateFromNx}}",
+      "description": "{{i18n.Nxs0DisassociateFromNXDesc}}"
+    },
+    "NxGroupCommand": {
+      "iconId": "cmdOpenInNx",
+      "isRibbon": true,
+      "title": "{{i18n.nxCommandGroupTitle}}",
+      "description": "{{i18n.NxGroupCommandDesc}}"
+    },
+    "fakeCommandToForceServerVisibilityAwn0NXOpenHosted": {
+      "iconId": "",
+      "title": ""
+    },
+    "Awn0ExportNXData": {
+      "iconId": "cmdExportNXAssembly",
+      "title": "{{i18n.exportNXData}}",
+      "extendedTooltip": {
+        "view": "Awn0ExportNXDataExtendedTooltip"
+      }
+    }
+  },
+  "commandPlacements": {
+    "AMObjectExpandCommandPlacement": {
+      "id": "AMObjectExpand",
+      "uiAnchor": "aw_primaryWorkArea",
+      "priority": 50
+    },
+    "AMObjectExpandBelowCommandPlacement": {
+      "id": "AMObjectExpandBelow",
+      "parentGroupId": "AMObjectExpand",
+      "priority": 1
+    },
+    "AMObjectCollapseBelowCommmandPlacement": {
+      "id": "AMObjectCollapseBelow",
+      "parentGroupId": "AMObjectExpand",
+      "priority": 2
+    },
+    "AMObjectExpandBelowCtxMenuCommandPlacement": {
+      "id": "AMObjectExpandBelowCtxMenu",
+      "uiAnchor": "aw_contextMenu2",
+      "priority": 38
+    },
+    "AMObjectCollapseBelowCtxMenuCommandPlacement": {
+      "id": "AMObjectCollapseBelowCtxMenu",
+      "uiAnchor": "aw_contextMenu2",
+      "priority": 39
+    },
+    "AmObjectAddPanelToolsInfo": {
+      "id": "AMObjectAddPanel",
+      "uiAnchor": "aw_rightWall",
+      "priority": 120,
+      "parentGroupId": "Awp0NewGroup"
+    },
+    "Awn0OpenNxTcXmlOneStepTest-classic": {
+      "id": "Awn0OpenNxTcXml",
+      "uiAnchor": "aw_oneStep",
+      "priority": 7,
+      "parentGroupId": "Awp0OpenGroup"
+    },
+    "Awn0OpenNxTcXmlOneStepTest": {
+      "id": "Awn0OpenNxTcXml",
+      "uiAnchor": "aw_rightWall",
+      "priority": 170,
+      "parentGroupId": "Awp0OpenGroup"
+    },
+    "Awn0OpenNxHostedCommandCellDatasetTest": {
+      "id": "Awn0NXOpenHostedCellCommand",
+      "uiAnchor": "com.siemens.splm.clientfx.ui.modelObjectDataGridActionCommands",
+      "priority": 1,
+      "cellDisplay": {
+        "hover": true,
+        "position": "TOP_RIGHT",
+        "selected": true
+      }
+    },
+    "Awn0OpenNxHostedCommandTest-classic": {
+      "id": "Awn0NXOpenHosted",
+      "uiAnchor": "aw_oneStep",
+      "priority": -1,
+      "parentGroupId": "NxGroupCommand"
+    },
+    "Awn0OpenNxHostedCommandTest": {
+      "id": "Awn0NXOpenHosted",
+      "uiAnchor": "aw_rightWall",
+      "priority": 160,
+      "parentGroupId": "NxGroupCommand"
+    },
+    "Awn0OpenNxAddHostedCommandTest-classic": {
+      "id": "Awn0NXAddComponentHosted",
+      "uiAnchor": "aw_oneStep",
+      "priority": 0,
+      "parentGroupId": "NxGroupCommand"
+    },
+    "Awn0OpenNxAddHostedCommandTest": {
+      "id": "Awn0NXAddComponentHosted",
+      "uiAnchor": "aw_rightWall",
+      "priority": 110,
+      "parentGroupId": "NxGroupCommand"
+    },
+    "Awn0OpenNxRelationBrowserTest-classic": {
+      "id": "Awn0NXOpenRelationBrowser",
+      "uiAnchor": "aw_oneStep",
+      "priority": 1,
+      "parentGroupId": "NxGroupCommand"
+    },
+    "Awn0OpenNxRelationBrowserTest": {
+      "id": "Awn0NXOpenRelationBrowser",
+      "uiAnchor": "aw_rightWall",
+      "priority": 180,
+      "parentGroupId": "NxGroupCommand"
+    },
+    "Awn0OpenNxrequirementsLinkTest-classic": {
+      "id": "Awn0NXOpenRequirementLinksHosted",
+      "uiAnchor": "aw_oneStep",
+      "priority": 1,
+      "parentGroupId": "NxGroupCommand"
+    },
+    "Awn0OpenNxrequirementsLinkTest": {
+      "id": "Awn0NXOpenRequirementLinksHosted",
+      "uiAnchor": "aw_rightWall",
+      "priority": 190,
+      "parentGroupId": "NxGroupCommand"
+    },
+    "Awn0SetNxDefaultBrowserTest-classic": {
+      "id": "Awn0NXSetDefaultFolderHosted",
+      "relativeTo": "Awp0AddToFavorites",
+      "priority": -1
+    },
+    "Awn0SetNxDefaultBrowserTest": {
+      "id": "Awn0NXSetDefaultFolderHosted",
+      "priority": 690,
+      "uiAnchor": "aw_rightWall",
+      "parentGroupId": "NxGroupCommand"
+    },
+    "Nxs0DisassociateToNxPlacementTest": {
+      "id": "Nxs0DisassociateFromNX",
+      "uiAnchor": "aw_rightWall",
+      "priority": 500,
+      "parentGroupId": "NxGroupCommand"
+    },
+    "Nxs0AssociateToNxPlacementTest": {
+      "id": "Nxs0AssociateToNX",
+      "uiAnchor": "aw_rightWall",
+      "priority": 260,
+      "parentGroupId": "NxGroupCommand"
+    },
+    "Awn0OpenNxTcXmlOneStep-classic": {
+      "id": "Awn0OpenNxTcXml",
+      "uiAnchor": "aw_oneStep",
+      "priority": 7,
+      "parentGroupId": "Awp0OpenGroup"
+    },
+    "Awn0OpenNxTcXmlOneStep": {
+      "id": "Awn0OpenNxTcXml",
+      "uiAnchor": "aw_rightWall",
+      "priority": 170,
+      "parentGroupId": "Awp0OpenGroup"
+    },
+    "Awn0OpenProductNxTcXmlOneStep-classic": {
+      "id": "Awn0OpenProductNxTcXml",
+      "uiAnchor": "aw_oneStep",
+      "priority": 1,
+      "relativeTo": "Awn0OpenNxTcXml",
+      "parentGroupId": "Awp0OpenGroup"
+    },
+    "Awn0OpenProductNxTcXmlOneStep": {
+      "id": "Awn0OpenProductNxTcXml",
+      "uiAnchor": "aw_rightWall",
+      "priority": 1,
+      "relativeTo": "Awn0OpenNxTcXml",
+      "parentGroupId": "Awp0OpenGroup"
+    },
+    "Awn0OpenNxHostedCommandCellDataGrid": {
+      "id": "Awn0NXOpenHostedCellCommand",
+      "uiAnchor": "com.siemens.splm.clientfx.ui.modelObjectDataGridActionCommands",
+      "priority": 1,
+      "cellDisplay": {
+        "hover": true,
+        "position": "TOP_RIGHT",
+        "selected": true
+      }
+    },
+    "Awn0OpenNxHostedCommandCellList": {
+      "id": "Awn0NXOpenHostedCellCommand",
+      "uiAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectObjectNavigationCellListActionCommands",
+      "priority": 1,
+      "cellDisplay": {
+        "hover": true,
+        "position": "TOP_RIGHT",
+        "selected": true
+      }
+    },
+    "Awn0OpenNxHostedCommandCellList2": {
+      "id": "Awn0NXOpenHostedCellCommand",
+      "uiAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectCellListActionCommands",
+      "priority": 1,
+      "cellDisplay": {
+        "hover": true,
+        "position": "TOP_RIGHT",
+        "selected": true
+      }
+    },
+    "Awn0OpenNxHostedCommand-classic": {
+      "id": "Awn0NXOpenHosted",
+      "uiAnchor": "aw_oneStep",
+      "priority": -1,
+      "parentGroupId": "NxGroupCommand"
+    },
+    "Awn0OpenNxHostedCommand": {
+      "id": "Awn0NXOpenHosted",
+      "uiAnchor": "aw_rightWall",
+      "priority": 160,
+      "parentGroupId": "NxGroupCommand"
+    },
+    "Awn0OpenProductNxHostedCommand-classic": {
+      "id": "Awn0NXOpenProductHosted",
+      "uiAnchor": "aw_oneStep",
+      "priority": 1,
+      "relativeTo": "Awn0NXOpenHosted",
+      "parentGroupId": "NxGroupCommand"
+    },
+    "Awn0OpenProductNxHostedCommand": {
+      "id": "Awn0NXOpenProductHosted",
+      "uiAnchor": "aw_rightWall",
+      "priority": 1,
+      "relativeTo": "Awn0NXOpenHosted",
+      "parentGroupId": "NxGroupCommand"
+    },
+    "Awn0OpenNxOpenDatasetVersionPanelHosted": {
+      "id": "Awn0NXOpenDatasetVersionPanelHosted",
+      "uiAnchor": "aw_rightWall",
+      "priority": 170,
+      "parentGroupId": "NxGroupCommand"
+    },
+    "Awn0OpenNxOpenDatasetVersionPanel": {
+      "id": "Awn0NXOpenDatasetVersionPanel",
+      "uiAnchor": "aw_rightWall",
+      "priority": 171,
+      "parentGroupId": "Awp0OpenGroup"
+    },
+    "Awn0OpenNxAddHostedCommand-classic": {
+      "id": "Awn0NXAddComponentHosted",
+      "uiAnchor": "aw_oneStep",
+      "priority": 0,
+      "parentGroupId": "NxGroupCommand"
+    },
+    "Awn0OpenNxAddHostedCommand": {
+      "id": "Awn0NXAddComponentHosted",
+      "uiAnchor": "aw_rightWall",
+      "priority": 110,
+      "parentGroupId": "NxGroupCommand"
+    },
+    "Awn0OpenNxRelationBrowser-classic": {
+      "id": "Awn0NXOpenRelationBrowser",
+      "uiAnchor": "aw_oneStep",
+      "priority": 1,
+      "parentGroupId": "NxGroupCommand"
+    },
+    "Awn0OpenNxRelationBrowser": {
+      "id": "Awn0NXOpenRelationBrowser",
+      "uiAnchor": "aw_rightWall",
+      "priority": 180,
+      "parentGroupId": "NxGroupCommand"
+    },
+    "Awn0OpenNxrequirementsLink-classic": {
+      "id": "Awn0NXOpenRequirementLinksHosted",
+      "uiAnchor": "aw_oneStep",
+      "priority": 1,
+      "parentGroupId": "NxGroupCommand"
+    },
+    "Awn0OpenNxrequirementsLink": {
+      "id": "Awn0NXOpenRequirementLinksHosted",
+      "uiAnchor": "aw_rightWall",
+      "priority": 190,
+      "parentGroupId": "NxGroupCommand"
+    },
+    "Awn0SetNxDefaultBrowser": {
+      "id": "Awn0NXSetDefaultFolderHosted",
+      "uiAnchor": "aw_rightWall",
+      "priority": 190,
+      "parentGroupId": "NxGroupCommand"
+    },
+    "NXGroupOneStep": {
+      "id": "NxGroupCommand",
+      "uiAnchor": "aw_rightWall",
+      "priority": 500
+    },
+    "NXGroupOneStep_workarea": {
+      "id": "NxGroupCommand",
+      "uiAnchor": "aw_workarea_toolbar",
+      "relativeTo": "Awp0OpenGroup"
+    },
+    "Nxs0DisassociateToNxPlacement": {
+      "id": "Nxs0DisassociateFromNX",
+      "uiAnchor": "aw_rightWall",
+      "priority": 380,
+      "parentGroupId": "NxGroupCommand"
+    },
+    "Nxs0AssociateToNxPlacement": {
+      "id": "Nxs0AssociateToNX",
+      "uiAnchor": "aw_rightWall",
+      "priority": 260,
+      "parentGroupId": "NxGroupCommand"
+    },
+    "fakeCommandToForceServerVisibilityAwn0NXOpenHostedPlacement2": {
+      "id": "fakeCommandToForceServerVisibilityAwn0NXOpenHosted",
+      "uiAnchor": "aw_rightWall",
+      "priority": 0
+    },
+    "exportNXDataCommandPlacement": {
+      "id": "Awn0ExportNXData",
+      "uiAnchor": "aw_rightWall",
+      "priority": 81,
+      "parentGroupId": "Awp0ShareGroup"
+    }
+  }
+}

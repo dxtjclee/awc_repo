@@ -1,0 +1,23 @@
+<aw-popup2 id="Arm0SingleRequirementWidePanelEditor" caption="{{i18n.documentationTitle}}" class="temp-test-req">
+    <aw-panel>
+        <aw-panel-body class="aw-richtexteditor-widePanelBody">
+            <aw-column width="fill" height="fill">
+                <aw-command-panel-section collapsed="disabled"
+                    caption="{{data.selectedRefObj.paraNum}} {{data.selectedRefObj.id}}-{{data.selectedRefObj.name}}">
+                </aw-command-panel-section>
+                <aw-include oncontextmenu="return false;" name="Arm0RequirementCkeditor5"
+                    sub-panel-context="{editorProps : data.editorProps,'requirementCtx':{...fields.reqWidePanelCTX}, ...subPanelContext}"
+                    class="aw-requirementsCkeditor-panel aw-ckeditor-panel" exist-when="conditions.isEditorLoaded">
+                </aw-include>
+            </aw-column>
+        </aw-panel-body>
+        <aw-panel-footer>
+            <aw-button button-type="base" action="checkAndCloseWidePanel">
+                <aw-i18n>i18n.cancel</aw-i18n>
+            </aw-button>
+            <aw-button action="saveWidePanelContent" aw-class="{ 'disabled': !(conditions.editorisDirty) }">
+                <aw-i18n>i18n.save</aw-i18n>
+            </aw-button>
+        </aw-panel-footer>
+    </aw-panel>
+</aw-popup2>

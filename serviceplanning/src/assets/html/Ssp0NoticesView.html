@@ -1,0 +1,7 @@
+<aw-advanced-bar type="TOOLBAR" negative="true" visible-when="conditions.IsSelectionValid">
+    <aw-command-bar anchor="ssp0Noticebar" alignment="HORIZONTAL"></aw-command-bar>
+</aw-advanced-bar>
+<ssp0-notices-tree visible-when="conditions.IsSelectionValid"></ssp0-notices-tree>
+<aw-flex-row height="12f" align-content="center" exist-when="!conditions.IsSelectionValid">
+    <mfe-message sub-panel-context="data.messages.SelectionIsNotWcOrActivity"></mfe-message>
+</aw-flex-row>

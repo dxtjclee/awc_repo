@@ -1,0 +1,16 @@
+<aw-command-panel caption="i18n.showInterfacesPanelTitle">
+    <aw-panel-body>
+        <aw-panel-section collapsed="disabled" caption="{{subPanelContext.selectionData.selected[0].props.awb0UnderlyingObject.uiValues[0]}}">
+            <aw-command-bar class="aw-second-barHorizontal" anchor="ase1ShowInterfacesPanelAnchor" alignment="HORIZONTAL" reverse="true"
+                context="data.dataProviders.showInterfacesDataProvider">
+            </aw-command-bar>
+            <aw-list-filter prop="data.filterBox" dataprovider="data.dataProviders.showInterfacesDataProvider">
+                <aw-default-cell vmo="item"></aw-default-cell>
+            </aw-list-filter>
+            <aw-i18n visible-when="data.searchResults.length === 0">i18n.noResultsFound</aw-i18n>
+        </aw-panel-section>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button action="buttonClick" visible-when="conditions.isButtonVisible"><aw-i18n>i18n.showInterfacesButton</aw-i18n></aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

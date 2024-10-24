@@ -1,0 +1,90 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-popup2.directive",
+        "js/aw-panel.directive",
+        "js/aw-icon-button.directive",
+        "js/aw-flex-row.directive",
+        "js/aw-flex-column.directive",
+        "js/aw-icon.directive"
+    ],
+    "data": {
+        "buttonCommand": {
+            "action": "closeDialog",
+            "iconName": "ClosePanel",
+            "tooltip": "{{i18n.close}}"
+        }
+    },
+    "actions": {
+        "initPopup": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "getPopupParams"
+                },
+                {
+                    "action": "getIframeSrc"
+                },
+                {
+                    "action": "initHostingPopup"
+                }
+            ]
+        },
+        "getPopupParams": {
+            "actionType": "JSFunction",
+            "method": "getPopupParams",
+            "inputData": {
+                "ctx": "{{ctx}}",
+                "contextModelObj": "{{subPanelContext.modelObject}}"
+            },
+            "outputData": {
+                "iframeId": "iframeId",
+                "isUsingSecondaryHostingSvc": "isUsingSecondaryHostingSvc",
+                "ecnName": "ecnName"
+            },
+            "deps": "js/services/ngpChangeManagementService"
+        },
+        "getIframeSrc": {
+            "actionType": "JSFunction",
+            "method": "getIframeSrc",
+            "inputData": {
+                "ctx": "{{ctx}}",
+                "contextModelObj": "{{subPanelContext.modelObject}}"
+            },
+            "outputData": {
+                "src": ""
+            },
+            "deps": "js/services/ngpChangeManagementService"
+        },
+        "initHostingPopup": {
+            "actionType": "JSFunction",
+            "method": "setHostingPopup",
+            "inputData": {
+                "ctx": "{{ctx}}",
+                "contextModelObj": "{{subPanelContext.modelObject}}",
+                "data": "{{data}}"
+            },
+            "deps": "js/services/ngpChangeManagementService"
+        },
+        "closeDialog": {
+            "actionType": "JSFunction",
+            "method": "destroyHostingPopup",
+            "inputData": {
+                "popupId": "{{data._internal.panelId}}",
+                "isUsingSecondaryHostingSvc": "{{data.isUsingSecondaryHostingSvc}}"
+            },
+            "deps": "js/services/ngpChangeManagementService"
+        }
+    },
+    "lifecycleHooks": {
+        "onInit": "initPopup"
+    },
+    "onEvent": [ {
+        "eventId": "LOCATION_CHANGE_COMPLETE",
+        "action": "closeDialog"
+    } ],
+    "i18n": {
+        "close": [ "NgpChangeMgmtMessages" ],
+        "ngpMcnTitle": [ "NgpChangeMgmtMessages" ],
+        "ngpMcnSubTitle": [ "NgpChangeMgmtMessages" ]
+    }
+}

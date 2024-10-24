@@ -1,0 +1,12 @@
+<aw-command-panel caption="i18n.tq0AssignQUStateModelTitle">
+    <aw-panel-body scrollable="false">
+        <aw-panel-section caption="i18n.tq0AssignQUStateModelSecTitle" >
+            <aw-list-filter id="workflowListFilter" prop="data.filterBox" dataprovider="data.dataProviders.getWorkflowTemplatesList">
+                <aw-default-cell vmo="item"></aw-default-cell>
+            </aw-list-filter>
+        </aw-panel-section>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button visible-when = "conditions.tq0ShowAssignWorkflowbtn" action="assignWorkflowTemplate"><aw-i18n>i18n.tq0AssignQUStateModelTitle</aw-i18n></aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

@@ -1,0 +1,13 @@
+<aw-command-panel caption="i18n.Aqc0Add" context="subPanelContext">
+    <aw-panel-body scrollable="false">      
+        <aw-guidance-message exist-when="conditions.showGuidanceMessageForDuplicateError" message="duplicateAnswerErrorMsg" closable="false" show-type="false" show-icon="false">
+        </aw-guidance-message> 
+        <aw-widget prop="data.answerText"></aw-widget>    
+        <aw-numeric prop="data.answerValue"></aw-numeric>        
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button action="checkForDuplicate" visible-when="conditions.showAddCommand">
+            <aw-i18n visible-when="conditions.showAddCommand">i18n.Aqc0Add</aw-i18n>  
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

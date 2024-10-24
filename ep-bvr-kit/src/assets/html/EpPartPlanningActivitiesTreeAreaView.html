@@ -1,0 +1,5 @@
+<ep-tree-table exist-when="conditions.areActivitiesToDisplay" view-id="EpPartPlanningActivitiesTreeTable" sub-panel-context="data.activitiesTreeContext" selection-data="data.selectionData"> </ep-tree-table>
+<mfe-loading-message exist-when="conditions.isLoading"></mfe-loading-message>
+<mfe-message exist-when="conditions.isNotLoadingAndNoSelection" sub-panel-context="data.messages.selectProcessOrOperation"> </mfe-message>
+<mfe-message exist-when="conditions.isNotLoadingAndNoActivities" sub-panel-context="data.messages.noActivities"> </mfe-message>
+<mfe-message exist-when="conditions.isIncorrectOperationType" sub-panel-context="data.messages.incorrectOperationType"> </mfe-message>

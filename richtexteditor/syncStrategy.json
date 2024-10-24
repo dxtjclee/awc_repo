@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0.0",
+  "syncStrategies": {
+    "syncParamTable": {
+      "source": {
+        "view": "Arm0RequirementDocumentationACEEditor",
+        "port": "inputSelectionForSync"
+      },
+      "target": {
+        "view": "Att1ShowParametersTableForSync",
+        "port": "syncUniformParamTable"
+      }
+    },
+    "syncParamTableInSummaryTable": {
+      "source": {
+        "view": "Arm0RequirementSummaryTable",
+        "port": "inputSelectionInSummaryTableForSync"
+      },
+      "target": {
+        "view": "Att1ShowParametersTableForSync",
+        "port": "syncUniformParamTable"
+      }
+    }
+  },
+  "syncStrategyHandlers": {
+    "att1UniformParamTableSyncHandler": {
+      "id": "syncParamTable",
+      "activeWhen": {
+        "condition": "conditions.canSyncParamTable"
+      }
+    },
+    "att1UniformParamTableSyncSummaryTableHandler": {
+      "id": "syncParamTableInSummaryTable",
+      "activeWhen": {
+        "condition": "conditions.canSyncParamTableInSummaryTable"
+      }
+    }
+  },
+  "conditions": {
+    "canSyncParamTable": {
+      "expression": "syncContext.sourceViewModel.subPanelContext.activeTab.view==='Arm0RequirementDocumentationACEEditor'"
+    },
+    "canSyncParamTableInSummaryTable": {
+      "expression": "ctx.xrtPageContext.secondaryXrtPageID === 'tc_xrt_summary_table' && ctx.parametersTable.enableSync === true"
+    }
+  }
+}

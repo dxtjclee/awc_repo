@@ -1,0 +1,170 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "openOnCreate": {
+            "displayName": "{{i18n.addAndOpen}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": true,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "effectivityUnitSectionAllUnitsValue": {
+            "uiValue": "{{i18n.effectivityUnitSectionAllUnitsValue}}",
+            "displayName": "{{i18n.effectivityUnitSectionAllUnitsValue}}",
+            "dbValue": "-1",
+            "type": "STRING"
+        },
+        "occurrenceManagementTodayTitle": {
+            "uiValue": "{{i18n.occurrenceManagementTodayTitle}}",
+            "displayName": "{{i18n.occurrenceManagementTodayTitle}}",
+            "type": "STRING"
+        },
+        "defaultVariantRule": {
+            "displayName": "{{i18n.useNoVariantRuleLabel}}",
+            "uiValue": "{{i18n.useNoVariantRuleLabel}}",
+            "type": "STRING"
+        },
+        "creationType": {
+            "props": {
+                "type_name": {
+                    "dbValues": ["Fnd0SearchRecipe"],
+                    "dbValue": "Fnd0SearchRecipe"
+                }
+            }
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "actions": {
+        "loadXrtViewModelForCreateRecipe": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadCreateXrt",
+            "inputData": {
+                "type": "CREATE",
+                "activePageTitle": "",
+                "selectedObject": "",
+                "objectType": "{{data.creationType.props.type_name.dbValues[0]}}"
+            },
+            "outputData": {
+                "xrtData": ""
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "createRecipeWithBOMAction": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ViewMgmtAW-2019-12-ViewDataManagement",
+            "method": "manageRecipes3",
+            "inputData": {
+                "inputs": "{{function:ManageRecipesInput}}"
+            },
+            "policy": {
+                "types": [ {
+                    "name": "BusinessObject",
+                    "properties": [ {
+                        "name": "awp0CellProperties"
+                    } ]
+                } ]
+            },
+            "outputData": {
+                "createdObject": "result.recipeOutput[0].recipeObject"
+            },
+            "events": {
+                "success": [ {
+                    "name": "evm1OpenCreatedRecipe",
+                    "eventData": {
+                        "recipeObject": "{{data.createdObject}}"
+                    },
+                    "condition": "data.openOnCreate.dbValue"
+                },
+                {
+                    "name": "aw.closePopup",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ],
+                "failure": [ {
+                    "name": "aw.closePopup",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            },
+            "deps": "js/Evm1CreateRecipeFromSelection"
+        },
+        "openRecipe": {
+            "actionType": "Navigate",
+            "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+            "navigationParams": {
+                "uid": "{{data.createdObject.uid}}",
+                "edit": true
+            }
+        },
+        "closePopupWindow": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        }
+    },
+    "functions": {
+        "ManageRecipesInput": {
+            "functionName": "ManageRecipesInput",
+            "parameters": [
+                "{{data}}",
+                "{{props.subPanelContext.occContext}}",
+                 "{{editHandlers.addPanelEditHandler}}"
+            ]
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "loadXrtViewModelForCreateRecipe"
+    },
+    "onEvent": [ {
+            "eventId": "evm1OpenCreatedRecipe",
+            "action": "openRecipe",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "aw.closePopup",
+            "action": "closePopupWindow"
+        }
+    ],
+    "i18n": {
+        "addAndOpen": [
+            "RecipeCommandPanelsMessages"
+        ],
+        "Create": [
+            "RecipeCommandPanelsMessages"
+        ],
+        "CreateRecipe": [
+            "RecipeCommandPanelsMessages"
+        ],
+        "effectivityUnitSectionAllUnitsValue": [
+            "OccurrenceManagementConstants"
+        ],
+        "occurrenceManagementTodayTitle": [
+            "OccurrenceManagementConstants"
+        ],
+        "useNoVariantRuleLabel": [
+            "OccurrenceManagementConstants"
+        ]
+    }
+}

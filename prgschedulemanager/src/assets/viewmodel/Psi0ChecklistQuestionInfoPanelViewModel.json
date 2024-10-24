@@ -1,0 +1,163 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-panel-body.directive",
+        "js/aw-xrt.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/visible-when.directive"
+    ],
+    "actions":{
+        "editHandlerStartEdit": {
+            "actionType": "JSFunction",
+            "method": "startEdit",
+            "inputData": {
+                "editHandler": "{{editHandlers.infoPanelEditHandler}}"
+            },
+            "deps": "js/Awp0ObjectInfoService"
+        },
+        "startEdit": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "editHandlerStartEdit"
+                }
+            ]
+        },
+
+        "save": {
+            "actionType": "JSFunction",
+            "method": "saveEditsChecklistQuestionOperation",
+            "deps": "js/Psi0AddChecklistQuestionService",
+            "inputData":{
+                "InfoPanel":true
+              },
+            "outputData": {
+                "inputs": "inputs",
+                "AnswerFlag": "AnswerFlag",
+                "questionNumberArray": "questionNumberArray",
+                "lastQuestionNumber": "lastQuestionNumber"
+            },
+            "events": {
+                "success": [ {
+                    "name": "saveEditAndSubmitChecklistQuestionEvent"
+                } ]
+            }
+        },
+        "saveEditAndSubmitChecklistQuestionAction": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2018-05-DataManagement",
+            "method": "saveViewModelEditAndSubmitWorkflow2",
+            "inputData": {
+                "inputs": "{{data.inputs}}"
+            },
+            "outputData": {
+                "serviceData": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "doPostSaveEditChecklistQuestionEventSuccess"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "doPostSaveEditChecklistQuestionEventFailure"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [ {
+                        "condition": "data.AnswerFlag === true && data.questionNumberArray.length === 0",
+                        "message": "SaveEditSingleCheckQuestionInfoMessage"
+                    }
+                ],
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            }
+        },
+        "doPostSaveEditChecklistQuestionEventSuccess": {
+            "actionType": "JSFunction",
+            "method": "saveEditsPostActions",
+            "inputData": {
+                "saveSuccess": true
+            },
+            "deps": "js/editHandlerService"
+        },
+        "doPostSaveEditChecklistQuestionEventFailure": {
+            "actionType": "JSFunction",
+            "method": "saveEditsPostActions",
+            "inputData": {
+                "saveSuccess": false
+            },
+            "deps": "js/editHandlerService"
+        }
+    },
+    "conditions": {
+    },
+    "onEvent": [
+        {
+            "eventId": "saveEditAndSubmitChecklistQuestionEvent",
+            "action": "saveEditAndSubmitChecklistQuestionAction"
+        }
+    ],
+    "messages": {
+        "SOAFailureMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        },
+        "SaveEditSingleCheckQuestionInfoMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.SaveEditSingleChecklistQuestionErrorMsg}}",
+            "messageTextParams": [
+                "{{data.lastQuestionNumber}}"
+            ]
+        }
+    },
+    "i18n":{
+        "SaveEditSingleChecklistQuestionErrorMsg": [
+            "PrgScheduleManagerMessages"
+        ],
+        "startEditButtonText": [
+            "PrgScheduleManagerMessages"
+        ],
+        "save" : [
+            "PrgScheduleManagerMessages"
+        ]
+    },
+    "data": {
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "editHandlers": {
+        "infoPanelEditHandler": {
+            "context": "INFO_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "ctx": {
+        "selected": {
+            "type": "Object"
+        },
+        "INFO_PANEL_CONTEXT": {
+            "type": "Object"
+        },
+        "INFO_PANEL_CONTEXT._editing": {
+            "type": "Boolean"
+        },
+        "INFO_PANEL_CONTEXT.canEdit": {
+            "type": "Boolean"
+        }
+    }
+}

@@ -1,0 +1,187 @@
+{
+    "schemaVersion" : "1.0.0",
+    "data" :{
+       "addPanelState": {
+            "initialValues": {
+                "sourceObjects": "",
+                "selectedTab": ""
+            },
+            "meta": {
+            }
+        }
+    },
+    "actions": {
+        "createRelationAndGetProperties": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData": {
+                "objects": "{{function:getSchedules}}",
+                "attributes": [
+                    "object_name",
+                    "published",
+                    "is_template"
+                ]
+            },
+            "policy": {
+                "types": [
+                    {
+                        "name": "Schedule",
+                        "properties": [
+                            {
+                                "name": "object_name"
+                            },
+                            {
+                                "name": "published"
+                            },
+                            {
+                                "name": "is_template"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "condition":"data.schedules.validSchedules[0]",
+                        "name": "addSchedule.callSoa"
+                    },
+                    {
+                        "name": "addSchedule.throwMessage"
+                    }
+                ]
+            },
+            "outputData": {
+                "schedules": "{{function:getProps}}"
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            },
+            "deps": "js/Psi0RelateScheduleService"
+        },
+        "createRelationsMessages": {
+            "actionType": "JSFunction",
+            "method": "getErrorMessage",
+            "inputData": {
+                "data": "{{data}}",
+                "schedules": "{{data.schedules.invalidSchedules}}"
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "condition": "errorCode=='invalidScheduleErrorMsg'",
+                        "message": "invalidScheduleErrorMsg"
+                    }
+                ]
+            },
+            "deps": "js/Psi0RelateScheduleService"
+        },
+        "createRelationsforPalette": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "createRelations",
+            "inputData": {
+                "input": "{{function:getCreateInput}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relations": "",
+                            "relatedModified": [
+                                "{{ctx.panelContext.targetObject}}"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "awPanel.CreateOrAddObjectCompleteEvent",
+                        "eventData": {
+                            "createdObjs": "{{addPanelState.sourceObjects}}"
+                        }
+                    },
+                    {
+                        "name": "complete",
+                        "condition": "!subPanelContext.panelPinned",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            },
+            "deps": "js/Psi0RelateScheduleService"
+        }
+    },
+    "functions": {
+        "getProps": {
+            "functionName": "getProps",
+            "parameters": [
+
+                "{{addPanelState.sourceObjects}}"
+            ]
+        },
+        "getSchedules": {
+            "functionName": "getSchedules",
+            "parameters": [
+                "{{addPanelState.sourceObjects}}"
+            ]
+        },
+        "getCreateInput": {
+            "functionName": "getCreateInput",
+            "parameters": [
+                "{{data.schedules.validSchedules}}",
+                "{{ctx.panelContext.targetObject}}"
+            ]
+        }
+    },
+    "messages": {
+        "SOAFailureMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        },
+        "invalidScheduleErrorMsg": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.invalidScheduleErrorMsg}}",
+            "messageTextParams": [
+                "{{data.schedules.invalidSchedules[0].props.object_name.dbValues[0]}}"
+            ]
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "addSchedule.callSoa",
+            "action": "createRelationsforPalette"
+        },
+        {
+            "eventId": "addSchedule.throwMessage",
+            "action": "createRelationsMessages"
+        }
+    ],
+    "conditions": {
+        "isPaletteTabAddButtonVisible": {
+            "expression": "addPanelState.selectedTab.view==='PaletteTabPageSub' && addPanelState.sourceObjects.length > 0"
+        },
+        "isSearchTabAddButtonVisible": {
+            "expression": "addPanelState.selectedTab.view!='NewTabPageSub' && addPanelState.selectedTab.view!='PaletteTabPageSub' && addPanelState.sourceObjects.length > 0"
+        }
+    },
+    "i18n": {
+        "RelateScheduleTitle": [
+            "PrgScheduleManagerMessages"
+        ],
+        "addButtonTitle": [
+            "PrgScheduleManagerMessages"
+        ],
+        "invalidScheduleErrorMsg": [
+            "PrgScheduleManagerMessages"
+        ]
+    }
+}

@@ -1,0 +1,46 @@
+<aw-command-panel caption="i18n.filter">
+    <aw-panel-body>
+        <div class="sw-row" exist-when="data.activeViewSharedData.activeView === 'Arm0TraceMatrixTracelinkTypeFilter'">
+            <aw-command-sub-panel panel-id="Arm0TraceMatrixTracelinkTypeFilter"
+                exist-when="data.tracelinkTypeList.categories && data.tracelinkTypeList.categories.length>0"
+                sub-panel-context="{searchState:data.tracelinkTypeList, sharedData:data.sharedData}">
+            </aw-command-sub-panel>
+        </div>
+
+        <div class="sw-column aw-richtexteditor-matrixDiscoveryFilterPanelBody" exist-when="ctx[data.contextKey].productContextInfo">
+            <div class="sw-row aw-richtexteditor-matrixFilterPanelContextLabel"
+                exist-when="data.activeViewSharedData.activeView !== 'Arm0TraceMatrixTracelinkTypeFilter'">
+                {{data.activeFilterViewObjectName}}
+            </div>
+            <aw-command-sub-panel panel-id="Awb0DiscoveryFilterCommandSubPanel"
+                exist-when="data.activeViewSharedData.activeView === 'Awb0DiscoveryFilterCommandSubPanel'"
+                sub-panel-context="{...props.subPanelContext, data: data, activeViewSharedData: data.activeViewSharedData, sharedData:data.sharedData, occContext:ctx[data.contextKey]}">
+            </aw-command-sub-panel>
+
+            <aw-navigate-panel title="{{data.sharedData.spatialRecipeIndexToUpdate >=0 ?  i18n.EditProximitySubPanel: i18n.ProximitySubPanel }}"
+                exist-when="data.activeViewSharedData.activeView === 'ProximitySubPanel'"
+                pre-panel-id='Awb0DiscoveryFilterCommandSubPanel' panel-id='ProximitySubPanel'
+                sub-panel-context='{activeViewSharedData: data.activeViewSharedData, sharedData:data.sharedData}'
+                action="navigateBackToDiscoverySubPanel">
+            </aw-navigate-panel>
+            <aw-navigate-panel title='i18n.BoxZoneSubPanel'
+                exist-when="data.activeViewSharedData.activeView === 'BoxZoneSubPanel'"
+                pre-panel-id='Awb0DiscoveryFilterCommandSubPanel' panel-id='BoxZoneSubPanel'
+                    sub-panel-context='{activeViewSharedData: data.activeViewSharedData, sharedData:data.sharedData, occContext: ctx[data.contextKey]}'
+                action="navigateBackToDiscoverySubPanel">
+            </aw-navigate-panel>
+            <aw-navigate-panel title='i18n.PlaneZoneSubPanel'
+                exist-when="data.activeViewSharedData.activeView === 'PlaneZoneSubPanel'"
+                pre-panel-id='Awb0DiscoveryFilterCommandSubPanel' panel-id='PlaneZoneSubPanel'
+                    sub-panel-context='{activeViewSharedData: data.activeViewSharedData, sharedData:data.sharedData, occContext: ctx[data.contextKey]}'
+                action="navigateBackToDiscoverySubPanel">
+            </aw-navigate-panel>
+        </div>
+    </aw-panel-body>
+    <aw-panel-footer visible-when="data.activeViewSharedData.activeView === 'Arm0TraceMatrixTracelinkTypeFilter' || data.activeViewSharedData.activeView === 'Awb0DiscoveryFilterCommandSubPanel'">
+        <aw-button action="applyMatrixFilter"
+            enable-when="data.sharedData.enableFilterApply">
+            <aw-i18n>i18n.filterButtonTitle</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

@@ -1,0 +1,39 @@
+<ep-configuration-chip-area exist-when="ctx.epTaskPageContext.loadedObject.uid && ctx.ep.scopeObject.uid" configuration-chips-data="data.configurationChipsData"></ep-configuration-chip-area>
+<aw-sublocation sub-location-preference="data.awSubLocationPref" sub-panel-context="{provider : data.provider, occContext:data.occContext}">
+    <mfe-loading-message exist-when="!ctx.epPageContext.loadedObject.uid || !ctx.ep.scopeObject.uid">
+    </mfe-loading-message>
+    <div class="sw-column w-12" exist-when="ctx.epPageContext.loadedObject.uid && ctx.ep.scopeObject.uid">
+        <ep-balancing-dashboard balancing-data="data.balancingData"></ep-balancing-dashboard>
+        <mfe-content-container container-direction="HORIZONTAL" container-name="BalancingPageContents" class="flex-auto">
+            <mfe-content-container container-direction="VERTICAL" container-name="BalancingPageOverview" class="aw-epBalancing-overviewContainer w-1">
+                <mfe-content-panel sub-panel-context="{...data.overviewContext, balancingData: data.balancingData}"></mfe-content-panel>
+            </mfe-content-container>
+            <div aw-class="[ctx.ep.balancingShowProductBOP ? 'w-9' : 'w-11']" class="sw-column flex-auto" exist-when="!data.hideOperations">
+                <ep-balancing-share-process-resource exist-when="data.balancingData.selectionData.sharePr.isShareToAnotherPRVisible" class="w-12 h-1 aw-epBalancing-shareProcessResource" sub-panel-context="{ occContext:data.occContext, balancingData: data.balancingData }"></ep-balancing-share-process-resource>
+                <mfe-content-container container-direction="HORIZONTAL" container-name="BalancingMidSubPage" class="flex-auto">
+                    <mfe-content-container container-direction="VERTICAL" container-name="BalancingPageTiles" class="w-3">
+                        <mfe-content-panel sub-panel-context="{...data.stationTilesContext, balancingData: data.balancingData}"></mfe-content-panel>
+                    </mfe-content-container>
+                    <mfe-content-container container-direction="VERTICAL" container-name="BalancingPageSingleStation" class="flex-auto" aw-class="[ctx.ep.balancingShowProductBOP ? 'w-5' : 'w-7']">
+                        <mfe-content-container container-direction="HORIZONTAL" container-name="BalancingPageOperations" aw-class="[ctx.maximizedVertically === undefined ? 'h-7' : 'h-12']">
+                            <mfe-content-panel sub-panel-context="{ ...data.operationsContext, occContext:data.occContext, sharedSelectionData:data.sharedSelectionData, balancingData: data.balancingData}" occ-context="data.occContext"></mfe-content-panel>
+                        </mfe-content-container>
+                        <mfe-content-container container-direction="HORIZONTAL" container-name="BalancingPageSequence" aw-class="[ctx.maximizedVertically === undefined ? 'h-5' : 'aw-epBalancing-maximizedVertically']">
+                            <mfe-content-panel sub-panel-context="{...data.sequenceContext, balancingData: data.balancingData}"></mfe-content-panel>
+                        </mfe-content-container>
+                    </mfe-content-container>
+                </mfe-content-container>
+            </div>
+            <mfe-content-container container-direction="VERTICAL" container-name="BalancingPageProductBOP" class="w-2" exist-when="ctx.ep.balancingShowProductBOP">
+                <mfe-content-container container-direction="HORIZONTAL" container-name="BalancingPageProductBOP" aw-class="[ctx.ep.assignmentIndicationMode && conditions.epShowMissingTab ? 'h-7' : 'h-12']">
+                    <mfe-content-panel sub-panel-context="{...data.productBOPContext, sharedSelectionData:data.sharedSelectionData, balancingData: data.balancingData}"></mfe-content-panel>
+                </mfe-content-container>
+                <mfe-content-container container-direction="HORIZONTAL" container-name="BalancingMissingInSource" aw-class="[ctx.maximizedVertically === undefined ? 'h-5' : 'aw-epBalancing-maximizedVertically']" exist-when="ctx.ep.assignmentIndicationMode && conditions.epShowMissingTab">
+                    <mfe-content-panel class="aw-ep-missingInSourcePanel" sub-panel-context="data.missingSourceContext"></mfe-content-panel>
+                </mfe-content-container>
+            </mfe-content-container>
+        </mfe-content-container>
+        <ep-balancing-manager exist-when="ctx.ep.scopeObject" balancing-data="data.balancingData"></ep-balancing-manager>
+    </div>
+
+</aw-sublocation>

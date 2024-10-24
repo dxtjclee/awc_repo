@@ -1,0 +1,69 @@
+/* Copyright (c) 2022 Siemens */
+
+$iconSize: rem-calc(36);
+$paddingTop: rem-calc(5);
+
+.ep-planning-header {
+    font-size: $fontsize_2x_large;
+    display: flex;
+    align-items: center;
+
+    .aw-icon {
+        height: $iconSize;
+        width: $iconSize;
+        margin-right: rem-calc(12);
+    }
+}
+
+.ep-planning-taskBar {
+    padding: $padding_normal;
+    justify-content: center;
+    align-items: center;
+}
+.ep-planning-operationsTable{
+    .aw-splm-tableHeaderCellInner {
+        width: 100%;
+        height: 100%;
+        display: block;
+        .aw-visual-indicator {
+            padding-right: 0;
+            vertical-align: middle;
+        }
+    }
+    .aw-splm-tableCellContents{
+        padding-top: 0;
+        padding-bottom:  0;
+        padding-left: 0;
+    }
+}
+.ep-planning-operationsHeaderLabel{
+    display: block;
+    height: 50%;
+    padding-top: $paddingTop;
+    padding-left: $padding_normal;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.ep-planning-operationsHeaderIcon{
+    display: flex;
+    height: 50%;
+    justify-content: center;
+    align-items: center;
+}
+.ep-planning-operationsHeaderTotalLabel{
+    display: block;
+    padding-top: $paddingTop;
+    padding-left: $padding_normal;
+    font-weight: $bold_font_weight;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.ep-planning-operationsHeader{
+    height: 50%;
+}
+.ep-operationPlanning-leftTaskBar {
+    gap: $margin_large;
+}

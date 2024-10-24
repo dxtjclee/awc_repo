@@ -1,0 +1,910 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/visible-when.directive",
+        "js/aw-list.directive",
+        "js/aw-default-cell.directive",
+        "js/aw-popup2.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/aw-command-sub-panel.directive",
+        "js/aw-command-panel-section.directive",
+        "js/aw-icon-button.directive",
+        "js/aw-tab-set.directive",
+        "js/aw-panel.directive",
+        "js/aw-search-box.directive",
+        "js/aw-panel-header.directive",
+        "js/aw-textbox.directive",
+        "js/aw-flex-row.directive",
+        "js/aw-row.directive",
+        "js/aw-flex-column.directive",
+        "js/aw-column.directive",
+        "js/aw-widget.directive"
+    ],
+    "actions": {
+        "getCharDef": {
+            "actionType": "dataProvider",
+            "method": "charDefListProvider"
+        },
+        "updateServiceDataAction":  {
+            "actionType": "JSFunctionAsync",
+            "method": "updatePartialErrors",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData":{
+                "selectedCount":"selectedCount",
+                "charPartialErrors":"charPartialErrors"
+            },
+            "actionMessages": {
+                "success": [ {
+                    "condition": "data.dataProviders.charDefListProvider.selectedObjects && data.dataProviders.charDefListProvider.selectedObjects.length === 1",
+                    "message": "CharAdded"
+                },
+                {
+                    "condition": "data.dataProviders.charDefListProvider.selectedObjects && data.dataProviders.charDefListProvider.selectedObjects.length > 1",
+                    "message": "addMultipleCharSuccess"
+                }],
+                "failure":[
+                {
+                    "condition": "data.dataProviders.charDefListProvider.selectedObjects && data.dataProviders.charDefListProvider.selectedObjects.length > 1 && data.serviceData.partialErrors",
+                    "message": "addMultipleOrPartialChars"
+                },
+                {
+                    "condition": "data.dataProviders.charDefListProvider.selectedObjects && data.dataProviders.charDefListProvider.selectedObjects.length === 1 && data.serviceData.partialErrors",
+                    "message": "addSingleCharFailure"
+                }]
+            },
+            "deps": "js/SlmCreateCharService"
+        },
+        "doSearch": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "searchInitiated"
+                    }
+                ]
+            }
+        },
+        "findSavedQuery": {
+            "actionType": "TcSoaService",
+            "serviceName": "Query-2010-04-SavedQuery",
+            "method": "findSavedQueries",
+            "inputData": {
+                "inputCriteria": [
+                    {
+                        "queryNames": [
+                            "MRO Search Characteristic"
+                        ]
+                    }
+                ]
+            },
+            "outputData": {
+                "generalQuery": "savedQueries[0]"
+            }
+        },
+        "searchCharDef": {
+            "actionType": "TcSoaService",
+            "serviceName": "Query-2006-03-SavedQuery",
+            "method": "executeSavedQuery",
+            "inputData": {
+                "query": "{{data.generalQuery}}",
+                "limit": 0,
+                "entries": [
+                    "Characteristic Name"
+                ],
+                "values": [
+                    "{{data.searchBox.dbValue}}"
+                ]
+            },
+            "outputData": {
+                "searchResponse": "objects",
+                "totalFound": "nFound"
+            }
+        },
+        "batchAction": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "reveal"
+                },
+                {
+                    "action": "findSavedQuery"
+                }
+            ]
+        },
+        "batchActionForDerived": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "derivedCharPanelOpen"
+                },
+                {
+                    "action": "loadCharForDerived"
+                }
+            ]
+        },
+        "reveal": {
+            "actionType": "dataProvider",
+            "method": "charType"
+        },
+        "getNeutralPart": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData": {
+                "attributes": [
+                    "items_tag"
+                ],
+                "objects": [
+                    {
+                        "uid": "{{ctx.selected.props.awb0UnderlyingObject.dbValues[0]}}",
+                        "type": "{{ctx.selected.props.awb0UnderlyingObjectType.dbValues[0]}}"
+                    }
+                ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "characteristicsCreated1"
+                    }
+                ]
+            }
+        },
+        "createChar": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2016-09-DataManagement",
+            "parameters": {
+                "selectedNeutralPart": "{{actionData.selectedNeutralPart}}"
+            },
+            "deps": "js/SlmCreateCharService",
+            "method": "createAttachAndSubmitObjects",
+            "inputData": {
+                "inputs": "{{function:getCreateCharInput}}"
+            },
+            "outputData": {
+                "output": "output",
+                "serviceData": "ServiceData",
+                "createdObject": "output[0].objects[0]"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "closePopup1"
+                    },
+                    {
+                        "condition": "(ctx.selected.modelType.typeHierarchyArray.indexOf('Folder') > -1)",
+                        "name": "primaryWorkarea.reset"
+                    },
+                    {
+                        "name": "nav",
+                        "condition": "(ctx.selected.modelType.typeHierarchyArray.indexOf('Folder') > -1)"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "closePopup1"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "charCreated"
+                    }
+                ],
+                "failure": [
+                    {
+                        "message": "charErrorMsg"
+                    }
+                ]
+            }
+        },
+        "createRelation": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "deps": "js/SlmCreateCharService",
+            "method": "createRelations",
+            "inputData": {
+                "input": "{{function:getCreateRelationsInput}}"
+            },
+            "outputData": {
+                "output": "output",
+                "serviceData": "ServiceData"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "updateServiceData"
+                    },
+                    {
+                        "name": "close"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "updateServiceData"
+                    },
+                    {
+                        "name": "close"
+                    }
+            ]
+            }
+
+        },
+        "loadCharTypes": {
+            "actionType": "JSFunction",
+            "method": "createdataProviderList",
+            "outputData": {
+                "searchResults": ""
+            },
+            "deps": "js/SlmCreateCharService"
+        },
+        "loadCharTypeTypes": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2016-03-Finder",
+            "method": "performSearch",
+            "inputData": {
+                "searchInput": {
+                    "maxToLoad": 25,
+                    "maxToReturn": 25,
+                    "providerName": "Awp0TypeSearchProvider",
+                    "searchCriteria": {
+                        "searchString": "",
+                        "typeSelectorId": "",
+                        "listOfIncludeObjectTypes": "CharacteristicDefinition",
+                        "loadSubTypes": "true"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "startIndex": "{{data.dataProviders.performSearch.startIndex}}",
+                    "attributesToInflate": [
+                        "parent_types",
+                        "type_name",
+                        "object_string"
+                    ]
+                }
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "searchResults"
+            },
+            "deps": "js/SlmCreateCharService"
+        },
+        "loadCharForDerived": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2012-10-Finder",
+            "method": "findObjectsByClassAndAttributes2",
+            "deps": "js/SlmCreateCharService",
+            "inputData": {
+                "input": {
+                    "clientId": "GWT_THIN_CLIENT",
+                    "startIndex": 0,
+                    "maxLoad": 200,
+                    "maxToReturn": 200,
+                    "searchCriteria": [
+                        {
+                            "className": "CharacteristicDefinition",
+                            "searchAttributes": {
+                                "object_name": "*"
+                            }
+                        }
+                    ],
+                    "searchMode": "GeneralQuery",
+                    "uids": [],
+                    "attributes": []
+                }
+            },
+            "outputData": {
+                "existingCharList": "{{function:filterCharForDerived}}"
+            }
+        },
+        "prepareCharExpressionValue": {
+            "actionType": "JSFunction",
+            "method": "prepareCharExpressionValue",
+            "inputData": {
+                "expressionValue": "{{data.expressionValue}}",
+                "charListBox":"{{data.charListBox}}",
+                "existingCharList":"{{data.existingCharList}}"
+            },
+            "outputData": {
+                "expressionValue": "expressionValue",
+                "charListBox": "charListBox"
+            },
+            "deps": "js/SlmCreateCharService"
+        },
+        "prepareOperExpressionValue": {
+            "actionType": "JSFunction",
+            "method": "prepareOperExpressionValue",
+            "inputData": {
+                "expressionValue": "{{data.expressionValue}}",
+                "operatorListBox": "{{data.operatorListBox}}",
+                "opratorsList": "{{data.opratorsList}}"
+
+            },
+            "outputData": {
+                "expressionValue": "expressionValue",
+                "operatorListBox": "operatorListBox"
+            },
+            "deps": "js/SlmCreateCharService"
+        },
+        "ClosePopUpAction": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        },
+        "dateCharPanelOpen": {
+            "actionType": "JSFunction",
+            "method": "updateCtx",
+            "inputData": {
+                "name": "showDateCharPanel",
+                "value": true
+            },
+            "deps": "js/appCtxService"
+        },
+        "lifeCharPanelOpen": {
+            "actionType": "JSFunction",
+            "method": "updateCtx",
+            "inputData": {
+                "name": "showLifeCharPanel",
+                "value": true
+            },
+            "deps": "js/appCtxService"
+        },
+        "obsCharPanelOpen": {
+            "actionType": "JSFunction",
+            "method": "updateCtx",
+            "inputData": {
+                "name": "showObsCharPanel",
+                "value": true
+            },
+            "deps": "js/appCtxService"
+        },
+        "derivedCharPanelOpen": {
+            "actionType": "JSFunction",
+            "method": "updateCtx",
+            "inputData": {
+                "name": "showDerivedCharPanel",
+                "value": true
+            },
+            "deps": "js/appCtxService"
+        },
+        "clearDateCharPanelCtx": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "inputData": {
+                "name": "showDateCharPanel"
+            },
+            "deps": "js/appCtxService"
+        },
+        "clearLifeCharPanelCtx": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "inputData": {
+                "name": "showLifeCharPanel"
+            },
+            "deps": "js/appCtxService"
+        },
+        "clearObsCharPanelCtx": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "inputData": {
+                "name": "showObsCharPanel"
+            },
+            "deps": "js/appCtxService"
+        },
+        "clearDerivedCharPanelCtx": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "inputData": {
+                "name": "showDerivedCharPanel"
+            },
+            "deps": "js/appCtxService"
+        },
+        "clearData": {
+            "actionType": "JSFunction",
+            "method": "clearData",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "charName": "charName",
+                "charUnit": "charUnit",
+                "typeOf": "typeOf",
+                "trueValues": "trueValues",
+                "falseValues": "falseValues",
+                "precision": "precision"
+            },
+            "deps": "js/SlmCreateCharService"
+        },
+        "navigate": {
+            "actionType": "Navigate",
+            "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+            "navigationParams": {
+                "s_uid": "{{data.createdObject.uid}}",
+                "uid": "{{ctx.selected.uid}}"
+            }
+        },
+        "clearAndClose": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "clearDateCharPanelCtx"
+                },
+                {
+                    "action": "clearLifeCharPanelCtx"
+                },
+                {
+                    "action": "clearObsCharPanelCtx"
+                },
+                {
+                    "action": "clearDerivedCharPanelCtx"
+                },
+                {
+                    "action": "ClosePopUpAction"
+                }
+            ]
+        },
+        "clearCtx": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "clearDateCharPanelCtx"
+                },
+                {
+                    "action": "clearLifeCharPanelCtx"
+                },
+                {
+                    "action": "clearObsCharPanelCtx"
+                },
+                {
+                    "action": "clearDerivedCharPanelCtx"
+                },
+                {
+                    "action": "clearData"
+                }
+            ]
+        }
+    },
+    "conditions": {
+        "dateCharSelected": {
+            "expression": "(data.dataProviders.charType.selectedObjects[0].type === 'DateCharDefinition')"
+        },
+        "lifeCharSelected": {
+            "expression": "(data.dataProviders.charType.selectedObjects[0].type === 'LifeCharDefinition')"
+        },
+        "obsCharSelected": {
+            "expression": "(data.dataProviders.charType.selectedObjects[0].type === 'ObsCharDefinition')"
+        },
+        "derivedCharSelected": {
+            "expression": "(data.dataProviders.charType.selectedObjects[0].type === 'DerivedCharDefinition')"
+        },
+        "isSelectionPageVisibility": {
+            "expression": "(ctx.showDateCharPanel || ctx.showLifeCharPanel || ctx.showObsCharPanel || ctx.showDerivedCharPanel)"
+        },
+        "isCharSelectedFromSearch": {
+            "expression": "(data.dataProviders.charDefListProvider.selectedObjects.length)"
+        },
+        "requiredFieldsEnteredForDate": {
+            "expression": "(data.charName.dbValue && data.charName.dbValue !='' && ctx.showDateCharPanel)"
+        },
+        "requiredFieldsEnteredForLife": {
+            "expression": "(data.charName.dbValue && data.charName.dbValue !='' && data.charUnit.dbValue  && data.charUnit.dbValue !='')"
+        },
+        "requiredFieldsEnteredForObs": {
+            "expression": "(data.charName.dbValue && data.charName.dbValue !='' && data.charUnit.dbValue && data.charUnit.dbValue !='' && data.typeOf.dbValue && data.typeOf.dbValue !='')"
+        },
+        "requiredFieldsEnteredForLogicalObs": {
+            "expression": "(data.charName.dbValue && data.charName.dbValue !=''  && data.typeOf.dbValue && data.typeOf.dbValue !='Numeric')"
+        },
+        "requiredFieldsEnteredForDerived": {
+            "expression": "(data.charName.dbValue && data.charName.dbValue !='' && data.charUnit.dbValue  && data.charUnit.dbValue !='' && data.expressionValue.dbValue  && data.expressionValue.dbValue !='')"
+        }
+    },
+    "lifecycleHooks": {
+        "onInit": "batchAction",
+        "onUnmount": "clearCtx"
+    },
+    "onEvent": [
+        {
+            "eventId": "aw.closePopup",
+            "action": "ClosePopUpAction"
+        },
+        {
+            "eventId": "updateServiceData",
+            "action": "updateServiceDataAction"
+        },
+        {
+            "eventId": "charType.selectionChangeEvent",
+            "action": "dateCharPanelOpen",
+            "condition": "conditions.dateCharSelected"
+        },
+        {
+            "eventId": "charType.selectionChangeEvent",
+            "action": "lifeCharPanelOpen",
+            "condition": "conditions.lifeCharSelected"
+        },
+        {
+            "eventId": "charType.selectionChangeEvent",
+            "action": "obsCharPanelOpen",
+            "condition": "conditions.obsCharSelected"
+        },
+        {
+            "eventId": "charType.selectionChangeEvent",
+            "action": "batchActionForDerived",
+            "condition": "conditions.derivedCharSelected"
+        },
+        {
+            "eventId": "charListBox.lovValueChanged",
+            "action": "prepareCharExpressionValue",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "operatorListBox.lovValueChanged",
+            "action": "prepareOperExpressionValue",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "searchInitiated",
+            "condition": "data.searchBox.dbValue && data.searchBox.dbValue.length>0",
+            "action": "getCharDef"
+        },
+        {
+            "eventId": "characteristicsCreated1",
+            "action": "createRelation",
+            "condition": "data.selectedTab.tabKey === 'search'"
+        },
+        {
+            "eventId": "characteristicsCreated1",
+            "action": "createChar",
+            "condition": "(ctx.showDateCharPanel && ctx.showDateCharPanel === true) || (ctx.showLifeCharPanel && ctx.showLifeCharPanel === true) || (ctx.showObsCharPanel && ctx.showObsCharPanel === true) || (ctx.showDerivedCharPanel && ctx.showDerivedCharPanel === true)"
+        },
+        {
+            "eventId": "closePopup1",
+            "action": "clearAndClose"
+        },
+        {
+            "eventId": "nav",
+            "action": "navigate"
+        }
+    ],
+    "functions": {
+        "charTypeList": {
+            "functionName": "charTypeList",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getCreateRelationsInput": {
+            "functionName": "getCreateRelationsInput",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getPart": {
+            "functionName": "getPart",
+            "parameters": []
+        },
+        "getCreateCharInput": {
+            "functionName": "getCreateCharInput",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getPasteProp":{
+            "functionName": "getPasteProp",
+            "parameters": []
+        },
+        "getBONameForDerived": {
+            "functionName": "getBONameForDerived",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "inputForCharList": {
+            "functionName": "inputForCharList",
+            "parameters": [
+                "{{data}}"
+            ]
+        }
+    },
+    "data": {
+        "addPanelTabModels": [
+            {
+                "tabKey": "newChar",
+                "name": "{{i18n.newChar}}"
+            },
+            {
+                "tabKey": "search",
+                "name": "{{i18n.Search}}",
+                "recreatePanel": true,
+                "visibleWhen": "!(ctx.selected.modelType.typeHierarchyArray.indexOf('Folder') > -1)"
+            }
+        ],
+        "searchBox": {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "true",
+            "dbValue": ""
+        },
+        "charName": {
+            "type": "STRING",
+            "displayName": "{{i18n.CharacteristicsName}}",
+            "isRequired": "true",
+            "dbValue": ""
+        },
+        "charUnit": {
+            "type": "STRING",
+            "displayName": "{{i18n.charUnit}}",
+            "isRequired": "true",
+            "dbValue": ""
+        },
+        "precision": {
+            "type": "STRING",
+            "displayName": "{{i18n.precision}}",
+            "isRequired": "false",
+            "dbValue": ""
+        },
+        "buttonCommand": {
+            "action": "clearCtx",
+            "iconName": "Back",
+            "tooltip": "{{i18n.Back}}"
+        },
+        "typeOf": {
+            "displayName": "{{i18n.typeOfValue}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "hasLov": true,
+            "dbValue": "{{i18n.Numeric}}",
+            "dispValue": "{{i18n.Numeric}}"
+        },
+        "typeOfValues": {
+            "type": "STRING",
+            "dbValue": [
+                {
+                    "propDisplayValue": "{{i18n.Numeric}}",
+                    "dispValue": "{{i18n.Numeric}}",
+                    "propInternalValue": "Numeric"
+                },
+                {
+                    "propDisplayValue": "{{i18n.Logical}}",
+                    "dispValue": "{{i18n.Logical}}",
+                    "propInternalValue": "Logical"
+                },
+                {
+                    "propDisplayValue": "{{i18n.Textual}}",
+                    "dispValue": "{{i18n.Textual}}",
+                    "propInternalValue": "Textual"
+                }
+            ]
+        },
+        "trueValues": {
+            "type": "STRING",
+            "displayName": "{{i18n.values}}",
+            "isRequired": "false",
+            "requiredText": "True",
+            "dbValue": ""
+        },
+        "falseValues": {
+            "type": "STRING",
+            "isRequired": "false",
+            "requiredText": "False",
+            "dbValue": ""
+        },
+        "stringList": {
+            "displayName": "{{i18n.values}}",
+            "type": "STRINGARRAY",
+            "isRequired": "false",
+            "isEditable": "true",
+            "isArray": "true"
+        },
+        "charListBox": {
+            "type": "STRING",
+            "dbValue": " ",
+            "requiredText": "{{i18n.TypeCharName}}",
+            "dataProvider": "charListProvider",
+            "isEditable": "true"
+        },
+        "operatorListBox": {
+            "type": "STRING",
+            "dbValue": " ",
+            "requiredText": "{{i18n.TypeOperator}}",
+            "dataProvider": "opratorListProvider",
+            "isEditable": "true"
+        },
+        "opratorsList": {
+            "type": "STRING",
+            "dbValue": [
+                {
+                    "propDisplayValue": "(",
+                    "dispValue": "(",
+                    "propInternalValue": "("
+                },
+                {
+                    "propDisplayValue": "+",
+                    "dispValue": "+",
+                    "propInternalValue": "+"
+                },
+                {
+                    "propDisplayValue": "-",
+                    "dispValue": "-",
+                    "propInternalValue": "-"
+                },
+                {
+                    "propDisplayValue": "/",
+                    "dispValue": "/",
+                    "propInternalValue": "/"
+                },
+                {
+                    "propDisplayValue": "*",
+                    "dispValue": "*",
+                    "propInternalValue": "*"
+                },
+                {
+                    "propDisplayValue": ")",
+                    "dispValue": ")",
+                    "propInternalValue": ")"
+                }
+            ]
+        },
+        "expressionValue": {
+            "type": "STRING",
+            "displayName": "{{i18n.Expression}}",
+            "isRequired": "true",
+            "isEditable": "true",
+            "dbValue": ""
+        }
+    },
+    "dataProviders": {
+        "charType": {
+            "dataProviderType": "Static",
+            "action": "loadCharTypes",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}"
+        },
+        "charDefListProvider": {
+            "action": "searchCharDef",
+            "response": "{{data.searchResponse}}",
+            "totalFound": "{{data.totalFound}}",
+            "selectionModelMode": "multiple"
+        },
+        "charListProvider": {
+            "response": "{{data.existingCharList}}"
+        },
+        "opratorListProvider": {
+            "response": "{{data.opratorsList.dbValue}}"
+        }
+    },
+    "i18n": {
+        "CancelText": [
+            "SlmMessages"
+        ],
+        "Add": [
+            "SlmMessages"
+        ],
+        "DateCharacteristics": [
+            "SlmConstants"
+        ],
+        "LifeCharacteristics": [
+            "SlmConstants"
+        ],
+        "ObsCharacteristics": [
+            "SlmConstants"
+        ],
+        "DerivedCharacteristics": [
+            "SlmConstants"
+        ],
+        "newChar": [
+            "SlmMessages"
+        ],
+        "noResultsFound": [
+            "SlmConstants"
+        ],
+        "CharacteristicsName": [
+            "SlmConstants"
+        ],
+        "charAlreadyExists": [
+            "SlmMessages"
+        ],
+        "charUnit": [
+            "SlmConstants"
+        ],
+        "precision": [
+            "SlmConstants"
+        ],
+        "typeOfValue": [
+            "SlmConstants"
+        ],
+        "Numeric": [
+            "SlmConstants"
+        ],
+        "Logical": [
+            "SlmConstants"
+        ],
+        "Textual": [
+            "SlmConstants"
+        ],
+        "values": [
+            "SlmConstants"
+        ],
+        "CharCreated": [
+            "SlmMessages"
+        ],
+        "Expression": [
+            "SlmConstants"
+        ],
+        "TypeCharName": [
+            "SlmConstants"
+        ],
+        "TypeOperator": [
+           "SlmConstants"
+        ],
+        "Back": [
+            "SlmConstants"
+        ],
+        "charAlreadyExistsMultiple": [
+            "SlmMessages"
+        ],
+        "charAddedMultiple": [
+            "SlmMessages"
+        ]
+    },
+    "messages": {
+        "CharAdded": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.CharCreated}}",
+            "messageTextParams": [
+                "{{data.dataProviders.charDefListProvider.selectedObjects[0].props.object_string.dbValue}}"
+            ]
+        },
+        "charAlreadyExists": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.charAlreadyExists}}"
+        },
+        "charCreated": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.CharCreated}}",
+            "messageTextParams": [
+                "data.charName.dbValue"
+            ]
+        },
+        "charErrorMsg": {
+            "messageType": "ERROR",
+            "messageText": "{{serviceData.partialErrors[0].errorValues[0].message}}"
+        },
+        "addMultipleCharSuccess": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.charAddedMultiple}}",
+            "messageTextParams": [
+                "{{data.dataProviders.charDefListProvider.selectedObjects.length}}",
+                "{{data.dataProviders.charDefListProvider.selectedObjects.length}}"
+            ]
+        },
+        "addMultipleOrPartialChars": {
+            "expression": {
+                "successCount": "data.selectedCount - data.serviceData.partialErrors.length"
+            },
+            "messageType": "ERROR",
+            "messageKey": "serviceManagerNotyError",
+            "messageTextParams": [
+                "{{expression.successCount}}",
+                "{{data.selectedCount}}"
+            ],
+            "messageData": {
+                "partialErrors": "{{data.charPartialErrors}}"
+            }
+        },
+        "addSingleCharFailure": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.charAlreadyExistsMultiple}}",
+            "messageTextParams": [ "{{data.dataProviders.charDefListProvider.selectedObjects[0].props.object_string.dbValue}}" ]
+        }
+    }
+}

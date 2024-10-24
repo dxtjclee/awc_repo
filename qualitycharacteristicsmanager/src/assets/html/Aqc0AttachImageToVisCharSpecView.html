@@ -1,0 +1,16 @@
+<aw-command-panel caption="i18n.Aqc0AttachImageToVisCharSpecTitle">
+    <aw-panel-body aw-init="data.panelId='Aqc0AttachImageToVisCharSpec'">
+        <aw-panel-section caption="i18n.UploadImageFile" collapsed="disabled">
+            <aw-file-upload type-filter="{{data.typeFilter}}" file-change-action="startDatasetCreation" is-required="true"></aw-file-upload>
+        </aw-panel-section>
+        <aw-panel-section exist-when="data.fileName" collapsed="disabled">
+            <aw-textbox prop="data.datasetName"></aw-textbox>
+            <aw-textarea prop="data.datasetDesc" hint="textarea"></aw-textarea>
+        </aw-panel-section>
+    </aw-panel-body>
+    <aw-panel-footer>
+            <aw-button action="createImageDatasetForVisCharSpec" size='auto' aw-class="{'disabled': !(conditions.enableAqc0Attach)}">
+                <aw-i18n>i18n.Aqc0Attach</aw-i18n>
+            </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

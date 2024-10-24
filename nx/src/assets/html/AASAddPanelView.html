@@ -1,0 +1,34 @@
+<aw-panel-header>
+    <aw-panel-section caption="i18n.toTitle" exist-when="props.subPanelContext.addElementState.parent">
+        <aw-default-cell item="props.subPanelContext.addElementState.parent"></aw-default-cell>
+    </aw-panel-section>
+</aw-panel-header>
+<aw-form name="createInputsFormValidator" aw-form-validator="">
+    <aw-add include-types="{{data.allowedTypeInfo.objectTypeName}}" type-filter="{{data.allowedTypeInfo.searchTypeName}}"
+      load-sub-types="false" max-recent-count="5" exist-when="data.allowedTypeInfo"
+      visible-tabs="{{data.allowedTypeInfo.allowedTabs}}" preferred-type="{{data.allowedTypeInfo.preferredType}}"
+      is-include-sub-types="{{data.isIncludeSubTypes}}"
+      add-panel-state="fields.addPanelState"
+      sub-panel-context="{...subPanelContext, triggerCreate: data.triggerCreate,policy: data._policy, extensionVMProps: {clr0AppearanceArea: data.clr0AppearanceArea, clr0PABRoot: data.clr0PABRoot}}"
+      xrt-state="data.xrtState"
+      edit-handler="editHandlers.addPanelEditHandler"
+      target-object='ctx.subPanelContext.targetObject'
+      relation-map="data._relationMap"></aw-add>
+    <aw-command-panel-section
+        exist-when="conditions.isElementCreateSubVisible"
+        caption="i18n.addElementProperties" collapsed="false">
+        <aw-command-sub-panel panel-id="Awb0ElementCreateSub" sub-panel-context="{...subPanelContext, addPanelState: fields.addPanelState}" isolate-mode="true"></aw-command-sub-panel>
+    </aw-command-panel-section>
+    <aw-widget prop="data.numberOfElements" visible-when="(!props.subPanelContext.addElementState.AddOccurrencePropertiesOnCreate || ctx.aceActiveContext.context.isMarkupEnabled ) && subPanelContext.occContext.supportedFeatures.Awb0BulkAddFeature && conditions.isSingleElementSelected"></aw-widget>
+    <aw-panel-footer>
+        <aw-button action="createAndAddElement" visible-when="formProp.attributes.valid && conditions.isNewTabAddButtonVisible">
+            <aw-i18n>i18n.addElementBtn</aw-i18n>
+        </aw-button>
+        <aw-button action="addElements" visible-when="formProp.attributes.valid && (( conditions.isSingleElementSelected && (conditions.isAddOccurrencePropertiesOnCreateSupported || conditions.areNumberOfElementsValid)) || conditions.areMultipleElementSelected)" >
+            <aw-i18n>i18n.addElementBtn</aw-i18n>
+        </aw-button>
+        <aw-button default="false" action="getPropertiesToCopy" visible-when="formProp.attributes.valid && (( conditions.isSingleElementSelected && props.subPanelContext.addElementState.isCopyButtonEnabled && (conditions.isAddOccurrencePropertiesOnCreateSupported || conditions.areNumberOfElementsValid)) || (conditions.areMultipleElementSelected && props.subPanelContext.addElementState.isCopyButtonEnabled))" >
+            <aw-i18n>i18n.addElementCopyButtonText</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-form>

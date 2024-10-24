@@ -1,0 +1,10 @@
+<mfe-loading-message exist-when="!conditions.isXRTTypeLoaded"></mfe-loading-message>
+<aw-form name="createMcnXrt" class="aw-ngp-createMcnPopup" show-when="conditions.isXRTTypeLoaded">
+    <aw-panel-body>
+        <aw-xrt type="CREATE" object-type="{{ctx.preferences.NGPMCNTypeToCreate[0]}}" xrt-state="data.xrtState"></aw-xrt>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button button-type="base" action="closePopupWindow" enable-when="!data.submitInProgress" size="auto">{{i18n.cancel}}</aw-button>
+        <aw-button action="createAndSubmit" enable-when="!data.submitInProgress && formProp.attributes.valid" size="auto">{{i18n.createAndSubmit}}</aw-button>
+    </aw-panel-footer>
+</aw-form>

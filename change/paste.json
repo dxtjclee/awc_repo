@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "1.0.0",
+  "pasteHandlers": {
+    "defaultPasteHandlerForImpactAnalysis": {
+      "action": "defaultPasteHandlerForImpactAnalysis",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForImpactAnalysisNew"
+      }
+    },
+    "defaultPasteHandlerForParticipant": {
+      "action": "cmPasteParticipantNotSupported",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForParticipant"
+      }
+    }
+  },
+  "actions": {
+    "cmPasteParticipantNotSupported": {
+      "actionType": "JSFunction",
+      "method": "participantDefaultPasteHandler",
+      "deps": "js/Cm1CreateParticipantsService",
+      "inputData": {
+        "targetObject": "{{pasteContext.targetObject}}"
+      }
+    },
+    "defaultPasteHandlerForImpactAnalysis": {
+      "actionType": "JSFunction",
+      "method": "defaultPasteHandlerForImpactAnalysis",
+      "deps": "js/Cm1ImpactedWidgetService",
+      "inputData": {
+        "targetObject": "{{pasteContext.targetObject}}",
+        "sourceObject": "{{pasteContext.sourceObject}}"
+      },
+      "events": {
+        "success": [
+          {
+            "name": "dragDrop.success",
+            "condition": "pasteContext.isDragDropIntent",
+            "eventData": {
+              "sourceObjects": "{{pasteContext.sourceObject}}",
+              "targetObject": "{{pasteContext.targetObject}}"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "conditions": {
+    "isPasteHandlerActiveForImpactAnalysisNew": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "ChangeImpactedItem"
+            }
+          },
+          {
+            "$source": "pasteContext.sourceObject",
+            "$query": {
+              "$typeOf": "WorkspaceObject"
+            }
+          }
+        ]
+      }
+    },
+    "isPasteHandlerActiveForParticipant": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.relationType",
+            "$query": {
+              "$eq": "HasParticipant"
+            }
+          },
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Participant"
+            }
+          },
+          {
+            "$source": "pasteContext.sourceObject",
+            "$query": {
+              "$typeOf": "Participant"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "i18n": {
+    "ParticipantPasteNotSupported": [
+      "ChangeMessages"
+    ]
+  }
+}

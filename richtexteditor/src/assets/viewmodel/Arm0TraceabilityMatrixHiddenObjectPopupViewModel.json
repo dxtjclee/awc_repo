@@ -1,0 +1,128 @@
+{
+    "schemaVersion" : "1.0.0",
+    "imports":
+    [],
+
+    "actions":{
+        "reveal": {
+            "actionType": "JSFunction",
+            "method": "createPopupData",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "outputData": {
+                "hiddenObjectCountLabel": "hiddenObjectCountLabel",
+                "columnValues":"columnValues",
+                "columnValuesWithoutFilter":"columnValuesWithoutFilter"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "unhideAction":{
+            "actionType": "JSFunction",
+            "method": "unhideSelected",
+            "inputData": {
+                "column": "{{data.columnValues}}",
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "filterAction":{
+            "actionType": "JSFunction",
+            "method": "filterAction",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "columnValues":"columnValues",
+                "noFacetResults":"noFacetResults"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "updateSelectAllProp":{
+            "actionType": "JSFunction",
+            "method": "updateSelectAllProp",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "facetValue": ""
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "updateColumnValuesProp":{
+            "actionType": "JSFunction",
+            "method": "updateColumnValuesProp",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "facetValue": ""
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        }
+    },
+    "data": {
+        "noFacetResults":false,
+        "columnValues":"",
+        "searchBoxPlaceHolder": {
+            "dbValue": "{{i18n.searchText}}"
+        },
+        "selectAllProp":{
+            "displayName": "{{i18n.selectAllLabel}}",
+            "dispValue": "{{i18n.selectAllLabel}}",
+            "dbValue": true,
+            "type": "BOOLEAN",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "textValueToFilter": {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "false",
+            "dbValue": ""
+        },
+        "noResultsFound": {
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "false",
+            "dbValue": "{{i18n.noResultsFound}}",
+            "displayValue": "{{i18n.noResultsFound}}"
+        }
+    },
+    "onEvent": [
+    ],
+    "i18n": {
+        "searchText": [
+            "UIMessages"
+        ],
+        "selectAll": [
+            "UIMessages"
+        ],
+        "unhide":[
+            "MatrixMessages"
+        ],
+        "hiddenColumnLabel":[
+            "MatrixMessages"
+        ],
+        "doubleClickToUnhide":[
+            "MatrixMessages"
+        ],
+        "hiddenRowsLabel":[
+            "MatrixMessages"
+        ],
+        "selectAllLabel":[
+            "MatrixMessages"
+        ],
+        "noResultsFound":[
+            "RequirementsCommandPanelsMessages"
+        ]
+    },
+    "lifecycleHooks": {
+        "onMount": "reveal",
+        "onUpdate": [{
+            "action": "filterAction",
+            "observers": [ "viewModel.data.textValueToFilter.dbValue" ]
+        }]
+    }
+}

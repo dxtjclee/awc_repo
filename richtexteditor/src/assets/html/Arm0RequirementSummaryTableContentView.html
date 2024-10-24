@@ -1,0 +1,13 @@
+<div class="sw-row aw-requirementsmanager-summaryTableSize">
+    <div class="sw-column">
+        <aw-server-visibility-toolbar first-anchor="aw_reqSummaryCommandbar" second-anchor="aw_toolbarRight,aw_fullScreen"
+            context="{ pageState:fields.pageState, dataProvider:data.dataProviders.showReqSummaryTableProvider, fullScreenState:subPanelContext.fullScreenState }" orientation="HORIZONTAL"></aw-server-visibility-toolbar>
+        <aw-splm-table gridid="showReqSummaryTable"
+            show-check-box="data.dataProviders.showReqSummaryTableProvider.selectionModel.multiSelectEnabled">
+        </aw-splm-table>
+    </div>
+</div>
+<aw-splitter direction="HORIZONTAL" visible-when="data.pageState.showSplitPanel === true"></aw-splitter>
+<div class="sw-row" height="25%" exist-when="data.pageState.showSplitPanel === true">
+    <aw-include name="Att1ShowParametersTableForSync" sub-panel-context="{...subPanelContext, selection:fields.pageState.summaryTableAdaptedSelection, selectionData:fields.paramTableSelectionData }"></aw-include>
+</div>

@@ -1,0 +1,25 @@
+<aw-panel>
+    <aw-label prop="data.releaseScheduleLabel"></aw-label>
+    <aw-row height="12f" exist-when="conditions.isEditInProgress">
+        <aw-column width="40%">
+        </aw-column>
+        <aw-column width="60%">
+            <aw-radiobutton prop="data.whenApproved" list="data.whenApprovedOptions.dbValue" action="changeRadioForDelayedRelease"></aw-radiobutton>
+            <aw-textbox prop="data.delayByDaysTextBox" visible-when="data.whenApproved.dbValue === 'tq0DelayByDays'"></aw-textbox>
+            <aw-date prop="data.dateDetails" visible-when="conditions.isDelayByDate"></aw-date>
+        </aw-column>
+    </aw-row>
+    <aw-checkbox prop="data.AllowEarlyRelease" exist-when="(data.whenApproved.dbValue === 'tq0DelayByDays' || data.whenApproved.dbValue === 'tq0DelayByDate') && conditions.isEditInProgress"></aw-checkbox>
+    <aw-checkbox prop="data.updateQualRecords" exist-when="conditions.isEditInProgress"></aw-checkbox>
+
+    <aw-row height="3f" exist-when="!conditions.isEditInProgress">
+        <aw-column width="fill">
+                <aw-label prop="data.whenApproved"></aw-label>
+                <aw-label prop="data.delayByDaysTextBoxValue" exist-when="ctx.selected.props.tq0ReleaseAfterDays.dbValues[0] !== null"></aw-label>
+                <aw-label prop="data.dateDetails" exist-when="ctx.selected.props.tq0ReleaseAfterDate.dbValues[0] !== null"></aw-label>
+        </aw-column>
+    </aw-row>
+    <aw-row></aw-row>
+    <aw-label prop="data.AllowEarlyRelease" exist-when="ctx.selected.props.tq0ImmediateRelease.dbValue !== true && !conditions.isEditInProgress"></aw-label>
+    <aw-label prop="data.updateQualRecords" exist-when="!conditions.isEditInProgress"></aw-label>
+</aw-panel>

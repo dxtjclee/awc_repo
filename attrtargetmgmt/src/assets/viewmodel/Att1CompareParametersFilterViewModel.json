@@ -1,0 +1,396 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "reveal": {
+            "actionType": "batchJob",
+            "steps": [{
+                    "action": "initializeMenu"
+                },{
+                    "action": "checkForFilterDisability"
+                },{
+                    "action": "initializeFacetDataProvider",
+                    "condition": "data.showFilters.dbValue === true && ctx.columnMenuContext.isFacetLoading === false"
+                }]
+        },
+        "initializeMenu": {
+            "actionType": "JSFunction",
+            "method": "initializeMenu",
+            "inputData": {
+                "column": "{{subPanelContext.gridContext.columnDef}}",
+                "operation": "{{subPanelContext.gridContext.columnDef.filter.operation}}",
+                "columnFilterData": "{{subPanelContext.gridContext.columnDef.filter}}",
+                "columnMenuData": "{{subPanelContext.gridContext.columnDef.filter.columnMenuData}}"
+            },
+            "outputData": {
+                "operation.dbValue": "operation.dbValue",
+                "operation.uiValue": "operation.uiValue",
+                "textValue.value": "columnMenuData.textValue.dbValue",
+                "textValue.dbValue": "columnMenuData.textValue.dbValue",
+                "showFilters.dbValue": "columnMenuData.showFilterFacets",
+                "isFilterApplied":"isFilterApplied"
+            },
+            "deps": "js/Att1CompareParametersFilter"
+        },
+        "initializeFacetDataProvider": {
+            "actionType": "dataProvider",
+            "method": "facetDataProvider"
+        },
+        "filterAction": {
+            "actionType": "JSFunction",
+            "method": "doTextFiltering",
+            "inputData": {
+                "column": "{{subPanelContext.gridContext.columnDef}}",
+                "viewModelData": "{{data.data}}",
+                "facetDataProvider": "{{data.dataProviders.facetDataProvider}}",
+                "gridContextDispatcher": "{{subPanelContext.gridContextDispatcher}}"
+            },
+            "outputData": {
+                "newFilters": ""
+            },
+            "deps": "js/Att1CompareParametersFilter"
+        },
+        "textFilterInputChangedBatch": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "textFilterInputChanged"
+                },
+                {
+                    "action": "initializeFacetValuesDebounce",
+                    "condition": "data.showFilters.dbValue === true && ctx.columnMenuContext.isFacetLoading === false"
+                }
+            ]
+        },
+        "showFiltersToggleChangedBatch": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "showFiltersToggleChanged"
+                },
+                {
+                    "action": "initializeFacetDataProvider",
+                    "condition": "data.showFilters.dbValue === true && ctx.columnMenuContext.isFacetLoading === false"
+                }
+            ]
+        },
+        "textFilterInputChanged": {
+            "actionType": "JSFunction",
+            "method": "textFilterInputChanged",
+            "inputData": {
+                "gridContextDispatcher": "{{subPanelContext.gridContextDispatcher}}",
+                "column": "{{subPanelContext.gridContext.columnDef}}",
+                "viewModelData": "{{data.data}}",
+                "isBulkEditing": "{{subPanelContext.gridContext.isBulkediting}}",
+                "isFilterDisabled": "{{fields.isFilterDisabled}}"
+            },
+            "outputData": {
+                "isCompareFilter" : "isCompareFilter"
+            },
+            "deps": "js/Att1CompareParametersFilter"
+        },
+        "initializeFacetValues": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadFacetValues",
+            "inputData": {
+                "gridContextDispatcher": "{{subPanelContext.gridContextDispatcher}}",
+                "column": "{{subPanelContext.gridContext.columnDef}}",
+                "viewModel": "{{data}}",
+                "subPanelContext": "{{subPanelContext}}",
+                "facetDataProvider": "{{data.dataProviders.facetDataProvider}}",
+                "reloadValues": true,
+                "isFilterDisabled": "{{fields.isFilterDisabled}}"
+            },
+            "outputData": {
+                "searchResults": ""
+            },
+            "deps": "js/awColumnFilterService"
+        },
+        "initializeFacetValuesDebounce": {
+            "actionType": "JSFunctionAsync",
+            "method": "updateFacetValuesDebounce",
+            "inputData": {
+                "gridContextDispatcher": "{{subPanelContext.gridContextDispatcher}}",
+                "column": "{{subPanelContext.gridContext.columnDef}}",
+                "viewModel": "{{data}}",
+                "subPanelContext": "{{subPanelContext}}",
+                "facetDataProvider": "{{data.dataProviders.facetDataProvider}}",
+                "reloadValues": true,
+                "isFilterDisabled": "{{fields.isFilterDisabled}}"
+            },
+            "deps": "js/awColumnFilterService"
+        },
+        "loadFacetValues": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadFacetValues",
+            "inputData": {
+                "gridContextDispatcher": "{{subPanelContext.gridContextDispatcher}}",
+                "column": "{{subPanelContext.gridContext.columnDef}}",
+                "viewModel": "{{data}}",
+                "subPanelContext": "{{subPanelContext}}",
+                "facetDataProvider": "{{data.dataProviders.facetDataProvider}}",
+                "reloadValues": false,
+                "isFilterDisabled": "{{fields.isFilterDisabled}}"
+            },
+            "outputData": {
+                "searchResults": ""
+            },
+            "deps": "js/awColumnFilterService"
+        },
+        "showFiltersToggleChanged": {
+            "actionType": "JSFunction",
+            "method": "showFiltersToggleChanged",
+            "inputData": {
+                "gridContextDispatcher": "{{subPanelContext.gridContextDispatcher}}",
+                "column": "{{subPanelContext.gridContext.columnDef}}",
+                "viewModelData": "{{data.data}}"
+            },
+            "deps": "js/awColumnFilterService"
+        },
+        "filterFacetInputChanged": {
+            "actionType": "JSFunction",
+            "method": "filterFacetInputChanged",
+            "inputData": {
+                "gridContextDispatcher": "{{subPanelContext.gridContextDispatcher}}",
+                "column": "{{subPanelContext.gridContext.columnDef}}",
+                "viewModelData": "{{data.data}}",
+                "facetDataProvider": "{{data.dataProviders.facetDataProvider}}",
+                "facetParameters": "{{parameters}}",
+                "isBulkEditing": "{{subPanelContext.gridContext.isBulkediting}}",
+                "isFilterDisabled": "{{fields.isFilterDisabled}}"
+            },
+            "outputData": {
+                "facetValue": ""
+            },
+            "deps": "js/awColumnFilterService"
+        },
+        "clearFilter": {
+            "actionType": "JSFunction",
+            "method": "clearFilterFromMenu",
+            "inputData": {
+                "column": "{{subPanelContext.gridContext.columnDef}}",
+                "gridContextDispatcher": "{{subPanelContext.gridContextDispatcher}}"
+            },
+            "outputData": {
+                "newFilters": ""
+            },
+            "deps": "js/awColumnFilterService"
+        },
+        "checkForFilterDisability": {
+            "actionType": "JSFunction",
+            "method": "checkForFilterDisability",
+            "inputData": {
+                "column": "{{subPanelContext.gridContext.columnDef}}",
+                "viewModelData": "{{data.data}}",
+                "hasFilterFacetAction": "{{subPanelContext.hasFilterFacetAction}}",
+                "facetDataProvider": "{{data.dataProviders.facetDataProvider}}",
+                "isBulkEditing": "{{subPanelContext.gridContext.isBulkediting}}",
+                "isFilterDisabled": "{{fields.isFilterDisabled}}"
+            },
+            "outputData": {
+                "isCompareFilter" : "isCompareFilter"
+            },
+            "deps": "js/Att1CompareParametersFilter"
+        }
+    },
+    "data": {
+        "textValue": {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "",
+            "dispValue": ""
+        },
+        "operation": {
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "true"
+        },
+        "title": {
+            "displayName": "{{i18n.textFilterTitle}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "false"
+        },
+        "_linkOptions_operationsLink": {
+            "hasPopup": true,
+            "iconOptions": {
+                "title": "textOnly",
+                "cell": "textOnly"
+            }
+        },
+        "_itemOptions_facetCheckbox": {
+            "applySelection": false
+        },
+        "showFilters": {
+            "displayName": "{{i18n.toggleFacetTitle}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "value": "",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        },
+        "noMatchesFound": {
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "false",
+            "dbValue": "{{i18n.noMatchesFound}}",
+            "displayValue": "{{i18n.noMatchesFound}}"
+        },
+        "isFilterApplied":"false",
+        "isFilterDisabled": {
+            "initialValues": {
+                "value": true
+            },
+            "meta": {}
+        }
+    },
+    "dataProviders": {
+        "facetDataProvider": {
+            "action": "initializeFacetValues",
+            "nextAction": "loadFacetValues",
+            "response": "{{data.searchResults.results}}",
+            "totalFound": "{{data.searchResults.totalFound}}",
+            "selectionModelMode": "none"
+        },
+        "operationsDataProvider": {
+            "response": [ {
+                    "propDisplayValue": "{{i18n.containsOperation}}",
+                    "propInternalValue": "contains",
+                    "selected": false
+                },
+                {
+                    "propDisplayValue": "{{i18n.notContainsOperation}}",
+                    "propInternalValue": "notContains",
+                    "selected": false
+                },
+                {
+                    "propDisplayValue": "{{i18n.startsWithOperation}}",
+                    "propInternalValue": "startsWith",
+                    "selected": false
+                },
+                {
+                    "propDisplayValue": "{{i18n.endsWithOperation}}",
+                    "propInternalValue": "endsWith",
+                    "selected": false
+                },
+                {
+                    "propDisplayValue": "{{i18n.equalsOperation}}",
+                    "propInternalValue": "equals",
+                    "selected": false
+                },
+                {
+                    "propDisplayValue": "{{i18n.notEqualsOperation}}",
+                    "propInternalValue": "notEquals",
+                    "selected": false
+                },
+                {
+                    "propDisplayValue": "{{i18n.CompareFilterHasValue}}",
+                    "propInternalValue": "hasValue",
+                    "selected": false
+                },
+                {
+                    "propDisplayValue": "{{i18n.CompareFilterHasNoValue}}",
+                    "propInternalValue": "hasNoValue",
+                    "selected": false
+                },
+                {
+                    "propDisplayValue": "{{i18n.CompareFilterSameValue}}",
+                    "propInternalValue": "sameValue",
+                    "selected": false
+                },
+                {
+                    "propDisplayValue": "{{i18n.CompareFilterDiffValue}}",
+                    "propInternalValue": "differentValue",
+                    "selected": false
+                }
+            ],
+            "totalFound": 10
+        }
+    },
+    "functions": {
+        "getActiveWorkspaceXrtContext": {
+            "functionName": "getActiveWorkspaceXrtContext",
+            "parameters": [
+                "{{ctx.ActiveWorkspace:xrtContext}}"
+            ]
+        }
+    },
+    "onEvent": [ {
+        "eventId": "awlinkPopup.selected",
+        "action": "textFilterInputChangedBatch"
+    } ],
+    "i18n": {
+        "clearButtonTitle": [
+            "UIMessages"
+        ],
+        "textFilterTitle": [
+            "UIMessages"
+        ],
+        "containsOperation": [
+            "UIMessages"
+        ],
+        "notContainsOperation": [
+            "UIMessages"
+        ],
+        "startsWithOperation": [
+            "UIMessages"
+        ],
+        "endsWithOperation": [
+            "UIMessages"
+        ],
+        "equalsOperation": [
+            "UIMessages"
+        ],
+        "notEqualsOperation": [
+            "UIMessages"
+        ],
+        "FILTER_TEXT": [
+            "BaseMessages"
+        ],
+        "searchText": [
+            "UIMessages"
+        ],
+        "toggleFacetTitle": [
+            "UIMessages"
+        ],
+         "noMatchesFound": [
+            "UIMessages"
+        ],
+        "selectAll": [
+            "UIMessages"
+        ],
+        "CompareFilterHasValue": [
+            "Att1Messages"
+        ],
+        "CompareFilterHasNoValue": [
+            "Att1Messages"
+        ],
+        "CompareFilterSameValue": [
+            "Att1Messages"
+        ],
+        "CompareFilterDiffValue": [
+            "Att1Messages"
+        ]
+    },
+    "messages": {},
+    "conditions": {
+        "isShowFiltersSelected": {
+            "expression": "data.showFilters.dbValue === true"
+        },
+        "filteringEnabled": {
+            "expression": "subPanelContext.gridContext.columnDef.filter.view && subPanelContext.gridContext.columnDef.isFilteringEnabled !== false && subPanelContext.gridOptions.isFilteringEnabled"
+        },
+        "noFacetResults": {
+            "expression": "dataProviders.facetDataProvider.viewModelCollection.totalFound === 0 && ctx.columnMenuContext.isFacetLoading === false"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "reveal",
+        "onUpdate": [{
+            "action": "textFilterInputChangedBatch",
+            "observers": [ "viewModel.data.textValue.dbValue" ]
+        },{
+            "action": "checkForFilterDisability",
+            "observers": [ "viewModel.data.showFilters.dbValue" ]
+        }]
+    }
+}

@@ -1,0 +1,25 @@
+<aw-command-panel caption="i18n.fileSelect" context="data" hide-title="true">
+    <aw-panel-body>
+        <aw-panel-section caption="i18n.search">
+            <aw-search-box prop="data.searchString" placeholder="i18n.searchBoxPlaceHolder" action="search"></aw-search-box>
+            <aw-list exist-when="data.totalFound > 0" dataprovider="data.dataProviders.searchDataProvider">
+                <aw-default-cell vmo="item"></aw-default-cell>
+            </aw-list>
+        </aw-panel-section>
+        <aw-panel-section caption="Folder Browse">
+            <aw-splm-table gridid="gridView"  use-tree="true" show-decorators="true"/>
+        </aw-panel-section>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-flex-column  width="fill"  align-content="end">
+            <aw-flex-row  justify="right">
+                <aw-button enable-when="conditions.isSubmitBtnVisible" size="auto" action="selectInHost">
+                    <aw-i18n>i18n.open</aw-i18n>
+                </aw-button>
+                <aw-button size="auto" action="cancelSelection">
+                    <aw-i18n>i18n.cancel</aw-i18n>
+                </aw-button>
+            </aw-flex-row>
+        </aw-flex-column>
+    </aw-panel-footer>
+</aw-command-panel>

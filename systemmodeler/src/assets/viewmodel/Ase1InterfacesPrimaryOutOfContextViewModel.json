@@ -1,0 +1,47 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+
+    "actions": {
+        "processSelectionChange": {
+            "actionType": "JSFunction",
+            "method": "processSelectionChange",
+            "inputData": {
+                "primarySelectionData": "{{data.primarySelectionData}}",
+                "secondarySelectionData": "{{data.secondarySelectionData}}",
+                "selectionData": "{{props.primarySelection}}"
+            },
+            "outputData": {},
+            "deps": "js/Ase1InterfacesUtilService"
+        }
+    },
+
+    "data": {
+        "primarySelectionData": {
+            "initialValues": {
+            },
+            "meta": {}
+        },
+        "secondarySelectionData": {
+            "initialValues": {
+            },
+            "meta": {}
+        }
+    },
+
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        },
+        "primary-selection": {
+            "type": "object"
+        }
+    },
+
+    "lifecycleHooks": {
+        "onUpdate": [ {
+            "action": "processSelectionChange",
+            "observers": [ "viewModel.atomicData.primarySelectionData", "viewModel.atomicData.secondarySelectionData" ]
+        }]
+    }
+}

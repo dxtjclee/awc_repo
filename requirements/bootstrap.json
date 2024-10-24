@@ -1,0 +1,5 @@
+{
+  "postInit": [
+    "import('js/eventBus').then(function(eventBus){eventBus.subscribe('sessionInfo.updated',function(){import('js/Arm0TracelinkPollingService').then(function(arm0TracelinkPollingService){arm0TracelinkPollingService.init();});});});"
+  ]
+}

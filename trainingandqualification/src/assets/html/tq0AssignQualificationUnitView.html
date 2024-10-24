@@ -1,0 +1,15 @@
+<aw-command-panel caption="{{(ctx.selected.type === 'Tq0QualificationProfile') ? i18n.tq0AssignQualificationUnitTitle : i18n.add}}">
+    <aw-panel-body scrollable="false">
+        <aw-panel-section caption="i18n.tq0QualificationUnitSecTitle" >
+            <aw-list-filter id="userListFilter" prop="data.filterBox" dataprovider="data.dataProviders.getQualificationUnitList">
+                <aw-default-cell vmo="item"></aw-default-cell>
+            </aw-list-filter>
+        </aw-panel-section>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button visible-when = "conditions.tq0ShowQUnitAssignbtn" action="checkTargetEntityAddedOrNot"><aw-i18n>i18n.tq0AssignQualificationUnitTitle</aw-i18n></aw-button>
+        <aw-button visible-when = "conditions.tq0PreReqAssignbtn" action="assignPrerequisites"><aw-i18n>i18n.add</aw-i18n></aw-button>
+        <aw-button visible-when = "conditions.tq0AddQUtoQualDefinitionbtn" action="addQualUnitsToQualDeftn"><aw-i18n>i18n.add</aw-i18n></aw-button>
+
+    </aw-panel-footer>
+</aw-command-panel>

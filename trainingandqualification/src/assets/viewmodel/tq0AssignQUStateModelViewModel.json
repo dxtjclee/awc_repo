@@ -1,0 +1,120 @@
+{
+    "schemaVersion" : "1.0.0",
+    "imports":
+    [
+        "js/aw-command-panel.directive",
+        "js/visible-when.directive",
+        "js/aw-command-panel-section.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-list-filter.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/aw-widget.directive",
+        "js/aw-property-label.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-default-cell.directive"
+    ],
+    "actions":
+    {
+        "getWorkFlowTemplatesOnReveal":
+        {
+            "actionType": "dataProvider",
+            "method": "getWorkflowTemplatesList"
+        },
+        "loadData": {
+            "actionType": "JSFunctionAsync",
+            "method": "getWorkflowTemplateVMOs",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "searchResults": "searchResults",
+                "totalFound": "totalFound",
+                "totalLoaded": "totalLoaded"
+            },
+            "deps": "js/tq0AssignWorkflowTemplate"
+        },
+        "assignWorkflowTemplate": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-09-DataManagement",
+            "method": "setProperties",
+            "inputData": {
+              "info": "{{function:addWorkflowTemplate}}"
+            },
+            "events": {
+              "success": [
+                {
+                  "name": "cdm.relatedModified",
+                  "eventData": {
+                    "refreshLocationFlag": true,
+                    "relatedModified": [
+                      "{{ctx.selected}}"
+                    ]
+                  },
+                  "condition": "!conditions.tq0IsQUnit"
+                },
+                {
+                  "name": "cdm.relatedModified",
+                  "eventData": {
+                    "refreshLocationFlag": true,
+                    "relatedModified": [
+                      "{{ctx.selected}}"
+                    ]
+                  },
+                  "condition": "conditions.tq0IsQUnit"
+                },
+                {
+                  "name": "complete",
+                  "eventData": {
+                    "source": "toolAndInfoPanel"
+                  }
+                }
+              ]
+            },
+            "deps": "js/tq0AssignWorkflowTemplate"
+        }
+    },
+    "data":{
+        "filterBox":{
+            "displayName": "{{i18n.filterBox}}",
+            "type": "STRING",
+            "dbValue": ""
+        }
+    },
+    "dataProviders": {
+        "getWorkflowTemplatesList": {
+            "action":"loadData",
+            "response": "{{data.searchResults}}",
+            "totalLoaded": "{{data.totalLoaded}}",
+            "totalFound": "{{data.totalFound}}",
+             "selectionModelMode": "single"
+        }
+    },
+    "conditions":{
+        "tq0IsQUnit":{
+            "expression":"ctx.selected.modelType.typeHierarchyArray.indexOf('Tq0QualificationUnit') > -1"
+        },
+        "tq0ShowAssignWorkflowbtn":{
+            "expression": "conditions.tq0IsQUnit && dataProviders.getWorkflowTemplatesList.selectedObjects.length > 0"
+        }
+    },
+    "functions": {
+        "addWorkflowTemplate": {
+          "functionName": "addWorkflowTemplate",
+          "parameters": [
+            "{{data}}",
+            "{{ctx}}"
+          ]
+        }
+    },
+    "lifecycleHooks": {
+        "onInit":"getWorkFlowTemplatesOnReveal"
+    },
+    "i18n":
+    {
+        "filterBox": ["responsibleUserMessages"],
+        "tq0AssignQUStateModelTitle":["trainingandqualificationMessages"],
+        "tq0AssignQUStateModelSecTitle":["trainingandqualificationMessages"]
+    }
+}

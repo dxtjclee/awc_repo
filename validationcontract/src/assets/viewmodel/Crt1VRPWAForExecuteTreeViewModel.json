@@ -1,0 +1,624 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-column.directive",
+        "js/aw-i18n.directive",
+        "js/aw-am-table-panel.directive",
+        "js/exist-when.directive"
+    ],
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "lifecycleHooks": {
+        "onUpdate": [ {
+            "action": "handleSelectionChange",
+            "observers": [ "viewModel.atomicData.selectionData" ]
+        } ],
+        "onMount": "onMountForExecute"
+
+    },
+    "actions": {
+        "onMountForExecute": {
+            "actionType": "JSFunction",
+            "method": "onMountForExecute",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Crt1VRPWAForExecuteTreeService"
+        },
+        "changeSelectionForExecute": {
+            "actionType": "JSFunction",
+            "method": "changeSelectionForExecute",
+            "inputData": {
+                "data": "{{data}}",
+                "subPanelContext": "{{subPanelContext}}"
+            },
+            "outputData": {},
+            "deps": "js/Crt1VRPWAForExecuteTreeService"
+        },
+        "handleSelectionChange": {
+            "actionType": "JSFunction",
+            "method": "handleSelectionChange",
+            "inputData": {
+                "data": "{{data.dataProviders.treeTableExecuteProvider}}",
+
+                "subPanelContext": "{{subPanelContext}}"
+
+            },
+            "outputData": {},
+            "deps": "js/Crt1VRPWAForExecuteTreeService"
+        },
+        "reloadTable": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "testCaseTable.plTable.reload"
+                } ]
+            }
+
+        },
+        "nextAction": {
+            "actionType": "JSFunction",
+            "method": "nextAction",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+
+            },
+            "deps": "js/Crt1VRPWAForExecuteTreeService"
+        },
+        "previousAction": {
+            "actionType": "JSFunction",
+            "method": "previousAction",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {},
+            "deps": "js/Crt1VRPWAForExecuteTreeService"
+        },
+        "passAction": {
+            "actionType": "JSFunctionAsync",
+            "method": "passButtonClicked",
+            "deps": "js/Crt1VRPWAForExecuteTreeService",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "passButtonClicked": ""
+            },
+            "events": {
+                "success": [ {
+                        "name": "editInProgressMsg",
+                        "condition": "ctx.editInProgress"
+                    },
+                    {
+                        "name": "noEditInProgress",
+                        "condition": "!ctx.editInProgress"
+                    }
+
+                ]
+            }
+        },
+        "failAction": {
+            "actionType": "JSFunctionAsync",
+            "method": "failButtonClicked",
+            "deps": "js/Crt1VRPWAForExecuteTreeService",
+            "inputData": {
+                "data":"{{data}}"
+            },
+            "outputData": {
+                "failButtonClicked":""
+            },
+            "events": {
+                "success": [ {
+                    "name": "editInProgressMsg",
+                    "condition": "ctx.editInProgress"
+                },
+                {
+                    "name": "noEditInProgressInCaseOfFail",
+                    "condition": "!ctx.editInProgress"
+                }
+
+             ]
+            }
+        },
+        "blockedAction": {
+            "actionType": "JSFunctionAsync",
+            "method": "blockedButtonClicked",
+            "deps": "js/Crt1VRPWAForExecuteTreeService",
+            "inputData": {
+                "data":"{{data}}"
+            },
+            "outputData": {
+                "blockedButtonClicked":""
+            },
+            "events": {
+                "success": [ {
+                    "name": "editInProgressMsg",
+                    "condition": "ctx.editInProgress"
+                },
+                {
+                    "name": "noEditInProgressInCaseOfBlocked",
+                    "condition": "!ctx.editInProgress"
+                }
+
+             ]
+            }
+        },
+        "cautionAction": {
+            "actionType": "JSFunctionAsync",
+            "method": "cautionButtonClicked",
+            "deps": "js/Crt1VRPWAForExecuteTreeService",
+            "inputData": {
+                "data":"{{data}}"
+            },
+            "outputData": {
+                "cautionButtonClicked":""
+            },
+            "events": {
+                "success": [ {
+                    "name": "editInProgressMsg",
+                    "condition": "ctx.editInProgress"
+                },
+                {
+                    "name": "noEditInProgressInCaseOfCaution",
+                    "condition": "!ctx.editInProgress"
+                }
+
+             ]
+            }
+        },
+        "saveColumnConfigLoadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "saveUIColumnConfigs2",
+            "inputData": {
+                "columnConfigurations": [ {
+                    "clientScopeURI": "Crt1ExecuteTestPWATable",
+                    "columnConfigId": "ExecuteTestTableColConfig",
+                    "columns": "{{data.dataProviders.treeTableExecuteProvider.newColumns}}",
+                    "scope": "LoginUser",
+                    "scopeName": ""
+                } ]
+            },
+            "outputData": {}
+
+        },
+        "resetColumnConfig": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "getOrResetUIColumnConfigs4",
+            "inputData": {
+                "getOrResetUiConfigsIn": [ {
+                    "scope": "LoginUser",
+                    "scopeName": "",
+                    "clientName": "AWClient",
+                    "resetColumnConfig": true,
+                    "columnConfigQueryInfos": [ {
+                        "clientScopeURI": "Crt1ExecuteTestPWATable",
+                        "operationType": "configured",
+                        "typeNames": [
+                            "WorkspaceObject"
+                        ],
+                        "columnsToExclude": []
+                    } ],
+                    "businessObjects": [
+                        {}
+                    ]
+                } ]
+            },
+            "outputData": {
+                "dataProviders.treeTableExecuteProvider.resetColumnConfigs": "{{function:getColumnDataForDynamicTables}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "testCaseTable.plTable.reload"
+                } ]
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "loadTreeDataForExecute": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeDataForExecute",
+            "inputData": {
+                "treeLoadInput": "request.treeLoadInput",
+                "columnFilters": "{{data.columnProviders.treeTableExecuteColumnProvider.columnFilters}}",
+                "parentUid": "{{function:getParentUid}}",
+                "testCaseTreeTableColumnFilters": "{{props.subPanelContext.context.vrSublocationState.pieChartData.vrTables.treeTableExecuteProvider.testCaseTreeTableColumnFilters}}",
+                "testResultColumnFilters": "{{props.subPanelContext.context.vrSublocationState.pieChartData.vrTables.topPieChart.testResultColumnFilters}}",
+                "scopeURI": "{{data.subPanelContext}}"
+            },
+            "outputData": {
+                "totalFound": "result.treeLoadResult.totalChildCount",
+                "totalLoaded": "result.treeLoadResult.childNodes.length",
+                "searchResults": "result.treeLoadResult.childNodes"
+            },
+            "deps": "js/Crt1VRPWAForExecuteTreeService",
+            "events": {
+                "success": [ {
+                    "name": "updateSelectionForRemoveAndEditAction",
+                    "condition": "data.eventData.state === 'saved' && data.dataProviders.treeTableExecuteProvider && data.eventMap['treeTableExecuteProvider.selectionChangeEvent']"
+                } ]
+            }
+        },
+
+        "loadTreeTablePropertiesForExecute": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTablePropertiesForExecute",
+            "inputData": {
+                "propertyLoadInput": "request.propertyLoadInput",
+                "data": "{{data}}",
+                "scopeURI": "{{props.subPanelContext}}"
+            },
+            "outputData": {
+                "dataProviders.treeTableExecuteProvider.columnConfig": "propertyLoadResult.columnConfig"
+            },
+            "deps": "js/Crt1VRPWAForExecuteTreeService"
+        },
+        "loadTreeTableColumnsForExecute": {
+            "actionType": "JSFunction",
+            "method": "loadTreeTableColumnsForExecute",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.treeTableExecuteProvider}}",
+                "data": "{{data}}"
+            },
+            "deps": "js/Crt1VRPWAForExecuteTreeService"
+        },
+        "isAttrItemUpdatedForExecute": {
+            "actionType": "JSFunction",
+            "method": "isAttrItemUpdatedForExecute",
+            "inputData": {
+                "eventMap": "{{data.eventMap}}",
+                "scopeSel": "",
+                "subPanleCtx": "{{props.subPanelContext}}",
+                "data": "{{data}}"
+            },
+            "deps": "js/Crt1VRPWAForExecuteTreeService"
+        },
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/columnArrangeService"
+        },
+        "modelObjectsLoadedForExecute": {
+            "actionType": "JSFunction",
+            "method": "modelObjectsLoadedForExecute",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.treeTableExecuteProvider}}",
+                "selectionForExecute": " ",
+                "subPanleCtx": "{{props.subPanelContext}}",
+                "data": "{{data}}"
+            },
+            "deps": "js/Crt1VRPWAForExecuteTreeService"
+        },
+        "modelObjectEditedInExecute": {
+            "actionType": "JSFunction",
+            "method": "modelObjectEditedInExecute",
+            "inputData": {
+                "eventMap": "{{data.eventMap}}"
+            },
+            "deps": "js/Crt1VRPWAForExecuteTreeService"
+        },
+        "cancelEdits": {
+            "actionType": "JSFunction",
+            "method": "cancelEdits",
+            "deps": "js/editHandlerService"
+        },
+        "saveEdits": {
+            "actionType": "JSFunctionAsync",
+            "method": "saveEdits",
+            "deps": "js/editHandlerService",
+            "inputData": {},
+            "outputData": {},
+            "events": {
+                "success": [ {
+                        "name": "setPassResultStatus",
+                        "condition": "data.passButtonClicked === true && ( !data.failButtonClicked || data.failButtonClicked === false) && ( !data.cautionButtonClicked || data.cautionButtonClicked === false) && ( !data.blockedButtonClicked || data.blockedButtonClicked === false)"
+                    },
+                    {
+                        "name": "setFailResultStatus",
+                        "condition": "data.failButtonClicked === true && ( !data.passButtonClicked || data.passButtonClicked === false) && ( !data.cautionButtonClicked || data.cautionButtonClicked === false) && ( !data.blockedButtonClicked || data.blockedButtonClicked === false)"
+                    },
+                    {
+                        "name": "setBlockedResultStatus",
+                        "condition": "data.blockedButtonClicked === true && ( !data.passButtonClicked || data.passButtonClicked === false) && ( !data.failButtonClicked || data.failButtonClicked === false) && ( !data.cautionButtonClicked || data.cautionButtonClicked === false)"
+                    },
+                    {
+                        "name": "setCautionResultStatus",
+                        "condition": "data.cautionButtonClicked === true && ( !data.passButtonClicked || data.passButtonClicked === false) && ( !data.failButtonClicked || data.failButtonClicked === false) && ( !data.blockedButtonClicked || data.blockedButtonClicked === false)"
+                    }
+
+                ]
+            }
+        },
+        "saveAndDiscardMsg": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {}
+                ]
+            },
+            "actionMessages": {
+                "success": [ {
+                    "message": "cancelEditsVRMsg"
+                } ]
+            }
+        },
+        "setPassResultStatus": {
+            "actionType": "JSFunction",
+            "method": "passAction",
+            "inputData": {
+                "subPanleCtx": "{{props.subPanelContext}}",
+                "scopeSel": "",
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "passButtonClicked":""
+            },
+            "deps": "js/Crt1VRPWAForExecuteTreeService"
+        },
+        "setFailResultStatus": {
+            "actionType": "JSFunction",
+            "method": "failAction",
+            "inputData": {
+                "subPanleCtx": "{{props.subPanelContext}}",
+                "scopeSel": "",
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "failButtonClicked":""
+            },
+            "deps": "js/Crt1VRPWAForExecuteTreeService"
+        },
+        "setBlockedResultStatus": {
+            "actionType": "JSFunction",
+            "method": "blockedAction",
+            "inputData": {
+                "subPanleCtx": "{{props.subPanelContext}}",
+                "scopeSel": "",
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "blockedButtonClicked": ""
+            },
+            "deps": "js/Crt1VRPWAForExecuteTreeService"
+        },
+        "setCautionResultStatus": {
+            "actionType": "JSFunction",
+            "method": "cautionAction",
+            "inputData": {
+                "subPanleCtx": "{{props.subPanelContext}}",
+                "scopeSel": "",
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "cautionButtonClicked":""
+            },
+            "deps": "js/Crt1VRPWAForExecuteTreeService"
+        },
+        "callGetResultAndChartSOAfterImport": {
+            "actionType": "JSFunction",
+            "method": "getResultSOAInputForExecute",
+            "inputData": {
+                "dataProvider": "",
+                "selectionForExecute": "",
+                "subPanleCtx": "{{props.subPanelContext}}",
+                "data": "{{data}}"
+            },
+            "outputData": {},
+            "events": {
+                "success": [ {
+                    "name": "uniformParamTable.reloadTable"
+                } ]
+            },
+            "deps": "js/Crt1VRPWAForExecuteTreeService"
+        }
+    },
+    "dataProviders": {
+        "treeTableExecuteProvider": {
+            "initializeAction": "loadTreeDataForExecute",
+            "nextAction": "loadTreeDataForExecute",
+            "previousAction": "loadTreeDataForExecute",
+            "editContext": "treeTableExecuteProvider",
+            "treeLoadResult": "action.result.treeLoadResult",
+            "selectionModelMode": "single",
+            "inputData": {
+
+                "accessMode": "tree",
+                "selectionData": "{{fields.selectionData}}"
+            },
+            "contextMenuCommandsAnchor": "aw_testCaseTable_contextMenu"
+        },
+        "GridTreePropertyProvider": {
+            "action": "loadTreeTablePropertiesForExecute",
+            "propertyLoadResult": "action.result.propertyLoadResult"
+        }
+    },
+    "functions": {
+        "getParentUid": {
+            "functionName": "getParentUid",
+            "parameters": [
+                "{{props.subPanelContext}}"
+            ]
+        }
+    },
+    "columnProviders": {
+        "treeTableExecuteColumnProvider": {
+            "loadColumnAction": "loadTreeTableColumnsForExecute",
+
+            "saveColumnAndLoadAction": "saveColumnConfigLoadData",
+            "resetColumnAction": "resetColumnConfig",
+            "columns": "{{data.columns}}",
+            "enableSorting": false,
+            "id": "Crt1ExecuteTestPWATable"
+        }
+    },
+    "grids": {
+        "pwaTableForExecute": {
+            "dataProvider": "treeTableExecuteProvider",
+            "columnProvider": "treeTableExecuteColumnProvider",
+            "propertyProvider": "GridTreePropertyProvider",
+            "addIconColumn": false,
+            "enableArrangeMenu": true,
+            "gridOptions": {
+                "enableSorting": false,
+                "maxRowsToShow": 20,
+                "isFilteringEnabled": false
+            }
+        }
+    },
+    "data": {
+        "selectionData": {
+            "initialValues": {},
+            "meta": {}
+        }
+    },
+    "onEvent": [ {
+            "eventId": "treeTableExecuteProvider.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "changeSelectionForExecute"
+        },
+        {
+            "eventId": "CreateTracelink.postCreateTracelink",
+            "action": "reloadTable"
+        },
+        {
+            "eventId": "nextAction",
+            "action": "nextAction"
+        },
+        {
+            "eventId": "previousAction",
+            "action": "previousAction"
+        },
+        {
+            "eventId": "passAction",
+            "action": "passAction"
+        },
+        {
+            "eventId": "failAction",
+            "action": "failAction"
+        },
+        {
+            "eventId": "blockedAction",
+            "action": "blockedAction"
+        },
+        {
+            "eventId": "cautionAction",
+            "action": "cautionAction"
+        },
+        {
+            "eventId": "cdm.updated",
+            "cacheEventData": true,
+            "action": "isAttrItemUpdatedForExecute"
+        },
+        {
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        },
+        {
+            "eventId": "ExecuteTable.modelObjectsLoadedForExecute",
+            "cacheEventData": true,
+            "action": "modelObjectsLoadedForExecute"
+        },
+        {
+            "eventId": "treeTableExecuteProvider.modelObjectsUpdated",
+            "cacheEventData": true,
+            "action": "modelObjectEditedInExecute"
+        },
+        {
+            "eventId": "editInProgressMsg",
+            "action": "saveAndDiscardMsg"
+        },
+        {
+            "eventId": "noEditInProgress",
+            "action": "setPassResultStatus"
+        },
+        {
+            "eventId": "setPassResultStatus",
+            "action": "setPassResultStatus"
+        },
+        {
+            "eventId": "setFailResultStatus",
+            "action": "setFailResultStatus"
+        },
+        {
+            "eventId":"noEditInProgressInCaseOfFail",
+            "action":"setFailResultStatus"
+        },
+        {
+            "eventId": "setBlockedResultStatus",
+            "action": "setBlockedResultStatus"
+        },
+        {
+            "eventId":"noEditInProgressInCaseOfBlocked",
+            "action":"setBlockedResultStatus"
+        },
+        {
+            "eventId": "setCautionResultStatus",
+            "action": "setCautionResultStatus"
+        },
+        {
+            "eventId":"noEditInProgressInCaseOfCaution",
+            "action":"setCautionResultStatus"
+        },
+        {
+            "eventId": "Att1ImportParameter.completed",
+            "cacheEventData": true,
+            "action": "callGetResultAndChartSOAfterImport"
+        }
+    ],
+    "messages": {
+        "cancelEditsVRMsg": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.saveDiscardMsgForEdit}}",
+            "messageTextParams": [
+                "{{ctx.selected.props.object_string.dbValues[0]}}"
+            ],
+            "navigationOptions": [
+                {
+                    "option": "Discard",
+                    "text": "{{i18n.discard}}",
+                    "action": "cancelEdits"
+                },
+                {
+                    "option": "Save",
+                    "text": "{{i18n.Save}}",
+                    "action": "saveEdits"
+                }
+            ]
+
+        }
+    },
+    "conditions": {},
+    "i18n": {
+        "Fail": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Pass": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "InProgress": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "saveDiscardMsgForEdit": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Save": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "discard":[
+            "AnalysisRequestCommandPanelsMessages"
+        ]
+    }
+
+}

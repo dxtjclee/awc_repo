@@ -1,0 +1,110 @@
+{
+  "schemaVersion": "1.0.0",
+  "pasteHandlers": {
+    "pasteHandlerForPsi0AuthorDependenciesWorkspaceObject": {
+      "action": "actionForPsi0AuthorDependenciesWorkspaceObject",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForPsi0AuthorDependenciesWorkspaceObject"
+      }
+    },
+    "pasteHandlerForPsi0ChecklistPsi0ChecklistQuestion": {
+      "action": "actionForScheduleTaskItemRevision",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForPsi0ChecklistPsi0ChecklistQuestion"
+      }
+    }
+  },
+  "actions": {
+    "actionForScheduleTaskItemRevision": {
+      "actionType": "JSFunction",
+      "method": "psi0DefaultPasteHandler",
+      "deps": "js/Psi0AddChecklistQuestionService",
+      "inputData": {
+        "targetObject": "{{pasteContext.targetObject}}",
+        "sourceObject": "{{pasteContext.sourceObject}}",
+        "relationType": "{{pasteContext.relationType}}"
+      },
+      "events": {
+        "success": [
+          {
+            "name": "dragDrop.success",
+            "condition": "pasteContext.isDragDropIntent",
+            "eventData": {
+              "sourceObjects": "{{pasteContext.sourceObject}}",
+              "targetObject": "{{pasteContext.targetObject}}"
+            }
+          }
+        ]
+      }
+    },
+    "actionForPsi0AuthorDependenciesWorkspaceObject": {
+      "actionType": "JSFunction",
+      "method": "pasteDependenciesObjectsInList",
+      "deps": "js/Psi0AuthorDependencies",
+      "inputData": {
+        "targetObject": "{{pasteContext.targetObject}}",
+        "sourceObject": "{{pasteContext.sourceObject}}"
+      },
+      "events": {
+        "success": [
+          {
+            "name": "dragDrop.success",
+            "condition": "pasteContext.isDragDropIntent",
+            "eventData": {
+              "sourceObjects": "{{pasteContext.sourceObject}}",
+              "targetObject": "{{pasteContext.targetObject}}"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "conditions": {
+    "isPasteHandlerActiveForPsi0AuthorDependenciesWorkspaceObject": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Psi0AuthorDependencies"
+            }
+          },
+          {
+            "$or": [
+              {
+                "$source": "pasteContext.sourceObject",
+                "$query": {
+                  "$typeOf": "WorkspaceObject"
+                }
+              },
+              {
+                "$source": "pasteContext.sourceObject",
+                "$query": {
+                  "$typeOf": "Awb0Element"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "isPasteHandlerActiveForPsi0ChecklistPsi0ChecklistQuestion": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Psi0Checklist"
+            }
+          },
+          {
+            "$source": "pasteContext.sourceObject",
+            "$query": {
+              "$typeOf": "Psi0ChecklistQuestion"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

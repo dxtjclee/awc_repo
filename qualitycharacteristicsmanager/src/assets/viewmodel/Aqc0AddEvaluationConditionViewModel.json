@@ -1,0 +1,208 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "actions": {        
+        "selectionChangeOfPropertyContext": {
+            "actionType": "JSFunction",
+            "method": "selectionChangeOfPropertyContext",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "genericWidget": "genericWidget",
+                "currentFieldValueType": "currentFieldValueType",
+                "genericValueContext": "genericValueContext",
+                "isDuplicate":"isDuplicate",
+                "isFieldEmpty":"isFieldEmpty"
+            },
+            "deps": "js/Aqc0ChecklistSpecRatingEvalRuleService"            
+        },
+        "getPreferenceAction": {
+            "actionType": "JSFunction",
+            "method": "getPreferenceAction",
+            "inputData": {
+                "typeInternalName":"Qc0ChecklistSpecification",
+                "preferenceName" : "AWC_Qc0RatingRuleEvaluationProperties"
+            },
+            "outputData": {
+                "EvalautionRatingPreferenceMap": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "getPropertyEvent"
+                } ]
+            },
+            "deps": "js/Aqc0ChecklistSpecRatingEvalRuleService"
+        },              
+        "getPropertyAction": {
+            "actionType": "JSFunction",
+            "method": "getPropertyAction",
+            "inputData": {
+                "typeInternalName" : "Qc0ChecklistSpecification"
+            },
+            "outputData": {
+                "EvalautionRatingPropertiesMap": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "setPropertyContextValuesEvent",
+                    "condition": "!subPanelContext.addPanelState.editParameterContext"
+                },
+                {
+                    "name": "setPropertyContextValuesInEditEvent",
+                    "condition": "subPanelContext.addPanelState.editParameterContext"
+                }]
+            },
+            "deps": "js/Aqc0ChecklistSpecRatingEvalRuleService"
+        },
+        "setPropertyContextValuesInEdit": {
+            "actionType": "JSFunction",
+            "method": "displayPropertyPreferencesActionInEdit",
+            "inputData": {
+                "typeInternalName" : "Qc0ChecklistSpecification",
+                "data": "{{data}}",
+                "subPanelContext":"{{subPanelContext}}"
+            },
+            "outputData": {
+                "propertyContextValues.dbValue": "propertyContextValues",
+                "propertyContext": "propertyContext",
+                "genericWidget": "genericWidget",
+                "currentFieldValueType": "currentFieldValueType",
+                "genericValueContext": "genericValueContext"
+            },
+            "deps": "js/Aqc0ChecklistSpecRatingEvalRuleService"    
+        }, 
+        "setPropertyContextValues": {
+            "actionType": "JSFunction",
+            "method": "displayPropertyPreferencesAction",
+            "inputData": {
+                "typeInternalName" : "Qc0ChecklistSpecification",
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "propertyContextValues.dbValue": ""
+            },
+            "deps": "js/Aqc0ChecklistSpecRatingEvalRuleService"    
+        },         
+        "addConditionToFilter": {
+            "actionType": "JSFunction",
+            "method": "addCondition",
+            "inputData": {
+                "data": "{{data}}",
+                "addPanelState": "{{subPanelContext.addPanelState}}"
+            },
+            "outputData": {
+                "isDuplicate": "isDuplicate",
+                "isFieldEmpty": "isFieldEmpty",
+                "errorParam": "param"
+            },
+            "deps": "js/Aqc0ChecklistSpecRatingEvalRuleService"
+        } 
+    },
+    "data": {    
+        "propertyContext": {
+            "displayName": "{{i18n.Aqc0PropertySection}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "hasLov": "true",
+            "dbValue": ""
+        },
+        "propertyContextValues": {
+            "type": "STRING",
+            "dbValue": [ {} ]
+        },       
+        "currentFieldValueType": {
+            "type": "STRING",
+            "dbValue": ""
+        },               
+        "genericWidget": {
+            "displayName": "",
+            "type": "BOOLEAN",
+            "isRequired": "true",
+            "dbValue": ""
+        },        
+        "genericValueContext": {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "true",
+            "hasLov": "true",
+            "dbValue": ""
+        }    
+    },
+    "messages": {
+        "duplicatePropertyErrorMsg": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.Aqc0PropertyAleadyExistErrorMsg}}",
+            "messageTextParams": [
+                "{{data.errorParam}}"
+            ]
+        }     
+    },
+    "onEvent": [ 
+        {
+            "eventId": "awPanel.reveal",
+            "cacheEventData": true,
+            "action": "getPreferenceAction"
+        },
+        {
+            "eventId": "selectionChangeOfPropertyContext",
+            "cacheEventData": true,
+            "action": "selectionChangeOfPropertyContext"
+        }, 
+        {
+            "eventId": "getPropertyEvent",
+            "action": "getPropertyAction"
+        },   
+        {
+            "eventId": "setPropertyContextValuesEvent",
+            "action": "setPropertyContextValues"
+        },
+        {
+            "eventId": "setPropertyContextValuesInEditEvent",
+            "action": "setPropertyContextValuesInEdit"
+        }
+    ],
+    "conditions": {
+        "showValueWidget": {
+            "expression": " data.genericWidget.dbValue || data.genericWidget.dbValue === 0 || data.genericWidget.dbValue === false"
+        },
+        "showWidget": {
+            "expression": "data.propertyContext.dbValue"
+        },
+        "showAddWidget": {
+            "expression": "!(subPanelContext && subPanelContext.addPanelState && subPanelContext.addPanelState.editParameterContext) && conditions.showWidget && conditions.showValueWidget"
+        },
+        "showSaveWidget": {
+            "expression": "subPanelContext && subPanelContext.addPanelState && subPanelContext.addPanelState.editParameterContext && conditions.showWidget && conditions.showValueWidget"
+        },               
+        "showGenericWidget": {
+            "expression": "conditions.showWidget && data.currentFieldValueType.dbValue !== 'LISTBOX'"
+        },               
+        "checkForStringType": {
+            "expression": "data.currentFieldValueType.dbValue === 'STRING'"
+        },
+        "showGuidanceMessageForDuplicateError": {
+            "expression": "data.isDuplicate === true && data.isFieldEmpty === false"
+        }
+    },
+    "i18n": {       
+        "Aqc0PropertySection": [
+            "qualitycentermanagerMessages"
+        ],        
+        "Aqc0Add": [
+            "qualitycentermanagerMessages"
+        ],
+        "Aqc0Save":[
+            "qualitycentermanagerMessages"
+        ],       
+        "Aqc0ConditionCellValueSection": [
+            "qualitycentermanagerMessages"
+        ],
+        "Aqc0ConditionCellNameSection":[
+            "qualitycentermanagerMessages"
+        ],
+        "Aqc0PropertyAleadyExistErrorMsg":[
+            "qualitycentermanagerMessages"
+        ]
+    }
+}

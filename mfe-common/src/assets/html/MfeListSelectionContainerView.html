@@ -1,0 +1,12 @@
+<div class="sw-row aw-arrange-noSelect justify-space-between h-12">
+    <mfe-list-selection-panel list-info="data.availableListInfo" selection-data="data.availableListSelectionData">
+    </mfe-list-selection-panel>
+
+    <div class="w-1 sw-column flex-auto justify-center align-center">
+        <aw-icon-button size="large" command="data.add" enable-when="data.availableListSelectionData.selected.length > 0"></aw-icon-button>
+        <aw-icon-button size="large" command="data.remove" enable-when="data.selectedListSelectionData.selected.length > 0"></aw-icon-button>
+    </div>
+
+    <mfe-list-selection-panel list-info="data.selectedListInfo" selection-data="data.selectedListSelectionData">
+    </mfe-list-selection-panel>
+</div>

@@ -1,0 +1,12 @@
+<aw-command-panel caption="i18n.addPanelTitle" context="subPanelContext">
+    <aw-add target-object="ctx.selected" relations="S2P:Pch0PlanChangeRelation"
+      include-types="Prg0AbsPlan" type-filter="Prg0AbsPlan"
+      visible-tabs="palette,search" add-panel-state="fields.addPanelState"
+      sub-panel-context="{ ...subPanelContext,triggerCreate: data.triggerCreate }"></aw-add>
+    <aw-panel-footer enable-when="data.activeView!='AssignProjectSub'&&data.activeView!='addTypeReferenceSub'">
+        <!-- panel-footer button for Palette and Search tab -->
+        <aw-button action="createRelationForPaletteOrSearch" enable-when="conditions.isPaletteTabAddButtonVisible || conditions.isSearchTabAddButtonVisible" >
+            <aw-i18n>i18n.addButtonTitle</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

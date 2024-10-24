@@ -1,0 +1,32 @@
+<aw-panel-section caption="i18n.Parameters" exist-when="conditions.showUniformTable">
+    <aw-column width="100%">
+        <att1-show-parameters-table-for-sync sub-panel-context="{ ...subPanelContext }"></att1-show-parameters-table-for-sync>
+    </aw-column>
+    <aw-column width="30%" align-content="center" exist-when="(props.subPanelContext.context.vrSublocationState.showChart === undefined || props.subPanelContext.context.vrSublocationState.showChart === true)">
+        <aw-row height="18f">
+            <aw-include name="Crt1Chart" sub-panel-context="{ ...subPanelContext }"></aw-include>
+        </aw-row>
+    </aw-column>
+</aw-panel-section>
+
+
+<aw-panel-section caption="i18n.InputParaTable" exist-when="conditions.showUniformInputTable && (props.subPanelContext.context.vrSublocationState.showChart === undefined || props.subPanelContext.context.vrSublocationState.showChart === true || props.subPanelContext.context.vrSublocationState.showChart === false)">
+    <aw-column width="100%">
+        <att1-show-parameters-table-for-sync view-id="inputTable" sub-panel-context="{ ...subPanelContext, paramTableKey: 'att1ShowInputParametersTableKey', reusable : true }"></att1-show-parameters-table-for-sync>
+    </aw-column>
+</aw-panel-section>
+
+
+<aw-panel-section caption="i18n.OutputParaTable" exist-when="conditions.showUniformOutputTable">
+    <aw-column width="100%">
+        <att1-show-parameters-table-for-sync view-id="outputTable" sub-panel-context="{ ...subPanelContext, paramTableKey: 'att1ShowOutputParametersTableKey', reusable : true }"></att1-show-parameters-table-for-sync>
+    </aw-column>
+    <aw-column width="30%" align-content="center" exist-when="(props.subPanelContext.context.vrSublocationState.showChart === undefined || props.subPanelContext.context.vrSublocationState.showChart === true)">
+        <aw-row height="18f">
+            <aw-include name="Crt1Chart" sub-panel-context="{ ...subPanelContext }"></aw-include>
+        </aw-row>
+    </aw-column>
+</aw-panel-section>
+
+
+

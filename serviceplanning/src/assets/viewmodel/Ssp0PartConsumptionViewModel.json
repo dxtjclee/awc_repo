@@ -1,0 +1,168 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "sbomTreeContext": {
+            "tabs": [
+                {
+                    "name": "{{i18n.sbomTitle}}",
+                    "tabKey": "Ssp0SbomTree"
+                }
+            ]
+        },
+        "sbomViewerContext": {
+            "tabs": [
+                {
+                    "name": "{{i18n.graphicsTitle}}",
+                    "tabKey": "Ssp0SbomGraphics"
+                }
+            ]
+        },
+        "servicePlanContext": {
+            "tabs": [
+                {
+                    "name": "{{i18n.servicePlanTitle}}",
+                    "tabKey": "Ssp0ServicePlanTree"
+                }
+            ]
+        },
+        "sideNavLeftData": {
+            "slide": "FLOAT",
+            "direction": "RIGHT_TO_LEFT",
+            "animation": true,
+            "width": "STANDARD",
+            "height": "FULL"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "initializerBatchJob",
+        "onUnmount": "removeCtxParamsBatchJob"
+    },
+    "actions": {
+        "removeCtxParamsBatchJob": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "removeCtxParamSelected"
+                },
+                {
+                    "action": "removeCtxParamsLocation"
+                }
+            ]
+        },
+        "removeCtxParamSelected": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "inputData": {
+                "name": "selected"
+            },
+            "deps": "js/appCtxService"
+        },
+        "removeCtxParamsLocation": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "inputData": {
+                "name": "ssp0Location"
+            },
+            "deps": "js/appCtxService"
+        },
+        "registerLocationName": {
+            "actionType": "JSFunction",
+            "method": "updateCtx",
+            "deps": "js/appCtxService",
+            "inputData": {
+                "name": "locationContext",
+                "value": {
+                    "ActiveWorkspace:Location": "setServicePlanRoot",
+                    "ActiveWorkspace:SubLocation": "servicePlanning"
+                }
+            }
+        },
+        "registerLocationContext": {
+            "actionType": "JSFunction",
+            "method": "registerCtx",
+            "deps": "js/appCtxService",
+            "inputData": {
+                "name": "ssp0Location",
+                "value": {
+                    "taskName": "{{i18n.taskName}}",
+                    "taskTypeIconURL": "assets/image/typeMECollaborativeContext48.svg"
+                }
+            }
+        },
+        "initializerBatchJob": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "registerLocationName"
+                },
+                {
+                    "action": "registerLocationContext"
+                },
+                {
+                    "action": "soaCallForPLFDisplayNames"
+                },
+                {
+                    "action": "toggleSelectionSync"
+                },
+                {
+                    "action": "registerSubLocationName"
+                }
+            ]
+        },
+        "soaCallForPLFDisplayNames": {
+            "actionType": "JSFunction",
+            "method": "soaCallForPLFDisplayNames",
+            "deps": "js/ssp0LoadSbomClientColumns"
+        },
+        "toggleSelectionSync": {
+            "actionType": "JSFunction",
+            "method": "setToggleStateInCtx",
+            "inputData": {
+                "toggleState": "{{data.selectionSync.dbValue}}"
+            },
+            "deps": "js/ssp0SelectionSyncService"
+        },
+        "registerSubLocationName": {
+            "actionType": "JSFunction",
+            "method": "registerCtx",
+            "deps": "js/appCtxService",
+            "inputData": {
+                "name": "sublocation",
+                "value": {
+                    "clientScopeURI": "Ssp0SbomManagement"
+                }
+            }
+        },
+        "handleCompleteEvent": {
+            "actionType": "JSFunction",
+            "method": "handleCompleteEvent",
+            "inputData": {
+                "provider": "{{parameters.eventData}}"
+            },
+            "deps": "js/ssp0ColumnArrangeService"
+        }
+    },
+    "i18n": {
+        "taskName": [
+            "ssp0Messages"
+        ],
+        "sbomTitle": [
+            "ssp0Messages"
+        ],
+        "graphicsTitle": [
+            "ssp0Messages"
+        ],
+        "servicePlanTitle": [
+            "ssp0Messages"
+        ]
+    },
+    "onEvent": [
+        {
+            "eventId": "complete",
+            "action": "handleCompleteEvent",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            }
+        }
+    ]
+}

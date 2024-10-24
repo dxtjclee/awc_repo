@@ -1,0 +1,235 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "slmPertToggleModePopupId":"",
+        "graphModel": {
+            "graphDataProvider": {
+                "name": "slmPertGraphDataProvider",
+                "dataParser": {
+                    "nodes": "nodes",
+                    "edges": "edges",
+                    "node": {
+                        "id": "uid"
+                    },
+                    "edge": {
+                        "id": "id",
+                        "sourceNodeId": "puid",
+                        "targetNodeId": "suid"
+                    }
+                },
+                "groupRelationCategory": "",
+                "graphRenderInterface": "js/ssp0PertGraphRenderService"
+            },
+            "uid": "SlmPert",
+            "config": {
+                "enableEdit": true,
+                "minZoom": 0,
+                "maxZoom": 1,
+                "autoEdgeRoutingType": "HV_SEGMENT3",
+                "fitViewPosition": "CENTER",
+                "movableItems": [
+                    "Node"
+                ],
+                "selectableItems": [
+                    "Node",
+                    "Edge"
+                ],
+                "layout": {
+                    "layoutMode": "IncUpdateLayout",
+                    "defaultOption": "LeftToRight"
+                },
+                "nodeToNodeDistance": {
+                    "x": 40,
+                    "y": 40
+                },
+                "edgeToEdgeDistance": {
+                    "x": 20,
+                    "y": 20
+                },
+                "minNodeSize": {
+                    "width": 80,
+                    "height": 40
+                },
+                "inputMode": "viewInputMode",
+                "graphEditHandler": "js/ssp0PertEditService",
+                "moveWithoutSelection": true,
+                "enableAutoPan": true,
+                "enableMarqueeSelection": false,
+                "showOverview": true,
+                "enableObjectArrangement": true,
+                "snapToGridByAnchorPoint": false,
+                "showGrid": false,
+                "enableAlignment": false,
+                "isNetworkMode": false,
+                "defaults": {
+                    "nodeSize": {
+                        "width": 250,
+                        "height": 106
+                    },
+                    "nodeStyle": {
+                        "templateId": "slmPertNodeTemplate"
+                    },
+                    "edgeStyle": {
+                        "color": "rgb(46,46,46)",
+                        "dashStyle": "SOLID",
+                        "isHotSpotEdge": true,
+                        "targetArrow": {
+                            "arrowShape": "TRIANGLE",
+                            "fillInterior": true,
+                            "arrowScale": 1
+                        },
+                        "thickness": 1
+                    }
+                }
+            },
+            "inputModes": {
+                "editingMode": {
+                    "editMode": true,
+                    "creatableItem": "Edge",
+                    "defaultCursor": "default"
+                },
+                "viewInputMode": {
+                    "editMode": false,
+                    "enableManualEdgeRouting": true,
+                    "enableNodeResize": false,
+                    "enableLabelEdit": false,
+                    "dragableCursorUrl": "cursor/openhand.cur",
+                    "draggingCursorUrl": "cursor/closedhand.cur"
+                }
+            }
+        }
+    },
+    "actions": {
+        "showMfePertToggleModePopup": {
+            "actionType": "popup",
+            "inputData": {
+                "options": {
+                    "view": "PertToggle",
+                    "reference": ".aw-serviceplanning-pertContainer",
+                    "innerClassName": "aw-mfePert-togglePopupMargin",
+                    "isModal": false,
+                    "height": 32,
+                    "width": 64,
+                    "disableClose": true,
+                    "clickOutsideToClose": false,
+                    "placement": "bottom-start",
+                    "forceCloseOthers": false,
+                    "subPanelContext": {
+                        "graphModel": "{{data.graphModel}}"
+                    }
+                }
+            },
+            "outputData": {
+                "slmPertToggleModePopupId": "id"
+            }
+        },
+        "moveGraphItems": {
+            "actionType": "JSFunction",
+            "method": "moveGraphItems",
+            "inputData": {
+                "items": "{{parameters.eventData.items}}",
+                "graphModel": "{{data.graphModel}}"
+            },
+            "deps": "js/ssp0PertEditService"
+        },
+        "loadGraphData": {
+            "actionType": "JSFunction",
+            "method": "loadGraphData",
+            "inputData": {
+                "graphModel": "{{data.graphModel}}",
+                "subPanelContext": "{{[ctx.selectedActivity]}}"
+            },
+            "deps": "js/ssp0PertGraphDataProviderService"
+        },
+        "updateMfePertToggleModePopup": {
+            "actionType": "JSFunction",
+            "method": "update",
+            "inputData": {
+                "popupElement":{"id": "{{data.slmPertToggleModePopupId}}"}
+            },
+            "deps": "js/popupService"
+        },
+        "resetLayout": {
+            "actionType": "JSFunction",
+            "method": "resetLayout",
+            "inputData": {
+                "graphModel": "{{data.graphModel}}"
+            },
+            "deps": "js/ssp0PertEditService"
+        },
+        "showEdgeCreationMsg": {
+            "actionType": "JSFunction",
+            "method": "showEdgeCreationMsg",
+            "inputData": {
+                "graphModel": "{{i18n.relationshipExist}}"
+            },
+            "deps": "js/ssp0PertEditService"
+        },
+        "showCyclicError": {
+            "actionType": "JSFunction",
+            "method": "showEdgeCreationMsg",
+            "inputData": {
+                "graphModel": "{{i18n.cycleDetected}}"
+            },
+            "deps": "js/ssp0PertEditService"
+        },
+        "updateSelectionInContext": {
+            "actionType": "JSFunction",
+            "method": "setPertNodesSelection",
+            "inputData": {
+                "graphModel": "{{data.graphModel}}"
+            },
+            "outputData": {
+                "selectedPertNodes": ""
+            },
+            "deps": "js/ssp0PertEditService"
+        }
+    },
+    "i18n": {
+        "relationshipExist": [
+            "timeAnalysisMessages"
+        ],
+        "cycleDetected": [
+            "timeAnalysisMessages"
+        ]
+    },
+    "onEvent": [
+        {
+            "eventId": "awGraph.selectionChanged",
+            "action": "updateSelectionInContext"
+        },
+        {
+            "eventId":"aw-splitter-update",
+            "action":"updateMfePertToggleModePopup",
+            "condition":"data.slmPertToggleModePopupId"
+        },
+        {
+            "eventId": "awGraph.initialized",
+            "action": "loadGraphData"
+
+        },
+        {
+            "eventId": "awGraph.graphItemsMoved",
+            "action": "moveGraphItems",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            }
+        },
+        {
+            "eventId": "awGraph.initialized",
+            "action": "showMfePertToggleModePopup"
+        },
+        {
+            "eventId":"Ssp0ActivityPERTTab.resetLayout",
+            "action":"resetLayout"
+        },
+        {
+            "eventId":"Ssp0ActivityPERT.showEdgeError",
+            "action":"showEdgeCreationMsg"
+        },
+        {
+            "eventId":"Ssp0ActivityPERT.showCyclicError",
+            "action":"showCyclicError"
+        }
+    ]
+}

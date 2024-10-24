@@ -1,0 +1,19 @@
+[
+  {
+    "conditions": {
+      "modelType.typeHierarchyArray": {
+        "$in": [
+          "SSP0BvrWorkCard",
+          "SSP0BvrServiceRequirement",
+          "SSP0BvrServiceProcess",
+          "SSP0BvrServiceContainer"
+        ]
+      }
+    },
+    "target": {
+      "prop": "bl_revision",
+      "method": "getAlternateSelectedObjects",
+      "deps": "js/selection.service"
+    }
+  }
+]

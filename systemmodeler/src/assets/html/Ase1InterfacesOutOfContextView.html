@@ -1,0 +1,8 @@
+<aw-panel>
+    <aw-advanced-bar type="TOOLBAR" negative='true'>
+        <aw-command-bar context="{ selection:data.selection? data.selection:[], pageState:fields.interfacesPageState }" anchor="ase1_interfacesShowDetailsOutOfContextCmd" alignment="HORIZONTAL" class="aw-commands-commandBarHorizontalRight"></aw-command-bar>
+    </aw-advanced-bar>
+    <ase1-interfaces-primary-out-of-context primary-selection="fields.primarySelectionData" sub-panel-context="subPanelContext"></ase1-interfaces-primary-out-of-context>
+    <aw-splitter exist-when="conditions.toggleInterfaceDetailsPanelCond" direction="HORIZONTAL"></aw-splitter>
+    <ase1-show-details-for-interfaces exist-when="conditions.toggleInterfaceDetailsPanelCond" sub-panel-context="{...subPanelContext,selection:data.selection? data.selection:[], selectionData:fields.secondarySelectionData}"></ase1-show-details-for-interfaces>
+</aw-panel>

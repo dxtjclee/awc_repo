@@ -1,0 +1,105 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "ports": {},
+
+    "data": {
+        "tabsParametersAndRequirements": [
+            {
+                "name": "{{i18n.parametersTab}}",
+                "tabKey": "parametersTab",
+                "viewId": "Att1ShowParametersTableForSync"
+            },
+            {
+                "name": "{{i18n.requirementsTab}}",
+                "tabKey": "requirementsTab",
+                "viewId": "Ase0SystemRequirements"
+            }
+        ],
+        "selectMessage": {
+            "displayName": "",
+            "type": "STRING",
+            "isEditable": "false",
+            "dbValue": "",
+            "dispValue": "{{i18n.connectionSelectMessage}}",
+            "labelPosition": "NO_PROPERTY_LABEL"
+        }
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+
+    "lifecycleHooks": {
+        "onMount": "onLoad",
+        "onUpdate": {
+            "action": "clearSelection",
+            "observers": [ "viewModel.data.selectedTab" ]
+        },
+        "onUnmount": "clearSelection"
+    },
+
+    "actions": {
+        "onLoad": {
+            "actionType": "JSFunction",
+            "method": "populateSelectMessage",
+            "inputData": {
+                "selected" : "{{props.subPanelContext.selected}}",
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "selectMessage.uiValue" : ""
+            },
+            "deps": "js/Ase1InterfacesUtilService"
+        },
+        "clearSelection": {
+            "actionType": "JSFunction",
+            "deps": "lodash",
+            "method": "invoke",
+            "inputData": {
+                "0": "{{props.subPanelContext.selectionData}}",
+                "1": "update",
+                "2": {
+                    "selected": []
+                }
+            }
+        }
+    },
+
+    "dataProviders": {},
+
+    "columnProviders": {},
+
+    "functions": {},
+
+    "grids": {},
+
+    "dataParseDefinitions": {},
+    "onEvent": [],
+
+    "i18n": {
+        "parametersTab": [
+            "SystemModelerConstants"
+        ],
+        "requirementsTab": [
+            "SystemModelerConstants"
+        ],
+        "connectionSelectMessage": [
+            "SystemModelerMessages"
+        ],
+        "functionSelectMessage": [
+            "SystemModelerMessages"
+        ],
+        "interfaceSelectMessage": [
+            "SystemModelerMessages"
+        ]
+    },
+    "messages": {},
+    "conditions": {
+        "nonEmptySelection": {
+            "expression": "props.subPanelContext.selection && props.subPanelContext.selection.length > 0"
+        }
+    }
+}
+

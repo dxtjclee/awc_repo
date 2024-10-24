@@ -1,0 +1,28 @@
+<aw-popup2>
+    <aw-panel>
+        <aw-panel-body>
+            <div class="sw-row" visible-when="conditions.showInScopeNodes" align-content="center">
+                <div class="sw-column h-3" offset-right="1f">
+                    <span class="aw-ngp-inScopeTitle"><aw-i18n>i18n.assignmentsInScope</aw-i18n></span>
+                </div>
+            </div>
+            <aw-separator visible-when="conditions.showInScopeNodes" class="aw-ngp-assignmentIndicationAssignedInSeparator"></aw-separator>
+            <aw-list visible-when="conditions.showInScopeNodes" dataprovider="subPanelContext.dataProviders.inScopeAssignmentIndicationDataProvider" class=" aw-ngp-assignmentIndicationAssignedInList">
+                <div class="aw-ngp-cellListItemAssignIndicationName" title="{{item.props.object_string.dbValues[0]}}">
+                    <aw-icon-button command="data.findAndRevealAssignedToCommand"></aw-icon-button>{{item.props.object_string.dbValues[0]}}
+                </div>
+            </aw-list>
+            <div class="sw-row" visible-when="conditions.showOutOfScopeNodes" align-content="center">
+                <div class="sw-column h-3" offset-right="1f">
+                    <span class="aw-ngp-outOfScopeTitle"><aw-i18n>i18n.assignmentsInAnotherScope</aw-i18n></span>
+                </div>
+            </div>
+            <aw-separator exist-when="conditions.showOutOfScopeNodes" class="aw-ngp-assignmentIndicationAssignedInSeparator"></aw-separator>
+            <aw-list visible-when="conditions.showOutOfScopeNodes" dataprovider="subPanelContext.dataProviders.outOfScopeAssignmentIndicationDataProvider">
+                <div class="aw-ngp-cellListItemAssignIndicationName" title="{{item.props.object_string.dbValues[0]}}">
+                    <aw-icon-button command="data.findAndRevealAssignedToCommand"></aw-icon-button>{{item.props.object_string.dbValues[0]}}
+                </div>
+            </aw-list>
+        </aw-panel-body>
+    </aw-panel>
+</aw-popup2>

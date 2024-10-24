@@ -1,0 +1,237 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "messages": {
+            "SelectionIsNotSrOrWc": [
+                {
+                    "text": "{{i18n.SelectionIsNotSrOrWc}}"
+                }
+            ]
+        }
+    },
+    "ports": {
+        "setToolsTreeData": {
+            "syncObject": {}
+        },
+        "setOccurrenceType": {
+            "syncObject": {}
+        }
+    },
+    "actions": {
+        "getOccType": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "getPreferences"
+                },
+                {
+                    "action": "getChildNodeData"
+                },
+                {
+                    "action": "getOccTypeListUsingPreferences"
+                },
+                {
+                    "action": "getChildNodeProperties",
+                    "condition": "conditions.IsUidsNull"
+                },
+                {
+                    "action": "updateToolsTreeDataPort"
+                }
+            ]
+        },
+        "activeTabInCtx": {
+            "actionType": "JSFunction",
+            "method": "registerCtx",
+            "inputData": {
+                "name": "SelectedTab",
+                "value": "tools"
+            },
+            "deps": "js/appCtxService"
+        },
+        "getPreferences": {
+            "actionType": "TcSoaService",
+            "serviceName": "Administration-2012-09-PreferenceManagement",
+            "method": "getPreferences",
+            "inputData": {
+                "preferenceNames": [
+                    "MEDisplayOccurrenceType"
+                ],
+                "includePreferenceDescriptions": false
+            },
+            "outputData": {
+                "preferencesList": "{{function:getPreferencesNamesList}}"
+            },
+            "deps": "js/ssp0ToolService"
+        },
+        "getOccTypeListUsingPreferences": {
+            "actionType": "TcSoaService",
+            "serviceName": "Administration-2012-09-PreferenceManagement",
+            "method": "getPreferences",
+            "inputData": {
+                "preferenceNames": "{{ctx.preferencesList}}",
+                "includePreferenceDescriptions": false
+            },
+            "outputData": {
+                "occTypeList": "{{function:getOccTypeList}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "sendOccType"
+                    }
+                ]
+            },
+            "deps": "js/ssp0ToolService"
+        },
+        "sendOccType": {
+            "actionType": "Sync",
+            "inputData": {
+                "port": "setOccurrenceType",
+                "syncObject": "{{data.occTypeList}}"
+            }
+        },
+        "updateToolsTreeDataPort": {
+            "actionType": "Sync",
+            "inputData": {
+                "port": "setToolsTreeData",
+                "syncObject": {
+                    "treeLoadResult": "{{data.treeLoadResult}}",
+                    "selection": "{{data.eventMap['Ssp0Tools.triggerFunction'].selection}}"
+                }
+            }
+        },
+        "getChildNodeProperties": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData": {
+                "attributes": "{{function:getChildNodeAttributes}}",
+                "objects": "{{data.uids}}"
+            },
+            "outputData": {
+                "treeLoadResult": "{{function:setTreeProperties}}"
+            },
+            "policy": {
+                "types": [
+                    {
+                        "name": "BOMLine",
+                        "properties": [
+                            {
+                                "name": "bl_line_object",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "bl_rev_fnd0objectId",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "deps": "js/ssp0ToolService"
+        },
+        "getChildNodeData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData": {
+                "attributes": [
+                    "Mfg0used_equipment"
+                ],
+                "objects": [
+                    {
+                        "uid": "{{ctx.selectedVMO.uid}}",
+                        "type": "BomLine"
+                    }
+                ]
+            },
+            "outputData": {
+                "uids": "{{function:getToolNodes}}"
+            },
+            "deps": "js/ssp0ToolService"
+        },
+        "loadToolsTree": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "getChildNodeData"
+                },
+                {
+                    "action": "getChildNodeProperties",
+                    "condition": "conditions.IsUidsNull"
+                },
+                {
+                    "action": "updateToolsTreeDataPort"
+                }
+            ]
+        }
+    },
+    "conditions": {
+        "IsVMOValid": {
+            "expression": "ctx.selectedVMO.modelType.typeHierarchyArray.includes('SSP0BvrServiceRequirement') || ctx.selectedVMO.modelType.typeHierarchyArray.includes('SSP0BvrWorkCard')"
+        },
+        "IsUidsNull": {
+            "expression": "data.uids.length > 0"
+        }
+    },
+    "ctx": {
+        "selectedVMO": {
+            "type": "object"
+        }
+    },
+    "functions": {
+        "setTreeProperties": {
+            "functionName": "setTreeProperties",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getChildNodes": {
+            "functionName": "getChildNodes",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getToolNodes": {
+            "functionName": "getToolNodes",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getChildNodeAttributes": {
+            "functionName": "getChildNodeAttributes",
+            "parameters": []
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "Ssp0Tools.triggerFunction",
+            "action": "loadToolsTree",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "sendOccType",
+            "action": "sendOccType",
+            "cacheEventData": true
+        }
+    ],
+    "i18n": {
+        "SelectionIsNotSrOrWc": [
+            "ssp0Messages"
+        ]
+    },
+    "lifecycleHooks": {
+        "onInit": "getOccType",
+        "onMount": "activeTabInCtx"
+    }
+}

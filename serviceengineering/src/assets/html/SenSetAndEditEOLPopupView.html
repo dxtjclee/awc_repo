@@ -1,0 +1,31 @@
+<aw-popup2>
+    <aw-panel>
+        <aw-panel-body>
+            <aw-panel-section>
+                <div class="aw-sen-textSelectedPart">
+                    <label>{{i18n.selectedPartName}}</label>
+                    <label><strong>{{ctx.selected.props.object_string.dbValues[0]}}</strong></label>
+                </div>
+                <aw-textbox prop="data.Name"></aw-textbox>
+                <aw-textbox prop="data.fnd0RevisionId"></aw-textbox>
+                <aw-widget prop="data.object_desc"></aw-widget>
+                <aw-listbox prop="data.smr0FromDate" action="" is-select-only='true'></aw-listbox>
+                <aw-textbox prop="data.smr0Duration"></aw-textbox>
+                <aw-listbox prop="data.smr0DurationUnit" action="" is-select-only='true'></aw-listbox>
+            </aw-panel-section>
+        </aw-panel-body>
+        <aw-panel-footer class="aw-sen-setEOLButton">
+            <aw-button button-type="base" action="ClosePopUpAction">
+                <aw-i18n>i18n.CancelEOLText</aw-i18n>
+            </aw-button>
+            <aw-button action="saveEOLEdits" enable-when="conditions.isEOLBtnEnabled"
+                visible-when="conditions.isEditEOLCmdEnable">
+                <aw-i18n>i18n.SetEOLText</aw-i18n>
+            </aw-button>
+            <aw-button action="CreateEOLBatchAction" enable-when="conditions.isEOLBtnEnabled"
+                visible-when="conditions.isSetEOLCmdEnable">
+                <aw-i18n>i18n.SetEOLText</aw-i18n>
+            </aw-button>
+        </aw-panel-footer>
+    </aw-panel>
+</aw-popup2>

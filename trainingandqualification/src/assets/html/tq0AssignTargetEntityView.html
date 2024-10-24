@@ -1,0 +1,43 @@
+<aw-command-panel caption="{{conditions.tq0IsAddCommandActive?i18n.add:i18n.replace}}">
+
+    <aw-panel-body scrollable="false">
+        <aw-tab-set tabs="data.tabModels">
+
+            <aw-scrollpanel visible-when="data.selectedTab.tabKey === 'userPage'">
+                <aw-widget prop="data.allGroups" enable-when="conditions.enableGroupSelection"
+                    visible-when="conditions.enableGroupRoleView"></aw-widget>
+                <aw-widget prop="data.allRoles" enable-when="conditions.enableRoleSelection"
+                    visible-when="conditions.enableGroupRoleView"></aw-widget>
+                <aw-property-label prop="data.searchString"></aw-property-label>
+                <aw-list-filter id="userListFilter" prop="data.filterBox"
+                    dataprovider="data.dataProviders.userPerformSearch">
+                    <aw-include name="Awp0UserPanelCell" sub-panel-context="item"></aw-include>
+                </aw-list-filter>
+            </aw-scrollpanel>
+
+            <search-tab-page-sub sub-panel-context="{searchFilterTabModels: data.searchFilterTabModels.dbValue,addPanelState: data.addPanelState}"  visible-when="data.selectedTab.tabKey === 'equipmentPage'"></search-tab-page-sub>
+
+
+            <aw-scrollpanel visible-when="data.selectedTab.tabKey === 'palettePage'">
+                </aw-panel-section>
+                <aw-list dataprovider="dataProviders.paletteObjectProvider">
+                    <aw-default-cell vmo="item"></aw-default-cell>
+                </aw-list>
+                </aw-panel-section>
+            </aw-scrollpanel>
+
+        </aw-tab-set>
+    </aw-panel-body>
+
+    <aw-panel-footer>
+        <aw-button action="assign" enable-when="!ctx.addItemEventProgressing"
+            visible-when="(conditions.addUserObject || conditions.addEquipmentObject || conditions.addPaletteObject) && conditions.tq0IsAddCommandActive">
+            <aw-i18n>i18n.add</aw-i18n>
+        </aw-button>
+        <aw-button action="replaceExistingTargetEntity"
+            visible-when="(conditions.addUserObject || conditions.addEquipmentObject || conditions.addPaletteObject) && !conditions.tq0IsAddCommandActive">
+            <aw-i18n>i18n.replace</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+
+</aw-command-panel>

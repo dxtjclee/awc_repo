@@ -1,0 +1,137 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "initialize": {
+            "actionType": "JSFunction",
+            "method": "initialize",
+            "inputData": {
+                "firstRequirement": "{{data.firstRequirement}}",
+                "secondRequirement": "{{data.secondRequirement}}"
+            },
+            "outputData": {
+                "firstRequirement": "firstRequirement",
+                "secondRequirement": "secondRequirement"
+            },
+            "deps": "js/ssp0CreateRequirementRelationService"
+        },
+        "createRelation": {
+            "actionType": "JSFunctionAsync",
+            "method": "createRelation",
+            "inputData": {
+                "relationName": "SSP0Requires"
+            },
+            "deps": "js/ssp0CreateRequirementRelationService",
+            "outputData": {
+                "output": "{{function:handlePartialErrorsFromSoa}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "ClosePopUpAction"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "ClosePopUpAction"
+                    }
+                ]
+            }
+        },
+        "ClosePopUpAction": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        },
+        "swapAction": {
+            "actionType": "JSFunction",
+            "method": "swapRequirements",
+            "inputData": {
+                "firstRequirement": "{{data.firstRequirement}}",
+                "secondRequirement": "{{data.secondRequirement}}"
+            },
+            "outputData": {
+                "firstRequirement": "firstRequirement",
+                "secondRequirement": "secondRequirement"
+            },
+            "deps": "js/ssp0CreateRequirementRelationService"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "initialize"
+    },
+    "onEvent": [
+        {
+            "eventId": "updateServiceData",
+            "action": "updateServiceDataAction"
+        },
+        {
+            "eventId": "ClosePopUpAction",
+            "action": "ClosePopUpAction"
+        }
+    ],
+    "functions": {
+        "createRelation": {
+            "functionName": "createRelation",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "handlePartialErrorsFromSoa": {
+            "functionName": "handlePartialErrorsFromSoa",
+            "parameters": [
+                "{{data}}"
+            ]
+        }
+    },
+    "data": {
+        "firstRequirement": {
+            "type": "STRING",
+            "dbValue": "",
+            "isEnabled": "true",
+            "isRequired": "true",
+            "isEditable": "true"
+        },
+        "swapCommand": {
+            "action": "swapAction",
+            "iconName": "cmdSwap",
+            "tooltip": "{{i18n.Swap}}"
+        },
+        "secondRequirement": {
+            "type": "STRING",
+            "dbValue": "",
+            "isEnabled": "true",
+            "isRequired": "true",
+            "isEditable": "true"
+        },
+        "firstRequirementLable": {
+            "displayName": "{{i18n.service_requirement}}",
+            "isRequired": "true",
+            "isEditable": "true"
+        },
+        "secondRequirementLabel": {
+            "displayName": "{{i18n.SetRequiresRelation}}",
+            "isRequired": "true",
+            "isEditable": "false"
+        }
+    },
+    "i18n": {
+        "Set": [
+            "ServicePlannerConstants"
+        ],
+        "Cancel": [
+            "ServicePlannerConstants"
+        ],
+        "service_requirement": [
+            "ServicePlannerConstants"
+        ],
+        "SetRequiresRelation": [
+            "ServicePlannerConstants"
+        ],
+        "Swap": [
+            "ServicePlannerConstants"
+        ]
+    }
+}

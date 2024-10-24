@@ -1,0 +1,51 @@
+{
+    "schemaVersion" : "1.0.0",
+    "data":{
+        "_provider": {
+            "priority": 0,
+            "label": {
+                "source": "/i18n/LibrarymgmtMessages",
+                "key": "libraryResultsTitle"
+            },
+            "clientScopeURI": "Awp0SearchResults",
+            "nameToken": "lbr1.LibraryResultsSubLocation",
+            "context": {
+                "search": {
+                    "provider": "Awp0FullTextSearchProvider",
+                    "sortType": "Priority",
+                    "chartTitle": {
+                        "source": "/i18n/SearchMessages",
+                        "key": "SearchResultsChartTitle"
+                    },
+                    "criteria": {
+                        "searchFromLocation": "global"
+                    },
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "tableViewProperties": ["object_name", "checked_out_user", "object_desc", "release_status_list", "fnd0InProcess", "ics_subclass_name"]
+                }
+            },
+            "breadcrumbConfig": {
+                "vm": "AwSearchBreadcrumb"
+            },
+            "viewBase": "Awp0Base"
+        },
+        "_headerTitle": null
+    },
+    "actions":{
+        "initializeLibrarySublocation": {
+            "actionType": "JSFunction",
+            "method": "initializeLibrarySublocation",
+            "inputData":{
+                "data":"{{data}}"
+            },
+            "outputData":{
+                "_headerTitle" :""      
+            },
+            "deps": "js/libSubLocationService"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "initializeLibrarySublocation"
+    }
+}

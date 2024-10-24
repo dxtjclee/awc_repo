@@ -1,0 +1,22 @@
+<aw-flex-column width="5">
+    <aw-flex-row height="12" exist-when="conditions.isContextAvailable">
+        <aw-selection-summary class="aw-serviceplanning-summary" selection="ctx.selectedVMO !== undefined && ctx.selectedVMO !== null ? ctx.selectedVMO : []" context="ctx.ssp0SecondaryPageContext" selection-data="data.selectionDataForSummary"> </aw-selection-summary>
+    </aw-flex-row>
+    <aw-splitter direction="HORIZONTAL"> </aw-splitter>
+    <aw-flex-row height="7">
+        <aw-panel-body height="7">
+            <aw-advanced-bar type="TOOLBAR">
+                <aw-flex-row height="3f">
+                    <aw-flex-column width="6">
+                        <aw-tab-set class="aw-mfe-tabs" tabs="data.tabModels" justify="center" align-content="center">
+                        </aw-tab-set>
+                    </aw-flex-column>
+                    <aw-flex-column align-content="end">
+                        <aw-command-bar anchor="Ssp0Parts_uiAnchor" alignment="HORIZONTAL" context="{...data.tabModel}"></aw-command-bar>
+                    </aw-flex-column>
+                </aw-flex-row>
+            </aw-advanced-bar>
+            <aw-include view-id="{{data.tabModel.viewId ? data.tabModel.viewId : data.tabModel.tabKey}}" name="{{data.tabModel.viewName ? data.tabModel.viewName : data.tabModel.tabKey}}" sub-panel-context="{...props.subPanelContext, ...data.tabModel}"> </aw-include>
+        </aw-panel-body>
+    </aw-flex-row>
+</aw-flex-column>

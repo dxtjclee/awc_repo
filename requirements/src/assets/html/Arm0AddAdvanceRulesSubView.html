@@ -1,0 +1,23 @@
+<aw-panel-body class="aw-requirements-importPanelBody">
+    <aw-listbox prop="data.importType" list="subPanelContext.sharedData.reqSpecEleTypeList" exist-when="subPanelContext.sharedData.reqSpecEleTypeList"></aw-listbox>
+    <aw-listbox prop="data.conditionProcessingType" list="data.conditionProcessingTypeList.dbValue"></aw-listbox>
+    <aw-panel-section>
+        <arm0-add-rules-cell vmo="item" options="data" aw-repeat="item : fields.conditionRules.conditionVMOs" ></arm0-add-rules-cell>
+    </aw-panel-section>
+    <div>
+        <aw-icon-button button-type="button" class="aw-layout-right" command="data.addCondition"></aw-icon-button>
+    </div>
+    <aw-command-panel-section caption="i18n.propertyRulesCaption" anchor="data.importFromWordRuleSubCommands" context='{subPanelContext:subPanelContext, importType:data.importType}'>
+        <aw-list dataprovider="data.dataProviders.dispPropRulesList">
+            <aw-include name="Arm0ImportPropRulesCell" sub-panel-context="item"></aw-include>
+        </aw-list>
+    </aw-command-panel-section>
+</aw-panel-body>
+<aw-panel-footer>
+    <aw-button action="addAdvanceRule" visible-when="conditions.isAddRuleVisible" enable-when="!conditions.isTextBoxEmpty">
+        <aw-i18n>i18n.Add</aw-i18n>
+    </aw-button>
+    <aw-button action="updateAdvanceRule" visible-when="conditions.isUpdateRuleVisible" enable-when="!conditions.isTextBoxEmpty">
+        <aw-i18n>i18n.update</aw-i18n>
+    </aw-button>
+</aw-panel-footer>

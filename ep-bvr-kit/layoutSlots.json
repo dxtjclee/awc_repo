@@ -1,0 +1,194 @@
+{
+  "slots": {
+    "mfeEpTaskHeaderSlot": {
+      "name": "mfe_header",
+      "view": "EpTaskHeader",
+      "activeWhen": {
+        "condition": "conditions.isOnEPTaskPage"
+      }
+    },
+    "mfeEpTaskBarSlot": {
+      "name": "mfe_taskBar",
+      "view": "MfeTaskbar",
+      "activeWhen": {
+        "condition": "conditions.isOnEPTaskPage"
+      }
+    },
+    "mfeEpToolbarRightSlot": {
+      "name": "mfe_toolbar",
+      "view": "EpToolBar",
+      "activeWhen": {
+        "condition": "conditions.isOnEPTaskPage"
+      }
+    },
+    "showManageHeaderPage": {
+      "name": "ep_taskNavigation",
+      "view": "EpHeaderPageName",
+      "activeWhen": {
+        "condition": "conditions.isOnManagePage"
+      }
+    },
+    "epHeaderNavSlot": {
+      "name": "ep_taskNavigation",
+      "view": "EpTaskNavigation",
+      "activeWhen": {
+        "condition": "conditions.isNotOnManagePage"
+      }
+    },
+    "epProductBOPCnIndicationbarSlot": {
+      "name": "mfe_taskbarLeftSlot",
+      "view": "EpCnIndication",
+      "activeWhen": {
+        "condition": "conditions.isOnProductBOPPage"
+      }
+    },
+    "epAssemblyPlanningSlot": {
+      "name": "mfe_taskbarLeftSlot",
+      "view": "EpBOPLowLevelTaskBarLeftBar",
+      "activeWhen": {
+        "condition": "conditions.isAssemblyPlanningPageAndProcessStructureLoaded"
+      }
+    },
+    "mfeEpIndicationbarSlot": {
+      "name": "mfe_taskbarLeftSlot",
+      "view": "EpBOPLowLevelTaskBarLeftBar",
+      "activeWhen": {
+        "condition": "conditions.isOnWIPage"
+      }
+    },
+    "epBalancingMfeTaskBarLeftSlot": {
+      "name": "mfe_taskbarLeftSlot",
+      "view": "EpLineBalancingMfeTaskbarLeftSlot",
+      "activeWhen": {
+        "condition": "conditions.isOnLBPage"
+      }
+    },
+    "lineLayoutPageTaskHeaderSlot": {
+      "name": "mfe_header",
+      "view": "LineLayoutPageHeader",
+      "activeWhen": {
+        "condition": "conditions.isOnLineLayoutPage"
+      }
+    },
+    "operationPlanningPageScopeSlot": {
+      "name": "mfe_taskbarLeftSlot",
+      "view": "EpOperationPlanningPageScope",
+      "activeWhen": {
+        "condition": "conditions.isOnOperationPlanningPage"
+      }
+    },
+    "operationPlanningPageTaskbarSlot": {
+      "name": "mfe_toolbar",
+      "view": "EpOperationPlanningPageTaskbar",
+      "activeWhen": {
+        "condition": "conditions.isOnOperationPlanningPage"
+      }
+    },
+    "operationPlanningPageHeaderSlot": {
+      "name": "ep_taskNavigation",
+      "view": "EpOperationsPlanningHeaderPageName",
+      "activeWhen": {
+        "condition": "conditions.isOnOperationPlanningPage"
+      }
+    },
+    "epBOPCnIndicationbarSlot": {
+      "name": "mfe_taskbarLeftSlot",
+      "view": "EpCnIndication",
+      "activeWhen": {
+        "condition": "conditions.isOnHighLevelPlanningPage"
+      }
+    },
+    "epHeaderScopeSlot": {
+      "name": "ep_taskScope",
+      "view": "EpHeaderScope",
+      "activeWhen": {
+        "condition": "conditions.shouldAddHeaderScopeSlot"
+      }
+    },
+    "epHeaderAdditionsSlot": {
+      "name": "ep_headerAdditions",
+      "view": "EpHeaderAdditions",
+      "activeWhen": {
+        "condition": "conditions.shouldAddHeaderScopeSlot"
+      }
+    }
+  },
+  "conditions": {
+    "isOnEPTaskPage": {
+      "expression": "ctx.locationContext['ActiveWorkspace:Location'] === 'easyplan'"
+    },
+    "isOnManagePage": {
+      "expression": "ctx.locationContext['ActiveWorkspace:SubLocation'] === 'manageWorkPackageNewSubLocation'"
+    },
+    "isNotOnManagePage": {
+      "expression": "ctx.locationContext['ActiveWorkspace:SubLocation'] !== 'manageWorkPackageNewSubLocation' && ctx.locationContext['ActiveWorkspace:SubLocation'] !== 'operationPlanning'"
+    },
+    "isOnProductBOPPage": {
+      "expression": "ctx.sublocation.nameToken==='functionalPlan' && ctx.state.params.tracking_cn && ctx.state.params.tracking_cn !== null"
+    },
+    "isAssemblyPlanningPageAndProcessStructureLoaded": {
+      "expression": {
+        "$or": [
+          {
+            "$and": [
+              {
+                "$source": "ctx.sublocation.nameToken",
+                "$query": {
+                  "$eq": "assemblyPlanning"
+                }
+              },
+              {
+                "$source": "ctx.epTaskPageContext.processStructure.uid",
+                "$query": {
+                  "$notNull": true
+                }
+              }
+            ]
+          },
+          {
+            "$and": [
+              {
+                "$source": "ctx.sublocation.nameToken",
+                "$query": {
+                  "$eq": "functionalPlan"
+                }
+              },
+              {
+                "$source": "ctx.epTaskPageContext.functionalPlan.uid",
+                "$query": {
+                  "$notNull": true
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "isOnWIPage": {
+      "expression": "ctx.sublocation.nameToken === 'workInstructions'"
+    },
+    "isOnLBPage": {
+      "expression": {
+        "$source": "ctx.sublocation.nameToken",
+        "$query": {
+          "$eq": "lineBalancing"
+        }
+      }
+    },
+    "isOnLineLayoutPage": {
+      "expression": "ctx.locationContext['ActiveWorkspace:SubLocation'] === 'lineLayoutPage'"
+    },
+    "isOnOperationPlanningPage": {
+      "expression": "ctx.sublocation && ctx.sublocation.nameToken && ctx.sublocation.nameToken === 'operationPlanning'"
+    },
+    "isOnHighLevelPlanningPage": {
+      "expression": "ctx.sublocation.nameToken==='highLevelPlanning' && ctx.state.params.tracking_cn && ctx.state.params.tracking_cn !== null"
+    },
+    "shouldAddHeaderScopeSlot": {
+      "expression": "conditions.isNotOnMBMAlignmentPage &&  ctx.sublocation.nameToken !== 'manageWorkPackageNewSubLocation' && ctx.sublocation.nameToken  !== 'globalMbomManager'"
+    },
+    "isNotOnMBMAlignmentPage": {
+      "expression": "ctx.sublocation.nameToken!=='multiBOMManager:ebomContextSublocation' && ctx.sublocation.nameToken!=='multiBOMManager:mbomContextSublocation'"
+    }
+  }
+}

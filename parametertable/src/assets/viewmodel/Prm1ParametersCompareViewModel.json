@@ -1,0 +1,299 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+    ],
+    "ports": {
+        "inputSelectionForSync": {
+            "syncObject": {}
+        }
+    },
+    "actions": {
+        "reveal":
+        {
+            "actionType": "JSFunction",
+            "method": "initializeCompareContext",
+            "inputData": {
+                "ctx": "{{ctx}}",
+                "paramCompareViewContext": "{{data.paramCompareViewContext}}"
+            },
+            "outputData": {
+                "paramCompareViewContext": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "condition": "data.paramCompareViewContext.ComparisonContextViewMode === 'table'",
+                        "name": "prm1CompareTable.loadComparisonContextTableView"
+                    },
+                    {
+                        "condition": "data.paramCompareViewContext.ComparisonContextViewMode === 'list'",
+                        "name": "prm1CompareTable.loadComparisonContextListView"
+                    }
+                ]
+            },
+            "deps": "js/prm1ParameterViewService"
+        },
+        "launchAddComparisonPanel": {
+            "actionType": "dialog",
+            "inputData": {
+                "options": {
+                    "view": "prm1ProductAddComparisonPanel",
+                    "parent": ".aw-layout-workarea",
+                    "placement": "right",
+                    "width": "SMALL",
+                    "height": "FULL",
+                    "isCloseVisible": false,
+                    "push": false
+                }
+            }
+        },
+        "processSyncAction": {
+            "actionType": "Sync",
+            "inputData": {
+                "port": "inputSelectionForSync",
+                "syncObject": "{{data.compareData}}"
+            }
+        },
+        "handleParameterSelectionChange":
+        {
+            "actionType": "JSFunction",
+            "method": "handleParameterSelectionChange",
+            "deps": "js/prm1ParameterViewService",
+            "inputData": {
+                "data":"{{data.eventData}}"
+            },
+            "outputData":{
+                "paramCompareViewContext.isPublishCommandEnabled":"isPublishCommandEnabled"
+            }
+        },
+        "initComparisonContextListDataProvider": {
+            "actionType": "dataProvider",
+            "method": "comparisonContextListDataProvider"
+        },
+        "initComparisonContextTableDataProvider": {
+            "actionType": "dataProvider",
+            "method": "ComparisonContextTableDataProvider"
+        },
+        "getComparisonContextData": {
+            "actionType": "JSFunction",
+            "method": "getComparisonContextData",
+            "inputData": {
+                "paramCompareViewContext": "{{data.paramCompareViewContext}}"
+            },
+            "outputData": {
+                "contextTotalFound": "totalFound",
+                "contextSearchResults": "searchResults"
+            },
+            "deps": "js/prm1ParameterViewService"
+        },
+        "handleLocationChange":{
+            "actionType": "JSFunction",
+            "method": "handleLocationChange",
+            "inputData": {
+                "paramCompareViewContext": "{{data.paramCompareViewContext}}"
+            },
+            "outputData": {
+                "compareData": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "uniformParamTable.applySync",
+                        "condition":"ctx.state.params && ctx.state.params.isReloadRequired===true"
+                    }
+                ]
+            },
+            "deps": "js/prm1ParameterViewService"
+        },
+        "doPostProcessing":{
+            "actionType": "JSFunction",
+            "method": "doPostProcessing",
+            "inputData": {
+                "paramCompareViewContext": "{{data.paramCompareViewContext}}"
+            },
+            "outputData": {
+                "paramCompareViewContext": "paramCompareViewContext"
+            },
+            "deps": "js/prm1ParameterViewService"
+        },
+        "updateComparisonContextSelection": {
+            "actionType": "JSFunction",
+            "method": "updateComparisonContextSelection",
+            "inputData": {
+                "data": "{{data}}",
+                "paramCompareViewContext": "{{data.paramCompareViewContext}}"
+            },
+            "outputData": {
+                "paramCompareViewContext": "paramCompareViewContext"
+            },
+            "deps": "js/prm1ParameterViewService"
+        }
+    },
+    "dataProviders": {
+        "comparisonContextListDataProvider": {
+            "action": "getComparisonContextData",
+            "response": "{{data.contextSearchResults}}",
+            "totalFound": "{{data.contextTotalFound}}",
+            "selectionModelMode": "multiple",
+            "commandsAnchor": "aw_ComparisonElementList"
+        },
+        "ComparisonContextTableDataProvider": {
+            "action": "getComparisonContextData",
+            "response": "{{data.contextSearchResults}}",
+            "totalFound": "{{data.contextTotalFound}}",
+            "selectionModelMode": "multiple",
+            "commandsAnchor": "aw_ComparisonElementTable"
+        }
+    },
+    "grids": {
+        "ComparisonContextTable": {
+            "dataProvider": "ComparisonContextTableDataProvider",
+            "columnProvider": "ComparisonContextTableColumnProvider",
+            "addIconColumn": true,
+            "gridOptions": {
+                "enableGridMenu": false,
+                "enablePinning": false,
+                "enableSorting": false,
+                "maxRowsToShow": 3
+            }
+        }
+    },
+    "columnProviders": {
+        "ComparisonContextTableColumnProvider": {
+            "columns": [
+            {
+                "name": "object_name",
+                "displayName": "{{i18n.Name}}",
+                "width": 200,
+                "enableColumnHiding": false
+            },
+            {
+                "name": "object_type",
+                "displayName": "{{i18n.Type}}",
+                "width": 200,
+                "enableColumnHiding": false
+            },
+            {
+                "name": "object_desc",
+                "displayName": "{{i18n.Description}}",
+                "minWidth": 40,
+                "width": 200,
+                "enableColumnHiding": false
+            },
+            {
+                "name": "owning_user",
+                "displayName": "{{i18n.OwningUser}}",
+                "maxWidth": 400,
+                "minWidth": 40,
+                "width": 200,
+                "enableColumnHiding": false
+            }
+        ]
+        }
+    },
+    "conditions": {},
+    "functions": {},
+    "data": {
+        "paramCompareViewContext": {
+            "initialValues": {
+            },
+            "meta": {
+            }
+        },
+        "isPublishCommandEnabled": false
+    },
+    "lifecycleHooks":
+    {
+        "onMount":"reveal",
+        "onUnmount":"doPostProcessing"
+    },
+    "messages": {},
+    "onEvent": [
+        {
+            "eventId": "uniformParamTable.applySync",
+            "cacheEventData": true,
+            "action": "processSyncAction"
+        },
+        {
+            "eventId": "prm1CompareTable.loadComparisonContextTable",
+            "action": "initComparisonContextTableDataProvider"
+        },
+        {
+            "eventId": "prm1CompareTable.loadComparisonContextTableView",
+            "action": "initComparisonContextTableDataProvider"
+        },
+        {
+            "eventId": "prm1CompareTable.loadComparisonContextListView",
+            "action": "initComparisonContextListDataProvider"
+        },
+        {
+            "eventId": "prm1CompareTable.showAddComparisonPanel",
+            "action": "launchAddComparisonPanel"
+        },
+        {
+            "eventId": "ComparisonContextTableDataProvider.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "updateComparisonContextSelection"
+        },
+        {
+            "eventId": "comparisonContextListDataProvider.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "updateComparisonContextSelection"
+        },
+        {
+            "eventId": "uniformParamTable.selectionChanged",
+            "cacheEventData": true,
+            "action": "handleParameterSelectionChange"
+        },
+        {
+            "eventId":"LOCATION_CHANGE_COMPLETE",
+            "action":"handleLocationChange"
+        }
+    ],
+    "ctx" : {
+        "paramCompareViewContext" : {
+            "type" : "object"
+        },
+        "selected":{
+            "type" : "object"
+         }
+    },
+    "i18n": {
+        "ComparisonSectionTitle": [
+            "prm1ParameterTableMessages"
+        ],
+        "Revision": [
+            "prm1ParameterTableMessages"
+        ],
+        "Variant": [
+            "prm1ParameterTableMessages"
+        ],
+        "Units": [
+            "prm1ParameterTableMessages"
+        ],
+        "Expansion": [
+            "prm1ParameterTableMessages"
+        ],
+        "Date": [
+            "prm1ParameterTableMessages"
+        ],
+        "NoVariantRule": [
+            "prm1ParameterTableMessages"
+        ],
+        "Today": [
+            "prm1ParameterTableMessages"
+        ],
+        "OwningUser": [
+            "prm1ParameterTableMessages"
+        ],
+        "Name": [
+            "prm1ParameterTableMessages"
+        ],
+        "Type": [
+            "prm1ParameterTableMessages"
+        ],
+        "Description": [
+            "prm1ParameterTableMessages"
+        ]
+    }
+}

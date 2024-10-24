@@ -1,0 +1,169 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-splm-table.directive"
+    ],
+    "actions": {
+
+        "loadData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableData",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}",
+                "htmlSpecTmplContent": "{{subPanelContext.rmHtmlSpecLocnState.HTML_SPEC_TEMPLATE_CONTENT}}",
+                "maxTreeLevel": "{{data.maxTreeLevel}}",
+                "treeLoadInput": "request.treeLoadInput"
+            },
+            "outputData": {
+                "treeLoadResult": "treeLoadResult"
+            },
+            "deps": "js/Arm0HTMLSpecTemplateTree"
+        },
+        "validateSelection": {
+            "actionType": "JSFunction",
+            "method": "validateSelection",
+            "inputData": {
+                "selectedObject": "{{data.dataProviders.htmlSpecDataProvider.selectedObjects[0]}}"
+            },
+            "deps": "js/Arm0HTMLSpecTemplateTree"
+        },
+        "expandNode": {
+            "actionType": "JSFunction",
+            "method": "expandNode",
+            "inputData": {
+                "data": "{{data}}",
+                "parentObjectUid": "{{data.eventData.parentObjectUid}}"
+            },
+            "deps": "js/Arm0HTMLSpecTemplateTree"
+        },
+        "refreshTreeDataProvider": {
+            "actionType": "dataProvider",
+            "method": "htmlSpecDataProvider"
+        },
+        "selectTreeObjForCrossProb":
+        {
+            "actionType": "JSFunction",
+            "method": "selectTreeObjForCrossProb",
+            "inputData":
+            {
+                "data": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/Arm0HTMLSpecTemplateTree"
+        }
+    },
+    "lifecycleHooks": {
+        "onUpdate": [ {
+            "action": "refreshTreeDataProvider",
+            "observers": [ "subPanelContext.context.rmHtmlSpecLocnState.HTML_SPEC_TEMPLATE_CONTENT" ]
+        } ]
+    },
+    "data": {
+
+        "treeData": {
+
+            "Name of document": "Alenia Small",
+            "Specification Type": "Requirement Specification",
+            "SubTypes": [ { "typeName": "Requirement", "displayTypeName": "Requirement" }, { "typeName": "Paragraph", "displayTypeName": "Paragraph" }, { "typeName": "Test", "displayTypeName": "Test" } ],
+            "level": 0,
+            "uniqueID": "uniqueID1",
+            "Word_file_Ticket": "file ticket for the word file in case of re-preview",
+            "children": []
+        },
+        "maxTreeLevel": {
+            "displayName": "",
+            "type": "INTEGER",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "100",
+            "dispValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        },
+        "treeColumns": [
+            {
+                "name": "object_name",
+                "displayName": "{{i18n.nameLabel}}",
+                "minWidth": 150,
+                "width": 250,
+                "isTreeNavigation": true
+            },
+            {
+                "name": "object_type",
+                "displayName": "{{i18n.specType}}",
+                "minWidth": 150,
+                "width": 150
+            }
+        ]
+    },
+    "dataProviders": {
+        "htmlSpecDataProvider": {
+            "action": "loadData",
+            "initializeAction": "loadData",
+            "nextAction": "loadData",
+            "previousAction": "loadData",
+            "treeLoadResult": "{{data.treeLoadResult}}",
+            "inputData": {
+                "accessMode": "tree"
+            }
+        }
+
+    },
+    "columnProviders": {
+        "htmlSpecColumnProvider": {
+            "columns": "{{data.treeColumns}}",
+            "soaEnabled": false,
+            "sortCriteria": []
+        }
+    },
+    "grids": {
+        "htmlSpecTreeTable": {
+            "dataProvider": "htmlSpecDataProvider",
+            "columnProvider": "htmlSpecColumnProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "useStaticFirstCol": true,
+                "enableDragAndDrop": false,
+                "enablePinning": false,
+                "enableSorting": false
+            }
+        }
+    },
+
+    "onEvent": [
+
+        {
+            "eventId": "htmlSpecDataProvider.selectionChangeEvent",
+            "action": "validateSelection"
+        },
+
+        {
+            "eventId": "importPreview.refreshTreeDataProvider",
+            "action": "refreshTreeDataProvider"
+        },
+        {
+
+            "eventId": "aceElementsSelectionUpdatedEvent",
+            "action": "selectTreeObjForCrossProb",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            },
+            "cacheEventData": true
+        },
+        {
+
+            "eventId": "Arm0HTMLSpecTemplateTree.expandNode",
+            "action": "expandNode",
+            "cacheEventData": true
+        }
+
+    ],
+    "i18n": {
+        "nameLabel":[
+            "RequirementsCommandPanelsMessages"
+        ],
+        "specType":[
+            "RequirementsCommandPanelsMessages"
+        ]
+    }
+}

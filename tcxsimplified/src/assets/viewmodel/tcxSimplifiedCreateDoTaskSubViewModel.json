@@ -1,0 +1,552 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel-section.directive",
+        "js/aw-command-panel.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-scrollpanel.directive",
+        "js/aw-default-cell.directive",
+        "js/aw-list.directive",
+        "js/aw-i18n.directive",
+        "js/aw-widget.directive",
+        "js/aw-button.directive"
+    ],
+    "data": {
+        "activeView": "tcxSimplifiedCreateTaskAttachmentSub",
+        "previousView": "",
+        "taskName": {
+            "displayName": "{{i18n.taskName}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "isEditable": "true",
+            "numberOfLines": 1,
+            "dbValue": "To Do: "
+        },
+        "priority": {
+            "dbValue": "",
+            "displayName": "{{i18n.priority}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "hasLov": "true",
+            "dataProvider": "getPriorityTypes"
+        },
+        "dueDate": {
+            "displayName": "{{i18n.dueDate}}",
+            "type": "DATE",
+            "isRequired": "false",
+            "dbValue": "",
+            "isEditable": "true",
+            "validationCriteria": [{
+                "condition": "conditions.isInvalidDueDate",
+                "value": "{{i18n.dueDateValidationErrorMessage}}"
+            }]
+        },
+        "description": {
+            "displayName": "{{i18n.description}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "dbValue": "",
+            "maxLength": 270,
+            "numberOfLines": 4
+        },
+        "priorityTypeListBoxValues": [
+            {
+                "propDisplayValue": "{{i18n.low}}",
+                "propInternalValue": "Low"
+            },
+            {
+                "propDisplayValue": "{{i18n.medium}}",
+                "propInternalValue": "Medium"
+            },
+            {
+                "propDisplayValue": "{{i18n.high}}",
+                "propInternalValue": "High"
+            },
+            {
+                "propDisplayValue": "{{i18n.urgent}}",
+                "propInternalValue": "Urgent"
+            }
+        ],
+        "targetContextObject": {},
+        "targetsSelectionData": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "assignedUserObject": {},
+        "assignedUserSelectionData": {
+            "initialValues": {},
+            "meta": {}
+        }
+    },
+    "dataProviders": {
+        "attachTargets": {
+            "response": "{{data.targetContextObject.modelObjects}}",
+            "totalFound": "{{data.targetContextObject.modelObjects.length}}",
+            "totalLoaded": "{{data.targetContextObject.modelObjects.length}}",
+            "selectionModelMode": "multiple",
+            "inputData": {
+                "selectionData": "{{fields.targetsSelectionData}}"
+            }
+        },
+        "getPriorityTypes": {
+            "response": "{{data.priorityTypeListBoxValues}}"
+        },
+        "attachAssignedUsers": {
+            "response": "{{data.assignedUserObject.modelObjects}}",
+            "totalFound": "{{data.assignedUserObject.modelObjects.length}}",
+            "totalLoaded": "{{data.assignedUserObject.modelObjects.length}}",
+            "selectionModelMode": "multiple",
+            "inputData": {
+                "selectionData": "{{fields.assignedUserSelectionData}}"
+            }
+        }
+    },
+    "actions": {
+        "onMountAction": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "loadWorkflowTemplates"
+                },
+                {
+                    "action": "populateCreateTaskDetails"
+                },
+                {
+                    "action": "setTaskName"
+                },
+                {
+                    "action": "initTargetPanel"
+                },
+                {
+                    "action": "initAssignedUsersPanel"
+                },
+                {
+                    "action": "setCreateTaskState"
+                }
+            ]
+        },
+        "onUnMountAction": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "saveCreateTaskState"
+                }
+            ]
+        },
+        "saveCreateTaskState": {
+            "actionType": "JSFunction",
+            "method": "saveCreateTaskState",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/createTaskService"
+        },
+        "setTaskName": {
+            "actionType": "JSFunction",
+            "method": "setTaskName",
+            "inputData": {
+                "taskName": "{{data.taskName}}"
+            },
+            "outputData": {
+                "taskName": ""
+            },
+            "deps": "js/createTaskService"
+        },
+        "setCreateTaskState": {
+            "actionType": "JSFunction",
+            "method": "setCreateTaskState",
+            "inputData": {
+                "taskName": "{{data.taskName}}",
+                "priority": "{{data.priority}}",
+                "dueDate": "{{data.dueDate}}",
+                "description": "{{data.description}}",
+                "sharedData":"{{props.subPanelContext.sharedData}}"
+            },
+            "outputData": {
+                "taskName": "taskName",
+                "priority": "priority",
+                "dueDate": "dueDate",
+                "description": "description"
+            },
+            "deps": "js/createTaskService"
+        },
+        "initTargetPanel": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "populateTargetsData"
+                },
+                {
+                    "action": "initDataProvider"
+                }
+            ]
+        },
+        "initDataProvider": {
+            "actionType": "dataProvider",
+            "method": "attachTargets"
+        },
+        "populateTargetsData": {
+            "actionType":"JSFunction",
+            "method":"populateTargetsData",
+            "inputData":{
+                "sharedData": "{{props.subPanelContext.sharedData}}",
+                "data":"{{data}}"
+            },
+            "outputData": {
+                "targetContextObject": ""
+            },
+            "deps":"js/createTaskService"
+        },
+        "initAssignedUsersPanel": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "populateAssignedUsersData"
+                },
+                {
+                    "action": "initUsersDataProvider"
+                }
+            ]
+        },
+        "initUsersDataProvider": {
+            "actionType": "dataProvider",
+            "method": "attachAssignedUsers"
+        },
+        "populateAssignedUsersData": {
+            "actionType":"JSFunction",
+            "method":"populateAssignedUsersData",
+            "inputData":{
+                "sharedData": "{{props.subPanelContext.sharedData}}"
+            },
+            "outputData": {
+                "assignedUserObject": ""
+            },
+            "deps":"js/createTaskService"
+        },
+        "updateTargetSelection": {
+            "actionType":"JSFunction",
+            "method":"populateTargetsData",
+            "inputData":{
+                "context": "{{data.targetContextString}}",
+                "sourceObjects": "{{props.targetObjects}}",
+                "selectedObjects": "{{dataProviders.attachTargets.selectedObjects}}"
+            },
+            "outputData": {
+                "targetContextObject": ""
+            },
+            "deps":"js/createTaskService"
+        },
+        "create": {
+            "actionType": "TcSoaService",
+            "serviceName": "Workflow-2008-06-Workflow",
+            "method": "createInstance",
+            "inputData": {
+                "startImmediately": true,
+                "name": "{{data.taskName.dbValue}}",
+                "contextData": {
+                    "deadlineDate": "",
+                    "processTemplate": "Cad Design Simple Task",
+                    "attachmentCount": "{{data.targetContextObject.modelObjects.length}}",
+                    "attachments": "{{function:getTargetUids}}",
+                    "attachmentTypes": "{{function:getAttachmentTypes}}"
+                }
+            },
+            "outputData": {
+                "createdProcess": "ServiceData.created[0]",
+                "allModelObjects": "ServiceData.modelObjects",
+                "partialErrors": "ServiceData.partialErrors",
+                "empTaskCreated": "{{function:getTaskObject}}"
+            },
+            "deps": "js/createTaskService",
+            "events": {
+                "success": [
+                    {
+                        "name": "postCreateTask.setProperties"
+                    },
+                    {
+                        "name": "submissionSuccessful",
+                        "eventData": {
+                            "createChangeData": "{{data}}"
+                        }
+                    },
+                    {
+                        "name": "workflow.updateTaskCount"
+                    },
+                    {
+                        "name": "primaryWorkarea.reset",
+                        "condition": "ctx.editInProgress && ( ctx.ViewModeContext && (ctx.ViewModeContext.ViewModeContext === 'TreeView' || ctx.ViewModeContext.ViewModeContext === 'TreeSummaryView' ||  ctx.ViewModeContext.ViewModeContext === 'TableSummaryView' || ctx.ViewModeContext.ViewModeContext === 'TableView'))"
+                    },
+                    {
+                        "name": "primaryWorkarea.reset",
+                        "condition": "data.createdProcess && ctx.locationContext['ActiveWorkspace:Location'] === 'com.siemens.splm.client.inbox.tasksLocation'"
+                    },
+                    {
+                        "name": "primaryWorkarea.reset",
+                        "condition": "data.createdProcess && subPanelContext.pageContext.secondaryActiveTabId === 'tc_xrt_Tasks'"
+                    }    
+                ]
+            },
+            "actionMessages": {
+                "failure":
+                [
+                    {
+                        "message": "createTaskFailure",
+                        "condition": "data.partialErrors.length > 0"
+                    }
+                ],
+                "success":
+                [
+                    {
+                        "message": "createDoTaskSuccessMessage"
+                    }
+                ]
+
+            }
+        },
+        "loadWorkflowTemplates":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Workflow-2013-05-Workflow",
+            "method": "getWorkflowTemplates",
+            "inputData":
+            {
+                "input": [{
+                    "clientId": "allTemplates",
+                    "getFiltered": false
+                }]
+            },
+            "policy":
+            {
+                "types":
+                [
+                    {
+
+                        "name": "EPMTaskTemplate",
+                        "properties":
+                        [
+                            {
+                                "name": "template_name"
+                            },
+                            {
+                                "name": "object_desc"
+                            },
+                            {
+                                "name": "subtask_template"
+                            },
+                            {
+                                "name": "fnd0Instructions"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "outputData":
+            {
+                "allTemplates": "templatesOutput[0].workflowTemplates"
+            }
+        },
+        "populateCreateTaskDetails": {
+            "actionType": "JSFunction",
+            "method": "populateCreateTaskDetails",
+            "inputData": {
+               "allTemplates": "{{data.allTemplates}}",
+               "workflowTemplatesProp": "{{data.workflowTemplates}}"
+            },
+            "outputData": {
+                "templates": "templatesObjects",
+                "workflowTemplates" : "workflowTemplatesProp"
+            },
+            "deps": "js/createTaskService"
+        },
+        "callSetPropertiesSOA": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "callSetPropertiesForEpmTask"
+                },
+                {
+                    "action": "callSetPropertiesForEpmDoTask"
+                }
+            ]
+        },
+        "callSetPropertiesForEpmTask": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-09-DataManagement",
+            "method": "setProperties",
+            "inputData": {
+                "info": [
+                    {
+                        "object": "{{data.empTaskCreated.empTask}}",
+                        "vecNameVal": [
+                            {
+                                "name": "object_desc",
+                                "values": ["{{data.description.dbValue}}"]
+                            },
+                            {
+                                "name": "fnd0Priority",
+                                "values": ["{{data.priority.uiValue}}"]
+                            },
+                            {
+                                "name": "due_date",
+                                "values": ["{{function:convertToIsoString}}"]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "deps": "js/createTaskService"
+        },
+        "callSetPropertiesForEpmDoTask": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-09-DataManagement",
+            "method": "setProperties",
+            "inputData": {
+                "info": [
+                    {
+                        "object": "{{data.empTaskCreated.empDoTask}}",
+                        "vecNameVal": [
+                            {
+                                "name": "object_desc",
+                                "values": ["{{data.description.dbValue}}"]
+                            },
+                            {
+                                "name": "fnd0Priority",
+                                "values": ["{{data.priority.uiValue}}"]
+                            },
+                            {
+                                "name": "due_date",
+                                "values": ["{{function:convertToIsoString}}"]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "deps": "js/createTaskService",
+            "events": {
+                "success": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            }
+        },
+        "validateDueDate": {
+            "actionType": "JSFunction",
+            "method": "validateDueDate",
+            "inputData": {
+                "dueDateDateObj": "{{data.dueDate.dateApi.dateObject}}"
+            },
+            "outputData": {
+                "isInvalidDueDate": "isInvalidDueDate"
+            },
+            "deps": "js/createTaskService"
+        },
+        "onDueDateValidationChange": {
+            "actionType": "JSFunction",
+            "method": "updateField",
+            "inputData": {
+                "fields": "{{fields}}",
+                "fieldNameToUpdate": "dueDate"
+            },
+            "deps": "js/createTaskService"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "onMountAction",
+        "onUnmount": "onUnMountAction",
+        "onUpdate": [
+            {
+                "action": "validateDueDate",
+                "observers": ["viewModel.data.dueDate.dbValue"]
+            },
+            {
+                "action": "onDueDateValidationChange",
+                "observers": ["viewModel.data.isInvalidDueDate"]
+            }
+        ]
+    },
+    "onEvent": [
+        {
+            "eventId": "postCreateTask.setProperties",
+            "action": "callSetPropertiesSOA"
+        },
+        {
+            "eventId": "awPanel.reveal",
+            "criteria":
+            {
+                "panelId": "tcxSimplifiedCreateDoSub"
+            },
+            "action": "onMountAction"
+        },
+        {
+            "eventId": "createTask.reloadTargetDataProvider",
+            "action": "initDataProvider"
+        },
+        {
+            "eventId": "createTask.reloadAssineeDataProvider",
+            "action": "initUsersDataProvider"
+        }
+    ],
+    "functions": {
+        "getTargetUids": {
+            "functionName": "getTargetUids",
+            "parameters": ["{{data.targetContextObject}}", "{{data.assignedUserObject}}","{{props.subPanelContext.sharedData.value}}","{{data.workflowTemplates}}"]
+        },
+        "getAttachmentTypes": {
+            "functionName": "getAttachmentTypes",
+            "parameters": ["{{data.targetContextObject}}", "{{data.assignedUserObject}}"]
+        },
+        "getTaskObject": {
+            "functionName": "getTaskObject"
+        },
+        "convertToIsoString": {
+            "functionName": "convertToIsoString",
+            "parameters": ["{{data.dueDate.dbValue}}"]
+        }
+    },
+    "conditions": {
+        "isInvalidDueDate": {
+            "expression": "data.isInvalidDueDate"
+        },
+        "isValidToCreate": {
+            "expression": "data.taskName.dbValue && !conditions.isInvalidDueDate"
+        }
+    },
+    "messages": {
+        "createTaskFailure": {
+            "messageType": "ERROR",
+            "messageText": "{{data.partialErrors[0].errorValues[0].message}}"
+        },
+        "createDoTaskSuccessMessage": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.createTaskSubmitSuccess}}",
+            "messageTextParams":
+            [
+                "{{data.taskName.dbValue}}"
+            ]
+        }
+    },
+    "i18n": {
+        "createDoTask": ["tcxsimplifiedMessages"],
+        "taskName": ["tcxsimplifiedMessages"],
+        "priority": ["tcxsimplifiedMessages"],
+        "dueDate": ["tcxsimplifiedMessages"],
+        "dueDateValidationErrorMessage": ["tcxsimplifiedMessages"],
+        "description": ["tcxsimplifiedMessages"],
+        "createTask": ["tcxsimplifiedMessages"],
+        "taskDefinition": ["tcxsimplifiedMessages"],
+        "taskData":["tcxsimplifiedMessages"],
+        "add": [ "tcxsimplifiedMessages" ],
+        "remove":["tcxsimplifiedMessages"],
+        "createTaskSubmitSuccess": ["tcxsimplifiedMessages"],
+        "low":["tcxsimplifiedMessages"],
+        "medium":["tcxsimplifiedMessages"],
+        "high":["tcxsimplifiedMessages"],
+        "urgent":["tcxsimplifiedMessages"],
+        "assignee":["tcxsimplifiedMessages"]
+    }
+}

@@ -1,0 +1,275 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data": {
+        "xrtState": {
+            "initialValues": {
+                "deepCopyDatas": ""
+            },
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        },
+        "createFollowUpQualityAudit": {
+            "displayName": "{{i18n.qa0CreateFollowUpQualityAudit}}",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT",
+            "dbValue": 0,
+            "type": "BOOLEAN"
+        },
+        "objName" : {
+            "displayName": "{{i18n.qualityAudittitle}}"
+        }
+    },
+    "actions": {
+        "initializeAuditSaveAs": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "updateStatewithCurrentSelection"
+                },
+                {
+                    "action": "getSuccessorRelation"
+                }
+            ]
+        },
+        "updateStatewithCurrentSelection": {
+            "actionType": "JSFunction",
+            "method": "initializeSelectedData",
+            "inputData": {
+                "subPanelContext":  "{{props.subPanelContext}}"
+            },
+            "outputData" : {
+                "saveAsPanelContext": ""
+            },
+            "deps": "js/qa0AuditSaveAsService"
+        },
+        "getSuccessorRelation": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "clientScopeURI": ""
+                },
+                "searchInput": {
+                    "attributesToInflate": [],
+                    "maxToLoad": 110,
+                    "maxToReturn": 110,
+                    "providerName": "Awp0ReferencesProvider",
+                    "searchCriteria": {
+                        "parentUid": "{{props.subPanelContext.selectionData.selected[0].uid}}"
+                    },
+                    "startIndex": 0
+                }
+            },
+            "outputData": {
+                "totalFound": "totalFound"
+            }
+        },
+        "createNewObject": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2012-09-DataManagement",
+            "method": "saveAsObjectAndRelate",
+            "inputData":
+            {
+                "saveAsInput": "{{function:prepareSaveAsInput}}",
+                "relateInfo": [ {
+                    "relate": true
+                } ]
+            },
+            "outputData": {
+                "ServiceData": "ServiceData",
+                "createdAudit": "output[0].objects[0]"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "createRelationEvent",
+                        "condition": "data.createFollowUpQualityAudit.dbValue"
+                    },
+                    {
+                        "name": "complete",
+                        "condition": "!data.createFollowUpQualityAudit.dbValue",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ],
+                "failure": [
+                    {
+                        "condition": "data.ServiceData.partialErrors.length > 0",
+                        "name": "qa0AuditSaveAsFailureMessageEvent"
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [ {
+                    "message": "SaveAsObjectSuccess"
+                } ]
+            },
+            "deps": "js/Awp0ShowSaveAsService"
+        },
+        "createRelation": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "createRelations",
+            "deps": "js/qa0AuditUtils",
+            "inputData": {
+                "input": [ {
+                    "primaryObject": "{{props.subPanelContext.selectionData.selected[0]}}",
+                    "secondaryObject": "{{data.createdAudit}}",
+                    "relationType": "Qa0QualityAuditSuccessorRel",
+                    "clientId": "",
+                    "userData": {
+                        "uid": "AAAAAAAAAAAAAA",
+                        "type": "unknownType"
+                    }
+                } ]
+            },
+            "outputData": {
+                "ServiceData": "ServiceData",
+                "updateElementResponse": "",
+                "updatedObject": "ServiceData.updated[0]",
+                "errorMessage": "{{function:populateErrorString}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{ctx.selected}}"
+                            ],
+                            "refreshLocationFlag": true
+                        }
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ],
+                "failure": [ {
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "condition": "data.ServiceData.partialErrors.length > 0",
+                        "message": "displayError"
+                    }
+                ]
+            }
+        },
+        "qa0AuditSaveAsFailureAction": {
+            "actionType": "JSFunction",
+            "method": "populateErrorString",
+            "deps": "js/qa0AuditUtils",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "errorMessage": ""
+            },
+            "actionMessages": {
+                "success": [ {
+                    "message": "displayError"
+                } ]
+            }
+        }
+    },
+    "editHandlers": {
+        "saveAsNewEditHandler": {
+            "context": "SAVEAS_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "dataParseDefinitions": {
+        "convertSavedAsObject": {
+            "outputFormatType": "ViewModelObject",
+            "dataInput": "saveAsTrees[0].objectCopy.uid",
+            "operationType": "CREATE"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "createRelationEvent",
+            "action" : "createRelation"
+        },
+        {
+            "eventId": "auditSaveAs",
+            "action" : "createNewObject"
+        },
+        {
+            "eventId": "qa0AuditSaveAsFailureMessageEvent",
+            "action": "qa0AuditSaveAsFailureAction"
+        }
+    ],
+    "lifecycleHooks": {
+        "onMount": "initializeAuditSaveAs"
+    },
+    "functions": {
+        "prepareSaveAsInput":{
+            "functionName":"getSaveAsInput",
+            "parameters": [
+                "{{data}}",
+                "{{data.saveAsPanelContext}}",
+                "{{xrtState.deepCopyDatas}}",
+                "{{editHandlers.saveAsNewEditHandler}}"
+            ]
+        }
+    },
+    "messages": {
+        "SaveAsObjectSuccess": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.qa0SaveAsObjectSuccess}}",
+            "messageTextParams": [
+                "{{data.createdAudit.props.object_name.dbValues[0]}}"
+            ]
+        },
+        "displayError": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.qa0PartialError}}",
+            "messageTextParams": [
+                "{{data.errorMessage}}"
+            ]
+        }
+    },
+    "conditions": {},
+    "i18n": {
+        "qa0SaveAs": [
+            "qualityauditMessages"
+        ],
+        "qa0CreateFollowUpQualityAudit": [
+            "qualityauditMessages"
+        ],
+        "qa0SaveAsObjectSuccess" : [
+            "qualityauditMessages"
+        ],
+        "qa0PartialError": [
+            "qualityauditMessages"
+        ]
+    }
+}

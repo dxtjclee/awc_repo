@@ -1,0 +1,307 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "occContext": {
+            "initialValues": {
+                "selectedModelObjects": [],
+                "viewKey": "",
+                "productContextInfo": null,
+                "elementToPCIMapCount": null,
+                "supportedFeatures": null,
+                "skipReloadOnConfigParamChange": true
+            },
+            "meta": {}
+        },
+        "provider": {
+            "label": "{{i18n.assemblyPlanningTitle}}",
+            "priority": 3,
+            "name": "assemblyPlanning",
+            "clientScopeURI": "assemblyPlanning",
+            "nameToken": "assemblyPlanning"
+        },
+        "tabConfig": {
+            "tabTitle": "{{i18n.epProcessTreeTitle}}",
+            "tabKey": "ApProcessTree"
+        },
+        "assemblyTabsConfigForClassicBOP": {
+            "tabs": [ {
+                    "name": "{{i18n.assemblyTreeTitle}}",
+                    "tabKey": "EpAssemblyTree"
+                },
+                {
+                    "name": "{{i18n.boeTreeTitle}}",
+                    "tabKey": "AssemblyPlanningBoeTree"
+                },
+                {
+                    "name": "{{i18n.backgroundPartsTitle}}",
+                    "tabKey": "EpBackgroundPartsTree"
+                }
+            ]
+        },
+        "assemblyTabsConfigForPlantBOP": {
+            "tabs": [ {
+                    "name": "{{i18n.targetAssembliesTitle}}",
+                    "tabKey": "EpAssemblyTree"
+                },
+                {
+                    "name": "{{i18n.boeTreeTitle}}",
+                    "tabKey": "AssemblyPlanningBoeTree"
+                }
+            ],
+            "cmdDisplayOption": "toolbarBelowTabs"
+        },
+        "detailsTabsConfig": {
+            "tabs": [ {
+                    "name": "{{i18n.partTitle}}",
+                    "tabKey": "WiPartsTable",
+                    "loadInputObject": {
+                        "propertiesToLoad": [ "Mfg0all_material" ]
+                    }
+                },
+                {
+                    "name": "{{i18n.resourcesTitle}}",
+                    "tabKey": "WiResourcesTable",
+                    "loadInputObject": {
+                        "propertiesToLoad": [ "Mfg0used_equipment" ]
+                    }
+                },
+                {
+                    "name": "{{i18n.workareaTitle}}",
+                    "tabKey": "EpWorkareaTable",
+                    "loadInputObject": {
+                        "propertiesToLoad": [ "Mfg0assigned_workarea" ]
+                    }
+                },
+                {
+                    "name": "{{i18n.summaryTitle}}",
+                    "tabKey": "EpInformation",
+                    "xrtType": "SUMMARY",
+                    "noElementSelectedMessageForXRT": [ {
+                        "text": "{{i18n.epInformationNoSelectionMessage}}"
+                    } ]
+                },
+                {
+                    "name": "{{i18n.filesTitle}}",
+                    "tabKey": "EpFiles",
+                    "xrtType": "SUMMARY",
+                    "loadInputObject": {
+                        "propertiesToLoad": [ "mbc0AttachedFiles" ]
+                    }
+                },
+                {
+                    "name": "{{i18n.documentsTitle}}",
+                    "tabKey": "EpDocuments",
+                    "xrtType": "SUMMARY",
+                    "loadInputObject": {
+                        "loadTypes": [ "GetWeblinks" ],
+                        "propertiesToLoad": [ "mbc0AssignedDocuments" ],
+                        "loadedObjectMapKeys": [ "WebLink" ]
+                    }
+                },
+                {
+                    "name": "{{i18n.externalFlowsTitle}}",
+                    "namePrefix": "{{i18n.externalFlowsTitle}}",
+                    "tabKey": "EpExternalFlows",
+                    "loadInputObject": {
+                        "loadTypes": [
+                            "GetScopeFlows"
+                        ],
+                        "relatedObjectMapKey": [
+                            "ExternalPredecessors",
+                            "ExternalSuccessors"
+                        ]
+                    }
+                },
+                {
+                    "name": "{{i18n.inspectionTitle}}",
+                    "tabKey": "EpInspectionDefinitionsTable",
+                    "loadTypes": [ "GetInspectionDefinition" ],
+                    "relatedObjectMapKey": [ "InspectionDefinitions" ],
+                    "loadInputObject": {
+                        "loadTypes": [ "GetInspectionDefinition" ],
+                        "relatedObjectMapKey": [
+                            "InspectionDefinitions"
+                        ]
+                    }
+                },
+                {
+                    "name": "{{i18n.dcdsTitle}}",
+                    "tabKey": "EpDCDsTable",
+                    "loadInputObject": {
+                        "propertiesToLoad": [ "mes0DCDNodes" ]
+                    }
+                }
+            ]
+        }
+    },
+    "actions": {
+        "updateVisibleTabs": {
+            "actionType": "batchJob",
+            "steps": [ {
+                "action": "showBackgroundTab",
+                "condition": "conditions.isTCPlatformValidForDIPA"
+            } ]
+        },
+        "showBackgroundTab": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "assemblyTabsConfigForPlantBOP": {
+                    "tabs": [ {
+                            "name": "{{i18n.targetAssembliesTitle}}",
+                            "tabKey": "EpAssemblyTree"
+                        },
+                        {
+                            "name": "{{i18n.boeTreeTitle}}",
+                            "tabKey": "AssemblyPlanningBoeTree"
+                        },
+                        {
+                            "name": "{{i18n.backgroundPartsTitle}}",
+                            "tabKey": "EpDynamicInProcessAssemblyTree"
+                        }
+                    ],
+                    "cmdDisplayOption": "toolbarBelowTabs"
+                }
+            },
+            "outputData": {
+                "assemblyTabsConfigForPlantBOP": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        }
+    },
+    "conditions": {
+        "isScopeObjectAvailableForPP":{
+            "expression":"ctx.ep.scopeObject"
+        },
+        "isPlantBOPScope": {
+            "expression": "ctx.ep.scopeObject.modelType.typeHierarchyArray.includes('Mfg0BvrProcessArea')"
+        },
+        "isTCMajorVersionGreaterThan14": {
+            "expression": {
+                "$source": "ctx.tcSessionData.tcMajorVersion",
+                "$query": {
+                    "$gt": "14"
+                }
+            }
+        },
+        "isTCMajorVersionEqualTo14": {
+            "expression": {
+                "$source": "ctx.tcSessionData.tcMajorVersion",
+                "$query": {
+                    "$eq": "14"
+                }
+            }
+        },
+        "isTCMinorVersionGreaterThan2": {
+            "expression": {
+                "$source": "ctx.tcSessionData.tcMinorVersion",
+                "$query": {
+                    "$gt": "2"
+                }
+            }
+        },
+        "isTCMinorVersionEqualTo2": {
+            "expression": {
+                "$source": "ctx.tcSessionData.tcMinorVersion",
+                "$query": {
+                    "$eq": "2"
+                }
+            }
+        },
+        "isTCQRMNumberGreaterThanOrEqual1": {
+            "expression": {
+                "$source": "ctx.tcSessionData.tcQRMNumber",
+                "$query": {
+                    "$gte": "1"
+                }
+            }
+        },
+        "isReadOnlyMode": {
+            "expression": "ctx.mfgReadOnlyMode.readOnlyMode"
+        },
+        "isTCPlatformValidForDIPA": {
+            "expression": {
+                "$or": [ {
+                        "$source": "conditions.isTCMajorVersionGreaterThan14",
+                        "$query": {
+                            "$eq": true
+                        }
+                    },
+                    {
+                        "$source": "conditions.isTCVersionGreaterThan_14_2",
+                        "$query": {
+                            "$eq": true
+                        }
+                    },
+                    {
+                        "$source": "conditions.isTCVersionGreaterThanOrEqualTo_14_2_0_1",
+                        "$query": {
+                            "$eq": true
+                        }
+                    }
+                ]
+            }
+        },
+        "isTCVersionGreaterThan_14_2": {
+            "expression": {
+                "$and": [ {
+                        "$source": "conditions.isTCMajorVersionEqualTo14",
+                        "$query": {
+                            "$eq": true
+                        }
+                    },
+                    {
+                        "$source": "conditions.isTCMinorVersionGreaterThan2",
+                        "$query": {
+                            "$eq": true
+                        }
+                    }
+                ]
+            }
+        },
+        "isTCVersionGreaterThanOrEqualTo_14_2_0_1": {
+            "expression": {
+                "$and": [ {
+                        "$source": "conditions.isTCMajorVersionEqualTo14",
+                        "$query": {
+                            "$eq": true
+                        }
+                    },
+                    {
+                        "$source": "conditions.isTCMinorVersionEqualTo2",
+                        "$query": {
+                            "$eq": true
+                        }
+                    },
+                    {
+                        "$source": "conditions.isTCQRMNumberGreaterThanOrEqual1",
+                        "$query": {
+                            "$eq": true
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "i18n": {
+        "assemblyPlanningTitle": [ "AssemblyMessages" ],
+        "epProcessTreeTitle": [ "AssemblyMessages" ],
+        "assemblyTreeTitle": [ "AssemblyMessages" ],
+        "boeTreeTitle": [ "AssemblyMessages" ],
+        "backgroundPartsTitle": [ "BackgroundPartsMessages" ],
+        "partTitle": [ "DetailsMessages" ],
+        "resourcesTitle": [ "DetailsMessages" ],
+        "workareaTitle": [ "DetailsMessages" ],
+        "summaryTitle": [ "DetailsMessages" ],
+        "filesTitle": [ "DetailsMessages" ],
+        "documentsTitle": [ "DetailsMessages" ],
+        "epInformationNoSelectionMessage": [ "DetailsMessages" ],
+        "dcdsTitle": [ "DetailsMessages" ],
+        "externalFlowsTitle": [ "DetailsMessages" ],
+        "inspectionTitle": [ "DetailsMessages" ],
+        "targetAssembliesTitle": [ "AssemblyMessages" ]
+    },
+    "lifecycleHooks": {
+        "onMount": "updateVisibleTabs"
+    }
+}

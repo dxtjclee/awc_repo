@@ -1,0 +1,25 @@
+<aw-command-panel caption="i18n.programRelation">
+    <aw-panel-header>
+        <aw-back-button title="i18n.addButtonTitle" action="Psi0ProgramRelationPanel"></aw-back-button>
+    </aw-panel-header>
+    <div class="aw-layout-flexColumn" show-when="conditions.isActiveStateAddPanel">
+        <aw-add target-object='ctx.locationContext.modelObject' relations=""
+          include-types="{{data.includeTypes}}" type-filter="{{data.typeFilter}}"
+          type-override-id="PP" add-panel-state="fields.addPanelState"
+          active-state="data.activeState" project-state="data.projectState"
+          xrt-state="data.xrtState" edit-handler="editHandlers.addPanelEditHandler">
+        </aw-add>
+        <!-- Panel footer-->
+        <aw-panel-footer>
+            <!-- panel-footer button for New tab -->
+            <aw-button action="createAndRelateObject" visible-when="conditions.isNewTabAddButtonVisible" enable-when="awPanelBody.$valid">
+                <aw-i18n>i18n.addButtonTitle</aw-i18n>
+            </aw-button>
+            <!-- panel-footer button for Palette and Search tab -->
+            <aw-button action="addRelationFromPaletteAndSearch" visible-when="conditions.isPaletteTabAddButtonVisible || conditions.isSearchTabAddButtonVisible">
+                <aw-i18n>i18n.addButtonTitle</aw-i18n>
+            </aw-button>
+        </aw-panel-footer>
+    </div>
+    <aw-add-navigate active-state="data.activeState" project-state="data.projectState" action="actions.setActiveView"></aw-add-navigate>
+</aw-command-panel>

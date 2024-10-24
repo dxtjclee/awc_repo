@@ -1,0 +1,87 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+
+    },
+    "conditions": {
+
+    },
+    "onEvent": [ {
+        "eventId": "loadContentHeader",
+        "action": "loadContentHeader"
+    },
+    {
+        "eventId": "contentHeaderAction",
+        "action": "contentHeaderAction"
+    }
+ ],
+    "actions": {
+        "loadContentHeader": {
+            "actionType": "JSFunction",
+            "method": "loadContentHeader",
+            "inputData": {},
+            "outputData": {
+                "vrHeaderViewContext": ""
+            },
+            "deps": "js/Crt1VRContentService"
+        },
+        "getPropertiesForReleaseVersion": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData": {
+                "objects": [
+                    "{{data.ctx.vr_previousSelectionForExecute}}"
+                ],
+                "attributes": [
+                    "crt0ReleaseVersions"
+                ]
+            },
+            "events": {
+                "success": [ {
+                    "name": "loadContentHeader"
+                } ]
+            }
+        },
+        "getSoftwareDeployedStatus":{
+            "actionType": "JSFunction",
+            "method": "getSoftwareDeployedStatus",
+            "inputData": { },
+            "outputData": {
+                "isSoftwareDeployed": "isSoftwareDeployed"
+            },
+            "events": {
+                "success": [ {
+                    "name": "contentHeaderAction"
+                } ]
+            },
+            "deps": "js/Crt1VRContentService"
+        },
+        "contentHeaderAction": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "getPropertiesForReleaseVersion",
+                    "condition": "data.isSoftwareDeployed === true"
+                },
+                {
+                    "action": "loadContentHeader",
+                    "condition": "data.isSoftwareDeployed === false"
+                }
+            ]
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "getSoftwareDeployedStatus"
+    },
+    "i18n": {
+        "ExecuteTest": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "ManageContextTitle": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "SoftwareRelease": [
+            "AnalysisRequestCommandPanelsMessages"
+        ]
+    }
+}

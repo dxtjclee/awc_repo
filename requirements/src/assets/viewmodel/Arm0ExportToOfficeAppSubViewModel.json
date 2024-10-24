@@ -1,0 +1,887 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+
+    "actions": {
+        "reveal": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2014-11-RequirementsManagement",
+            "method": "getExportTemplates",
+            "inputData": {
+                "filter": [
+                    {
+                        "inputObjects": "{{ctx.mselected}}",
+                        "templateTypes": [
+                            "SpecTemplate",
+                            "ExcelTemplate",
+                            "ObjectTemplate",
+                            "SpecElementRevisionSubTypes"
+                        ]
+                    }
+                ]
+            },
+            "outputData": {
+                "response": "{{function:processExportTemplatesResponse}}"
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "condition": "errorCode.code==141080",
+                        "message": "notificationForExportFailureMsg"
+                    }
+                ]
+            },
+            "deps": "js/Arm0ExportToOfficeApp"
+        },
+        "initializreveal": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "initialize"
+                },
+                {
+                    "action": "reveal"
+                }
+            ]
+        },
+        "updateCheckoutButtonState": {
+            "actionType": "JSFunction",
+            "method": "updateCheckoutButtonState",
+            "inputData": {
+                "occContext": "{{subPanelContext.occContext}}",
+                "selectedObjs": "{{ctx.mselected}}",
+                "checkOutOptionValue": "{{ctx.preferences.REQ_checkout_objects_before_export[0]}}",
+                "implicitCheckOutPref": "{{ctx.preferences.TC_Enable_Implicit_CO[0]}}",
+                "showCheckOutOption": "{{ctx.preferences.Show_Checkout_option[0]}}"
+            },
+            "outputData": {
+                "checkOutWord.dbValue": "checkOutWord.dbValue",
+                "checkOutWord.isEnabled": "checkOutWord.isEnabled",
+                "checkOutExcel.dbValue": "checkOutExcel.dbValue",
+                "checkOutExcel.isEnabled": "checkOutExcel.isEnabled"
+            },
+            "deps": "js/Arm0ExportToOfficeApp"
+        },
+        "addOverride": {
+            "actionType": "JSFunction",
+            "method": "addOverride",
+            "inputData":
+            {
+                "overrideTypes": "{{data.overrideTypes}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "outputData": {
+                "overrideTypes": ""
+            },
+            "deps": "js/Arm0ExportToOfficeApp"
+        },
+        "removeOverride": {
+            "actionType": "JSFunction",
+            "method": "removeOverride",
+            "inputData": {
+                "overrideTypes": "{{data.overrideTypes}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "outputData": {
+                "overrideTypes": ""
+            },
+            "deps": "js/Arm0ExportToOfficeApp"
+        },
+        "initializeExportTypes": {
+            "actionType": "JSFunction",
+            "method": "initializeExportTypes",
+            "inputData": {
+                "exportType1": "{{data.exportType1}}"
+            },
+            "outputData": {
+                "exportType": ""
+            },
+            "deps": "js/Arm0ExportToOfficeApp"
+        },
+        "initializeSearchType": {
+            "actionType": "JSFunction",
+            "method": "initializeSearchType",
+            "inputData": {
+                "searchLocation": "{{ctx.sublocation.historyNameToken}}"
+            },
+            "outputData": {
+                "searchLocation": ""
+            },
+            "deps": "js/Arm0ExportToOfficeApp"
+        },
+        "initialize": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "initializeExportTypes"
+                },
+                {
+                    "action": "initializeSearchType"
+                }
+            ]
+        },
+        "exportSearchResultsBatchJob": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "export",
+                    "condition": "conditions.isExportAllowed && !data.exportType1.dbValue"
+                },
+                {
+                    "action": "exportFullTextSearch",
+                    "condition": "data.searchLocation === 'teamcenter_search_search' && data.exportType1.dbValue"
+                },
+                {
+                    "action": "exportAdvancedSearch",
+                    "condition": "data.searchLocation === 'teamcenter_search_advancedSearch' && data.exportType1.dbValue "
+                }
+            ]
+        },
+        "export": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2017-06-RequirementsManagement",
+            "method": "exportToApplication3",
+            "inputData": {
+                "input": [ {
+                    "templateName": "{{function:getTemplateName}}",
+                    "applicationFormat": "{{function:getApplicationFormat}}",
+                    "objectsToExport": "{{function:getObjectsToExport}}",
+                    "targetObjectsToExport": "{{function:getTargetObjectsToExport}}",
+                    "exportOptions": "{{function:getExportOptionValue}}",
+                    "recipeSourceObjects": [],
+                    "recipeTargetObjects": [],
+                    "attributesToExport": [],
+                    "objectTemplateInputs": "{{function:getOverrideType}}",
+                    "includeAttachments": "{{function:getIsIncludeAttachment}}"
+                } ]
+            },
+
+            "outputData": {
+                "fileTicket": "transientFileReadTickets[0]"
+            },
+
+            "events": {
+                "success": [
+                    {
+                        "name": "layout.showToolInfo",
+                        "eventData": {
+                            "visible": false
+                        }
+                    },
+                    {
+                        "name": "complete",
+                        "condition": "runInBackgroundExcel.dbValue",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ],
+
+                "failure": [{
+                    "condition": "errorCode.code==223201",
+                    "name": "layout.showToolInfo",
+                    "eventData": {
+                        "visible": false
+                    }
+                }
+                ]
+            },
+
+            "actionMessages": {
+                "failure": [ {
+                        "condition": "errorCode.code==223201",
+                        "message": "notificationForFlatListExportMsg"
+                    },
+                    {
+                        "condition": "errorCode.code != 223201",
+                        "message": "exportGenericFailureMessage"
+                    }
+                ],
+                "success": [
+                    {
+                        "message": "notificationForExportRunInBackgroundMsg",
+                        "condition": "data.exportOption.dbValue && runInBackgroundExcel.dbValue "
+                    },
+                {
+                    "message": "notificationForExportRunInBackgroundMsg",
+                    "condition": "!data.exportOption.dbValue && (runInBackgroundWord.dbValue || data.exportWordActivity.dbValue==='withAttachment') && !data.compare.dbValue "
+                },
+                {
+                     "message": "notificationForCompareMsg",
+                     "condition": "!data.exportOption.dbValue && data.compare.dbValue && ctx.mselected.length==2"
+                }
+            ]
+
+            },
+
+            "deps": "js/Arm0ExportToOfficeApp"
+        },
+        "exportFullTextSearch": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2018-12-Finder",
+            "method": "exportSearchResults",
+            "inputData": {
+                "searchInput": {
+                    "attributesToInflate": ["{{function:getTemplateName}}","{{function:getIsRunInBackground}}"],
+                    "maxToLoad": "{{function:getDefaultPageSize}}",
+                    "maxToReturn": "{{function:getDefaultPageSize}}",
+                    "providerName": "{{subPanelContext.searchState.provider}}",
+                    "searchCriteria": "{{subPanelContext.searchState.criteria}}",
+                    "searchFilterFieldSortType": "{{subPanelContext.searchState.sortType}}",
+                    "searchFilterMap": "{{subPanelContext.searchState.activeFilterMap}}",
+                    "searchSortCriteria": "",
+                    "cursor": {
+                        "startIndex": 0
+                    }
+                },
+                "columnConfig": {
+                    "columnConfigId": "{{subPanelContext.searchState.columnConfig.columnConfigId}}",
+                    "operationType": "{{subPanelContext.searchState.columnConfig.operationType}}",
+                    "columns": "{{subPanelContext.searchState.columnConfig.columns}}"
+                },
+                "exportAll": "{{data.exportType1.dbValue}}",
+                "selectedObjectUIDs": "{{function:getSelectedUids}}",
+                "applicationFormat": "{{function:getApplicationFormat}}"
+            },
+            "outputData": {
+                "fileTicket": "transientFileReadTickets[0]"
+            },
+            "events": {
+                "success": [ {
+                        "name": "layout.showToolInfo",
+                        "eventData": {
+                            "visible": false
+                        }
+                    },
+                    {
+                        "name": "complete",
+                        "condition": "runInBackgroundExcel.dbValue",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ],
+
+                "failure": [ {
+                        "condition": "errorCode.code==223201",
+                        "name": "layout.showToolInfo",
+                        "eventData": {
+                            "visible": false
+                        }
+                    }
+                ]
+            },
+
+            "actionMessages": {
+                "failure": [ {
+                        "condition": "errorCode.code==223201",
+                        "message": "notificationForFlatListExportMsg"
+                    },
+                    {
+                        "condition": "errorCode.code != 223201",
+                        "message": "exportGenericFailureMessage"
+                    }
+                ],
+                "success": [ {
+                    "message": "notificationForExportRunInBackgroundMsg",
+                    "condition": "data.exportOption.dbValue && runInBackgroundExcel.dbValue && (data.exportType1.dbValue || !data.exportType1.dbValue)"
+                },
+                {
+                    "message": "notificationForExportRunInBackgroundMsg",
+                    "condition": "!data.exportOption.dbValue && (runInBackgroundWord.dbValue || data.exportWordActivity.dbValue==='withAttachment') && !data.compare.dbValue && (data.exportType1.dbValue || !data.exportType1.dbValue)"
+                },
+                {
+                    "message": "notificationForCompareMsg",
+                    "condition": "!data.exportOption.dbValue && data.compare.dbValue && ctx.mselected.length==2"
+                }
+            ]
+
+            },
+            "deps": "js/Arm0ExportToOfficeApp"
+        },
+        "exportAdvancedSearch": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2018-12-Finder",
+            "method": "exportSearchResults",
+            "inputData": {
+                "searchInput": {
+                    "attributesToInflate": ["{{function:getTemplateName}}","{{function:getIsRunInBackground}}"],
+                    "maxToLoad": "{{function:getDefaultPageSize}}",
+                    "maxToReturn": "{{function:getDefaultPageSize}}",
+                    "providerName": "Awp0SavedQuerySearchProvider",
+                    "searchCriteria": "{{subPanelContext.searchState.advancedSearchCriteria}}",
+                    "searchFilterFieldSortType": "Priority",
+                    "searchFilterMap6": {},
+                    "searchSortCriteria": "{{ctx.sublocation.sortCriteria}}",
+                    "cursor": {
+                        "startIndex": 0
+                    }
+                },
+                "columnConfig": {
+                    "columnConfigId": "{{subPanelContext.searchState.columnConfig.columnConfigId}}",
+                    "operationType": "{{subPanelContext.searchState.columnConfig.operationType}}",
+                    "columns": "{{subPanelContext.searchState.columnConfig.columns}}"
+                },
+                "exportAll": "{{data.exportType1.dbValue}}",
+                "selectedObjectUIDs": "{{function:getSelectedUids}}",
+                "applicationFormat": "{{function:getApplicationFormat}}"
+            },
+
+            "outputData": {
+                "fileTicket": "transientFileReadTickets[0]"
+            },
+            "events": {
+                "success": [ {
+                        "name": "layout.showToolInfo",
+                        "eventData": {
+                            "visible": false
+                        }
+                    },
+                    {
+                        "name": "complete",
+                        "condition": "runInBackgroundExcel.dbValue",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ],
+
+                "failure": [ {
+                        "condition": "errorCode.code==223201",
+                        "name": "layout.showToolInfo",
+                        "eventData": {
+                            "visible": false
+                        }
+                    }
+                ]
+            },
+
+            "actionMessages": {
+                "failure": [ {
+                        "condition": "errorCode.code==223201",
+                        "message": "notificationForFlatListExportMsg"
+                    },
+                    {
+                        "condition": "errorCode.code != 223201",
+                        "message": "exportGenericFailureMessage"
+                    }
+                ],
+                "success": [ {
+                    "message": "notificationForExportRunInBackgroundMsg",
+                    "condition": "data.exportOption.dbValue && runInBackgroundExcel.dbValue && (data.exportType1.dbValue || !data.exportType1.dbValue)"
+                },
+                {
+                    "message": "notificationForExportRunInBackgroundMsg",
+                    "condition": "!data.exportOption.dbValue && (runInBackgroundWord.dbValue || data.exportWordActivity.dbValue==='withAttachment') && !data.compare.dbValue && (data.exportType1.dbValue || !data.exportType1.dbValue)"
+                },
+                {
+                    "message": "notificationForCompareMsg",
+                    "condition": "!data.exportOption.dbValue && data.compare.dbValue && ctx.mselected.length==2"
+                }
+            ]
+
+            },
+                "deps": "js/Arm0ExportToOfficeApp"
+        },
+        "loadCells": {
+            "actionType": "dataProvider",
+            "method": "overrideTypeList"
+        },
+
+        "doExportDocument": {
+            "actionType": "JSFunction",
+            "method": "openFile",
+            "inputData": {
+                "data": "{{data.fileTicket}}"
+            },
+            "deps": "js/fmsUtils"
+        },
+
+        "getExportWordActivityOptions": {
+            "actionType": "JSFunction",
+            "method": "getExportWordActivityOptions",
+            "inputData": {
+                "selectedObjs": "{{ctx.mselected}}",
+                "options": "{{data.exportWordActivityListIn.dbValue}}",
+                "preferencs": "{{ctx.preferences.REQ_Export_WithAddin[0]}}"
+            },
+            "outputData": {
+                "exportWordActivityOptions": ""
+            },
+            "deps": "js/Arm0ExportToOfficeApp"
+        },
+
+        "getExportExcelActivityOptions": {
+            "actionType": "JSFunction",
+            "method": "getExportExcelActivityOptions",
+            "inputData": {
+                "selectedObjs": "{{ctx.mselected}}",
+                "options": "{{data.exportExcelActivityListIn.dbValue}}",
+                "preferencs": "{{ctx.preferences.REQ_Export_WithAddin[0]}}"
+            },
+            "outputData": {
+                "exportExcelActivityOptions": ""
+            },
+            "deps": "js/Arm0ExportToOfficeApp"
+        }
+    },
+
+    "lifecycleHooks": {
+        "onMount": "initializreveal",
+        "onUpdate": [
+            {
+                "action": "updateCheckoutButtonState",
+                "observers": [ "viewModel.response" ]
+            },
+            {
+                "action": "addOverride",
+                "observers": [ "props.subPanelContext.sharedData.newOverrideType" ]
+            },
+            {
+                "action": "removeOverride",
+                "observers": [ "props.subPanelContext.sharedData.removeOverrideType" ]
+            },
+            {
+                "action": "loadCells",
+                "observers": [ "viewModel.overrideTypes" ]
+            },
+            {
+                "action": "reveal",
+                "observers": [ "props.subPanelContext.selectionData.selected" ]
+            },
+            {
+                "action": "doExportDocument",
+                "observers": [ "viewModel.fileTicket" ]
+            }
+        ]
+    },
+
+    "data": {
+        "exportType1": {
+            "displayName": "",
+            "type": "BOOLEAN",
+            "isEditable": "true",
+            "dbValue": false,
+            "vertical": true,
+            "labelPosition": "NO_PROPERTY_LABEL",
+            "propertyRadioTrueText": "{{i18n.allResult}}",
+            "propertyRadioFalseText": "{{i18n.selectedResults}}"
+        },
+        "exportOption": {
+            "displayName": "{{i18n.Awp0ExportWithTemplate}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "propertyRadioTrueText": "{{i18n.excelOption}}",
+            "propertyRadioFalseText": "{{i18n.wordOption}}",
+            "dbValue": true,
+            "labelPosition": "PROPERTY_LABEL_AT_LEFT_CENTER"
+        },
+
+        "activity": {
+            "displayName": "{{i18n.activity}}",
+            "name": "activityListBox",
+            "type": "STRING",
+            "isRequired": true,
+            "dataProvider": "activityListBoxDataProvider",
+            "dbValue": "view",
+            "dispValue": "{{i18n.view}}"
+        },
+
+        "exportWordActivityListIn": {
+            "type": "STRING",
+            "dbValue": [
+                {
+                    "propDisplayValue": "{{i18n.view}}",
+                    "propInternalValue": "view"
+                },
+                {
+                    "propDisplayValue": "{{i18n.liveEdit}}",
+                    "propInternalValue": "liveEdit"
+                },
+                {
+                    "propDisplayValue": "{{i18n.withAttachment}}",
+                    "propInternalValue": "withAttachment"
+                }
+            ]
+        },
+
+        "exportExcelActivityListIn": {
+            "type": "STRING",
+            "dbValue": [
+                {
+                    "propDisplayValue": "{{i18n.view}}",
+                    "propInternalValue": "view"
+                },
+                {
+                    "propDisplayValue": "{{i18n.liveEdit}}",
+                    "propInternalValue": "liveEdit"
+                },
+                {
+                    "propDisplayValue": "{{i18n.bulkliveEdit}}",
+                    "propInternalValue": "bulkliveEdit"
+                },
+                {
+                    "propDisplayValue": "{{i18n.editImport}}",
+                    "propInternalValue": "editImport"
+                }
+            ]
+        },
+
+
+        "exportWordActivity": {
+            "displayName": "{{i18n.activity}}",
+            "name": "exportWordActivityListBox",
+            "type": "STRING",
+            "isRequired": true,
+            "dataProvider": "exportWordActivityListBoxDataProvider",
+            "dbValue": "view",
+            "dispValue": "{{i18n.view}}"
+        },
+
+        "specTemplates": {
+            "displayName": "{{i18n.template}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "hasLov": true
+        },
+
+        "excelTemplates": {
+            "displayName": "{{i18n.template}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "hasLov": true
+        },
+
+        "compare": {
+            "displayName": "{{i18n.compare}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+
+        "checkOutWord": {
+            "displayName": "{{i18n.checkOut}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+
+        "includeAttachments": {
+            "displayName": "{{i18n.includeAttachments}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+
+        "checkOutExcel": {
+            "displayName": "{{i18n.checkOut}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+
+        "runInBackgroundExcel": {
+            "displayName": "{{i18n.runinBG}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "dbValue": false,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+
+        "runInBackgroundWord": {
+            "displayName": "{{i18n.runinBG}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "dbValue": false,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "exportCommands": "arm0_exportCommands"
+    },
+
+    "preferences": [
+        "Show_Checkout_option",
+        "REQ_checkout_objects_before_export",
+        "TC_Enable_Implicit_CO",
+        "REQ_Export_WithAddin"
+    ],
+
+    "functions": {
+        "getTemplateName": {
+            "functionName": "getTemplateName",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+
+        "getApplicationFormat": {
+            "functionName": "getApplicationFormat",
+            "parameters": [
+                "{{data}}",
+                "{{conditions.toExportForCompare}}"
+            ]
+        },
+
+        "getExportOptionValue": {
+            "functionName": "getExportOptionValue",
+            "parameters": [
+                "{{data}}",
+                "{{conditions.toExportForCompare}}"
+            ]
+        },
+        "getOverrideType": {
+            "functionName": "getOverrideType",
+            "parameters": [
+                "{{data}}",
+                "{{conditions.toExportForCompare}}"
+            ]
+        },
+        "getIsIncludeAttachment": {
+            "functionName": "getIsIncludeAttachment",
+            "parameters": [
+                "{{data}}",
+                "{{conditions.toExportForCompare}}"
+            ]
+        },
+        "getObjectsToExport": {
+            "functionName": "getObjectsToExport",
+            "parameters": [
+                "{{data}}",
+                "{{conditions.toExportForCompare}}",
+                "{{ctx.mselected}}"
+            ]
+        },
+        "getTargetObjectsToExport": {
+            "functionName": "getTargetObjectsToExport",
+            "parameters": [
+                "{{data}}",
+                "{{conditions.toExportForCompare}}",
+                "{{ctx.mselected}}"
+            ]
+        },
+        "processExportTemplatesResponse": {
+            "functionName": "processExportTemplatesResponse",
+            "parameters": [
+                "{{data}}",
+                "{{ctx}}",
+                "{{subPanelContext.sharedData}}"
+            ]
+        },
+        "getDefaultPageSize": {
+            "functionName": "getDefaultPageSize",
+            "parameters": [
+                "{{ctx.preferences.AWC_DefaultPageSize}}"
+            ]
+        },
+        "getSelectedUids": {
+            "functionName": "getSelectedUids",
+            "parameters": [
+                "{{ctx}}"
+            ]
+        },
+        "getIsRunInBackground":{
+            "functionName": "getIsRunInBackground",
+            "parameters": [
+                "{{data}}"
+            ]
+        }
+    },
+
+    "messages": {
+        "exportGenericFailureMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        },
+        "notificationForFlatListExportMsg": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.notificationForFlatListExport}}",
+            "messageTextParams": [
+                "{{ctx.mselected[0].props.object_string.uiValues[0]}}"
+            ]
+        },
+
+        "notificationForCompareMsg": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.notificationForCompare}}",
+            "messageTextParams": [
+                "{{ctx.mselected[0]}}",
+                "{{ctx.mselected[1]}}"
+            ]
+        },
+        "notificationForExportRunInBackgroundMsg": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.notificationForExportRInB}}",
+            "messageTextParams": [
+                "{{ctx.mselected[0]}}"
+            ]
+        },
+        "notificationForExportFailureMsg": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.notificationForExportFailure}}"
+        }
+    },
+
+    "conditions": {
+        "isCompareAllowed": {
+            "expression": "!data.exportOption.dbValue && ctx.mselected.length==2 && data.specTemplates.dbValue.length>0"
+        },
+
+        "isExportAllowed": {
+            "expression": "(!data.exportOption.dbValue && data.specTemplates.dbValue.length>0) || (data.exportOption.dbValue && data.activity.dbValue.length>0 && data.excelTemplates.dbValue.length>0 ) "
+        },
+
+        "toVisibleWordCheckOutButton": {
+            "expression": "!data.exportOption.dbValue && data.exportWordActivity.dbValue==='liveEdit' && !conditions.toExportForCompare"
+        },
+
+        "toVisibleExcelCheckOutButton": {
+            "expression": "data.exportOption.dbValue && (data.activity.dbValue==='liveEdit' || data.activity.dbValue==='bulkliveEdit')"
+        },
+
+        "toVisibleRunInBackgroundExcelButton": {
+            "expression": "data.exportOption.dbValue  && conditions.isExportAllowed && (data.exportType1.dbValue || !data.exportType1.dbValue)"
+        },
+
+        "toVisibleRunInBackgroundWordButton": {
+            "expression": "!data.exportOption.dbValue  && conditions.isExportAllowed && data.exportWordActivity.dbValue!=='withAttachment' && !conditions.toExportForCompare && (data.exportType1.dbValue || !data.exportType1.dbValue)"
+        },
+
+        "toVisibleExportButton": {
+            "expression": "conditions.isExportAllowed"
+        },
+
+        "toVisibleIncludeAttachmentsButton": {
+            "expression": "!data.exportOption.dbValue && !conditions.toExportForCompare"
+        },
+        "toVisibleOverrideTypes": {
+            "expression": "!data.exportOption.dbValue && !conditions.toExportForCompare"
+        },
+        "toExportForCompare": {
+            "expression": "conditions.isCompareAllowed && data.compare.dbValue"
+        },
+        "singleSelectionItemRevision": {
+            "expression": "ctx.mselected.length === 1 && ctx.mselected[0].modelType.typeHierarchyArray.indexOf( 'ItemRevision' ) > 0"
+        },
+        "asShownVisible": {
+            "expression": "!props.subPanelContext.sharedData"
+        },
+        "is4GDObject": {
+            "expression": "ctx.selected.uid.endsWith('AWB4GD')"
+        },
+        "isExportToOfficeTempalteValidNonAce": {
+            "expression": "!props.subPanelContext.occContext&&(ctx.selected.modelType.typeHierarchyArray.indexOf( 'WorkspaceObject' ) > -1)"
+        },
+        "isExportToOfficeTempalteValidAce": {
+            "expression": "props.subPanelContext.occContext&&(ctx.selected.modelType.typeHierarchyArray.indexOf( 'Awb0ConditionalElement' ) > -1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'ItemRevision' ) > -1)"
+        },
+        "isExportToOfficeTempalteValid": {
+            "expression": "( ctx.mselected.length > 0 )&&(!props.subPanelContext.occContext&&(ctx.selected.modelType.typeHierarchyArray.indexOf( 'WorkspaceObject' ) > -1) ||props.subPanelContext.occContext&&(ctx.selected.modelType.typeHierarchyArray.indexOf( 'Awb0ConditionalElement' ) > -1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'ItemRevision' ) > -1))&& ( !conditions.is4GDObject)"
+        },
+        "isExportoAllResultbuttonVisible":{
+            "expression":"(data.searchLocation === 'teamcenter_search_search' || data.searchLocation === 'teamcenter_search_advancedSearch')"
+        }
+    },
+
+    "i18n": {
+        "wordOption": [
+            "RequirementsCommandPanelsMessages"
+        ],
+
+        "excelOption": [
+            "RequirementsCommandPanelsMessages"
+        ],
+
+        "template": [
+            "RequirementsCommandPanelsMessages"
+        ],
+
+        "compare": [
+            "RequirementsCommandPanelsMessages"
+        ],
+
+        "export": [
+            "RequirementsCommandPanelsMessages"
+        ],
+
+        "view": [
+            "RequirementsCommandPanelsMessages"
+        ],
+
+        "liveEdit": [
+            "RequirementsCommandPanelsMessages"
+        ],
+
+        "bulkliveEdit": [
+            "RequirementsCommandPanelsMessages"
+        ],
+
+        "editImport": [
+            "RequirementsCommandPanelsMessages"
+        ],
+
+        "notificationForCompare": [
+            "RequirementsCommandPanelsMessages"
+        ],
+
+        "checkOut": [
+            "RequirementsCommandPanelsMessages"
+        ],
+
+        "runinBG": [
+            "RequirementsCommandPanelsMessages"
+        ],
+
+        "notificationForFlatListExport": [
+            "RequirementsCommandPanelsMessages"
+        ],
+
+        "notificationForExportRInB": [
+            "RequirementsCommandPanelsMessages"
+        ],
+
+        "overrideTypeTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "includeAttachments": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "withAttachment": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "selectedResults": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "allResults": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "asShown": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "activity": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "notificationForExportFailure": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "allResult" :[
+            "RequirementsCommandPanelsMessages"
+        ],
+        "Awp0ExportWithTemplate":[
+            "RequirementsCommandPanelsMessages"
+        ]
+    },
+    "dataProviders": {
+        "activityListBoxDataProvider": {
+            "action":"getExportExcelActivityOptions",
+            "response": "{{data.exportExcelActivityOptions}}"
+        },
+        "exportWordActivityListBoxDataProvider": {
+            "action": "getExportWordActivityOptions",
+            "response": "{{data.exportWordActivityOptions}}"
+        },
+        "overrideTypeList": {
+            "commandsAnchor": "arm0_export_overridetype_cellCommands",
+            "response": "{{data.overrideTypes}}",
+            "selectionModelMode": "single"
+        }
+    }
+}

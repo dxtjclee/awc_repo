@@ -1,0 +1,86 @@
+{
+  "Programs": {
+    "data": {
+      "browserSubTitle": {
+        "source": "/i18n/ProgramPlanningCommandPanelsMessages",
+        "key": "Pgp0ProgramsTitle"
+      },
+      "headerTitle": {
+        "source": "/i18n/ProgramPlanningCommandPanelsMessages",
+        "key": "Pgp0ProgramsTitle"
+      }
+    },
+    "view": "AwSearchLocation",
+    "parent": "root",
+    "url": "/programs"
+  },
+  "myProgramsDashboard": {
+    "data": {
+      "priority": 1,
+      "label": {
+        "source": "/i18n/ProgramPlanningCommandPanelsMessages",
+        "key": "Pgp0MyDashboardPanelTitle"
+      }
+    },
+    "params": {
+      "filter": null
+    },
+    "parent": "Programs",
+    "view": "MyProgramsDashboardPage",
+    "url": "/myProgramsDashboard"
+  },
+  "myPrograms": {
+    "data": {
+      "priority": 2,
+      "label": {
+        "source": "/i18n/ProgramPlanningCommandPanelsMessages",
+        "key": "Pgp0MyProgramsPanelTitle"
+      }
+    },
+    "params": {
+      "filter": null
+    },
+    "parent": "Programs",
+    "view": "MyProgramsPage",
+    "url": "/myPrograms"
+  },
+  "comparePlanLocation": {
+    "abstract": true,
+    "data": {
+      "browserSubTitle": {
+        "source": "/i18n/ProgramPlanningCommandPanelsMessages",
+        "key": "Pgp0ComparePlans"
+      }
+    },
+    "view": "commonLocation",
+    "parent": "root"
+  },
+  "com_siemens_splm_compare_plans": {
+    "data": {
+      "context": {
+        "hideRightWall": true
+      },
+      "nameToken": "com.siemens.splm.client.comparePlan:CompareSublocation",
+      "clientScopeURI": "Pgp0ComparePlanObjects"
+    },
+    "params": {
+      "cmdArg": {
+        "array": true
+      },
+      "c_csid": null,
+      "c_uid": null,
+      "filter": null,
+      "o_uid": null,
+      "pci_uid": null,
+      "spageId": null,
+      "t_uid": null,
+      "uid": null,
+      "incontext_uid": null,
+      "snap_uid": null,
+      "comparePlanUids": null
+    },
+    "view": "Pgp0ComparePlanItems",
+    "parent": "comparePlanLocation",
+    "url": "/comparePlans"
+  }
+}

@@ -1,0 +1,32 @@
+<aw-advanced-bar type="TOOLBAR" negative='true' exist-when="subPanelContext.parametersTable.options.compareParameters===true">
+    <aw-flex-row height="fill">
+        <div class='sw-column w-3'>
+            <div class="aw-attrtargetmgmt-chip">
+                <aw-flex-row>
+                    <div class="aw-attrtargetmgmt-legendItem">
+                        <div class="aw-attrtargetmgmt-legendItemMarker differenceValue"></div>
+                        <div class="aw-attrtargetmgmt-legendItemLabel">
+                            <aw-i18n>i18n.DifferenceValue</aw-i18n>
+                        </div>
+                    </div>
+                    <div class="aw-attrtargetmgmt-legendItem">
+                        <div class="aw-attrtargetmgmt-legendItemMarker missingValue"></div>
+                        <div class="aw-attrtargetmgmt-legendItemLabel">
+                            <aw-i18n>i18n.MissingValue</aw-i18n>
+                        </div>
+                    </div>
+                </aw-flex-row>
+            </div>
+        </div>
+        <div class='sw-column w-9 justify-right align-right'>
+            <aw-server-visibility-command-bar anchor="aw_showParamOptCommandBar" alignment="HORIZONTAL" context="{...subPanelContext,dataProvider:dataProviders.uniformParamDataProvider,context:subPanelContext.context,openedObject:subPanelContext.context?subPanelContext.context.baseSelection:subPanelContext?subPanelContext.openedObject:undefined , occContext:subPanelContext.context? subPanelContext.context.occContext:undefined}" exist-when="subPanelContext.parametersTable.clientScopeURI !== undefined" overflow="true"></aw-server-visibility-command-bar>
+        </div>
+    </aw-flex-row>
+</aw-advanced-bar>
+<aw-server-visibility-toolbar class="aw-attrtargetmgmt-toolbar" first-anchor="aw_showParamViewCommandBar" second-anchor="aw_showParamOptCommandBar" orientation="HORIZONTAL" context="{...subPanelContext,dataProvider:dataProviders.uniformParamDataProvider,context:subPanelContext.context,openedObject:subPanelContext.context?subPanelContext.context.baseSelection:subPanelContext?subPanelContext.openedObject:undefined ,selectionData: fields.selectionData, occContext:subPanelContext.context? subPanelContext.context.occContext:undefined}" exist-when="subPanelContext.parametersTable.options.compareParameters===undefined && subPanelContext.parametersTable.clientScopeURI !== undefined"></aw-server-visibility-toolbar>
+<aw-row height="fill">
+    <aw-splm-table gridid="uniformParamTable" sub-panel-context="...data"  container-height="subPanelContext.parametersTable.containerHeight" use-tree="true" show-decorators="true" show-context-menu="subPanelContext.parametersTable.showContextMenu" show-check-box="dataProviders.uniformParamDataProvider.selectionModel.multiSelectEnabled"></aw-splm-table>
+    <aw-popup options="actions.openParameterWidePanel.options">
+    </aw-popup>
+</aw-row>
+

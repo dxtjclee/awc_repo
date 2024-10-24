@@ -1,0 +1,724 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-panel-body.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-action-section.directive",
+        "js/aw-popup2.directive",
+        "js/aw-include.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/aw-command-panel-section.directive",
+        "js/exist-when.directive",
+        "js/aw-flex-row.directive",
+        "js/aw-flex-column.directive",
+        "js/visible-when.directive"
+    ],
+    "actions": {
+        "reveal": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "Arm0SingleRequirementWidePanel.getSpecificationSegment"
+                    },
+                    {
+                        "name": "requirementDocumentation.getSelectedRefObj"
+                    }
+                ]
+            }
+        },
+        "getSelectedRefObj": {
+            "actionType": "JSFunction",
+            "method": "getSelectedRefObj",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "selectedRefObj": ""
+            },
+            "deps": "js/Arm0SingleRequirementWidePanelEditor"
+        },
+        "updateImages": {
+            "actionType": "JSFunction",
+            "method": "updateImages",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0DocumentationUtil"
+        },
+        "initWidePanelContent": {
+            "actionType": "JSFunction",
+            "method": "initWidePanelContent",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}",
+                "reqWidePanelCTX": "{{fields.reqWidePanelCTX}}"
+            },
+            "outputData": {
+                "selected": "selected",
+                "editMode":"editMode",
+                "htmlString":"htmlString"
+            },
+            "events": {
+                "success": [ {
+                        "name": "requirementDocumentation.refreshImages",
+                        "condition": "data.missingImages.length > 0"
+                    },
+                    {
+                        "name": "requirementDocumentation.refreshRefImages",
+                        "condition": "data.missingRefImages.length > 0"
+                    }
+                ]
+            },
+            "deps": "js/Arm0SingleRequirementWidePanelEditor"
+        },
+        "setOLEObjectToDownload": {
+            "actionType": "JSFunction",
+            "method": "setOLEObjectToDownload",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "requirementDocumentation.downloadOLEObject",
+                    "condition": "data.oleObjsToDownload.length > 0"
+                } ]
+            },
+            "deps": "js/Arm0RequirementDocumentation"
+        },
+        "refreshImages": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData": {
+                "objects": "{{data.missingImages}}",
+                "attributes": [
+                    "awp0ThumbnailImageTicket"
+                ]
+            },
+            "outputData": {
+                "imageTickets": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "requirementDocumentation.updateImages"
+                } ]
+            }
+        },
+        "refreshRefImages": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-FileManagement",
+            "method": "getFileReadTickets",
+            "inputData": {
+                "files": "{{data.missingRefImages}}"
+            },
+            "outputData": {
+                "imageRefTickets": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "requirementDocumentation.updateImages"
+                } ]
+            }
+        },
+        "getSpecificationSegment": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AwReqMgmtSe-2019-06-SpecNavigation",
+            "method": "getSpecificationSegment",
+            "inputData": {
+                "inputData": "{{function:getSpecificationSegmentInput}}"
+            },
+            "outputData": {
+                "content": "output"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.initWidePanelContent"
+                    }
+                ]
+            },
+            "deps": "js/Arm0SingleRequirementWidePanelEditor"
+        },
+        "getDatasetTypesWithDefaultRelation": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2015-10-DataManagement",
+            "method": "getDatasetTypesWithDefaultRelation",
+            "inputData": {
+                "fileExtensions": [ "{{data.fileExtensions}}" ],
+                "parent": {
+                    "type": "{{data.selectedRefObj.type}}",
+                    "uid": "{{data.selectedRefObj.uid}}"
+                }
+            },
+            "outputData": {
+                "datasetTypesWithDefaultRelInfo": "output[0].datasetTypesWithDefaultRelInfo"
+            },
+            "events": {
+                "success": [ {
+                    "name": "Arm0SingleRequirementWidePanelEditor.prepareInputforOLEInsert"
+                } ]
+            },
+            "deps": "js/Arm0RequirementDocumentation"
+        },
+        "prepareInputforOLEInsert": {
+            "actionType": "JSFunction",
+            "method": "prepareInputforOLEInsert",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData":{
+                "datasetInfo": "datasetInfo"
+            },
+            "events": {
+                "success": [ {
+                    "name": "Arm0SingleRequirementWidePanelEditor.InsertObjInCKEditorWidePanel"
+                } ]
+            },
+            "deps": "js/Arm0RequirementDocumentation"
+        },
+        "checkAndCloseWidePanel":{
+            "actionType": "JSFunction",
+            "method": "checkAndCloseWidePanel",
+            "deps": "js/Arm0SingleRequirementWidePanelEditor"
+        },
+        "saveWidePanelContent": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AwReqMgmtSe-2019-06-SpecNavigation",
+            "method": "createOrUpdateContents",
+            "inputData": {
+                "createUpdateInput": "{{function:getInputValues}}"
+            },
+            "outputData": {
+                "content": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "Arm0SingleRequirementWidePanel.getSpecificationSegment"
+                } ]
+            },
+            "actionMessages": {
+                "failure": [
+                {
+                    "message": "handleImportPartialError"
+                } ]
+            },
+            "deps": "js/Arm0SingleRequirementWidePanelEditor"
+        },
+        "saveAndCloseWidePanelContent": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AwReqMgmtSe-2019-06-SpecNavigation",
+            "method": "createOrUpdateContents",
+            "inputData": {
+                "createUpdateInput": "{{function:getInputValues}}"
+            },
+            "outputData": {
+                "content": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "requirementDocumentation.closeWidePanel"
+                } ]
+            },
+            "actionMessages": {
+                "failure": [
+                {
+                    "message": "handleImportPartialError"
+                } ]
+            },
+            "deps": "js/Arm0SingleRequirementWidePanelEditor"
+        },
+        "downloadOLEObjectFromDataSet": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData": {
+                "objects": "{{data.oleObjectDS}}",
+                "attributes": [
+                    "IMAN_specification"
+                ]
+            },
+            "outputData": {
+                "response": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "requirementDocumentation.setOLEObjectToDownload"
+                } ]
+            },
+            "deps": "js/Arm0RequirementDocumentation"
+        },
+        "downloadOLEObject": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-FileManagement",
+            "method": "getFileReadTickets",
+            "inputData": {
+                "files": "{{data.oleObjsToDownload}}"
+            },
+            "outputData": {
+                "fileTickets": "tickets[1]"
+            },
+            "events": {
+                "success": [ {
+                    "name": "requirementDocumentation.doExportDocumentEvent"
+                } ]
+            }
+        },
+        "doExportDocument": {
+            "actionType": "JSFunction",
+            "method": "openFile",
+            "inputData": {
+                "data": "{{data.fileTickets[0]}}"
+            },
+            "deps": "js/fmsUtils"
+        },
+        "actionOleObjectClicked": {
+            "actionType": "JSFunction",
+            "method": "actionOleObjectClicked",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "events": {
+                "success": [ {
+                        "name": "requirementDocumentation.downloadOLEObject",
+                        "condition": "data.oleObjsToDownload"
+                    },
+                    {
+                        "name": "requirementDocumentation.downloadOLEObjectFromDataSet",
+                        "condition": "data.oleObjectDS"
+                    }
+                ]
+            },
+            "deps": "js/requirementsUtils"
+        },
+        "handleOLEClickInCKeditor": {
+            "actionType": "JSFunction",
+            "method": "handleOLEClickInHomeCKeditor",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "events": {
+                "success": [ {
+                        "name": "requirementDocumentation.downloadOLEObject",
+                        "condition": "data.oleObjsToDownload"
+                    },
+                    {
+                        "name": "requirementDocumentation.downloadOLEObjectFromDataSet",
+                        "condition": "data.oleObjectDS"
+                    }
+                ]
+            },
+            "deps": "js/Arm0RequirementOLEDownloadService"
+        },
+        "insertImage": {
+            "actionType": "JSFunction",
+            "method": "insertImage",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0DocumentationUtil"
+        },
+        "insertOLE": {
+            "actionType": "JSFunction",
+            "method": "insertOLE",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0RequirementDocumentation"
+        },
+        "updateFormData": {
+            "actionType": "JSFunction",
+            "method": "updateFormData",
+            "inputData": {
+                "fileData": {
+                    "key": "fmsTicket",
+                    "value": "{{data.fmsTicket}}"
+                },
+                "data": "{{data}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "requirementDocumentation.uploadFile"
+                } ]
+            },
+            "deps": "js/Arm0DocumentationUtil"
+        },
+        "InsertObjInCKEditorWidePanel": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-04-DataManagement",
+            "method": "createDatasets",
+            "inputData": {
+                "input": [ {
+                    "clientId": "{{data.datasetInfo.clientId}}",
+                    "container": {
+                        "uid": "AAAAAAAAAAAAAA",
+                        "type": "unknownType"
+                    },
+                    "datasetFileInfos": [ {
+                        "fileName": "{{data.datasetInfo.fileName}}",
+                        "namedReferenceName": "{{data.datasetInfo.namedReferenceName}}",
+                        "isText": false
+                    } ],
+                    "relationType": "",
+                    "description": "",
+                    "name": "{{data.datasetInfo.name}}",
+                    "type": "{{data.datasetInfo.type}}"
+                } ]
+            },
+            "outputData": {
+                "fmsTicket": "datasetOutput[0].commitInfo[0].datasetFileTicketInfos[0].ticket",
+                "commitInfos": "datasetOutput[0].commitInfo[0]",
+                "relatedModified": "datasetOutput[0].dataset",
+                "createdObject": "datasetOutput[0].dataset"
+            },
+            "events": {
+                "success": [ {
+                    "name": "requirementDocumentation.updateFormData"
+                } ]
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "message": "handleImportPartialError"
+                    }
+                ]
+            },
+            "deps": "js/Arm0RequirementDocumentation"
+        },
+        "uploadFile": {
+            "actionType": "RESTService",
+            "serviceName": "",
+            "method": "POST",
+            "inputData": {
+                "request": {
+                    "method": "POST",
+                    "url": "{{Constants.fmsUrl}}",
+                    "headers": {
+                        "Content-type": "undefined"
+                    },
+                    "data": "{{data.formData}}"
+                }
+            },
+            "events": {
+                "success": [ {
+                    "name": "requirementDocumentation.commitDataset"
+                } ],
+                "failure": [ {
+                    "name": "Arm0ImportFromOffice.importDocumentFailed"
+                } ]
+            }
+        },
+        "commitDataset": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-FileManagement",
+            "method": "commitDatasetFiles",
+            "inputData": {
+                "commitInput": [ {
+                    "dataset": "{{data.commitInfos.dataset}}",
+                    "createNewVersion": true,
+                    "datasetFileTicketInfos": [ {
+                        "datasetFileInfo": {
+                            "clientId": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.clientId}}",
+                            "fileName": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.fileName}}",
+                            "namedReferencedName": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.namedReferenceName}}",
+                            "isText": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.isText}}",
+                            "allowReplace": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.allowReplace}}"
+                        },
+                        "ticket": "{{data.fmsTicket}}"
+                    } ]
+                } ]
+            },
+            "events": {
+                "success": [ {
+                        "name": "requirementDocumentation.insertImage",
+                        "condition": "data.datasetInfo.type==='Image'"
+                    },
+                    {
+                        "name": "requirementDocumentation.insertOLE",
+                        "condition": "data.datasetInfo.type!='Image'"
+                    }
+                ]
+            }
+        },
+        "closeWidePanel": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtxclosePopup",
+            "inputData": {
+                "reqWidePanelCTX": "{{fields.reqWidePanelCTX}}"
+            },
+            "deps": "js/Arm0SingleRequirementWidePanelEditor"
+        },
+        "isCkeditorInstanceReady": {
+            "actionType": "JSFunction",
+            "method": "isCkeditorInstanceReady",
+            "inputData": {
+                "data": "{{data}}",
+                "requirementCtx":"{{fields.reqWidePanelCTX}}"
+            },
+            "outputData": {
+                "ckeditorReady":"ckeditorReady",
+                "showCKEditor":"showCKEditor",
+                "htmlString":"htmlString"
+            },
+            "deps": "js/Arm0SingleRequirementWidePanelEditor"
+        },
+        "openCrossRefLinkInNewTab": {
+            "actionType": "JSFunction",
+            "method": "navigateToObject",
+            "inputData": {
+                "crossRefLinkElement": "{{data.eventMap['requirementDocumentation.openCrossRefLinkInNewTab'].crossRefLinkElement}}",
+                "id": "{{data.eventMap['requirementDocumentation.openCrossRefLinkInNewTab'].id}}",
+                "ctx":"{{ctx}}"
+            },
+            "deps": "js/ckeditorOperations"
+        },
+        "setOLEDetailsToData":{
+            "actionType": "JSFunction",
+            "method": "setOLEDetailsToData",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData":{
+                "eventData" : "eventData",
+                "form": "form",
+                "fileExtensions": "fileExtensions"
+            },
+            "events": {
+                "success": [ {
+                    "name": "Arm0SingleRequirementWidePanelEditor.getDatasetTypesWithDefaultRelation"
+                } ]
+            },
+            "deps": "js/Arm0SingleRequirementWidePanelEditor"
+        },
+        "setImageDetailsToData":{
+            "actionType": "JSFunction",
+            "method": "setImageDetailsToData",
+            "inputData":{
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "form": "form",
+                "datasetInfo":"datasetInfo"
+            },
+            "events": {
+                "success": [ {
+                    "name": "Arm0SingleRequirementWidePanelEditor.InsertObjInCKEditorWidePanel"
+                } ]
+            },
+            "deps": "js/Arm0SingleRequirementWidePanelEditor"
+        }
+    },
+    "data": {
+        "editorProps": {
+            "type": "ADVANCED_NODROP",
+            "contentType": ""
+        },
+        "viewerProps": {
+            "dbValue": ""
+        },
+        "selectedRefObj":{},
+        "reqWidePanelCTX":{
+            "initialValues": {
+            },
+            "meta": {
+            }
+        }
+    },
+    "functions": {
+        "getRevisionObject": {
+            "functionName": "getRevisionObject",
+            "parameters": [
+                "{{ctx.selected}}"
+            ]
+        },
+        "getRevisionObjectType": {
+            "functionName": "getRevisionObjectType",
+            "parameters": [
+                "{{ctx.selected}}"
+            ]
+        },
+        "getInputValues": {
+            "functionName": "getInputValues",
+            "parameters": [
+                "{{data}}",
+                "{{fields.reqWidePanelCTX}}"
+            ]
+        },
+        "getSpecificationSegmentInput": {
+            "functionName": "getSpecificationSegmentInput",
+            "parameters": [
+                "{{data}}"
+            ]
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "requirementDocumentation.InsertOLEInCKEditor",
+            "action": "setOLEDetailsToData",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementDocumentation.InsertImageInCKEditor",
+            "action": "setImageDetailsToData",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementDocumentation.reveal",
+            "action": "reveal"
+        },
+        {
+            "eventId": "Arm0SingleRequirementWidePanel.getSpecificationSegment",
+            "action": "getSpecificationSegment"
+        },
+        {
+            "eventId": "requirementDocumentation.getSelectedRefObj",
+            "action": "getSelectedRefObj"
+        },
+        {
+            "eventId": "requirementDocumentation.initWidePanelContent",
+            "action": "initWidePanelContent"
+        },
+        {
+            "eventId": "requirementDocumentation.refreshRefImages",
+            "action": "refreshRefImages"
+        },
+        {
+            "eventId": "requirementDocumentation.refreshImages",
+            "action": "refreshImages"
+        },
+        {
+            "eventId": "requirementDocumentation.updateImages",
+            "action": "updateImages"
+        },
+        {
+            "eventId": "requirementDocumentation.downloadOLEObjectFromDataSet",
+            "action": "downloadOLEObjectFromDataSet"
+        },
+        {
+            "eventId": "requirementDocumentation.downloadOLEObject",
+            "action": "downloadOLEObject"
+        },
+        {
+            "eventId": "requirementDocumentation.doExportDocumentEvent",
+            "action": "doExportDocument"
+        },
+        {
+            "eventId": "requirementDocumentation.setOLEObjectToDownload",
+            "action": "setOLEObjectToDownload"
+        },
+        {
+            "eventId": "Arm0SingleRequirementWidePanelEditor.InsertObjInCKEditorWidePanel",
+            "action": "InsertObjInCKEditorWidePanel"
+        },
+        {
+            "eventId": "requirementDocumentation.commitDataset",
+            "action": "commitDataset"
+        },
+        {
+            "eventId": "requirementDocumentation.insertImage",
+            "action": "insertImage"
+        },
+        {
+            "eventId": "requirementDocumentation.insertOLE",
+            "action": "insertOLE"
+        },
+        {
+            "eventId": "requirementDocumentation.updateFormData",
+            "action": "updateFormData"
+        },
+        {
+            "eventId": "requirementDocumentation.uploadFile",
+            "action": "uploadFile"
+        },
+        {
+            "eventId": "Arm0SingleRequirementWidePanelEditor.prepareInputforOLEInsert",
+            "action": "prepareInputforOLEInsert"
+        },
+        {
+            "eventId": "Arm0SingleRequirementWidePanelEditor.getDatasetTypesWithDefaultRelation",
+            "action": "getDatasetTypesWithDefaultRelation"
+        },
+        {
+            "eventId": "oleObjectClickedRM",
+            "cacheEventData": true,
+            "action": "actionOleObjectClicked"
+        },
+        {
+            "eventId": "requirementDocumentation.handleOLEClick",
+            "cacheEventData": true,
+            "action": "handleOLEClickInCKeditor"
+        },
+        {
+            "eventId": "appCtx.update",
+            "criteria": {
+                "name": "AWRequirementsEditor"
+            },
+            "action": "isCkeditorInstanceReady"
+        },
+        {
+            "eventId": "requirementDocumentation.closeWidePanel",
+            "action":"closeWidePanel"
+        },
+        {
+            "eventId": "Arm0SingleRequirementWidePanelEditor.contentUnloaded",
+            "action": "cleanupOnContentUnloaded"
+        },
+        {
+            "eventId":"Arm0SingleRequirementWidePanelEditor.reveal",
+            "action": "reveal"
+        },
+        {
+            "eventId":"Arm0SingleRequirementWidePanelEditor.saveAndCloseWidePanelContent",
+            "action": "saveAndCloseWidePanelContent"
+        },
+        {
+            "eventId":"Arm0SingleRequirementWidePanelEditor.checkAndCloseWidePanel",
+            "action": "checkAndCloseWidePanel"
+        },
+        {
+            "eventId": "requirementDocumentation.openCrossRefLinkInNewTab",
+            "action": "openCrossRefLinkInNewTab",
+            "cacheEventData": true
+        }
+    ],
+    "conditions": {
+        "editorisDirty": {
+            "expression": "ctx.Arm0Requirements && ctx.Arm0Requirements.Editor && ctx.AWRequirementsEditor && ( data.reqWidePanelCTX.AWRequirementsEditor.dirtyFlagforCkEditor === true)"
+        },
+        "isEditorLoaded": {
+            "expression":"ctx.Arm0Requirements.Editor && ctx.Arm0Requirements.Editor === 'CKEDITOR_5' && ctx.Arm0Requirements.EditorLoaded"
+        }
+    },
+    "messages": {
+        "notificationForImageErrorWrongFile": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.imageErrorWrongFile}}",
+            "messageTextParams": []
+        },
+        "notificationMultiUserEditError": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.multiUserEditError}}",
+            "messageTextParams": [
+                "{{ctx.selected.cellHeader1}}"
+            ]
+        },
+        "handleImportPartialError": {
+           "messageType": "ERROR",
+           "messageText": "{{errorCode}}"
+       }
+    },
+    "i18n": {
+        "imageErrorWrongFile": [ "RichTextEditorCommandPanelsMessages" ],
+        "multiUserEditError": [ "RichTextEditorCommandPanelsMessages" ],
+        "save": [ "RichTextEditorCommandPanelsMessages" ],
+        "documentationTitle": [ "RequirementsCommandPanelsMessages" ],
+        "cancel": [ "RequirementsCommandPanelsMessages" ],
+        "navigationConfirmationSingle": [ "TCUICommandPanelsMessages" ],
+        "discard": [ "TCUICommandPanelsMessages" ]
+    },
+    "lifecycleHooks": {
+        "onMount": "reveal"
+    }
+}

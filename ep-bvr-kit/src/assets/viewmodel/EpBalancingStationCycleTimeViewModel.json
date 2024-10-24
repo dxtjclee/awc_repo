@@ -1,0 +1,71 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "actions": {
+        "updateCycleTime": {
+            "actionType": "JSFunction",
+            "method": "stringToFloat",
+            "inputData": {
+                "value": "{{props.subPanelContext.balancingData.selectionData.station.props.elb0cycleTime.displayValues[0]}}"
+            },
+            "outputData": {
+                "stationCycleTime": ""
+            },
+            "deps": "js/epBalancingLabelsService"
+        },
+        "getTimeUnits": {
+            "actionType": "JSFunction",
+            "method": "getCurrentTimeUnitShort",
+            "outputData": {
+                "timeUnits": ""
+            },
+            "deps": "js/epTimeUnitsService"
+        },
+        "updateStationTimeInHeader": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "updateCycleTime"
+                },
+                {
+                    "action": "getTimeUnits"
+                }
+            ]
+        }
+    },
+    "i18n": {
+        "cycleTimeChip": [
+            "BalancingMessages"
+        ]
+    },
+    "conditions": {
+        "stationHasProcessResources": {
+            "expression": {
+                "$source": "props.subPanelContext.balancingData.selectionData.station.props.Mfg0processResources.dbValue.length",
+                "$query": {
+                    "$gt": 0
+                }
+            }
+        }
+    },
+    "lifecycleHooks": {
+        "onUpdate": [
+            {
+                "action": "updateStationTimeInHeader",
+                "observers": [
+                    "props.subPanelContext.balancingData.selectionData.station"
+                ]
+            },
+            {
+                "action": "updateCycleTime",
+                "observers": [
+                    "props.subPanelContext.balancingData.selectionData.station.props.elb0cycleTime.displayValues"
+                ]
+            }
+        ]
+    }
+}

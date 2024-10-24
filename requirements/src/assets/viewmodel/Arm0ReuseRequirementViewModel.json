@@ -1,0 +1,247 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-radiobutton.directive",
+        "js/aw-checkbox.directive",
+        "js/aw-panel-body.directive",
+        "js/visible-when.directive",
+        "js/aw-widget.directive",
+        "js/aw-command-panel.directive",
+        "js/enable-when.directive"
+    ],
+    "data": {
+        "reuseOptions": {
+            "type": "BOOLEAN",
+            "isRequired": "true",
+            "propertyRadioTrueText": "{{i18n.createCopy}}",
+            "propertyRadioFalseText": "{{i18n.createDerived}}",
+            "dbValue": true,
+            "vertical": true,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "name": {
+            "displayName": "{{i18n.name}}",
+            "type": "STRING",
+            "maxLength": 90,
+            "isRequired": "true",
+            "isEditable": "true",
+            "dbValue": ""
+        },
+        "desc": {
+            "displayName": "{{i18n.desc}}",
+            "type": "STRING",
+            "maxLength": 90,
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": ""
+        },
+        "runInBackgroundReuse":
+        {
+            "displayName": "{{i18n.runinBG}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        }
+    },
+    "actions": {
+        "updateCtxAndCallReuseSOA":
+        {
+            "actionType": "JSFunction",
+            "method": "registerCtx",
+            "inputData": {
+                "name": "isReuseEventProgressing",
+                "value": true
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0ReuseRequirement.deriveRequirement"
+                    }
+                ]
+            },
+            "deps": "js/appCtxService"
+        },
+        "unregisterReuseCmdContext": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "deps": "js/appCtxService",
+            "inputData": {
+                "name": "isReuseEventProgressing"
+            }
+        },
+        "changeName":{
+            "actionType": "JSFunction",
+            "method": "getDerivedObjectName",
+            "inputData": {
+                "ctx": "{{ctx}}",
+                "data" :  "{{data}}"
+            },
+            "deps": "js/reuseRequirementService"
+        },
+        "reuse": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceReqMgmt-2019-06-SpecNavigation",
+            "method": "reuseSpecification",
+            "inputData": {
+                "inputs": [ {
+                    "operationType": "{{function:getOperationType}}",
+                    "selectedElements": "{{function:getSelectedElements}}",
+                    "createInputs": "{{function:getCreateInput}}",
+                    "dataset": {},
+                    "inputCtxt": {},
+                    "isDeep": false,
+                    "isRunInBackground": "{{function:getRunInBackgroundOptionValue}}",
+                    "options": {},
+                    "tracelinkType": "",
+                    "datasetVersion": 0
+                } ]
+            },
+
+            "outputData": {
+                "response": "reuseStatusList"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0ReuseRequirement.unregisterReuseCmdContext"
+                    },
+                    {
+                        "name": "arm0ReuseObject.open",
+                        "condition": "!data.runInBackgroundReuse.dbValue"
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ],
+
+                "failure": [
+                    {
+                        "name": "Arm0ReuseRequirement.unregisterReuseCmdContext"
+                    },
+                    {
+                    "condition": "errorCode.code==223201",
+                    "name": "layout.showToolInfo",
+                    "eventData": {
+                        "visible": false
+                    }
+                } ]
+            },
+            "actionMessages": {
+                "success": [ {
+                    "message": "notificationForReuseMsg",
+                    "condition": "data.runInBackgroundReuse.dbValue"
+                } ],
+                "failure": [
+                {
+                    "message": "dispatcherNotInstalledFailure",
+                    "condition": "errorCode.code===3104"
+                }
+            ]
+            },
+            "deps": "js/reuseRequirementService"
+        },
+        "openReusedObject": {
+            "actionType": "Navigate",
+            "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+            "navigationParams": {
+                "page": "Content",
+                "pageId": "tc_xrt_Content",
+                "spage": "tc_xrt_Documentation",
+                "spageId": "Documentation",
+                "uid": "{{data.response[0].clonedObject.uid}}"
+            }
+
+        }
+    },
+    "functions": {
+        "getCreateInput": {
+            "functionName": "getCreateInput",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getOperationType": {
+            "functionName": "getOperationType",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getSelectedElements": {
+            "functionName": "getSelectedElements"
+        },
+        "getRunInBackgroundOptionValue": {
+            "functionName": "getRunInBackgroundOptionValue",
+            "parameters": [
+                "{{data}}"
+            ]
+        }
+    },
+    "onEvent": [
+    {
+        "eventId": "arm0ReuseObject.open",
+        "cacheEventData": true,
+        "action": "openReusedObject"
+    },
+    {
+        "eventId": "Arm0ReuseRequirement.deriveRequirement",
+        "action":"reuse"
+    },
+    {
+        "eventId": "Arm0ReuseRequirement.unregisterReuseCmdContext",
+        "action":"unregisterReuseCmdContext"
+    }
+
+    ],
+    "messages": {
+        "notificationForReuseMsg":
+        {
+            "messageType": "INFO",
+            "messageText": "{{i18n.notificationForReuse}}",
+            "messageTextParams":
+            [
+                "{{ctx.mselected[0].props.object_string.uiValues[0]}}"
+            ]
+        },
+        "dispatcherNotInstalledFailure": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "i18n": {
+        "reuseDocumentTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "createCopy": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "createDerived": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "reuse": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "name": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "desc": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "derived":[
+            "RequirementsCommandPanelsMessages"
+        ],
+        "runinBG":
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "notificationForReuse":
+        [
+            "RequirementsCommandPanelsMessages"
+        ]
+    }
+}

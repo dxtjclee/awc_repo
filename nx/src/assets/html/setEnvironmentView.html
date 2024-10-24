@@ -1,0 +1,5 @@
+<!-- Environment link -->
+<aw-column visible-when="ctx.preferences.TC_NX_Environments && ctx.preferences.TC_NX_Environments.length !== 0 && ctx.preferences.AWC_NX_ApplicationAndEnvironmentIsSupported[0] && ctx.preferences.AWC_NX_ApplicationAndEnvironmentIsSupported[0]==='true' && !ctx.aw_hosting_enabled">
+    <aw-property-label prop="data.environment"></aw-property-label>
+    <aw-link-with-popup-menu prop="data.environmentInfo" dataprovider="data.dataProviders.environmentLink" link-popup-menu-id="aw-state-setEnvironment" display-property="{{props.setEnvironment}}"></aw-link-with-popup-menu>
+</aw-column>

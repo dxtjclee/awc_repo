@@ -1,0 +1,30 @@
+{
+    "schemaVersion" : "1.0.0",
+    "imports":
+    [
+        "js/aw-frame.directive"
+    ],
+    "actions":
+    {
+        "reveal": {
+            "actionType": "JSFunction",
+            "method": "openInViewerTab",
+            "inputData":
+            {
+                "data": "{{data}}"
+            },
+            "deps": "js/Eda0EdmViewerService"
+        }
+    },
+    "onEvent":
+    [
+        {
+            "eventId": "Eda0EdmViewer.contentLoaded",
+            "action": "reveal"
+        }
+    ],
+    "data" :
+    {
+        "projPath":""
+    }
+}

@@ -1,0 +1,66 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/visible-when.directive",
+        "js/aw-list.directive",
+        "js/aw-panel.directive",
+        "js/aw-include.directive",
+        "js/aw-link.directive"
+    ],
+    "actions": {
+        "moreTracelinkClicked":{
+            "actionType" : "JSFunction",
+            "method": "moreTracelinkClicked",
+            "inputData": {
+                "data": "{{subPanelContext.selectedTooltipObject}}"
+            },
+            "deps" : "js/requirementsTooltipService"
+        },
+        "activateExistingTraceLinkPopup": {
+            "actionType": "JSFunction",
+            "method": "activateExistingTraceLinkPanel",
+            "inputData": {
+                "data": {
+                    "declView": "Arm0ExistingTraceLinkTreePopup",
+                    "locals": {
+                        "anchor": "arm0_existing_tl_popup"
+                    },
+                    "options": {
+                        "reference": ".aw-layout-infoCommandbar",
+                        "isModal": false,
+                        "placement": "left-end",
+                        "width": 600,
+                        "height": 800,
+                        "draggable": true,
+                        "detachMode": true,
+                        "disableClose": true
+                    }
+                },
+                "calcHeight" : true
+            },
+            "deps": "js/Arm0ExistingTraceLink"
+        }
+    },
+    "data": {
+        "more": {
+            "displayName": "{{i18n.more}}",
+            "type": "STRING",
+            "dbValue": "",
+            "dispValue": ""
+        }
+    },
+    "onEvent":[
+        {
+            "eventId": "Arm0ExistingTraceLinkTree.activateExistingTraceLinkPanel",
+            "action": "activateExistingTraceLinkPopup"
+        }
+       
+    ],  
+    "i18n":
+    {
+        "more":
+        [
+            "RequirementsCommandPanelsMessages"
+        ]
+    }
+}

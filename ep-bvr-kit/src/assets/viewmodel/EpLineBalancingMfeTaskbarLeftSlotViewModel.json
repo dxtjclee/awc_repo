@@ -1,0 +1,30 @@
+{
+    "conditions": {
+    "isTrackingCnPresent": {
+        "expression": {
+            "$and": [
+                {
+                    "$source": "ctx.state.params.tracking_cn",
+                    "$query": {
+                        "$notNull": true
+                    }
+                },
+                {
+                    "$source": "ctx.epTaskPageContext.processStructure",
+                    "$query": {
+                        "$notNull": true
+                    }
+                }
+            ]
+        }
+    },
+    "isAllocationIndicationAllowed": {
+        "expression": {
+            "$source": "ctx.epPageContext.functionalPlan",
+            "$query": {
+                "$notNull": true
+            }
+        }
+    }
+
+}}

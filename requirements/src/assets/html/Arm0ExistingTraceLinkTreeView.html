@@ -1,0 +1,14 @@
+<aw-flex-column>
+    <div class="aw-requirement-createTracelink" exist-when="data.selectedObj">
+        <aw-command-panel-section caption="{{data.selectedObj}}" collapsed="disabled"></aw-command-panel-section>
+    </div>
+    <aw-flex-row height="3.4f">
+        <aw-flex-column align-content="end">
+            <aw-toolbar first-anchor="aw_existingTracelinkTree" second-anchor="aw_existingTracelinkOverviewTab"
+                     orientation="HORIZONTAL"  context="{dataProvider:dataProviders.existingTlDataProvider}"></aw-toolbar>
+        </aw-flex-column>
+    </aw-flex-row>
+    <aw-flex-row height="fill">
+        <aw-splm-table gridid="existingTlGrid" use-tree="true" show-decorators="true" show-check-box="data.dataProviders.existingTlDataProvider.selectionModel.multiSelectEnabled"></aw-splm-table>
+    </aw-flex-row>
+    <aw-flex-column>

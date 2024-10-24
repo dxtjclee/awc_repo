@@ -1,0 +1,12 @@
+<aw-command-panel caption="i18n.map" context="subPanelContext">
+    <aw-panel-body>
+        <aw-list-filter prop="data.filterBox" dataprovider="data.dataProviders.performSearch">
+
+           <att1-map-attribute-cell vmo="item" sub-panel-context="{subPanelContext}"></att1-map-attribute-cell>
+        </aw-list-filter>
+    </aw-panel-body>
+    <aw-panel-footer>
+       <aw-button action="mapAttributes" visible-when="conditions.isValidToShowMapButton"><aw-i18n>i18n.map</aw-i18n></aw-button>
+   </aw-panel-footer>
+</aw-command-panel>
+

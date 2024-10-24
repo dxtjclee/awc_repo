@@ -1,0 +1,732 @@
+{
+  "commands": {
+    "Uml0RemoveProjectModel": {
+      "iconId": "cmdRemove",
+      "isGroup": false,
+      "title": "{{i18n.removeProjectModel}}"
+    },
+    "Uml1OpenInSmw": {
+      "iconId": "cmdOpen",
+      "title": "{{i18n.Uml1OpenInSmwTitle}}"
+    },
+    "Uml1OpenInCameo": {
+      "iconId": "cmdOpen",
+      "title": "{{i18n.Uml1OpenInCameoTitle}}"
+    },
+    "Uml0RemoveParticipate": {
+      "iconId": "cmdRemove",
+      "isGroup": false,
+      "title": "{{i18n.removeProjectModel}}"
+    }
+  },
+  "commandHandlers": {
+    "Uml0ShowAddObjectHandler": {
+      "id": "Awp0ShowAddObject",
+      "activeWhen": {
+        "condition": "conditions.addCmdActiveForProjectModel"
+      },
+      "visibleWhen": false
+    },
+    "Uml0PasteObjectSetHandler": {
+      "id": "Awp0Paste",
+      "activeWhen": {
+        "condition": "conditions.uml0PasteToObjectSetActiveCondition"
+      },
+      "visibleWhen": false
+    },
+    "Uml0RemoveProjectModelCommandHandler": {
+      "id": "Uml0RemoveProjectModel",
+      "action": "confirmRemove1",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.uml0RemoveProjectModelCommandCondition"
+      }
+    },
+    "Uml1OpenInSmwCommandHandler": {
+      "id": "Uml1OpenInSmw",
+      "action": "Uml1OpenInSmwCommandAction",
+      "activeWhen": {
+        "condition": "conditions.Uml1OpenInSmwCommandCondition"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Uml1OpenInSmwCommandCondition"
+      }
+    },
+    "Uml1OpenInCameoCommandHandler": {
+      "id": "Uml1OpenInCameo",
+      "action": "Uml1OpenInCameoCommandAction",
+      "activeWhen": {
+        "condition": "conditions.Uml1OpenInCameoCommandCondition"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Uml1OpenInCameoCommandCondition"
+      }
+    },
+    "RemoveParticipateCommandDelegateHandler": {
+      "id": "Awp0RemoveParticipant",
+      "action": "",
+      "activeWhen": {
+        "condition": "conditions.Uml0RemoveParticipateCommandVisibility"
+      },
+      "visibleWhen": false
+    },
+    "Uml0RemoveParticipateCommandHandler": {
+      "id": "Uml0RemoveParticipate",
+      "action": "Uml0RemoveParticipateCommandAction",
+      "activeWhen": {
+        "condition": "conditions.Uml0RemoveParticipateCommandVisibility"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Uml0RemoveParticipateCommandVisibility"
+      }
+    },
+    "Uml0OverrideAwb0ViewGroupHandler": {
+      "id": "Awb0ViewGroup",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": false
+    },
+    "Uml0Awb0InsertParentElementHandler": {
+      "id": "Awb0InsertParentElement",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": true,
+      "enableWhen": false
+    },
+    "UmlAwb0RemoveLevelHandler": {
+      "id": "Awb0RemoveLevel",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": true,
+      "enableWhen": false
+    },
+    "Uml0Awb0SetInContextHandler": {
+      "id": "Awb0SetInContext",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": true,
+      "enableWhen": false
+    },
+    "Uml0Awb0AddSubstitutesPWAHandler": {
+      "id": "Awb0AddSubstitutesPWA",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": true,
+      "enableWhen": false
+    },
+    "Uml0ps0AddAlternatePWAHandler": {
+      "id": "ps0AddAlternatePWA",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": true,
+      "enableWhen": false
+    },
+    "Uml0Awb0ReleaseStatusEffectivityHandler": {
+      "id": "Awb0ReleaseStatusEffectivity",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": true,
+      "enableWhen": false
+    },
+    "Uml0Awb0OccurrenceEffectivityHandler": {
+      "id": "Awb0OccurrenceEffectivity",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": true,
+      "enableWhen": false
+    },
+    "Uml0Awb0InsertParentElementCtxMenuHandler": {
+      "id": "Awb0InsertParentElementCtxMenu",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": false,
+      "enableWhen": false
+    },
+    "Uml0Awb0RemoveElementCtxMenuHandler": {
+      "id": "Awb0RemoveElementCtxMenu",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": false,
+      "enableWhen": false
+    },
+    "Uml0Awp0CutContextMenuHandler": {
+      "id": "Awp0CutContextMenu",
+      "activeWhen": {
+        "condition": "conditions.Uml0Awp0CutCommandHandlerCondition"
+      },
+      "visibleWhen": false,
+      "enableWhen": false
+    },
+    "Uml0Awp0PasteContextMenuHandler": {
+      "id": "Awp0PasteContextMenu",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": false,
+      "enableWhen": false
+    },
+    "Uml0Awb0SetInContextCtxMenuHandler": {
+      "id": "Awb0SetInContextCtxMenu",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": false,
+      "enableWhen": false
+    },
+    "Uml0Awb0RemoveLevelCtxMenuHandler": {
+      "id": "Awb0RemoveLevelCtxMenu",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": false,
+      "enableWhen": false
+    },
+    "Uml0Overrideawb0SplitRootCmdHandler": {
+      "id": "awb0SplitRootCmd",
+      "action": "",
+      "activeWhen": {
+        "condition": "conditions.Uml0disableSplitcmdCondition"
+      },
+      "visibleWhen": false
+    },
+    "Uml0Awp0InContextReportsCommandDelegateHandler": {
+      "id": "Awp0InContextReports",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": false
+    },
+    "Uml0Arm0ImportFromOfficeCommandDelegateHandler": {
+      "id": "Arm0ImportFromOffice",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": false
+    },
+    "Uml0GcShowStartEditHandler": {
+      "id": "GcStartEdit",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": true,
+      "enableWhen": false
+    },
+    "Uml0Awb0AddChildElementCommandHandler": {
+      "id": "Awb0AddChildElementDeclarative",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isAddChildCommandSupported"
+      },
+      "enableWhen": false
+    },
+    "Uml0Awb0AddSiblingElementCommandHandler": {
+      "id": "Awb0AddSiblingElementDeclarative",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isAddSiblingCommandSupported"
+      },
+      "enableWhen": false
+    },
+    "Uml0RemoveElementCommandDelegateHandler": {
+      "id": "Awb0RemoveElement",
+      "action": "removeElement",
+      "activeWhen": {
+        "condition": "conditions.Uml0RemoveCommandDisabledCondition"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isRemoveCommandSupported"
+      },
+      "enableWhen": false
+    },
+    "Uml0RemoveDiagramElementCommandDelegateHandler": {
+      "id": "Ase0RemoveDiagramElement",
+      "activeWhen": {
+        "condition": "conditions.Uml0RemoveDiagramCommandDisabledCondition"
+      },
+      "visibleWhen": {
+        "condition": "conditions.removeElementActiveCondition"
+      },
+      "enableWhen": false
+    },
+    "Uml0Awp0DeleteCommandHandler": {
+      "id": "Awp0Delete",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Awp0DeleteCommandConditionVisible"
+      },
+      "enableWhen": false
+    },
+    "Uml0Awp0PasteCommandHandler": {
+      "id": "Awp0Paste",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": true,
+      "enableWhen": false
+    },
+    "Uml0Awp0PasteAsChildCommandHandler": {
+      "id": "Arm1PasteObjectAsChildCmd",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isArm1PasteObjectAsChildCmdVisible"
+      },
+      "enableWhen": false
+    },
+    "Uml0Awp0PasteAsSiblingCommandHandler": {
+      "id": "Arm1PasteObjectAsSiblingCmd",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isArm1PasteObjectAsSiblingCmdVisible"
+      },
+      "enableWhen": false
+    },
+    "Uml0Awb0ReplaceElementDeclarative": {
+      "id": "Awb0ReplaceElementDeclarative",
+      "activeWhen": {
+        "condition": "conditions.Uml0disableReplaceElementcmdCondition"
+      },
+      "enableWhen": false,
+      "visibleWhen": {
+        "condition": "conditions.isReplaceCommandSupported"
+      }
+    },
+    "Uml0Awb0SaveAsAndReplaceElementCommandHandler": {
+      "id": "Awb0SaveAsAndReplaceElement",
+      "activeWhen": {
+        "condition": "conditions.Uml0disableSaveAsAndReplaceElementcmdCondition"
+      },
+      "enableWhen": false,
+      "visibleWhen": {
+        "condition": "conditions.isSaveAsAndReplaceCommandSupported"
+      }
+    },
+    "Uml0Qfm0GenerateFmeaCommandDelegateHandler": {
+      "id": "Qfm0GenerateFmea",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": false
+    },
+    "Uml0Sc1CreateLineItemCommandDelegateHandler": {
+      "id": "Sc1CreateLineItem",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": false
+    },
+    "Uml0Awn0ExportNXDataCommandDelegateHandler": {
+      "id": "Awn0ExportNXData",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": false
+    },
+    "Uml0Awn0OpenNxTcXmlCommandDelegateHandler": {
+      "id": "Awn0OpenNxTcXml",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": false
+    },
+    "Uml0openInIllustratorCommandDelegateHandler": {
+      "id": "openInIllustrator",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": false
+    },
+    "Uml0Awp0OpenInRACCommandDelegateHandler": {
+      "id": "Awp0OpenInRAC",
+      "activeWhen": {
+        "condition": "conditions.Uml0DisableOpenInRacCondition"
+      },
+      "visibleWhen": false
+    },
+    "Uml0Awb0ShowDuplicateCommandDelegateHandler": {
+      "id": "Awb0ShowDuplicate",
+      "activeWhen": {
+        "condition": "conditions.Uml0DuplicateCommandDisableCondition"
+      },
+      "visibleWhen": false
+    },
+    "Uml0Arm0MoveUpCommandDelegateHandler": {
+      "id": "Arm0MoveUp",
+      "activeWhen": {
+        "condition": "conditions.Uml0Arm0MoveUpCommandCondition"
+      },
+      "visibleWhen": false
+    },
+    "Uml0Arm0MoveDownCommandDelegateHandler": {
+      "id": "Arm0MoveDown",
+      "activeWhen": {
+        "condition": "conditions.Uml0Arm0MoveDownCommandCondition"
+      },
+      "visibleWhen": false
+    },
+    "Uml0Arm0PromoteElementCommandDelegateHandler": {
+      "id": "Arm0PromoteElement",
+      "activeWhen": {
+        "condition": "conditions.Uml0Arm0PromoteElementCommandCondition"
+      },
+      "visibleWhen": false
+    },
+    "Uml0Arm0DemoteElementCommandDelegateHandler": {
+      "id": "Arm0DemoteElement",
+      "activeWhen": {
+        "condition": "conditions.Uml0Arm0DemoteElementCommandCondition"
+      },
+      "visibleWhen": false
+    },
+    "Uml0Arm0ExportCommandDelegateHandler": {
+      "id": "Arm0Export",
+      "activeWhen": {
+        "condition": "conditions.Uml0Arm0ExportCommandCondition"
+      },
+      "visibleWhen": false
+    },
+    "Uml0Arm0ImportExcelCommandDelegateHandler": {
+      "id": "Arm0ImportExcel",
+      "activeWhen": {
+        "condition": "conditions.Uml0Arm0ExportCommandCondition"
+      },
+      "visibleWhen": false
+    },
+    "Uml0Arm1ReorderCommandDelegateHandler": {
+      "id": "Arm1Reorder",
+      "activeWhen": {
+        "condition": "conditions.Uml0Arm1ReorderCommandCondition"
+      },
+      "visibleWhen": false
+    },
+    "Uml0Awp0CutCommandDelegateHandler": {
+      "id": "Awp0Cut",
+      "activeWhen": {
+        "condition": "conditions.Uml0Awp0CutCommandHandlerCondition"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Uml0Awp0CutCommandHandlerCondition"
+      },
+      "enableWhen": false
+    },
+    "Uml0Awb0PackAllCommandDelegateHandler": {
+      "id": "Awb0PackAll",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": false
+    },
+    "Uml0Awb0UnpackAllCommandDelegateHandler": {
+      "id": "Awb0UnpackAll",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": false
+    },
+    "Uml0Awb0ShowMarkupCommandDelegateHandler": {
+      "id": "Awb0ShowMarkup",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": false
+    },
+    "Uml0Awb0CompareGroupCommandDelegateHandler": {
+      "id": "Awb0CompareGroup",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": false
+    },
+    "Uml0Awb0RollupGroupCommandDelegateHandler": {
+      "id": "Awb0RollupGroup",
+      "activeWhen": {
+        "condition": "conditions.Uml0CommandDisabledCondition"
+      },
+      "visibleWhen": false
+    },
+    "uml0Awb0AddGroupDelegateHandler": {
+      "id": "Awb0AddGroup",
+      "activeWhen": {
+        "condition": "conditions.Uml0isProjectModelCondition"
+      },
+      "visibleWhen": true,
+      "enableWhen": false
+    },
+    "uml0Awb0RestructureGroupDelegateHandler": {
+      "id": "Awb0RestructureGroup",
+      "activeWhen": {
+        "condition": "conditions.Uml0isProjectModelCondition"
+      },
+      "visibleWhen": true,
+      "enableWhen": false
+    },
+    "uml0Awp0CompareCommandDelegateHandler": {
+      "id": "objectSetCompareViewMode",
+      "activeWhen": {
+        "condition": "conditions.Uml0Awp0CompareCommandHandlerCondition"
+      },
+      "visibleWhen": false,
+      "enableWhen": false
+    }
+  },
+  "actions": {
+    "performRemoveProjectModelOperation": {
+      "actionType": "TcSoaService",
+      "serviceName": "Core-2014-10-DataManagement",
+      "method": "removeChildren",
+      "deps": "js/cutUtils",
+      "inputData": {
+        "inputData": "{{function:cutPMInputs}}"
+      },
+      "events": {
+        "success": [
+          {
+            "name": "cdm.relatedModified",
+            "eventData": {
+              "relatedModified": "{{function:adaptedRelatedModifiedCutPMInput}}",
+              "createdObjects": "",
+              "childObjects": "{{ctx.mselected}}"
+            }
+          },
+          {
+            "name": "cutToAwClipboard"
+          }
+        ]
+      }
+    },
+    "confirmRemove1": {
+      "actionType": "Event",
+      "method": "Event",
+      "inputData": {
+        "events": [
+          {}
+        ]
+      },
+      "actionMessages": {
+        "success": [
+          {
+            "message": "confirmRemove2"
+          }
+        ]
+      }
+    },
+    "Uml1OpenInSmwCommandAction": {
+      "actionType": "JSFunction",
+      "method": "Uml1OpenInSmwCommandHandler",
+      "inputData": {
+        "sourceObjects": "{{ctx.mselected}}",
+        "data": "{{data}}",
+        "commandContext": "{{commandContext.occContext}}"
+      },
+      "deps": "js/Uml1OpenInSmwCommandHandler"
+    },
+    "Uml1OpenInCameoCommandAction": {
+      "actionType": "JSFunction",
+      "method": "Uml1OpenInCameoCommandHandler",
+      "inputData": {
+        "sourceObjects": "{{ctx.mselected}}",
+        "data": "{{data}}",
+        "commandContext": "{{commandContext.occContext}}"
+      },
+      "deps": "js/Uml1OpenInCameoCommandHandler"
+    },
+    "Uml0RemoveParticipateCommandAction": {
+      "actionType": "JSFunction",
+      "method": "getAdaptedObjects",
+      "inputData": {
+        "sourceObjects": [
+          "{{ctx.pselected}}"
+        ]
+      },
+      "outputData": {
+        "selectedObject": ""
+      },
+      "events": {
+        "success": [
+          {
+            "condition": "data.selectedObject[0] && data.selectedObject[0].modelType.typeHierarchyArray.indexOf( 'ItemRevision' ) > -1",
+            "name": "removeParticipants"
+          },
+          {
+            "condition": "data.selectedObject[0] && ( data.selectedObject[0].modelType.typeHierarchyArray.indexOf( 'EPMTask' ) > -1 || data.selectedObject[0].modelType.typeHierarchyArray.indexOf( 'Signoff' ) > -1 )",
+            "name": "removeTaskParticipants"
+          }
+        ]
+      },
+      "deps": "js/adapterService"
+    }
+  },
+  "conditions": {
+    "addCmdActiveForProjectModel": {
+      "expression": "commandContext.objectSetSource === 'Uml0AssociatedModel.Uml0MLModelRevision' && ctx.xrtSummaryContextObject.modelType.typeHierarchyArray.indexOf('Fnd0LogicalBlockRevision') > -1 && commandContext.dataProvider && commandContext.dataProvider.viewModelCollection.totalObjectsLoaded > 0"
+    },
+    "Uml0Awp0CutCommandHandlerCondition": {
+      "expression": "(conditions.awb0CutCommandActive && conditions.Uml0CommandDisabledCondition) || conditions.Uml0Awp0CutCommandDisableHandlerCondition"
+    },
+    "Uml0Awp0CutCommandDisableHandlerCondition": {
+      "expression": "(conditions.cutVisibility || conditions.removeAttachmentVisibility) && commandContext.selectionData.relationInfo && (commandContext.selectionData.relationInfo[0].relationType === 'GRM(Seg0ExchangeAllocation,Seg0IntfSpec)' || commandContext.selectionData.relationInfo[0].relationType === 'REF(items_tag,Item).GRMS2P(Seg0ExchangeAllocation,Seg0InterfaceRevision)' || commandContext.selectionData.relationInfo[0].relationType === 'GRM(Seg0FxChainInvolvementRel,Sys0LogicalFunc)' || commandContext.selectionData.relationInfo[0].relationType === 'GRM(Seg0FxChainInvolvementRel,Sys0PhysicalFunc)' || commandContext.selectionData.relationInfo[0].relationType === 'GRM(Seg0FxChainInvolvementRel,Sys0SystemFunc)' || commandContext.selectionData.relationInfo[0].relationType === 'GRM(Seg0FxChainInvolvementRel,PSConnection)' || commandContext.selectionData.relationInfo[0].relationType === 'GRM(Seg0FxChainInvolvementRel,Seg0FxChain)')"
+    },
+    "uml0PasteToObjectSetActiveCondition": {
+      "expression": "commandContext.objectSetSource === 'Uml0AssociatedModel.Uml0MLModelRevision' && ctx.xrtSummaryContextObject.modelType.typeHierarchyArray.indexOf('Fnd0LogicalBlockRevision') > -1 && conditions.awp0PasteToObjectSetActiveCondition"
+    },
+    "uml0RemoveProjectModelCommandCondition": {
+      "expression": "ctx.selected.type === 'Uml0MLModelRevision' && commandContext.objectSetSource === 'Uml0AssociatedModel.Uml0MLModelRevision' && ctx.xrtSummaryContextObject.modelType.typeHierarchyArray.indexOf('Fnd0LogicalBlockRevision') > -1"
+    },
+    "Uml1OpenInSmwCommandCondition": {
+      "expression": "ctx.visibleServerCommands.Uml1OpenInSmw || (commandContext.occContext && ctx.sublocation.clientScopeURI==='Awb0OccurrenceManagement' && (commandContext.occContext.topElement.props.uml1Type.dbValues[0] ==='Capella Project' || commandContext.occContext.topElement.props.uml1Type.dbValues[0] ==='Capella Library' || commandContext.occContext.topElement.props.uml1Type.dbValues[0] ==='Capella Configuration Project'))"
+    },
+    "Uml1OpenInCameoCommandCondition": {
+      "expression": "ctx.visibleServerCommands.Uml1OpenInCameo || (commandContext.occContext && ctx.sublocation.clientScopeURI==='Awb0OccurrenceManagement' && commandContext.occContext.topElement.props.uml1Type.dbValues[0] ==='SysML Cameo')"
+    },
+    "Uml0RemoveParticipateCommandVisibility": {
+      "expression": "ctx.mselected.length > 0 && ctx.selected.modelType.parentTypeName === 'Participant' && ctx.xrtSummaryContextObject.modelType.typeHierarchyArray.indexOf('Uml0MLModelRevision') > -1"
+    },
+    "Uml0isProjectModelCondition": {
+      "expression": "commandContext.occContext && ctx.sublocation.clientScopeURI==='Awb0OccurrenceManagement' && !commandContext.occContext.isOpenedUnderAContext && commandContext.occContext.topElement.modelType.typeHierarchyArray.indexOf('Uml1ModelElement') > -1"
+    },
+    "Uml0disableSplitcmdCondition": {
+      "expression": "commandContext.occContext && !commandContext.occContext.supportedFeatures['4GStructureFeature'] && ctx.sublocation.clientScopeURI==='Awb0OccurrenceManagement' && !commandContext.occContext.isOpenedUnderAContext && !ctx.hiddenCommands.awb0SplitRootCmd && commandContext.occContext.topElement.modelType.typeHierarchyArray.indexOf('Uml1ModelElement') > -1"
+    },
+    "Uml0disableReplaceElementcmdCondition": {
+      "expression": "conditions.isReplaceCommandSupported && conditions.Uml0CommandDisabledCondition"
+    },
+    "Uml0disableSaveAsAndReplaceElementcmdCondition": {
+      "expression": "conditions.isSaveAsAndReplaceCommandSupported && conditions.Uml0CommandDisabledCondition"
+    },
+    "Uml0InDiagramContextCondition": {
+      "expression": "commandContext.occContext && ctx.sublocation.clientScopeURI==='Awb0OccurrenceManagement' && commandContext.occContext.isOpenedUnderAContext && commandContext.occContext.rootElement.modelType.typeHierarchyArray.indexOf('Uml1ModelElement') > -1"
+    },
+    "Uml0CommandDisabledCondition": {
+      "expression": "(ctx.visibleServerCommands.Uml1DisableAuthoringCmd || conditions.Uml0isProjectModelCondition || conditions.Uml0InDiagramContextCondition) && (!ctx.preferences.AWC_Uml0_enable_aw_commands || ctx.preferences.AWC_Uml0_enable_aw_commands[0] === 'false')"
+    },
+    "Uml0RemoveCommandDisabledCondition": {
+      "expression": "conditions.isRemoveCommandSupported && ctx.visibleServerCommands.Uml1DisableRemoveElementCmd"
+    },
+    "Uml0RemoveDiagramCommandDisabledCondition": {
+      "expression": "conditions.removeElementActiveCondition && conditions.Uml0CommandDisabledCondition"
+    },
+    "Uml0DisableOpenInRacCondition": {
+      "expression": "conditions.awp0OpenInRACCommandCondition && conditions.Uml0CommandDisabledCondition"
+    },
+    "Uml0DuplicateCommandDisableCondition": {
+      "expression": "conditions.isAwb0DuplicateVisible && conditions.Uml0isProjectModelCondition"
+    },
+    "Uml0Arm0MoveUpCommandCondition": {
+      "expression": "conditions.Uml0CommandDisabledCondition && conditions.visibleMoveUpCommand"
+    },
+    "Uml0Arm0MoveDownCommandCondition": {
+      "expression": "conditions.Uml0CommandDisabledCondition && conditions.visibleMoveDownCommand"
+    },
+    "Uml0Arm0PromoteElementCommandCondition": {
+      "expression": "conditions.Uml0CommandDisabledCondition && conditions.visiblePromoteCommand"
+    },
+    "Uml0Arm0DemoteElementCommandCondition": {
+      "expression": "conditions.Uml0CommandDisabledCondition && conditions.visibleDemoteCommand"
+    },
+    "Uml0Arm0ExportCommandCondition": {
+      "expression": "(conditions.Uml0CommandDisabledCondition && conditions.exportExcelCommandCondition  && conditions.att1RoundTripCommandCondition) || (conditions.Uml0CommandDisabledCondition && conditions.exportExcelCommandCondition)"
+    },
+    "Uml0Arm1ReorderCommandCondition": {
+      "expression": "conditions.Uml0CommandDisabledCondition && conditions.visibleReorderCommand"
+    },
+    "Uml0Awp0CompareCommandHandlerCondition": {
+      "expression": "conditions.objectSetSupportsCompareView && (commandContext.objectSetSource === 'GRM(Seg0ExchangeAllocation,Seg0IntfSpec)')  || (commandContext.objectSetSource === 'REF(items_tag,Item).GRMS2P(Seg0ExchangeAllocation,Seg0InterfaceRevision)') || (commandContext.objectSetSource === 'GRM(Seg0FxChainInvolvementRel,Sys0LogicalFunc),GRM(Seg0FxChainInvolvementRel,Sys0PhysicalFunc),GRM(Seg0FxChainInvolvementRel,Sys0SystemFunc)') || (commandContext.objectSetSource === 'GRM(Seg0FxChainInvolvementRel,PSConnection)') || (commandContext.objectSetSource === 'GRM(Seg0FxChainInvolvementRel,Seg0FxChain)')"
+    }
+  },
+  "preferences": [
+    "WEB_default_site_server",
+    "WEB_default_site_deployed_app_name",
+    "AWC_Uml0_enable_aw_commands"
+  ],
+  "messages": {
+    "cutSinglePMSuccessful": {
+      "messageType": "INFO",
+      "messageText": "{{i18n.cutSingleSuccessful}}",
+      "messageTextParams": [
+        "{{ctx.mselected[0].props.object_string.uiValues[0]}}",
+        "{{ctx.pselected}}"
+      ]
+    },
+    "confirmRemove2": {
+      "messageType": "WARNING",
+      "messageText": "{{i18n.removeAssociatedModelRelation}}",
+      "messageTextParams": [
+        "{{ctx.mselected[0].props.object_string.uiValues[0]}}"
+      ],
+      "navigationOptions": [
+        {
+          "option": "Cancel",
+          "text": "{{i18n.cancel}}"
+        },
+        {
+          "option": "Remove",
+          "text": "{{i18n.Remove}}",
+          "action": "performRemoveProjectModelOperation"
+        }
+      ]
+    }
+  },
+  "i18n": {
+    "removeProjectModel": [
+      "UmlSysmlConstants"
+    ],
+    "removeAssociatedModelRelation": [
+      "UmlSysmlMessages"
+    ],
+    "cutSingleSuccessful": [
+      "ZeroCompileCommandMessages"
+    ],
+    "Uml1OpenInSmwTitle": [
+      "UmlSysmlConstants"
+    ],
+    "Uml1OpenInCameoTitle": [
+      "UmlSysmlConstants"
+    ],
+    "licenseNotFound": [
+      "UmlSysmlMessages"
+    ]
+  },
+  "commandPlacements": {
+    "Uml1OpenInSmwOneStep": {
+      "id": "Uml1OpenInSmw",
+      "uiAnchor": "aw_rightWall",
+      "priority": 7,
+      "parentGroupId": "Awp0OpenGroup"
+    },
+    "Uml1OpenInCameoOneStep": {
+      "id": "Uml1OpenInCameo",
+      "uiAnchor": "aw_rightWall",
+      "priority": 7,
+      "parentGroupId": "Awp0OpenGroup"
+    }
+  },
+  "functions": {
+    "cutPMInputs": {
+      "functionName": "cutInputs",
+      "parameters": []
+    },
+    "adaptedRelatedModifiedCutPMInput": {
+      "functionName": "adaptedRelatedModifiedInput",
+      "parameters": []
+    }
+  }
+}

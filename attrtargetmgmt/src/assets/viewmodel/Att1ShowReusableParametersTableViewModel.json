@@ -1,0 +1,1511 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "updateGMMForSelectedDataType":
+        {
+            "actionType": "JSFunction",
+            "method": "updateGMMForSelectedDataType",
+            "inputData": {
+                "unsavedRows":"{{data.unsavedRows}}",
+                "dataType": "{{parameters.dataType}}",
+                "vmo": "{{parameters.vmo}}",
+                "dataProvider": "{{data.dataProviders.uniformParamDataProvider}}",
+                "typeTemplates": "{{data.newRowCacheMap}}",
+                "createParamWithDef": "{{ctx.preferences.PLE_Parameter_Create_With_Definition_Ux[0]}}"
+            },
+            "outputData": {
+                "unsavedRows":"unsavedRows"
+            },
+            "deps": "js/Att1InlineAuthoringHandler"
+        },
+        "checkForDataTypeTemplate":
+        {
+            "actionType": "JSFunction",
+            "method": "checkForDataTypeTemplate",
+            "inputData": {
+                "event":"{{parameters.eventData}}",
+                "dataProvider": "{{data.dataProviders.uniformParamDataProvider}}",
+                "typeTemplates": "{{data.newRowCacheMap}}"
+            },
+            "outputData": {
+                "inlineCreateDataType":"inlineCreateDataType",
+                "inlineCreateClientId":"inlineCreateClientId"
+            },
+            "deps": "js/Att1InlineAuthoringHandler"
+        },
+        "checkForParameterDefTemplate":
+        {
+            "actionType": "JSFunction",
+            "method": "checkForParameterDefTemplate",
+            "inputData": {
+                "selected": "{{parameters.eventData}}",
+                "dataProvider": "{{data.dataProviders.uniformParamDataProvider}}",
+                "typeTemplates": "{{data.newRowCacheMap}}"
+            },
+            "outputData": {
+                "inlineParameterDefRev":"inlineParameterDefRev",
+                "inlineCreateClientId":"inlineCreateClientId"
+            },
+            "deps": "js/Att1InlineAuthoringHandler"
+        },
+        "handleSavedEditStateChange":{
+            "actionType": "JSFunction",
+            "method": "handleSavedEditStateChange",
+            "deps": "js/Att1ShowParametersTableService",
+            "inputData": {
+                "data":"{{data}}",
+                "parametersTable":"{{subPanelContext.parametersTable}}"
+            }
+        },
+        "handleVMCollectionUpdate": {
+            "actionType": "JSFunction",
+            "method": "handleHtmlPanelVMCollection",
+            "deps": "js/xrtUtilities",
+            "inputData": {
+                "callback": "{{subPanelContext.callback.updateVMCollectionCallback}}",
+                "response": {
+                    "dataProvider": "{{data.dataProviders.uniformParamDataProvider}}"
+                }
+            }
+        },
+        "openParameterWidePanel":{
+            "actionType": "popup",
+            "method": "showParameterData",
+            "deps": "js/Att1ParameterWidePanelService",
+            "inputData": {
+                "options": {
+                    "view":"Att1ParameterWidePanel",
+                    "anchor": "att1_parameter_complex_data",
+                    "reference": ".aw-layout-infoCommandbar",
+                    "isModal": false,
+                    "placement": "left-end",
+                    "width": 800,
+                    "height": 680,
+                    "caption": "{{subPanelContext.parametersTable.selectedUnderlyingObjects[0].props.object_name.uiValues[0]}}",
+                    "draggable": false,
+                    "detachMode": true,
+                    "disableClose": true,
+                    "clickOutsideToClose":false,
+                    "subPanelContext": {
+                        "parametersTable":"{{subPanelContext.parametersTable}}",
+                        "source":"{{data.eventData}}"
+                    },
+                    "hooks": {
+                        "whenOpened": "{{function:handleOpenWidePanelHook}}"
+                    },
+                    "data":"{{data}}",
+                    "calcHeight" : true,
+                    "parametersTable":"{{subPanelContext.parametersTable}}"
+                }
+            }
+        },
+        "setFlagsForWidePanel":{
+            "actionType": "JSFunction",
+            "method": "setReusableTableFlagsForWidePanel",
+            "inputData": {
+                "eventData": "{{data.eventData}}",
+                "parametersTable":"{{subPanelContext.parametersTable}}"
+            },
+            "deps": "js/Att1ShowReusableParametersTableService"
+        },
+        "invokeFileSelectionDialog":{
+            "actionType": "JSFunction",
+            "method": "openFileSelectionDialog",
+            "deps": "js/Att1FileSelectionService",
+            "inputData": {
+                "data": "{{data}}",
+                "eventToCall":"uniformParamTable.getFileTicketToUpload",
+                "parametersTable":"{{subPanelContext.parametersTable}}"
+            }
+        },
+        "getFileTicketToUpload":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2007-01-FileManagement",
+            "method": "getTransientFileTicketsForUpload",
+            "inputData": {
+                "transientFileInfos": [
+                    {
+                        "fileName": "{{data.eventMap['uniformParamTable.getFileTicketToUpload'].fileName}}",
+                        "isBinary": true
+                    }
+                ]
+            },
+            "outputData": {
+                "fmsTicket": "transientFileTicketInfos[0].ticket"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "uniformParamTable.updateFileContentInFormData"
+                    }
+                ]
+            }
+        },
+        "updateFileContentInFormData": {
+            "actionType": "JSFunction",
+            "method": "setFormDataForSelectedFile",
+            "deps": "js/Att1FileSelectionService",
+            "inputData": {
+                "data": "{{data}}",
+                "eventToCall":"uniformParamTable.uploadFile"
+            }
+        },
+        "uploadFile": {
+            "actionType": "RESTService",
+            "serviceName": "",
+            "method": "POST",
+            "inputData": {
+                "request": {
+                    "method": "POST",
+                    "url": "{{Constants.fmsUrl}}",
+                    "headers": {
+                        "Content-type": "undefined"
+                    },
+                    "data": "{{data.formData}}"
+                }
+            },
+            "outputData": {
+                "isParameterWidePanelOpen": "true"
+            }
+        },
+        "editEventAction": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "plTable.editStateChange",
+                        "eventData": {
+                            "state": "{{data.eventData.state}}",
+                            "dataSource": {
+                                "dataProviders": "{{data.dataProviders}}"
+                            }
+                        }
+                    },
+                    {
+                        "name": "uniformParamTable.handleSavedEditStateChange",
+                        "eventData": {
+                            "state": "{{data.eventData.state}}",
+                            "dataSource": {
+                                "dataProviders": "{{data.dataProviders}}"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{fields.columnsData}}"
+            },
+            "deps": "js/columnArrangeService"
+        },
+        "saveColumnConfigData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "saveUIColumnConfigs2",
+            "inputData": {
+                "columnConfigurations": [ {
+                    "clientScopeURI": "{{subPanelContext.parametersTable.clientScopeURI}}",
+                    "columnConfigId": "{{data.dataProviders.uniformParamDataProvider.columnConfig.columnConfigId}}",
+                    "columns": "{{data.dataProviders.uniformParamDataProvider.newColumns}}",
+                    "scope": "LoginUser",
+                    "scopeName": ""
+                } ]
+            },
+            "outputData": {}
+        },
+        "saveColumnConfigLoadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "saveUIColumnConfigs2",
+            "inputData": {
+                "columnConfigurations": [ {
+                    "clientScopeURI": "{{subPanelContext.parametersTable.clientScopeURI}}",
+                    "columnConfigId": "{{data.dataProviders.uniformParamDataProvider.columnConfig.columnConfigId}}",
+                    "columns": "{{data.dataProviders.uniformParamDataProvider.newColumns}}",
+                    "scope": "LoginUser",
+                    "scopeName": ""
+                } ]
+            },
+            "outputData": {},
+            "events": {
+                "success": [ {
+                    "name": "uniformParamTable.columnConfigSaved"
+                } ]
+            }
+        },
+        "loadDataForSavedColumnConfig": {
+            "actionType": "JSFunctionAsync",
+            "method": "getTableViewModelProperties",
+            "deps": "js/tcViewModelObjectService",
+            "inputData": {
+                "vmNodes": "{{data.dataProviders.uniformParamDataProvider.viewModelCollection.loadedVMObjects}}",
+                "context": {
+                    "clientScopeURI": "{{subPanelContext.parametersTable.clientScopeURI}}",
+                    "clientName": "AWClient"
+                }
+            },
+            "outputData": {
+                "newColumnConfig": "result.output.columnConfig"
+            },
+            "events": {
+                "success": [ {
+                    "name": "uniformParamTable.updateParamTreeColumns"
+                } ]
+            }
+        },
+        "resetColumnConfig": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "getOrResetUIColumnConfigs4",
+            "inputData": {
+                "getOrResetUiConfigsIn": [ {
+                    "scope": "LoginUser",
+                    "scopeName": "",
+                    "clientName": "AWClient",
+                    "resetColumnConfig": true,
+                    "columnConfigQueryInfos": [ {
+                        "clientScopeURI": "{{subPanelContext.parametersTable.clientScopeURI}}",
+                        "operationType": "configured",
+                        "typeNames": "{{data.dataProviders.uniformParamDataProvider.columnConfig.typesForArrange}}",
+                        "columnsToExclude": []
+                    } ],
+                    "businessObjects": [
+                        {}
+                    ]
+                } ]
+            },
+            "outputData": {
+                "dataProviders.uniformParamDataProvider.columnConfig": "{{function:postResetFunction}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "uniformParamTable.columnConfigSaved"
+                    }
+                ]
+            },
+            "deps": "js/tcarrange.service"
+        },
+        "updateParamTreeColumns": {
+            "actionType": "JSFunction",
+            "method": "updateParamTreeColumns",
+            "inputData": {
+                "data": "{{data.newColumnConfig}}",
+                "dataProvider": "{{data.dataProviders.uniformParamDataProvider}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "uniformParamTable.setCellRenderers"
+                } ]
+            },
+            "deps": "js/attrTableUtils"
+        },
+        "loadTreeColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadParamTreeColumns",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.uniformParamDataProvider}}"
+            },
+            "deps": "js/Att1ShowParametersTableService"
+        },
+        "loadTreeData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadParamTreeData",
+            "inputData": {
+                "treeLoadInput": "request.treeLoadInput",
+                "sortCriteria": "{{data.columnProviders.uniformParamColumnProvider.sortCriteria}}",
+                "columnFilters": "{{data.columnProviders.uniformParamColumnProvider.columnFilters}}",
+                "parametersTable": "{{subPanelContext.parametersTable}}",
+                "subPanelContext": "{{subPanelContext}}"
+            },
+            "outputData": {
+                "searchResults": "treeLoadResult.childNodes",
+                "parametersCount": "treeLoadResult.totalChildCount",
+                "response":"response"
+            },
+            "events": {
+                "success": [ {
+                        "name": "uniformParamTable.plTable.loadProps",
+                        "eventData": {
+                            "VMOs": []
+                        },
+                        "condition": "dataProviders.uniformParamDataProvider.columnConfig  === undefined && data.parametersCount === 0"
+                    },
+                    {
+                        "name": "uniformParamTable.processResponse",
+                        "eventData": {
+                            "response": "{{data.response}}"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Att1ShowParametersTableService"
+        },
+        "loadTreeProperties": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadParamTreeProperties",
+            "inputData": {
+                "propertyLoadInput": "request.propertyLoadInput",
+                "parametersTable": "{{subPanelContext.parametersTable}}"
+            },
+            "outputData": {
+                "dataProviders.uniformParamDataProvider.columnConfig": "result.propertyLoadResult.columnConfig",
+                "dataProviders.uniformParamDataProvider.updatedNodes": "result.propertyLoadResult.updatedNodes",
+                "propertyLoadResult": "result.propertyLoadResult"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "uniformParamTable.tableLoaded",
+                        "eventData":
+                        {
+                            "dataProvider": "{{data.dataProviders.uniformParamDataProvider}}"
+                        },
+                        "condition":"data.dataProviders.uniformParamDataProvider.viewModelCollection.totalObjectsLoaded > 0"
+                    }
+                ]
+            },
+            "deps": "js/Att1ShowParametersTableService"
+        },
+        "updateDisplayNames": {
+            "actionType": "JSFunction",
+            "method": "updateDisplayNames",
+            "inputData": {
+                "eventData": "{{data.eventData}}",
+                "parametersTable": "{{subPanelContext.parametersTable}}"
+            },
+            "deps": "js/Att1ShowParametersTableService"
+        },
+        "syncParamSelections": {
+            "actionType": "JSFunction",
+            "method": "syncParamSelections",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.uniformParamDataProvider}}",
+                "parametersTable": "{{subPanelContext.parametersTable}}",
+                "subPanelContext": "{{subPanelContext}}"
+            },
+            "deps": "js/Att1ShowParametersTableService"
+        },
+        "refreshUniformParamTable": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name":"uniformParamTable.plTable.clientRefresh"
+                    }
+                ]
+            }
+        },
+        "reloadUniformParamTable": {
+            "actionType": "JSFunction",
+            "method": "reloadUniformParamTable",
+            "inputData": {
+                "parametersTable": "{{subPanelContext.parametersTable}}",
+                "eventData":"{{data.eventData}}",
+                "dataProvider":"{{data.dataProviders.uniformParamDataProvider}}"
+            },
+            "deps": "js/Att1ShowParametersTableService",
+            "events": {
+                "success": [
+                    {
+                        "name": "uniformParamTable.reloadCompleted"
+                    }
+                ]
+            }
+        },
+        "reloadOrExpandUniformParamTable": {
+            "actionType": "JSFunction",
+            "method": "reloadOrExpandUniformParamTable",
+            "inputData": {
+                "eventData": "{{data.eventData}}",
+                "parametersTable": "{{subPanelContext.parametersTable}}",
+                "vmNodes": "{{data.dataProviders.uniformParamDataProvider.viewModelCollection.loadedVMObjects}}"
+            },
+            "deps": "js/Att1ShowParametersTableService"
+        },
+        "doPostProcessingAfterTableReload": {
+            "actionType": "JSFunction",
+            "method": "doPostProcessingAfterTableReload",
+            "inputData": {
+                "parametersTable": "{{subPanelContext.parametersTable}}"
+            },
+            "deps": "js/Att1ShowParametersTableService"
+        },
+        "isParameterOverridden": {
+            "actionType": "JSFunction",
+            "method": "isAttrItemUpdated",
+            "inputData": {
+                "eventMap": "{{data.eventMap}}",
+                "refreshEvent": "uniformParamTable.reloadTable",
+                "parametersTable": "{{subPanelContext.parametersTable}}"
+            },
+            "deps": "js/attrTableUtils"
+        },
+        "selectParameters":{
+            "actionType": "JSFunction",
+            "method": "setSelection",
+            "inputData": {
+                "data": "{{data.dataProviders.uniformParamDataProvider}}",
+                "objectsToSelect" :"{{data.eventMap['uniformParamTable.selectNodes'].attributesToSelect}}",
+                "selectNodes" :"{{data.eventMap['uniformParamTable.selectNodes'].selectNodes}}"
+            },
+            "deps": "js/Att1ShowParametersTableService"
+        },
+        "setCellRenderers":{
+            "actionType": "JSFunction",
+            "method": "setCellRenderers",
+            "inputData": {
+                "data": "{{data.propertyLoadResult}}",
+                "columnConfig" :"{{data.dataProviders.uniformParamDataProvider.columnConfig}}",
+                "parametersTable": "{{subPanelContext.parametersTable}}",
+                "vmNodes": "{{data.dataProviders.uniformParamDataProvider.viewModelCollection.loadedVMObjects}}"
+            },
+            "outputData": {
+                "dataProviders.uniformParamDataProvider.columnConfig": "propertyLoadResult.columnConfig"
+            },
+            "deps": "js/Att1ShowParametersTableService"
+        },
+        "expandNodes":{
+            "actionType": "JSFunction",
+            "method": "expandNodes",
+            "inputData": {
+                "data": "{{data.dataProviders.uniformParamDataProvider}}",
+                "objectsToExpand" :"{{data.eventMap['uniformParamTable.expandNodes'].attributesToExpand}}"
+            },
+            "deps": "js/Att1ShowParametersTableService"
+        },
+        "tableLoaded":{
+            "actionType": "JSFunction",
+            "method": "tableLoaded",
+            "inputData": {
+                "data": "{{data.dataProviders.uniformParamDataProvider}}",
+                "parametersCount": "{{data.parametersCount}}",
+                "parametersTable": "{{subPanelContext.parametersTable}}",
+                "selection": "{{subPanelContext.selection}}"
+            },
+            "deps": "js/Att1ShowParametersTableService"
+        },
+        "unInitParametersTable": {
+            "actionType": "JSFunction",
+            "method": "unInitParametersTable",
+            "inputData": {
+                "parametersTable": "{{subPanelContext.parametersTable}}"
+            },
+            "deps": "js/Att1ShowParametersTableService"
+        },
+        "updateChildParametersNonEditable": {
+            "actionType": "JSFunction",
+            "method": "updateChildParametersNonEditable",
+            "inputData": {
+                "eventData": "{{data.eventData}}"
+            },
+            "outputData": {
+                "data": "data"
+            },
+            "deps": "js/Att1ShowParametersTableService"
+        },
+        "updateCellPropNonEditable": {
+            "actionType": "JSFunction",
+            "method": "updateCellPropNonEditable",
+            "inputData": {
+                "data": "{{data.eventData}}"
+            },
+            "deps": "js/Att1ShowParametersTableService"
+        },
+        "updateOverrideCellPropNonEditable": {
+            "actionType": "JSFunction",
+            "method": "updateOverrideCellPropNonEditable",
+            "inputData": {
+                "data": "{{data.eventData}}"
+            },
+            "deps": "js/Att1ShowParametersTableService"
+        },
+        "clearParameterTableSelection": {
+            "actionType": "JSFunction",
+            "method": "clearParameterTableSelection",
+            "inputData": {
+                "dataProvider":"{{data.dataProviders.uniformParamDataProvider}}",
+                "activeObjectSet": "{{subPanelContext.xrtState.activeObjectSet}}"
+            },
+            "deps": "js/Att1ShowParametersTableService"
+        },
+        "att1SplmTreeStartEdit": {
+            "actionType": "JSFunction",
+            "method": "execute",
+            "deps": "js/startEditGroupCommandService",
+            "inputData": {
+                "handleContext": "",
+                "view": "{{ctx.ViewModeContext.ViewModeContext}}"
+            }
+        },
+        "att1SplmTableSaveEdit": {
+            "actionType": "JSFunction",
+            "method": "updateRedlineProps",
+            "deps": "js/xrtUtilities",
+            "inputData": {},
+            "events": {
+                "success": [ {
+                    "name": "save.performOperation"
+                } ]
+            }
+        },
+        "handleHostingSelectionChange": {
+            "actionType": "JSFunction",
+            "method": "handleHostingParaSelectionChange",
+            "inputData": {
+                "eventdata": "{{eventData}}"
+            },
+            "deps": "js/Att1ShowParametersTableService"
+        },
+        "removeParamsFromTable": {
+            "actionType": "JSFunction",
+            "method": "removeParamsFromTable",
+            "deps": "js/RemoveMeasurableAttr",
+            "inputData": {
+                "parametersTable": "{{subPanelContext.parametersTable}}",
+                "dataProvider": "{{data.dataProviders.uniformParamDataProvider}}",
+                "eventData":"{{data.eventData}}"
+            }
+        },
+        "addInlineRow": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "Att1InlineAuthoring.renderInlineRow",
+                    "eventData": {
+                        "targetObjectType": "{{parameters.targetObjectType}}",
+                        "parentElement": "{{function:populateParentElement}}",
+                        "context": "{{parameters.context}}"
+                    }
+                } ]
+            },
+            "deps": "js/Att1InlineAuthoringHandler"
+        },
+        "inlineRowBatch": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "changeParameterColumnConfig",
+                    "condition": "parameters.context.parametersTable.requestId === subPanelContext.parametersTable.requestId"
+                },
+                {
+                    "action": "getParameterVMOObjects",
+                    "condition": "parameters.context.parametersTable.requestId === subPanelContext.parametersTable.requestId && data.newRowCacheMap.Double === undefined"
+                },
+                {
+                    "action": "callUsageProvider"
+                },
+                {
+                    "action": "renderInlineRow",
+                    "condition": "parameters.context.parametersTable.requestId === subPanelContext.parametersTable.requestId"
+                },
+                {
+                    "action": "editInlineRow",
+                    "condition": "parameters.context.parametersTable.requestId === subPanelContext.parametersTable.requestId"
+                }
+            ]
+        },
+        "editInlineRow": {
+            "actionType": "JSFunction",
+            "method": "editInlineRow",
+            "inputData": {
+                "inlineAuthoringHandlerContext": "{{data.inlineAuthoringHandlerContext}}"
+            },
+            "deps": "js/Att1InlineAuthoringHandler"
+        },
+        "getParameterVMOObjectsBatch": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "getParameterVMOObjects",
+                    "condition": "parameters.paramDefFound !== true"
+                },
+                {
+                    "action": "updateGMMForSelectedDataType"
+                }
+            ]
+        },
+        "renderInlineRow": {
+            "actionType": "JSFunction",
+            "method": "renderInlineRow",
+            "inputData": {
+                "targetObjectType": "{{parameters.targetObjectType}}",
+                "parentNode": "{{data.dataProviders.uniformParamDataProvider.topTreeNode}}",
+                "unsavedRows": "{{data.unsavedRows}}",
+                "newRowCacheMap": "{{data.newRowCacheMap}}",
+                "treeDataProvider": "{{data.dataProviders.uniformParamDataProvider}}",
+                "inlineAuthoringHandlerContext": "{{data.inlineAuthoringHandlerContext}}",
+                "createParamWithDef": "{{ctx.preferences.PLE_Parameter_Create_With_Definition_Ux[0]}}",
+                "i18n":"{{i18n}}",
+                "table": "{{parameters.context.parametersTable}}"
+            },
+            "outputData": {
+                "unsavedRows": ""
+            },
+            "deps": "js/Att1InlineAuthoringHandler"
+        },
+        "trySaveEdits": {
+            "actionType": "JSFunction",
+            "method": "isAllowedToSave",
+            "inputData": {
+                "unsavedRows": "{{data.unsavedRows}}",
+                "treeDataProvider": "{{data.dataProviders.uniformParamDataProvider}}"
+            },
+            "outputData": {
+                "isSaveAllowed": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "Att1InlineAuthoring.handleSaveEdits",
+                    "condition": "conditions.isInlineEditTable"
+                } ]
+            },
+            "deps": "js/Att1InlineAuthoringHandler"
+        },
+        "handleSaveEdits": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "Att1InlineAuthoring.saveInlineRow",
+                    "condition": "conditions.isSaveAllowed"
+                } ]
+            },
+            "actionMessages": {
+                "success": [ {
+                    "condition": "conditions.isNotSaveAllowed",
+                    "message": "missingRequiredValue"
+                } ]
+            },
+            "deps": "js/Att1InlineAuthoringHandler"
+        },
+        "saveInlineRow": {
+            "actionType": "JSFunction",
+            "method": "prepareInputForCreateInlineParametersSoa",
+            "inputData": {
+                "data": "{{data}}",
+                "unsavedRows": "{{data.unsavedRows}}",
+                "editHandler":  "{{data.inlineAuthoringHandlerContext}}",
+                "parametersTable": "{{subPanelContext.parametersTable}}",
+                "selectedParent": "{{subPanelContext.selection[0]}}",
+                "createParamWithDef": "{{ctx.preferences.PLE_Parameter_Create_With_Definition_Ux[0]}}"
+            },
+            "outputData": {
+                "createParametersInput": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "createParametersSoaCall2",
+                    "condition": "conditions.isInlineEditTable"
+                } ]
+            },
+            "deps": "js/addMeasurableAttr"
+        },
+        "cancelInlineEdits": {
+            "actionType": "JSFunction",
+            "method": "cancelEdits",
+            "deps": "js/Att1InlineAuthoringEditService"
+        },
+        "discardAllUnsavedRows": {
+            "actionType": "JSFunction",
+            "method": "discardAllUnsavedRows",
+            "inputData": {
+                "unsavedRows": "{{data.unsavedRows}}",
+                "treeDataProvider": "{{data.dataProviders.uniformParamDataProvider}}",
+                "commandContext": "{{commandContext}}"
+            },
+            "outputData": {
+                "unsavedRows": [],
+                "savedRows": "undefined",
+                "failedUnsavedRows": "undefined"
+            },
+            "events": {
+                "success": [ {
+                    "name": "Att1InlineAuthoring.changeParameterColumnConfig",
+                    "eventData": {
+                        "hiddenFlagValue": true
+                    }
+                },
+                {
+                    "name": "Att1InlineAuthoring.resetInlineDataCache"
+                },
+                {
+                    "name": "Att1InlineAuthoring.removeEditHandler"
+                },
+                {
+                    "name": "Att1InlineAuthoring.refreshData"
+                }
+             ]
+            },
+            "deps": "js/Att1InlineAuthoringHandler"
+        },
+        "refreshData": {
+            "actionType": "JSFunction",
+            "method": "refreshData",
+            "deps": "js/AwXrt2Service"
+        },
+        "removeUnsavedRows": {
+            "actionType": "JSFunction",
+            "method": "removeUnsavedRows",
+            "inputData": {
+                "eventData":"{{data.eventData}}",
+                "unsavedRows": "{{data.unsavedRows}}",
+                "treeDataProvider": "{{data.dataProviders.uniformParamDataProvider}}"
+            },
+            "outputData": {
+                "unsavedRows": "result.unsavedRows",
+                "failedUnsavedRows": "result.failedUnsavedRows"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Att1InlineAuthoring.changeParameterColumnConfig",
+                        "eventData": {
+                            "hiddenFlagValue": true
+                        },
+                        "condition":"data.unsavedRows.length === 0"
+                    },
+                    {
+                        "name": "uniformParamTable.plTable.clientRefresh"
+                    }
+                ]
+            },
+            "deps": "js/Att1InlineAuthoringHandler"
+        },
+        "createParametersSoaCall2": {
+            "actionType": "TcSoaService",
+            "serviceName": "AttrTargetMgmt-2020-12-AttributeTargetManagement",
+            "method": "createParameters",
+            "inputData": {
+                "inputs": "{{data.createParametersInput}}"
+            },
+            "outputData": {
+                "createdObject": "",
+                "response": "",
+                "errorDetails": "{{function:processCreateParamName}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Att1InlineAuthoring.discardAllUnsavedRows"
+                    },
+                    {
+                        "name": "Att1InlineAuthoring.removeEditHandler"
+                    },
+                    {
+                        "name": "Att1InlineAuthoring.cancelEdits"
+                    },
+                    {
+                        "name": "uniformParamTable.reloadTable",
+                        "eventData": {
+                            "requestId": "{{commandContext.parametersTable.requestId}}",
+                            "reusable": "{{commandContext.reusable}}"
+                        }
+                    }
+                ],
+                "failure": [ {
+                        "name": "att1AddParameter.setItemEventProgressing",
+                        "eventData": {
+                            "valueToSet": false
+                        }
+                    },
+                    {
+                        "name": "updateUnsavedRows"
+                    },
+                    {
+                        "name": "uniformParamTable.refreshTable"
+                    },
+                    {
+                        "name": "Att1InlineAuthoring.processPartialErrorsAfterSave",
+                        "eventData": {
+                            "data": "{{ctx}}"
+                        }
+                    },
+                    {
+                        "name": "confirmWriteAccessError",
+                        "condition": "data.errorDetails.errorCode === 185074"
+                    },
+                    {
+                        "name": "notWriteAccessError",
+                        "condition": "data.errorDetails.errorCode !== 185074"
+                    }
+                ]
+            },
+            "deps": "js/addMeasurableAttr"
+        },
+        "processPartialErrorsAfterSave": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "processPartialErrors"
+                },
+                {
+                    "action": "postSaveHandlerPartialErrors"
+                }
+            ]
+        },
+        "processPartialErrors": {
+            "actionType": "JSFunction",
+            "method": "processPartialErrors",
+            "inputData": {
+                "response": "{{data.response}}"
+            },
+            "deps": "js/Att1InlineAuthoringHandler"
+        },
+        "updateUnsavedRows": {
+            "actionType": "JSFunction",
+            "method": "updateUnsavedRows",
+            "inputData": {
+                "unsavedRows": "{{data.unsavedRows}}",
+                "ServiceData": "{{data.response.ServiceData}}",
+                "treeDataProvider": "{{data.dataProviders.uniformParamDataProvider}}"
+            },
+            "outputData": {
+                "unsavedRows": "unsavedRows",
+                "savedRows": "savedRows",
+                "failedUnsavedRows": "failedUnsavedRows"
+            },
+            "deps": "js/Att1InlineAuthoringHandler"
+        },
+        "postSaveHandler": {
+            "actionType": "JSFunction",
+            "method": "postSaveHandler",
+            "inputData": {
+                "savedRows": "{{data.unsavedRows}}",
+                "treeDataProvider": "{{data.dataProviders.uniformParamDataProvider}}",
+                "soaResponse": "{{data.response}}",
+                "selectSavedRows": true
+            },
+            "outputData": {
+                "selectionToUpdate": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "plTable.scrollToRow",
+                    "eventData": {
+                        "gridId": "uniformParameterTable",
+                        "rowUids": "{{data.selectionToUpdate}}"
+                    }
+                } ]
+            },
+            "deps": "js/Att1InlineAuthoringHandler"
+        },
+        "postSaveHandlerPartialErrors": {
+            "actionType": "JSFunction",
+            "method": "postSaveHandler",
+            "inputData": {
+                "savedRows": "{{data.savedRows}}",
+                "treeDataProvider": "{{data.dataProviders.treeDataProvider}}",
+                "soaResponse": "{{data.response}}",
+                "selectSavedRows": false
+            },
+            "deps": "js/Att1InlineAuthoringHandler"
+        },
+        "removeInlineEditHandler": {
+            "actionType": "JSFunction",
+            "method": "removeEditHandler",
+            "inputData": {
+                "inlineAuthoringHandlerContext": "{{data.inlineAuthoringHandlerContext}}"
+            },
+            "deps": "js/Att1InlineAuthoringHandler"
+        },
+        "resetInlineDataCache": {
+            "actionType": "JSFunction",
+            "method": "resetInlineDataCache",
+            "outputData": {
+                "newRowCacheMap": "newRowCacheMap",
+                "inlineCreateClientId": "inlineCreateClientId",
+                "inlineCreateDataType": "inlineCreateDataType",
+                "inlineParameterDefRev": "inlineParameterDefRev"
+
+            },
+            "deps": "js/Att1InlineAuthoringHandler"
+        },
+        "discardUnsavedAndResetInlineDataCacheBatch": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "cancelInlineEdits"
+                },
+                {
+                    "action": "discardAllUnsavedRows"
+                },
+                {
+                    "action": "refreshData"
+                }
+            ]
+        },
+        "discardUnsavedInlineAndReload": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "cancelInlineEdits"
+                },
+                {
+                    "action": "discardAllUnsavedRows"
+                },
+                {
+                    "action": "reloadUniformParamTable"
+                }
+            ]
+        },
+        "changeParameterColumnConfig": {
+            "actionType": "JSFunction",
+            "method" : "changeParameterColumnConfig",
+            "inputData" : {
+                "dataProvider" : "{{dataProviders.uniformParamDataProvider.columnConfig}}",
+                "hiddenFlagValue" :"{{parameters.hiddenFlagValue}}",
+                "createParamWithDef": "{{ctx.preferences.PLE_Parameter_Create_With_Definition_Ux[0]}}",
+                "objectColumnName": "{{i18n.objectColumnName}}",
+                "cols":"{{dataProviders.uniformParamDataProvider.cols}}"
+            },
+            "outputData": {
+                "dataProviders.uniformParamDataProvider.columnConfig.columns": "newColumnConfigCols",
+                "dataProviders.uniformParamDataProvider.columnConfig.columnConfigId": "columnConfigId",
+                "columnNames": "columnNames",
+                "dataProviders.uniformParamDataProvider.cols":"newCols"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name":"uniformParamTable.plTable.clientRefresh"
+                    }
+                ]
+            },
+            "deps": "js/Att1InlineAuthoringHandler"
+        },
+        "callUsageProvider": {
+            "actionType": "dataProvider",
+            "method": "usageProvider"
+        },
+        "getParameterVMOObjects": {
+            "actionType": "TcSoaService",
+            "serviceName": "AttrTargetMgmtAW-2023-06-AttributeTargetManagement",
+            "method": "getParameterVMOObjects",
+            "inputData": {
+                "inputs": [ {
+                    "clientId": "{{data.inlineCreateClientId}}",
+                    "action": "inlinecreate",
+                    "dataType": "{{data.inlineCreateDataType}}",
+                    "parameterDefRev": "{{data.inlineParameterDefRev}}",
+                    "application": "Engineering",
+                    "columnNames": "{{data.columnNames}}",
+                    "optionNameValueMap":{"defaultUsage" : "{{props.subPanelContext.parametersTable.usage}}"}
+                } ]
+            },
+            "outputData": {
+                "newRowCacheMap": "{{function:processInlineTemplates}}"
+            },
+            "deps": "js/Att1InlineAuthoringHandler"
+        }
+    },
+    "lifecycleHooks": {
+        "onUpdate": [
+            {
+                "action": "clearParameterTableSelection",
+                "observers": [ "props.subPanelContext.xrtState.activeObjectSet" ]
+            },
+            {
+                "action": "syncParamSelections",
+                "observers": [ "viewModel.atomicData.selectionData" ]
+            },
+            {
+                "action": "openParameterWidePanel",
+                "observers": [ "props.subPanelContext.parametersTable.isParameterWidePanelOpen" ]
+            },
+            {
+                "action": "invokeFileSelectionDialog",
+                "observers": [ "props.subPanelContext.parametersTable.invokeSelectiondialog" ]
+            },
+            {
+                "action": "doArrangeEvent",
+                "observers": [ "fields.columnsData" ]
+            }
+        ],
+        "onUnmount": "unInitParametersTable"
+    },
+    "preferences": [
+    ],
+    "functions": {
+        "handleOpenWidePanelHook": {
+            "functionName": "handleOpenWidePanelHook",
+            "parameters": [
+                "{{props.subPanelContext.parametersTable}}"
+            ]
+        },
+        "postResetFunction": {
+            "functionName": "postResetFunction",
+            "parameters": [
+                "{{data.dataProviders.gridDataProvider.columnConfig}}"
+            ]
+        },
+        "populateParentElement": {
+            "functionName": "populateParentElement",
+            "parameters": [
+                "{{commandContext}}",
+                "{{data.dataProviders.uniformParamDataProvider.topTreeNode}}"
+            ]
+        },
+        "populateInlineRows": {
+            "functionName": "populateInlineRows",
+            "parameters": [
+                "{{data.unsavedRows}}",
+                "{{data.dataProviders.uniformParamDataProvider}}"
+            ],
+            "deps": "js/Att1InlineAuthoringHandler"
+        },
+        "processInlineTemplates": {
+            "functionName": "processInlineTemplates",
+            "parameters": [
+                "{{data.response}}",
+                "{{data.newRowCacheMap}}",
+                "{{data.newRowCacheMap}}"
+            ]
+        }
+    },
+    "dataProviders": {
+        "uniformParamDataProvider": {
+            "initializeAction": "loadTreeData",
+            "nextAction": "loadTreeData",
+            "previousAction": "loadTreeData",
+            "treeLoadResult": "action.result.treeLoadResult",
+            "selectionModelMode": "multiple",
+            "cacheCollapse": true,
+            "inputData": {
+                "accessMode": "tree",
+                "selectionData": "{{fields.selectionData}}",
+                "selectionModel": "{{data.selectionModels.reusableTreeSelectionModel}}"
+            },
+            "editContext": "{{subPanelContext.parametersTable.editContext}}",
+            "commandsAnchor": "show_object_command"
+        },
+        "uniformParamPropertyProvider": {
+            "action": "loadTreeProperties",
+            "propertyLoadResult": "action.result.propertyLoadResult"
+        },
+        "usageProvider": {
+            "response": "{{data.lovUsagePropOptions}}",
+            "moreValuesExist": false
+        },
+        "dataTypeProvider": {
+            "response": "{{data.lovDataTypePropOptions}}",
+            "moreValuesExist": false
+        }
+    },
+    "selectionModels": {
+        "reusableTreeSelectionModel": {
+            "selectionMode": "multiple"
+        }
+    },
+    "grids": {
+        "uniformParamTable": {
+            "dataProvider": "uniformParamDataProvider",
+            "propertyProvider": "uniformParamPropertyProvider",
+            "columnProvider": "uniformParamColumnProvider",
+            "enableArrangeMenu": true,
+            "addIconColumn": false,
+            "gridOptions": {
+                "enableSorting": true,
+                "useStaticFirstCol": true,
+                "isFilteringEnabled": true
+            }
+        }
+    },
+    "columnProviders": {
+        "uniformParamColumnProvider": {
+            "loadColumnAction": "loadTreeColumns",
+            "saveColumnAndLoadAction": "saveColumnConfigLoadData",
+            "saveColumnAction": "saveColumnConfigData",
+            "resetColumnAction": "resetColumnConfig",
+            "sortCriteria": []
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "uniformParamDataProvider.modelObjectsUpdated",
+            "cacheEventData": true,
+            "action": "handleVMCollectionUpdate"
+        },
+        {
+            "eventId": "editHandlerStateChange",
+            "cacheEventData": true,
+            "action": "editEventAction"
+        },
+        {
+            "eventId": "uniformParamTable.columnConfigSaved",
+            "cacheEventData": true,
+            "action": "loadDataForSavedColumnConfig",
+            "condition": "ctx.NONE && !ctx['NONE']._editing"
+        },
+        {
+            "eventId": "uniformParamTable.updateParamTreeColumns",
+            "action": "updateParamTreeColumns"
+        },
+        {
+            "eventId": "vmc.modified.uniformParamDataProvider",
+            "cacheEventData": true,
+            "action": "updateDisplayNames"
+        },
+        {
+            "eventId": "uniformParamTable.refreshTable",
+            "cacheEventData": true,
+            "action": "refreshUniformParamTable"
+        },
+        {
+            "eventId": "uniformParamTable.reloadTable",
+            "cacheEventData": true,
+            "action": "reloadUniformParamTable",
+            "condition": "(subPanelContext.parametersTable.parametersTableViewMode === undefined ) || (subPanelContext.parametersTable.parametersTableViewMode !== undefined && subPanelContext.parametersTable.parametersTableViewMode.viewModeContext === 'hideChildLines')"
+        },
+        {
+            "eventId": "uniformParamTable.reloadTable",
+            "cacheEventData": true,
+            "action": "reloadOrExpandUniformParamTable",
+            "condition": "subPanelContext.parametersTable.parametersTableViewMode !== undefined && subPanelContext.parametersTable.parametersTableViewMode.viewModeContext === 'showChildLines'"
+        },
+        {
+            "eventId": "uniformParamTable.reloadCompleted",
+            "cacheEventData": true,
+            "action": "doPostProcessingAfterTableReload"
+        },
+        {
+            "eventId": "cdm.updated",
+            "cacheEventData": true,
+            "action": "isParameterOverridden"
+        },
+        {
+            "eventId": "uniformParamTable.selectNodes",
+            "cacheEventData": true,
+            "action": "selectParameters"
+        },
+        {
+            "eventId": "uniformParamTable.clearSelections",
+            "cacheEventData": true,
+            "action": "clearSelections"
+        },
+        {
+            "eventId": "uniformParamTable.expandNodes",
+            "cacheEventData": true,
+            "action": "expandNodes"
+        },
+        {
+            "eventId": "uniformParamTable.tableLoaded",
+            "cacheEventData": true,
+            "action": "tableLoaded"
+        },
+        {
+            "eventId": "uniformParamTable.setCellRenderers",
+            "cacheEventData": true,
+            "action": "setCellRenderers"
+        },
+        {
+            "eventId":"uniformParamTable.openParameterWidePanel",
+            "cacheEventData": true,
+            "action": "setFlagsForWidePanel",
+            "condition": "subPanelContext.parametersTable.selectedUnderlyingObjects.length > 0"
+        },
+        {
+            "eventId":"uniformParamTable.handleSavedEditStateChange",
+            "cacheEventData": true,
+            "action":"handleSavedEditStateChange"
+        },
+        {
+            "eventId": "hosting.changeSelection",
+            "cacheEventData": true,
+            "action": "handleHostingSelectionChange"
+        },
+        {
+            "eventId": "uniformParamTable.removeParamsFromTable",
+            "cacheEventData": true,
+            "action": "removeParamsFromTable"
+        },
+        {
+            "eventId": "Att1InlineAuthoring.addInlineRow",
+            "inputArgs": {
+                "targetObjectType": "{{eventData.targetObjectType}}",
+                "context": "{{eventData.context}}"
+            },
+            "action": "addInlineRow"
+        },
+        {
+            "eventId": "Att1InlineAuthoring.renderInlineRow",
+            "inputArgs": {
+                "targetObjectType": "{{eventData.targetObjectType}}",
+                "context": "{{eventData.context}}"
+            },
+            "condition": "conditions.isContextForInlineEdit",
+            "action": "inlineRowBatch"
+        },
+        {
+            "eventId": "Att1InlineAuthoring.trySaveEdits",
+            "inputArgs": {
+                "requestId": "{{eventData.requestId}}"
+            },
+            "action": "trySaveEdits",
+            "condition": "conditions.isInlineEditTable"
+        },
+        {
+            "eventId": "Att1InlineAuthoring.handleSaveEdits",
+            "action": "handleSaveEdits",
+            "condition": "conditions.isInlineEditTable"
+        },
+        {
+            "eventId": "updateUnsavedRows",
+            "action": "updateUnsavedRows",
+            "condition": "conditions.isInlineEditTable"
+        },
+        {
+            "eventId": "Att1InlineAuthoring.saveInlineRow",
+            "action": "saveInlineRow",
+            "condition": "conditions.isInlineEditTable"
+        },
+        {
+            "eventId": "createParametersSoaCall2",
+            "action": "createParametersSoaCall2",
+            "condition": "conditions.isInlineCanCallSOA"
+        },
+        {
+            "eventId": "Att1InlineAuthoring.discardAllUnsavedRows",
+            "action": "discardAllUnsavedRows",
+            "condition": "conditions.isInlineEditTable"
+        },
+        {
+            "eventId": "Att1InlineAuthoring.refreshData",
+            "action": "refreshData"
+        },
+        {
+            "eventId": "Att1InlineAuthoringHandler.postSaveHandler",
+            "action": "postSaveHandler"
+        },
+        {
+            "eventId": "Att1InlineAuthoring.processPartialErrorsAfterSave",
+            "action": "processPartialErrors",
+            "condition": "conditions.isInlineEditTable"
+
+        },
+        {
+            "eventId": "Att1InlineAuthoring.discardUnsavedAndResetInlineDataCache",
+            "condition": "conditions.inlineReloadRequired",
+            "action": "discardUnsavedInlineAndReload"
+        },
+        {
+            "eventId": "Att1InlineAuthoring.discardUnsavedAndResetInlineDataCache",
+            "condition": "conditions.inlineRefreshRequired",
+            "action": "discardUnsavedAndResetInlineDataCacheBatch"
+        },
+        {
+            "eventId": "Att1InlineAuthoring.discardUnsavedInlineAndReload",
+            "action": "discardUnsavedInlineAndReload"
+        },
+        {
+            "eventId":"Att1ShowParametersTable.updateDataTypeForInlineParameter",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            },
+            "action":"checkForDataTypeTemplate",
+            "condition": "conditions.isInlineEditTable"
+        },
+        {
+            "eventId":"Att1InlineAuthoring.updateGMMForSelectedDataType",
+            "inputArgs": {
+                "dataType": "{{eventData.dataType}}",
+                "vmo": "{{eventData.vmo}}"
+            },
+            "condition": "conditions.isInlineSave",
+            "action":"updateGMMForSelectedDataType"
+        },
+        {
+            "eventId":"Att1InlineAuthoring.updateGMMForSelectedParam",
+            "inputArgs": {
+                "dataType": "{{eventData.dataType}}",
+                "vmo": "{{eventData.vmo}}"
+            },
+            "action":"updateGMMForSelectedDataType"
+        },
+        {
+            "eventId":"Att1InlineAuthoring.getParameterVMOObjectsAndApply",
+            "inputArgs": {
+                "dataType": "{{eventData.dataType}}",
+                "vmo": "{{eventData.vmo}}",
+                "paramDefFound": "{{eventData.paramDefFound}}"
+            },
+            "action":"getParameterVMOObjectsBatch",
+            "condition": "conditions.isInlineEditTable"
+        },
+        {
+            "eventId":"Att1ShowParametersTable.updateParamDefForInlineParameter",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            },
+            "action":"checkForParameterDefTemplate",
+            "condition": "conditions.isInlineEditTable"
+        },
+        {
+            "eventId": "Att1InlineAuthoring.changeParameterColumnConfig",
+            "action": "changeParameterColumnConfig",
+            "inputArgs": {
+                "hiddenFlagValue": "{{eventData.hiddenFlagValue}}"
+            },
+            "condition": "conditions.isInlineEditTable"
+        },
+        {
+            "eventId": "Att1InlineAuthoring.removeSelectedInlineParam",
+            "cacheEventData": true,
+            "action": "removeUnsavedRows",
+            "condition": "conditions.isInlineEditTable"
+        },
+        {
+            "eventId": "Att1InlineAuthoring.removeEditHandler",
+            "action": "removeInlineEditHandler",
+            "condition": "conditions.isInlineEditTable"
+        },
+        {
+            "eventId": "Att1InlineAuthoring.resetInlineDataCache",
+            "action": "resetInlineDataCache"
+        },
+        {
+            "eventId": "Att1InlineAuthoring.cancelEdits",
+            "action": "cancelInlineEdits"
+        }
+    ],
+    "data":{
+        "reusable": true,
+        "selectionData": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "showCheckBox": {
+            "initialValues": {
+                "value": false
+            },
+            "meta": {}
+        },
+        "isBulkEditing": {
+            "initialValues": {
+                "value": false
+            },
+            "meta": {}
+        },
+        "selectRows": {
+            "initialValues": {
+                "value": ""
+            },
+            "meta": {}
+        },
+        "arrangeData": {
+            "initialValues": {
+                "value": false
+            },
+            "meta": {}
+        },
+        "columnsData": {
+            "initialValues": {
+                "value": false
+            },
+            "meta": {}
+        },
+        "newRowCacheMap": {},
+        "unsavedRows": [],
+        "inlineAuthoringHandlerContext": "ParameterTableEditContext",
+        "lovUnitProp":{
+            "displayName": "{{i18n.UnitOfMeasure}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "hasLov":true,
+            "isEditable": "true",
+            "dbValue": "",
+            "uiValue": ""
+        },
+        "lovUnitPropOptions":{
+            "type": "STRING",
+            "dbValue": ""
+        },
+        "columnNames": [],
+        "inlineCreateClientId": "Double",
+        "inlineCreateDataType": "",
+        "inlineParameterDefRev": ""
+    },
+    "props": {
+        "view-id": {
+            "type": "string"
+        }
+    },
+    "conditions": {
+        "isSaveAllowed": {
+            "expression": "data.isSaveAllowed === true && commandContext.parametersTable.requestId === subPanelContext.parametersTable.requestId"
+        },
+        "isNotSaveAllowed": {
+            "expression": "!conditions.isSaveAllowed && commandContext.parametersTable.requestId === subPanelContext.parametersTable.requestId"
+        },
+        "isInlineSave": {
+            "expression": "data.unsavedRows.length > 0"
+        },
+        "isNotInlineSave": {
+            "expression": "data.unsavedRows === undefined || data.unsavedRows.length === 0"
+        },
+        "inlineReloadRequired": {
+            "expression": "data.savedRows !== undefined && data.savedRows.length > 0"
+        },
+        "inlineRefreshRequired": {
+            "expression": "data.savedRows === undefined || data.savedRows.length === 0"
+        },
+        "useParameterDefinitionCond": {
+            "expression": "ctx.preferences.PLE_Parameter_Create_With_Definition_Ux[0] === 'true'"
+        },
+        "dontUseParameterDefinitionCond": {
+            "expression": "ctx.preferences.PLE_Parameter_Create_With_Definition_Ux[0] === 'false'"
+        },
+        "needParamDef": {
+            "expression": "data.newRowCacheMap[data.inlineParameterDefRev] === undefined"
+        },
+        "isContextForInlineEdit": {
+            "expression": "parameters.context.parametersTable.requestId === subPanelContext.parametersTable.requestId"
+        },
+        "isInlineEditTable": {
+            "expression": "ctx.ParameterTableEditContext.requestId !== undefined && ctx.ParameterTableEditContext.requestId === subPanelContext.parametersTable.requestId"
+        },
+        "isInlineCanCallSOA": {
+            "expression": "ctx.ParameterTableEditContext.requestId !== undefined && ctx.ParameterTableEditContext.requestId === subPanelContext.parametersTable.requestId && data.unsavedRows.length > 0"
+        }
+    },
+    "i18n": {
+        "DifferenceValue":[
+            "Att1AttrMappingMessages"
+        ],
+        "MissingValue":[
+            "Att1AttrMappingMessages"
+        ],
+        "NoResult": [
+            "Att1Messages"
+        ],
+        "Fail": [
+            "Att1Messages"
+        ],
+        "Pass": [
+            "Att1Messages"
+        ],
+        "Parameters": [
+            "Att1Messages"
+        ],
+        "missingRequiredValue": [
+            "Att1AttrMappingMessages"
+        ],
+        "newParameterName": [
+            "Att1AttrMappingMessages"
+        ],
+        "objectColumnName": [
+            "Att1Messages"
+        ]
+    },
+    "messages": {
+        "missingRequiredValue": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.missingRequiredValue}}"
+        }
+    }
+}

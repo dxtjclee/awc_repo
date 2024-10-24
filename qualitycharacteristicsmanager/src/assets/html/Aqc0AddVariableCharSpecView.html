@@ -1,0 +1,23 @@
+<aw-command-panel caption="i18n.Aqc0AddCharSpecificationTitle" context="subPanelContext">
+    <aw-panel-body>
+        <aw-widget prop="data.objectName" exist-when="ctx.isTC13_2OnwardsSupported"></aw-widget>
+        <aw-widget prop="data.object_desc">
+        </aw-widget>
+        <aw-listbox prop="data.qc0Context" list="data.contextTypeList"></aw-listbox>
+        <aw-listbox prop="data.qc0Criticality" list="data.qc0CriticalityList"></aw-listbox>
+        <aw-listbox prop="data.qc0limitation" list="data.limitationList"></aw-listbox>
+        <aw-listbox prop="data.qc0UnitOfMeasure" list="data.unitOfMeasureList"></aw-listbox>
+        <aw-widget prop="data.qc0NominalValue"></aw-widget>
+        <aw-listbox prop="data.qc0ToleranceType" list="data.ToleranceTypeList" exist-when="ctx.isTC13_1OnwardsSupported"></aw-listbox>
+        <aw-widget exist-when="data.qc0limitation.dbValue !='Up'" prop="data.qc0UpperTolerance"></aw-widget>
+        <aw-widget exist-when="(data.qc0limitation.dbValue =='Both Sides' || data.qc0limitation.dbValue =='Up')" prop="data.qc0LowerTolerance"></aw-widget>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button action="CreateVariableCharSpec" exist-when="ctx.isTC13_2OnwardsSupported" visible-when="formProp.attributes.valid">
+            <aw-i18n>i18n.addButtonTitle</aw-i18n>
+        </aw-button>
+        <aw-button action="generateNextValuesAndSubmit" exist-when="!ctx.isTC13_2OnwardsSupported">
+            <aw-i18n>i18n.addButtonTitle</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

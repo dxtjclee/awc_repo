@@ -1,0 +1,156 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-include.directive",
+        "js/aw-column.directive"
+    ],
+    "data": {
+        "parametersTable": {
+            "initialValues": {
+            },
+            "meta": {
+            }
+        }
+    },
+    "ports": {
+        "syncUniformParamTable": {
+            "onChangeAction": "syncParametersTable",
+            "syncObject": {}
+        }
+    },
+    "props": {
+        "view-id": {
+            "type": "string"
+        },
+        "sub-panel-context":{
+            "type":"object"
+        }
+    },
+    "actions": {
+        "syncParametersTable": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "applySync",
+                    "condition": "conditions.isApplySync"
+                }
+            ]
+        },
+        "applySync": {
+            "actionType": "JSFunction",
+            "method": "syncParametersTable",
+            "inputData": {
+                "parentObject": "{{ports.syncUniformParamTable.syncObject}}",
+                "parametersTable": "{{data.parametersTable}}"
+            },
+            "outputData": {
+                "parametersTable": "parametersTable"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "uniformParamTable.reloadTable",
+                        "eventData": {
+                            "reusable": "{{props.subPanelContext.reusable}}",
+                            "requestId": "{{props.subPanelContext.requestId}}"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Att1ShowParametersTableService2"
+        },
+        "initParametersTableForElements": {
+            "actionType": "JSFunction",
+            "method": "initParametersTableForSync",
+            "inputData": {
+                "parentObject": "{{props.subPanelContext.selection}}",
+                "commandContext": "{{props.subPanelContext}}",
+                "parametersTable": "{{data.parametersTable}}"
+            },
+            "outputData": {
+                "parametersTable": "parametersTable"
+            },
+            "deps": "js/Att1ShowParametersTableService"
+        },
+        "processSelectionChangeAction": {
+            "actionType": "JSFunction",
+            "method": "processSelectionChangeAction",
+            "inputData": {
+                "eventData": "{{data.eventData}}",
+                "selection": "{{props.subPanelContext.selection}}",
+                "parametersTable": "{{data.parametersTable}}"
+            },
+            "outputData": {
+                "parametersTable": "parametersTable"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "uniformParamTable.reloadTable",
+                        "eventData": {
+                            "reusable": "{{props.subPanelContext.reusable}}"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Att1ShowParametersTableService"
+        },
+        "handleSelectionChange":{
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "processSelectionChangeAction",
+                    "condition": "data.parametersTable.listenToPrimarySelectionEvent === true"
+                }
+            ]
+        }
+
+    },
+    "lifecycleHooks": {
+        "onInit": "initParametersTableForElements",
+        "onUpdate": [ {
+            "action": "handleSelectionChange",
+            "observers": [ "props.subPanelContext.selection" ]
+        }]
+    },
+    "messages": {
+    },
+    "onEvent": [
+        {
+            "eventId": "Att1ShowParametersTableSync.ApplySync",
+            "cacheEventData": true,
+            "action": "applySync"
+        }
+    ],
+    "conditions": {
+        "showParameterHeader": {
+            "expression": "data.parametersTable.options.hideParameterHeader === undefined || data.parametersTable.options.hideParameterHeader === false"
+        },
+        "isApplySync": {
+            "expression": "ports.syncUniformParamTable.syncObject && ( ports.syncUniformParamTable.syncObject.selectedParents !== undefined || ports.syncUniformParamTable.syncObject.searchCriteria !== undefined )"
+        }
+    },
+    "functions": {
+
+    },
+    "ctx": {
+        "xrtSummaryContextObject": {
+            "type": "object"
+        },
+        "occmgmtContext": {
+            "type": "object"
+        },
+        "requirements": {
+            "type": "object"
+        },
+        "locationContext": {
+            "type": "object"
+        },
+        "parametersTable": {
+            "type": "object"
+        }
+    },
+    "i18n": {
+        "attributeTitle": [
+            "Att1Messages"
+        ]
+    }
+}

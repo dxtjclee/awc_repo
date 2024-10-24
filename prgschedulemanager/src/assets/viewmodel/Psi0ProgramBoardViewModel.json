@@ -1,0 +1,439 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "kanbanid": "ProgramBoard",
+        "kanbanColumnMap": {},
+        "kanbanState": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "programBoardAnchor": "programBoardCmdAnchor"
+    },
+    "actions": {
+        "loadRelatedObjects": {
+            "actionType": "TcSoaService",
+            "serviceName": "PPSMInterfaceAw-2019-06-PPSMInterface",
+            "method": "getProgramRelatedObjects",
+            "inputData": {
+                "getRelatedObjectsInput": "{{function:getRelatedObjectsInput}}"
+            },
+            "policy": {
+                "types": [ {
+                        "name": "Psi0PrgDelRevision",
+                        "properties": [ {
+                                "name": "psi0DueDate"
+                            },
+                            {
+                                "name": "psi0ResponsibleUsr",
+                                "modifiers": [ {
+                                    "name": "withProperties",
+                                    "Value": "true"
+                                } ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Psi0AbsRIO",
+                        "properties": [ {
+                                "name": "psi0TargetDate"
+                            },
+                            {
+                                "name": "psi0ResponsibleUsr",
+                                "modifiers": [ {
+                                    "name": "withProperties",
+                                    "Value": "true"
+                                } ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Psi0AbsChecklist",
+                        "properties": [ {
+                                "name": "psi0DueDate"
+                            },
+                            {
+                                "name": "psi0ResponsibleUser",
+                                "modifiers": [ {
+                                    "name": "withProperties",
+                                    "Value": "true"
+                                } ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Schedule",
+                        "properties": [ {
+                            "name": "finish_date"
+                        } ]
+                    },
+                    {
+                        "name": "Prg0AbsCriteria",
+                        "properties": [ {
+                            "name": "fnd0ResponsibleUser",
+                            "modifiers": [ {
+                                "name": "withProperties",
+                                "Value": "true"
+                            } ]
+                        } ]
+                    },
+                    {
+                        "name": "WorkspaceObject",
+                        "properties": [ {
+                                "name": "object_name"
+                            },
+                            {
+                                "name": "object_string"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "ItemRevision",
+                        "properties": [ {
+                            "name": "object_string"
+                        } ]
+                    }
+                ]
+            },
+            "outputData": {
+                "actualUidToPrgBoardUidMap": "{{function:parseRelatedObjSOAResponse}}"
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            },
+            "deps": "js/Psi0ProgramBoardService"
+        },
+        "prepareProgramBoardColumns": {
+            "actionType": "JSFunction",
+            "method": "prepareProgramBoardColumns",
+            "inputData": {
+                "setupPrgBoardState": "{{props.subPanelContext.setupPrgBoardState}}",
+                "atomicDataRef": "{{data.atomicDataRef}}",
+                "kanbanId": "{{data.kanbanid}}",
+                "selectionData": "{{props.subPanelContext.selectionData}}"
+            },
+            "outputData": {
+                "kanbanState": ""
+            },
+            "deps": "js/Psi0ProgramBoardService"
+        },
+        "updateRelatedBoardData": {
+            "actionType": "JSFunction",
+            "method": "updateRelatedBoardData",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Psi0ProgramBoardService"
+        },
+        "handleOperationsForPrgBoardKanban": {
+            "actionType": "JSFunction",
+            "method": "handleOperationsForPrgBoardKanban",
+            "inputData": {
+                "kanbanState": "{{data.kanbanState}}",
+                "setupPrgBoardState": "{{props.subPanelContext.setupPrgBoardState}}"
+            },
+            "deps": "js/Psi0ProgramBoardService"
+        },
+        "dragDropForCriteria": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-09-DataManagement",
+            "method": "setProperties",
+            "inputData": {
+                "info": "{{function:setPropertiesInput}}"
+            },
+            "outputData": {
+                "setPropertiesResponse": ""
+            },
+            "events": {
+                "failure": [ {
+                    "name": "ProgramBoard.dragDropFailure",
+                    "eventData": {
+                        "failedUids": "{{function:getFailedUidsForSetProperties}}"
+                    }
+                } ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            },
+            "deps": "js/Psi0ProgramBoardService"
+        },
+        "createAndDeleteRelations": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "createRelations",
+            "inputData": {
+                "input": "{{function:getCreateRelationsInput}}"
+            },
+            "outputData": {
+                "createAndDeleteRelResponse": "{{function:createAndDeleteRelationsResponse}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "deleteRelationsEvent"
+                } ],
+                "failure": [ {
+                        "name": "deleteRelationsEvent",
+                        "condition": "data.createAndDeleteRelResponse.successUids.length > 0"
+                    },
+                    {
+                        "name": "ProgramBoard.dragDropFailure",
+                        "eventData": {
+                            "failedUids": "{{data.createAndDeleteRelResponse.failedUids}}"
+                        }
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            },
+            "deps": "js/Psi0ProgramBoardService"
+        },
+        "deleteAndCreateRelations": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "deleteRelations",
+            "inputData": {
+                "input": "{{function:getDeleteRelationsInput}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "createRelationsEvent"
+                } ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            },
+            "deps": "js/Psi0ProgramBoardService"
+        },
+        "deleteRelationsSOA": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "deleteRelations",
+            "inputData": {
+                "input": "{{function:getDeleteRelationsInputAfterCreate}}"
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            },
+            "deps": "js/Psi0ProgramBoardService"
+        },
+        "createRelationsSOA": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "createRelations",
+            "inputData": {
+                "input": "{{function:getCreteRelationsInputAfterDelete}}"
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            },
+            "deps": "js/Psi0ProgramBoardService"
+        },
+        "revertPrgBoardCardDragDrop": {
+            "actionType": "JSFunction",
+            "method": "revertPrgBoardCardDragDrop",
+            "inputData": {
+                "kanbanState": "{{data.atomicDataRef.kanbanState}}",
+                "failedUids": "{{data.eventMap['ProgramBoard.dragDropFailure'].failedUids}}"
+            },
+            "deps": "js/Psi0ProgramBoardService"
+        },
+        "splitterUpdateAction": {
+            "actionType": "JSFunction",
+            "method": "splitterUpdateAction",
+            "inputData": {
+                "kanbanState": "{{data.atomicDataRef.kanbanState}}",
+                "setupPrgBoardState": "{{props.subPanelContext.setupPrgBoardState}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/Psi0ProgramBoardService"
+        },
+        "closeProgramBoard": {
+            "actionType": "JSFunction",
+            "method": "closeProgramBoardPanel",
+            "inputData": {
+                "setupPrgBoardState": "{{props.subPanelContext.setupPrgBoardState}}"
+            },
+            "deps": "js/Psi0ProgramBoardService"
+        },
+        "switchToTreeViewForPlanNavigation": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "switchToTreeViewForPlanNavigationEvent",
+                        "condition": "ctx.ViewModeContext.ViewModeContext === 'TreeSummaryView'"
+                    }
+                ]
+            }
+        },
+        "switchToTreeViewForPlanNavigationAction": {
+            "actionType": "JSFunction",
+            "method": "changeViewMode",
+            "deps": "js/viewMode.service",
+            "inputData": {
+                "viewMode": "TreeView"
+            }
+        }
+    },
+    "functions": {
+        "getRelatedObjectsInput": {
+            "functionName": "getRelatedObjectsInput",
+            "parameters": [
+                "{{props.subPanelContext.setupPrgBoardState}}"
+            ]
+        },
+        "parseRelatedObjSOAResponse": {
+            "functionName": "parseRelatedObjSOAResponse",
+            "parameters": [
+                "{{data.atomicDataRef.kanbanState}}",
+                "{{data.i18n}}"
+            ]
+        },
+        "getCreateRelationsInput": {
+            "functionName": "getCreateRelationsInput",
+            "parameters": [
+                "{{data.atomicData.kanbanState}}"
+            ]
+        },
+        "getDeleteRelationsInput": {
+            "functionName": "getDeleteRelationsInput",
+            "parameters": [
+                "{{data.atomicData.kanbanState}}"
+            ]
+        },
+        "getCreteRelationsInputAfterDelete": {
+            "functionName": "getCreteRelationsInputAfterDelete",
+            "parameters": [
+                "{{data.atomicData.kanbanState.operation.value.dragContext.from.config.status}}",
+                "{{data.atomicData.kanbanState.operation.value.dragContext.source}}",
+                "{{data.eventMap['ProgramBoard.dragDropFailure'].failedUids}}"
+            ]
+        },
+        "getDeleteRelationsInputAfterCreate": {
+            "functionName": "getDeleteRelationsInputAfterCreate",
+            "parameters": [
+                "{{data.atomicData.kanbanState.operation.value.dragContext.from.config.status}}",
+                "{{data.createAndDeleteRelResponse.successUids}}"
+            ]
+        },
+        "setPropertiesInput": {
+            "functionName": "setPropertiesInput",
+            "parameters": [
+                "{{data.atomicData.kanbanState}}"
+            ]
+        },
+        "getFailedUidsForSetProperties": {
+            "functionName": "getFailedUidsForSetProperties",
+            "parameters": [
+                "{{data.setPropertiesResponse}}",
+                "{{data.actualUidToPrgBoardUidMap}}"
+            ]
+        },
+        "createAndDeleteRelationsResponse": {
+            "functionName": "createAndDeleteRelationsResponse",
+            "parameters": [
+                "{{data.actualUidToPrgBoardUidMap}}"
+            ]
+        }
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "lifecycleHooks": {
+        "onUpdate": [ {
+                "action": "prepareProgramBoardColumns",
+                "observers": [ "props.subPanelContext.setupPrgBoardState.selectedObjs",
+                    "props.subPanelContext.setupPrgBoardState.context"
+                ]
+            },
+            {
+                "action": "loadRelatedObjects",
+                "observers": [ "viewModel.atomicData.kanbanState.kanbanInitialized" ]
+            },
+            {
+                "action": "handleOperationsForPrgBoardKanban",
+                "observers": [ "viewModel.atomicData.kanbanState.operation" ]
+            }
+        ],
+        "onMount" : "switchToTreeViewForPlanNavigation"
+    },
+    "messages": {
+        "SOAFailureMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "onEvent": [ {
+            "eventId": "cdm.updated",
+            "cacheEventData": true,
+            "action": "updateRelatedBoardData"
+        },
+        {
+            "eventId": "dragDropForCriteriaEvent",
+            "action": "dragDropForCriteria"
+        },
+        {
+            "eventId": "deleteAndCreateRelationsEvent",
+            "cacheEventData": true,
+            "action": "deleteAndCreateRelations"
+        },
+        {
+            "eventId": "createAndDeleteRelationsEvent",
+            "action": "createAndDeleteRelations"
+        },
+        {
+            "eventId": "deleteRelationsEvent",
+            "cacheEventData": true,
+            "action": "deleteRelationsSOA"
+        },
+        {
+            "eventId": "createRelationsEvent",
+            "cacheEventData": true,
+            "action": "createRelationsSOA"
+        },
+        {
+            "eventId": "ProgramBoard.dragDropFailure",
+            "cacheEventData": true,
+            "action": "revertPrgBoardCardDragDrop"
+        },
+        {
+            "eventId": "aw-splitter-update",
+            "cacheEventData": true,
+            "action": "splitterUpdateAction"
+        },
+        {
+            "eventId": "appCtx.register",
+            "condition": "name === 'ViewModeContext' && value.ViewModeContext === 'TreeSummaryView' ",
+            "action": "closeProgramBoard"
+        },
+        {
+            "eventId": "switchToTreeViewForPlanNavigationEvent",
+            "action": "switchToTreeViewForPlanNavigationAction"
+        }
+    ],
+    "conditions": {},
+    "i18n": {
+        "unassigned": [
+            "ProgramPlanningCommandPanelsMessages"
+        ],
+        "programBoardHeader": [
+            "ProgramPlanningCommandPanelsMessages"
+        ]
+    }
+
+}

@@ -1,0 +1,96 @@
+{
+    "data": {
+        "sideNavLeftData": {
+            "slide": "FLOAT",
+            "direction": "RIGHT_TO_LEFT",
+            "animation": true,
+            "width": "STANDARD",
+            "height": "FULL"
+        },
+        "tabModels": [
+            {
+                "name": "{{i18n.Parts}}",
+                "tabKey": "Ssp0ActivityParts",
+                "viewId": "Ssp0ActivityParts",
+                "viewName": "Ssp0ActivityParts"
+            },
+            {
+                "name": "{{i18n.Tools}}",
+                "tabKey": "Ssp0ActivityTools",
+                "viewId": "Ssp0ActivityTools",
+                "viewName": "Ssp0ActivityTools"
+            },
+            {
+                "name": "{{i18n.Skills}}",
+                "tabKey": "Ssp0ActivitySkills",
+                "viewId": "Ssp0ActivitySkills",
+                "viewName": "Ssp0ActivitySkills"
+            },
+            {
+                "name": "{{i18n.Notices}}",
+                "tabKey": "Ssp0ActivityNotices",
+                "viewId": "Ssp0ActivityNotices",
+                "viewName": "Ssp0ActivityNotices"
+            }
+        ]
+    },
+    "actions":{
+        "reloadIfPartsTab": {
+            "actionType": "JSFunction",
+            "method": "loadPartsTree",
+            "deps": "js/ssp0ActivityUtilityService"
+        },
+        "updateTabModelBatchAction": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "updateTabModel"
+                },
+                {
+                    "action": "reloadIfPartsTab"
+                }
+            ]
+        },
+        "updateTabModel": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": "{{data.selectedTab}}"
+            },
+            "outputData": {
+                "tabModel": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "closeAddAttachmentPanel": {
+            "actionType": "JSFunction",
+            "method": "closeAddAttachmentPanel",
+            "inputData": {
+                "subPanelContext": {
+                    "source": "toolAndInfoPanel"
+                }
+            },
+            "deps": "js/ssp0ActivityUtilityService"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "complete",
+            "action": "closeAddAttachmentPanel",
+            "cacheEventData": true
+        }
+    ],
+    "lifecycleHooks": {
+        "onUpdate":{
+            "action": "updateTabModelBatchAction",
+            "observers": [
+                "viewModel.data.selectedTab"
+            ]
+        }
+    },
+    "i18n": {
+        "Notices": [
+            "timeAnalysisMessages"
+        ]
+    }
+}

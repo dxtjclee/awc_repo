@@ -1,0 +1,129 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-init.directive",
+        "js/aw-checkbox.directive",
+        "js/aw-button.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-label.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-column.directive",
+        "js/aw-i18n.directive"
+    ],
+    "data": {
+        "snapToGridData": {
+            "displayName": "{{i18n.snapToGrid}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dispValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT",
+            "dbValue": "{{props.graphState.Ase0SnapToGrid}}"
+        },
+        "showGridData": {
+            "displayName": "{{i18n.showGrid}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dispValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT",
+            "dbValue": "{{props.graphState.gridOptions}}"
+        },
+        "majorLines": {
+            "displayName": "{{i18n.majorLines}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dispValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT",
+            "dbValue": "{{props.graphState.Ase0MajorLines}}"
+        },
+        "minorLines": {
+            "displayName": "{{i18n.minorLines}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dispValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT",
+            "dbValue": "{{props.graphState.Ase0MinorLines}}"
+        },
+        "lineType": {
+            "displayName": "{{i18n.lineType}}",
+            "type": "STRING",
+            "labelPosition": "PROPERTY_LABEL_AT_LEFT"
+        },
+        "activeView": "Ase0SettingsSub"
+    },
+    "actions": {
+        "applySetting": {
+            "actionType": "JSFunction",
+            "method": "applyGridSetting",
+            "inputData": {
+                "data": "{{data}}",
+                "graphState": "{{props.graphState}}",
+                "graphModel": "{{props.data.graphModel}}"
+            },
+            "events": {
+                "success": [ {
+                        "name": "archModeler.applySetting"
+                    },
+                    {
+                        "name": "aw.closePopup",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Ase0GridHandler"
+        },
+        "closePopupWindow": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        }
+    },
+
+    "conditions": {
+        "enableSnapToGridData": {
+            "expression": "props.graphState.isAutoLayoutOn === false"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "aw.closePopup",
+            "action": "closePopupWindow"
+        }
+    ],
+
+    "i18n": {
+        "GridSetting": [
+            "ArchitectureModelerConstants"
+        ],
+        "GridSubPanelTitle": [
+            "ArchitectureModelerConstants"
+        ],
+        "snapToGrid": [
+            "ArchitectureModelerConstants"
+        ],
+        "showGrid": [
+            "ArchitectureModelerConstants"
+        ],
+        "majorLines": [
+            "ArchitectureModelerConstants"
+        ],
+        "minorLines": [
+            "ArchitectureModelerConstants"
+        ],
+        "lineType": [
+            "ArchitectureModelerConstants"
+        ],
+        "apply": [
+            "ArchitectureModelerConstants"
+        ]
+    }
+}

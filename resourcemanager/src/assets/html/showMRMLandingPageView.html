@@ -1,0 +1,33 @@
+<aw-base-sublocation provider="data._sublocation">
+    <aw-scrollPanel class="aw-showMRMLandingPage-bg">
+        <div class="sw-row h-6">
+            <!-- First row for Tiles -->
+            <aw-tile-canvas tile-groups="data.tileGroups"></aw-tile-canvas>
+        </div>
+        <aw-splitter direction="HORIZONTAL"></aw-splitter>
+        <div class="sw-row h-6">
+            <!-- Second row for Recents and Discussion with two column -->
+            <div class="sw-column afx-content-background w-6">
+                <!-- First column for Recents -->
+                <div class="sw-row aw-showMRMLandingPage-card aw-showMRMLandingPage-cardHeight" id="mrmRecentCardId">
+                    <aw-link class="aw-showMRMLandingPage-title" prop="data.recentTitle" action="goToRecentLocation">
+                    </aw-link>
+                    <aw-list class="aw-showMRMLandingPage-cellborder" dataprovider="data.dataProviders.recentObjDataProvider"
+                        visible-when="data.dataProviders.recentObjDataProvider.viewModelCollection.totalFound > 0">
+                        <aw-default-cell vmo="item"></aw-default-cell>
+                    </aw-list>
+                </div>
+            </div>
+            <aw-splitter></aw-splitter>
+            <div class="sw-column afx-content-background w-6">
+                <!-- Second column for Discussions -->
+                <div class="sw-row aw-showMRMLandingPage-card aw-showMRMLandingPage-discussionCell aw-showMRMLandingPage-cardHeight" id="mrmDiscussionsCardId">
+                    <aw-link class="aw-showMRMLandingPage-title" prop="data.discussionsTitle"
+                        action="goToDiscussionLocation">
+                    </aw-link>
+                    <aw-include name="landingPageFeedList" sub-panel-context="subPanelContext"></aw-include>
+                </div>
+            </div>
+        </div>
+    </aw-scrollPanel>
+</aw-base-sublocation>

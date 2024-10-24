@@ -1,0 +1,97 @@
+// Copyright 2019 Siemens Product Lifecycle Management Software Inc.
+$Acp-imported-balloon-color: $Status_Green_Base;
+$Acp-importedUpdated-balloon-color: $Siemens_Yellow_11;
+$Acp-selected-balloon-color: $Siemens_Blue_9;
+$Acp-balloon-color: $Siemens_Blue_17;
+$Acp-chxTable-bg-color: $PL_Black_25;
+$Acp-border-color: $PL_Black_23;
+$Acp-balloon-text-color: $PL_Black_4;
+$Acp-selected-balloon-text-color: $Siemens_Snow;
+$Acp-selected-updated-imported-row-text-color:$Siemens_Yellow_11;
+$Acp-selected-imported-row-text-color:$Siemens_Status_Green;
+$Acp-drawing-background-color: $Siemens_Snow;
+
+.aw-controlinspectionplan-rulesTitle {
+    background-color: $AW_SiemensAccentBlueLight;
+}
+.aw-controlinspectionplan-bctinspectorchxtable .imported {
+    color: $Acp-imported-balloon-color;
+    &[aria-selected="true"] {
+        color:$Acp-selected-imported-row-text-color;
+    }
+}
+.aw-controlinspectionplan-bctinspectorchxtable .importedUpdated {
+    color: $Acp-importedUpdated-balloon-color;
+    &[aria-selected="true"] {
+        color:$Acp-selected-updated-imported-row-text-color;
+    }
+}
+.aw-controlinspectionplan-bctinspectordrawing {
+    .leaflet-container {
+        background-color: $Acp-chxTable-bg-color;
+    }
+    .balloon {
+        fill: $Acp-balloon-color;
+        stroke: $Acp-balloon-color;
+        &[aria-selected="true"] {
+            fill: $Acp-selected-balloon-color;
+            stroke: $Acp-selected-balloon-color;
+            text {
+                fill: $Acp-selected-balloon-text-color;
+            }
+        }
+        text {
+            fill: $Acp-balloon-text-color;
+        }
+    }
+    .loader {
+        border-color: $Acp-border-color;
+        border-top-color: $Acp-balloon-color;
+    }
+    .balloon.imported {
+        fill: $Acp-imported-balloon-color;
+        stroke: $Acp-imported-balloon-color;
+        &[aria-selected="true"] {
+            stroke: $Acp-selected-balloon-color;
+        }
+        text {
+            fill: $Acp-selected-balloon-text-color;
+        }
+    }
+    .balloon.importedUpdated {
+        fill: $Acp-importedUpdated-balloon-color;
+        stroke: $Acp-importedUpdated-balloon-color;
+        &[aria-selected="true"] {
+            stroke: $Acp-selected-balloon-color;
+        }
+        text {
+            fill: $Acp-selected-balloon-text-color;
+        }
+    }
+    .inspector-viewer-3d {
+        background-color: $Acp-drawing-background-color;
+    }
+    .inspector-viewer-2d {
+        background-color: $Acp-drawing-background-color;
+    }
+}
+.aw-controlinspectionplan-bctinspectorchxtable {
+    border-color: $table_border_color;
+    background-color: $Acp-chxTable-bg-color;
+    thead {
+        background-color: $Acp-chxTable-bg-color;
+    }
+    th, td {
+        border: 1px solid $Acp-border-color;
+    }
+    tr {
+        &:nth-child(even) {
+            background: $Siemens_Snow;
+        }
+        &[aria-selected="true"] {
+            background: $Siemens_Blue_10_Old;
+            color: $Siemens_Blue_10;
+        }
+    }
+}
+

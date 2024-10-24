@@ -1,0 +1,32 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "visContext": {},
+        "context": {
+            "viewKey": "sbomContext"
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "actions": {
+        "registerSbomViewerClearParameter": {
+            "actionType": "JSFunction",
+            "method": "registerCtx",
+            "inputData": {
+                "name": "ssp0clearSbomViewer",
+                "value": true
+            },
+            "deps": "js/appCtxService"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "registerSbomViewerClearParameter"
+    }
+}

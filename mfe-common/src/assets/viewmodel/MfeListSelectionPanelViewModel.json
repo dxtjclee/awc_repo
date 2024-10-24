@@ -1,0 +1,67 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "list-info": {
+            "type": "object"
+        },
+        "selection-data": {
+            "type": "object"
+        }
+    },
+    "data": {
+        "filterBox": {
+            "displayName": "",
+            "type": "STRING",
+            "dbValue": ""
+        },
+        "filteredList": ""
+    },
+    "actions": {
+        "initializeDataProvider": {
+            "actionType": "dataProvider",
+            "method": "listDataProvider"
+        },
+        "filterList": {
+            "actionType": "JSFunction",
+            "method": "filterList",
+            "inputData": {
+                "filterText": "{{data.filterBox.dbValue}}",
+                "list": "{{props.listInfo.list}}",
+                "startIndex": "{{data.dataProviders.listDataProvider.startIndex}}"
+            },
+            "outputData": {
+                "filteredList": "filteredList"
+            },
+            "deps": "js/mfeListSelectionService"
+        },
+        "updateFilterList": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "filterList"
+                },
+                {
+                    "action": "initializeDataProvider"
+                }
+            ]
+        }
+    },
+    "dataProviders": {
+        "listDataProvider": {
+            "dataProviderType": "Static",
+            "response": "{{data.filteredList}}",
+            "totalFound": "{{data.filteredList.length}}",
+            "selectionModelMode": "multiple",
+            "inputData": {
+                "selectionData": "{{props.selectionData}}"
+            }
+        }
+    },
+    "lifecycleHooks": {
+        "onUpdate": [ {
+            "action": "updateFilterList",
+            "observers": [
+                "props.listInfo.list", "viewModel.filterBox.dbValue"
+            ]
+        } ]
+    }
+}

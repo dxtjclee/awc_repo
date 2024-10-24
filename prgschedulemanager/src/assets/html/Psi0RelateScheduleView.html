@@ -1,0 +1,11 @@
+<aw-command-panel caption="i18n.RelateScheduleTitle" context="subPanelContext">
+    <aw-add target-object="ctx.panelContext.targetObject" relations="{{}}"
+      visible-tabs="palette,search" max-recent-count="5" type-filter="Schedule" search-filter="Schedule.is_baseline=false"
+      add-panel-state="fields.addPanelState" sub-panel-context="{...subPanelContext}"></aw-add>
+    <aw-panel-footer>
+        <!-- panel-footer button for Palette and Search tab -->
+        <aw-button action="createRelationAndGetProperties" enable-when="conditions.isPaletteTabAddButtonVisible || conditions.isSearchTabAddButtonVisible">
+            <aw-i18n>i18n.addButtonTitle</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

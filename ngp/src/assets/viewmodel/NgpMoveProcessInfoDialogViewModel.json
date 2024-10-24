@@ -1,0 +1,53 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-popup2.directive",
+        "js/aw-panel.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive"
+    ],
+    "actions":{
+        "closeDialog": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        },
+        "movePEs":{
+            "actionType": "batchJob",
+            "steps": [{
+                    "action": "movePEsToNewTarget"
+                },
+                {
+                    "action": "closeDialog"
+                }
+            ]
+
+        },
+        "movePEsToNewTarget": {
+            "actionType": "JSFunction",
+            "method": "movePEsToNewTarget",
+            "inputData": {
+                "moveCandidates": "{{subPanelContext.moveCandidates}}",
+                "newTarget": "{{subPanelContext.newTarget}}"
+            },
+            "deps": "js/services/ngpRestructureService"
+        }
+    },
+    "i18n":{
+        "movePEsTitle":["NgpDataMgmtMessages"],
+        "movePEsLabel":["NgpDataMgmtMessages"],
+        "movePEFirstConsequence":["NgpDataMgmtMessages"],
+        "movePESecondConsequence":["NgpDataMgmtMessages"],
+        "movePEThirdConsequence":["NgpDataMgmtMessages"],
+        "movePEFourthConsequence":["NgpDataMgmtMessages"],
+        "movePEFifthConsequence":["NgpDataMgmtMessages"],
+        "movePESixthConsequence":["NgpDataMgmtMessages"],
+        "movePESeventhConsequence":["NgpDataMgmtMessages"],
+        "cancel":["NgpDataMgmtMessages"],
+        "move":["NgpDataMgmtMessages"]
+    }
+}

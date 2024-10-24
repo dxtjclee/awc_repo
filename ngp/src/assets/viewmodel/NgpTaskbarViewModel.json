@@ -1,0 +1,109 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {},
+    "actions": {
+        "buildSubPages": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "getAvailableSubPages"
+                },
+                {
+                    "action":"updateTabs"
+                },
+                {
+                    "action": "constructTabs"
+                }
+            ]
+        },
+        "handleSwitchLocation": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "getAvailableSubPages"
+                },
+                {
+                    "action":"getDefaultSubpageName"
+                },
+                {
+                    "action":"switchSubLocation"
+                }
+            ]
+        },
+        "getDefaultSubpageName":{
+            "actionType": "JSFunctionAsync",
+            "method": "getDefaultSubpageName",
+            "deps": "js/services/ngpNavigationService",
+            "inputData": {
+                "modelObject": "{{ctx.ngp.scopeObject}}"
+            },
+            "outputData": {
+                "defaultSubpage": ""
+            }
+        },
+
+        "getAvailableSubPages": {
+            "actionType": "JSFunctionAsync",
+            "method": "getAvailableSubpages",
+            "deps": "js/page.service",
+            "inputData": {
+                "parentState": null,
+                "additionalEvalEnv": {
+                    "epObjectToNavigate": "{{ctx.ep.scopeObject}}",
+                    "ngpObjectToNavigate": "{{ctx.ngp.scopeObject}}"
+                }
+            },
+            "outputData": {
+                "availablePages": ""
+            }
+        },
+        "constructTabs": {
+            "actionType": "JSFunctionAsync",
+            "method": "constructTabs",
+            "deps": "js/awHeaderService",
+            "inputData": {
+                "availablePages": "{{data.availablePages}}"
+            },
+            "outputData": {
+                "subLocationTabs": ""
+            }
+        },
+        "updateTabs": {
+            "actionType": "JSFunction",
+            "method": "updateTabs",
+            "inputData": {
+                "data": "{{data.subLocationTabCond}}"
+            },
+            "outputData": {
+                "subLocationTabCond": ""
+            },
+            "deps": "js/defaultLocationService"
+        },
+        "switchSubLocation": {
+            "actionType": "JSFunction",
+            "method": "switchSubLocation",
+            "inputData": {
+                "pageId": "{{data.pageId}}",
+                "tabTitle": "{{data.tabTitle}}",
+                "subLocationTabs": "{{data.subLocationTabs}}",
+                "data":"{{data}}"
+            },
+            "deps": "js/awHeaderService"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "mfe.scopeObjectChanged",
+            "action": "buildSubPages"
+        },
+        {
+            "eventId": "appCtx.register",
+            "condition": "name === 'state' ",
+            "action": "updateTabs"
+        },
+        {
+            "eventId": "locationChangeSuccess",
+            "action": "handleSwitchLocation"
+        }
+    ]
+}

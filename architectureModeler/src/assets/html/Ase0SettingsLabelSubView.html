@@ -1,0 +1,14 @@
+<aw-panel-body>
+    <aw-scrollpanel>
+        <aw-panel-section caption="i18n.display">
+            <aw-widget prop="labelCategoryType" aw-repeat="labelCategoryType : data.labelCategories">
+            </aw-widget>
+        </aw-panel-section>
+    </aw-scrollpanel>
+    <aw-checkbox prop="data.resetLabelPositions"> </aw-checkbox>
+</aw-panel-body>
+<aw-panel-footer>
+    <aw-button action="applyLabelSetting" enable-when="(awPanelBody.$valid && awPanelBody.$dirty) || data.resetLabelPositions.dbValue === true">
+        <aw-i18n>i18n.apply</aw-i18n>
+    </aw-button>
+</aw-panel-footer>

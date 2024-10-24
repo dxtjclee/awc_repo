@@ -1,0 +1,498 @@
+{
+    "schemaVersion": "1.0.0",
+    "ports": {
+        "EpAllocationIndicationToggle_updateIndicationContext": {
+            "onChangeAction": "setIndicationContext",
+            "syncObject": {}
+        },
+        "EpAllocationIndicationToggle_setBalancingData": {
+            "onChangeAction": "setBalancingData",
+            "syncObject": {}
+        },
+        "EpAllocationIndicationToggle_selectedSourceOperation":{
+            "syncObject": {},
+            "onChangeAction": "handleOperationSelectionFromList"
+        },
+        "EpAllocationIndicationToggle_selectedMissingInSourceOperation":{
+            "syncObject": {},
+            "onChangeAction": "handleOperationSelectionFromMissingInSource"
+        }
+    },
+    "props": {
+        "view-id": {
+            "type": "string"
+        }
+    },
+    "data": {
+        "allocationIndicationToggleCommand": {
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "dbValue": false,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT",
+            "displayName": "{{i18n.allocationIndicationLabel}}"
+        }
+    },
+    "actions": {
+        "handleOperationSelectionFromList": {
+            "actionType": "JSFunction",
+            "method": "findInPlantBOPFromAssignmentList",
+            "inputData": {
+                "inputObject": "{{ports.EpAllocationIndicationToggle_selectedSourceOperation.syncObject}}",
+                "balancingData": "{{data.balancingData}}"
+            },
+            "deps": "js/epAllocationIndicationService",
+            "events": {
+                "success": [
+                    {
+                        "name": "ep.focusSelectedStation"
+                    }
+                ]
+            }
+        },
+        "setIndicationContext": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": "{{ports.EpAllocationIndicationToggle_updateIndicationContext.syncObject}}"
+            },
+            "outputData": {
+                "sharedSelectionData": "sharedSelectionData"
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "setBalancingData": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": "{{ports.EpAllocationIndicationToggle_setBalancingData.syncObject}}"
+            },
+            "outputData": {
+                "balancingData": "balancingData"
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "toggleAllocationIndicator": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "saveAllocationIndicationMode"
+                },
+                {
+                    "action": "loadAllocationIndication",
+                    "condition": "conditions.isAllocationIndicationModeOn"
+                },
+                {
+                    "action": "setBalancingStations"
+                },
+                {
+                    "action": "processAllocationIndicationLoadResponseAndUpdateCache",
+                    "condition": "conditions.isAllocationIndicationModeOn"
+                },
+                {
+                    "action": "registerReload",
+                    "condition": "conditions.isAllocationIndicationModeOn"
+                },
+                {
+                    "action": "resetAllocationIndicationCache",
+                    "condition": "!conditions.isAllocationIndicationModeOn"
+                },
+                {
+                    "action": "updateSharedSelectionData"
+                },
+                {
+                    "action": "epBalancingAllocationIndicationAction"
+                }
+            ]
+        },
+        "updateSharedSelectionData": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInAtomicData",
+            "inputData": {
+                "targetAtomicData": "{{data.sharedSelectionData}}",
+                "updatedValues": {
+                    "isAllocationIndicationOn": "{{data.allocationIndicationToggleCommand.dbValue}}"
+                }
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "registerReload": {
+            "actionType": "JSFunction",
+            "method": "registerReload",
+            "inputData": {
+                "checkType": "ProductBopPlantBop",
+                "currentScope": "{{ctx.epPageContext.loadedObject.uid}}",
+                "sourceObject": "{{ctx.epPageContext.functionalPlan.uid}}",
+                "targetObject": "{{ctx.epPageContext.processStructure.uid}}"
+            },
+            "deps": "js/epAllocationIndicationService"
+        },
+        "resetAllocationIndicationCache": {
+            "actionType": "JSFunction",
+            "method": "destroy",
+            "deps": "js/epAllocationIndicationService",
+            "outputData":{
+                "stationSelectionData": "",
+                "stationOperationSelectionData":""
+            }
+        },
+        "saveAllocationIndicationMode": {
+            "actionType": "JSFunction",
+            "method": "setGlobalAssignmentIndicationToggleValue",
+            "inputData": {
+                "value": "{{data.allocationIndicationToggleCommand.dbValue}}"
+            },
+            "deps": "js/epToggleService"
+        },
+        "loadAllocationIndication": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadIndication",
+            "inputData": {
+                "accountabilityInputObject": {
+                    "checkType": "ProductBopPlantBop",
+                    "currentScope": "{{ctx.epPageContext.loadedObject}}",
+                    "sourceObject": "{{ctx.epPageContext.functionalPlan}}",
+                    "targetObject": "{{ctx.epPageContext.processStructure}}",
+                    "allocationType": "AllocationIndication"
+                }
+            },
+            "outputData": {
+                "response": ""
+            },
+            "deps": "js/epIndicationService"
+        },
+        "processAllocationIndicationLoadResponseAndUpdateCache": {
+            "actionType": "JSFunction",
+            "method": "processAllocationIndicationLoadResponseAndUpdateCache",
+            "inputData": {
+                "relatedObjectsMap": "{{data.response.relatedObjectsMap}}"
+            },
+            "deps": "js/epAllocationIndicationService"
+        },
+        "handleAllocationIndicationClickEvent": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "epBalancingShowProductBOPAction"
+                },
+                {
+                    "action": "handleAllocationIndicationClickAction"
+                },
+                {
+                    "action": "getLoadTypeInputForSelectedOperation",
+                    "condition": "data.sourceObjectToSelect !== null"
+                },
+                {
+                    "action": "loadPackMasterForItem",
+                    "condition": "data.sourceObjectToSelect !== null"
+                },
+                {
+                    "action": "findSelectedItemInProductBOPTree",
+                    "condition": "data.sourceObjectToSelect !== null"
+                },
+                {
+                    "action": "setSelectionPort",
+                    "condition": "data.selectedVmo !== null"
+                }
+            ]
+        },
+        "handleSingleAllocationIndicationProductBOP":{
+            "actionType": "JSFunction",
+            "method": "findInPlantBOP",
+            "inputData": {
+                "objectUid": "{{parameters.eventData.contextObject.nodeToFindId}}",
+                "balancingData": "{{data.balancingData}}"
+            },
+            "deps": "js/epAllocationIndicationService",
+            "events": {
+                "success": [
+                    {
+                        "name": "ep.focusSelectedStation"
+                    }
+                ]
+            }
+        },
+        "handleMultipleAllocationIndicationProductBOP": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action":  "findTargetParentsInPlantBOP"
+                },
+                {
+                    "action":  "findInAndOutOfScopeObjectsAction",
+                    "condition": "data.targetObjectMap"
+                },
+                {
+                    "action": "showAllocatedInPopup"
+                }
+            ]
+        },
+        "findTargetParentsInPlantBOP":{
+            "actionType": "JSFunction",
+            "method": "getTargetsWithParentsForSource",
+            "inputData": {
+                "objectUid": "{{parameters.eventData.contextObject.nodeToFindId}}"
+            },
+            "outputData":{
+                "targetObjectMap": ""
+            },
+            "deps": "js/epAllocationIndicationService"
+        },
+        "findInAndOutOfScopeObjectsAction":{
+            "actionType": "JSFunction",
+            "method": "findInAndOutOfScopeObjects",
+            "inputData": {
+                "targetObjectMap": "{{data.targetObjectMap}}",
+                "balancingStations": "{{data.stationInfo.balancingStations}}"
+            },
+            "outputData":{
+                "inScope": "inScope",
+                "outOfScope": "outOfScope"
+            },
+            "deps": "js/epAllocationIndicationService"
+        },
+        "showAllocatedInPopup": {
+            "actionType": "JSFunction",
+            "method": "show",
+            "inputData": {
+                "options": {
+                    "view": "EpAssignmentIndicationAssignedInListPopup",
+                    "placement": "bottom-start",
+                    "whenParentScrolls": "close",
+                    "reference": "{{parameters.eventData.contextObject.popupReferenceElement}}",
+                    "draggable": false,
+                    "subPanelContext": {
+                        "contextObject": "{{parameters.eventData.contextObject}}",
+                        "inScope": "{{data.inScope}}",
+                        "outOfScope": "{{data.outOfScope}}",
+                        "disableAssignedToOutOfScopeList": true
+                    }
+                }
+            },
+            "outputData": {
+                "indicationPopupId": "id"
+            },
+            "deps": "js/popupService"
+        },
+        "handleAllocationIndicationClickAction": {
+            "actionType": "JSFunction",
+            "method": "getSourceForTarget",
+            "inputData": {
+                "objectUid": "{{parameters.eventData.contextObject.nodeToFindId}}"
+            },
+            "outputData": {
+                "sourceObjectToSelect": ""
+            },
+            "deps": "js/epAllocationIndicationService"
+        },
+        "setSelectionPort": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInAtomicData",
+            "inputData": {
+                "targetAtomicData": "{{data.balancingData}}",
+                "updatedValues": {
+                    "selectionData.findInProductBOP": "{{data.selectedVmo}}"
+                }
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "findSelectedItemInProductBOPTree": {
+            "actionType": "JSFunction",
+            "method": "findSelectedItemByUIDInTree",
+            "inputData": {
+                "vmoObj": "{{data.sourceObjectToSelect}}",
+                "loadedObjectResponse": "{{data.loadedPackMasterObjResponse}}"
+            },
+            "outputData": {
+                "selectedVmo": ""
+            },
+            "deps": "js/epStructureSearchService"
+        },
+        "loadPackMasterForItem": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadObject",
+            "inputData": {
+                "loadTypeInputs": "{{data.loadTypeInputs}}"
+            },
+            "outputData": {
+                "loadedPackMasterObjResponse": ""
+            },
+            "deps": "js/epLoadService"
+        },
+        "getLoadTypeInputForSelectedOperation": {
+            "actionType": "JSFunction",
+            "method": "getLoadTypeInputs",
+            "inputData": {
+                "loadType": [
+                    "getProperties"
+                ],
+                "objectUid": "{{data.sourceObjectToSelect}}",
+                "props": [
+                    "bl_pack_master"
+                ]
+            },
+            "outputData": {
+                "loadTypeInputs": ""
+            },
+            "deps": "js/epLoadInputHelper"
+        },
+        "cleanUpAllocationIndicationAssignedInDataFromCache": {
+            "actionType": "JSFunction",
+            "method": "cleanUpAssignmentIndicationAssignedInDataFromCache",
+            "inputData": {
+                "inputObjectUid": "{{parameters.eventData.contextObject.nodeToFindId}}"
+            },
+            "deps": "js/epAssignmentIndicationService"
+        },
+        "loadAssignmentIndicationAssignedInData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadAssignmentIndicationAssignedInData",
+            "inputData": {
+                "findNodeInContextInputObject": {
+                    "searchType": "FindProductInProcessBop",
+                    "currentScope": "{{ctx.epPageContext.loadedObject}}",
+                    "nodeToFind": "{{data.eventMap['ep.allocationIndicationIconClickEvent'].contextObject.nodeToFindId}}",
+                    "contextObject": "{{ctx.epPageContext.processStructure}}"
+                }
+            },
+            "outputData": {
+                "inScope": "inScopeNodes",
+                "outOfScope": "outOfScopeNodes"
+            },
+            "deps": "js/epAssignmentIndicationService"
+        },
+        "setBalancingStations": {
+            "actionType": "JSFunction",
+            "method": "setBalancingStations",
+            "inputData": {
+                "balancingData": "{{ports.EpAllocationIndicationToggle_setBalancingData.syncObject.balancingData.loadedData}}"
+            },
+            "deps": "js/epAllocationIndicationService"
+        },
+        "epBalancingAllocationIndicationAction": {
+            "actionType": "JSFunction",
+            "method": "updateCtx",
+            "inputData": {
+                "name": "ep.assignmentIndicationMode",
+                "value": "{{data.allocationIndicationToggleCommand.dbValue}}"
+            },
+            "deps": "js/appCtxService"
+        },
+        "showMismatchOptionsPopup": {
+            "actionType": "JSFunction",
+            "method": "show",
+            "inputData": {
+                "options": {
+                    "view": "EpAllocationIndicationMismatchOptionsPopup",
+                    "placement": "bottom-start",
+                    "whenParentScrolls": "close",
+                    "reference": "{{parameters.eventData.contextObject.popupReferenceElement}}",
+                    "draggable": false,
+                    "subPanelContext": {
+                        "contextObject": "{{parameters.eventData.contextObject}}"
+                    }
+                }
+            },
+            "outputData": {
+                "popupId": ""
+            },
+            "deps": "js/popupService"
+        },
+        "epBalancingShowProductBOPAction": {
+            "actionType": "JSFunction",
+            "method": "updateCtx",
+            "inputData": {
+                "name": "ep.balancingShowProductBOP",
+                "value": true
+            },
+            "deps": "js/appCtxService"
+        },
+        "handleAllocationIndicationSaveEvent": {
+            "actionType": "JSFunction",
+            "method": "updateAccountabilityResponseCache",
+            "inputData": {
+                "saveEvents": "{{parameters.eventData}}"
+            },
+            "deps": "js/epAllocationIndicationService"
+        },
+        "handleOperationSelectionFromMissingInSource":{
+            "actionType": "JSFunction",
+            "method": "findMissingInSourceInPlantBOP",
+            "inputData": {
+                "missingInSourceObject": "{{ports.EpAllocationIndicationToggle_selectedMissingInSourceOperation.syncObject[0]}}",
+                "balancingData": "{{data.balancingData}}"
+            },
+            "deps": "js/epAllocationIndicationService",
+            "events": {
+                "success": [
+                    {
+                        "name": "ep.focusSelectedStation"
+                    }
+                ]
+            }
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "ep.allocationIndicationIconClickEvent",
+            "action": "handleAllocationIndicationClickEvent",
+            "condition": "contextObject.structureType === 'Mfg0BvrPlantBOP' && (contextObject.indicationMatchType === 'SINGLE_MATCH' || contextObject.indicationMatchType === 'MULTIPLE_MATCH')",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            }
+        },
+        {
+            "eventId": "ep.allocationIndicationIconClickEvent",
+            "action": "showMismatchOptionsPopup",
+            "condition": "contextObject.structureType === 'Mfg0BvrPlantBOP' && ( contextObject.indicationMatchType === 'PARTIAL_SINGLE_MATCH' || contextObject.indicationMatchType === 'PARTIAL_MULTIPLE_MATCH')",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            }
+        },
+        {
+            "eventId": "ep.allocationIndicationIconClickEvent",
+            "action": "handleSingleAllocationIndicationProductBOP",
+            "condition": "contextObject.structureType === 'Mfg0BvrProductBOP' && (contextObject.indicationMatchType === 'PARTIAL_SINGLE_MATCH' || contextObject.indicationMatchType === 'SINGLE_MATCH')",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            }
+        },
+        {
+            "eventId": "ep.allocationIndicationIconClickEvent",
+            "action": "handleMultipleAllocationIndicationProductBOP",
+            "condition": "contextObject.structureType === 'Mfg0BvrProductBOP' && (contextObject.indicationMatchType === 'PARTIAL_MULTIPLE_MATCH' || contextObject.indicationMatchType === 'MULTIPLE_MATCH')",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            }
+        },
+        {
+            "eventId": "ep.findMismatchInProductBOP",
+            "action": "handleAllocationIndicationClickEvent",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            }
+        },
+        {
+            "eventId": "ep.allocationIndicationEvents",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            },
+            "action": "handleAllocationIndicationSaveEvent"
+        }
+    ],
+    "conditions": {
+        "isAllocationIndicationModeOn": {
+            "expression": "data.allocationIndicationToggleCommand.dbValue"
+        },
+        "isToggleButtonEnabled": {
+            "expression": "ports.EpAllocationIndicationToggle_setBalancingData.syncObject.balancingData.loadedData.balancingStations.length > 0"
+        }
+    },
+    "i18n": {
+        "allocationIndicationLabel": [
+            "allocationIndicationMessages"
+        ]
+    },
+    "lifecycleHooks": {
+        "onUnmount": "resetAllocationIndicationCache"
+    }
+}

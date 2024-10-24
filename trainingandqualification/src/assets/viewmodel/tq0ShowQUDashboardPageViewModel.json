@@ -1,0 +1,41 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "_qualificationUnitProvider": {
+            "breadcrumbConfig": {
+                "vm": "AwSearchBreadcrumb"
+            },
+            "viewModes": {
+                "ListView": {
+                    "primaryWorkArea": "list",
+                    "secondaryWorkArea": true
+                },
+                "SummaryView": {
+                    "primaryWorkArea": "list",
+                    "secondaryWorkArea": true
+                }
+            },
+            "defaultDisplayMode": "ListView",
+            "priority": 2,
+            "clientScopeURI": "",
+            "nameToken": "com.siemens.splm.client.qualityCenterManager:showQUDashboard",
+            "viewBase": "Awp0Base",
+            "context": {
+                "search": {
+                    "provider": "Tq0TrainingQualProvider",
+                    "criteria": {
+                        "searchContentType": "Tq0QualificationUnit"
+                    },
+                    "isFilteringEnabled": true,
+                    "sortType": "Priority",
+                    "chartTitle": {
+                        "source": "/i18n/trainingandqualificationMessages",
+                        "key": "trainingQualificationResultsTitle"
+                    },
+                    "maxToLoad": 2000,
+                    "maxToReturn": 2000
+                }
+            }
+        }
+    }
+}

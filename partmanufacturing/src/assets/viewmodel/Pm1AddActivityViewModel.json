@@ -1,0 +1,179 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "addPanelState": {
+            "initialValues": {
+                "creationType": "",
+                "createdObject": "",
+                "sourceObjects": "",
+                "selectedTab": ""
+            },
+            "meta": {}
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "AddObjectPrimarySub",
+                "context": {}
+            },
+            "meta": {}
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "setTargetActivity"
+    },
+    "actions": {
+        "setTargetActivity": {
+            "actionType": "JSFunction",
+            "method": "setTargetActivity",
+            "inputData": {
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "outputData": {
+                "targetActivity": ""
+            },
+            "deps": "js/partMfgActivityService"
+        },
+        "updateActivityState": {
+            "actionType": "JSFunction",
+            "method": "updateActivityState",
+            "inputData": {
+                "searchState": "{{props.subPanelContext.searchState}}",
+                "activity": "{{data.createdObject}}",
+                "operation": "add"
+            },
+            "outputData": {},
+            "deps": "js/partMfgActivityService"
+        },
+        "createAndAddActivity": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2016-09-DataManagement",
+            "method": "createAttachAndSubmitObjects",
+            "inputData": {
+                "inputs": "{{function:getActivityCreateInput}}"
+            },
+            "outputData": {
+                "createdObject": "{{function:getCreatedActivity}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "addActivity.updateActivityTable"
+                    },
+                    {
+                        "name": "complete",
+                        "condition": "!data._internal.isDestroyed && !conditions.isPanelPinned",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "complete",
+                        "condition": "!data._internal.isDestroyed && !conditions.isPanelPinned",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "condition": "data.createdObject",
+                        "message": "addActivitySuccessfulMessage"
+                    }
+                ],
+                "failure": [
+                    {
+                        "message": "genericAddObjectFailure"
+                    }
+                ]
+            },
+            "deps": "js/partMfgActivityService"
+        }
+    },
+    "conditions": {
+        "isPanelPinned": {
+            "expression": "subPanelContext.panelPinned"
+        },
+        "isNewTabAddButtonVisible": {
+            "expression": "addPanelState.selectedTab.view==='NewTabPageSub' && addPanelState.creationType"
+        },
+        "isActiveStateAddPanel": {
+            "expression": "data.activeState.activeView ==='AddObjectPrimarySub'"
+        }
+    },
+    "messages": {
+        "genericAddObjectFailure": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        },
+        "addActivitySuccessfulMessage": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.pasteSuccessfulWithTargetLocation}}",
+            "messageTextParams": [
+                "{{data.createdObject.props.object_string.uiValues[0]}}",
+                "{{data.targetActivity}}}"
+            ]
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "addActivity.updateActivityTable",
+            "action": "updateActivityState"
+        }
+    ],
+    "functions": {
+        "getActivityCreateInput": {
+            "functionName": "getActivityCreateInput",
+            "parameters": [
+                "{{data}}",
+                "{{addPanelState.creationType}}",
+                "{{editHandlers.addPanelEditHandler}}"
+            ]
+        },
+        "getCreatedActivity": {
+            "functionName": "getCreatedActivity",
+            "parameters": [
+                "{{response}}"
+            ]
+        }
+    },
+    "i18n": {
+        "Pm1AddElementBtn": [
+            "partmanufacturingMessages"
+        ],
+        "Pm1AddActivityTitle": [
+            "partmanufacturingMessages"
+        ],
+        "Pm1ToTitle": [
+            "partmanufacturingMessages"
+        ],
+        "pasteSuccessfulWithTargetLocation": [
+            "awAddDirectiveMessages"
+        ]
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    }
+}

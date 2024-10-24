@@ -1,0 +1,26 @@
+{
+  "actions": {
+    "dragOverCustomHighlight": {
+      "actionType": "syncFunction",
+      "method": "dragOverCustomHighlight",
+      "deps": "js/Arm0CreateTraceLink"
+    },
+    "dropCustomHighlight": {
+      "actionType": "syncFunction",
+      "method": "dropCustomHighlight",
+      "deps": "js/Arm0CreateTraceLink"
+    }
+  },
+  "dropHandlers": {
+    "dropHandlerForCustomTableHighlight": {
+      "views": [
+        "Arm0StartItemList",
+        "Arm0EndItemList"
+      ],
+      "dropActions": {
+        "dragOver": "dragOverCustomHighlight",
+        "drop": "dropCustomHighlight"
+      }
+    }
+  }
+}

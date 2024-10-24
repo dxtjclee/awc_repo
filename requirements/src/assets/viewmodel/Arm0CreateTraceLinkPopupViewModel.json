@@ -1,0 +1,652 @@
+{
+    "schemaVersion" : "1.0.0",
+    "imports":
+    [
+        "js/aw-panel-body.directive",
+        "js/aw-command-panel-section.directive",
+        "js/aw-listbox.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/aw-form.directive",
+        "js/aw-form-validator.directive",
+        "js/exist-when.directive",
+        "js/aw-xrt.directive",
+        "js/aw-property-label.directive",
+        "js/aw-include.directive",
+        "js/aw-popup2.directive",
+        "js/visible-when.directive"
+    ],
+
+    "actions":
+    {
+        "reveal": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-04-DataManagement",
+            "method": "findDisplayableSubBusinessObjectsWithDisplayNames",
+            "inputData":
+            {
+                "input":
+                [
+                    {
+                        "boTypeName": "FND_TraceLink",
+                        "exclusionBOTypeNames":
+                        [
+                            "Fnd0ListsParamReqments",
+                            "Fnd0CAE_TargetOccurrence"
+                        ]
+                    }
+                ]
+            },
+
+            "outputData":
+            {
+                "outTraceLinkTypes":"output"
+            },
+
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "CreateTracelinkPopup.registerCtx",
+                        "condition": "!ctx.CreateTraceLinkPopupCtx"
+                    },
+                    {
+                        "name": "createTracelink.initStartItemList"
+                    },
+                    {
+                        "name": "createTracelink.generateTraceLinkTypes"
+                    }
+                ]
+            }
+        },
+        "registerTracelinkPopupCtx": {
+            "actionType": "JSFunction",
+            "method": "registerCtx",
+            "inputData": {
+                "name": "CreateTraceLinkPopupCtx",
+                "value": true
+            },
+            "deps": "js/appCtxService"
+        },
+        "generateTraceLinkTypes": {
+            "actionType": "JSFunction",
+            "method": "generateTraceLinkTypes",
+            "inputData":
+            {
+                "data": "{{data}}"
+            },
+            "outputData":
+            {
+                "traceLinkTypeList": "traceLinkTypeList",
+                "traceLinkType": "traceLinkType",
+                "defaultTraceLinkType": "defaultTraceLinkType"
+            },
+            "deps": "js/Arm0CreateTraceLink"
+        },
+        "initStartItemList": {
+            "actionType": "JSFunction",
+            "method": "initStartItemList",
+            "inputData":
+            {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "outputData": {
+                "viewExistingTracelink": "viewExistingTracelink",
+                "sourceObject":"sourceObject",
+                "modelProperty":"modelProperty",
+                "startItems.dbValue":"startItem",
+                "endItems.dbValue": "endItem"
+            },
+            "deps": "js/Arm0CreateTraceLink"
+        },
+        "traceLinkTypeUpdated": {
+            "actionType": "JSFunction",
+            "method": "traceLinkTypeUpdated",
+            "inputData":
+            {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "fetchTracelinkProperty": "fetchTracelinkProperty",
+                "selectedTraceLinkType": "selectedTraceLinkType"
+            },
+             "events":
+            {
+
+            },
+            "deps": "js/Arm0CreateTraceLink"
+        },
+        "createTraceLink":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "AWS2-2018-12-RequirementsManagement",
+            "method": "createTracelinks",
+            "inputData":
+            {
+            "input":"{{function:getCreateTraceLinkInput}}"
+            },
+             "outputData": {
+                "outputCreateRelation": "output",
+                "serviceData":"ServiceData"
+            },
+
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "CreateTracelink.postCreateTracelink"
+                    },
+                    {
+                        "name": "createTracelink.showTracelinkCreationMessage"
+                    }
+                ],
+                "failure":
+                [
+                  {
+                        "name": "CreateTracelink.postCreateTracelink",
+                "condition": "data.outputCreateRelation.length > 0"
+                   },
+                   {
+                        "name": "createTracelink.showTracelinkCreationMessage"
+                    }
+                ]
+            },
+            "actionMessages":{
+                "failure":[
+                    {
+                        "message":"createTraceLinkFailure"
+                    }
+                ]
+            },
+            "deps": "js/Arm0CreateTraceLink"
+
+        },
+        "showTracelinkCreationMessage":{
+            "actionType": "JSFunction",
+            "method": "showTracelinkCreationMessage",
+            "inputData":
+            {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0CreateTraceLink"
+        },
+        "removeFromStartItems": {
+            "actionType": "JSFunction",
+            "method": "removeFromStartItems",
+            "inputData":
+            {
+                "data": "{{data}}",
+                "obj": "{{data.selectedCell}}"
+            },
+             "events": {
+                "success": [
+                    {
+                        "name":"CreateTracelink.refreshStartItemList"
+                    }
+                ]
+            },
+            "deps": "js/Arm0CreateTraceLink"
+        },
+         "removeFromEndItems": {
+            "actionType": "JSFunction",
+            "method": "removeFromEndItems",
+            "inputData":
+            {
+                "data": "{{data}}",
+                "obj": "{{data.selectedCell}}"
+            },
+             "events": {
+                "success": [
+                    {
+                        "name":"CreateTracelink.refreshEndItemList"
+                    }
+                ]
+            },
+            "deps": "js/Arm0CreateTraceLink"
+        },
+         "pasteInEndItems": {
+            "actionType": "JSFunction",
+            "method": "pasteInEndItems",
+            "inputData":
+            {
+                "data": "{{commandContext}}"
+            },
+             "actionMessages":
+            {
+                "success":
+                [
+                    {
+                         "condition": "data.errorManyToManyTracelink",
+                        "message": "notificationManytoManyTracelinkCreation"
+
+                    }
+                ]
+            },
+            "deps": "js/Arm0CreateTraceLink"
+        },
+         "pasteInStartItems": {
+            "actionType": "JSFunction",
+            "method": "pasteInStartItems",
+            "inputData":
+            {
+                "data": "{{commandContext}}"
+            },
+             "actionMessages":
+            {
+                "success":
+                [
+                    {
+                         "condition": "data.errorManyToManyTracelink",
+                        "message": "notificationManytoManyTracelinkCreation"
+
+                    }
+                ]
+            },
+            "deps": "js/Arm0CreateTraceLink"
+        },
+
+          "refreshStartItemList":
+        {
+            "actionType": "dataProvider",
+            "method": "startItemList"
+        },
+         "refreshEndItemList":
+        {
+            "actionType": "dataProvider",
+            "method": "endItemList"
+        },
+         "postCreateTracelink": {
+            "actionType": "JSFunction",
+            "method": "postCreateTracelink",
+            "inputData":
+            {
+                "data": "{{data}}"
+            },
+            "events": {
+             "success":
+                [
+                    {
+                     "name": "createTracelink.unPinPanelAndCompletePostTLCreation"
+                    },
+                    {
+                        "name": "requirementTraceabilityMatrix.refreshTraceabilityMatrix"
+                    },
+                    {
+                        "name": "aceSecondaryWorkArea.refreshTabs",
+                        "condition": "ctx.selected.modelType.typeHierarchyArray.indexOf('Wbs0ConditionalElement') > -1"
+                    }
+                ]
+                },
+
+            "deps": "js/Arm0CreateTraceLink"
+        },
+         "reloadEndObjects":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData":
+            {
+                "objects": "{{data.endItems.dbValue}}",
+                "attributes":
+                [
+                    "has_trace_link"
+                ]
+            }
+        },
+        "unPinPanelAndCompletePostTLCreation":
+        {
+            "actionType": "JSFunction",
+            "method": "setUnPin",
+            "inputData":
+            {
+                "data": "{{data}}",
+                "ctx": "{{ctx.createTraceLinkWorkSpace}}"
+            },
+            "outputData": {},
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "condition": "ctx.occmgmtContext",
+                        "name": "requirementDocumentation.updateDocumentationTabPostCTL",
+                        "eventData":
+                        {
+                            "startItems": "{{data.startItems.dbValue}}",
+                            "endItems": "{{data.endItems.dbValue}}",
+                            "ctx": "{{ctx}}",
+                            "outputCreateRelation": "{{data.outputCreateRelation}}",
+                            "serviceData":"{{data.serviceData}}"
+                        }
+                    },
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "refreshLocationFlag": true,
+                            "relations": "",
+                            "relatedModified": "{{data.startItems.dbValue}}",
+                            "createdObjects":  "{{data.createdObject}}"
+                        },
+                        "condition": "subPanelContext.pageContext.secondaryActiveTabId === 'attachments' || subPanelContext.pageContext.secondaryActiveTabId === 'tc_xrt_Relations'"
+                    },
+                    {
+                        "name": "cdm.updated",
+                        "eventData": {
+
+                            "updatedObjects": "{{data.endItems.dbValue}}"
+                        },
+                        "condition": "subPanelContext.pageContext.secondaryActiveTabId === 'attachments' || subPanelContext.pageContext.secondaryActiveTabId === 'tc_xrt_Relations'"
+                    },
+                    {
+                        "name": "CreateTracelinkPopup.Close"
+                    }
+                ]
+            },
+            "deps": "js/Arm0CreateTraceLink"
+        },
+        "openAddPanelForStartItemList": {
+            "actionType": "JSFunction",
+            "method": "openAddPanelForStartItemList",
+            "inputData": { },
+            "deps": "js/Arm0CreateTraceLink"
+        },
+        "openAddPanelForEndItemList": {
+            "actionType": "JSFunction",
+            "method": "openAddPanelForEndItemList",
+            "inputData": { },
+            "deps": "js/Arm0CreateTraceLink"
+        },
+        "unRegisterLocalStorageAndClosePopup": {
+            "actionType": "JSFunction",
+            "method": "unRegisterLocalStorageAndClosePopup",
+            "inputData":
+            {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0CreateTraceLinkPopupService"
+        }
+    },
+
+    "onEvent": [
+        {
+            "eventId": "Arm0CreateTraceLinkPopup.reveal",
+            "action": "reveal"
+        },
+        {
+            "eventId": "CreateTracelinkPopup.registerCtx",
+            "action": "registerTracelinkPopupCtx"
+        },
+        {
+            "eventId": "createTracelink.generateTraceLinkTypes",
+            "action": "generateTraceLinkTypes"
+        },
+        {
+            "eventId": "createTracelink.initStartItemList",
+            "action": "initStartItemList"
+        },
+        {
+            "eventId": "CreateTracelink.refreshStartItemList",
+            "action": "refreshStartItemList"
+        },
+        {
+            "eventId": "CreateTracelink.refreshEndItemList",
+            "action": "refreshEndItemList"
+        },
+        {
+            "eventId": "CreateTracelink.postCreateTracelink",
+            "action": "postCreateTracelink"
+        },
+        {
+            "eventId": "createTracelink.reloadEndObjects",
+            "action": "reloadEndObjects"
+        },
+        {
+            "eventId": "createTracelink.unPinPanelAndCompletePostTLCreation",
+            "action": "unPinPanelAndCompletePostTLCreation"
+        },
+        {
+            "eventId": "arm0AddForStartItemListEvent",
+            "action": "openAddPanelForStartItemList"
+        },
+        {
+            "eventId": "arm0PasteInStartItemEvent",
+            "action": "pasteInStartItems"
+        },
+        {
+            "eventId": "Arm0AddForEndItemListEvent",
+            "action": "openAddPanelForEndItemList"
+        },
+        {
+            "eventId": "Arm0PasteInEndItemsEvent",
+            "action": "pasteInEndItems"
+        },
+        {
+            "eventId": "CreateTracelinkPopup.Close",
+            "action": "unRegisterLocalStorageAndClosePopup"
+        },
+        {
+            "eventId":"createTracelink.showTracelinkCreationMessage",
+            "action": "showTracelinkCreationMessage"
+        }
+
+    ],
+    "dataParseDefinitions": {
+        "convertNvObject": {
+            "outputFormatType": "ViewModelObject",
+            "dataInput": "output[0].objectToRender.modelObject.uid",
+            "operationType": "CREATE"
+        }
+    },
+     "messages":
+    {
+        "createTraceLinkFailure":{
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "data":
+    {
+        "startItemListcommands":"arm0_startItemListcommands",
+        "endItemListcommands":"arm0_endItemListcommands",
+        "startItems": {
+             "isArray": "true",
+             "dbValue":
+             [
+             ]
+         },
+         "endItems": {
+             "isArray": "true",
+             "dbValue":
+             [
+             ]
+         },
+        "traceLinkType":{
+            "displayName": "{{i18n.selectTraceLinkType}}",
+            "type": "STRING",
+            "hasLov": true,
+            "emptyLOVEntry": false,
+            "labelPosition": "PROPERTY_LABEL_AT_TOP",
+            "dataProvider": "generateTraceLinkTypes"
+        },
+        "isPanelPinned":
+        {
+            "type": "BOOLEAN",
+            "dbValue": false
+        },
+
+        "arm0PinCommand" : "arm0_oneStepPinCommands",
+
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "preferences":
+    [
+        "TraceReport_Default_TraceLink_Type",
+        "RV1_DARB_Filter_Properties"
+    ],
+    "functions":
+    {
+        "getCreateTraceLinkInput":
+        {
+            "functionName": "getCreateTraceLinkInput",
+            "parameters":
+            [
+                "{{data}}",
+                "{{editHandlers.addPanelEditHandler}}"
+            ]
+        }
+    },
+    "dataProviders":
+    {
+      "startItemList":
+        {
+         "commands":
+            {
+                "delete":
+                {
+                    "id": "cmdDelete",
+                    "title": "{{i18n.Remove}}",
+                    "areas": [ "com.siemens.splm.clientfx.ui.modelObjectListActionCommands" ],
+                    "priorities": [ 300 ],
+                    "action":"removeFromStartItems",
+                    "displayOption": "ON_HOVER_AND_SELECTION",
+                    "position": "TOP_RIGHT"
+                }
+
+            },
+            "response":"{{data.startItems.dbValue}}",
+            "selectionModelMode": "single"
+         },
+      "endItemList":
+        {
+         "commands":
+            {
+                "delete":
+                {
+                    "id": "cmdDelete",
+                    "title": "{{i18n.Remove}}",
+                    "areas": [ "com.siemens.splm.clientfx.ui.modelObjectListActionCommands" ],
+                    "priorities": [ 300 ],
+                    "action":"removeFromEndItems",
+                    "displayOption": "ON_HOVER_AND_SELECTION",
+                    "position": "TOP_RIGHT"
+                }
+
+            },
+            "response":"{{data.endItems.dbValue}}",
+            "selectionModelMode": "single"
+         },
+        "generateTraceLinkTypes": {
+            "action": "generateTraceLinkTypes",
+            "response": "{{data.traceLinkTypeList}}"
+        }
+    },
+    "conditions":
+    {
+        "visibleFooter":
+        {
+            "expression": "data.endItems.dbValue.length >0 && data.startItems.dbValue.length >0"
+        },
+        "visibleCreateObjectButton": {
+            "expression": "conditions.visibleFooter && conditions.isXRTTypeLoaded"
+        },
+        "visibleCreateTracelinkButton":
+        {
+            "expression": "conditions.visibleFooter && !conditions.visibleCreateObjectButton"
+        },
+        "showDropHintForStartBucket":
+        {
+            "expression": "data.startItems.dbValue.length === 0"
+        },
+        "showDropHintForEndBucket":
+        {
+            "expression": "data.endItems.dbValue.length === 0"
+        },
+        "isXRTTypeLoaded": {
+            "expression": "xrtState.xrtTypeLoaded"
+        }
+    },
+
+    "i18n":
+    {
+        "createTraceLinkLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "createTraceLinkTitle":
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "startLink":
+         [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "endLink":
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "properties":
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "createTraceLink":
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "Remove":
+        [
+          "RequirementsCommandPanelsMessages"
+        ],
+        "dropHint":
+        [
+          "RequirementsCommandPanelsMessages"
+        ],
+        "addInStartBucket":
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "addInEndBucket" :
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "selectTraceLinkType":
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "closeTitle":
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "tracelinkSuccessMessage" :
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "oneToManyPartialTracelinkSuccessMessage" :
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "ManyToOnePartialTracelinkSuccessMessage" :
+        [
+            "RequirementsCommandPanelsMessages"
+        ]
+    }
+}

@@ -1,0 +1,34 @@
+<aw-command-panel caption="i18n.CreateStudyChildTitle" context="subPanelContext">
+    <!--Display list of all Study Types on create study panel when VR is selected-->
+    <aw-panel-body visible-when="!data.panelVisibility">
+        <aw-panel-section caption="i18n.CreateTypeHeader"></aw-panel-section>
+        <aw-list dataprovider="data.dataProviders.getStudyTypes">
+            <aw-type-cell vmo="item"></aw-type-cell>
+        </aw-list>
+    </aw-panel-body>
+    <!--Display create stylesheet of a selected study type-->
+    <aw-panel-body visible-when="data.panelVisibility">
+        <aw-panel-section caption="i18n.to">
+            <aw-default-cell item="props.subPanelContext.vrSublocationState.mselected[0]"> </aw-default-cell>
+        </aw-panel-section>
+        <aw-panel-section caption="i18n.CreateTypeHeader">
+            <aw-title-link prop="data.displayedType" action="clearSelectedType"></aw-title-link>
+        </aw-panel-section>
+        <aw-xrt type="CREATE" object-type="{{data.selType.dbValue}}" xrt-state="data.xrtState" ></aw-xrt>
+        <aw-panel-section caption="i18n.PopulationHeader" exist-when="ctx.panelContext.selObj">
+            <aw-widget prop="data.populationValues"></aw-widget>
+        </aw-panel-section>
+        <aw-panel-section caption="i18n.PopulationHeader" exist-when="!ctx.panelContext.selObj">
+            <aw-widget prop="data.populationValuesForTrends"></aw-widget>
+        </aw-panel-section>
+        <aw-panel-section>
+            <aw-checkbox prop="data.openOnCreate" enable-when="!subPanelContext.panelPinned"></aw-checkbox>
+        </aw-panel-section>
+    </aw-panel-body>
+    <!--Create button footer on panel-->
+    <aw-panel-footer>
+        <aw-button action="createStudyInit" visible-when="data.panelVisibility && formProp.attributes.valid">
+            <aw-i18n>i18n.CreateButtonText</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

@@ -1,0 +1,143 @@
+{
+    "schemaVersion": "1.0.0",
+    "ports": {
+        "listenPartsViewersId": {
+            "syncObject": {},
+            "onChangeAction": "listenPartsViewersAction"
+        }
+    },
+    "actions": {
+        "reloadIfPartsTab": {
+            "actionType": "JSFunction",
+            "method": "loadPartsTree",
+            "deps": "js/ssp0PartsService"
+        },
+        "reloadIfToolsTab": {
+            "actionType": "JSFunction",
+            "method": "loadToolsTree",
+            "deps": "js/ssp0ToolService"
+        },
+        "reloadIfNoticessTab": {
+            "actionType": "JSFunction",
+            "method": "reloadNoticesTree",
+            "deps": "js/ssp0CreateOrAssignNoticeService"
+        },
+        "updateTabModelBatchAction": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "updateTabModel"
+                },
+                {
+                    "action": "reloadIfPartsTab"
+                },
+                {
+                    "action": "reloadIfToolsTab"
+                },
+                {
+                    "action": "reloadIfNoticessTab"
+                }
+            ]
+        },
+        "updateTabModel": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": "{{data.selectedTab}}"
+            },
+            "outputData": {
+                "tabModel": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "listenPartsViewersAction": {
+            "actionType": "JSFunction",
+            "method": "updateVisViewerInstanceId",
+            "inputData": {
+                "syncObject": "{{ports.listenPartsViewersId.syncObject}}",
+                "data": "{{data}}",
+                "viewerId": "PartsViewer"
+            },
+            "deps": "js/ssp0VisViewerUtilityService"
+        },
+        "clearPartsViewer": {
+            "actionType": "JSFunction",
+            "method": "clearPartsViewer",
+            "deps": "js/ssp0GraphicsUtilityService"
+        },
+        "handleSelectionChange": {
+            "actionType": "JSFunction",
+            "method": "handleSelectionChange",
+            "inputData": {
+                "selectedObjects": "{{ctx.selectedVMO}}"
+            },
+            "deps": "js/ssp0SelectionSyncService"
+        }
+    },
+    "lifecycleHooks": {
+        "onUpdate": [
+            {
+                "action": "handleSelectionChange",
+                "observers": [
+                    "ctx.selectedVMO"
+                ]
+            },
+            {
+                "action": "updateTabModelBatchAction",
+                "observers": [
+                    "viewModel.data.selectedTab"
+                ]
+            }
+        ],
+        "onMount": "clearPartsViewer"
+    },
+    "data": {
+        "visContext": {},
+        "selectionDataForSummary": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "tabModels": [
+            {
+                "name": "{{i18n.TabParts}}",
+                "tabKey": "Ssp0Parts",
+                "viewId": "Ssp0Parts",
+                "viewName": "Ssp0Parts"
+            },
+            {
+                "name": "{{i18n.TabTools}}",
+                "tabKey": "Ssp0Tools",
+                "viewId": "Ssp0Tools",
+                "viewName": "Ssp0Tools"
+            },
+            {
+                "name": "{{i18n.TabSkills}}",
+                "tabKey": "Ssp0Skills",
+                "viewId": "Ssp0Skills",
+                "viewName": "Ssp0Skills"
+            },
+            {
+                "name": "Notices",
+                "tabKey": "Ssp0Notices",
+                "viewId": "Ssp0Notices",
+                "viewName": "Ssp0Notices"
+            }
+        ]
+    },
+    "conditions": {
+        "isContextAvailable": {
+            "expression": "ctx.ssp0SecondaryPageContext!==undefined"
+        }
+    },
+    "i18n": {
+        "TabParts": [
+            "ServicePlannerConstants"
+        ],
+        "TabTools": [
+            "ServicePlannerConstants"
+        ],
+        "TabSkills": [
+            "ServicePlannerConstants"
+        ]
+    }
+}

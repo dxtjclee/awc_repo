@@ -1,0 +1,100 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-advanced-bar.directive",
+        "js/aw-flex-column.directive",
+        "js/aw-flex-row.directive",
+        "js/aw-command-bar.directive"
+    ],
+    "ports": {
+        "inputSelectionForSync": {
+            "syncObject": {}
+        }
+    },
+    "actions": {
+        "reveal":
+        {
+            "actionType": "JSFunction",
+            "method": "updateHeaderProperties",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "taskBarRevisionRule": "taskBarRevisionRule",
+                "taskBarVariantRule":"taskBarVariantRule",
+                "taskBarEffDate": "taskBarEffDate",
+                "taskBarUnits": "taskBarUnits",
+                "compareType":"compareType"
+            },
+            "deps": "js/prm1ParameterViewService"
+        }
+    },
+    "lifecycleHooks":
+    {
+        "onMount":"reveal"
+    },
+    "conditions": {},
+    "functions": {},
+    "data": {
+        "taskBarRevisionRule": {
+            "displayName": "{{i18n.Revision}}",
+            "dbValue": "{{i18n.Revision}}",
+            "type": "STRING",
+            "uiValue" : ""
+        },
+        "taskBarVariantRule": {
+            "displayName": "{{i18n.Variant}}",
+            "type": "STRING",
+            "uiValue" :"{{i18n.NoVariantRule}}",
+            "dispValue": "{{i18n.NoVariantRule}}"
+        },
+        "taskBarUnits": {
+            "displayName": "{{i18n.Units}}",
+            "type": "STRING",
+            "uiValue" : "{{i18n.DoubleQuotes}}",
+            "dispValue": "{{i18n.DoubleQuotes}}"
+        },
+        "taskBarEffDate": {
+            "displayName": "{{i18n.Date}}",
+            "dbValue": "{{i18n.Date}}",
+            "type": "STRING",
+            "uiValue": "{{i18n.Today}}",
+            "dispValue": "{{i18n.Today}}"
+        }
+    },
+    "messages": {},
+    "onEvent": [
+
+    ],
+    "ctx" : {
+        "paramCompareViewContext" : {
+            "type" : "object"
+        }
+    },
+    "i18n": {
+        "Revision": [
+            "prm1ParameterTableMessages"
+        ],
+        "Variant": [
+            "prm1ParameterTableMessages"
+        ],
+        "Units": [
+            "prm1ParameterTableMessages"
+        ],
+        "Expansion": [
+            "prm1ParameterTableMessages"
+        ],
+        "Date": [
+            "prm1ParameterTableMessages"
+        ],
+        "NoVariantRule": [
+            "prm1ParameterTableMessages"
+        ],
+        "Today": [
+            "prm1ParameterTableMessages"
+        ],
+        "DoubleQuotes": [
+            "prm1ParameterTableMessages"
+        ]
+    }
+}

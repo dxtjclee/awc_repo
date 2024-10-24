@@ -1,0 +1,665 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        },
+        "table-settings":{
+            "type":"object"
+        }
+    },
+    "ports": {
+        "contextObject": {
+            "syncObject": {},
+            "onChangeAction": "hideAndReloadTable"
+        }
+    },
+    "data": {
+        "messages": {
+            "noSingleElementSelected": [ {
+                "text": "{{i18n.selectSingleElement}}"
+            } ],
+            "noAssignedParts": [ {
+                "text": "{{i18n.noAssignedParts}}"
+            } ]
+        },
+        "tablePolicy": {
+            "types": [ {
+                "name": "Cpd0DesignElement",
+                "properties": [ {
+                        "name": "cpd0is_leaf"
+                    },
+                    {
+                        "name": "cpd0design_element_id"
+                    },
+                    {
+                        "name": "cpd0presented_parent",
+                        "modifiers": [
+                            {
+                                "name": "withProperties",
+                                "Value": "true"
+                            } ]
+                    }
+                ]
+            }]
+        },
+        "tableSettings":{
+            "columnConfigPreference":"NGPBuildStrategyAssignmentsColumns",
+            "tableObjectsBaseTypes": ["Mdl0PositionedModelElement"],
+            "fixedColumns":["object_string", "assignmentType" ],
+            "clientColumns":[
+                {
+                    "propertyName": "mismatchOrMissing",
+                    "displayName": "{{i18n.missingHeader}}",
+                    "typeName": "mismatchOrMissing",
+                    "drawnWidth": 55,
+                    "alternateID":"mismatchOrMissing.mismatchOrMissing"
+                },
+                {
+                    "propertyName": "assignmentType",
+                    "displayName": "{{i18n.purpose}}",
+                    "typeName": "assignmentType",
+                    "alternateID":"assignmentType.assignmentType"
+                }
+            ]
+        },
+        "showLoading": false
+    },
+    "actions": {
+        "emptyDataProvider": {
+            "actionType": "JSFunction",
+            "method": "emptyDataProvider",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.ngpAssignedPartsTableDataProvider}}"
+            },
+            "deps": "js/mfeTableService"
+        },
+        "registerPolicyAndGetAssignedParts": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "setLoadingTrue"
+                },
+                {
+                    "action": "registerPolicy"
+                },
+                {
+                    "action": "getAssignedParts"
+                }
+            ]
+        },
+        "hideAndReloadTable": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "setLoadingTrue"
+                },
+                {
+                    "action": "removeSelectionFromCommandData"
+                },
+                {
+                    "action": "emptyDataProvider"
+                },
+                {
+                    "action": "updateContextObject"
+                },
+                {
+                    "action": "createColumns"
+                },
+                {
+                    "action": "reloadTable"
+                }
+            ]
+        },
+        "updateCommandData": {
+            "actionType": "JSFunction",
+            "method": "setCommandContext",
+            "inputData": {
+                "tabModel": "{{props.subPanelContext}}",
+                "commandContext": {
+                    "selection": "{{data.eventMap['ngpAssignedPartsTableDataProvider.selectionChangeEvent'].selectedObjects}}",
+                    "cmdObjects": "{{data.eventMap['ngpAssignedPartsTableDataProvider.selectionChangeEvent'].selectedObjects}}",
+                    "input": "{{ports.contextObject.syncObject[0]}}"
+                }
+            },
+            "deps": "js/mfeContentPanelUtil"
+        },
+        "removeSelectionFromCommandData": {
+            "actionType": "JSFunction",
+            "method": "setCommandContext",
+            "inputData": {
+                "tabModel": "{{props.subPanelContext}}",
+                "commandContext": {
+                    "selection": [],
+                    "cmdObjects": [],
+                    "input": "{{ports.contextObject.syncObject[0]}}"
+                }
+            },
+            "deps": "js/mfeContentPanelUtil"
+        },
+        "setLoadingTrue": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": true
+            },
+            "outputData": {
+                "showLoading": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "setLoadingFalse": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": false
+            },
+            "outputData": {
+                "showLoading": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "reloadTable": {
+            "actionType": "JSFunction",
+            "method": "reloadTable",
+            "inputData": {
+                "tableId": "ngpBuildStrategyAssignedPartsTable"
+            },
+            "deps": "js/mfeTableService"
+        },
+        "getAssignedParts": {
+            "actionType": "JSFunctionAsync",
+            "method": "getAssignedParts",
+            "inputData": {
+                "treeLoadInput": "{{data.treeLoadInput}}",
+                "contextObject": "{{props.subPanelContext.input}}",
+                "dataProvider": "{{data.dataProviders.ngpAssignedPartsTableDataProvider}}",
+                "sortCriteria": "{{data.columnProviders.ngpAssignedPartsTableColumnProvider.sortCriteria}}"
+            },
+            "outputData": {
+                "treeLoadResult": "treeLoadResult"
+            },
+            "events": {
+                "success": [ {
+                    "name": "ngp.getAssignedPartsFinished"
+                } ]
+            },
+            "deps": "js/services/ngpAssignedObjectsService"
+        },
+        "createColumns": {
+            "actionType": "JSFunction",
+            "method": "createColumns",
+            "inputData": {
+                "preferenceName": "NGPBuildStrategyAssignmentsColumns",
+                "dataProvider": "{{data.dataProviders.ngpAssignedPartsTableDataProvider}}",
+                "columnProvider": "{{data.columnProviders.ngpAssignedPartsTableColumnProvider}}",
+                "additionalPolicyObjects": "{{data.tablePolicy}}",
+                "tableCmdColumnPropName":"",
+                "tableTreeNavColumnPropName":"object_string",
+                "treeNavigationColumnIndex": "",
+                "viewModelData": "{{data}}"
+            },
+            "deps": "js/mfeTableService"
+        },
+        "saveModifiedColumns": {
+            "actionType": "JSFunction",
+            "method": "saveResizedColumnsWidth",
+            "inputData": {
+                "tableSettings": "{{data.grids.ngpBuildStrategyAssignedPartsTable.gridOptions.textBundle.tableSettings}}",
+                "columns": "{{data.eventMap.columnArrange.columns}}"
+            },
+            "deps": "js/services/ngpTableService"
+        },
+        "registerPolicy": {
+            "actionType": "JSFunction",
+            "method": "register",
+            "inputData": {
+                "name": "ngpBuildStrategyAssignedPartsTable",
+                "policyObj": "{{data.dataProviders.ngpAssignedPartsTableDataProvider.policy}}"
+            },
+            "deps": "js/mfePolicyService"
+        },
+        "unregisterPolicy": {
+            "actionType": "JSFunction",
+            "method": "unregister",
+            "inputData": {
+                "name": "ngpBuildStrategyAssignedPartsTable"
+            },
+            "deps": "js/mfePolicyService"
+        },
+        "updateContextObject": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": "{{ports.contextObject.syncObject[0]}}"
+            },
+            "outputData": {
+                "contextObject": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "refreshObjects":{
+            "actionType":"JSFunctionAsync",
+            "method":"refreshObjects",
+            "inputData":{
+                "modelObjects": "{{data.dataProviders.ngpAssignedPartsTableDataProvider.viewModelCollection.loadedVMObjects}}"
+            },
+            "deps": "js/services/ngpLoadService"
+        },
+        "arrangeColumnsAndRefresh":{
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "unregisterPolicy"
+                },
+                {
+                    "action": "createColumns"
+                },
+                {
+                    "action": "registerPolicy"
+                },
+                {
+                    "action": "refreshObjects"
+                }
+            ]
+        },
+        "assignParts": {
+            "actionType": "JSFunction",
+            "method": "assignObjects",
+            "inputData": {
+                "assignedObjects": "{{data.eventMap['ngp.dropAssignableObjects'].assignedObjects}}",
+                "targetObject": "{{props.subPanelContext.input}}"
+            },
+            "deps": "js/services/ngpAssignedObjectsService"
+        },
+        "filterOutFirstLevelTreeObjectUidsFromList": {
+            "actionType": "JSFunction",
+            "method": "filterOutFirstLevelTreeObjectUidsFromList",
+            "inputData": {
+                "treeObjectUids": "{{data.eventMap['ngp.objectsUnassignedEvent'].unassignedUids}}",
+                "dataProvider": "{{data.dataProviders.ngpAssignedPartsTableDataProvider}}"
+            },
+            "outputData": {
+                "filteredChildUids": ""
+            },
+            "deps": "js/mfeTableService"
+        },
+        "getParentUids": {
+            "actionType": "JSFunction",
+            "method": "getParentUids",
+            "inputData": {
+                "childUids": "{{data.filteredChildUids}}",
+                "dataProvider": "{{data.dataProviders.ngpAssignedPartsTableDataProvider}}"
+            },
+            "outputData": {
+                "parentUids": ""
+            },
+            "deps": "js/mfeTableService"
+        },
+        "updateTableAfterRemove": {
+            "actionType": "JSFunction",
+            "method": "updateTableAfterRemove",
+            "inputData": {
+                "toBeDeletedUidArray": "{{data.eventMap['ngp.objectsUnassignedEvent'].unassignedUids}}",
+                "toBeUpdatedUidArray": "{{data.parentUids}}",
+                "dataProvider": "{{data.dataProviders.ngpAssignedPartsTableDataProvider}}"
+            },
+            "deps": "js/services/ngpRestructureService"
+        },
+        "updateTableAfterRemoveFromPlanElement": {
+            "actionType": "JSFunction",
+            "method": "updateTableAfterRemoveFromPlanElement",
+            "inputData": {
+                "unassignedObjects": "{{data.eventMap['ngp.objectsUnassignedFromPlanElementEvent'].unassignedObjects}}",
+                "dataProvider": "{{data.dataProviders.ngpAssignedPartsTableDataProvider}}"
+            },
+            "deps": "js/services/ngpAssignedObjectsService"
+        },
+        "unselectInvisibleNodes": {
+            "actionType": "JSFunction",
+            "method": "unselectInvisibleNodes",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.ngpAssignedPartsTableDataProvider}}"
+            },
+            "deps": "js/mfeTableService"
+        },
+        "getParentUidsAndUpdateTableAfterRemove": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "filterOutFirstLevelTreeObjectUidsFromList"
+                },
+                {
+                    "action": "getParentUids"
+                },
+                {
+                    "action": "updateTableAfterRemove"
+                },
+                {
+                    "action": "unselectInvisibleNodes"
+                }
+            ]
+        },
+        "setSelectionInVis":
+        {
+            "actionType": "JSFunction",
+            "method": "setSelectionInVis",
+            "inputData": {
+                "selectedObjects": "{{data.eventMap['ngpBuildStrategyAssignedPartsTable.gridSelection'].selectedObjects}}"
+            },
+            "deps": "js/services/ngpVisInteropService"
+        },
+        "updateSelectionFromVis":
+        {
+            "actionType": "JSFunction",
+            "method": "findAndSetSelection",
+            "inputData": {
+                "selection": "{{data.eventMap['ngpVisInterop.selectionChangeEvent']}}",
+                "dataProvider": "{{data.dataProviders.ngpAssignedPartsTableDataProvider}}",
+                "viewModelData": "{{data}}"
+            },
+            "deps": "js/services/ngpAssignedObjectsService"
+        },
+        "findAndSetSelection":
+        {
+            "actionType": "JSFunction",
+            "method": "findAndSetSelection",
+            "inputData": {
+                "selection": ["{{data.eventMap['ngp.selectAssignedObjects'].selection}}"],
+                "dataProvider": "{{data.dataProviders.ngpAssignedPartsTableDataProvider}}",
+                "viewModelData": "{{data}}"
+            },
+            "deps": "js/services/ngpAssignedObjectsService"
+        },
+        "setSelectionFromStorageData":
+        {
+            "actionType": "JSFunction",
+            "method": "setSelectionFromStorageData",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.ngpAssignedPartsTableDataProvider}}",
+                "viewModelData": "{{data}}"
+            },
+            "deps": "js/services/ngpAssignedObjectsService"
+        },
+        "setVisInteropHandlers":
+        {
+            "actionType": "JSFunction",
+            "method": "setVisInteropHandlers",
+            "deps": "js/services/ngpVisInteropService"
+        }
+    },
+    "columnProviders": {
+        "ngpAssignedPartsTableColumnProvider": {
+            "loadColumnAction": "createColumns",
+            "resetColumnAction": "saveModifiedColumns",
+            "saveColumnAndLoadAction": "saveModifiedColumns",
+            "frozenColumnIndex": -1,
+            "enableSorting": true,
+            "enableCellEdit": false,
+            "columnInfos": [
+                {
+                    "name": "mismatchOrMissing",
+                    "displayName": "{{i18n.missingHeader}}",
+                    "enableSorting": false
+                },
+                {
+                    "name": "assignmentType",
+                    "displayName": "{{i18n.purpose}}",
+                    "enableSorting": false,
+                    "visibleWhen": "conditions.isContextPlanElement"
+                }
+            ]
+        }
+    },
+    "dataProviders": {
+        "ngpAssignedPartsTableDataProvider": {
+            "initializeAction": "registerPolicyAndGetAssignedParts",
+            "nextAction": "getAssignedParts",
+            "previousAction": "getAssignedParts",
+            "selectionModelMode": "multiple",
+            "treeLoadResult": "action.result.treeLoadResult",
+            "treePageSize": 100,
+            "inputData": {
+                "accessMode": "tree",
+                "topNodeUid": "{{data.topNodeUid}}"
+            }
+        }
+    },
+    "grids": {
+        "ngpBuildStrategyAssignedPartsTable": {
+            "dataProvider": "ngpAssignedPartsTableDataProvider",
+            "columnProvider": "ngpAssignedPartsTableColumnProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "enableGridMenu": true,
+                "textBundle": {
+                    "TwistieTooltipCollapsed": "{{i18n.expand}}",
+                    "TwistieTooltipExpanded": "{{i18n.collapse}}"
+                }
+            }
+        }
+    },
+    "conditions": {
+        "showLoadingMessage": {
+            "expression": {
+                "$and": [ {
+                        "$source": "data.showLoading",
+                        "$query": {
+                            "$eq": true
+                        }
+                    },
+                    {
+                        "$source": "conditions.isValidSelectedObject",
+                        "$query": {
+                            "$eq": true
+                        }
+                    }
+                ]
+            }
+        },
+        "showNoAssignmentsMessage": {
+            "expression": {
+                "$and": [ {
+                        "$source": "conditions.hasAssignments",
+                        "$query": {
+                            "$eq": false
+                        }
+                    },
+                    {
+                        "$source": "conditions.isValidSelectedObject",
+                        "$query": {
+                            "$eq": true
+                        }
+                    },
+                    {
+                        "$source": "data.showLoading",
+                        "$query": {
+                            "$eq": false
+                        }
+                    }
+                ]
+            }
+        },
+        "showTableData": {
+            "expression": {
+                "$and": [ {
+                        "$source": "conditions.hasAssignments",
+                        "$query": {
+                            "$eq": true
+                        }
+                    },
+                    {
+                        "$source": "data.showLoading",
+                        "$query": {
+                            "$eq": false
+                        }
+                    }
+                ]
+            }
+        },
+        "isValidSelectedObject": {
+            "expression": {
+                "$and": [ {
+                        "$source": "ports.contextObject.syncObject.length",
+                        "$query": {
+                            "$eq": 1
+                        }
+                    },
+                    {
+                        "$source": "ports.contextObject.syncObject[0].uid.length",
+                        "$query": {
+                            "$gt": 0
+                        }
+                    }
+                ]
+            }
+        },
+        "hasAssignments": {
+            "expression": {
+                "$source": "data.dataProviders.ngpAssignedPartsTableDataProvider.viewModelCollection.loadedVMObjects.length",
+                "$query": {
+                    "$gt": 0
+                }
+            }
+        },
+        "needToUpdateTable": {
+            "expression": {
+                "$source": "data.needToUpdateTable",
+                "$query": {
+                    "$eq": true
+                }
+            }
+        },
+        "isContextPlanElement": {
+            "expression": {
+                    "$source": "props.subPanelContext.input.modelType.typeHierarchyArray",
+                    "$query": {
+                        "$in": [ "Mpr0PlanElement" ]
+                    }
+            }
+        },
+        "shouldSelectAssignedObject": {
+            "expression": {
+                "$and": [ {
+                    "$source": "data.dataProviders.ngpAssignedPartsTableDataProvider.viewModelCollection.loadedVMObjects.length",
+                    "$query": {
+                        "$gt": 0
+                    }
+                    },
+                    {
+                        "$source": "props.subPanelContext.input.foundationID",
+                        "$query": {
+                            "$eq": "{{assignedTo}}"
+                        }
+                    }
+                ]
+            }
+        },
+        "shouldUpdateSelectionInVis": {
+            "expression": {
+                    "$source": "ctx.aw_host_type",
+                    "$query": {
+                        "$eq": "Vis"
+                    }
+            }
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "setVisInteropHandlers",
+        "onUnmount": "unregisterPolicy"
+    },
+    "onEvent":
+    [
+        {
+            "eventId": "columnArrange",
+            "condition": "name === 'ngpBuildStrategyAssignedPartsTable'",
+            "cacheEventData": true,
+            "action": "saveModifiedColumns"
+        },
+        {
+            "eventId": "ngp.updateColumns",
+            "action": "arrangeColumnsAndRefresh",
+            "condition": "tableId === 'NGPBuildStrategyAssignmentsColumns'"
+        },
+        {
+            "eventId": "ngp.addNewAssignedPartsToTable",
+            "action": "hideAndReloadTable"
+        },
+        {
+            "eventId": "ngpAssignedPartsTableDataProvider.selectionChangeEvent",
+            "action": "updateCommandData",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "ngpBuildStrategyAssignedPartsTable.gridSelection",
+            "action": "setSelectionInVis",
+            "condition": "conditions.shouldUpdateSelectionInVis",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "ngp.assignedPartsTableRefreshEvent",
+            "condition": "targetObject.uid === subPanelContext.input.uid",
+            "action": "reloadTable"
+        },
+        {
+            "eventId": "ngp.dropAssignableObjects",
+            "cacheEventData": true,
+            "action": "assignParts"
+        },
+        {
+            "eventId": "ngp.objectsUnassignedEvent",
+            "action": "getParentUidsAndUpdateTableAfterRemove",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "ngp.objectsUnassignedFromPlanElementEvent",
+            "action": "updateTableAfterRemoveFromPlanElement",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "ngpBuildStrategyAssignedPartsTable.plTable.loadMorePages",
+            "action": "unselectInvisibleNodes"
+        },
+        {
+            "eventId": "ngp.setProductSourceContext",
+            "action": "reloadTable"
+        },
+        {
+            "eventId" : "ngp.subsetDefinitionUpdate",
+            "action" : "reloadTable"
+        },
+        {
+            "eventId" : "ngp.productScopeRemoved",
+            "action" : "reloadTable",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "ngpVisInterop.selectionChangeEvent",
+            "action": "updateSelectionFromVis",
+            "condition": "conditions.hasAssignments",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "ngpAssignedPartsTableDataProvider.treeNodesLoaded",
+            "action": "setSelectionFromStorageData"
+        },
+        {
+            "eventId": "ngp.selectAssignedObjects",
+            "action": "findAndSetSelection",
+            "condition": "conditions.shouldSelectAssignedObject",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "ngp.getAssignedPartsFinished",
+            "action": "setLoadingFalse"
+        }
+    ],
+    "i18n": {
+        "selectSingleElement": [ "NgpBuildStrategyMessages" ],
+        "noAssignedParts": [ "NgpBuildStrategyMessages" ],
+        "collapse": [ "NgpBuildStrategyMessages" ],
+        "expand": [ "NgpBuildStrategyMessages" ],
+        "missingHeader":["NgpBuildStrategyMessages"],
+        "purpose":["NgpBuildStrategyMessages"]
+    }
+}

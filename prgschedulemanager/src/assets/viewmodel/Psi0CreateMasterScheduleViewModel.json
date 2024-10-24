@@ -1,0 +1,95 @@
+{
+    "schemaVersion" : "1.0.0",
+    "data": {
+        "name": {
+            "displayName":"{{i18n.name}}",
+            "dbValue": "",
+            "type": "STRING",
+            "isRequired":"true"
+        },
+        "description": {
+            "displayName":"{{i18n.description}}",
+            "dbValue": " ",
+            "type": "STRING",
+            "isRequired":"false"
+        }
+    },
+
+    "actions":
+    {
+        "create":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "ProjectManagementAw-2017-06-ScheduleManagementAw",
+            "method": "createMasterSchedule",
+            "inputData":
+            {
+                "createMasterInputs":
+                [
+                    {
+                        "name": "{{data.name.dbValue}}",
+                        "description": "{{data.description.dbValue}}",
+                        "schedulesToInsert": "{{ctx.selectedSchedules}}",
+                        "timeZone":""
+
+                   }
+               ],
+               "runInBackground": true
+            },
+            "events":
+            {
+                "success":
+                [
+                   {
+                        "name": "complete",
+                        "eventData":
+                        {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "createSuccess"
+                    }
+                ],
+                "failure": [ 
+                    {
+                        "message": "SOAFailureMessage"
+                    } 
+                ]
+            }
+        }
+    },
+
+    "conditions": {
+        "isValidToShowCreateButton": {
+            "expression":"data.name.dbValue"
+        }
+    },
+    "messages": {
+        "createSuccess": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.psi0CreateMasterScheduleMsg}}",
+            "messageTextParams": [
+                "{{data.name.dbValue}}"
+            ]
+        },
+        "SOAFailureMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+
+    "i18n":
+    {
+        "createMasterScheduleCommandTitle": ["PrgScheduleManagerMessages"],
+        "create":["PrgScheduleManagerMessages"],
+        "name": ["PrgScheduleManagerMessages"],
+        "description": ["PrgScheduleManagerMessages"],
+        "timeZone": ["PrgScheduleManagerMessages"],
+        "psi0CreateMasterScheduleMsg": ["PrgScheduleManagerMessages"]
+    }
+}

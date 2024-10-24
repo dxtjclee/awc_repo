@@ -1,0 +1,15 @@
+{
+  "postHandshakeModules": [
+    {
+      "module": "js/hostMentorQueryService",
+      "condition": true
+    }
+  ],
+  "queries": {
+    "com.siemens.splm.client.Mentor.IsMentorQueryHandlerAvailable": {
+      "module": "js/hostMentorQueryService",
+      "service": "hostMentorQueryService",
+      "constructor": "createIsMentorQuerySupportedQueryHandler"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+<aw-panel>
+    <aw-panel-body>
+        <ep-search-object class="aw-epSearchObject-box" sub-panel-context="data.epSearchConfig"></ep-search-object>
+        <aw-textbox prop="data.inputPropName"></aw-textbox>
+        <aw-textbox prop="data.description"></aw-textbox>
+        <aw-guidance-message message="guidanceMessage" closable="false" banner-style="true" show-icon="true" show-type="false" exist-when="subPanelContext.guidanceMessage"></aw-guidance-message>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button button-type="base" action="closePopupWindow" size="auto">{{i18n.cancel}}</aw-button>
+        <aw-button enable-when="conditions.isAddObjectButtonEnabled && formProp.attributes.valid " action="createPlantFromTemplateBatchAction" size="auto">{{subPanelContext.buttonName}}</aw-button>
+    </aw-panel-footer>
+</aw-panel>

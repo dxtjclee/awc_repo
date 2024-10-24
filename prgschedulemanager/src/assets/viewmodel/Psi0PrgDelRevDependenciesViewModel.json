@@ -1,0 +1,244 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "reveal": {
+            "actionType": "dataProvider",
+            "methods": [
+                "psi0PrecedingList",
+                "psi0SucceedingList",
+                "psi0ConcurrentList"
+            ]
+        },
+        "searchPreceding": {
+            "actionType": "TcSoaService",
+            "serviceName": "Query-2014-11-Finder",
+            "method": "performSearch",
+            "inputData": {
+                "searchInput": {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Psi0PrgObjsSearchProvider",
+                    "searchCriteria": {
+                        "searchContentType": "Psi0BeforeDependency",
+                        "relationObjectUid": "{{ctx.mselected[0].uid}}",
+                        "responseType": "",
+                        "searchString": "",
+                        "eventObject": "{{ctx.xrtSummaryContextObject.uid}}"
+                    },
+
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "startIndex": "{{data.dataProviders.psi0ConcurrentList.startIndex}}"
+                }
+            },
+            "policy": {
+                "types": [ {
+                    "name": "Psi0Relation",
+                    "properties": [ {
+                            "name": "primary_object"
+                        },
+                        {
+                            "name": "secondary_object"
+                        }
+                    ]
+                } ]
+            },
+            "outputData": {
+                "psi0PrecedingSearchResults": "searchResults",
+                "psi0PrecedingTotalFound": "totalFound",
+                "psi0PrecedingTotalLoaded": "totalLoaded",
+                "noResultsFound" : "{{i18n.noResultsFound}}"
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            }
+        },
+        "searchSucceeding": {
+            "actionType": "TcSoaService",
+            "serviceName": "Query-2014-11-Finder",
+            "method": "performSearch",
+            "inputData": {
+                "searchInput": {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Psi0PrgObjsSearchProvider",
+                    "searchCriteria": {
+                        "searchContentType": "Psi0AfterDependency",
+                        "relationObjectUid": "{{ctx.mselected[0].uid}}",
+                        "responseType": "",
+                        "searchString": "",
+                        "eventObject": "{{ctx.xrtSummaryContextObject.uid}}"
+                    },
+
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "startIndex": "{{data.dataProviders.psi0ConcurrentList.startIndex}}"
+                }
+            },
+            "policy": {
+                "types": [ {
+                    "name": "Psi0Relation",
+                    "properties": [ {
+                            "name": "primary_object"
+                        },
+                        {
+                            "name": "secondary_object"
+                        }
+
+                    ]
+                } ]
+            },
+            "outputData": {
+                "psi0SucceedingSearchResults": "searchResults",
+                "psi0SucceedingTotalFound": "totalFound",
+                "psi0SucceedingTotalLoaded": "totalLoaded",
+                "noResultsFound" : "{{i18n.noResultsFound}}"
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            }
+        },
+        "searchConcurrent": {
+            "actionType": "TcSoaService",
+            "serviceName": "Query-2014-11-Finder",
+            "method": "performSearch",
+            "inputData": {
+                "searchInput": {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Psi0PrgObjsSearchProvider",
+                    "searchCriteria": {
+                        "searchContentType": "Psi0ConcurrentDependency",
+                        "relationObjectUid": "{{ctx.mselected[0].uid}}",
+                        "responseType": "",
+                        "searchString": "",
+                        "eventObject": "{{ctx.xrtSummaryContextObject.uid}}"
+                    },
+
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "startIndex": "{{data.dataProviders.psi0ConcurrentList.startIndex}}"
+                }
+            },
+            "policy": {
+                "types": [ {
+                    "name": "Psi0Relation",
+                    "properties": [ {
+                            "name": "primary_object"
+                        },
+                        {
+                            "name": "secondary_object"
+                        }
+
+                    ]
+                } ]
+            },
+            "outputData": {
+                "psi0ConcurrentSearchResults": "searchResults",
+                "psi0ConcurrentTotalFound": "totalFound",
+                "psi0ConcurrentTotalLoaded": "totalLoaded",
+                "noResultsFound" : "{{i18n.noResultsFound}}"
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            }
+        }
+    },
+    "dataProviders": {
+        "psi0PrecedingList": {
+            "action": "searchPreceding",
+            "response": "{{data.psi0PrecedingSearchResults}}",
+            "totalFound": "{{data.psi0PrecedingTotalFound}}",
+            "totalLoaded": "{{data.psi0PrecedingTotalLoaded}}",
+            "commands": {
+                "Awp0ShowObjectCell": {
+                    "id": "cmdOpen",
+                    "areas": [
+                        "com.siemens.splm.clientfx.ui.modelObjectListActionCommands"
+                    ],
+                    "priorities": [
+                        300
+                    ],
+                    "dependencies": [
+                        "js/showObjectCommandHandler"
+                    ],
+                    "displayOption": "ON_HOVER_AND_SELECTION",
+                    "position": "TOP_RIGHT"
+                }
+            }
+        },
+        "psi0SucceedingList": {
+            "action": "searchSucceeding",
+            "response": "{{data.psi0SucceedingSearchResults}}",
+            "totalFound": "{{data.psi0SucceedingTotalFound}}",
+            "totalLoaded": "{{data.psi0SucceedingTotalLoaded}}",
+            "commands": {
+                "Awp0ShowObjectCell": {
+                    "id": "cmdOpen",
+                    "areas": [
+                        "com.siemens.splm.clientfx.ui.modelObjectListActionCommands"
+                    ],
+                    "priorities": [
+                        300
+                    ],
+                    "dependencies": [
+                        "js/showObjectCommandHandler"
+                    ],
+                    "displayOption": "ON_HOVER_AND_SELECTION",
+                    "position": "TOP_RIGHT"
+                }
+            }
+        },
+        "psi0ConcurrentList": {
+            "action": "searchConcurrent",
+            "response": "{{data.psi0ConcurrentSearchResults}}",
+            "totalFound": "{{data.psi0ConcurrentTotalFound}}",
+            "totalLoaded": "{{data.psi0ConcurrentTotalLoaded}}",
+            "commands": {
+                "Awp0ShowObjectCell": {
+                    "id": "cmdOpen",
+                    "areas": [
+                        "com.siemens.splm.clientfx.ui.modelObjectListActionCommands"
+                    ],
+                    "priorities": [
+                        300
+                    ],
+                    "dependencies": [
+                        "js/showObjectCommandHandler"
+                    ],
+                    "displayOption": "ON_HOVER_AND_SELECTION",
+                    "position": "TOP_RIGHT"
+                }
+            }
+        }
+    },
+    "onEvent": [ {
+        
+    } ],
+    "lifecycleHooks": {
+        "onMount": "reveal"
+    },
+    "messages": {
+        "SOAFailureMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "i18n": {
+        "preceding": [
+            "PrgScheduleManagerMessages"
+        ],
+        "concurrent": [
+            "PrgScheduleManagerMessages"
+        ],
+        "succeeding": [
+            "PrgScheduleManagerMessages"
+        ],
+        "noResultsFound": [
+            "PrgScheduleManagerMessages"
+        ]
+    }
+}

@@ -1,0 +1,21 @@
+[
+  {
+    "conditions": {
+      "$and": [
+        {
+          "modelType.typeHierarchyArray": {
+            "$in": [
+              "MECollaborationContext"
+            ]
+          }
+        }
+      ]
+    },
+    "navigations": {
+      "navigateTo": "manageWorkPackageNew",
+      "navigationParams": {
+        "uid": "{{navContext.vmo.uid}}"
+      }
+    }
+  }
+]

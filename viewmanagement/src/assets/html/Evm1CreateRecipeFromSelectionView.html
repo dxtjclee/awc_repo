@@ -1,0 +1,11 @@
+<aw-command-panel caption="i18n.CreateRecipe" context="subPanelContext">
+    <aw-panel-body>
+        <aw-xrt-2 type="CREATE" xrt-data="data.xrtData" object-type="{{data.creationType.props.type_name.dbValues[0]}}" exist-when="data.xrtData" xrt-state="data.xrtState"></aw-xrt-2>
+        <aw-checkbox prop="data.openOnCreate" visible-when="data.xrtData"></aw-checkbox>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button action="createRecipeWithBOMAction" visible-when="formProp.attributes.valid">
+            <aw-i18n>i18n.Create</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

@@ -1,0 +1,33 @@
+<aw-panel class="aw-ngp-associatePartitionsPanel">
+    <mfe-loading-message class="aw-ngp-associatePartitionsLoadingMsg" exist-when="!conditions.finishedCreatingPartitionSchemeList"></mfe-loading-message>
+    <aw-panel-body class="aw-ngp-associatePartitionsPanelBody" show-when="conditions.finishedFirstPartitionsLoad" exist-when="conditions.finishedCreatingPartitionSchemeList" scrollable="false">
+        <div class="sw-row h-1">
+            <aw-listbox class="aw-ngp-associatePartitionsRevisionRule" prop="data.revisionRuleLabel" list="data.revisionRuleList"></aw-listbox>
+            <aw-listbox prop="data.intentLabel" list="data.intentList" visible-when="conditions.shouldShowIntent"></aw-listbox>
+        </div>
+        <div class="sw-row h-1">
+            <aw-listbox prop="data.partitionSchemeLabel" list="data.partitionSchemeList" action="onPartitionSchemeChange" aw-class="{'disabled': conditions.shouldDisablePartitionSchemeList}"></aw-listbox>
+        </div>
+        <div class="sw-row w-12 h-10">
+            <div class="sw-column w-6">
+                <aw-label prop="data.availablePartitionsLabel"></aw-label>
+                <mfe-loading-message class="aw-ngp-associatePartitionEmptyMsg" exist-when="!conditions.finishedLoadingAvailablePartitions"></mfe-loading-message>
+                <mfe-message-panel class="aw-ngp-associatePartitionEmptyMsg" exist-when="conditions.shouldDisplayNoAvailablePartitionsMsg" messages-data="{messageLines: data.messages.noPartitionsForScheme}"></mfe-message-panel>
+                <aw-splm-table class="aw-ngp-partitionsTable" show-when="conditions.shouldShowAvailablePartitionsTable" gridid="ngpAvailablePartitionsTable" use-tree="true" show-decorators="true"></aw-splm-table>
+            </div>
+            <div class="sw-column w-1">
+                <aw-command-bar class="aw-ngp-associatePartitionsCmdBar" anchor="ngpAssociatePartitionsDlgCommandBar" context="{...data.dataProviders}" alignment="VERTICAL" overflow="true"></aw-command-bar>
+            </div>
+            <div class="sw-column w-6">
+                <aw-label prop="data.partitionsToAssociateLabel"></aw-label>
+                <mfe-message-panel class="aw-ngp-associatePartitionEmptyMsg" exist-when="!conditions.shouldDisplayAssociatedPartitionsTable" messages-data="{messageLines: data.messages.noPartitionsSelected}"></mfe-message-panel>
+                <aw-splm-table class="aw-ngp-partitionsTable" show-when="conditions.shouldDisplayAssociatedPartitionsTable" gridid="ngpPartitionsToAssociateTable" show-decorators="true"></aw-splm-table>
+            </div>
+        </div>
+    </aw-panel-body>
+    <aw-panel-footer class="aw-ngp-associatePartitionsPanelFooter" exist-when="conditions.finishedFirstPartitionsLoad">
+        <aw-button button-type="chromeless" size="auto" visible-when="conditions.hasSubsetDefObject" action="removeProductScope">{{i18n.removeProductScope}}</aw-button>
+        <aw-button button-type="base" action="closeDialog" size="auto">{{i18n.cancel}}</aw-button>
+        <aw-button action="associatePartitionsAndCloseDlg" size="auto" aw-class="{'disabled': conditions.shouldDisableAssociatePartitionBtn}">{{i18n.done}}</aw-button>
+    </aw-panel-footer>
+</aw-panel>

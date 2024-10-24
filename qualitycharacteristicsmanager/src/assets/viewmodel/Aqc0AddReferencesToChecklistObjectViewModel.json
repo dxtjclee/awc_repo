@@ -1,0 +1,174 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "addChecklistReference": {
+            "actionType": "JSFunctionAsync",
+            "method": "getCreateInputForCreateChecklistObject",
+            "inputData": {
+                "data": "{{data}}",
+                "creationType": "{{addPanelState.creationType}}",
+                "selectedTab": "{{addPanelState.selectedTab}}",
+                "editHandler": "{{editHandlers.addPanelEditHandler}}"
+            },
+            "outputData": {
+                "createdObjectForChecklistReferences": "",
+                "addElementResponse": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "createChecklistReferencesRelation"
+                }],
+                "failure": [ {
+                    "name": "addObject.addOprfailed"
+                } ]
+            },
+            "deps": "js/Aqc0UtilService"
+        },
+        "createRelation": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "createRelations",
+            "inputData": {
+                "input": [{
+                    "primaryObject": "{{ctx.xrtSummaryContextObject}}",
+                    "secondaryObject": "{{data.createdObjectForChecklistReferences}}",
+                    "relationType": "Qc0ChecklistSpecReferences",
+                    "clientId": "",
+                    "userData": {
+                        "uid": "AAAAAAAAAAAAAA",
+                        "type": "unknownType"
+                    }
+                }]
+            },
+            "events": {
+                "success": [ {
+                    "name":"cdm.relatedModified",
+                    "eventData": {
+                        "relatedModified": [
+                            "{{ctx.selected}}"
+                        ]
+                    }
+                },
+                {
+                    "name": "complete",
+                    "eventData":
+                    {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "condition": "errorCode.code===35010",
+                    "message": "displayErrorMessage"
+                } ]
+            }
+        },
+        "setActiveView":{
+            "actionType": "JSFunction",
+            "method": "resetActiveView",
+            "inputData": {
+                "stateName": "{{data.activeState}}",
+                "destPanelId": "AddObjectPrimarySub"
+            },
+            "outputData": {
+                "activeState": ""
+            },
+            "deps": "js/addObjectUtils"
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "messages": {
+        "displayErrorMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.relationAlreadyExistsMsg}}",
+            "messageTextParams": [
+                "{{data.createdObjectForChecklistReferences.props.object_name.dbValue}}"
+            ]
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "createChecklistReferencesRelation",
+            "action": "createRelation"
+        }
+    ],
+    "conditions": {
+        "isPaletteSearchTabAddButtonVisible": {
+            "expression": "addPanelState.selectedTab.view!='NewTabPageSub' && addPanelState.sourceObjects.length > 0"
+        },
+        "isNewTabAddButtonVisible": {
+            "expression": "addPanelState.selectedTab.view ==='NewTabPageSub' && addPanelState.creationType && xrtState.xrtTypeLoaded"
+        },
+        "isAddButtonVisible": {
+            "expression": "conditions.isPaletteSearchTabAddButtonVisible || conditions.isNewTabAddButtonVisible"
+        }
+    },
+    "data": {
+        "performAddOperation": true,
+        "addPanelState": {
+            "initialValues": {
+                "creationType": "",
+                "createdObject": "",
+                "sourceObjects": "",
+                "selectedTab": ""
+            },
+            "meta": {}
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "AddObjectPrimarySub",
+                "context": {}
+            },
+            "meta": {}
+        },
+        "projectState": {
+            "initialValues": {
+                "selectedProjects": [],
+                "triggerAssign": false
+            },
+            "meta": {
+                "selectedProjects": {
+                    "field": "true",
+                    "type": "OBJECT"
+                },
+                "triggerAssign": {
+                    "field": "true",
+                    "type": "BOOLEAN"
+                }
+            }
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "i18n": {
+        "addButtonTitle": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "BACK_BUTTON_TITLE": [
+            "BaseMessages"
+        ],
+        "relationAlreadyExistsMsg": [
+            "qualitycharacteristicsmanagerMessages"
+        ]
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    }
+}

@@ -1,0 +1,28 @@
+<aw-advanced-bar type="TASKBAR">
+    <aw-flex-row align-content="center" height="4f">
+        <div class="aw-comparisoncontext-taskbarContent aw-layout-headerProperty">
+            <span class="aw-widgets-propertyLabelTop">{{data.taskBarRevisionRule.propertyDisplayName}}:</span>
+            <span>{{data.taskBarRevisionRule.uiValue}}</span>
+        </div>
+        <div class="aw-layout-headerProperty">
+            <span class="aw-widgets-propertyLabelTop">{{data.taskBarVariantRule.propertyDisplayName}}:</span>
+            <span>{{data.taskBarVariantRule.uiValue}}</span>
+        </div>
+
+        <div class="aw-layout-headerProperty" visible-when="data.compareType==='ProductParamComparison'">
+            <span class="aw-widgets-propertyLabelTop">{{data.taskBarEffDate.propertyDisplayName}}:</span>
+            <span>{{data.taskBarEffDate.uiValue}}</span>
+        </div>
+
+        <div class="aw-layout-headerProperty" visible-when="data.compareType==='ProductParamComparison'">
+            <span class="aw-widgets-propertyLabelTop">{{data.taskBarUnits.propertyDisplayName}}:</span>
+            <span>{{data.taskBarUnits.uiValue}}</span>
+        </div>
+        <aw-flex-column width="fill" justify="right" align-content="end">
+            <aw-command-bar anchor="aw_parameters_compare_taskbar" alignment="HORIZONTAL"></aw-command-bar>
+        </aw-flex-column>
+        <aw-flex-column width="0.5" justify="right" align-content="end">
+            <aw-command-bar anchor="toolbarRightSlot" alignment="HORIZONTAL"></aw-command-bar>
+        </aw-flex-column>
+    </aw-flex-row>
+</aw-advanced-bar>

@@ -1,0 +1,72 @@
+// @<COPYRIGHT>@
+// ==================================================
+// Copyright 2020.
+// Siemens Product Lifecycle Management Software Inc.
+// All Rights Reserved.
+// ==================================================
+// @<COPYRIGHT>@
+
+.aw-ngp-createObjectForm{
+
+    .aw-ngp-createObjectTypeList.aw-panelBody{
+        overflow-y: hidden;
+        padding-bottom: 0;
+        .sw-section{
+            height: 100%;
+            .sw-section-content{
+                height: calc( 100% - 32px );
+                padding-right: 0;
+                .aw-widgets-cellListItem{
+                    padding: $padding_normal;
+                }
+            }
+        }
+
+    }
+
+    .aw-ngp-createObjectPanel   {
+        >.aw-layout-subLocation  {
+            >.aw-layout-panelSection  {
+                >.aw-layout-panelSectionContent {
+                    padding: 8px 16px 0 16px;
+                    width: auto;
+                    overflow: auto;
+                    height: 333px;
+                    .aw-layout-panelSection{
+                        .aw-layout-panelSectionContent{
+                            padding: 8px 16px ;
+                            width: auto;
+                        }
+                    }
+                }
+
+                >.aw-layout-panelSectionTitle{
+                    font-weight: 500;
+                    background-color: transparent;
+                }
+            }
+        }
+        &.aw-layout-panelBody{
+            &.aw-base-scrollPanel{
+                padding:8px 0;
+                overflow: hidden;
+            }
+        }
+
+        .aw-layout-panelContent {
+            .aw-layout-panelBody{
+                &.aw-base-scrollPanel{
+                    height: 340px;
+                }
+            }
+        }
+        .aw-layout-panelSectionTitle {
+            background-color: transparent ;
+        }
+    }
+    .aw-widgets-namingRuleGroup {
+        .aw-jswidgets-drop {
+            position: fixed;
+        }
+    }
+}

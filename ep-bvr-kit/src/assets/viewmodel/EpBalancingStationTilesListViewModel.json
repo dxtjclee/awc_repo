@@ -1,0 +1,92 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "view-path": {
+            "type": "object"
+        },
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data": {
+        "messages": {
+            "noStationsInTheLine": [
+                {
+                    "text": "{{i18n.noStationsInTheLine}}"
+                }
+            ]
+        }
+    },
+    "actions": {
+        "scrollIntoSelectedStation": {
+            "actionType": "JSFunction",
+            "method": "scrollIntoSelectedStation",
+            "inputData": {
+                "balancingStations": "{{props.subPanelContext.balancingData.loadedData.balancingStations}}",
+                "selectedStation": "{{props.subPanelContext.balancingData.selectionData.station}}"
+            },
+            "deps": "js/epBalancingSelectionService"
+        },
+        "loadSelectionFromLocalStorage":{
+            "actionType": "JSFunction",
+            "method": "loadSelectionFromLocalStorage",
+            "inputData": {
+                "balancingData": "{{props.subPanelContext.balancingData}}",
+                "contextUid":"{{ctx.epPageContext.loadedObject.uid}}"
+            },
+            "deps": "js/epBalancingSelectionService"
+        },
+        "saveSelectionToLocalStorage":{
+            "actionType": "JSFunction",
+            "method": "saveSelectionToLocalStorage",
+            "inputData": {
+                "balancingData": "{{props.subPanelContext.balancingData}}",
+                "contextUid":"{{ctx.epPageContext.loadedObject.uid}}"
+            },
+            "deps": "js/epBalancingSelectionService"
+        }
+    },
+    "lifecycleHooks": {
+        "onUpdate": [
+            {
+                "action": "scrollIntoSelectedStation",
+                "observers": [
+                    "props.subPanelContext.balancingData.selectionData.station",
+                    "props.subPanelContext.balancingData.selectionData.operation"
+                ]
+            },
+            {
+                "action": "loadSelectionFromLocalStorage",
+                "observers": [
+                    "props.subPanelContext.balancingData.loadedData.balancingStations.length"
+                ]
+            },
+            {
+                "action": "saveSelectionToLocalStorage",
+                "observers": [
+                    "props.subPanelContext.balancingData.selectionData.station",
+                    "props.subPanelContext.balancingData.selectionData.processResource"
+                ]
+            }
+        ]
+    },
+    "i18n": {
+        "noStationsInTheLine": [
+            "BalancingMessages"
+        ]
+    },
+    "conditions": {
+        "loading": {
+            "expression": "props.subPanelContext.balancingData.loadedData.loading"
+        },
+        "hasStations": {
+            "expression": "props.subPanelContext.balancingData.loadedData.numberOfStations > 0"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "ep.focusSelectedStation",
+            "action": "scrollIntoSelectedStation"
+        }
+    ]
+}

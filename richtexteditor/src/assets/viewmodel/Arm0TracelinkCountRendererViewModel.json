@@ -1,0 +1,79 @@
+{
+    "schemaVersion" : "1.0.0",
+    "imports": [],
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "actions": {
+        "showTracelinks": {
+            "actionType": "JSFunction",
+            "method": "activateExistingTraceLinkPanel",
+            "inputData": {
+                "data": {
+                    "declView": "Arm0ExistingTraceLinkTreePopup",
+                    "locals": {
+                        "anchor": "arm0_existing_tl_popup",
+                        "caption": "{{i18n.existingTraceLinkLabel}}"
+                    },
+                    "options": {
+                        "reference": ".aw-layout-infoCommandbar",
+                        "isModal": false,
+                        "placement": "left-end",
+                        "width": 600,
+                        "height": 400,
+                        "draggable": true,
+                        "detachMode": true,
+                        "disableClose": true
+                    }
+                },
+                "calcHeight" : true
+            },
+            "deps": "js/Arm0ExistingTraceLink"
+        },
+        "createTracelink": {
+            "actionType": "JSFunction",
+            "method": "addObjectToTracelinkPanel",
+            "inputData": {
+                "data":{
+                    "sourceObject": {
+                        "uid": "{{subPanelContext.vmo.props.arm0SourceElement.dbValues[0]}}"
+                    }
+                }
+            },
+            "deps": "js/Arm0CreateTraceLink"
+        }
+    },
+    "conditions": {
+        "hasExistingTracelinks": {
+            "expression": "subPanelContext.vmo.props.arm0TracelinkCount.dbValues[0]>0"
+        }
+    },
+    "data": {
+        "tracelinkCountLabel": {
+            "dbValue": "{{subPanelContext.vmo.props.arm0TracelinkCount.dbValue}}",
+            "type": "STRING",
+            "dispValue": "{{subPanelContext.vmo.props.arm0TracelinkCount.uiValue}}",
+            "labelPosition": "NO_PROPERTY_LABEL"
+        },
+        "createTracelinksCmd": {
+            "iconName": "indicatorTraceLink",
+            "tooltip": "{{i18n.createTraceLinkTitle}}",
+            "action": "createTracelink"
+        },
+        "createNewTracelinkCmd": {
+            "iconName": "cmdCreateTraceLink",
+            "tooltip": "{{i18n.createTraceLinkTitle}}",
+            "action": "createTracelink"
+        }
+    },
+    "i18n": {
+        "createTraceLinkTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "existingTraceLinkLabel": [
+            "RequirementsCommandPanelsMessages"
+        ]
+    }
+}

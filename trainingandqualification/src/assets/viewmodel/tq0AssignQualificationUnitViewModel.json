@@ -1,0 +1,360 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/visible-when.directive",
+        "js/aw-command-panel-section.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-list-filter.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/aw-widget.directive",
+        "js/aw-property-label.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-default-cell.directive"
+    ],
+    "actions": {
+        "getQuListOnReveal": {
+            "actionType": "dataProvider",
+            "method": "getQualificationUnitList"
+        },
+        "tq0QuAssignedRefreshSplmTableAction": {
+            "actionType": "JSFunction",
+            "method": "publishEventToReloadQrTable",
+            "deps": "js/tq0SplmUtils"
+        },
+        "searchQualificationUnit": {
+            "actionType": "JSFunction",
+            "method": "searchQualificationUnit",
+            "deps": "js/tq0Utils",
+            "inputData": {
+                "selected": "{{ctx.selected}}",
+                "filterValue": "{{data.filterBox}}"
+            },
+            "outputData": {
+                "searchResults": "searchResults",
+                "totalFound": "totalFound",
+                "totalLoaded": "totalLoaded"
+            }
+        },
+        "assignQUToQPG": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-09-DataManagement",
+            "method": "setProperties",
+            "inputData": {
+                "info": "{{function:addQualUnitToQPG}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "refreshLocationFlag": true,
+                            "relations": "",
+                            "relatedModified": [
+                                "{{ctx.selected}}",
+                                "{{ctx.pselected}}"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/tq0Utils"
+        },
+        "checkTargetEntityAddedOrNot": {
+            "actionType": "JSFunction",
+            "method": "checkTargetEntityAddedOrNot",
+            "deps": "js/tq0Utils",
+            "inputData": {
+                "mselected": "{{ctx.mselected}}"
+            },
+            "outputData": {
+                "hasTargetEntity": "hasTargetEntity"
+            },
+            "events": {
+                "success": [
+                    {
+                        "condition": "data.hasTargetEntity === true",
+                        "name": "executeAssignQUToQPAction"
+                    },
+                    {
+                        "name": "cdm.relatedModified",
+                        "condition": "ctx.selected.type === 'Tq0QualProfileGroup' || ctx.pselected.type === 'Tq0QualProfileGroup'",
+                        "eventData": {
+                            "refreshLocationFlag": true,
+                            "relations": "",
+                            "relatedModified": [
+                                "{{ctx.selected}}",
+                                "{{ctx.pselected}}"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "condition": "(data.hasTargetEntity === false && ctx.mselected.length > 1)",
+                        "message": "targetEntityConfirmationMessageForMultipleProfile"
+                    },
+                    {
+                        "condition": "(data.hasTargetEntity === false && ctx.mselected.length === 1)",
+                        "message": "targetEntityConfirmationMessageForSingleProfile"
+                    }
+                ]
+            }
+        },
+        "assignQualificationUnits": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-TrainingQualificationAw-2020-12-TrainingQualification",
+            "method": "assignQualificationUnits",
+            "inputData": {
+                "assignQualificationInputs": "{{function:getAssignQUsSoaInp}}"
+            },
+            "outputData": {
+                "serviceData": "ServiceData",
+                "createdObject": "qualificationRecords"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "tq0ShowQUInQPG"
+                    },
+                    {
+                        "name": "tq0QuAssignedRefreshSplmTable"
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    },
+                    {
+                        "name": "cdm.relatedModified",
+                        "condition": "ctx.selected.type === 'Tq0QualProfileGroup' || ctx.pselected.type === 'Tq0QualProfileGroup'",
+                        "eventData": {
+                            "refreshLocationFlag": true,
+                            "relations": "",
+                            "relatedModified": [
+                                "{{ctx.selected}}",
+                                "{{ctx.pselected}}"
+                            ]
+                        }
+                    }
+                ],
+                "failure": [ {
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "assignQUnitsFailed"
+                } ]
+
+            },
+            "deps": "js/tq0Utils"
+        },
+        "assignPrerequisites": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-09-DataManagement",
+            "method": "setProperties",
+            "inputData": {
+                "info": [ {
+                    "object": "{{ctx.selected}}",
+                    "vecNameVal": [ {
+                        "name": "tq0Prerequisites",
+                        "values": "{{function:getPrerequisiteValues}}"
+                    } ]
+                } ]
+            },
+            "events": {
+                "success": [
+                {
+                    "name": "cdm.relatedModified",
+                    "eventData": {
+                        "refreshLocationFlag": true,
+                        "relations": "",
+                        "relatedModified": [
+                            "{{ctx.pselected}}"
+                        ]
+                    }
+                },
+                {
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                },
+                {
+                    "name": "tq0PrerequisitesGrid.plTable.reload"
+                } ]
+            },
+            "deps": "js/tq0Utils"
+        },
+        "addQualUnitsToQualDeftn": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-09-DataManagement",
+            "method": "setProperties",
+            "inputData": {
+                "info": "{{function:getQualUnitList}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "refreshLocationFlag": true,
+                            "relations": "",
+                            "relatedModified": [
+                                "{{ctx.pselected}}",
+                                "{{ctx.selected}}"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/tq0Utils"
+        }
+    },
+    "data": {
+        "filterBox": {
+            "displayName": "{{i18n.filterBox}}",
+            "type": "STRING",
+            "dbValue": ""
+        }
+    },
+    "dataProviders": {
+        "getQualificationUnitList": {
+            "action": "searchQualificationUnit",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "totalLoaded": "{{data.totalLoaded}}",
+            "selectionModelMode": "multiple",
+            "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectCellListActionCommands"
+        }
+    },
+    "conditions": {
+        "tq0IsQProfileAndQPG": {
+            "expression": "ctx.selected.modelType.typeHierarchyArray.indexOf('Tq0QualificationProfile') > -1 || ctx.selected.modelType.typeHierarchyArray.indexOf('Tq0QualProfileGroup') > -1"
+        },
+        "tq0ShowQUnitAssignbtn": {
+            "expression": "conditions.tq0IsQProfileAndQPG && dataProviders.getQualificationUnitList.selectedObjects.length > 0"
+        },
+        "tq0PreReqAssignbtn": {
+            "expression": "ctx.selected.modelType.typeHierarchyArray.indexOf('Tq0QualificationUnit') > -1 && dataProviders.getQualificationUnitList.selectedObjects.length > 0"
+        },
+        "tq0AddQUtoQualDefinitionbtn" : {
+            "expression": "ctx.selected.modelType.typeHierarchyArray.indexOf('Tq0QualificationDefinition') > -1 && dataProviders.getQualificationUnitList.selectedObjects.length > 0 "
+
+        }
+
+    },
+    "messages": {
+        "assignQUnitsFailed": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.assignQUnitsFailed}}",
+            "messageTextParams": [
+                "{{data.serviceData.partialErrors[0].errorValues[0].message}}"
+            ]
+        },
+        "targetEntityConfirmationMessageForMultipleProfile": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.tq0AddTargetEntityToMultipleProfile}}",
+            "navigationOptions": [
+                {
+                    "option": "Cancel",
+                    "text": "{{i18n.tq0CancelText}}"
+                },
+                {
+                    "option": "Continue",
+                    "text": "{{i18n.tq0ContinueText}}",
+                    "action": "assignQualificationUnits"
+                }
+            ]
+        },
+        "targetEntityConfirmationMessageForSingleProfile": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.tq0AddTargetEntityToSingleProfile}}",
+            "navigationOptions": [
+                {
+                    "option": "Cancel",
+                    "text": "{{i18n.tq0CancelText}}"
+                }
+            ]
+        }
+    },
+    "functions": {
+        "getAssignQUsSoaInp": {
+            "functionName": "getAssignQUsSoaInp",
+            "parameters": [
+                "{{data.dataProviders.getQualificationUnitList.selectedObjects}}",
+                "{{ctx.mselected}}",
+                "{{ctx.pselected}}",
+                "{{ctx}}"
+            ]
+        },
+        "getPrerequisiteValues": {
+            "functionName": "getPrerequisiteValues",
+            "parameters": [
+                "{{data.dataProviders.getQualificationUnitList}}"
+            ]
+        },
+        "addQualUnitToQPG": {
+            "functionName": "addQualUnitToQPG",
+            "parameters": [
+                "{{data.dataProviders.getQualificationUnitList.selectedObjects}}",
+                "{{ctx}}"
+            ]
+        },
+        "getQualUnitList": {
+            "functionName": "getQualUnitList",
+            "parameters": [
+                "{{data.dataProviders.getQualificationUnitList.selectedObjects}}"
+            ]
+        }
+
+    },
+    "onEvent": [ {
+        "eventId": "tq0QuAssignedRefreshSplmTable",
+        "action": "tq0QuAssignedRefreshSplmTableAction"
+    },
+    {
+        "eventId": "tq0ShowQUInQPG",
+        "action": "assignQUToQPG",
+        "condition": "ctx.selected.type === 'Tq0QualProfileGroup'"
+    },
+    {
+        "eventId": "executeAssignQUToQPAction",
+        "action": "assignQualificationUnits"
+    }],
+    "lifecycleHooks": {
+        "onInit": "getQuListOnReveal"
+    },
+    "i18n": {
+        "filterBox": [ "responsibleUserMessages" ],
+        "tq0AssignQualificationUnitTitle": [ "assignQualificationUnitMessages" ],
+        "tq0QualificationUnitSecTitle": [ "assignQualificationUnitMessages" ],
+        "assignQUnitsFailed": [ "assignQualificationUnitMessages" ],
+        "add": ["trainingandqualificationMessages"],
+        "tq0AddTargetEntityToMultipleProfile": ["trainingandqualificationMessages"],
+        "tq0AddTargetEntityToSingleProfile": ["trainingandqualificationMessages"],
+        "tq0CancelText": ["trainingandqualificationMessages"],
+        "tq0ContinueText": ["trainingandqualificationMessages"]
+    }
+}

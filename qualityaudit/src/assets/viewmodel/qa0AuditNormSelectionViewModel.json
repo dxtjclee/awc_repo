@@ -1,0 +1,82 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "data": {},
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "dataProviders": {
+        "AuditNormProvider": {
+            "response": "{{data.genericAuditNorms}}"
+        }
+    },
+    "actions": {
+        "loadData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadAndBindProperty",
+            "inputData": {
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "outputData": {
+                "qa0AuditNorms": ""
+            },
+            "deps": "js/qa0AuditNormSelectionService"
+        },
+        "editStateChanger": {
+            "actionType": "JSFunctionAsync",
+            "method": "auditNormEditStateChanger",
+            "inputData": {
+                "subPanelContext": "{{props.subPanelContext}}",
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "genericAuditNorms": "genericAuditNorms",
+                "qa0AuditNorms": "qa0AuditNorms"
+            },
+            "deps": "js/qa0AuditNormSelectionService"
+        },
+        "auditNormChangeAction": {
+            "actionType": "JSFunctionAsync",
+            "method": "auditNormChangeAction",
+            "inputData": {
+                "subPanelContext": "{{props.subPanelContext}}",
+                "data": "{{data}}"                
+            },
+            "outputData": {
+                "genericAuditNorms": "genericAuditNorms",
+                "qa0AuditNorms": "qa0AuditNorms"
+            },
+            "deps": "js/qa0AuditNormSelectionService"
+        },
+        "addHtmlPanelData": {
+            "actionType": "JSFunction",
+            "method": "addHtmlPanelPropertiesInDataSource",
+            "inputData": {
+                "updatedProperties": [
+                    "{{data.qa0AuditNorms}}"
+                ],
+                "type": "SUMMARY"
+            },
+            "deps": "js/xrtUtilities"
+        }
+    },
+    "lifecycleHooks": {
+        "onInit": "loadData",
+        "onUpdate": [
+            {
+                "action": "addHtmlPanelData",
+                "observers": [
+                    "viewModel.data.qa0AuditNorms"
+                ]
+            }
+        ]
+    },
+    "onEvent": [
+        {
+            "eventId": "editHandlerStateChange",
+            "action": "editStateChanger"
+        }
+    ]
+}

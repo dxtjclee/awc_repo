@@ -1,0 +1,335 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/aw-add.directive",
+        "js/visible-when.directive",
+        "js/aw-form.directive",
+        "js/aw-checkbox.directive",
+        "js/enable-when.directive",
+        "js/aw-panel-body.directive"
+    ],
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "actions": {
+        "initCreateInputs": {
+            "actionType": "JSFunction",
+            "method": "initCreateObject",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}",
+                "creationType": "{{addPanelState.creationType}}",
+                "editHandler": "{{editHandlers.addPanelEditHandler}}"
+            },
+            "outputData": {
+                "createInputs": "",
+                "creationType": "{{addPanelState.creationType}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "awCrt1CreateAR.inputsReady"
+                    }
+                ]
+            },
+            "deps": "js/createAnalysisRequest"
+        },
+        "createObject": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-Core-2012-10-DataManagement",
+            "method": "createRelateAndSubmitObjects",
+            "inputData": {
+                "inputs": "{{data.createInputs}}"
+            },
+            "outputData": {
+                "createdMainObject": "output[0].objects[0]",
+                "createdObject": "{{function:getCreatedObject}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "addObject.objectcreated"
+                    },
+                    {
+                        "name": "associateProjectToVR.assignProjects",
+                        "condition": "data.dataProviders.getAssignedProjectsProvider.viewModelCollection.loadedVMObjects.length > 0"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "message": "SOAFailureMsg"
+                    }
+                ]
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "createDialog": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "setVRCreatedMsg"
+                },
+                {
+                    "action": "setVRCreatedConfimation"
+                }
+            ]
+        },
+        "setVRCreatedMsg":{
+            "actionType": "JSFunction",
+            "method": "setVRCreatedmessage",
+            "deps": "js/analysisRequestUtils",
+            "inputData": {
+                "data": "{{data}}",
+                "subPanelContext": "{{subPanelContext}}"
+            },
+            "outputData": {
+                "warningmsg": ""
+            }
+        },
+        "setVRCreatedConfimation":{
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "setVRCreatedmsg"
+                } ]
+            },
+            "events": {
+                "success": [ {
+                    "condition": "subPanelContext.panelPinned === false",
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            }
+        },
+        "assignProjectsToCreatedObject1": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2007-09-ProjectLevelSecurity",
+            "method": "assignOrRemoveObjects",
+            "inputData": {
+                "assignedOrRemovedobjects": [
+                    {
+                        "projects": "{{data.dataProviders.getAssignedProjectsProvider.viewModelCollection.loadedVMObjects}}",
+                        "objectToAssign": [
+                            "{{data.createdMainObject}}"
+                        ],
+                        "objectToRemove": []
+                    }
+                ]
+            }
+        },
+        "populateSavedBookmark": {
+            "actionType": "JSFunction",
+            "method": "populateSavedBookmark",
+            "inputData": {
+            },
+            "outputData": {
+                "domainUid": "domainUid"
+            },
+            "deps": "js/analysisRequestUtils"
+        },
+        "postProcessAR": {
+            "actionType": "JSFunction",
+            "method": "processCreatedObject",
+            "inputData": {
+                "data": "{{data}}",
+                "subPanelContext": "{{subPanelContext}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name":"awCrt1CreateAR.showdialogbox",
+                        "condition":"conditions.isOpenOnCreateCheckBox"
+                    }
+                ]
+            },
+            "deps": "js/analysisRequestUtils"
+        },
+        "performPostProcessingAfterXRTLoaded": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "populateSavedBookmark",
+                    "condition": "conditions.isXRTTypeLoaded"
+                }
+            ]
+        },
+        "setActiveView":{
+            "actionType": "JSFunction",
+            "method": "resetActiveView",
+            "inputData": {
+                "stateName": "{{data.activeState}}",
+                "destPanelId": "AddObjectPrimarySub"
+            },
+            "outputData": {
+                "activeState": ""
+            },
+            "deps": "js/addObjectUtils"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "addObject.objectcreated",
+            "action": "postProcessAR"
+        },
+        {
+            "eventId": "associateProjectToVR.assignProjects",
+            "action": "assignProjectsToCreatedObject1"
+        },
+        {
+            "eventId": "setVRCreatedmsg",
+            "message": "setVRCreatemessage"
+        },
+        {
+            "eventId": "awCrt1CreateAR.showdialogbox",
+            "action": "createDialog"
+        },
+        {
+            "eventId": "getRecentTypesProvider.selectionChangeEvent",
+            "action": "populateSavedBookmark",
+            "condition": "addPanelState.creationType"
+        },
+        {
+            "eventId": "awCrt1CreateAR.inputsReady",
+            "action": "createObject"
+        }
+    ],
+    "data": {
+        "openOnCreate": {
+            "displayName": "{{i18n.openonCreate}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": true,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "domainUid": {
+            "displayName": "",
+            "type": "STRING"
+        },
+        "addPanelState": {
+            "initialValues": {
+                "creationType": "",
+                "selectedTab": "",
+                "xrtTypeLoaded": ""
+            },
+            "meta": {}
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "AddObjectPrimarySub",
+                "context": {}
+            },
+            "meta": {}
+        },
+        "xrtState": {
+            "initialValues": {
+                "context": {}
+            },
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        },
+        "projectState": {
+            "initialValues": {
+                "selectedProjects": [],
+                "triggerAssign": false
+            },
+            "meta": {
+                "selectedProjects": {
+                    "field": "true",
+                    "type": "OBJECT"
+                },
+                "triggerAssign": {
+                    "field": "true",
+                    "type": "BOOLEAN"
+                }
+            }
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+     "ctx": {
+        "selected": null,
+        "pselected": null,
+        "melected": null,
+        "parammgmtctx": null,
+        "xrtSummaryContextObject": null,
+        "aceActiveContext.context": null
+    },
+    "conditions": {
+        "isOpenOnCreateCheckBox":{
+            "expression":"data.openOnCreate.dbValue === false"
+        },
+        "isNewTabAddButtonVisible": {
+            "expression": "addPanelState.creationType"
+        },
+        "isXRTTypeLoaded": {
+            "expression": "xrtState.xrtTypeLoaded"
+        },
+        "isActiveStateAddPanel": {
+            "expression": "data.activeState.activeView ==='AddObjectPrimarySub'"
+        }
+    },
+    "messages": {
+        "SOAFailureMsg": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        },
+        "setVRCreatemessage":{
+            "messageType": "INFO",
+
+            "messageText": "{{data.warningmsg}}"
+        }
+    },
+    "i18n": {
+        "Create_AR_Panel_Title": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Create_Button_Title": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Context_Title": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "AddObjectsForValidationFromDiagramWarning": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "throwError": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "openonCreate": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "detailedInfoMessageForInvalidTypes": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "dialogMessage":[
+            "AnalysisRequestCommandPanelsMessages"
+        ]
+    },
+    "lifecycleHooks": {
+        "onUpdate": {
+            "action": "performPostProcessingAfterXRTLoaded",
+            "observers": [ "viewModel.atomicData.xrtState.xrtTypeLoaded" ]
+        }
+    }
+}

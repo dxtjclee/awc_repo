@@ -1,0 +1,13 @@
+<aw-command-panel caption="i18n.insertBlankTable" context="subPanelContext">
+    <aw-panel-body>
+        <aw-panel-section>
+            <aw-numeric prop="data.rows"></aw-numeric>
+            <aw-numeric prop="data.columns"></aw-numeric>
+        </aw-panel-section>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button action="addNewComplexTable" visible-when="awPanelBody.$valid && conditions.positiveIntegerCond">
+            <aw-i18n>i18n.insert</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

@@ -1,0 +1,11 @@
+<div class="sw-row ep-operationPlanning-leftTaskBar align-center">
+    <div>{{ctx.epTaskPageContext.loadedObject.props.object_string.dbValues[0]}}</div>
+    <div class="aw-mfeChip-container">
+        <aw-icon class="aw-mfeChip-icon" icon-id="indicatorDashboardOverallTime"></aw-icon>
+        <div class="aw-mfeChip-label">
+            <aw-i18n show-when="data.isTaktTimeFromLine === true">i18n.lineTaktTime</aw-i18n>
+            <aw-i18n show-when="data.isTaktTimeFromLine === false">i18n.stationTaktTime</aw-i18n>
+        </div>
+        <div class="aw-mfeChip-value">{{data.taktTime}}</div>
+    </div>
+</div>

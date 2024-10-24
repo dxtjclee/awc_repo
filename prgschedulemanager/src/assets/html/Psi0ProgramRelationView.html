@@ -1,0 +1,12 @@
+<aw-command-panel caption="i18n.programRelation">
+    <aw-panel-body scrollable="false">
+        <aw-panel-section caption="i18n.to">
+            <aw-default-cell item="data.selectedEvent"></aw-default-cell>
+        </aw-panel-section>
+        <aw-command-panel-section caption="i18n.relatedArtifacts" anchor="data.Psi0ProgramRelationCommandAnchor">
+            <aw-list-filter prop="data.filterText" dataprovider="data.dataProviders.getLinkedObjectsSearchProvider">
+                <aw-default-cell vmo="item"></aw-default-cell>
+            </aw-list-filter>
+        </aw-command-panel-section>
+    </aw-panel-body>
+</aw-command-panel>

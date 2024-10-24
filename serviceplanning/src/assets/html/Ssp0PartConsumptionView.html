@@ -1,0 +1,27 @@
+<aw-scrollpanel>
+    <div class='aw-layout-defaultSublocation aw-layout-flexColumn'>
+        <div class="aw-layout-sublocationContainer w-12 h-12">
+            <mfe-content-container class="sw-row h-12 w-12 aw-mfe-subpageContent" container-direction="HORIZONTAL" container-name="mainPanelTabs">
+                <mfe-content-container container-direction="VERTICAL" container-name="leftPanelTabs" class="w-3">
+                    <!-- Top left panel -->
+                    <mfe-content-container container-direction="HORIZONTAL" container-name="topLeftPanelTabs" class="h-7">
+                        <mfe-content-panel sub-panel-context="data.sbomTreeContext">
+                        </mfe-content-panel>
+                    </mfe-content-container>
+                    <!-- Bottom left panel -->
+                    <mfe-content-container container-direction="HORIZONTAL" container-name="bottomLeftPanelTabs" class="h-5">
+                        <ssp0-sbom-secondary></ssp0-sbom-secondary>
+                    </mfe-content-container>
+                </mfe-content-container>
+                <mfe-content-container container-direction="VERTICAL" container-name="middlePanelTab" class="w-4">
+                    <mfe-content-container container-direction="HORIZONTAL" container-name="servicePanelPanelTabs" class="h-12">
+                        <mfe-content-panel sub-panel-context="data.servicePlanContext">
+                        </mfe-content-panel>
+                    </mfe-content-container>
+                </mfe-content-container>
+                <ssp0-service-plan></ssp0-service-plan>
+                <aw-sidenav id="aw_toolsAndInfo" config="data.sideNavLeftData"></aw-sidenav>
+            </mfe-content-container>
+        </div>
+    </div>
+</aw-scrollpanel>

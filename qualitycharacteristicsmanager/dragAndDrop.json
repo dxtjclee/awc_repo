@@ -1,0 +1,59 @@
+{
+  "dragHandlers": {
+    "dragHandlerForQc0MasterCharSpec": {
+      "activeWhen": true,
+      "views": [
+        "Aqc0CharLibrary",
+        "Aqc0CharLibraryTree"
+      ],
+      "dragActions": {
+        "dragStart": "handlerDragStartActionForQc0MasterCharSpec"
+      }
+    }
+  },
+  "dropHandlers": {
+    "dropHandlerForQc0MasterCharSpec": {
+      "dropActions": {
+        "dragOver": "handlerDragOverActionForQc0MasterCharSpec",
+        "drop": "handlerDropActionForQc0MasterCharSpec"
+      },
+      "activeWhen": true,
+      "views": [
+        "Aqc0CharLibrary",
+        "Aqc0CharLibraryTree"
+      ]
+    }
+  },
+  "actions": {
+    "handlerDragStartActionForQc0MasterCharSpec": {
+      "actionType": "syncFunction",
+      "method": "dragStartActionForQc0MasterCharSpec",
+      "inputData": {},
+      "deps": "js/Aqc0CharManagerUtils"
+    },
+    "handlerDragOverActionForQc0MasterCharSpec": {
+      "actionType": "syncFunction",
+      "method": "dragOverActionForQc0MasterCharSpec",
+      "inputData": {
+        "views": [
+          "Aqc0CharLibrary",
+          "Aqc0CharLibraryTree"
+        ],
+        "type": [
+          "Qc0MasterCharSpec"
+        ],
+        "readOnlyMode": false
+      },
+      "deps": "js/Aqc0CharManagerUtils"
+    },
+    "handlerDropActionForQc0MasterCharSpec": {
+      "actionType": "syncFunction",
+      "method": "setPropertiesForPaste",
+      "inputData": {
+        "subPanelContext": "{{props.subPanelContext}}",
+        "charLibraryDataProvider": "{{data.dataProviders.charLibraryDataProvider}}"
+      },
+      "deps": "js/Aqc0CharManagerUtils"
+    }
+  }
+}

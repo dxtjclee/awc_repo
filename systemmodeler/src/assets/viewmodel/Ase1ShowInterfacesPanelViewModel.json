@@ -1,0 +1,147 @@
+{
+    "schemaVersion" : "1.0.0",
+    "imports": [],
+
+    "actions": {
+        "ReloadShowInterfacesDataProvider": {
+            "actionType": "dataProvider",
+            "method": "showInterfacesDataProvider"
+        },
+        "buttonClick": {
+            "actionType": "JSFunction",
+            "method": "onButtonClick",
+            "inputData": {
+                "selectedObjectsInPanel": "{{data.dataProviders.showInterfacesDataProvider.selectedObjects}}",
+                "pwaSelectedObj": "{{ctx.selected}}",
+                "bundledConnectionMap": "{{data.interfacesData.bundledConnectionMap}}",
+                "occContext":"{{subPanelContext.occContext}}"
+            },
+            "outputData": {
+                "panelIsActive": false
+            },
+            "events": {
+                "success": [ {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Ase1ShowInterfacesPanelService"
+        },
+        "onInverseSelection": {
+            "actionType": "JSFunction",
+            "method": "onInverseSelection",
+            "inputData":
+            {
+                "data": "{{data}}"
+            },
+            "deps": "js/Ase1ShowInterfacesPanelService"
+        },
+        "loadTableData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-SystemsModeling-2017-06-DiagramManagement",
+            "method": "getInterfaces",
+            "deps": "js/Ase1ShowInterfacesPanelService",
+            "inputData": {
+                "input": [ {
+                    "clientId": "showSystemPanel",
+                    "diagramInfo": {},
+                    "externalSystems": [],
+                    "inputContext": {
+                        "productContext": "{{props.subPanelContext.occContext.productContextInfo}}"
+                    },
+                    "navigationMode": "ShowInterfaces",
+                    "systemInView": "{{props.subPanelContext.selectionData.selected[0]}}",
+                    "systemOfInterest": "{{props.subPanelContext.selectionData.selected[0]}}"
+                } ]
+            },
+            "outputData": {
+                "interfacesData": "{{function:modifyResultsList}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "Ase1ShowInterfacesPanel.reloadDataProvider"
+                } ]
+            }
+        },
+        "applyFilter": {
+            "actionType": "JSFunction",
+            "method": "checkFilter",
+            "inputData": {
+                "interfacesData": "{{data.interfacesData.retResults}}",
+                "filterText": "{{data.filterBox.dbValue}}"
+            },
+            "outputData": {
+                "searchResults": "",
+                "panelIsActive": true
+            },
+            "deps": "js/Ase1ShowInterfacesPanelService"
+        }
+    },
+
+    "lifecycleHooks": {
+        "onUpdate": [ {
+            "action": "loadTableData",
+            "observers": [ "props.subPanelContext.selectionData.value" ]
+        } ]
+    },
+
+    "onEvent": [ {
+            "eventId": "Ase1ShowInterfacesPanel.reloadDataProvider",
+            "action": "ReloadShowInterfacesDataProvider",
+            "eventSource": "current"
+        }
+    ],
+
+    "data":
+    {
+        "panelIsActive": false,
+        "filterBox":
+        {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "false",
+            "dbValue": ""
+        }
+    },
+
+    "functions":
+    {
+        "modifyResultsList":
+        {
+            "functionName": "modifyResultsList",
+            "parameters": []
+        }
+    },
+
+    "dataProviders": {
+        "showInterfacesDataProvider":
+        {
+            "action": "applyFilter",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.searchResults.length}}",
+            "selectionModelMode": "multiple"
+        }
+    },
+
+    "conditions":
+    {
+        "showPanelIsActive":
+        {
+            "expression": "data.panelIsActive === true"
+        },
+        "isButtonVisible":
+        {
+            "expression": "data.dataProviders.showInterfacesDataProvider.selectedObjects.length>0"
+        }
+    },
+
+    "i18n":
+    {
+        "showInterfacesPanelTitle": ["SystemModelerConstants"],
+        "showInterfacesButton": ["SystemModelerConstants"],
+        "noResultsFound": ["SystemModelerConstants"]
+    }
+}

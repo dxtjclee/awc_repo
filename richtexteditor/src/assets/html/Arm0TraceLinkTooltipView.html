@@ -1,0 +1,10 @@
+<aw-balloon-popup-panel class="aw-richtexteditor-traceLinkTooltip">
+    <aw-panel>
+        <aw-list dataprovider="data.dataProviders.tracelinkedItemList">
+            <aw-include name="Arm0TracelinkTooltipSub" sub-panel-context="item"></aw-include>
+        </aw-list>
+        <div class="aw-requirement-tooltipMore" visible-when="data.showMoreTracelinkOption">
+            <aw-link prop="data.more" action="moreTracelinkClicked"></aw-link>
+        </div>
+    </aw-panel>
+</aw-balloon-popup-panel>

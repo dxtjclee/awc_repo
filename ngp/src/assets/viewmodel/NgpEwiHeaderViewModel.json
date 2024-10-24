@@ -1,0 +1,36 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-model-icon.directive",
+        "js/aw-logo.directive",
+        "js/aw-flex-row.directive",
+        "js/exist-when.directive",
+        "js/aw-i18n.directive",
+        "js/aw-flex-column.directive"
+    ],
+    "i18n": {
+        "loading": [ "NgpHeaderMessages" ]
+    },
+    "actions": {
+        "initializeData": {
+            "actionType": "JSFunction",
+            "method": "initNGP",
+            "deps": "js/services/ngpInitializationService"
+        },
+        "loadModel": {
+            "actionType": "JSFunction",
+            "method": "loadModel",
+            "deps": "js/services/ngpInitializationService"
+        },
+        "destroy": {
+            "actionType": "JSFunction",
+            "method": "onDestroy",
+            "deps": "js/services/ngpInitializationService"
+        }
+    },
+    "lifecycleHooks": {
+        "onInit": "initializeData",
+        "onMount": "loadModel",
+        "onUnmount": "destroy"
+    }
+}

@@ -1,0 +1,118 @@
+{
+    "schemaVersion": "1.0.0",
+    "ctx": {
+        "clsAdmin.classSystem": {
+            "type": "object"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "initializeClassesSWA",
+        "onUpdate": [
+            {
+                "action": "updateClassesSWA",
+                "observers": [
+                    "props.subPanelContext.context.searchState.propertiesSWA"
+                ]
+            }
+        ]
+    },
+    "props":{
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data":{
+        "headerProperties": [
+            {
+                "propertyName": "ID"
+            },
+            {
+                "propertyName": "IRDI"
+            },
+            {
+                "propertyName": "owning_user"
+            },
+            {
+                "propertyName": "dateModified"
+            },
+            {
+                "propertyName": "Status"
+            },
+            {
+                "propertyName": "object_type"
+            }
+        ],
+        "clsadminPropCommands": "clsadmin_propCommands"
+    },
+    "actions":{
+        "updateClassesSWA":{
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "initializeClassesSWA"
+                }
+            ]
+        },
+        "initializeClassesSWA": {
+            "actionType": "JSFunction",
+            "method": "initializeSWA",
+            "inputData": {
+                "subPanelContext": "{{subPanelContext.context.searchState}}",
+                "subLocationName": "Classes",
+                "optionsTitle": "{{i18n.optionsTitle}}",
+                "aliasTitle": "{{i18n.aliasTitle}}"
+            },
+            "outputData": {
+                "currentSecData": "currentSecData",
+                "aspects": "aspects",
+                "property": "property",
+                "classAttributes": "classAttributes",
+                "hasClassAttributes": "hasClassAttributes",
+                "referenceLinks": "referenceLinks",
+                "attrprop": "attrprop",
+                "attrSelected": false,
+                "optionsTitle": "optionsTitle",
+                "aliasTitle": "aliasTitle",
+                "options": "options",
+                "hasOptions": "hasOptions",
+                "alias": "alias",
+                "hasAlias": "hasAlias",
+                "hasImages": "hasImages",
+                "selectedUid": "selectedUid",
+                "multiSiteData": "multiSiteData"
+            },
+            "deps":"js/classifyAdminService"
+        }
+    },
+    "dataProviders": {
+
+    },
+    "columnProviders": {
+    },
+    "grids": {
+    },
+    "onEvent":[
+
+    ],
+    "conditions": {
+        "showAllProp": {
+            "expression": "props.subPanelContext.context.searchState.showAllProp === true"
+        },
+        "isSummaryHeaderHidden": {
+            "expression": "!(ctx.state && ctx.state.urlAttributes && ctx.state.urlAttributes.flexibleLayouts !== undefined)"
+        }
+    },
+    "i18n": {
+        "associations":     ["ClassificationAdminMessages"],
+        "attributes":       [ "ClassificationAdminMessages" ],
+        "dataType":         [ "ClassificationAdminMessages" ],
+        "metric":           [ "ClassificationAdminMessages" ],
+        "multiSite":        [ "ClassificationAdminMessages" ],
+        "nonMetric":        [ "ClassificationAdminMessages" ],
+        "preview":          [ "ClassificationAdminMessages" ],
+        "propertiesTitle":  [ "ClassificationAdminMessages" ],
+        "optionsTitle":     [ "ClassificationAdminMessages" ],
+        "aliasTitle":       [ "ClassificationAdminMessages" ]
+    }
+
+}

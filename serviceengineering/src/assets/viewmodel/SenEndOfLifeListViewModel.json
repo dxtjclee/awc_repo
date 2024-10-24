@@ -1,0 +1,54 @@
+{
+    "schemaVersion": "1.0.0",
+    "dataProviders": {
+        "eolDataProvider": {
+            "action": "getEOLObjectsOnSelectedPart",
+            "response": "{{data.eolObjects}}",
+            "totalFound": "{{data.eolObjects.length}}",
+            "commandsAnchor": "CellCommands_inEOLList"
+        }
+    },
+    "actions": {
+        "doGridDataProvider": {
+            "actionType": "dataProvider",
+            "method": "eolDataProvider"
+        },
+        "getEOLObjectsOnSelectedPart": {
+            "actionType": "JSFunction",
+            "method": "getEOLRevisionListByCreationDate",
+            "inputData": {
+                "inputEndOfLife": "{{ctx.eolOnSelectedPart[0]}}"
+            },
+            "outputData": {
+                "eolObjects": ""
+            },
+            "deps": "js/senEndOfLifeService"
+        },
+        "updateCtxOnSelection": {
+            "actionType": "JSFunction",
+            "method": "registerCtx",
+            "inputData": {
+                "name": "eolRevisionSelected",
+                "value": "{{data.dataProviders.eolDataProvider.selectedObjects[0]}}"
+            },
+            "deps": "js/appCtxService"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "eolDataProvider.selectionChangeEvent",
+            "action": "updateCtxOnSelection"
+        },{
+            "eventId": "endOfLifeSection.updated",
+            "action": "doGridDataProvider"
+        }
+    ],
+    "lifecycleHooks": {
+        "onUpdate": {
+            "action": "doGridDataProvider",
+            "observers": [
+                "viewModel.ctx.eolOnSelectedPart"
+            ]
+        }
+    }
+}

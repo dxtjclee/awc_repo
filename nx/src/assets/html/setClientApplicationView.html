@@ -1,0 +1,5 @@
+<!-- Client Application link -->
+<aw-column visible-when="ctx.preferences.TC_NX_Applications && ctx.preferences.TC_NX_Applications.length !== 0 && ctx.preferences.AWC_NX_ApplicationAndEnvironmentIsSupported[0] && ctx.preferences.AWC_NX_ApplicationAndEnvironmentIsSupported[0]==='true' && !ctx.aw_hosting_enabled">
+    <aw-property-label prop="data.clientApplication"></aw-property-label>
+    <aw-link-with-popup-menu prop="data.applicationInfo" dataprovider="data.dataProviders.applicationLink" link-popup-menu-id="aw-state-setApplication" display-property="{{props.setApplication}}"></aw-link-with-popup-menu>
+</aw-column>

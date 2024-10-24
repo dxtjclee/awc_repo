@@ -1,0 +1,6 @@
+<aw-panel-section exist-when="data.showTable">
+    <aw-toolbar first-anchor="RecipeTableTreeAnchor" second-anchor="evm1ExportToExcelAnchor" context="{ showTable:data.showTable, currentDisplay:data.currentDisplay, recipeState: props.recipeState }"></aw-toolbar>
+    <evm1-recipe-results-table sub-panel-context="{data: data, parentSelectionData: subPanelContext.parentSelectionData, selectionData: subPanelContext.selectionData, selectionModel: subPanelContext.selectionModels.resultsTableSelectionModel}" recipe-state="props.recipeState" exist-when="conditions.showTableView"></evm1-recipe-results-table>
+    <evm1-recipe-results-tree sub-panel-context="{data: data, parentSelectionData: subPanelContext.parentSelectionData, selectionData: subPanelContext.selectionData, selectionModel: subPanelContext.selectionModels.resultsTreeSelectionModel}" recipe-state="props.recipeState" exist-when="conditions.showTreeView"></evm1-recipe-results-tree>
+</aw-panel-section>
+

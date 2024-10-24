@@ -1,0 +1,115 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-list.directive",
+        "js/aw-default-cell.directive",
+        "js/aw-scrollpanel.directive"
+    ],
+    "actions": {
+        "reveal": {
+            "actionType": "dataProvider",
+            "method": "listDataProvider"
+        },
+
+        "getSpecifications":{
+            "actionType": "JSFunctionAsync",
+            "method": "loadObjects",
+            "deps": "js/Aqc0CharManagerUtils",
+            "inputData": {
+                "subPanelContext":"{{props.subPanelContext}}"
+            },
+            "outputData": {
+                "specificationsList": "totalLoaded",
+                "ctx.search.totalFound": "totalLoaded.length",
+                "ctx.search.totalLoaded": "totalLoaded.length"
+
+            },
+            "events":
+            {
+            "success":
+            [
+                {
+                    "name": "aqc0.processPWASelection"
+                }
+            ]
+           }
+        },
+        "updateSelectionInPWA": {
+            "actionType": "JSFunction",
+            "method": "processPWASelection",
+            "inputData": {
+                "sublocationState": "{{props.subPanelContext.pageContext.sublocationState}}",
+                "selectionModel": "{{data.dataProviders.listDataProvider.selectionModel}}",
+                "pinUnpinnedFlag" : "{{subPanelContext.pageContext.sublocationState.pinUnpinnedFlag}}"
+            },
+            "deps": "js/Aqc0CharManagerUtils"
+        },
+        "closePanelHeader": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            }
+        },
+        "closePanelInListView": {
+            "actionType": "JSFunction",
+            "method": "closePanelInListView",
+            "inputData": {
+                "subPanelContext" :"{{subPanelContext}}"
+              },
+            "deps": "js/Aqc0CharLibraryTreeTableService"
+        }
+    },
+    "functions": {
+    },
+    "dataProviders": {
+        "listDataProvider": {
+            "action": "getSpecifications",
+            "response": "{{data.specificationsList}}",
+            "totalFound": "{{data.totalFound}}",
+            "inputData": {
+                "selectionModel": "{{subPanelContext.selectionModel}}"
+            },
+            "commands": {
+                "Awp0ShowObjectCell": {
+                    "id": "cmdOpen",
+                    "title": "Open",
+                    "areas": [ "aw_oneStep" ],
+                    "priorities": [ 300 ],
+                    "dependencies": [ "js/showObjectCommandHandler" ],
+                    "displayOption": "ON_HOVER_AND_SELECTION",
+                    "position": "TOP_RIGHT"
+                }
+            },
+            "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectObjectNavigationCellListActionCommands"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "aqc0.processPWASelection",
+            "cacheEventData": true,
+            "action": "updateSelectionInPWA"
+        },
+        {
+            "eventId": "primaryWorkArea.selectionChangeEvent",
+            "action": "closePanelInListView"
+        }
+    ],
+    "data": {
+    },
+    "lifecycleHooks": {
+        "onMount": "reveal",
+        "onUpdate": {
+            "action": "reveal",
+            "observers": [
+                "props.subPanelContext.pageContext.sublocationState.newlyCreatedObjectFromCharLib"          ]
+        }
+    }
+}

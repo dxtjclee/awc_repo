@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "1.0.0",
+  "syncStrategies": {
+    "syncParamTable": {
+      "source": {
+        "view": "Crt1Chart",
+        "port": "inputColumnFiltersForSync"
+      },
+      "target": {
+        "view": "Att1ShowParametersTableForSync",
+        "port": "syncUniformParamTable"
+      }
+    },
+    "syncParamTableAfterShowHideCharts": {
+      "source": {
+        "view": "Crt1ParameterTable",
+        "port": "inputColumnFiltersForSync"
+      },
+      "target": {
+        "view": "Att1ShowParametersTableForSync",
+        "port": "syncUniformParamTable"
+      }
+    },
+    "syncReusableParamTable": {
+      "source": {
+        "view": "Crt1Chart",
+        "port": "inputColumnFiltersForSync"
+      },
+      "target": {
+        "view": "outputTable",
+        "port": "syncUniformParamTable"
+      }
+    },
+    "syncParamTableForTrends": {
+      "source": {
+        "view": "Crt1BarChart",
+        "port": "inputSearchCriteriaForSync"
+      },
+      "target": {
+        "view": "Att1ShowParametersTableForSync",
+        "port": "syncUniformParamTable"
+      }
+    },
+    "syncParamTableForTestResults": {
+      "source": {
+        "view": "Crt1ShowPlanTable",
+        "port": "inputParentUidsForSync"
+      },
+      "target": {
+        "view": "Att1ShowParametersTableForSync",
+        "port": "syncUniformParamTable"
+      }
+    },
+    "syncParamTableForPWA": {
+      "source": {
+        "view": "Crt1ParameterTable",
+        "port": "inputUnuseFlagForSync"
+      },
+      "target": {
+        "view": "Att1ShowParametersTableForSync",
+        "port": "syncUniformParamTable"
+      }
+    }
+  },
+  "syncStrategyHandlers": {
+    "syncStrategyObjectHandlerForReusableParaTable": {
+      "id": "syncReusableParamTable",
+      "activeWhen": true
+    },
+    "syncStrategyObjectHandlerForParameter": {
+      "id": "syncParamTable",
+      "activeWhen": true
+    },
+    "syncStrategyObjectHandlerForParameterAfterShowHideChart": {
+      "id": "syncParamTableAfterShowHideCharts",
+      "activeWhen": true
+    },
+    "syncStrategyObjectHandlerForTrendsParaTable": {
+      "id": "syncParamTableForTrends",
+      "activeWhen": true
+    },
+    "syncStrategyObjectHandlerForTestResultParaTable": {
+      "id": "syncParamTableForTestResults",
+      "activeWhen": true
+    },
+    "syncStrategyObjectHandlerForPWAParaTable": {
+      "id": "syncParamTableForPWA",
+      "activeWhen": true
+    }
+  }
+}

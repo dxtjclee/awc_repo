@@ -1,0 +1,538 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-splm-table.directive",
+        "js/aw-command-bar.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-chart.directive",
+        "js/aw-row.directive",
+        "js/aw-column.directive",
+        "js/aw-i18n.directive",
+        "js/aw-am-table-panel.directive",
+        "js/exist-when.directive"
+    ],
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "lifecycleHooks": {
+        "onUnmount": "removePieChartData",
+        "onUpdate": [
+            {
+                "action": "createPieChartForDynamicTables",
+                "observers": [
+                    "props.subPanelContext.context.vrSublocationState.pieChartData.vrTables.testCaseTableProvider.chartData"
+                ]
+            },
+            {
+                "action": "redrawtestCasePieChart",
+                "observers": [
+                    "props.subPanelContext.context.vrSublocationState.pieChartData.vrTables.testCaseTableProvider.redrawTestCasePieAsDoubleFilter"
+                ]
+            },
+            {
+                "action": "handleSelectionChange",
+                "observers": [
+                    "viewModel.atomicData.selectionData"
+                ]
+            }
+        ]
+    },
+    "actions": {
+        "handleSelectionChange": {
+            "actionType": "JSFunction",
+            "method": "handleSelectionChange",
+            "inputData": {
+                "data": "{{data.dataProviders.testCaseTableProvider}}",
+                "subPanelContext": "{{subPanelContext}}"
+            },
+            "outputData": {},
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "redrawtestCasePieChart": {
+            "actionType": "JSFunction",
+            "method": "redrawSecondaryPieCharts",
+            "inputData": {
+                "input": "{{data}}"
+            },
+            "outputData": {
+                "pieChartForTestCaseProvider_chartPoints": ""
+            },
+            "deps": "js/Crt1VROverviewTablesService",
+            "events": {
+                "success": [
+                    {
+                        "name": "redrawPieChartForDynamicTables"
+                    }
+                ]
+            }
+        },
+        "removePieChartData": {
+            "actionType": "JSFunction",
+            "method": "removePieChartData",
+            "inputData": {
+                "vrSublocationState": "{{props.subPanelContext.context.vrSublocationState}}",
+                "table": "testCaseTableProvider",
+                "pieClickedFlag": "testCasePieClicked",
+                "pieDedrawFlag": "redrawTestCasePieAsDoubleFilter",
+                "subPanelContext": "{{subPanelContext}}",
+                "dataProvider": "{{data.dataProviders.testCaseTableProvider}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "reloadTable": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "testCaseTable.plTable.reload"
+                    }
+                ]
+            }
+        },
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "getColumnDataForDynamicTables"
+                    }
+                ]
+            },
+            "deps": "js/dynamicTableUtils"
+        },
+        "saveColumnConfigLoadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "saveUIColumnConfigs2",
+            "inputData": {
+                "columnConfigurations": [
+                    {
+                        "clientScopeURI": "{{subPanelContext.context.vrSublocationState.scopeURI.get('IAV0TestCase')}}",
+                        "columnConfigId": "{{subPanelContext.context.vrSublocationState.columnConfig.get('IAV0TestCase')}}",
+                        "columns": "{{data.dataProviders.testCaseTableProvider.newColumns}}",
+                        "scope": "LoginUser",
+                        "scopeName": ""
+                    }
+                ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "testCaseTable.plTable.reload"
+                    }
+                ]
+            }
+        },
+        "resetColumnConfig": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "getOrResetUIColumnConfigs4",
+            "inputData": {
+                "getOrResetUiConfigsIn": [
+                    {
+                        "scope": "LoginUser",
+                        "scopeName": "",
+                        "clientName": "AWClient",
+                        "resetColumnConfig": true,
+                        "columnConfigQueryInfos": [
+                            {
+                                "clientScopeURI": "{{subPanelContext.context.vrSublocationState.scopeURI.get('IAV0TestCase')}}",
+                                "operationType": "configured",
+                                "typeNames": [
+                                    "WorkspaceObject"
+                                ],
+                                "columnsToExclude": []
+                            }
+                        ],
+                        "businessObjects": [
+                            {}
+                        ]
+                    }
+                ]
+            },
+            "outputData": {
+                "dataProviders.testCaseTableProvider.resetColumnConfigs": "{{function:getColumnDataForDynamicTables}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "testCaseTable.plTable.reload"
+                    }
+                ]
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "loadTestCaseTreeData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTestCaseTreeData",
+            "inputData": {
+                "treeLoadInput": "request.treeLoadInput",
+                "columnFilters": "{{data.columnProviders.testCaseColumnProvider.columnFilters}}",
+                "parentUid": "{{function:getParentUid}}",
+                "testCaseTreeTableColumnFilters": "{{props.subPanelContext.context.vrSublocationState.pieChartData.vrTables.testCaseTableProvider.testCaseTreeTableColumnFilters}}",
+                "testResultColumnFilters": "{{props.subPanelContext.context.vrSublocationState.pieChartData.vrTables.topPieChart.testResultColumnFilters}}",
+                "scopeURI": "{{data.subPanelContext}}"
+            },
+            "outputData": {
+                "totalFound": "result.treeLoadResult.totalChildCount",
+                "totalLoaded": "result.treeLoadResult.childNodes.length",
+                "searchResults": "result.treeLoadResult.childNodes"
+            },
+            "deps": "js/Crt1TestCaseTreeTableService",
+            "events": {
+                "success": [
+                    {
+                        "name": "updateSelectionForRemoveAndEditAction",
+                        "condition": "data.eventData.state === 'saved' && data.dataProviders.testCaseTableProvider && data.eventMap['testCaseTableProvider.selectionChangeEvent']"
+                    }
+                ]
+            }
+        },
+        "loadTreeTableProperties": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableProperties",
+            "inputData": {
+                "propertyLoadInput": "request.propertyLoadInput",
+                "data": "{{data}}",
+                "scopeURI": "{{props.subPanelContext}}"
+            },
+            "outputData": {
+                "dataProviders.testCaseTableProvider.columnConfig": "propertyLoadResult.columnConfig"
+            },
+            "deps": "js/Crt1TestCaseTreeTableService"
+        },
+        "loadTreeColumns": {
+            "actionType": "JSFunction",
+            "method": "loadTreeTableColumns",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.testCaseTableProvider}}",
+                "data": "{{data}}"
+            },
+            "deps": "js/Crt1TestCaseTreeTableService"
+        },
+        "changeSelectionForDynamicTables": {
+            "actionType": "JSFunction",
+            "method": "changeSelectionForDynamicTables",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.testCaseTableProvider}}"
+            },
+            "outputData": {
+                "selectedObjects": "selectedObjects"
+            },
+            "deps": "js/Crt1SelectionService"
+        },
+        "createPieChartForDynamicTables": {
+            "actionType": "JSFunction",
+            "method": "createPieChartForDynamicTables",
+            "inputData": {
+                "input": "{{data}}",
+                "tableColumnFilters": "testCaseTreeTableColumnFilters",
+                "redrawFlag": "redrawTestCasePieAsDoubleFilter",
+                "chartData": "{{props.subPanelContext.context.vrSublocationState.pieChartData.vrTables.testCaseTableProvider}}",
+                "seriesName": "{{data.i18n.TestCase}}",
+                "subPanelContext": "{{props.subPanelContext.context.vrSublocationState}}",
+                "table": "testCaseTableProvider"
+            },
+            "outputData": {
+                "pieChartForTestCaseProvider_chartPoints": ""
+            },
+            "deps": "js/Crt1PieChartsService"
+        },
+        "checkAndReloadTestCaseChart": {
+            "actionType": "JSFunction",
+            "method": "checkAndReloadTestCaseChart",
+            "inputData": {
+                "data": "{{data}}",
+                "subPanelContext": "{{props.subPanelContext.context.vrSublocationState}}"
+            },
+            "deps": "js/Crt1TestCaseTreeTableService"
+        },
+        "filterTestCaseTable": {
+            "actionType": "JSFunction",
+            "method": "filterTestCaseTable",
+            "inputData": {
+                "data": "{{data}}",
+                "chartProp": "{{props.subPanelContext.context.vrSublocationState}}"
+            },
+            "deps": "js/Crt1TestCaseTreeTableService"
+        },
+        "displayAllTestCase": {
+            "actionType": "JSFunction",
+            "method": "displayAllTestCase",
+            "inputData": {
+                "data": "{{data}}",
+                "chartProp": "{{props.subPanelContext.context.vrSublocationState}}"
+            },
+            "deps": "js/Crt1TestCaseTreeTableService"
+        },
+        "setSelection": {
+            "actionType": "JSFunction",
+            "method": "setSelection",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Crt1TestCaseTreeTableService"
+        },
+        "updateSelectionForRemoveAndEditAction": {
+            "actionType": "JSFunction",
+            "method": "updateSelectionForRemoveAndEditAction",
+            "deps": "js/Crt1SelectionService"
+        },
+        "setPanelPinnedState": {
+            "actionType": "JSFunction",
+            "method": "setPanelPinnedState",
+            "inputData": {
+                "eventData": "{{data.eventData}}"
+            },
+            "outputData": {
+                "panelPinned": "panelPinned"
+            },
+            "deps": "js/Crt1AddToVRService",
+            "events": {
+                "success": [
+                    {
+                        "name": "testCaseTable.plTable.reload"
+                    }
+                ]
+            }
+        },
+        "expandNode": {
+            "actionType": "JSFunction",
+            "method": "expandNode",
+            "inputData": {
+                "selectedObjects": "{{data.selectedObjects}}",
+                "dataProviders": "{{data.dataProviders}}"
+            },
+            "deps": "js/Crt1TestCaseTreeTableService"
+        },
+        "loadTestCaseTreeDataAfterEdit": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTestCaseTreeDataAfterEdit",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Crt1TestCaseTreeTableService"
+        },
+        "modelObjectsLoaded": {
+            "actionType": "JSFunction",
+            "method": "modelObjectsLoaded",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.testCaseTableProvider}}",
+                "eventMap": "{{data.eventMap}}",
+                "scopeSel": "{{props.subPanelContext.context.vrSublocationState.mselected[0]}}",
+                "subPanleCtx": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "modelObjectEdited": {
+            "actionType": "JSFunction",
+            "method": "modelObjectEdited",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.testCaseTableProvider}}",
+                "scopeSel": "{{props.subPanelContext.context.vrSublocationState.mselected[0]}}",
+                "subPanleCtx": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "updateVRCtx": {
+            "actionType": "JSFunction",
+            "method": "updateCtxForTreeNodeExpand",
+            "inputData": {
+                "subPanleCtx": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "addExtraColumnAfterReset": {
+            "actionType": "JSFunction",
+            "method": "getColumnDataForDynamicTables",
+            "inputData": {
+                "data": "{{data.dataProviders.testCaseTableProvider}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        }
+    },
+    "dataProviders": {
+        "testCaseTableProvider": {
+            "initializeAction": "loadTestCaseTreeData",
+            "nextAction": "loadTestCaseTreeData",
+            "previousAction": "loadTestCaseTreeData",
+            "editContext": "testCaseTableProvider",
+            "treeLoadResult": "action.result.treeLoadResult",
+            "selectionModelMode": "multiple",
+            "inputData": {
+                "accessMode": "tree",
+                "selectionData": "{{fields.selectionData}}"
+            },
+            "commandsAnchor": "Open_Content_command",
+            "contextMenuCommandsAnchor": "aw_testCaseTable_contextMenu"
+        },
+        "GridTreePropertyProvider": {
+            "action": "loadTreeTableProperties",
+            "propertyLoadResult": "action.result.propertyLoadResult"
+        }
+    },
+    "functions": {
+        "getParentUid": {
+            "functionName": "getParentUid",
+            "parameters": [
+                "{{subPanelContext}}"
+            ]
+        }
+    },
+    "columnProviders": {
+        "testCaseColumnProvider": {
+            "loadColumnAction": "loadTreeColumns",
+            "saveColumnAndLoadAction": "saveColumnConfigLoadData",
+            "resetColumnAction": "resetColumnConfig",
+            "columns": "{{data.columns}}",
+            "enableSorting": false,
+            "id": "Crt1TestCaseTable"
+        }
+    },
+    "grids": {
+        "testCaseTable": {
+            "dataProvider": "testCaseTableProvider",
+            "columnProvider": "testCaseColumnProvider",
+            "propertyProvider": "GridTreePropertyProvider",
+            "addIconColumn": false,
+            "enableArrangeMenu": true,
+            "gridOptions": {
+                "enableSorting": false,
+                "maxRowsToShow": 10,
+                "isFilteringEnabled": true
+            }
+        }
+    },
+    "data": {
+        "chartProviders": {
+            "pieChartForTestCaseProvider": {
+                "chartType": "pie",
+                "chartColorOverrideClass": "aw-verificationManagement-chartStatusColor",
+                "chartConfig": {
+                    "isChartZoomable": true,
+                    "isYAxisLinearOrLogarithmic": "logarithmic",
+                    "xAxisLabel": "",
+                    "yAxisLabel": "",
+                    "isDataLabelOnChartEnabled": true
+                }
+            }
+        },
+        "selectionData": {
+            "initialValues": {},
+            "meta": {}
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        },
+        {
+            "eventId": "testCaseTableProvider.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "changeSelectionForDynamicTables"
+        },
+        {
+            "eventId": "undefined.selected",
+            "cacheEventData": true,
+            "action": "filterTestCaseTable"
+        },
+        {
+            "eventId": "undefined.unselected",
+            "cacheEventData": true,
+            "action": "displayAllTestCase"
+        },
+        {
+            "eventId": "editHandlerStateChange",
+            "cacheEventData": true,
+            "action": "checkAndReloadTestCaseChart"
+        },
+        {
+            "eventId": "TestCaseTable.setSelection",
+            "action": "setSelection"
+        },
+        {
+            "eventId": "updateSelectionForRemoveAndEditAction",
+            "action": "updateSelectionForRemoveAndEditAction"
+        },
+        {
+            "eventId": "testCaseTreeTable.expandNode",
+            "action": "expandNode"
+        },
+        {
+            "eventId": "CreateTracelink.postCreateTracelink",
+            "action": "reloadTable"
+        },
+        {
+            "eventId": "TCTable.modelObjectsLoaded",
+            "cacheEventData": true,
+            "action": "modelObjectsLoaded"
+        },
+        {
+            "eventId": "TCTable.modelObjectsEdited",
+            "cacheEventData": true,
+            "action": "modelObjectEdited"
+        },
+        {
+            "eventId": "redrawPieChartForDynamicTables",
+            "action": "createPieChartForDynamicTables"
+        },
+        {
+            "eventId": "testCaseTable.plTable.toggleTreeNode",
+            "action": "updateVRCtx"
+        },
+        {
+            "eventId": "testCasePanelPinTCTableSelection",
+            "cacheEventData": true,
+            "action": "setPanelPinnedState"
+        },
+        {
+            "eventId": "resetPieChart",
+            "action": "redrawtestCasePieChart"
+        },
+        {
+            "eventId": "getColumnDataForDynamicTables",
+            "action": "addExtraColumnAfterReset"
+        }
+    ],
+    "conditions": {
+        "showTestCaseMessageString": {
+            "expression": "data.pieChartForTestCaseProvider_chartPoints[0].keyValueDataForChart[0].value === 0 && data.pieChartForTestCaseProvider_chartPoints[0].keyValueDataForChart[1].value === 0 && data.pieChartForTestCaseProvider_chartPoints[0].keyValueDataForChart[2].value === 0 && data.pieChartForTestCaseProvider_chartPoints[0].keyValueDataForChart[3].value === 0 && data.pieChartForTestCaseProvider_chartPoints[0].keyValueDataForChart[4].value === 0"
+        },
+        "showTestCaseChart": {
+            "expression": "data.pieChartForTestCaseProvider_chartPoints && data.pieChartForTestCaseProvider_chartPoints[0] && data.pieChartForTestCaseProvider_chartPoints[0].keyValueDataForChart[0].value != -1"
+        }
+    },
+    "i18n": {
+        "NoResult": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Fail": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Pass": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "TestCase": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "noTestCaseToDisplayChart": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Caution": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Blocked": [
+            "AnalysisRequestCommandPanelsMessages"
+        ]
+    }
+}

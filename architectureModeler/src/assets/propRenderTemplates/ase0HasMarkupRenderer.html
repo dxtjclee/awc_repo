@@ -1,0 +1,10 @@
+<% if(vmo.props && vmo.props.ase0HasMarkup){
+        var ase0HasMarkup = vmo.props.ase0HasMarkup.dbValue;
+        if ( ase0HasMarkup === true ){
+            var imagePath = basePath +'/image/';
+            imagePath += "typeComment48.svg"
+            var toolTip = vmo.props.ase0HasMarkup.uiValue;
+        }
+    }
+%>
+<img src ="<%=imagePath%>" alt="<%=toolTip%>" title="<%=toolTip%>"  class="aw-visual-indicator">

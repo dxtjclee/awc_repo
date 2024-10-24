@@ -1,0 +1,62 @@
+{
+    "schemaVersion" : "1.0.0",
+    "data":{
+        "_trainingQualificationProvider": {
+            "breadcrumbConfig": {
+                "vm": "AwSearchBreadcrumb"
+            },
+            "priority": 0,
+            "label": {
+                "source": "/i18n/trainingandqualificationMessages",
+                "key": "summary"
+            },
+            "clientScopeURI": "",
+
+            "nameToken": "com.siemens.splm.client.qualityCenterManager:ShowTrainingQualification",
+            "viewModes": {
+                "ListView": {
+                    "primaryWorkArea": "list",
+                    "secondaryWorkArea": false
+                },
+                "SummaryView": {
+                    "primaryWorkArea": "list",
+                    "secondaryWorkArea": true
+                }
+            },
+            "defaultDisplayMode": "ListView",
+            "context": {
+                "search": {
+                    "provider": "Tq0TrainingQualProvider",
+                    "criteria": {
+                        "searchContentType": ""
+                    },
+                    "activeFilterMap": {
+                        "WorkspaceObject.object_type": [
+                            {
+                                "searchFilterType": "StringFilter",
+                                "stringValue": "Tq0QualificationUnit"
+                            },
+                            {
+                                "searchFilterType": "StringFilter",
+                                "stringValue": "Tq0QualificationProfile"
+                            },
+                            {
+                                "searchFilterType": "StringFilter",
+                                "stringValue": "Tq0QualProfileGroup"
+                            }
+                        ]
+                    },
+                    "isFilteringEnabled": true,
+                    "sortType": "Priority",
+                    "chartTitle": {
+                        "source": "/i18n/trainingandqualificationMessages",
+                        "key": "trainingQualificationResultsTitle"
+                    },
+                    "maxToLoad": 110,
+                    "maxToReturn": 110
+                }
+            },
+            "viewBase": "showTrainingQualificationPage"
+        }
+    }
+}

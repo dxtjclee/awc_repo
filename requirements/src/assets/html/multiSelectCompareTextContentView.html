@@ -1,0 +1,44 @@
+<div exist-when="!data.compareHtmlData">
+    {{data.Arm0RequirementCompareTextLoadMessage}}
+</div>
+
+<aw-scrollpanel exist-when="data.compareHtmlData">
+    <aw-advanced-bar type="TOOLBAR" negative="true">
+        <div class="sw-row justify-justified">
+            <div class="sw-column align-self-center justify-center">
+                <h5 class="aw-requirements-compareTextComparisonPreviewText">
+                    {{data.Arm0RequirementHistoryContextCompareToMsg}}
+                </h5>
+            </div>
+            <div>
+            </div>
+            <div class="sw-row align-self-right">
+                <aw-command-bar anchor="arm0_textComparisonPreviewListcommands" alignment="HORIZONTAL" context="data"></aw-command-bar>
+                <aw-server-visibility-command-bar anchor="aw_toolbarRight,aw_fullScreen" alignment="HORIZONTAL" context="{fullScreenState:subPanelContext.fullScreenState}"></aw-server-visibility-command-bar>
+            </div>
+        </div>
+    </aw-advanced-bar>
+
+    <div class="aw-requirement-chip">
+        <div class="sw-row">
+            <div class="aw-requirement-legendItem">
+                <div class="aw-requirement-legendItemMarker added"></div>
+                <div class="aw-requirement-legendItemLabel"><aw-i18n>i18n.added</aw-i18n></div>
+            </div>
+
+            <div class="aw-requirement-legendItem">
+                <div class="aw-requirement-legendItemMarker removed"></div>
+                <div class="aw-requirement-legendItemLabel"><aw-i18n>i18n.removed</aw-i18n></div>
+            </div>
+
+            <div class="aw-requirement-legendItem">
+                <div class="aw-requirement-legendItemMarker modified"></div>
+                <div class="aw-requirement-legendItemLabel"><aw-i18n>i18n.modified</aw-i18n></div>
+            </div>
+        </div>
+    </div>
+
+    <div
+        class='aw-requirements-compareHistory aw-richtexteditor-documentPaper aw-richtexteditor-document aw-richtexteditor-documentPanel'>
+    </div>
+</aw-scrollpanel>

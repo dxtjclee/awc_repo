@@ -1,0 +1,102 @@
+{
+  "schema": "1.0.0.0",
+  "tabs": {
+    "variants": {
+      "name": {
+        "source": "/i18n/Att1AttrMappingMessages",
+        "key": "Variants"
+      },
+      "priority": 200,
+      "view": "Att1VariantsTab",
+      "visibleWhen": "context.parameterState && context.parameterState.selectedParameters.length > 0 && context.parameterState.parameterProject && context.parameterState.parameterProject.props.Att0HasVariantConfigContext !== undefined && context.parameterState.parameterProject.props.Att0HasVariantConfigContext.dbValues[0] !== undefined"
+    },
+    "fullScreenConfigurator": {
+      "name": {
+        "source": "/i18n/Att1AttrMappingMessages",
+        "key": "fullScreenConfigurator"
+      },
+      "priority": 200,
+      "view": "Att1FullScreenConfiguratorTab",
+      "visibleWhen": "context.parameterState && context.parameterState.mselected.length > 1 && context.parameterState.parameterProject && context.parameterState.parameterProject.props.Att0HasVariantConfigContext !== undefined && context.parameterState.parameterProject.props.Att0HasVariantConfigContext.dbValues[0] !== undefined"
+    },
+    "attributeMapping": {
+      "name": {
+        "source": "/i18n/Att1AttrMappingMessages",
+        "key": "attributeMapping"
+      },
+      "priority": 200,
+      "view": "Att1ShowParametersTableForSync",
+      "visibleWhen": "context.parameterState && context.parameterState.selectedGroups.length > 1 && context.parameterState.selectedParameters.length === 0"
+    },
+    "attributeTitle": {
+      "name": {
+        "source": "/i18n/Att1Messages",
+        "key": "attributeTitle"
+      },
+      "priority": 4,
+      "view": "Att1ShowParametersTableForSync",
+      "visibleWhen": {
+        "condition": "conditions.attributeCondition"
+      }
+    }
+  },
+  "conditions": {
+    "attributeCondition": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "selection.length",
+            "$query": {
+              "$gt": 1
+            }
+          },
+          {
+            "$source": "ctx.splitView.mode",
+            "$query": {
+              "$ne": true
+            }
+          },
+          {
+            "$source": "ctx.sublocation.clientScopeURI",
+            "$query": {
+              "$eq": "Awb0OccurrenceManagement"
+            }
+          },
+          {
+            "$or": [
+              {
+                "$source": {
+                  "$adapt": "selection"
+                },
+                "$query": {
+                  "$source": "modelType.name",
+                  "$query": {
+                    "$in": [
+                      "Fnd0LogicalBlockRevision",
+                      "Fnd0SystemModelRevision",
+                      "Requirement Revision",
+                      "PSConnectionRevision",
+                      "IAV0VerifReqmtRevision",
+                      "IAV0AbsReqmtRevision"
+                    ]
+                  }
+                }
+              },
+              {
+                "$source": {
+                  "$adapt": "selection"
+                },
+                "$query": {
+                  "$source": "modelType.name",
+                  "$query": {
+                    "$in": "{{ctx.preferences.PLE_MeasurableAttrParentObjectTypes}}"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

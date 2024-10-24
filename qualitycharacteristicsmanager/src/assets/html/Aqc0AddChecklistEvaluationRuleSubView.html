@@ -1,0 +1,25 @@
+<aw-panel-body>
+    <aw-checkbox prop="data.assessmentRequired"></aw-checkbox>
+    <aw-listbox prop="data.rating" list="data.ratingValues.dbValue" exist-when="data.assessmentRequired.dbValue===true"></aw-listbox>    
+    <aw-listbox prop="data.answer" list="data.answerValues" exist-when="data.assessmentRequired.dbValue===true"></aw-listbox>
+    <aw-listbox prop="data.state" list="data.stateValues" exist-when="data.assessmentRequired.dbValue===true"></aw-listbox>
+    <aw-break></aw-break>
+    <aw-widget prop="data.typeLov" hint="checkboxoptionlov" exist-when="data.assessmentRequired.dbValue===false"></aw-widget>
+    <aw-listbox prop="data.evaluatedTypeLov" exist-when="data.assessmentRequired.dbValue===false"></aw-listbox>
+    <aw-command-panel-section caption="i18n.Aqc0ThresholdRulesTitle" exist-when="data.assessmentRequired.dbValue===false" context="subPanelContext.activeState">
+        <aw-listbox prop="data.unitOfThreshold"></aw-listbox>
+        <aw-textbox prop="data.redYellowThreshold"></aw-textbox>
+        <aw-textbox prop="data.yellowGreenThreshold"></aw-textbox>
+        <aw-textbox prop="data.greenNullThreshold"></aw-textbox>
+    </aw-command-panel-section>
+    <aw-command-panel-section caption="i18n.Aqc0ParameterSectionTitle" anchor="data.addChecklistEvaluationRuleConditionCommand" context="subPanelContext.activeState">
+        <aw-list dataprovider="data.dataProviders.getEvaluationRuleConditions" context-menu-command-context="subPanelContext">
+            <aw-default-cell vmo="item"></aw-default-cell>
+        </aw-list>
+    </aw-command-panel-section>
+</aw-panel-body>
+<aw-panel-footer>
+    <aw-button action="addConditions" visible-when="conditions.showAddButton">
+        <aw-i18n>i18n.Aqc0Add</aw-i18n>
+    </aw-button>
+</aw-panel-footer>

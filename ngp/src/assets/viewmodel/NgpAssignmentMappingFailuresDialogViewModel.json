@@ -1,0 +1,42 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "errorIcon": "assets/image/indicatorError16.svg"
+    },
+    "actions": {
+        "closeDialog": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        },
+        "initDialog": {
+            "actionType": "JSFunction",
+            "method": "prepareMessageForTitleNumOfFailures",
+            "inputData": {
+                "assignmentMappingFailures": "{{subPanelContext.tablesInfo}}",
+                "infoString": "{{subPanelContext.infoString}}"
+            },
+            "outputData": {
+                "totalAssignmentFailures": ""
+            },
+            "deps": "js/services/ngpAssignmentMappingService"
+        },
+        "saveAssignmentMappingFailures" :{
+            "actionType": "JSFunction",
+            "method": "saveAssignmentMappingFailures",
+            "inputData": {
+                "assignmentMappingFailures": "{{subPanelContext.tablesInfo}}"
+            },
+            "deps": "js/services/ngpAssignmentMappingService"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "initDialog"
+    },
+    "i18n": {
+        "close": [ "NgpDataMgmtMessages" ]
+    }
+}

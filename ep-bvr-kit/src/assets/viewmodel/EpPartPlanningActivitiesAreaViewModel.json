@@ -1,0 +1,41 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "actions": { 
+        "closePanel": {
+            "actionType": "JSFunction",
+            "method": "updatePartialCtx",
+            "inputData": {
+                "path": "epPageContext.showActivities",
+                "value": ""
+            },
+            "deps": "js/appCtxService"
+    }
+    },
+    "data": {
+        "activitiesContentPanelData": {
+            "tabs": [ {
+                "name": "{{i18n.activitiesTitle}}",
+                "tabKey": "EpPartPlanningActivitiesTreeArea"
+            } ]
+        },
+        "activityDetailsContentPanelData": {
+            "tabs": [{
+                "name": "{{i18n.filesTitle}}",
+                "tabKey": "EpFiles",
+                "xrtType": "SUMMARY",
+                "viewId": "EpActivitiesFiles"
+            } ]
+        }
+    },
+    "i18n": {
+        "activitiesTitle": [ "PartPlanningMessages" ],
+        "summaryTitle": [ "DetailsMessages" ],
+        "filesTitle": [ "DetailsMessages" ],
+        "epInformationNoSelectionMessage": [ "DetailsMessages" ]
+    }
+}

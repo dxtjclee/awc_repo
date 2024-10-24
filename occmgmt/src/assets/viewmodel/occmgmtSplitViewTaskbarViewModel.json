@@ -1,0 +1,42 @@
+{
+    "schemaVersion": "1.0.0",
+
+    "actions": {
+        "launchComparePanel": {
+            "actionType": "JSFunction",
+            "method": "activateCommandPanel",
+            "deps": "js/commandPanel.service",
+            "inputData": {
+                "commandId": "Awb0Compare",
+                "location": "aw_toolsAndInfo",
+                "context": null,
+                "push": true
+            }
+        },
+        "updateCompareButtonVisibility": {
+            "actionType": "JSFunction",
+            "method": "evaluateCompareButtonVisibilityInSplitMode",
+            "deps": "js/discoverySubscriptionService"
+        }
+    },
+    "conditions": {
+        "isCompareValid": {
+            "expression": "ctx.splitView && ctx.splitView.mode && ctx.occmgmtContext.productContextInfo && ctx.occmgmtContext2.productContextInfo && ctx.occmgmtContext.productContextInfo.uid !== ctx.occmgmtContext2.productContextInfo.uid && !ctx.occmgmtContext2.supportedFeatures.Awb0UnassignedFeature === true && ctx.splitView.isCompareValidForDiscovery"
+        }
+    },
+    "onEvent": [
+    {
+        "eventId": "occDataLoadedEvent",
+        "action": "updateCompareButtonVisibility",
+        "condition": "dataProviderActionType === 'initializeAction'"
+    }
+    ],
+    "i18n": {
+        "compareTitle": [
+            "CompareSplitViewConstants"
+        ],
+        "compareOptionsTooltip": [
+            "CompareSplitViewConstants"
+        ]
+    }
+}

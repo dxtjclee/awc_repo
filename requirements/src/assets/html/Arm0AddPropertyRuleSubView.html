@@ -1,0 +1,20 @@
+<aw-panel-body class="aw-widgets-propertyRule">
+    <aw-listbox prop="data.setFieldType" list="data.setFieldTypeList" action="changeFiledTypes"></aw-listbox>
+    <aw-textbox prop="data.setFieldTypeTextValue" exist-when="!data.mapOfTypeDescriptions[data.setFieldType.dbValue]"></aw-textbox>
+    <aw-listbox prop="data.setFieldTypeValue" list="data.setFieldTypeValueList.dbValue" exist-when="data.mapOfTypeDescriptions[data.setFieldType.dbValue]"></aw-listbox>
+    <aw-listbox prop="data.advanceConditionProcessingType" list="data.advanceCProcessingTypeList.dbValue" action="addConditionProcessing"></aw-listbox>
+    <aw-panel-section>
+        <arm0-add-rules-cell vmo="item" options="data" aw-repeat="item : fields.conditionPropRules.conditionPropRulesVMOs" ></arm0-add-rules-cell>
+    </aw-panel-section>
+    <div>
+        <aw-icon-button button-type="button" class="aw-layout-right" exist-when="data.advanceConditionProcessingType.dbValue !== 'ALWAYS'" command="data.addPropCondition"></aw-icon-button>
+    </div>
+</aw-panel-body>
+<aw-panel-footer>
+    <aw-button action="addPropRule" visible-when="conditions.isAddPropRuleVisibilityCond" enable-when="conditions.isAddPropRuleEnable && (!conditions.isTextBoxEmpty)">
+        <aw-i18n>i18n.Add</aw-i18n>
+    </aw-button>
+    <aw-button action="updatePropRule" visible-when="conditions.isUpdatePropRuleVisible" enable-when="conditions.isAddPropRuleEnable && (!conditions.isTextBoxEmpty)">
+        <aw-i18n>i18n.update</aw-i18n>
+    </aw-button>
+</aw-panel-footer>

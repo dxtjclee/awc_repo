@@ -1,0 +1,33 @@
+<aw-panel-body>
+    <aw-command-panel-section caption="i18n.preceding" context="data" >
+        <div exist-when="conditions.showDropHintForPrecedingBucket" class="propertyLabelTopContainer aw-layout-flexRow aw-widgets-justifySpaceBetween">
+            <div class="aw-prgschedulemanager-hint">i18n.dropHint</div>
+        </div>
+        <aw-list dataprovider="data.dataProviders.psi0_precedingList" show-drop-area="true" name="psi0_precedingList" class="aw-widgets-droppable aw-widgets-cellListContainer">
+            <aw-default-cell vmo="item" data="data"></aw-default-cell>
+        </aw-list>
+
+    </aw-command-panel-section>
+
+    <aw-command-panel-section caption="i18n.concurrent" context="data" >
+        <div exist-when="conditions.showDropHintForConcurrentBucket" class="propertyLabelTopContainer aw-layout-flexRow aw-widgets-justifySpaceBetween">
+            <div class="aw-prgschedulemanager-hint">i18n.dropHint</div>
+        </div>
+        <aw-list dataprovider="data.dataProviders.psi0_concurrentList" show-drop-area="true" name="psi0_concurrentList" class="aw-widgets-droppable aw-widgets-cellListContainer">
+            <aw-default-cell vmo="item" data="data"></aw-default-cell>
+        </aw-list>
+    </aw-command-panel-section>
+
+    <aw-command-panel-section caption="i18n.succeeding" context="data" >
+        <div exist-when="conditions.showDropHintForSucceedingBucket" class="propertyLabelTopContainer aw-layout-flexRow aw-widgets-justifySpaceBetween">
+            <div class="aw-prgschedulemanager-hint">i18n.dropHint</div>
+        </div>
+        <aw-list dataprovider="data.dataProviders.psi0_succeedingList" show-drop-area="true" name="psi0_succeedingList" class="aw-widgets-droppable aw-widgets-cellListContainer">
+            <aw-default-cell vmo="item" data="data"></aw-default-cell>
+        </aw-list>
+    </aw-command-panel-section>
+</aw-panel-body>
+
+<aw-panel-footer visible-when="true" >
+    <aw-button action="recalculateSequence" enable-when="conditions.enableSaveButton"><aw-i18n>i18n.save</aw-i18n></aw-button>
+</aw-panel-footer>

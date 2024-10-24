@@ -1,0 +1,115 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "data": {
+        "addPanelState": {
+            "initialValues": {
+                "creationType": "",
+                "selectedTab": "",
+                "sourceObjects":"",
+                "targetObject":""
+            },
+            "meta": {}
+        }
+    },
+    "actions": {
+        "addObjectsToCollaboration": {
+            "actionType": "TcSoaService",
+            "serviceName": "EDMDCollab-2020-04-EDMDCollaboration",
+            "method": "createOrUpdateCollaboration",
+            "inputData": {
+                "createOrUpdateInput": {
+                    "collaborationToCreateOrUpdate": {
+                        "collabObjectUID" : "{{ctx.selected.uid}}",
+                        "objectProps" : {}
+                    },
+                    "attachObjectsToCollaboration": [
+                        {
+                            "objectUID" : "{{function:getSelectionFromAddPanel}}",
+                            "relationName" : ""
+                        }
+                    ]
+                }
+            },
+            "events": {
+                "success":
+                [
+                    {
+                        "name": "complete",
+                        "eventData":
+                        {
+                            "source": "toolAndInfoPanel"
+                        }
+                    },
+                    {
+                        "name": "primaryWorkarea.reset"
+                    }
+                ],
+                "failure":
+                [
+                    {
+                        "name": "complete",
+                        "eventData":
+                        {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "designAddedToCollaboration"
+                    }
+                ],
+                "failure": [
+                    {
+                        "message": "addDesignFailureMessage"
+                    }
+                ]
+            },
+            "deps": "js/Eda0UtilService"
+        }
+    },
+    "messages": {
+        "designAddedToCollaboration": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.designAddedToCollaboration}}",
+            "messageTextParams": [
+                "{{data.objectAddedToCollaboration}}"
+            ]
+        },
+        "addDesignFailureMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "functions": {
+        "getSelectionFromAddPanel": {
+            "functionName": "getSelectionFromAddPanel",
+            "parameters": [
+                "{{data}}"
+            ]
+        }
+    },
+    "conditions": {
+        "isAddButtonVisible": {
+            "expression": "conditions.isPaletteTabAddButtonVisible || conditions.isSearchTabAddButtonVisible"
+        },
+        "isPaletteTabAddButtonVisible": {
+            "expression": "conditions.isPaletteTabSelected &&  addPanelState.sourceObjects && addPanelState.sourceObjects.length==1"
+        },
+        "isSearchTabAddButtonVisible": {
+            "expression": "!conditions.isPaletteTabSelected && addPanelState.sourceObjects && addPanelState.sourceObjects.length==1"
+        },
+        "isPaletteTabSelected": {
+            "expression": "addPanelState.selectedTab.view==='PaletteTabPageSub'"
+        }
+    },
+    "i18n": {
+        "addToCollaboration": ["EdaMessages"],
+        "designAddedToCollaboration" : ["EdaMessages"],
+        "paletteTabTitle": ["awAddDirectiveMessages"],
+        "searchTabTitle": ["awAddDirectiveMessages"]
+    }
+}

@@ -1,0 +1,112 @@
+{
+    "schemaVersion" : "1.0.0",
+    "imports": [
+        "js/aw-splm-table.directive"
+    ],
+    "actions": {
+        "reveal": {
+            "actionType": "dataProvider",
+            "method": "eda1ParticipantsDesignOwnersProvider"
+        },
+        "search": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "clientScopeURI": "Eda0DesignOwnersTable",
+                    "operationType": "as_configured"
+                },
+                "searchInput": {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Eda1CollabDataProvider",
+                    "searchCriteria": {
+                        "sessionUid": "{{subPanelContext.selected.uid}}",
+                        "ParticipantPropName": "owning_user"
+                    },
+                    "searchSortCriteria": "{{data.columnProviders.eda1ParticipantsDesignOwnersColumnsProvider.sortCriteria}}"
+                },
+                "inflateProperties": true
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}",
+                "ctx.search.totalFound": "totalFound",
+                "ctx.search.totalLoaded": "totalLoaded",
+                "dataProviders.eda1ParticipantsDesignOwnersProvider.columnConfig": "columnConfig"
+            }
+        },
+        "loadColumns": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "operationType": "as_arranged",
+                    "clientScopeURI": "Eda0DesignOwnersTable"
+                },
+                "saveColumnConfigData": {
+                    "clientScopeURI": "Eda0DesignOwnersTable",
+                    "columnConfigId": "{{data.dataProviders.eda1ParticipantsDesignOwnersProvider.columnConfig.columnConfigId}}",
+                    "columns": "{{data.dataProviders.eda1ParticipantsDesignOwnersProvider.newColumns}}",
+                    "scope": "LoginUser",
+                    "scopeName": ""
+                },
+                "searchInput": {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Eda1CollabDataProvider",
+                    "searchCriteria": {
+                        "sessionUid": "{{subPanelContext.selected.uid}}",
+                        "ParticipantPropName": "owning_user"
+                    },
+                    "searchSortCriteria": "{{data.columnProviders.eda1ParticipantsDesignOwnersColumnsProvider.sortCriteria}}",
+                    "startIndex": "{{data.dataProviders.eda1ParticipantsDesignOwnersProvider.startIndex}}"
+                },
+                "inflateProperties": true
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}",
+                "dataProviders.eda1ParticipantsDesignOwnersProvider.columnConfig": "columnConfig"
+            }
+        }
+    },
+    "columnProviders": {
+        "eda1ParticipantsDesignOwnersColumnsProvider": {
+            "loadColumnAction": "loadColumns",
+            "columns": "{{data.columns}}",
+            "sortCriteria": []
+        }
+    },
+    "dataProviders": {
+        "eda1ParticipantsDesignOwnersProvider": {
+            "action": "search",
+            "editContext": "TABLE_CONTEXT",
+            "selectionModelMode": "single",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "commandsAnchor": "eda_open_object"
+        }
+    },
+    "grids": {
+        "Eda0ParticipantsDesignOwners": {
+            "dataProvider": "eda1ParticipantsDesignOwnersProvider",
+            "columnProvider": "eda1ParticipantsDesignOwnersColumnsProvider",
+            "enableArrangeMenu": true,
+            "gridOptions": {
+                "enablePinning": true,
+                "enableSorting": true,
+                "maxRowsToShow": 10
+            }
+        }
+    },
+    "onEvent": [ {
+            "eventId": "Eda0ParticipantsDesignOwners.initialized",
+            "action": "reveal"
+        }
+    ]
+}

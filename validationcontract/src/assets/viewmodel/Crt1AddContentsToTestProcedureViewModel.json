@@ -1,0 +1,323 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/visible-when.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-form.directive",
+        "js/aw-command-panel.directive",
+        "js/aw-add.directive"
+    ],
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "lifecycleHooks": {
+        "onUpdate": {
+            "action": "performPostProcessing",
+            "observers": [ "viewModel.atomicData.addPanelState.createdObject" ]
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "functions": {
+    },
+    "actions":
+    {
+        "reveal":
+        {
+            "actionType": "JSFunction",
+            "method": "setObjToDisplayPanel",
+            "inputData":
+             {
+                "panelContext": "{{ctx.panelContext}}"
+             },
+             "outputData": {
+                "createObj": "createObj",
+                "preferredType": "preferredType",
+                "typeFilter": "typeFilter",
+                "commandId": "commandId"
+            },
+             "deps": "js/Crt1AddToVRService"
+         },
+         "performPostProcessing": {
+            "actionType": "batchJob",
+            "steps": [ {
+                "action": "postProcessVR",
+                "condition": "conditions.isObjectCreated"
+            } ]
+        },
+         "createObject": {
+            "actionType": "JSFunction",
+            "method": "updateCreateTrigger",
+            "inputData": {
+                "triggerCreate": "{{data.triggerCreate}}",
+                "value": true
+            },
+            "outputData": {
+                "triggerCreate": "triggerCreate"
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "createRelationForPaletteOrSearch":
+        {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData":
+            {
+                 "events":
+                 [
+                     {
+                         "name": "addObject.addObjectPostProcess"
+                     }
+                 ]
+            }
+
+        },
+        "postProcessVR":
+        {
+            "actionType": "batchJob",
+            "steps": [
+            {
+                "action": "getManageInputForAdd"
+            },
+            {
+                "action": "manageAnalysisRequests"
+            },
+            {
+                "condition": "data.commandId === 'IAV1AddContentToTPTable' || data.commandId === 'IAV1AddContentToTPTableAsChild' || data.commandId === 'IAV1AddContentToTPTableAsChildChild' || data.commandId === 'IAV1AddContentToTPTableAsSiblingSibling'",
+                "action": "TestProcedureTableRefresh"
+            },
+            {
+                "condition": "data.commandId === 'IAV1AddContentToTestCaseTable' || data.commandId === 'IAV1AddContentToTestCaseTableAsChild' || data.commandId === 'IAV1AddContentToTestCaseTableAsChildChild' || data.commandId === 'IAV1AddContentToTestCaseTableAsSiblingSibling'",
+                "action": "TestCaseTableRefresh"
+            },
+            {
+                "condition": "subPanelContext.panelPinned",
+                "action": "generateNextValues"
+            },
+            {
+                "condition": "!subPanelContext.panelPinned",
+                "action": "closePanel"
+            }
+         ]
+        },
+        "generateNextValues": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+
+                    "name": "awPanel.loadNextValues"
+                }
+                ]
+            }
+        },
+        "getManageInputForAdd":
+        {
+            "actionType": "JSFunction",
+            "method": "getManageInputForTreeTables",
+            "inputData": {
+                "parentScopeObject": "{{ctx.panelContext}}",
+                "createdObject": "{{data.addPanelState.createdObject}}",
+                "palletteSearchObjects": "{{addPanelState.sourceObjects}}",
+                "ActiveCommandId":"{{ctx.panelContext.ActiveCommandId}}"
+            },
+            "deps": "js/manageVerificationService",
+            "outputData": {
+                "getManageInputForTreeTables": ""
+            }
+        },
+        "manageAnalysisRequests": {
+            "actionType": "JSFunction",
+            "method": "callManageVerificationSOA",
+            "inputData": {
+                "manageSOAInput": "{{data.getManageInputForTreeTables}}",
+                "i18n": "{{data.i18n}}",
+                "primaryActiveTabId":"",
+                "subPanelContext":"{{subPanelContext}}"
+            },
+            "deps": "js/manageVerificationService"
+        },
+        "TestCaseTableRefresh": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "uniformParamTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+
+                    },
+                    {
+                        "name": "testCasePanelPinTCTableSelection",
+                        "eventData": {
+                            "isPanelPinned": "{{subPanelContext.panelPinned}}"
+                        }
+                    }
+                ]
+            }
+        },
+        "TestProcedureTableRefresh": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "uniformParamTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+
+                    },
+                    {
+                        "name": "testProcedurePanelPinTPTableSelection",
+                        "eventData": {
+                            "isPanelPinned": "{{subPanelContext.panelPinned}}"
+                        }
+                    }
+                ]
+            }
+        },
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            }
+        },
+        "setActiveView":{
+            "actionType": "JSFunction",
+            "method": "resetActiveView",
+            "inputData": {
+                "stateName": "{{data.activeState}}",
+                "destPanelId": "AddObjectPrimarySub"
+            },
+            "outputData": {
+                "activeState": ""
+            },
+            "deps": "js/addObjectUtils"
+        }
+    },
+    "onEvent":
+    [
+        {
+            "eventId": "awPanel.reveal",
+            "action": "reveal"
+        },
+        {
+            "eventId": "gwt.SubLocationContentSelectionChangeEvent",
+            "action": "closePanel"
+        },
+        {
+            "eventId": "addObject.addObjectPostProcess",
+            "action": "postProcessVR"
+        }
+
+    ],
+    "data":
+    {
+        "triggerCreate": {
+            "dbValue": false,
+            "type": "BOOLEAN"
+        },
+        "addPanelState": {
+            "initialValues": {
+                "creationType": "",
+                "createdObject": "",
+                "sourceObjects": "",
+                "selectedTab": ""
+            },
+            "meta": {}
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "AddObjectPrimarySub",
+                "context": {}
+            },
+            "meta": {}
+        },
+        "projectState": {
+            "initialValues": {
+                "selectedProjects": [],
+                "triggerAssign": false
+            },
+            "meta": {
+                "selectedProjects": {
+                    "field": "true",
+                    "type": "OBJECT"
+                },
+                "triggerAssign": {
+                    "field": "true",
+                    "type": "BOOLEAN"
+                }
+            }
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "conditions":
+    {
+
+        "isNewTabAddButtonVisible":
+        {
+            "expression":"addPanelState.selectedTab.view==='NewTabPageSub' && addPanelState.selectedTab.view!='PaletteTabPageSub' && addPanelState.selectedTab.tabKey!='search' && ( addPanelState.creationType )"
+        },
+        "isPalatteTabSelection": {
+            "expression": "addPanelState.selectedTab.view==='PaletteTabPageSub' && addPanelState.sourceObjects.length > 0"
+        },
+        "isSearchTabSelection": {
+            "expression": "addPanelState.selectedTab.view!='NewTabPageSub' && addPanelState.selectedTab.view!='PaletteTabPageSub'"
+        },
+        "isActiveStateAddPanel": {
+            "expression": "data.activeState.activeView ==='AddObjectPrimarySub'"
+        },
+        "isObjectCreated": {
+            "expression": "addPanelState.createdObject"
+        }
+    },
+    "messages":
+        {
+            "addToPartialError": {
+                "messageType": "ERROR",
+                "messageText": "{{i18n.PartialError}}",
+                "messageTextParams": [
+                    "{{data.getManageInputForTreeTables.succMsg}}"
+
+                ]
+            }
+        },
+    "i18n": {
+        "AddTitle": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "PartialError": [
+            "AnalysisRequestCommandPanelsMessages"
+        ]
+    },
+    "ctx": {
+        "panelContext": null,
+        "preferences": null,
+        "xrtSummaryContextObject": null
+    }
+}

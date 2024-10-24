@@ -1,0 +1,285 @@
+{
+    "schemaVersion": "1.0.0",
+    "ports":{
+        "scopeObject_input":{
+            "syncObject":{},
+            "onChangeAction":"initAssignedObjectsDataProvider"
+        }
+    },
+    "props":{
+        "table-settings":{
+            "type":"object"
+        },
+        "messages-types":{
+            "type":"object"
+        }
+    },
+    "data":{
+        "isInLoadingState": false,
+        "tableSettings": "{{props.tableSettings}}"
+    },
+    "actions":{
+        "initAssignedObjectsDataProvider": {
+            "actionType": "dataProvider",
+            "method": "ngpAssignedObjectsDataProvider"
+        },
+        "registerPolicyAndGetAssignedObjects":{
+            "actionType":"batchJob",
+            "steps":[
+                {
+                    "action":"setInLoadingState"
+                },
+                {
+                    "action":"registerPolicy"
+                },
+                {
+                    "action":"getAssignedObjects"
+                }
+            ]
+        },
+        "setInLoadingState":{
+            "actionType":"JSFunction",
+            "method":"getValueInViewModel",
+            "inputData":{
+                "value":true
+            },
+            "outputData":{
+                "isInLoadingState":""
+            },
+            "deps":"js/mfeViewModelUtils"
+        },
+        "registerPolicy":{
+            "actionType": "JSFunction",
+            "method": "register",
+            "inputData": {
+                "name": "NgpAssignedObjectsTable",
+                "policyObj": "{{data.dataProviders.ngpAssignedObjectsDataProvider.policy}}"
+            },
+            "deps": "js/mfePolicyService"
+        },
+        "getAssignedObjects":{
+            "actionType":"JSFunctionAsync",
+            "method":"getAssignments",
+            "inputData": {
+                "modelObject":"{{ports.scopeObject_input.syncObject.modelObj}}",
+                "typesToInclude": "{{props.tableSettings.tableObjects}}",
+                "pageSize": 0,
+                "dataProvider":"{{data.dataProviders.ngpAssignedObjectsDataProvider}}",
+                "clientColumns": "{{props.tableSettings.clientColumns}}"
+            },
+            "outputData": {
+                "assignedObjects": "",
+                "isInLoadingState": false
+            },
+            "deps":"js/services/ngpProductAssignmentsService"
+        },
+        "createColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "createTableColumns",
+            "inputData": {
+                "preferenceName": "{{data.tableSettings.columnConfigPreference}}",
+                "dataProvider": "{{data.dataProviders.ngpAssignedObjectsDataProvider}}",
+                "columnProvider": {
+                    "enableSorting": true,
+                    "enableCellEdit": false
+                },
+                "additionalPolicyObjects": {},
+                "tableCmdColumnPropName":"object_string"
+            },
+            "deps": "js/services/ngpTableService"
+        },
+        "saveModifiedColumns": {
+            "actionType": "JSFunction",
+            "method": "saveResizedColumnsWidth",
+            "inputData": {
+                "preferenceName": "{{data.tableSettings.columnConfigPreference}}",
+                "columns": "{{data.eventMap.columnArrange.columns}}"
+            },
+            "deps": "js/mfeTableService"
+        },
+        "arrangeColumnsAndRefresh":{
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "unregisterPolicy"
+                },
+                {
+                    "action": "createColumns"
+                },
+                {
+                    "action": "registerPolicy"
+                },
+                {
+                    "action": "refreshTableObjects"
+                },
+                {
+                    "action": "refreshTable"
+                }
+            ]
+        },
+        "refreshTableObjects":{
+            "actionType":"JSFunctionAsync",
+            "method":"refreshObjects",
+            "inputData":{
+                "contextObject":"{{ports.scopeObject_input.syncObject.modelObj}}",
+                "dataProvider":"{{data.dataProviders.ngpAssignedObjectsDataProvider}}",
+                "columns": "{{grids.NgpAssignedObjectsTable.gridOptions.textBundle.tableSettings.clientColumns}}",
+                "modelObjects":"{{data.dataProviders.ngpAssignedObjectsDataProvider.viewModelCollection.loadedVMObjects}}"
+            },
+            "deps":"js/services/ngpProductAssignmentsService"
+        },
+        "refreshTable":{
+            "actionType":"JSFunction",
+            "method":"refreshTable",
+            "inputData":{
+                "tableId":"NgpAssignedObjectsTable"
+            },
+            "deps":"js/mfeTableService"
+        },
+        "unregisterPolicy":{
+            "actionType": "JSFunction",
+            "method": "unregister",
+            "inputData": {
+                "name": "NgpAssignedObjectsTable"
+            },
+            "deps": "js/mfePolicyService"
+        }
+    },
+    "grids": {
+        "NgpAssignedObjectsTable": {
+            "dataProvider": "ngpAssignedObjectsDataProvider",
+            "columnProvider": "ngpAssignedObjectsColumnProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "enableGridMenu": true
+            }
+        }
+    },
+    "dataProviders": {
+        "ngpAssignedObjectsDataProvider": {
+            "action": "registerPolicyAndGetAssignedObjects",
+            "response": "{{data.assignedObjects}}",
+            "totalFound": "{{data.assignedObjects.length}}",
+            "selectionModelMode": "multiple"
+        }
+    },
+    "columnProviders": {
+        "ngpAssignedObjectsColumnProvider": {
+            "loadColumnAction": "createColumns",
+            "resetColumnAction": "saveModifiedColumns",
+            "saveColumnAndLoadAction": "saveModifiedColumns",
+            "frozenColumnIndex": -1
+        }
+    },
+    "conditions":{
+        "isInLoadingState":{
+            "expression":{
+                "$source":"data.isInLoadingState",
+                "$query":{
+                    "$eq": true
+                }
+            }
+        },
+        "isScopeObjectValid":{
+            "expression": {
+                "$source": "ports.scopeObject_input.syncObject.modelObj",
+                "$query": {
+                    "$notNull": true
+                }
+            }
+        },
+        "hasAssignedObjects":{
+            "expression":{
+                "$source":"data.dataProviders.ngpAssignedObjectsDataProvider.viewModelCollection.loadedVMObjects.length",
+                "$query":{
+                    "$gt": 0
+                }
+            }
+        },
+        "showLoadingMsg":{
+            "expression":{
+                "$and":[
+                    {
+                        "$source":"conditions.isScopeObjectValid",
+                        "$query":{
+                            "$eq":true
+                        }
+                    },
+                    {
+                        "$source":"conditions.isInLoadingState",
+                        "$query":{
+                            "$eq":true
+                        }
+                    }
+                ]
+            }
+        },
+        "showNoObjectsAssignedMsg":{
+            "expression":{
+                "$and":[
+                    {
+                        "$source":"conditions.isScopeObjectValid",
+                        "$query":{
+                            "$eq":true
+                        }
+                    },
+                    {
+                        "$source":"conditions.isInLoadingState",
+                        "$query":{
+                            "$eq":false
+                        }
+                    },
+                    {
+                        "$source":"conditions.hasAssignedObjects",
+                        "$query":{
+                            "$eq":false
+                        }
+                    }
+                ]
+            }
+        },
+        "showTable":{
+            "expression":{
+                "$and":[
+                    {
+                        "$source":"conditions.isScopeObjectValid",
+                        "$query":{
+                            "$eq":true
+                        }
+                    },
+                    {
+                        "$source":"conditions.isInLoadingState",
+                        "$query":{
+                            "$eq":false
+                        }
+                    },
+                    {
+                        "$source":"conditions.hasAssignedObjects",
+                        "$query":{
+                            "$eq":true
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "i18n":{
+        "assignmentType":["NgpTableMessages"],
+        "mismatchOrMissing":["NgpTableMessages"],
+        "assignmentInContextAttributeGroups":["NgpTableMessages"],
+        "assignedToProcess":["NgpTableMessages"],
+        "assignedToOperation":["NgpTableMessages"],
+        "usedInActivity":["NgpTableMessages"]
+    },
+    "onEvent": [{
+        "eventId": "columnArrange",
+        "condition": "name === 'NgpAssignedObjectsTable'",
+        "cacheEventData": true,
+        "action": "saveModifiedColumns"
+    },
+    {
+        "eventId": "ngp.updateColumns",
+        "action": "arrangeColumnsAndRefresh",
+        "condition": "tableId === 'NGPWorkUnitAssignedPartsColumns' || tableId === 'NGPWorkUnitAssignedFeaturesColumns'"
+    }]
+}

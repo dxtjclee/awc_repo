@@ -1,0 +1,17 @@
+<aw-command-panel caption="i18n.createFreezePointTitle" context="subPanelContext">
+    <aw-panel-body form-prop="formProp">
+        <aw-panel-section caption="i18n.att1Properties">
+            <aw-textbox prop="data.name"></aw-textbox>
+            <aw-textbox prop="data.description"></aw-textbox>
+            <aw-widget  prop="data.unit"></aw-widget>
+
+        </aw-panel-section>
+    </aw-panel-body>
+
+    <aw-checkbox prop="data.openOnCreate"></aw-checkbox>
+    <aw-panel-footer>
+        <aw-button action="att1CreateFreezePoint"  enable-when="!ctx.addItemEventProgressing" visible-when="formProp.attributes.valid && !conditions.unitEffectivityOnlyPositiveInteger">
+            <aw-i18n>i18n.create</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

@@ -1,0 +1,32 @@
+{
+    "schemaVersion": "1.0.0",
+    "conditions" : {
+        "isElementCreateSectionVisible":{
+            "expression" : "props.subPanelContext.addPanelState.selectedTab.view==='NewTabPageSub' && props.subPanelContext.occContext.supportedFeatures.Awb0BulkAddFeature && !ctx.occmgmtContext.isMarkupEnabled && props.subPanelContext.addElementState.AddOccurrencePropertiesOnCreate"
+        }
+    },
+    "data": {
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_SUB_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "i18n": {
+        "addElementProperties": [
+            "OccurrenceManagementConstants"
+        ]
+    }
+}

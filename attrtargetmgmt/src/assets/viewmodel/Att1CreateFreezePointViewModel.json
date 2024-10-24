@@ -1,0 +1,385 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-textbox.directive",
+        "js/aw-widget.directive",
+        "js/aw-checkbox.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive"
+    ],
+    "actions": {
+        "updateNameWithEffectivity": {
+            "actionType": "JSFunction",
+            "method": "initFreezePanel",
+            "inputData": {
+                "data": "{{data}}",
+                "isUnitEffectivityChanged": true,
+                "fields": "{{fields}}"
+            },
+            "outputData": {
+                "name": "name"
+            },
+            "deps": "js/Att1FreezePointService"
+        },
+        "att1CreateFreezePoint": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "Att1SetFreezePoint.setFreezePointInProgress",
+                        "eventData": {
+                            "valueToSet": true
+                        }
+                    },
+                    {
+                        "name": "Att1SetFreezePoint.submitToSetFreezePointWorkFlow"
+                    }
+                ]
+            }
+        },
+        "setFreezePointInProgress": {
+            "actionType": "JSFunction",
+            "method": "registerCtx",
+            "inputData": {
+                "name": "setFreezePointInProgress",
+                "value": "{{data.eventMap['Att1SetFreezePoint.setFreezePointInProgress'].valueToSet}}"
+            },
+            "deps": "js/appCtxService"
+        },
+        "submitToSetFreezePointWorkFlow": {
+            "actionType": "TcSoaService",
+            "serviceName": "Workflow-2008-06-Workflow",
+            "method": "createInstance",
+            "inputData": {
+                "startImmediately": true,
+                "observerKey": "",
+                "name": "{{ctx.occmgmtContext.openedElement.props.awb0UnderlyingObject.uiValues[0]}}",
+                "subject": "",
+                "description": "{{data.unit.dbValue.toString()}}",
+                "contextData": {
+                    "processTemplate": "{{data.templateName}}",
+                    "attachmentCount": 1,
+                    "attachments": "{{function:getAttachedUIDS}}",
+                    "attachmentTypes": "{{function:getAttachmentTypesForFreeze}}",
+                    "processAssignmentList": ""
+                }
+            },
+            "outputData": {
+                "errorMsg": "{{function:processErrorMessageForSubmitToWorkFlow}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Att1SetFreezePoint.submissionSuccessful",
+                        "eventData": {
+                            "createChangeData": "{{data}}"
+                        }
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "condition": "data.errorMsg && data.errorMsg.length > 0",
+                        "message": "submitWorkflowError"
+                    }
+                ]
+            },
+            "deps": "js/Att1FreezePointService"
+        },
+        "att1SubmissionSuccessful": {
+            "actionType": "JSFunction",
+            "method": "startRecipeCreate",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Att1FreezePointService"
+        },
+        "closeDialogPanel":
+        {
+            "actionType": "JSFunction",
+            "method": "closeDialog",
+            "inputData": {
+                "editContext": "INFO_PANEL_CONTEXT",
+                "popupId": "{{subPanelContext.popupOptions.popupId}}"
+            },
+            "deps": "js/dialogService"
+        },
+        "att1CreateRecipe": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ViewMgmtAW-2019-06-ViewDataManagement",
+            "method": "manageRecipes2",
+            "inputData": {
+                "inputs": "{{function:createRecipesInput}}"
+            },
+            "outputData": {
+                "createRecipeResponse": "{{function:getCreatedFreezePoint}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "complete",
+                        "condition": "!data.openOnCreate.dbValue",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    },
+                    {
+                        "name": "closeDialog"
+                    },
+                    {
+                        "name": "Att1SetFreezePoint.refreshSeedNode",
+                        "condition": "ctx.selected.uid === ctx.pselected.uid && !data.openOnCreate.dbValue"
+                    },
+                    {
+                        "name": "uniformParamTable.reloadTable",
+                        "condition": "!data.openOnCreate.dbValue  && (subPanelContext.pageContext.secondaryActiveTabId === 'tc_xrt_AttributesForDCP')"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "createFreezePointSuccess",
+                        "condition": "!data.openOnCreate.dbValue"
+                    }
+                ]
+            },
+            "deps": "js/Att1FreezePointService"
+        },
+        "refreshSeedNode": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2007-01-DataManagement",
+            "method": "refreshObjects",
+            "inputData": {
+                "objects": "{{function:getRootObject}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Att1SetFreezePoint.nodeRefreshSuccessful"
+                    }
+                ]
+            },
+            "deps": "js/Att1FreezePointService"
+        },
+        "closeFreezePointPanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        },
+                        "condition": "!data.openOnCreate.dbValue"
+                    }
+                ]
+            }
+        },
+        "initFreezePanel": {
+            "actionType": "JSFunction",
+            "method": "initFreezePanel",
+            "inputData": {
+                "data": "{{data}}",
+                "isUnitEffectivityChanged": false,
+                "fields": "{{fields}}"
+            },
+            "outputData": {
+                "name": "name",
+                "unit": "unit",
+                "templateName": "templateName"
+            },
+            "deps": "js/Att1FreezePointService"
+        }
+    },
+    "data": {
+        "name": {
+            "displayName": "{{i18n.freezePointName}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "isEditable": "true",
+            "dbValue": ""
+        },
+        "description": {
+            "displayName": "{{i18n.freezePointDesc}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_LEFT"
+        },
+        "unit": {
+            "displayName": "{{i18n.freezePointUnit}}",
+            "type": "INTEGER",
+            "isRequired": "true",
+            "isEditable": "true",
+            "dbValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_LEFT",
+            "validationCriteria": [
+                {
+                    "condition": "conditions.unitEffectivityOnlyPositiveInteger",
+                    "value": "{{i18n.unitEffectivityValidationError}}"
+                }
+            ]
+        },
+        "openOnCreate": {
+            "displayName": "{{i18n.addAndOpen}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": true,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        }
+    },
+    "functions": {
+        "getAttachedUIDS": {
+            "functionName": "getAttachedUIDS",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getAttachmentTypesForFreeze": {
+            "functionName": "getAttachmentTypesForFreeze",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "createRecipesInput": {
+            "functionName": "createRecipesInput",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getCreatedFreezePoint": {
+            "functionName": "getCreatedFreezePoint",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "processErrorMessageForSubmitToWorkFlow": {
+            "functionName": "processErrorMessageForSubmitToWorkFlow",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getRootObject": {
+            "functionName": "getRootObject",
+            "parameters": [
+                "{{data}}"
+            ]
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "Att1SetFreezePoint.setFreezePointInProgress",
+            "cacheEventData": true,
+            "action": "setFreezePointInProgress"
+        },
+        {
+            "eventId": "Att1SetFreezePoint.submitToSetFreezePointWorkFlow",
+            "action": "submitToSetFreezePointWorkFlow"
+        },
+        {
+            "eventId": "Att1SetFreezePoint.submissionSuccessful",
+            "action": "att1SubmissionSuccessful"
+        },
+        {
+            "eventId": "Att1SetFreezePoint.createRecipe",
+            "cacheEventData": true,
+            "action": "att1CreateRecipe"
+        },
+        {
+            "eventId": "condition.expressionValueChanged",
+            "action": "updateNameWithEffectivity",
+            "criteria": {
+                "condition": "conditions.unitChangedCondition"
+            },
+            "cacheEventData": true
+        },
+        {
+            "eventId": "Att1SetFreezePoint.refreshSeedNode",
+            "action": "refreshSeedNode"
+        },
+        {
+            "eventId": "Att1SetFreezePoint.nodeRefreshSuccessful",
+            "action": "closeFreezePointPanel"
+        },
+        {
+            "eventId": "closeDialog",
+            "action": "closeDialogPanel"
+        }
+    ],
+    "conditions": {
+        "unitChangedCondition": {
+            "expression": "data.unit.dbValue",
+            "trackValues": true
+        },
+        "unitEffectivityOnlyPositiveInteger": {
+            "expression": "data.unit.dbValue && data.unit.dbValue < 0"
+        }
+    },
+    "messages": {
+        "createFreezePointSuccess": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.freezePointSuccessMessage}}",
+            "messageTextParams": [
+                "{{data.name.dbValue}}"
+            ]
+        },
+        "submitWorkflowError": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.serverError}}",
+            "messageTextParams": [
+                "{{data.errorMsg}}"
+            ]
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "initFreezePanel"
+    },
+    "i18n": {
+        "att1Properties": [
+            "Att1AttrMappingMessages"
+        ],
+        "createFreezePointTitle": [
+            "Att1AttrMappingMessages"
+        ],
+        "freezePointName": [
+            "Att1AttrMappingMessages"
+        ],
+        "freezePointDesc": [
+            "Att1AttrMappingMessages"
+        ],
+        "freezePointUnit": [
+            "Att1AttrMappingMessages"
+        ],
+        "addAndOpen": [
+            "Att1AttrMappingMessages"
+        ],
+        "create": [
+            "Att1AttrMappingMessages"
+        ],
+        "freezePointSuccessMessage": [
+            "Att1AttrMappingMessages"
+        ],
+        "serverError": [
+            "WorkflowCommandPanelsMessages"
+        ],
+        "freezePointUnitMessage": [
+            "Att1AttrMappingMessages"
+        ],
+        "frozen": [
+            "Att1AttrMappingMessages"
+        ],
+        "unitEffectivityValidationError": [
+            "Att1AttrMappingMessages"
+        ]
+    }
+}

@@ -1,0 +1,6 @@
+<mfe-loading-message exist-when="conditions.showLoadingMsg"></mfe-loading-message>
+<mfe-message-panel exist-when="!conditions.scopeObjectIsValid" messages-data="{messageLines: data.selectToSeeOperations}"></mfe-message-panel>
+<mfe-message-panel exist-when="conditions.showNoOperationsMsg" messages-data="{messageLines: data.noProcessOperationsMsg}"></mfe-message-panel>
+<div class="aw-ngp-table" show-when="conditions.hasOperations">
+    <aw-splm-table command-context="{tableSettings: data.tableSettings}" gridid="ngpOperationsTable" show-decorators="true"></aw-splm-table>
+</div>

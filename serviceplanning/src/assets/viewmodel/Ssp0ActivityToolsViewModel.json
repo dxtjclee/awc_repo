@@ -1,0 +1,299 @@
+{
+    "actions":{
+        "getChildNodeData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData": {
+                "attributes": [
+                    "al_activity_tool_bl_list"
+                ],
+                "objects": [
+                    {
+                        "uid": "{{ctx.selectedActivity.uid}}",
+                        "type": "BomLine"
+                    }
+                ]
+            },
+            "outputData": {
+                "uids": "{{function:getActivityTools}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "getChildNodeProperties"
+                    }
+                ]
+            },
+            "deps": "js/Ssp0ActivityToolsService"
+        },
+        "getChildNodeProperties": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData": {
+                "attributes": [
+                    "bl_has_children",
+                    "bl_line_name",
+                    "bl_occ_type",
+                    "bl_item_object_desc",
+                    "bl_item_object_type",
+                    "bl_rev_fnd0objectId"
+                ],
+                "objects": "{{data.uids}}"
+            },
+            "outputData": {
+                "treeLoadResult": "{{function:setTreeProperties}}"
+            },
+            "policy": {
+                "types": [
+                    {
+                        "name": "BOMLine",
+                        "properties": [
+                            {
+                                "name": "bl_line_object",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "bl_rev_fnd0objectId",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "deps": "js/Ssp0ActivityToolsService"
+        },
+        "loadToolsTree": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "getChildNodeData"
+                },
+                {
+                    "action": "getChildNodeProperties"
+                }
+            ]
+        },
+        "loadToolsTreeTableColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadToolsTreeTableColumns",
+            "inputData": {
+                "i18n": "{{i18n}}"
+            },
+            "outputData": {
+                "dataProviders.toolsTreeDataProvider.columnConfig": "columnConfig"
+            },
+            "deps": "js/Ssp0ActivityToolsService"
+        },
+        "doGridDataProvider": {
+            "actionType": "dataProvider",
+            "method": "toolsTreeDataProvider"
+        },
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/columnArrangeService"
+        },
+        "saveColumnConfigLoadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "saveUIColumnConfigs2",
+            "inputData": {
+                "columnConfigurations": [
+                    {
+                        "clientScopeURI": "Ssp0ToolsTableManagement",
+                        "columnConfigId": "{{data.dataProviders.toolsTreeDataProvider.columnConfig.columnConfigId}}",
+                        "columns": "{{data.dataProviders.toolsTreeDataProvider.newColumns}}",
+                        "scope": "LoginUser",
+                        "scopeName": ""
+                    }
+                ]
+            },
+            "outputData": {},
+            "events": {
+                "success": [
+                    {
+                        "name": "slm.toolsTableColumnConfig.saved"
+                    }
+                ]
+            }
+        },
+        "loadDataForSavedColumnConfig":{
+            "actionType": "JSFunctionAsync",
+            "method": "getTableViewModelProperties",
+            "deps": "js/tcViewModelObjectService",
+            "inputData": {
+                "vmNodes": "{{data.dataProviders.toolsTreeDataProvider.viewModelCollection.loadedVMObjects}}",
+                "context": {
+                    "clientScopeURI": "Ssp0ToolsTableManagement",
+                    "clientName": "AWClient",
+                    "columnConfigId": "Ssp0ToolsTableManagement",
+                    "columnsToExclude": "{{ctx.sbomProductContext.columnsToExclude}}",
+                    "operationType": "{{eventData.operationType}}"
+                }
+            },
+            "outputData": {
+                "newColumnConfig": "result.output.columnConfig"
+            }
+        },
+        "resetColumnConfig": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "getOrResetUIColumnConfigs4",
+            "inputData": {
+                "getOrResetUiConfigsIn": [
+                    {
+                        "scope": "LoginUser",
+                        "scopeName": "",
+                        "clientName": "AWClient",
+                        "resetColumnConfig": true,
+                        "columnConfigQueryInfos": [
+                            {
+                                "clientScopeURI": "Ssp0ToolsTableManagement",
+                                "operationType": "union",
+                                "columnsToExclude": []
+                            }
+                        ],
+                        "businessObjects": [
+                            {}
+                        ]
+                    }
+                ]
+            },
+            "outputData": {
+                "dataProviders.toolsTreeDataProvider.columnConfig": "{{function:postResetFunction}}"
+            },
+            "deps": "js/tcarrange.service"
+        }
+    },
+
+    "dataProviders": {
+        "toolsTreeDataProvider": {
+            "action":"loadToolsTree",
+            "response": "{{data.treeLoadResult.response}}",
+            "totalFound": "{{data.treeLoadResult.totalFound}}",
+            "selectionModelMode": "single"
+        }
+    },
+
+    "columnProviders": {
+        "toolsTreeColumnProvider": {
+            "loadColumnAction": "loadToolsTreeTableColumns",
+            "saveColumnAndLoadAction": "saveColumnConfigLoadData",
+            "resetColumnAction": "resetColumnConfig",
+            "columns": "{{data.columns}}",
+            "frozenColumnIndex": -1
+        }
+    },
+
+    "grids": {
+        "toolsTree": {
+            "dataProvider": "toolsTreeDataProvider",
+            "columnProvider": "toolsTreeColumnProvider",
+            "enableArrangeMenu": true,
+            "addIconColumn": false,
+            "gridOptions": {
+
+                "useStaticFirstCol": true,
+                "enableExpandAndPaginationInEdit": true
+            }
+        }
+    },
+
+    "functions":{
+        "getActivityTools": {
+            "functionName": "getActivityTools",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "setTreeProperties": {
+            "functionName": "setTreeProperties",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "postResetFunction": {
+            "functionName": "postResetFunction",
+            "parameters": [
+                "{{data.dataProviders.toolsTreeDataProvider.columnConfig}}"
+            ]
+        }
+    },
+
+    "onEvent": [
+        {
+            "eventId": "Ssp0ActivityParts.triggerFunction",
+            "action": "loadToolsTree"
+        },
+        {
+            "eventId": "Ssp0ActivityParts.reloadPartToolTables",
+            "action": "doGridDataProvider"
+        },
+        {
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        },
+        {
+            "eventId": "slm.toolsTableColumnConfig.saved",
+            "cacheEventData": true,
+            "action": "loadDataForSavedColumnConfig"
+        }
+    ],
+
+    "lifecycleHooks": {
+        "onUpdate": {
+            "action": "doGridDataProvider",
+            "observers": [
+                "viewModel.ctx.selectedActivity"
+            ]
+        }
+    },
+
+    "data": {
+        "messages": {
+            "noToolsConsumed": [
+                {
+                    "text": "{{i18n.noToolsConsumed}}"
+                }
+            ]
+        }
+    },
+
+    "conditions": {
+        "areToolsConsumed": {
+            "expression": "data.treeLoadResult.totalFound > 0"
+        }
+    },
+
+    "i18n": {
+        "nameValueColumn": [
+            "timeAnalysisMessages"
+        ],
+        "descriptionValueColumn": [
+            "timeAnalysisMessages"
+        ],
+        "occurrenceTypeColumn": [
+            "timeAnalysisMessages"
+        ],
+        "noToolsConsumed": [
+            "timeAnalysisMessages"
+        ]
+    }
+}

@@ -1,0 +1,23 @@
+<aw-command-panel caption="i18n.importLabelTitle" class="aw-requirements-importOfficePanel">
+        <div show-when="data.sharedData.activeView ==='Arm0ImportFromOfficeSub' && data.sharedData.activeView !== 'Arm0AddAdvanceRulesSub' && data.sharedData.activeView !== 'Arm0AddRulesSub' && data.sharedData.activeView !== 'Arm0AddAdvanceRulesSub'">
+            <aw-include name="Arm0ImportFromOfficeSub" sub-panel-context="{...subPanelContext, sharedData:fields.sharedData}"></aw-include>
+        </div>
+    <div class="sw-row flex-auto" exist-when="ctx.isArm0ImportFromWordSubPanelActive || ctx.isArm0ImportFromPDFSubPanelActive || ctx.locationContext[ 'ActiveWorkspace:Location' ] == 'ImportPreviewLocation'">
+        <aw-command-sub-panel panel-id="Arm0ImportFromWordSub" sub-panel-context="{data: data, ...subPanelContext, sharedData:fields.sharedData }" show-when="data.sharedData.activeView ==='Arm0ImportFromOfficeSub' && data.sharedData.fileName">
+        </aw-command-sub-panel>
+        <aw-navigate-panel title="i18n.addRules" exist-when="data.sharedData.activeView !=='Arm0ImportFromOfficeSub'" show-when="data.sharedData.activeView === 'Arm0AddAdvanceRulesSub' && data.sharedData.activeView !== 'Arm0AddRulesSub' && data.sharedData.activeView !== 'Arm0AddPropertyRuleSub'" panel-id='Arm0AddAdvanceRulesSub' sub-panel-context='{ ...subPanelContext, sharedData:fields.sharedData}' action='backActionForRule'>
+        </aw-navigate-panel>
+        <aw-navigate-panel title="i18n.addRules" exist-when="data.sharedData.activeView !=='Arm0ImportFromOfficeSub && data.sharedData.activeView !== 'Arm0AddAdvanceRulesSub' && data.sharedData.activeView === 'Arm0AddRulesSub' " show-when="data.sharedData.activeView === 'Arm0AddRulesSub' && data.sharedData.activeView !== 'Arm0AddAdvanceRulesSub' && data.sharedData.activeView !== 'Arm0AddPropertyRuleSub'" panel-id='Arm0AddRulesSub' sub-panel-context='{ ...subPanelContext, sharedData:fields.sharedData}' action='backActionForRule'>
+        </aw-navigate-panel>
+        <aw-navigate-panel title="i18n.showAdvanceOptionsLabel" exist-when="data.sharedData.activeView !=='Arm0ImportFromOfficeSub' && data.sharedData.activeView === 'Arm0AddPropertyRuleSub' && data.sharedData.activeView !== 'Arm0AddAdvanceRulesSub' && data.sharedData.activeView !== 'Arm0AddRulesSub'" show-when="data.sharedData.activeView === 'Arm0AddPropertyRuleSub' && data.sharedData.activeView !== 'Arm0AddAdvanceRulesSub' && data.sharedData.activeView !== 'Arm0AddRulesSub'" panel-id='Arm0AddPropertyRuleSub' sub-panel-context='{ ...subPanelContext, sharedData:fields.sharedData}' action='backActionForPropRule'>
+        </aw-navigate-panel>
+    </div>
+    <div class="sw-row flex-auto" visible-when="ctx.isArm0ImportFromExcelSubPanelActive">
+        <aw-command-sub-panel panel-id="Arm0ImportFromExcelSub" show-when="data.sharedData.activeView === 'Arm0ImportFromOfficeSub'" sub-panel-context="{data: data, ...subPanelContext, sharedData:fields.sharedData }"></aw-command-sub-panel>
+        <aw-navigate-panel title="Add Property" show-when="data.sharedData.activeView === 'Arm0AddPropertiesSub'"
+        panel-id='Arm0AddPropertiesSub' sub-panel-context='{sharedData:data.sharedData}' action='Arm0AddPropertiesSubbackAction'>
+    </div>
+   <div class="sw-row flex-auto" exist-when="ctx.isArm0ImportFromReqIFSubPanelActive">
+        <aw-command-sub-panel panel-id="Arm0ImportFromReqIFSub" show-when="data.sharedData.activeView === 'Arm0ImportFromOfficeSub'" sub-panel-context="{data: data, ...subPanelContext, sharedData:fields.sharedData }"></aw-command-sub-panel>
+    </div>
+    </aw-command-panel>

@@ -1,0 +1,199 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "actions": {
+        "loadColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableColumns",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.auditPlanTreeDataProvider}}",
+                "data": "{{data}}"          
+            },        
+            "outputData": {
+                "dataProviders.auditPlanTreeDataProvider.columnConfig": "columnConfig"
+            },    
+            "deps": "js/qa0AuditPlanTreeService"
+        },        
+        "loadData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableData",
+            "inputData": {
+                "treeLoadInput": "request.treeLoadInput",
+                "dataProvider": "{{data.dataProviders.auditPlanTreeDataProvider}}",
+                "delayTimeTree": "{{data.delayTimeTree}}",
+                "maxTreeLevel": "{{data.maxTreeLevel}}",
+                "sortCriteria": "{{data.columnProviders.auditPlanColumnProvider.sortCriteria}}"
+            },
+            "outputData": {
+                "totalFound": "result.treeLoadResult.totalChildCount",
+                "totalLoaded": "result.treeLoadResult.childNodes.length",
+                "searchResults": "result.treeLoadResult.childNodes",
+                "treeLoadResult": "result.treeLoadResult"            
+            },            
+            "deps": "js/qa0AuditPlanTreeService"
+        },       
+        "loadProperties": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableProperties",
+            "inputData": {
+                "propertyLoadInput": "request.propertyLoadInput",
+                "delayTimeProperty": "{{data.delayTimeProperty}}"
+            },           
+            "deps": "js/qa0AuditPlanTreeService"
+        },     
+        "updateDisplayNames": {
+            "actionType": "JSFunction",
+            "method": "updateDisplayNames",
+            "inputData": {
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/objectNavigationTreeService"
+        },   
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            }
+        },
+        "refreshTree": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData":
+            {
+                 "events":
+                 [
+                     {
+                        "name": "qualityAuditPlanTree.plTable.reload"
+                     }
+                 ]
+            }
+        }        
+    },
+    "data": {
+        "delayTimeTree": {
+            "displayName": "",
+            "type": "INTEGER",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "20",
+            "dispValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        },
+        "maxTreeLevel": {
+            "displayName": "",
+            "type": "INTEGER",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "100",
+            "dispValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        },
+        "qa0TreeColumnName": {
+            "uiValue": "{{i18n.qa0TreeColumnName}}",
+            "type": "STRING"
+        },
+        "qa0TreeColumnDescription": {
+            "uiValue": "{{i18n.qa0TreeColumnDescription}}",
+            "type": "STRING"
+        },
+        "qa0TreeColumnPlannedStartDate": {
+            "uiValue": "{{i18n.qa0TreeColumnPlannedStartDate}}",
+            "type": "STRING"
+        },
+        "qa0TreeColumnPlannedEndDate": {
+            "uiValue": "{{i18n.qa0TreeColumnPlannedEndDate}}",
+            "type": "STRING"
+        },
+        "qa0TreeColumnActualStartDate": {
+            "uiValue": "{{i18n.qa0TreeColumnActualStartDate}}",
+            "type": "STRING"
+        },
+        "qa0TreeColumnActualEndDate": {
+            "uiValue": "{{i18n.qa0TreeColumnActualEndDate}}",
+            "type": "STRING"
+        }
+    },
+    "dataProviders": {
+        "auditPlanTreeDataProvider": {
+            "action": "loadData",
+            "initializeAction": "loadData",
+            "nextAction": "loadData",
+            "previousAction": "loadData",         
+            "editContext": "TABLE_CONTEXT",   
+            "treeLoadResult": "action.result.treeLoadResult",
+            "selectionModelMode": "multiple",
+            "treePageSize": 100,
+            "inputData": {
+                "accessMode": "tree",
+                "selectionModel": "{{subPanelContext.selectionModel}}"
+            },        
+            "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectObjectNavigationCellListActionCommands"
+        },
+        "auditPlanPropertyProvider": {
+            "action": "loadProperties",
+            "propertyLoadResult": "action.result.propertyLoadResult"
+        }
+    },
+    "columnProviders": {
+        "auditPlanColumnProvider": {
+            "loadColumnAction": "loadColumns",
+            "columns": "{{auditPlanTreeDataProvider.columnConfig.columns}}",            
+            "soaEnabled": false,
+            "sortCriteria": "{{ctx.sublocation.sortCriteria}}"
+        }
+    },
+    "grids": {
+        "qualityAuditPlanTree": {
+            "dataProvider": "auditPlanTreeDataProvider",
+            "propertyProvider": "auditPlanPropertyProvider",
+            "columnProvider": "auditPlanColumnProvider",
+            "addIconColumn": false,           
+            "gridOptions": {                
+                "enableGridMenu": true,
+                "enablePinning": false
+            }
+        }
+    },
+    "i18n": {
+        "qa0TreeColumnName": ["qualityauditMessages"],
+        "qa0TreeColumnDescription": ["qualityauditMessages"],
+        "qa0TreeColumnPlannedStartDate": ["qualityauditMessages"],
+        "qa0TreeColumnPlannedEndDate": ["qualityauditMessages"],
+        "qa0TreeColumnActualStartDate": ["qualityauditMessages"],
+        "qa0TreeColumnActualEndDate": ["qualityauditMessages"]
+    },
+    "onEvent": [ 
+        {
+            "eventId": "qa0UpdateAuditPlanTree",            
+            "action": "refreshTree"
+        },
+        {
+            "eventId": "qa0UpdateAuditPlanTreeRemoved",            
+            "action": "refreshTree"
+        },
+        {
+            "eventId": "addObject.toTargetSuccess",
+            "action": "refreshTree"
+        },
+        {
+            "eventId": "addObject.objectCreatedWithRelation",
+            "action": "refreshTree"
+        },
+        {
+            "eventId": "auditPlanTreeDataProvider.modelObjectsUpdated",
+            "cacheEventData": true,
+            "action": "updateDisplayNames"
+        },
+        {
+            "eventId": "vmc.modified.auditPlanTreeDataProvider",
+            "cacheEventData": true,
+            "action": "updateDisplayNames"
+        }
+    ]
+}

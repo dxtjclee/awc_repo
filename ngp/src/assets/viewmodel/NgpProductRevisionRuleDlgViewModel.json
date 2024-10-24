@@ -1,0 +1,155 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-popup2.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-button.directive",
+        "js/aw-panel.directive",
+        "js/aw-flex-row.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-include.directive",
+        "js/aw-listbox.directive"
+    ],
+    "data": {
+        "enableDoneButton" : false,
+        "revisionRuleLabel": {
+            "displayName": "{{i18n.revisionRuleLabel}}",
+            "type": "STRING",
+            "hasLov": "true",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        }
+    },
+    "conditions":{
+        "enableDoneButtonCondition":{
+            "expression":{
+                "$source":"data.enableDoneButton",
+                "$query":{
+                    "$eq": "true"
+                }
+            }
+        },
+        "finishedRevisionRulesLoad":{
+            "expression":{
+                "$source":"data.finishedRevisionRulesLoad",
+                "$query":{
+                    "$eq": true
+                }
+            }
+        }
+    },
+    "actions": {
+        "revisionRuleSelectionChange":{
+            "actionType": "JSFunction",
+            "method": "revisionRuleSelectionChange",
+            "inputData": {
+                "data": "{{data.revisionRuleLabel}}",
+                "currRevisionRule" : "{{data.revisionRuleList[0]}}"
+            },
+            "outputData":
+            {
+                "enableDoneButton":""
+            },
+            "deps": "js/services/ngpRevisionRuleService"
+        },
+        "closeDialog": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        },
+        "initDataForDialog": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action":"getProductNameDescriptionForSetRevisionRule"
+                },
+                {
+                    "action": "getRevisionRuleList"
+                }
+            ]
+        },
+        "getRevisionRuleList": {
+            "actionType": "JSFunction",
+            "method": "getRevisionRuleList",
+            "inputData": {
+                "subsetDefinitions":"{{subPanelContext.subsetDefinition}}",
+                "defaultRevRulePref":"{{ctx.preferences.NGP_Default_Product_Revision_Rule}}",
+                "currRevisionRules" : "{{subPanelContext.currRevisionRules}}"
+            },
+            "outputData": {
+                "revisionRuleList": "",
+                "finishedRevisionRulesLoad": true
+            },
+            "deps": "js/services/ngpAssociatePartitionsService"
+        },
+        "getProductNameDescriptionForSetRevisionRule":{
+            "actionType": "JSFunction",
+            "method": "getProductNameDescriptionForSetRevisionRule",
+            "inputData": {
+                "planningScopeModelObject":"{{subPanelContext.context}}"
+            },
+            "outputData":{
+                "productScopeName":""
+            },
+            "deps": "js/services/ngpRevisionRuleService"
+        },
+        "setRevisionRule": {
+            "actionType": "JSFunctionAsync",
+            "method": "createOrUpdateProductSubsetsFromPartitions",
+            "inputData": {
+                "planningScopeModelObject":"{{subPanelContext.context}}",
+                "partitions": [],
+                "revisionRule": "{{data.revisionRuleLabel.dbValue}}"
+            },
+            "outputData":{
+                "successfullyAssociatedPartitions":""
+            },
+            "deps": "js/services/ngpProductScopeService"
+        },
+        "setRevisionRuleAndCloseDlg": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "setRevisionRule"
+                },
+                {
+                    "action": "ngpSubsetDefinitionUpdateEvent",
+                    "condition":"data.successfullyAssociatedPartitions === true"
+                },
+                {
+                    "action": "closeDialog",
+                    "condition":"data.successfullyAssociatedPartitions === true"
+                }
+            ]
+        },
+        "ngpSubsetDefinitionUpdateEvent": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "ngp.subsetDefinitionUpdate",
+                        "eventData": {
+                            "planningScopeModelObject": "{{subPanelContext.context}}",
+                            "subsetDefinition" : "{{subPanelContext.subsetDefinition}}"
+                        },
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            }
+        }
+
+    },
+    "lifecycleHooks": {
+        "onInit": "initDataForDialog"
+    },
+    "i18n": {
+        "productRevisionRuleTitle": [ "NgpProductRevisionRuleMessages" ],
+        "revisionRuleLabel": [ "NgpAssociatePartitionsMessages" ],
+
+        "cancel": [ "NgpProductRevisionRuleMessages" ],
+        "doneProductRevisionRule": [ "NgpProductRevisionRuleMessages" ]
+
+    }
+}

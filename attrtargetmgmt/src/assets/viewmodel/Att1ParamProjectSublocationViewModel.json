@@ -1,0 +1,97 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "sideNavLeftData": {
+            "slide": "FLOAT",
+            "direction": "RIGHT_TO_LEFT",
+            "animation": false,
+            "width": "STANDARD",
+            "height": "FULL"
+        },
+        "sideNavRightData": {
+            "slide": "PUSH",
+            "direction": "LEFT_TO_RIGHT",
+            "animation": false,
+            "width": "STANDARD",
+            "height": "FULL"
+        },
+        "parameterState": {
+            "initialValues": {
+                "parameterProject": {},
+                "selectedParameters": [],
+                "selectedGroups": [],
+                "selectedLeafGroups":[],
+                "mselected": [],
+                "hasVariantConfigContext": false,
+                "selectedParentsAreModifiable": true,
+                "parameterSelectedInPramProjectContext":false,
+                "selectedProxyParams":[],
+                "selectedProxyGroups":[],
+                "showParametersOnVC":false,
+                "showFSC":false,
+                "activeRevisionRule":"",
+                "activeVariantRule":"",
+                "swaSelectedObjects":[]
+            },
+            "meta": {}
+        },
+        "selectionData": {
+            "initialValues": {},
+            "meta": {}
+        }
+    },
+    "props": {
+        "provider": {
+            "type": "object"
+        },
+        "base-selection": {
+            "type": "object"
+        },
+        "sub-panel-context":{
+            "type":"object"
+        }
+    },
+    "actions": {
+        "initializeParameterState": {
+            "actionType": "JSFunction",
+            "method": "initializeParameterState",
+            "inputData": {
+                "openedObject": "{{props.baseSelection}}",
+                "context":"{{props.subPanelContext}}"
+            },
+            "outputData":{
+                "parameterState":""
+            },
+            "deps": "js/projectTreeTableService"
+        },
+        "handleParameterSelectionChange":
+        {
+            "actionType": "JSFunction",
+            "method": "handleParameterSelectionChange",
+            "deps": "js/projectTreeTableService",
+            "inputData": {
+                "eventData":"{{data.eventData}}",
+                "parametersState":"{{fields.parameterState}}"
+            }
+        }
+    },
+    "ctx": {
+        "location.titles.headerTitle": null,
+        "mselected":{
+            "type":"object"
+        },
+        "pselected":{
+            "type":"object"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "uniformParamTable.selectionChanged",
+            "cacheEventData": true,
+            "action": "handleParameterSelectionChange"
+        }
+    ],
+    "lifecycleHooks": {
+        "onMount": "initializeParameterState"
+    }
+}

@@ -1,0 +1,97 @@
+{
+    "schemaVersion": "1.0.0",
+
+    "data": {
+        "currentRevisionRule": {
+            "type": "STRING",
+            "uiValue": "{{data.currentRevisionRule}}"
+        }
+    },
+
+    "props": {
+        "recipe-config-state": {
+            "type": "object"
+        },
+        "occ-context":{
+            "type": "object"
+        },
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+
+    "dataProviders": {
+        "revisionLink": {
+            "dataProviderType": "TcLOV",
+            "lovConfiguration": {
+                "filterStr": "",
+                "lovPageSize":10000,
+                "viewModelObj": "{{ctx.userSession}}",
+                "viewProp": "{{ctx.userSession.props.awp0RevRule}}",
+                "operationName": "Edit"
+            },
+            "totalFound": ""
+        }
+    },
+
+    "actions": {
+        "initializeRevisionRuleConfigInfo": {
+            "actionType": "JSFunction",
+            "method": "getInitialRevisionRuleConfigData",
+            "inputData": {
+                "recipeConfigState": "{{props.recipeConfigState}}"
+            },
+            "outputData": {
+                "currentRevisionRule": ""
+            },
+            "deps": "js/Evm1ConfigurationPanelService"
+        },
+        "selectChangedRevisionRule": {
+            "actionType": "JSFunction",
+            "method": "selectChangedRevisionRule",
+            "inputData": {
+                "data": "{{data}}",
+                "recipeConfigState": "{{props.recipeConfigState}}"
+            },
+            "outputData": {
+                "currentRevisionRule": ""
+            },
+            "deps": "js/Evm1ConfigurationPanelService"
+        }
+    },
+
+    "functions": {
+    },
+
+    "lifecycleHooks": {
+        "onMount": "initializeRevisionRuleConfigInfo",
+        "onUpdate": [
+        {
+            "action": "initializeRevisionRuleConfigInfo",
+            "observers": [ "props.recipeConfigState.recipeState" ]
+        }]
+    },
+
+    "onEvent": [
+        {
+            "eventId": "awlinkPopup.selected",
+            "condition": "conditions.checkRevRuleChanged",
+            "cacheEventData": true,
+            "action": "selectChangedRevisionRule"
+        }
+    ],
+
+    "messages": {
+    },
+
+    "conditions": {
+        "checkRevRuleChanged":
+        {
+            "expression": "ctx.xrtSummaryContextObject.type === 'Fnd0SearchRecipe'"
+        }
+    },
+
+    "i18n": {
+        "ConfigPanelRevRuleTitle": [ "RecipeCommandPanelsMessages" ]
+    }
+}

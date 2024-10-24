@@ -1,0 +1,57 @@
+{
+  "show_incontext_parameter_template": {
+    "grids": [],
+    "columns": [
+      "REF(att1SourceAttribute,Att0MeasurableAttribute).REF(att1ContextObject,WorkspaceObject).object_name"
+    ],
+    "template": "",
+    "templateUrl": "/propRenderTemplates/showInContextParameter.html",
+    "renderFunction": "",
+    "headerTemplateUrl": "/propRenderTemplates/Att1PropertyIconRendererForHeader.html",
+    "dependentServices": [
+      "js/appCtxService"
+    ]
+  },
+  "show_variant_icon_template": {
+    "grids": [],
+    "columns": [
+      "att1HasVariantFormula"
+    ],
+    "tooltip": [],
+    "template": "",
+    "templateUrl": "/propRenderTemplates/showVariantConditionIcon.html",
+    "renderFunction": "",
+    "headerTemplateUrl": "/propRenderTemplates/Att1PropertyIconRendererForHeader.html",
+    "dependentServices": []
+  },
+  "attr_release_status_template": {
+    "grids": [],
+    "columns": [
+      "REF(att1SourceAttribute,WorkspaceObject).release_status_list",
+      "REF(att1SourceAttribute,Att0MeasurableAttribute).release_status_list"
+    ],
+    "tooltip": [
+      "object_name",
+      "date_released"
+    ],
+    "template": "",
+    "templateUrl": "/propRenderTemplates/releaseStatusRenderer.html",
+    "renderFunction": "",
+    "headerTemplateUrl": "/propRenderTemplates/Att1PropertyIconRendererForHeader.html",
+    "dependentServices": [
+      "soa/kernel/clientDataModel"
+    ]
+  },
+  "Measurements_attach_file": {
+    "grids": [],
+    "columns": [
+      "GRMREL(Att0HasMeasurementFile,Dataset).secondary_object"
+    ],
+    "tooltip": [],
+    "template": "",
+    "templateUrl": "",
+    "renderFunction": "attachFileColRenderer",
+    "deps": "propRenderTemplates/measurementsTableColRenderer",
+    "dependentServices": []
+  }
+}

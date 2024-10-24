@@ -1,0 +1,64 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-list.directive",
+        "js/aw-model-icon.directive",
+        "js/aw-clickable-title.directive",
+        "js/aw-pic.directive"
+    ],
+
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        },
+        "item": {
+            "type": "object"
+        }
+    },
+    "actions": {
+        "removeFromEndItems": {
+            "actionType": "JSFunction",
+            "method": "removeFromEndItems",
+            "inputData": {
+                "data": "{{subPanelContext}}",
+                "vmo": "{{data.eventMap['Crt1EndItemList.removeFromEndItems1'].vmo}}"
+            },
+            "deps": "js/stickyPanelService"
+        },
+        "refreshStickyPanelList": {
+            "actionType": "dataProvider",
+            "method": "stickyPanelList"
+        }
+    },
+    "onEvent": [ {
+            "eventId": "Refresh.stickyPanel",
+            "action": "refreshStickyPanelList"
+        },
+        {
+            "eventId": "Crt1EndItemList.removeFromEndItems1",
+            "action": "removeFromEndItems",
+            "cacheEventData": true
+        }
+    ],
+    "data": {
+        "icon": {
+            "dbValue": "{{props.item.typeIconURL}}"
+        },
+        "endItems": {
+            "isArray": "true",
+            "dbValue": []
+        }
+    },
+    "dataProviders": {
+        "stickyPanelList": {
+            "response": "{{subPanelContext.endItems1.dbValue}}",
+            "selectionModelMode": "single",
+            "commandsAnchor": "com.siemens.splm.clientfx.ui.modelObjectListActionCommands.end1"
+        }
+    },
+    "i18n": {
+        "Remove": [
+            "AnalysisRequestCommandPanelsMessages"
+        ]
+    }
+}

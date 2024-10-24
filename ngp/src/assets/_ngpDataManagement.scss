@@ -1,0 +1,53 @@
+// @<COPYRIGHT>@
+// ==================================================
+// Copyright 2021.
+// Siemens Product Lifecycle Management Software Inc.
+// All Rights Reserved.
+// ==================================================
+// @<COPYRIGHT>@
+
+.aw-ngp-MoveProcessMainPanel{
+    line-height: $global_line_height;
+    font-size: $fontsize_large;
+
+    >div{
+        margin-bottom: 8px;
+    }
+
+    .aw-ngp-moveProcessConsequencePanel{
+        padding-left: 16px;
+
+        >div{
+            display: list-item;
+            list-style-type: disc;
+            list-style-position: outside;
+            margin-bottom: 8px;
+        }
+    }
+}
+
+.aw-ngp-assignmentMappingFailureProcessName {
+    font-size: $fontsize_x_large;
+    margin-bottom: 4px;
+    margin-top: 24px;
+}
+
+
+.aw-ngp-assignmentMappingFailures {
+    @include flexbox();
+    @include flex-direction(row);
+    height: 19px;
+
+    .aw-ngp-assignmentMappingFailuresIcon {
+        padding-top: $padding_xsmall;
+        margin-right: $margin_small;
+        svg {
+            width: 16px;
+            height: 16px;
+        }
+    }
+
+    .aw-ngp-assignmentMappingFailuresMsg {
+        font-size: $fontsize_large;
+    }
+}

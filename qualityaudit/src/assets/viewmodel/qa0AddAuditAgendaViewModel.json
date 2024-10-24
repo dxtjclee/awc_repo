@@ -1,0 +1,165 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-xrt.directive",
+        "js/aw-i18n.directive",
+        "js/aw-button.directive"
+    ],
+    "actions": {
+        "createObjects": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2008-06-DataManagement",
+            "method": "createObjects",
+            "inputData": {
+                "input": "{{function:getCreateObjectInfo}}"
+            },
+            "outputData": {
+                "createdObject": "output[0].objects[0]",
+                "serviceData": "ServiceData",
+                "selectedNodes": "output[0].objects"
+            },
+            "events": {
+                "success": [ {
+                    "name": "afterCreateObjects"
+                } ]
+            },
+            "deps": "js/qa0AuditUtils"
+        },
+        "createRelation": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "createRelations",
+            "inputData": {
+                "input": [ {
+                    "primaryObject": "{{ctx.xrtSummaryContextObject}}",
+                    "secondaryObject": "{{data.createdObject}}",
+                    "relationType": "Qa0QualityAuditAgendaRel",
+                    "clientId": "",
+                    "userData": {
+                        "uid": "AAAAAAAAAAAAAA",
+                        "type": "unknownType"
+                    }
+                } ]
+            },
+            "events": {
+                "success": [ {
+                        "name": "complete",
+                        "condition": "!subPanelContext.panelPinned",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    },
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{ctx.xrtSummaryContextObject}}"
+                            ]
+                        }
+                    }
+                ],
+                "failure": [ {
+                    "name": "complete",
+                    "condition": "!subPanelContext.panelPinned",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            }
+        },
+        "setActiveView":{
+            "actionType": "JSFunction",
+            "method": "resetActiveView",
+            "inputData": {
+                "stateName": "{{data.activeState}}",
+                "destPanelId": "AddObjectPrimarySub"
+            },
+            "outputData": {
+                "activeState": ""
+            },
+            "deps": "js/addObjectUtils"
+        }
+    },
+    "ctx": {
+        "xrtSummaryContextObject": {
+            "type": "object"
+        }
+    },
+    "data": {
+        "_relationMap": {
+            "Qa0QualityAuditAgenda": ["Qa0QualityAuditAgendaRel"]
+        },
+        "selectedType": {
+            "type": "STRING",
+            "dbValue": "Qa0QualityAuditAgenda"
+        },
+        "addPanelState": {
+            "initialValues": {
+                "creationType": "",
+                "createdObject": "",
+                "sourceObjects": "",
+                "selectedTab": "",
+                "isDatasetCreate": ""
+            },
+            "meta": {}
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "AddObjectPrimarySub",
+                "context": {}
+            },
+            "meta": {}
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "onEvent": [ {
+            "eventId": "afterCreateObjects",
+            "action": "createRelation"
+        }
+    ],
+    "messages": {},
+    "conditions": {
+        "validAgendaEntry": {
+            "expression": "data.qa0StartDate.dbValue > 0 && data.qa0EndDate.dbValue > 0 && data.qa0Activity.dbValue"
+        }
+    },
+    "functions": {
+        "getCreateObjectInfo": {
+            "functionName": "getCreateObjectInfo",
+            "parameters": [
+                "{{data}}",
+                "{{editHandlers.addPanelEditHandler}}"
+            ]
+        }
+    },
+    "i18n": {
+        "qa0Add": [
+            "qualityauditMessages"
+        ],
+        "BACK_BUTTON_TITLE":["BaseMessages"]
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    }
+}

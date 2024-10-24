@@ -1,0 +1,23 @@
+{
+  "slots": {
+    "Prm1ParametersCompareHeaderView": {
+      "name": "aw_headerTitle",
+      "view": "Prm1ParametersCompareHeader",
+      "activeWhen": {
+        "condition": "conditions.isCompareSublocation"
+      }
+    },
+    "Prm1ParametersCompareTaskbarView": {
+      "name": "aw_taskBar",
+      "view": "Prm1ParametersCompareTaskbar",
+      "activeWhen": {
+        "condition": "conditions.isCompareSublocation"
+      }
+    }
+  },
+  "conditions": {
+    "isCompareSublocation": {
+      "expression": "ctx.locationContext['ActiveWorkspace:Location']==='parameterComapreTaskRoot'"
+    }
+  }
+}

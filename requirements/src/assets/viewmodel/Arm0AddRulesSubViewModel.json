@@ -1,0 +1,301 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports":
+    [
+        "js/aw-panel-body.directive",
+        "js/aw-listbox.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/aw-textbox.directive",
+        "js/visible-when.directive"
+],
+    "actions":
+    {
+        "reveal": {
+            "actionType": "JSFunction",
+            "method": "revealArm0AddRulesSub",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "outputData": {
+                "addConditionList": "addConditionList",
+                "operationTypeValues":"operationTypeValues",
+                "operationSubType":"operationSubType",
+                "importType":"importType",
+                "dispPropRules":"dispPropRules",
+                "operationValues":"operationValues",
+                "style":"style",
+                "operationSubTypeValues":"operationSubTypeValues",
+                "operationType":"operationType"
+
+
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+
+        "addRuleWordMatch":
+        {
+            "actionType": "JSFunction",
+            "method": "addRule",
+            "inputData":
+            {
+                "data": "{{data}}",
+                "sharedData": "{{subPanelContext.sharedData}}",
+                "newOverrideType": {
+                                      "cellHeader1":"{{data.importType.uiValue}}",
+                                      "cellHeader2":"{{data.operationType.uiValue}}",
+                                      "cellHeader3":"{{data.operationSubType.uiValue}}",
+                                      "cellHeader4":"{{data.operationValues.dbValue}}",
+                                      "cellHeader1InVal":"{{data.importType.dbValue}}",
+                                      "cellHeader2InVal":"{{data.operationType.dbValue}}",
+                                      "cellHeader3InVal":"{{data.operationSubType.dbValue}}",
+                                      "cellHeader4InVal":"{{data.operationValues.dbValue}}"
+                                    }
+            },
+             "events": {
+                "success": [
+                    {
+                        "name":"ImportFromOffice.refreshImportRuleList",
+                        "eventData":
+                        {
+                            "destPanelId": "Arm0ImportFromOfficeSubViewModel"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "addRuleStyleMatch":
+        {
+            "actionType": "JSFunction",
+            "method": "addRule",
+            "inputData":
+            {
+                "data": "{{data}}",
+                "sharedData": "{{subPanelContext.sharedData}}",
+                "newOverrideType": {
+                                      "cellHeader1":"{{data.importType.uiValue}}",
+                                      "cellHeader2":"{{data.operationType.uiValue}}",
+                                      "cellHeader3":"{{data.style.uiValue}}",
+                                      "cellHeader1InVal":"{{data.importType.dbValue}}",
+                                      "cellHeader2InVal":"{{data.operationType.dbValue}}",
+                                      "cellHeader3InVal":"{{data.style.dbValue}}"
+                                    }
+            },
+             "events": {
+                "success": [
+                    {
+                        "name":"ImportFromOffice.refreshImportRuleList",
+                        "eventData":
+                        {
+                            "destPanelId": "Arm0ImportFromOfficeSubViewModel"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "updateRuleWordMatch":
+        {
+            "actionType": "JSFunction",
+            "method": "updateRule",
+            "inputData":
+            {
+                "data": "{{data}}",
+                "newOverrideType": {
+                                      "cellHeader1":"{{data.importType.uiValue}}",
+                                      "cellHeader2":"{{data.operationType.uiValue}}",
+                                      "cellHeader3":"{{data.operationSubType.uiValue}}",
+                                      "cellHeader4":"{{data.operationValues.dbValue}}",
+                                      "cellHeader1InVal":"{{data.importType.dbValue}}",
+                                      "cellHeader2InVal":"{{data.operationType.dbValue}}",
+                                      "cellHeader3InVal":"{{data.operationSubType.dbValue}}",
+                                      "cellHeader4InVal":"{{data.operationValues.dbValue}}"
+                                    },
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+             "events": {
+                "success": [
+                    {
+                        "name":"ImportFromOffice.refreshImportRuleList",
+                        "eventData":
+                        {
+                            "destPanelId": "Arm0ImportFromOfficeSubViewModel"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "updateRuleStyleMatch":
+        {
+            "actionType": "JSFunction",
+            "method": "updateRule",
+            "inputData":
+            {
+                "data": "{{data}}",
+                "newOverrideType": {
+                                      "cellHeader1":"{{data.importType.uiValue}}",
+                                      "cellHeader2":"{{data.operationType.uiValue}}",
+                                      "cellHeader3":"{{data.style.uiValue}}",
+                                      "cellHeader1InVal":"{{data.importType.dbValue}}",
+                                      "cellHeader2InVal":"{{data.operationType.dbValue}}",
+                                      "cellHeader3InVal":"{{data.style.dbValue}}"
+                                    },
+               "sharedData": "{{subPanelContext.sharedData}}"
+
+            },
+             "events": {
+                "success": [
+                    {
+                        "name":"ImportFromOffice.refreshImportRuleList",
+                        "eventData":
+                        {
+                            "destPanelId": "Arm0ImportFromOfficeSubViewModel"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Arm0ImportFromWord"
+        }
+    },
+
+    "lifecycleHooks": {
+        "onMount": "reveal"
+    },
+    "onEvent": [
+        {
+            "eventId": "awPanel.navigate",
+            "criteria": {
+                "destPanelId": "Arm0AddRulesSub"
+            },
+            "action": "reveal"
+        }
+    ],
+
+    "data":
+    {
+        "operationType":
+        {
+            "displayName": "{{i18n.If}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "hasLov": "true"
+        },
+        "operationTypeValues":
+        {
+            "type": "STRING",
+            "dbValue":
+            [
+                {"propDisplayValue" :"{{i18n.wordContains}}", "dispValue" :"{{i18n.wordContains}}", "propInternalValue" : "Word_Contains"},
+                {"propDisplayValue" :"{{i18n.hasStyle}}", "dispValue" :"{{i18n.hasStyle}}", "propInternalValue" : "Has_Style"}
+            ]
+        },
+        "operationSubType":
+        {
+            "displayName": "{{i18n.match}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "hasLov": "true",
+            "labelPosition": "NO_PROPERTY_LABEL"
+        },
+        "operationSubTypeValues":
+        {
+            "type": "STRING",
+            "dbValue":
+            [
+                {"propDisplayValue" :"{{i18n.exactMatch}}","dispValue" :"{{i18n.exactMatch}}", "propInternalValue" : "Exact_Match"},
+                {"propDisplayValue" :"{{i18n.partialMatch}}","dispValue" :"{{i18n.partialMatch}}", "propInternalValue" : "Partial_Match"}
+            ]
+        },
+        "importType":
+        {
+            "displayName": "{{i18n.ImportType}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "hasLov": true
+        },
+        "operationValues":
+        {
+            "displayName": "{{i18n.operationValuesTitle}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "isEditable": "true"
+        },
+        "style":
+        {
+            "displayName": "{{i18n.style}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "hasLov": "true"
+        },
+        "styleValues":
+        {
+            "type": "STRING",
+            "dbValue":
+            [
+                {"propDisplayValue" :"Heading 1", "dispValue" :"Heading 1", "propInternalValue" : "Heading 1"},
+                {"propDisplayValue" :"Heading 2", "dispValue" :"Heading 2", "propInternalValue" : "Heading 2"},
+                {"propDisplayValue" :"Heading 3", "dispValue" :"Heading 3", "propInternalValue" : "Heading 3"},
+                {"propDisplayValue" :"Heading 4", "dispValue" :"Heading 4", "propInternalValue" : "Heading 4"},
+                {"propDisplayValue" :"Heading 5", "dispValue" :"Heading 5", "propInternalValue" : "Heading 5"},
+                {"propDisplayValue" :"Heading 6", "dispValue" :"Heading 6", "propInternalValue" : "Heading 6"},
+                {"propDisplayValue" :"Heading 7", "dispValue" :"Heading 7", "propInternalValue" : "Heading 7"},
+                {"propDisplayValue" :"Heading 8", "dispValue" :"Heading 8", "propInternalValue" : "Heading 8"},
+                {"propDisplayValue" :"Heading 9", "dispValue" :"Heading 9", "propInternalValue" : "Heading 9"}
+            ]
+        }
+    },
+    "ctx": {
+        "Arm0AddRulesSub.selectedRule": null
+    },
+    "conditions":
+    {
+        "isWordContainsRule":
+        {
+            "expression": "data.operationType.dbValue === 'Word_Contains'"
+        },
+        "isHasStyleRule":
+        {
+            "expression": "data.operationType.dbValue === 'Has_Style' && !subPanelContext.sharedData.RULE_CONST"
+        },
+        "isWordContainsAddRuleVisible":
+        {
+            "expression": "data.operationType.dbValue === 'Word_Contains' && !subPanelContext.sharedData.RULE_CONST"
+        },
+        "isWordContainsAddRuleEnableCond":
+        {
+            "expression": "conditions.isWordContainsAddRuleVisible && data.operationValues.dbValue.length > 0"
+        },
+        "isWordContainsUpdateRuleVisible":
+        {
+            "expression": "data.operationType.dbValue === 'Word_Contains' && subPanelContext.sharedData.RULE_CONST"
+        },
+        "isWordContainsUpdateRuleEnableCond":
+        {
+            "expression": "conditions.isWordContainsUpdateRuleVisible && data.operationValues.dbValue.length > 0"
+        },
+        "isHasStyleUpdateRule":
+        {
+            "expression": "data.operationType.dbValue === 'Has_Style' && subPanelContext.sharedData.RULE_CONST"
+        }
+
+    },
+    "i18n":
+    {
+        "Add": [ "RequirementsCommandPanelsMessages"],
+        "ImportType": [ "RequirementsCommandPanelsMessages"],
+        "If":[ "RequirementsCommandPanelsMessages"],
+        "operationValuesTitle":[ "RequirementsCommandPanelsMessages"],
+        "wordContains":[ "RequirementsCommandPanelsMessages"],
+        "hasStyle":[ "RequirementsCommandPanelsMessages"],
+        "exactMatch":[ "RequirementsCommandPanelsMessages"],
+        "partialMatch":[ "RequirementsCommandPanelsMessages"],
+        "update": [ "RequirementsCommandPanelsMessages"],
+        "style":[ "RequirementsCommandPanelsMessages"],
+        "match":[ "RequirementsCommandPanelsMessages"]
+    }
+}

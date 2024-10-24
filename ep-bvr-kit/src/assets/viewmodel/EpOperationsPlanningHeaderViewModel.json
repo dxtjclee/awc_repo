@@ -1,0 +1,27 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "populateOperationsHeaderAction": {
+            "actionType": "JSFunction",
+            "method": "populateOperationsHeader",
+            "inputData": {
+                "column": "{{props.column}}"
+            },
+            "outputData": {
+                "total": "total",
+                "weightedTimeTotal": "totalWeighted",
+                "pvColumnTotal": "pvColumnTotal"
+            },
+            "deps": "js/epOperationsPlanningGridService"
+        }
+    },
+    "data": {},
+    "i18n": {
+        "total": [
+            "PlanningMessages"
+        ]
+    },
+    "lifecycleHooks": {
+        "onMount": "populateOperationsHeaderAction"
+    }
+}

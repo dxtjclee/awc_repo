@@ -1,0 +1,28 @@
+<aw-command-panel caption="i18n.AddTitle" context="subPanelContext">
+    <div class="aw-layout-flexColumn" show-when="conditions.isActiveStateAddPanel">
+        <aw-add target-object='ctx.reportContext.target'
+            relations="{{ctx.reportContext.relations}}"
+            include-types="{{ctx.reportContext.includeTypes}}"
+            type-filter="{{ctx.reportContext.typeFilter}}"
+            visible-tabs="new,palette,search"
+            add-panel-state="fields.addPanelState"
+            sub-panel-context="{ ...subPanelContext, triggerCreate: data.triggerCreate,showDataSetUploadPanel:true}"
+            xrt-state="data.xrtState"
+            edit-handler="editHandlers.addPanelEditHandler"
+            active-state="data.activeState"
+            project-state="data.projectState">
+        </aw-add>
+        <aw-panel-footer>
+            <!-- panel-footer button for New tab -->
+            <aw-button default="true" action="createObject" enable-when="!ctx.addItemEventProgressing" visible-when="formProp.attributes.valid && conditions.isNewTabAddButtonVisible">
+                <aw-i18n>i18n.AddTitle</aw-i18n>
+            </aw-button>
+            <!-- panel-footer button for Palette and Search tab -->
+            <aw-button default="true" action="createRelationForPaletteOrSearch" visible-when="conditions.isPaletteSearchTabAddButtonVisible" >
+                <aw-i18n>i18n.AddTitle</aw-i18n>
+            </aw-button>
+        </aw-panel-footer>
+    </div>
+
+    <aw-add-navigate active-state="data.activeState" project-state="data.projectState" action="actions.setActiveView"></aw-add-navigate>
+ </aw-command-panel>

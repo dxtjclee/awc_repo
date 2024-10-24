@@ -1,0 +1,109 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data": {
+        "source": null,
+        "numberOfTargets": 1,
+        "compareProperties": "",
+        "compareMultipleMismatchesText": "",
+        "isUpdating": false
+    },
+    "actions": {
+        "initializeCompareData": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "getSourceObjectAndNumberOfTargets"
+                },
+                {
+                    "action": "loadProperties"
+                }
+            ]
+        },
+        "getSourceObjectAndNumberOfTargets": {
+            "actionType": "JSFunction",
+            "method": "getSourceObjectAndNumberOfTargets",
+            "inputData": {
+                "target": "{{subPanelContext.target}}",
+                "message": "{{i18n.compareMultipleMismatches}}"
+            },
+            "outputData": {
+                "source": "source",
+                "numberOfTargets": "numberOfTargets",
+                "compareMultipleMismatchesText": "compareMultipleMismatchesText"
+            },
+            "deps": "js/epAllocationCompareService"
+        },
+        "loadProperties": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadProperties",
+            "inputData": {
+                "sourceUid": "{{data.source}}",
+                "targetUid": "{{subPanelContext.target}}"
+            },
+            "outputData": {
+                "compareProperties": ""
+            },
+            "deps": "js/epAllocationCompareService"
+        },
+        "update": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "setUpdatingFlag"
+                },
+                {
+                    "action": "propagateChanges"
+                },
+                {
+                    "action": "closePopupWindow"
+                }
+            ]
+        },
+        "setUpdatingFlag": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "isUpdating": true
+            },
+            "outputData": {
+                "isUpdating": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "propagateChanges": {
+            "actionType": "JSFunctionAsync",
+            "method": "propagateChanges",
+            "inputData": {
+                "sourceUid": "{{data.source}}",
+                "targetUid": "{{subPanelContext.target}}",
+                "message": "{{i18n.compareUpdatedSuccessfully}}"
+            },
+            "deps": "js/epAllocationCompareService"
+        },
+        "closePopupWindow": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "initializeCompareData"
+    },
+    "i18n": {
+        "compareSubTitleSource": ["allocationIndicationMessages"],
+        "compareSubTitleTarget": ["allocationIndicationMessages"],
+        "compareMultipleMismatches": ["allocationIndicationMessages"],
+        "compareCancel": ["allocationIndicationMessages"],
+        "compareUpdate": ["allocationIndicationMessages"],
+        "compareUpdatedSuccessfully": ["allocationIndicationMessages"],
+        "compareProperty": ["allocationIndicationMessages"]
+    }
+}

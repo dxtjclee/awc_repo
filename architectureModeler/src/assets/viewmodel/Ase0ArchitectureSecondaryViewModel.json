@@ -1,0 +1,65 @@
+{
+    "schemaVersion": "1.0.0",
+
+    "actions": {
+        "getActiveSpiltPanel": {
+            "actionType": "JSFunctionAsync",
+            "method": "getActiveSpiltPanel",
+            "inputData": {
+                "commandContext": "{{props.primarySelection}}",
+                "ctx": "{{ctx}}"
+            },
+            "deps": "js/Ase0ArchitectureSecondaryViewService",
+            "outputData": {
+                "activeSplitPanelId": "activeSplitPanelID"
+            }
+        },
+        "clearSecondarySelection": {
+            "actionType": "JSFunction",
+            "method": "clearSelection",
+            "inputData": {
+                "secondarySelection": "{{props.secondarySelection}}"
+            },
+            "deps": "js/Ase0ArchitectureSecondaryViewService"
+        },
+        "updateSplitPanelContent": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "clearSecondarySelection"
+                },
+                {
+                    "action": "getActiveSpiltPanel"
+                }
+            ]
+        }
+    },
+
+    "data" : {
+        "activeSplitPanelId" : null
+    },
+
+    "lifecycleHooks": {
+        "onMount": "updateSplitPanelContent",
+        "onUpdate": [ {
+            "action": "updateSplitPanelContent",
+            "observers": [ "props.primarySelection.selected" ]
+        }],
+        "onUnmount": "clearSecondarySelection"
+    },
+
+    "props": {
+
+        "page-state": {
+            "type": "object"
+        },
+        "primary-selection": {
+            "type": "object"
+        },
+        "secondary-selection": {
+            "type": "object"
+        },
+        "sub-panel-context": {
+            "type": "object"
+        }
+    }
+}

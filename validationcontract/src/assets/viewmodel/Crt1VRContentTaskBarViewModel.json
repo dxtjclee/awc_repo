@@ -1,0 +1,155 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "clickableChip": [ {
+                "chipType": "BUTTON",
+                "iconId": "indicatorInformationSuccess16",
+                "labelDisplayName": "{{i18n.Pass}}"
+            },
+            {
+                "chipType": "BUTTON",
+                "iconId": "indicatorNo16",
+                "labelDisplayName": "{{i18n.Fail}}"
+            },
+            {
+                "chipType": "BUTTON",
+                "iconId": "indicatorCross16",
+                "labelDisplayName": "{{i18n.Blocked}}"
+            },
+            {
+                "chipType": "BUTTON",
+                "iconId": "indicatorWarning16",
+                "labelDisplayName": "{{i18n.Caution}}"
+            }
+        ]
+    },
+    "actions": {
+        "loadContentTastBar": {
+            "actionType": "JSFunction",
+            "method": "loadContentTastBar",
+            "inputData": {},
+
+            "outputData": {
+                "vrTaskBarContext": ""
+            },
+            "deps": "js/Crt1VRContentService"
+        },
+        "passAction": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "passAction"
+                } ]
+            }
+
+        },
+        "failAction": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "failAction"
+                } ]
+            }
+
+        },
+        "blockedAction": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "blockedAction"
+                } ]
+            }
+
+        },
+        "cautionAction": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "cautionAction"
+                } ]
+            }
+
+        },
+        "nextAction": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "nextAction"
+                } ]
+            }
+
+        },
+        "previousAction": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "previousAction"
+                } ]
+            }
+
+        },
+        "goBackAction": {
+            "actionType": "JSFunction",
+            "method": "goBack",
+            "deps": "js/locationNavigation.service"
+        },
+        "finishExecution": {
+            "actionType": "JSFunction",
+            "method": "finishExecution",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "goBackAction"
+                } ]
+            },
+            "deps": "js/Crt1VRPWAForExecuteTreeService"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "loadContentTastBar"
+    },
+    "onEvent": [
+        {
+            "eventId": "goBackAction",
+            "action": "goBackAction"
+
+        }
+     ],
+    "messages": {
+    },
+    "i18n": {
+        "Previous": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Next": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Finish": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Pass": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Fail": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Blocked": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Caution": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Completed": [
+            "AnalysisRequestCommandPanelsMessages"
+        ]
+    }
+
+}

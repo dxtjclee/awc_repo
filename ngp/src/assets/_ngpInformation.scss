@@ -1,0 +1,73 @@
+// @<COPYRIGHT>@
+// ==================================================
+// Copyright 2020.
+// Siemens Product Lifecycle Management Software Inc.
+// All Rights Reserved.
+// ==================================================
+// @<COPYRIGHT>@
+
+.aw-ngp-informationDetailsTitle {
+    font-size: $fontsize_2x_large;
+    font-weight: $bold_font_weight;
+}
+
+.aw-ngp-attachmentsPanel {
+    padding: $padding_normal 0 $padding_normal $padding_normal;
+    width: 100%;
+
+    .aw-base-scrollPanel.sw-column{
+        padding-right: $padding_normal;
+
+        .aw-layout-panelSection{
+            margin-bottom:$margin_normal;
+            display: block;
+
+            .aw-layout-panelSectionContent{
+                padding-top: $padding_normal;
+            }
+        }
+
+        .aw-mfe-typeAndNameCellList{
+            padding-left:$padding_xlarge;
+            padding-right: $padding_small;
+            .aw-widgets-cellListItem{
+                &:hover{
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .aw-ngp-attachmentsPanelOverview{
+
+            margin-bottom:$margin_normal;
+            height: rem-calc(32);
+            flex: 0 0 auto;
+
+            ul{
+                height: inherit;
+
+                li{
+                    @include flexbox();
+                    @include flex-direction(row);
+                    padding-left: rem-calc(35);
+                    padding-top: rem-calc(9);
+                    padding-bottom: rem-calc(9);
+                    width: auto;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    font-size: $fontsize_normal;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    cursor: pointer;
+                    height: inherit;
+                    border:none;
+                    letter-spacing: 0.5px;
+                }
+            }
+
+        }
+    }
+}
+
+

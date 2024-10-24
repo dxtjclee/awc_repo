@@ -1,0 +1,35 @@
+<aw-panel-body>
+    <aw-panel-section title="i18n.specType" visible-when="conditions.isTypeToAdd">
+        <aw-listbox exist-when="subPanelContext.sharedData.typePropInfos" prop="data.objectType" list="data.objectTypeList.dbValues" action="getPropertiesFromReqType"></aw-listbox>
+        <aw-textbox prop="data.filterBoxForType"></aw-textbox>
+        <aw-scrollpanel>
+        <div aw-repeat="prop : data.typePropertiesToSelect">
+            <aw-checkbox prop="prop" action="checkOrUncheckForTypeProperties"></aw-checkbox>
+        </div>
+    </aw-scrollpanel>
+    </aw-panel-section>
+    <aw-panel-section title="i18n.createTraceLinkTitle" visible-when="conditions.isTraceLinkToAdd">
+        <aw-listbox exist-when="subPanelContext.sharedData.typePropInfos" prop="data.traceLinkType" list="data.tracelinkTypeList.dbValues" action="getPropertiesFromTraceLink"></aw-listbox>
+        <aw-textbox prop="data.filterBoxForTraceLink"></aw-textbox>
+        <aw-scrollpanel>
+        <div aw-repeat="prop : data.tracelinkPropertiesToSelect">
+            <aw-checkbox prop="prop" action="checkOrUncheckForTraceLinkProperties"></aw-checkbox>
+        </div>
+    </aw-scrollpanel>
+    </aw-panel-section>
+</aw-panel-body>
+
+<aw-panel-footer>
+    <aw-button action="addTypes" visible-when="conditions.isTypeToAdd && !conditions.isTypeToUpdate && data.objectTypeList.dbValues.length > 0">
+        <aw-i18n>i18n.Add</aw-i18n>
+    </aw-button>
+    <aw-button action="addTraceLinks" visible-when="conditions.isTraceLinkToAdd && !conditions.isTraceLinkToUpdate && data.tracelinkTypeList.dbValues.length > 0">
+        <aw-i18n>i18n.Add</aw-i18n>
+    </aw-button>
+    <aw-button action="addTypes" visible-when="conditions.isTypeToAdd && conditions.isTypeToUpdate ">
+        <aw-i18n>i18n.update</aw-i18n>
+    </aw-button>
+    <aw-button action="addTraceLinks" visible-when="conditions.isTraceLinkToAdd && conditions.isTraceLinkToUpdate">
+        <aw-i18n>i18n.update</aw-i18n>
+    </aw-button>
+</aw-panel-footer>

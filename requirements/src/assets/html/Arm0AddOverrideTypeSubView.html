@@ -1,0 +1,8 @@
+<aw-panel-body>
+    <aw-listbox prop="data.objectType" list="subPanelContext.sharedData.specEleRevSubTypesList"></aw-listbox>
+    <aw-listbox prop="data.objectTemplate" visible-when="subPanelContext.previousActivePage !=='Arm0ExportToRoundTripWordDocument'" list="subPanelContext.sharedData.objectTemplateList"></aw-listbox>
+    <aw-listbox prop="data.htmlTemplate" visible-when="subPanelContext.previousActivePage ==='Arm0ExportToRoundTripWordDocument'" list="subPanelContext.sharedData.htmlTemplateList"></aw-listbox>
+</aw-panel-body>
+<aw-panel-footer>
+    <aw-button action="addOverride"><aw-i18n>i18n.Add</aw-i18n></aw-button>
+</aw-panel-footer>

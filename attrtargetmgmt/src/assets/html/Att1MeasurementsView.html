@@ -1,0 +1,55 @@
+<aw-panel-body>
+    <div exist-when="data.isShowGMMProps === true">
+        <div class="aw-layout-panelSectionTitle aw-attrtargetmgmt-measurementsHeader">
+            <span>{{i18n.Measurements}}</span>
+            <span exist-when="data.isShowGMMProps === true">
+            <span class="aw-attrtargetmgmt-headerProperty">{{data.propertyDisplayNames.Goal}} : {{data.goalPropValue}}</span>
+            <span class="aw-attrtargetmgmt-headerProperty">{{data.propertyDisplayNames.Min}} : {{data.minPropValue}}</span>
+            <span class="aw-attrtargetmgmt-headerProperty">{{data.propertyDisplayNames.Max}} : {{data.maxPropValue}}</span>
+            </span>
+        </div>
+        <div class="sw-row">
+            <aw-toolbar class="aw-attrtargetmgmt-toolbar" second-anchor="aw_measurementsTableOptCommandBar" orientation="HORIZONTAL" context="{...subPanelContext, dataProvider:dataProviders.Att1MeasuredValuesDataProvider, engrTable:fields.engrTable}" overflow="false"></aw-toolbar>
+        </div>
+        <div class="sw-row">
+            <aw-splm-table gridid="MeasurementsTable"></aw-splm-table>
+        </div>
+    </div>
+    <aw-command-panel-section caption="{{i18n.Measurements}}" collapsed="false" exist-when="data.isShowGMMProps !== true">
+
+        <div class="sw-row">
+            <aw-toolbar class="aw-attrtargetmgmt-toolbar" second-anchor="aw_measurementsTableOptCommandBar" orientation="HORIZONTAL" context="{...subPanelContext, dataProvider:dataProviders.Att1MeasuredValuesDataProvider, engrTable:fields.engrTable}" overflow="false"></aw-toolbar>
+        </div>
+        <div class="sw-row">
+            <aw-splm-table gridid="MeasurementsTable"></aw-splm-table>
+        </div>
+    </aw-command-panel-section>
+    <div class="aw-layout-panelSectionTitle aw-attrtargetmgmt-measurementsHeader" visible-when="fields.engrTable.measurementTable && fields.engrTable.measurementTable.isSelectedMeasurementContainsComlexData === true && fields.engrTable.measurementTable.selectedMeasurement && fields.engrTable.measurementTable.selectedMeasurement.modelType.typeHierarchyArray.indexOf('Att0MeasureValue') > -1">
+        <span>{{i18n.ValuesAndCharts}}</span>
+    </div>
+    <div class="aw-attrtargetmgmt-measurementsData h-4" visible-when="fields.engrTable.measurementTable && fields.engrTable.measurementTable.isSelectedMeasurementContainsComlexData === true && fields.engrTable.measurementTable.selectedMeasurement && fields.engrTable.measurementTable.selectedMeasurement.modelType.typeHierarchyArray.indexOf('Att0MeasureValue') > -1">
+        <div class="sw-row">
+            <aw-toolbar class="aw-attrtargetmgmt-toolbar" first-anchor="aw_engrTableCommandBar" second-anchor="aw_engrTableOptCommandBar" orientation="HORIZONTAL" context="{...subPanelContext, dataProvider:dataProviders.Att1MeasuredValuesDataProvider, engrTable:fields.engrTable,isShowValuesTable:data.isShowValuesTable,isShowChart:data.isShowChart}"></aw-toolbar>
+        </div>
+        <div class="sw-row">
+            <div class="sw-column" >
+                <div id='valueTable' exist-when="data.isShowValuesTable===true && (data.isShowChart===false || data.isShowChart===undefined)"></div>
+            </div>
+        </div>
+        <div class="sw-row" id='complexParameterChart' exist-when="(data.isShowValuesTable===false || data.isShowValuesTable===undefined)  && data.isShowChart===true">
+            <aw-chart chart-provider="data.chartProviders.lineChartDataProvider"></aw-chart>
+        </div>
+        <div class="sw-row" exist-when="data.isShowValuesTable===true && data.isShowChart===true">
+            <div class="sw-column w-5">
+                <div id='valueTable'>
+                </div>
+            </div>
+            <aw-splitter direction="VERTICAL" >
+            </aw-splitter>
+            <div class="sw-column w-7" id='complexParameterChart'>
+                <aw-chart chart-provider="data.chartProviders.lineChartDataProvider"></aw-chart>
+            </div>
+        </div>
+    </div>
+
+</aw-panel-body>

@@ -1,0 +1,40 @@
+    <aw-panel-body>
+        <aw-radiobutton prop="data.exportType" list="data.exportTypeValues.dbValue"></aw-radiobutton>
+        <aw-panel-section caption="i18n.export_options">
+            <aw-checkbox prop="data.withoutComment"></aw-checkbox>
+            <aw-checkbox prop="data.includeParagraphNumbering"></aw-checkbox>
+            <aw-checkbox prop="data.isIncludeTOC"></aw-checkbox>
+            <aw-checkbox prop="data.isIncludeTOI"></aw-checkbox>
+            <aw-checkbox prop="data.isIncludeLOT"></aw-checkbox>
+            <aw-checkbox prop="data.addWaterMark" action="createInstanceWatermark"></aw-checkbox>
+            <aw-label prop="data.label" visible-when="conditions.isCheckboxChecked"></aw-label>
+            <div visible-when="conditions.isCheckboxChecked" class="aw-requirements-watermarkEditor">
+                <div id="{{data.ckEditorIdWaterMark}}" name="{{data.ckEditorIdWaterMark}}"></div>
+            </div>
+            <aw-radiobutton prop="data.layout" visible-when="conditions.isCheckboxChecked" list="data.layoutValues.dbValue"></aw-radiobutton>
+            <aw-checkbox prop="data.isLockBodyContent" visible-when="data.exportType.dbValue!='readOnly'"></aw-checkbox>
+            <aw-checkbox prop="data.isEditStructure" visible-when="data.exportType.dbValue!='readOnly'"></aw-checkbox>
+            <aw-listbox prop="data.headerFooter" list="data.headerFooterList.dbValues"></aw-listbox>
+            <aw-radiobutton prop="data.exportOption" list="data.exportOptionValues.dbValue" class="sw-column"></aw-radiobutton>
+            <div visible-when="conditions.visibleExportPropertyOption">
+                <aw-listbox exist-when="data.typePropInfos" prop="data.objectType" list="data.objectTypeList.dbValues" action="getPropertiesFromReqType"></aw-listbox>
+                <aw-textbox prop="data.filterBoxForType"></aw-textbox>
+                <aw-scrollpanel>
+                    <div aw-repeat="prop : data.typePropertiesToSelect">
+                        <aw-checkbox prop="prop" action="checkOrUncheckTypeProperties"></aw-checkbox>
+                    </div>
+                </aw-scrollpanel>
+            </div>
+        </aw-panel-section>
+        <aw-command-panel-section caption="i18n.overrideTypeTitle" anchor="data.exportCommands" context="subPanelContext" visible-when="conditions.toVisibleOverrideTypes">
+            <aw-list dataprovider="data.dataProviders.overrideTypeList" item-options="subPanelContext.sharedData" visible-when="data.overrideTypes.length >0">
+                <aw-include name="Arm0OverrideTypeCell" sub-panel-context="item"></aw-include>
+            </aw-list>
+        </aw-command-panel-section>
+
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button enable-when="!data.isExportToWordRoundTripEventProgressing" action="updateCtxAndExportToWord">
+            <aw-i18n>i18n.exportToOfficeTitle</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>

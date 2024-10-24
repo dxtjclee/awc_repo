@@ -1,0 +1,20 @@
+<div class="sw-column aw-mfe-contentPanelContainer w-6 h-12">
+    <aw-advanced-bar type="TOOLBAR">
+        <div class="sw-row h-12 align-center">
+            <div class="sw-flex-column offsetFixed-1">
+                <span>{{props.listInfo.title}}</span>
+            </div>
+        </div>
+    </aw-advanced-bar>
+    <div class="sw-row aw-mfe-contentPanel h-12">
+        <div class="sw-column w-12 aw-mfe-listSelectionPanel">
+            <aw-list-filter prop="data.filterBox" dataprovider="dataProviders.listDataProvider" exist-when="props.listInfo.isListFilterVisible">
+                <span>{{item.cellHeader1}}</span>
+            </aw-list-filter>
+
+            <aw-list prop="data.filterBox" dataprovider="dataProviders.listDataProvider" exist-when="!props.listInfo.isListFilterVisible">
+                <span>{{item.cellHeader1}}</span>
+            </aw-list>
+        </div>
+    </div>
+</div>

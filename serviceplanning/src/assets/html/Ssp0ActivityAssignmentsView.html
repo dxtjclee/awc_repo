@@ -1,0 +1,35 @@
+<div class="sw-row aw-arrange-noSelect justify-space-between h-12">
+    <aw-separator is-vertical="true"></aw-separator>
+    <div class="w-6 sw-column flex-auto justify-left align-center">
+        <aw-panel-section caption="i18n.WorkCardOccurrencesTitle" collapsed="disabled">
+            <aw-list dataprovider="dataProviders.fetchWorkCardAssignments">
+                <aw-default-cell vmo="item"></aw-default-cell>
+            </aw-list>
+        </aw-panel-section>
+    </div>
+    <aw-separator is-vertical="true"></aw-separator>
+    <div class="w-1 sw-column flex-auto justify-center align-center">
+        <aw-icon-button size="large" command="data.add" ></aw-icon-button>
+        <aw-icon-button size="large" command="data.addAll" ></aw-icon-button>
+        <aw-break></aw-break>
+        <aw-icon-button size="large" command="data.remove"></aw-icon-button>
+        <aw-icon-button size="large" command="data.removeAll"></aw-icon-button>
+    </div>
+    <aw-separator is-vertical="true"></aw-separator>
+    <div class="w-6 sw-column flex-auto justify-left align-center">
+        <aw-panel-section caption="i18n.ActivityOccurrencesTitle" collapsed="disabled">
+            <aw-list dataprovider="dataProviders.fetchActivityAssignments">
+                <aw-default-cell vmo="item"></aw-default-cell>
+            </aw-list>
+        </aw-panel-section>
+    </div>
+    <aw-separator is-vertical="true"></aw-separator>
+</div>
+<aw-panel-footer>
+    <aw-button button-type="base" action="ClosePopUpAction" size="auto">
+        <aw-i18n>i18n.Cancel</aw-i18n>
+    </aw-button>
+    <aw-button size="auto" action="AddAndRemoveActivityAssignments" visible-when="formProp.attributes.valid">
+        <aw-i18n>i18n.Assign</aw-i18n>
+    </aw-button>
+</aw-panel-footer>

@@ -1,0 +1,76 @@
+{
+  "slots": {
+    "mfeNgpHeaderSlot": {
+      "name": "ngp_header",
+      "view": "NgpHeader",
+      "activeWhen": {
+        "condition": "conditions.isOnNGPPage"
+      }
+    },
+    "mfeNgpTaskBarSlot": {
+      "name": "ngp_taskBar",
+      "view": "NgpTaskbar",
+      "activeWhen": {
+        "condition": "conditions.isOnNGPPage"
+      }
+    },
+    "mfeNgpToolbarRightSlot": {
+      "name": "mfe_toolbar",
+      "view": "NgpToolBar",
+      "activeWhen": {
+        "condition": "conditions.isOnNGPPage"
+      }
+    },
+    "ngpEwiHeaderSlot": {
+      "name": "aw_header",
+      "view": "NgpEwiHeader",
+      "activeWhen": {
+        "condition": "conditions.isOnNGPEwiPage"
+      }
+    },
+    "ngpEwiGlobalNavigationSlot": {
+      "name": "aw_globalNavigation",
+      "view": "commonGlobalNavigation",
+      "activeWhen": {
+        "condition": "conditions.notInNGPEwiPage"
+      }
+    },
+    "ngpEwiGlobalNavigationBarSlot": {
+      "name": "aw_globalNavigationBar",
+      "view": "commonGlobalNavigationBar",
+      "activeWhen": {
+        "condition": "conditions.notInNGPEwiPage"
+      }
+    },
+    "ngpEwiAvatarSlot": {
+      "name": "aw_avatar",
+      "view": "commonAvatar",
+      "activeWhen": {
+        "condition": "conditions.notInNGPEwiPage"
+      }
+    },
+    "ngpEwiRightEdge": {
+      "name": "aw_rightEdge",
+      "view": "commonRightEdge",
+      "activeWhen": {
+        "condition": "conditions.notInNGPEwiPage"
+      }
+    }
+  },
+  "conditions": {
+    "isOnNGPPage": {
+      "expression": "ctx.locationContext['ActiveWorkspace:Location'] === 'com.siemens.splm.client.mfg.ngp' || ctx.locationContext['ActiveWorkspace:Location'] === 'root' && ctx.locationContext['ActiveWorkspace:SubLocation'] === 'com.siemens.splm.client.mfg.ngp'"
+    },
+    "isOnNGPEwiPage": {
+      "expression": "ctx.locationContext['ActiveWorkspace:Location'] === 'com.siemens.splm.client.mfg.ngp.ewi' || ctx.locationContext[ 'ActiveWorkspace:Location' ] === 'root' && ctx.locationContext[ 'ActiveWorkspace:SubLocation' ] === 'com.siemens.splm.client.mfg.ngp.ewi'"
+    },
+    "notInNGPEwiPage": {
+      "expression": {
+        "$source": "conditions.isOnNGPEwiPage",
+        "$query": {
+          "$eq": false
+        }
+      }
+    }
+  }
+}

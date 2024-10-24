@@ -1,0 +1,568 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+    ],
+    "actions": {
+        "handleParameterSelectionChange":{
+            "actionType": "JSFunction",
+            "method": "handleParameterSelectionChange",
+            "inputData": {
+                "parametersTable": "{{subPanelContext.parametersTable}}",
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "parameterSelectionData":"parameterSelectionData"
+            },
+            "deps": "js/Att1ParameterWidePanelService"
+        },
+        "updateMeasurementsIfUpdated":{
+            "actionType": "JSFunction",
+            "method": "updateMeasurementsIfUpdated",
+            "inputData": {
+                "parametersTable": "{{subPanelContext.parametersTable}}"
+            },
+            "deps": "js/Att1ParameterWidePanelService"
+        },
+        "revealPopup": {
+            "actionType": "JSFunction",
+            "method": "revealPopup",
+            "inputData": {
+                "data": "{{data}}",
+                "parametersTable": "{{subPanelContext.parametersTable}}"
+            },
+            "outputData": {
+                "isComplexDataImportInProgress": "isComplexDataImportInProgress",
+                "importInProgressMessage": "importInProgressMessage",
+                "parameterSelectionData":"parameterSelectionData"
+            },
+            "deps": "js/Att1ParameterWidePanelService"
+        },
+        "doPostProcessing": {
+            "actionType": "JSFunction",
+            "method": "doPostProcessing",
+            "inputData": {
+                "data": "{{data}}",
+                "parametersTable": "{{subPanelContext.parametersTable}}"
+            },
+            "outputData": {
+                "isComplexDataImportInProgress": "isComplexDataImportInProgress"
+            },
+            "deps": "js/Att1ParameterWidePanelService"
+        },
+        "setAttributeComplexDataSOACall": {
+            "actionType": "TcSoaService",
+            "serviceName": "AttrTargetMgmt-2021-12-AttributeTargetManagement",
+            "method": "updateParameters2",
+            "inputData": {
+                "inputs": "{{function:getSetAttributeComplexDataInput}}"
+            },
+            "outputData": {
+                "setAttrComplexDataResp": ""
+            },
+            "events": {
+                "success": [
+
+                    {
+                        "name":"Att1ParameterWidePanel.updateClientWithComplexData",
+                        "condition":"subPanelContext.parametersTable.addNewTableValueCommandClicked===true"
+                    },
+                    {
+                        "name": "Att1EngrTable.getDataFromServer",
+                        "condition": "data.isComplexDataImportInProgress===true"
+                    },
+                    {
+                        "name":"uniformParamTable.plTable.clientRefresh"
+                    },
+                    {
+                        "name": "Att1ParameterWidePanel.doPostProcessing"
+                    },
+                    {
+                        "name":"Att1NewTableValuePopup.ClosePopup"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "Att1ParameterWidePanel.doPostProcessing"
+                    },
+                    {
+                        "name":"Att1NewTableValuePopup.ClosePopup"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "newTableValueCreationSucceed"
+                    }
+                ],
+                "failure": [ {
+                    "message": "newTableValueCreationFailed"
+               } ]
+            },
+            "deps": "js/Att1ParameterWidePanelService"
+        },
+        "updateClientWithComplexData":{
+            "actionType": "JSFunction",
+            "method": "updateClientWithComplexData",
+            "inputData": {
+                "engrTable":"{{fields.engrTable}}",
+                "parametersTable":"{{subPanelContext.parametersTable}}"
+            },
+            "outputData": {
+                "parameterSelectionData":"parameterSelectionData",
+                "parametersTable":"parametersTable",
+                "engrTable":"engrTable"
+            },
+            "deps": "js/Att1ParameterWidePanelService"
+        },
+        "refresfClientWithImportedData":{
+            "actionType": "JSFunction",
+            "method": "refresfClientWithImportedData",
+            "inputData": {
+                "subPanelContext":"{{subPanelContext}}"
+            },
+            "deps": "js/Att1ParameterWidePanelService"
+        },
+        "CallImportComplexData": {
+            "actionType": "TcSoaService",
+            "serviceName": "AttrTargetMgmtAW-2019-06-AttributeTargetManagement",
+            "method": "importParameterExcel",
+            "inputData": {
+                "inputs": "{{function:getImportComplexDataInput}}",
+                "importOptions": [ "ComplexDataImport" ]
+            },
+            "policy":{
+                "types": [
+                    {
+                        "name": "Att0MeasurableAttributeDbl",
+                        "properties": [
+                            {
+                                "name": "att0CurrentValue",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Att0MeasureValueDbl",
+                        "properties": [
+                            {
+                                "name": "att0Value"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Att0MeasurableAttributeInt",
+                        "properties": [
+                            {
+                                "name": "att0CurrentValue",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Att0MeasureValueInt",
+                        "properties": [
+                            {
+                                "name": "att0Value"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Att0MeasurableAttributeBool",
+                        "properties": [
+                            {
+                                "name": "att0CurrentValue",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Att0MeasureValueBool",
+                        "properties": [
+                            {
+                                "name": "att0Value"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Att0MeasurableAttributeStr",
+                        "properties": [
+                            {
+                                "name": "att0CurrentValue",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Att0MeasureValueStr",
+                        "properties": [
+                            {
+                                "name": "att0Value"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Att0MeasurableAttributePnt",
+                        "properties": [
+                            {
+                                "name": "att0CurrentValue",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Att0MeasureValuePnt",
+                        "properties": [
+                            {
+                                "name": "att0Value"
+                            }
+                        ]
+                    }
+
+                ]
+            },
+            "outputData": {
+                "setAttrComplexDataResp": "",
+                "partialErrors": "ServiceData.partialErrors"
+            },
+            "events": {
+                "success": [
+
+                    {
+                        "name": "Att1ParameterWidePanel.refresfClientWithImportedData"
+                    },
+                    {
+                        "name":"Att1ParametersWidePanel.refreshParameters",
+                        "condition":"subPanelContext.parametersTable && subPanelContext.parametersTable.isParameterWidePanelOpen"
+                    },
+                    {
+                        "name": "Att1ParameterWidePanel.doPostProcessing"
+                    },
+                    {
+                        "name": "engrTable.refresh"
+                    },
+                    {
+                        "name":"uniformParamTable.updateMeasurementsIfUpdated"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "Att1ParameterWidePanel.doPostProcessing"
+                    },
+                    {
+                        "name": "Att1ParameterWidePanel.ClosePopup"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "importDone"
+                    }
+                ],
+                "failure": [ {
+                    "condition": "partialErrors",
+                    "message": "importErrorMsg"
+               } ]
+            },
+            "deps": "js/Att1ParameterWidePanelService"
+        },
+        "openDimensionsPopup": {
+            "actionType":"popup",
+            "inputData": {
+                "options": {
+                    "view":"Att1NewTableValuePopup",
+                    "reference": ".aw-attrtargetmgmt-toolbar",
+                    "height":240,
+                    "width":300,
+                    "placement":"bottom",
+                    "hasArrow":false,
+                    "forceCloseOthers":false,
+                    "isModal":false,
+                    "clickOutsideToClose":false,
+                    "subPanelContext":{
+                        "parametersTable": "{{subPanelContext.parametersTable}}",
+                        "engrTable": "{{fields.engrTable}}"
+                    }
+                }
+            },
+            "outputData":{
+                "popupId":"id",
+                "popupElement":"panelEl"
+            }
+        },
+        "hideDimensionPopup": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        },
+        "hidePopupPanel": {
+            "actionType": "JSFunction",
+            "method": "hidePopupPanel",
+            "inputData": {
+                "parametersTable": "{{subPanelContext.parametersTable.getValue()}}"
+            },
+            "deps": "js/Att1ParameterWidePanelService"
+        },
+        "refreshParameterObjects":{
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2007-01-DataManagement",
+            "method":"refreshObjects",
+            "inputData": {
+                "objects": "{{subPanelContext.parametersTable.selectedObjects}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name":"uniformParamTable.updateMeasurementsIfUpdated"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "uniformParamTable.refreshTable"
+                    }
+                ]
+            }
+        },
+        "updateCtxOnOpenPanel":{
+            "actionType": "JSFunction",
+            "method": "updateCtxOnOpenPanel",
+            "inputData": {
+                "parametersTable": "{{subPanelContext.parametersTable}}"
+            },
+            "deps": "js/Att1ShowParametersTableService"
+        },
+        "updateCtxOnClosePanel":{
+            "actionType": "JSFunction",
+            "method": "updateCtxOnClosePanel",
+            "inputData": {
+                "parametersTable": "{{subPanelContext.parametersTable}}"
+            },
+            "deps": "js/Att1ShowParametersTableService"
+        }
+    },
+    "data": {
+        "parameterSelectionData": {
+            "selectedParameter":[]
+        },
+        "importInProgressMessage": {
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "false",
+            "displayName": "{{i18n.importInProgressMsg}}",
+            "dispValue": "{{i18n.importInProgressMsg}}"
+        },
+        "engrTable": {
+            "initialValues": {
+            },
+            "meta": {
+            }
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "revealPopup"
+    },
+    "onEvent": [
+        {
+            "eventId": "Att1ParameterWidePanel.ClosePopup",
+            "cacheEventData": true,
+            "condition": "data.engrTable.goalTable.isDirty === true || data.engrTable.valueTable.isDirty === true",
+            "message": "checkUnsavedEdits"
+        },
+        {
+            "eventId": "Arm0ExportToRoundTripExcelDocument.panelOpenEvent",
+            "action": "updateCtxOnOpenPanel"
+        },
+        {
+            "eventId": "Arm0ExportToRoundTripExcelDocument.panelCloseEvent",
+            "action": "updateCtxOnClosePanel"
+        },
+        {
+            "eventId": "Att1ParameterWidePanel.ClosePopup",
+            "cacheEventData": true,
+            "condition": "data.engrTable.goalTable.isDirty === undefined && data.engrTable.valueTable.isDirty === undefined",
+            "action": "hidePopupPanel"
+        },
+        {
+            "eventId": "Att1ParameterWidePanel.revealPopup",
+            "cacheEventData": true,
+            "action": "revealPopup"
+        },
+        {
+            "eventId": "Att1ParameterWidePanel.openDimensionsPopup",
+            "action": "openDimensionsPopup"
+        },
+        {
+            "eventId": "Att1ParameterWidePanel.setAttributeComplexDataSOACall",
+            "cacheEventData": true,
+            "action": "setAttributeComplexDataSOACall"
+        },
+        {
+            "eventId": "Att1ParameterWidePanel.importComplexDataSOACall",
+            "cacheEventData": true,
+            "action": "CallImportComplexData"
+        },
+        {
+            "eventId": "Att1ParameterWidePanel.doPostProcessing",
+            "action": "doPostProcessing"
+        },
+        {
+            "eventId": "Att1NewTableValuePopup.ClosePopup",
+            "action": "hideDimensionPopup"
+        },
+        {
+            "eventId":"Att1ParametersWidePanel.refreshParameters",
+            "action": "refreshParameterObjects"
+        },
+        {
+            "eventId":"uniformParamTable.updateMeasurementsIfUpdated",
+            "action": "updateMeasurementsIfUpdated"
+
+        },
+        {
+            "eventId": "uniformParamTable.reloadCompleted",
+            "cacheEventData": true,
+            "condition": "subPanelContext.parametersTable && subPanelContext.parametersTable.isParameterWidePanelOpen === true",
+            "action": "hidePopupPanel"
+        },
+        {
+            "eventId":"Att1ParameterWidePanel.updateClientWithComplexData",
+            "action": "updateClientWithComplexData"
+        },
+        {
+            "eventId":"Att1ParameterWidePanel.refresfClientWithImportedData",
+            "action": "refresfClientWithImportedData"
+        },
+        {
+            "eventId":"uniformParamTable.selectionChanged",
+            "cacheEventData":true,
+            "action": "handleParameterSelectionChange"
+        }
+    ],
+    "messages": {
+        "importErrorMsg": {
+          "messageType": "ERROR",
+            "messageText": "{{data.partialErrors[0].errorValues[0].message}}"
+        },
+        "importDone":
+        {
+            "messageType": "INFO",
+            "messageText": "{{i18n.ImportSuccessful}}"
+        },
+        "checkUnsavedEdits": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.resetConfirmation}}",
+            "messageTextParams": [],
+            "navigationOptions": [ {
+                    "option": "discard",
+                    "text": "{{i18n.discard}}",
+                    "action": "hidePopupPanel"
+                },
+                {
+                    "option": "save",
+                    "text": "{{i18n.saveButtonText}}",
+                    "action": "saveEditEngrTable"
+                }
+            ]
+        },
+        "newTableValueCreationSucceed":{
+            "messageType": "INFO",
+            "messageText": "{{i18n.newTableValueCreationSuccess}}",
+            "messageTextParams": [
+                "{{data.NoOfRows}}",
+                "{{data.NoOfCols}}",
+                "{{subPanelContext.parametersTable.selectedUnderlyingObjects[0].props.object_name.uiValues[0]}}"
+            ]
+        },
+        "newTableValueCreationFailed":{
+            "messageType": "ERROR",
+            "messageText": "{{i18n.newTableValueCreationFail}}",
+            "messageTextParams": [
+                "{{data.NoOfRows}}",
+                "{{data.NoOfCols}}",
+                "{{subPanelContext.parametersTable.selectedUnderlyingObjects[0].props.object_name.uiValues[0]}}"
+            ]
+        }
+    },
+    "conditions": {
+        "showWidePanelForParameterWithComplexData":{
+            "expression":"subPanelContext.parametersTable.getValue().addNewTableValueCommandClicked === true || subPanelContext.parametersTable.getValue().isComplexDataImportInProgress===true || (data.parameterSelectionData.selectedParameter[0].props.att0AttributeTable.dbValues[0] !== undefined && data.parameterSelectionData.selectedParameter[0].props.att0AttributeTable.dbValues[0] !== null &&  data.parameterSelectionData.selectedParameter[0].props.att0AttributeTable.dbValues[0] !== '')"
+        },
+        "showWidePanelForParameterWithoutComplexData":{
+            "expression":"!subPanelContext.parametersTable.getValue().addNewTableValueCommandClicked && !subPanelContext.parametersTable.getValue().isComplexDataImportInProgress && (data.parameterSelectionData.selectedParameter[0].props.att0AttributeTable.dbValues[0] === null || data.parameterSelectionData.selectedParameter[0].props.att0AttributeTable.dbValues[0] === '')"
+        }
+    },
+    "functions": {
+        "getSetAttributeComplexDataInput": {
+            "functionName": "getSetAttributeComplexDataInput",
+            "parameters": [
+                "{{subPanelContext.parametersTable}}",
+                "{{data}}"
+            ]
+        },
+        "getImportComplexDataInput": {
+            "functionName": "getImportComplexDataInput",
+            "parameters": [
+                "{{subPanelContext.parametersTable}}",
+                "{{data}}"
+            ]
+        }
+    },
+    "i18n": {
+        "Measurements": [
+            "Att1Messages"
+        ],
+        "Values": [
+            "Att1Messages"
+        ],
+        "importInProgressMsg": [
+            "Att1Messages"
+        ],
+        "ImportSuccessful" : [
+            "Att1AttrMappingMessages"
+        ],
+        "newTableValueCreationSuccess" : [
+            "Att1Messages"
+        ],
+        "newTableValueCreationFail":[
+            "Att1Messages"
+        ],
+        "resetConfirmation": [
+            "OccurrenceManagementMessages"
+        ],
+        "saveButtonText": [
+            "OccurrenceManagementConstants"
+        ],
+        "discard": [
+            "ZeroCompileCommandMessages"
+        ]
+    }
+}

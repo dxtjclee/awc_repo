@@ -1,0 +1,95 @@
+{
+    "schemaVersion" : "1.0.0",
+    "imports": [],
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "actions": {
+        "editBodyText": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "loadProperties"
+                },
+                {
+                    "action": "getSourceElementObject"
+                },
+                {
+                    "action": "updateCtx"
+                }
+            ]
+        },
+        "loadProperties": {
+            "actionType": "JSFunction",
+            "method": "getProperties",
+            "inputData": {
+                "uids": [ "{{subPanelContext.vmo.props.arm0SourceElement.dbValues[0]}}" ],
+                "propNames": [ "arm1ParaNumber", "awb0ArchetypeName", "awb0ArchetypeId", "awb0UnderlyingObject", "awb0UnderlyingObjectType" ]
+            },
+            "deps": "soa/dataManagementService"
+        },
+        "getSourceElementObject": {
+            "actionType": "JSFunction",
+            "method": "getObject",
+            "inputData": {
+                "uid": "{{subPanelContext.vmo.props.arm0SourceElement.dbValues[0]}}"
+            },
+            "outputData": {
+                "sourceElement": ""
+            },
+            "deps": "soa/kernel/clientDataModel"
+        },
+        "updateCtx": {
+            "actionType": "JSFunction",
+            "method": "registerCtx",
+            "inputData": {
+                "name": "summaryTableSelectedObjUid",
+                "selectedRefObj": {
+                    "paraNum": "{{data.sourceElement.props.arm1ParaNumber.dbValues[0]}}",
+                    "name": "{{data.sourceElement.props.awb0ArchetypeName.dbValues[0]}}",
+                    "id": "{{data.sourceElement.props.awb0ArchetypeId.dbValues[0]}}",
+                    "type": "{{data.sourceElement.type}}",
+                    "uid": "{{data.sourceElement.uid}}",
+                    "revID": "{{data.sourceElement.props.awb0UnderlyingObject.dbValues[0]}}",
+                    "revType": "{{data.sourceElement.props.awb0UnderlyingObjectType.dbValues[0]}}",
+                    "modelRevObject": {
+                        "uid": "{{data.sourceElement.props.awb0UnderlyingObject.dbValues[0]}}",
+                        "type": "{{data.sourceElement.props.awb0UnderlyingObjectType.dbValues[0]}}"
+                    }
+                }
+            },
+            "deps": "js/appCtxService",
+            "events": {
+                "success": [ {
+                    "name": "Arm0SingleRequirementWidePanelEditor.showWidePanelEditorPopupPanel",
+                    "excludeLocalDataCtx": true
+                } ]
+            }
+        }
+    },
+    "conditions": {
+        "canShowBodyClearText": {
+            "expression": "subPanelContext.vmo.props.arm0SourceElement.dbValues[0].startsWith('SR::N::Arm0RequirementSpecElement') === false"
+        },
+        "bodyClearTextIsNotEmpty": {
+            "expression": "subPanelContext.vmo.props['REF(arm0UnderlyingObject,SpecElementRevision).body_cleartext'].dbValues[0].length > 0"
+        },
+        "wrappedCondition": {
+            "expression": "subPanelContext.vmo.iswrapped === true"
+        }
+    },
+    "data": {
+        "editBodyTextCmd": {
+            "iconName": "cmdEdit",
+            "tooltip": "{{i18n.edit}}",
+            "action": "editBodyText"
+        }
+    },
+    "i18n": {
+        "edit": [
+            "RichTextEditorCommandPanelsMessages"
+        ]
+    }
+}

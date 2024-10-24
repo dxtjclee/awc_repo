@@ -1,0 +1,441 @@
+{
+    "schemaVersion" : "1.0.0",
+    "imports":
+    [
+        "js/aw-tab-set.directive"
+    ],
+    "actions": {
+        "updateTabSelection": {
+            "actionType": "JSFunction",
+            "method": "updateTabSelection",
+            "inputData": {
+                "addPanelState" : "{{data.addPanelState}}"
+            },
+            "outputData": {
+                "addPanelState": "addPanelState"
+            },
+            "deps": "js/addMeasurableAttr"
+        },
+        "createParameterNew": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "Att1CreateParameter.createParameterNew"
+                } ]
+            }
+        },
+        "attachMeasurableAttributesSoaCall": {
+            "actionType": "TcSoaService",
+            "serviceName": "AttrTargetMgmtAW-2017-06-AttributeTargetManagement",
+            "method": "attachMeasurableAttributes",
+            "inputData": {
+                "inputs": "{{data.attachParameterSoaInput}}"
+            },
+            "outputData": {
+                "attachMeasurableAttributesSoaOutput": ""
+            },
+            "events": {
+                "success": [ {
+                        "name": "att1AddParameter.setItemEventProgressing",
+                        "eventData": {
+                            "valueToSet": false
+                        }
+                    },
+                    {
+                        "name": "uniformParamTable.reloadTable",
+                        "eventData": {
+                            "reusable": "{{ctx.panelContext.reusableParamTable}}"
+                        }
+                    },
+                    {
+                        "condition":"!subPanelContext.panelPinned",
+                        "name": "closeAddParameterPanel"
+                    }
+
+                ],
+                "failure": [ {
+                        "name": "att1AddParameter.setItemEventProgressing",
+                        "eventData": {
+                            "valueToSet": false
+                        }
+                    },
+                    {
+                        "name": "uniformParamTable.reloadTable",
+                        "eventData": {
+                            "reusable": "{{ctx.panelContext.reusableParamTable}}"
+                        }
+                    },
+                    {
+                        "condition":"!subPanelContext.panelPinned",
+                        "name": "closeAddParameterPanel"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "message": "attachParamFailure"
+                    }
+                ]
+            }
+        },
+        "attachParameterSoaCall": {
+            "actionType": "TcSoaService",
+            "serviceName": "AttrTargetMgmt-2020-12-AttributeTargetManagement",
+            "method": "attachParameters",
+            "inputData": {
+                "inputs": "{{data.attachParameterSoaInput}}"
+            },
+            "outputData": {
+                "attachMeasurableAttributesSoaOutput": ""
+            },
+            "events": {
+                "success": [ {
+                        "name": "att1AddParameter.setItemEventProgressing",
+                        "eventData": {
+                            "valueToSet": false
+                        }
+                    },
+                    {
+                        "name": "uniformParamTable.reloadTable",
+                        "eventData": {
+                            "reusable": "{{ctx.panelContext.reusableParamTable}}"
+                        }
+                    },
+                    {
+                        "condition":"!subPanelContext.panelPinned",
+                        "name": "closeAddParameterPanel"
+                    },
+                    {
+                        "name": "singleParamSetToDefaultUsage",
+                        "condition":"data.isSingleParam === true"
+                    },
+                    {
+                        "name": "multipleParamSetToDefaultUsage",
+                        "condition":"data.isSingleParam === false"
+                    }
+                ],
+                "failure": [ {
+                        "name": "att1AddParameter.setItemEventProgressing",
+                        "eventData": {
+                            "valueToSet": false
+                        }
+                    },
+                    {
+                        "name": "uniformParamTable.reloadTable",
+                        "eventData": {
+                            "reusable": "{{ctx.panelContext.reusableParamTable}}"
+                        }
+                    },
+                    {
+                        "condition":"!subPanelContext.panelPinned",
+                        "name": "closeAddParameterPanel"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "message": "attachParamFailure"
+                    }
+                ]
+            }
+        },
+        "refreshParameterTableAfterAttach":{
+            "actionType": "JSFunction",
+            "method": "refreshParameterTable",
+            "inputData": {
+                "attachMeasurableAttributesSoaOutput": "{{data.attachMeasurableAttributesSoaOutput}}",
+                "source":"attachParameter",
+                "subPanelContext":"{{subPanelContext}}",
+                "parametersTable":"{{ctx.panelContext.parametersTable}}"
+            },
+            "events": {
+                "success": [
+                    {
+                         "condition":"!subPanelContext.panelPinned",
+                        "name": "closeAddParameterPanel"
+                    }
+                ]
+            },
+            "deps": "js/Att1ParameterMgmtUtilService"
+        },
+        "closeAddParameterPanel":
+        {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData":
+            {
+                "events":
+                [
+                    {
+                        "name": "complete",
+                        "eventData":
+                        {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            }
+        },
+        "setItemEventProgressing":{
+            "actionType": "JSFunction",
+            "method": "registerCtx",
+            "inputData": {
+                "name": "addItemEventProgressing",
+                "value": "{{data.eventMap['att1AddParameter.setItemEventProgressing'].valueToSet}}"
+            },
+            "deps": "js/appCtxService"
+        },
+        "createParamForPaletteOrSearch": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "createParamForPaletteOrSearchAfterTc143",
+                    "condition": "(ctx.tcSessionData.tcMajorVersion > 14 || ctx.tcSessionData.tcMajorVersion === 14 && ctx.tcSessionData.tcMinorVersion >= 3)"
+                },
+                {
+                    "name": "createParamForPaletteOrSearchBeforeTc143",
+                    "condition": "!(ctx.tcSessionData.tcMajorVersion > 14 || ctx.tcSessionData.tcMajorVersion === 14 && ctx.tcSessionData.tcMinorVersion >= 3)"
+                }]
+            }
+        },
+        "createParamForPaletteOrSearchAfterTc143": {
+            "actionType": "JSFunction",
+            "method": "getAttachParameterSoaInput",
+            "inputData": {
+                "attributes": "{{addPanelState.sourceObjects}}",
+                "addAsCopy": false
+            },
+            "outputData": {
+                "attachParameterSoaInput": "SoaInput",
+                "defaultUsage":"defaultUsage",
+                "paramNames":"paramNames",
+                "isSingleParam":"isSingleParam"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "attachParameterSoaCall"
+                    }
+                ]
+            },
+            "deps": "js/addMeasurableAttr"
+        },
+        "createParamForPaletteOrSearchBeforeTc143": {
+            "actionType": "JSFunction",
+            "method": "getAttachParameterSoaInput",
+            "inputData": {
+                "attributes": "{{addPanelState.sourceObjects}}",
+                "addAsCopy": false
+            },
+            "outputData": {
+                "attachParameterSoaInput": "SoaInput",
+                "parentObject":"parentObject",
+                "selectedParentType":"selectedParentType"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "attachMeasurableAttributesSoaCall"
+                    }
+                ]
+            },
+            "deps": "js/addMeasurableAttr"
+        },
+        "createParamForPaletteOrSearchCopy": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "createParamForPaletteOrSearchCopyAfterTc143",
+                    "condition": "(ctx.tcSessionData.tcMajorVersion > 14 || ctx.tcSessionData.tcMajorVersion === 14 && ctx.tcSessionData.tcMinorVersion >= 3)"
+                },
+                {
+                    "name": "createParamForPaletteOrSearchCopyBeforeTc143",
+                    "condition": "!(ctx.tcSessionData.tcMajorVersion > 14 || ctx.tcSessionData.tcMajorVersion === 14 && ctx.tcSessionData.tcMinorVersion >= 3)"
+                }]
+            }
+        },
+        "createParamForPaletteOrSearchCopyAfterTc143": {
+            "actionType": "JSFunction",
+            "method": "getAttachParameterSoaInput",
+            "inputData": {
+                "attributes": "{{addPanelState.sourceObjects}}",
+                "addAsCopy": true
+            },
+            "outputData": {
+                "attachParameterSoaInput": "SoaInput",
+                "defaultUsage":"defaultUsage",
+                "paramNames":"paramNames",
+                "isSingleParam":"isSingleParam"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "attachParameterSoaCall"
+                    }
+                ]
+            },
+            "deps": "js/addMeasurableAttr"
+        },
+        "createParamForPaletteOrSearchCopyBeforeTc143": {
+            "actionType": "JSFunction",
+            "method": "getAttachParameterSoaInput",
+            "inputData": {
+                "attributes": "{{addPanelState.sourceObjects}}",
+                "addAsCopy": true
+            },
+            "outputData": {
+                "attachParameterSoaInput": "SoaInput",
+                "parentObject":"parentObject",
+                "selectedParentType":"selectedParentType"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "attachMeasurableAttributesSoaCall"
+                    }
+                ]
+            },
+            "deps": "js/addMeasurableAttr"
+        }
+    },
+   "data":
+    {
+        "filterType": "Att0MeasurableAttribute",
+        "addPanelState": {
+            "initialValues": {
+                "creationType": "",
+                "createdObject": "",
+                "sourceObjects": "",
+                "selectedTab": "",
+                "isDatasetCreate": "",
+                "isAddButtonEnabled":false
+            },
+            "meta": {
+                "creationType": {
+                    "field": "true",
+                    "type": "OBJECT"
+                },
+                "createdObject": {
+                    "field": "true",
+                    "type": "OBJECT"
+                },
+                "sourceObjects": {
+                    "field": "true",
+                    "type": "OBJECTARRAY"
+                },
+                "selectedTab": {
+                    "field": "true",
+                    "type": "OBJECT"
+                },
+                "isDatasetCreate": {
+                    "field": "true",
+                    "type": "BOOLEAN"
+                }
+            }
+        }
+
+    },
+    "conditions": {
+        "isNewTabAddButtonVisible": {
+            "expression": "addPanelState.isAddButtonEnabled===true"
+        },
+        "isPaletteSearchTabAddButtonVisible": {
+            "expression": "addPanelState.sourceObjects && addPanelState.sourceObjects.length > 0"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "createParamForPaletteOrSearchCopyAfterTc143",
+            "action": "createParamForPaletteOrSearchCopyAfterTc143"
+        },
+        {
+            "eventId": "createParamForPaletteOrSearchCopyBeforeTc143",
+            "action": "createParamForPaletteOrSearchCopyBeforeTc143"
+        },
+        {
+            "eventId": "createParamForPaletteOrSearchAfterTc143",
+            "action": "createParamForPaletteOrSearchAfterTc143"
+        },
+        {
+            "eventId": "createParamForPaletteOrSearchBeforeTc143",
+            "action": "createParamForPaletteOrSearchBeforeTc143"
+        },
+        {
+            "eventId": "attachParameterSoaCall",
+            "action": "attachParameterSoaCall"
+        },
+        {
+            "eventId": "attachMeasurableAttributesSoaCall",
+            "action": "attachMeasurableAttributesSoaCall"
+        },
+        {
+            "eventId": "att1AddParameter.setItemEventProgressing",
+            "cacheEventData": true,
+            "action": "setItemEventProgressing"
+        },
+        {
+            "eventId":"AttachParameter.refreshParameterTableAfterAttach",
+            "cacheEventData": true,
+            "action":"refreshParameterTableAfterAttach"
+        },
+        {
+            "eventId": "closeAddParameterPanel",
+            "action": "closeAddParameterPanel"
+        },
+        {
+            "eventId": "awTab.selected",
+            "action": "updateTabSelection"
+        },
+        {
+            "eventId": "singleParamSetToDefaultUsage",
+            "message": "singleParamSetToDefaultUsage"
+        },
+        {
+            "eventId": "multipleParamSetToDefaultUsage",
+            "message": "multipleParamSetToDefaultUsage"
+        }
+
+    ],
+    "messages": {
+        "attachParamFailure":{
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        },
+        "singleParamSetToDefaultUsage":{
+            "messageType": "INFO",
+            "messageText": "{{i18n.SingleParamSetDefaultUsage}}",
+            "messageTextParams": [
+                "{{data.paramNames}}",
+                "{{data.defaultUsage}}"
+            ]
+        },
+        "multipleParamSetToDefaultUsage":{
+            "messageType": "INFO",
+            "messageText": "{{i18n.MultipleParamSetDefaultUsage}}",
+            "messageTextParams": [
+                "{{data.paramNames}}",
+                "{{data.defaultUsage}}"
+            ]
+        }
+    },
+    "i18n": {
+
+        "add": [
+            "Att1AttrMappingMessages"
+        ],
+        "addAsCopy": [
+            "Att1AttrMappingMessages"
+        ],
+        "SingleParamSetDefaultUsage": [
+            "Att1AttrMappingMessages"
+        ],
+        "MultipleParamSetDefaultUsage": [
+            "Att1AttrMappingMessages"
+        ]
+    }
+}

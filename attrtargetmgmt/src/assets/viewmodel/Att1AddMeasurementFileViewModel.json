@@ -1,0 +1,172 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+    ],
+    "data": {
+        "triggerCreate": {
+            "dbValue": false,
+            "type": "BOOLEAN"
+        },
+        "addPanelState": {
+            "initialValues": {
+                "creationType": "",
+                "createdObject": "",
+                "sourceObjects": "",
+                "selectedTab": ""
+            },
+            "meta": {}
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "AddObjectPrimarySub",
+                "context": {}
+            },
+            "meta": {}
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "actions": {
+        "closePanel":{
+            "actionType": "JSFunction",
+            "method": "activateCommandPanel",
+            "deps": "js/commandPanel.service",
+            "inputData": {
+                "commandId": "Att1AddMeasurementFile",
+                "location": "aw_toolsAndInfo"
+            }
+        },
+        "createObject":
+        {
+            "actionType": "JSFunction",
+            "method": "updateCreateTrigger",
+            "inputData": {
+                "triggerCreate": "{{data.triggerCreate}}",
+                "value": true
+            },
+            "outputData": {
+                "triggerCreate": "triggerCreate"
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "createRelationForPaletteOrSearch":
+        {
+            "actionType": "JSFunction",
+            "method": "updateCreateTrigger",
+            "inputData": {
+                "triggerCreate": "{{data.triggerCreate}}",
+                "value": true
+            },
+            "outputData": {
+                "triggerCreate": "triggerCreate"
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "refreshLocation": {
+            "actionType": "JSFunction",
+            "method": "reloadMeasurementsTable",
+            "deps": "js/Att1MeasurementService",
+            "events": {
+                "success": [
+                    {
+                        "name": "cdm.relatedModified",
+                        "condition": "subPanelContext.selectionData.pselected === undefined || subPanelContext.openedObject.modelType.typeHierarchyArray.indexOf( 'Att0MeasurableAttribute' ) > -1",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{subPanelContext.openedObject}}"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "cdm.relatedModified",
+                        "condition": "subPanelContext.selectionData.pselected !== undefined && subPanelContext.selectionData.pselected.modelType.typeHierarchyArray.indexOf( 'Att0MeasurableAttribute' ) > -1",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{subPanelContext.selectionData.pselected}}"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "cdm.relatedModified",
+                        "condition": "subPanelContext.selectionData.selected[0].modelType.typeHierarchyArray.indexOf( 'Att0MeasureValue' ) > -1 && subPanelContext.openedObject.modelType.typeHierarchyArray.indexOf( 'Att0MeasurableAttribute' ) > -1",
+                        "eventData": {
+                            "refreshLocationFlag": false,
+                            "relatedModified": [
+                                "{{subPanelContext.openedObject}}"
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        "setActiveView":{
+            "actionType": "JSFunction",
+            "method": "resetActiveView",
+            "inputData": {
+                "stateName": "{{data.activeState}}",
+                "destPanelId": "AddObjectPrimarySub"
+            },
+            "outputData": {
+                "activeState": ""
+            },
+            "deps": "js/addObjectUtils"
+        }
+    },
+    "onEvent":
+    [
+        {
+            "eventId": "addObject.toTargetSuccess",
+            "action": "refreshLocation"
+        },
+        {
+            "eventId": "pasteItem.commitFailed",
+            "action": "closePanel"
+        },
+        {
+            "eventId": "Att1AddMeasurementFile.ClosePanel",
+            "action": "closePanel"
+        },
+        {
+            "eventId": "addObject.objectcreated",
+            "action": "refreshLocation"
+        }
+    ],
+    "lifecycleHooks": {
+        
+    },
+    "conditions": {
+        "isNewTabAddButtonVisible":
+        {
+            "expression":"addPanelState.selectedTab.view=='NewTabPageSub' && addPanelState.creationType && !addPanelState.isDatasetCreate"
+        },
+        "isPaletteSearchTabAddButtonVisible":
+        {
+            "expression":"addPanelState.selectedTab.view!='NewTabPageSub' && addPanelState.sourceObjects.length>0"
+        }
+    },
+    "i18n": {
+        "Measurement_File_Title": [ "Att1Messages" ],
+        "add": [ "Att1AttrMappingMessages" ],
+        "BACK_BUTTON_TITLE":["BaseMessages"]
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    }
+}

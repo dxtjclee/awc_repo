@@ -1,0 +1,36 @@
+<aw-flex-column width="12">
+    <aw-flex-row height="8f">
+        <aw-flex-column align-content="start">
+            <aw-flex-row align-content="center" justify="left">
+                <aw-flex-column width="4f" offset-right="1f" exist-when="data.scope.scopeObject.uid">
+                    <aw-model-icon class="aw-ngp-headerIcon" vmo="data.scope.scopeObject"></aw-model-icon>
+                </aw-flex-column>
+                <aw-flex-column width="fill">
+                    <aw-flex-row exist-when="data.scope.scopeObject.uid">
+                        <span class="aw-ngp-headerTitle">{{data.headerTitle}}</span>
+                    </aw-flex-row>
+                    <aw-flex-row exist-when="!data.scope.scopeObject.uid">
+                        <span class="aw-ngp-headerTitle"><aw-i18n>i18n.loading</aw-i18n></span>
+                    </aw-flex-row>
+                    <aw-flex-row exist-when="data.scope.scopeObject.uid">
+                        <ngp-navigation-breadcrumbs scope-object="data.scope.scopeObject"></ngp-navigation-breadcrumbs>
+                    </aw-flex-row>
+                </aw-flex-column>
+            </aw-flex-row>
+        </aw-flex-column>
+        <aw-flex-column align-content="end">
+            <aw-flex-row justify="right" align-content="center">
+                <aw-global-search></aw-global-search>
+                <aw-separator is-vertical="true" class="aw-ngp-headerSeparator"></aw-separator>
+                <div class="aw-ngp-chipContainer">
+                    <div class="aw-ngp-scopeObjectChips" exist-when="data.scope.scopeObject.uid">
+                        <ngp-class-library-indication scope-object="data.scope.scopeObject"></ngp-class-library-indication>
+                        <ngp-change-management-chip scope-object="data.scope.scopeObject"></ngp-change-management-chip>
+                        <ngp-effectivity-indication-chip scope-object="data.scope.scopeObject"></ngp-effectivity-indication-chip>
+                    </div>
+                </div>
+                <aw-logo></aw-logo>
+            </aw-flex-row>
+        </aw-flex-column>
+    </aw-flex-row>
+</aw-flex-column>

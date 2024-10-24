@@ -1,0 +1,12 @@
+<aw-command-panel caption="i18n.add" context="data">
+    <aw-panel-body scrollable="true">
+        <aw-panel-section caption="i18n.tq0QualificationProfilesSecTitle" >
+            <aw-list-filter id="userListFilter" prop="data.filterBox" dataprovider="data.dataProviders.getQualificationProfileList">
+                <aw-default-cell vmo="item"></aw-default-cell>
+            </aw-list-filter>
+        </aw-panel-section>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button visible-when = "true" action="assign"><aw-i18n>i18n.add</aw-i18n></aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

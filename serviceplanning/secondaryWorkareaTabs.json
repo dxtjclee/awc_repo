@@ -1,0 +1,35 @@
+{
+  "schema": "1.0.0.0",
+  "tabs": {
+    "sp3DViewer": {
+      "name": "3D",
+      "priority": 1,
+      "view": "Ssp03DTab",
+      "visibleWhen": "ctx.locationContext['ActiveWorkspace:SubLocation'] === 'servicePlanning' && context.viewKey === 'servicePlanContext'"
+    },
+    "spSBOM3DViewer": {
+      "name": "3D",
+      "priority": 1,
+      "view": "Ssp0SbomGraphics",
+      "visibleWhen": "ctx.locationContext['ActiveWorkspace:SubLocation'] === 'servicePlanning' && context.viewKey === 'sbomContext'"
+    },
+    "spSRPertView": {
+      "name": "PERT",
+      "priority": 400,
+      "view": "Ssp0SRPert",
+      "visibleWhen": "ctx.locationContext['ActiveWorkspace:SubLocation'] === 'servicePlanning' && context.viewKey === 'servicePlanContext' && ctx.selectedVMO.modelType.typeHierarchyArray.includes('SSP0BvrServiceRequirement')"
+    },
+    "spActivity3DViewer": {
+      "name": "3D",
+      "priority": 1,
+      "view": "Ssp03DActivityTab",
+      "visibleWhen": "ctx.locationContext['ActiveWorkspace:SubLocation'] === 'servicePlanningTimeAnalysis'"
+    },
+    "spActivityPERTViewer": {
+      "name": "PERT",
+      "priority": 400,
+      "view": "Ssp0ActivityPERTTab",
+      "visibleWhen": "ctx.locationContext['ActiveWorkspace:SubLocation'] === 'servicePlanningTimeAnalysis'"
+    }
+  }
+}

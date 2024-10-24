@@ -1,0 +1,8 @@
+<aw-panel-body>
+    <mfe-loading-message exist-when="conditions.showLoadingMessage"></mfe-loading-message>
+    <mfe-message-panel exist-when="!conditions.isValidSelectedObject" messages-data="{messageLines: data.messages.noSingleElementSelected}"></mfe-message-panel>
+    <mfe-message-panel exist-when="conditions.showNoAssignmentsMessage" messages-data="{messageLines: data.messages.noAssignedParts}"></mfe-message-panel>
+    <aw-scrollpanel class="aw-ngp-table" show-when="conditions.showTableData" exist-when="conditions.isValidSelectedObject">
+        <aw-splm-table command-context="{tableSettings: data.tableSettings}" gridid="ngpBuildStrategyAssignedPartsTable" use-tree="true"></aw-splm-table>
+    </aw-scrollpanel>
+</aw-panel-body>

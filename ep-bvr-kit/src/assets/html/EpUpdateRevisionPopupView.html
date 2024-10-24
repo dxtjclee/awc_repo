@@ -1,0 +1,10 @@
+<aw-panel>
+    <aw-panel-body>
+        <div class="aw-mbm-availableRevisionTableTitle">{{props.subPanelContext.availableRevisionTableTitle}}</div>
+        <aw-splm-table gridid="availableRevisionTable"></aw-splm-table>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button button-type="base" action="closePopupWindow" size="auto">{{i18n.cancelButton}}</aw-button>
+        <aw-button enable-when="conditions.isUpdateButtonEnabled" action="addContextToWP" size="auto">{{i18n.updateButton}}</aw-button>
+    </aw-panel-footer>
+</aw-panel>

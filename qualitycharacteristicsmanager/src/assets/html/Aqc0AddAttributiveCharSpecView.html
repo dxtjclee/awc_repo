@@ -1,0 +1,21 @@
+<aw-command-panel caption="i18n.Aqc0AddCharSpecificationTitle" context="subPanelContext">
+    <aw-panel-body>
+        <aw-widget prop="data.objectName" exist-when="ctx.isTC13_2OnwardsSupported"></aw-widget>
+        <aw-widget prop="data.object_desc">
+        </aw-widget>
+        <aw-listbox prop="data.qc0Context" list="data.contextTypeList"></aw-listbox>
+        <aw-listbox prop="data.qc0Criticality" list="data.qc0CriticalityList"></aw-listbox>
+        <aw-widget prop="data.qc0OkDescription">
+        </aw-widget>
+        <aw-widget prop="data.qc0NokDescription">
+        </aw-widget>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button action="CreateAttrCharSpec" exist-when="ctx.isTC13_2OnwardsSupported" visible-when="formProp.attributes.valid">
+            <aw-i18n>i18n.addButtonTitle</aw-i18n>
+        </aw-button>
+        <aw-button action="generateNextValuesAndSubmit" exist-when="!ctx.isTC13_2OnwardsSupported">
+            <aw-i18n>i18n.addButtonTitle</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

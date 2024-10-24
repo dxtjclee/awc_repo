@@ -1,0 +1,77 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "props": {
+        "page-state": {
+            "type": "object"
+        },
+        "primary-selection": {
+            "type": "object"
+        },
+        "interfaces-primary-selection": {
+            "type": "object"
+        },
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+
+    "data": {
+        "primarySelectionData": {
+            "initialValues": {
+            },
+            "meta": {}
+        },
+        "secondarySelectionData": {
+            "initialValues": {
+            },
+            "meta": {}
+        }
+    },
+
+    "actions": {
+        "processSelectionChange": {
+            "actionType": "JSFunction",
+            "method": "processSelectionChange",
+            "inputData": {
+                "primarySelectionData": "{{data.primarySelectionData}}",
+                "secondarySelectionData": "{{data.secondarySelectionData}}",
+                "selectionData": "{{props.interfacesPrimarySelection}}"
+            },
+            "outputData": {},
+            "deps": "js/Ase1InterfacesUtilService"
+        }
+    },
+
+    "dataProviders": {
+    },
+
+    "columnProviders": {
+    },
+
+    "grids": {
+    },
+
+    "functions": {
+    },
+
+    "dataParseDefinitions": {},
+    "onEvent": [
+    ],
+
+    "lifecycleHooks": {
+        "onUpdate": [ {
+            "action": "processSelectionChange",
+            "observers": [ "viewModel.atomicData.primarySelectionData", "viewModel.atomicData.secondarySelectionData" ]
+        }]
+    },
+
+    "i18n": {
+    },
+    "messages": {},
+    "conditions": {
+        "isTcReleaseAtLeast142": {
+            "expression": "ctx.tcSessionData.tcMajorVersion > 14 || (ctx.tcSessionData.tcMajorVersion === 14 && ctx.tcSessionData.tcMinorVersion >= 2)"
+        }
+    }
+}

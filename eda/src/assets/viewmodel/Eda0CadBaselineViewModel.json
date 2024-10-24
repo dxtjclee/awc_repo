@@ -1,0 +1,222 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-splm-table.directive",
+        "js/aw-scrollpanel.directive"
+    ],
+
+    "actions": {
+        "loadTreeTableData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableData",
+            "inputData": {
+                "treeLoadInput": "request.treeLoadInput",
+                "dataProvider": "{{data.dataProviders.CadBaselineDataProvider}}",
+                "elementUids": "{{function:getElementUid}}",
+                "rootElementUids": "{{function:getRootElementUids}}",
+                "productContextUids": "{{function:getProductContextUids}}",
+                "ctx": "{{ctx}}",
+                "sort": {
+                    "sortCriteria": "{{data.columnProviders.TreeColumnProvider.sortCriteria}}",
+                    "default": [ {
+                        "fieldName": "eda0BaselineDate",
+                        "sortDirection": "ASC"
+                    } ]
+                }
+            },
+            "outputData": {
+                "ctx.search.totalFound": "result.treeLoadResult.totalRootCount",
+                "ctx.search.totalLoaded": "result.treeLoadResult.childNodes.length"
+            },
+            "deps": "js/Eda0CadBaselineService"
+        },
+
+        "loadTreeTableProperties": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableProperties",
+            "inputData": {
+                "propertyLoadInput": "request.propertyLoadInput"
+            },
+            "outputData": {},
+            "deps": "js/Eda0CadBaselineService"
+        },
+
+        "loadTreeTableColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableColumns",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.CadBaselineDataProvider}}"
+            },
+            "deps": "js/Eda0CadBaselineService"
+        },
+
+        "reloadTreeTableColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "reloadTreeTableColumns",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.CadBaselineDataProvider}}"
+            },
+            "deps": "js/Eda0CadBaselineService"
+        },
+
+        "saveColumnConfig": {
+            "actionType": "TcSoaService",
+            "deps": "js/Eda0CadBaselineService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "saveUIColumnConfigs2",
+            "inputData": {
+                "columnConfigurations": [ {
+                    "clientScopeURI": "Eda0CadBaselineTable",
+                    "columnConfigId": "clientScopeURI",
+                    "columns": "{{data.dataProviders.CadBaselineDataProvider.newColumns}}",
+                    "scope": "LoginUser",
+                    "scopeName": ""
+                } ]
+            },
+            "outputData": {},
+            "events": {}
+        },
+
+        "resetColumnConfig": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "getOrResetUIColumnConfigs4",
+            "inputData": {
+                "getOrResetUiConfigsIn": [ {
+                    "scope": "LoginUser",
+                    "scopeName": "",
+                    "clientName": "AWClient",
+                    "resetColumnConfig": true,
+                    "columnConfigQueryInfos": [ {
+                        "clientScopeURI": "Eda0CadBaselineTable",
+                        "operationType": "configured",
+                        "typeNames": [ "WorkspaceObject" ],
+                        "columnsToExclude": []
+                    } ],
+
+                    "businessObjects": [ {} ]
+                } ]
+            },
+            "outputData": {
+                "dataProviders.GridTreePropertyProvider.columnConfig": "columnConfigurations[0].columnConfigurations[0]"
+            },
+            "events": {
+                "success": [ {
+                    "name": "loadTreeTableColumnsEvent"
+                } ]
+            }
+        },
+
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/columnArrangeService"
+        },
+
+        "doGridDataProvider": {
+            "actionType": "dataProvider",
+            "method": "Eda1CadBaseLineProvider"
+        }
+    },
+
+    "functions": {
+        "getElementUid": {
+            "functionName": "getElementUid",
+            "parameters": []
+        },
+
+        "getRootElementUids": {
+            "functionName": "getRootElementUids",
+            "parameters": []
+        },
+
+        "getProductContextUids": {
+            "functionName": "getProductContextUids",
+            "parameters": []
+        }
+    },
+
+    "dataProviders": {
+        "CadBaselineDataProvider": {
+            "initializeAction": "loadTreeTableData",
+            "nextAction": "loadTreeTableData",
+            "previousAction": "loadTreeTableData",
+            "editContext": "CADBASELINES_TREE_CONTEXT",
+            "selectionModelMode": "single",
+            "treeLoadResult": "action.result.treeLoadResult",
+            "inputData": {
+                "accessMode": "tree"
+            },
+
+            "policy": {
+                "types": [ {
+                    "name": "Eda0CadBaselineInfo",
+                    "properties": [
+                        { "name": "eda0BaselineDate" },
+                        { "name": "eda0BaselineName" }
+                    ]
+                } ]
+            }
+        },
+
+        "GridTreePropertyProvider": {
+            "action": "loadTreeTableProperties",
+            "propertyLoadResult": "action.result.propertyLoadResult"
+        }
+    },
+
+    "columnProviders": {
+        "TreeColumnProvider": {
+            "loadColumnAction": "loadTreeTableColumns",
+            "saveColumnAndLoadAction": "saveColumnConfig",
+            "saveColumnAction": "saveColumnConfig",
+            "resetColumnAction": "resetColumnConfig",
+            "sortCriteria": [],
+            "id": "js/Eda0CadBaselineService"
+        }
+    },
+
+    "grids": {
+        "CadBaselinesTree": {
+            "dataProvider": "CadBaselineDataProvider",
+            "propertyProvider": "GridTreePropertyProvider",
+            "columnProvider": "TreeColumnProvider",
+            "enableArrangeMenu": false,
+            "addIconColumn": false,
+            "gridOptions": {
+                "useStaticFirstCol": false,
+                "enableSorting": true
+            }
+        }
+    },
+
+    "onEvent": [ {
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        },
+
+        {
+            "eventId": "loadTreeTableColumnsEvent",
+            "action": "loadTreeTableColumns"
+        },
+
+        {
+            "eventId": "reloadTreeTableEvent",
+            "action": "doGridDataProvider"
+        }
+
+    ],
+
+    "conditions": {
+
+    },
+
+    "i18n": {
+
+    }
+}

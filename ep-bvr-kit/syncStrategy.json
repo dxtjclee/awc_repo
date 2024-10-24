@@ -1,0 +1,1968 @@
+{
+  "schemaVersion": "1.0.0",
+  "syncStrategies": {
+    "syncStrategyEpProcessOperationToEpActivitiesTable": {
+      "source": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpOperationActivitiesTable",
+        "port": "EpOperationActivities_inputObject"
+      }
+    },
+    "syncStrategyEpProcessOperationToEpActivitiesTableMultipleSelection": {
+      "source": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getMultipleSyncObject"
+      },
+      "target": {
+        "view": "EpOperationActivitiesTable",
+        "port": "EpOperationActivities_inputObject"
+      }
+    },
+    "syncStrategyWiEditorToEpActivitiesTable": {
+      "source": {
+        "view": "WiEditor",
+        "port": "WiEditor_selectedObjects"
+      },
+      "target": {
+        "view": "EpOperationActivitiesTable",
+        "port": "EpOperationActivities_inputObject"
+      }
+    },
+    "syncStrategyEpActivitiesTableToSelectedProcessInWIPageSyncManager": {
+      "source": {
+        "view": "EpActivitiesTable",
+        "port": "EpActivitiesTable_selectedOperation"
+      },
+      "target": {
+        "view": "epSelectedProcessInWIPageSyncManager",
+        "port": "MfeSyncManager_setSyncObject"
+      }
+    },
+    "syncStrategyEpActivitiesTableToSelectedProcessInAssemblyPlanningPageSyncMgr": {
+      "source": {
+        "view": "EpActivitiesTable",
+        "port": "EpActivitiesTable_selectedOperation"
+      },
+      "target": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_setSyncObject"
+      }
+    },
+    "syncStrategyEpRevisionRuleListWidgetToEpAddObject": {
+      "source": {
+        "view": "EpRevisionRuleListWidget",
+        "port": "EpRevisionRuleListWidget_selectedRevRule"
+      },
+      "target": {
+        "view": "EpAddObject",
+        "port": "EpAddObject_selectedRevRule"
+      }
+    },
+    "syncStrategyEpSearchObjectToEpAddObject": {
+      "source": {
+        "view": "EpSearchObject",
+        "port": "EpSearchObject_selectedObject"
+      },
+      "target": {
+        "view": "EpAddObject",
+        "port": "EpAddObject_selectedObject"
+      }
+    },
+    "syncStrategyEpSearchObjectToEpCreateObjectWithTemplate": {
+      "source": {
+        "view": "EpSearchObject",
+        "port": "EpSearchObject_selectedObject"
+      },
+      "target": {
+        "view": "EpCreateObjectFromTemplate",
+        "port": "EpCreateObjectFromTemplate_selectedObject"
+      }
+    },
+    "syncStrategyEpRevisionRuleListWidgetToEpCreateObjectWithTemplate": {
+      "source": {
+        "view": "EpRevisionRuleListWidget",
+        "port": "EpRevisionRuleListWidget_selectedRevRule"
+      },
+      "target": {
+        "view": "EpCreateObjectFromTemplate",
+        "port": "EpCreateObjectFromTemplate_selectedRevRule"
+      }
+    },
+    "epProductBopStructureTreeSelectionToSelectedProcessInAssemblyPlanningPageSyncMgr": {
+      "source": {
+        "view": "EpProductBopStructureTree_EpTreeTable",
+        "port": "EpTreeTable_selectedObjects"
+      },
+      "target": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_setSyncObject"
+      }
+    },
+    "epProductBopStructureTreeStructureSearchToSelectedProcessInAssemblyPlanningPageSyncMgr": {
+      "source": {
+        "view": "EpProductBopStructureTree_EpStructureSearch",
+        "port": "EpStructureSearch_selectedObjects"
+      },
+      "target": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_setSyncObject"
+      }
+    },
+    "selectedProcessInAssemblyPlanningPageSyncMgrToEpProductBopStructureTreeSyncMgr": {
+      "source": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpProductBopStructureTree_EpTreeTable",
+        "port": "EpTreeTable_selectedObjects"
+      }
+    },
+    "filesTabListSummarySyncStrategy": {
+      "source": {
+        "view": "EpFiles",
+        "port": "EpFiles_selectedObjects"
+      },
+      "target": {
+        "view": "EpFiles_epInformation",
+        "port": "EpInformation_inputObject"
+      }
+    },
+    "documensTabListSummarySyncStrategy": {
+      "source": {
+        "view": "EpDocuments",
+        "port": "EpDocuments_selectedObjects"
+      },
+      "target": {
+        "view": "EpDocuments_epInformation",
+        "port": "EpInformation_inputObject"
+      }
+    },
+    "documensTabCountSyncStrategy": {
+      "source": {
+        "view": "EpDocuments",
+        "port": "EpDocuments_updateTabContentCountPort"
+      },
+      "target": {
+        "view": "EpDetailsArea",
+        "port": "EpDetailsArea_updateTabContentCountPort"
+      }
+    },
+    "partsTabCountSyncStrategy": {
+      "source": {
+        "view": "WiPartsTable_EpDetailsTable",
+        "port": "EpDetailsTable_updateTabContentCountPort"
+      },
+      "target": {
+        "view": "EpDetailsArea",
+        "port": "EpDetailsArea_updateTabContentCountPort"
+      }
+    },
+    "resourceTabCountSyncStrategy": {
+      "source": {
+        "view": "WiResourcesTable_EpDetailsTable",
+        "port": "EpDetailsTable_updateTabContentCountPort"
+      },
+      "target": {
+        "view": "EpDetailsArea",
+        "port": "EpDetailsArea_updateTabContentCountPort"
+      }
+    },
+    "workAreaTabCountSyncStrategy": {
+      "source": {
+        "view": "EpWorkareaTable_EpDetailsTable",
+        "port": "EpDetailsTable_updateTabContentCountPort"
+      },
+      "target": {
+        "view": "EpDetailsArea",
+        "port": "EpDetailsArea_updateTabContentCountPort"
+      }
+    },
+    "wiWorkAreaTabCountSyncStrategy": {
+      "source": {
+        "view": "WiWorkareaTable_EpDetailsTable",
+        "port": "WiWorkareaTable_updateTabContentCountPort"
+      },
+      "target": {
+        "view": "EpDetailsArea",
+        "port": "EpDetailsArea_updateTabContentCountPort"
+      }
+    },
+    "epFilesTabCountSyncStrategy": {
+      "source": {
+        "view": "EpFiles",
+        "port": "EpFiles_updateTabContentCountPort"
+      },
+      "target": {
+        "view": "EpDetailsArea",
+        "port": "EpDetailsArea_updateTabContentCountPort"
+      }
+    },
+    "assignedPmiTabCountSyncStrategy": {
+      "source": {
+        "view": "WiAssignedPmiTable",
+        "port": "WiAssignedPmiTable_updateTabContentCountPort"
+      },
+      "target": {
+        "view": "EpDetailsArea",
+        "port": "EpDetailsArea_updateTabContentCountPort"
+      }
+    },
+    "dcdTabCountSyncStrategy": {
+      "source": {
+        "view": "EpDCDsTable_EpDetailsTable",
+        "port": "EpDetailsTable_updateTabContentCountPort"
+      },
+      "target": {
+        "view": "EpDetailsArea",
+        "port": "EpDetailsArea_updateTabContentCountPort"
+      }
+    },
+    "epStructureConfigurationFilterNavToEpDetailsTablesSyncStrategy": {
+      "source": {
+        "view": "EpStructureConfigurationFilterNav",
+        "port": "epConfigurationClearInputSelectionPort"
+      },
+      "target": {
+        "view": "EpDetailsArea",
+        "port": "EpDetailsArea_inputObjects"
+      }
+    },
+    "syncStrategyEpRevisionRuleListWidgetToEpCloneObject": {
+      "source": {
+        "view": "EpRevisionRuleListWidget",
+        "port": "EpRevisionRuleListWidget_selectedRevRule"
+      },
+      "target": {
+        "view": "CloneObjectPopup",
+        "port": "EpCloneObject_selectedRevRule"
+      }
+    },
+    "syncStrategyEpSearchObjectToEpCloneObject": {
+      "source": {
+        "view": "EpSearchObject",
+        "port": "EpSearchObject_selectedObject"
+      },
+      "target": {
+        "view": "CloneObjectPopup",
+        "port": "EpCloneObject_selectedObject"
+      }
+    },
+    "syncStrategyEpValidationResultTableToEpValidation": {
+      "source": {
+        "view": "EpValidationResultTable",
+        "port": "EpValidationResultTable_selectedObjects"
+      },
+      "target": {
+        "view": "EpValidation",
+        "port": "EpValidation_inputObject"
+      }
+    },
+    "syncStrategyEpValidationResultTableToEpValidationResultSelectionLabel": {
+      "source": {
+        "view": "EpValidationResultTable",
+        "port": "EpValidationResultTable_selectedObjects"
+      },
+      "target": {
+        "view": "EpValidationResultSelectionLabel",
+        "port": "EpValidationResultSelectionLabel_inputObject"
+      }
+    },
+    "syncStrategyEpValidationResultTableToSelectedProcessInWIPageSyncManager": {
+      "source": {
+        "view": "EpValidationResultTable",
+        "port": "EpValidationResultTable_selectedObjects"
+      },
+      "target": {
+        "view": "epSelectedProcessInWIPageSyncManager",
+        "port": "MfeSyncManager_setSyncObject"
+      }
+    },
+    "syncStrategyEpValidationResultTableToSelectedProcessInAssemblyPageSyncManager": {
+      "source": {
+        "view": "EpValidationResultTable",
+        "port": "EpValidationResultTable_selectedObjects"
+      },
+      "target": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_setSyncObject"
+      }
+    },
+    "structureSearchSyncStrategyForAssemblyTree": {
+      "source": {
+        "view": "EpStructureSearch",
+        "port": "EpStructureSearch_selectedObjects"
+      },
+      "target": {
+        "view": "EpAssemblyTree_EpTreeTable",
+        "port": "EpTreeTable_selectedObjects"
+      }
+    },
+    "structureSearchSyncStrategyForHighLevelPlanningMbomTree": {
+      "source": {
+        "view": "EpStructureSearch",
+        "port": "EpStructureSearch_selectedObjects"
+      },
+      "target": {
+        "view": "EpHighLevelPlanningMbomTree_EpTreeTable",
+        "port": "EpTreeTable_selectedObjects"
+      }
+    },
+    "structureSearchSyncStrategyForBackgroundPartsEbomTree": {
+      "source": {
+        "view": "EpStructureSearch",
+        "port": "EpStructureSearch_selectedObjects"
+      },
+      "target": {
+        "view": "EpBackgroundPartsEbomTree_EpTreeTable",
+        "port": "EpTreeTable_selectedObjects"
+      }
+    },
+    "structureSearchSyncStrategyForProductBopMbomTree": {
+      "source": {
+        "view": "EpProductBopMbomTree_EpStructureSearch",
+        "port": "EpStructureSearch_selectedObjects"
+      },
+      "target": {
+        "view": "EpProductBopMbomTree_EpTreeTable",
+        "port": "EpTreeTable_selectedObjects"
+      }
+    },
+    "structureSearchSyncStrategyForBalancingProductBOPTree": {
+      "source": {
+        "view": "EpStructureSearch",
+        "port": "EpStructureSearch_selectedObjects"
+      },
+      "target": {
+        "view": "EpBalancingProductBOP_EpTreeTable",
+        "port": "EpTreeTable_selectedObjects"
+      }
+    },
+    "missingInSrcToEpAssignmentIndicationToggleSyncStrategy": {
+      "source": {
+        "view": "EpMissingInSource",
+        "port": "EpMissingInSource_inputObject"
+      },
+      "target": {
+        "view": "EpAssignmentIndicationToggle",
+        "port": "EpAssignmentIndicationToggle_selectedParts"
+      }
+    },
+    "assignmentIndicationToggleToEpDetailsTableSyncStrategy": {
+      "source": {
+        "view": "EpAssignmentIndicationToggle",
+        "port": "EpAssignmentIndicationToggle_selectedParts"
+      },
+      "target": {
+        "view": "WiPartsTable_EpDetailsTable",
+        "port": "EpDetailsTable_setSelection"
+      }
+    },
+    "indicationToggleToSelectedProcessInWIPageSyncStrategy": {
+      "source": {
+        "view": "EpAssignmentIndicationToggle",
+        "port": "EpAssignmentIndicationToggle_selectedProcessOrOperation"
+      },
+      "target": {
+        "view": "epSelectedProcessInWIPageSyncManager",
+        "port": "MfeSyncManager_setSyncObject"
+      }
+    },
+    "indicationToggleToepSelectedProcessInAssemblyPlanningPageSyncMgr": {
+      "source": {
+        "view": "EpAssignmentIndicationToggle",
+        "port": "EpAssignmentIndicationToggle_selectedProcessOrOperation"
+      },
+      "target": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_setSyncObject"
+      }
+    },
+    "epAssignmentIndicationAssignedInListToInScopeEpAssignmentIndicationToggleSyncStrategy": {
+      "source": {
+        "view": "EpAssignmentIndicationAssignedInList",
+        "port": "EpAssignmentIndicationAssignedInList_inScopeSingleSelectionPort"
+      },
+      "target": {
+        "view": "EpAssignmentIndicationToggle",
+        "port": "EpAssignmentIndicationToggle_selectedProcessOrOperation"
+      }
+    },
+    "epAssignmentIndicationAssignedInListPopupToOutScopeEpAssignmentIndicationToggleSyncStrategy": {
+      "source": {
+        "view": "EpAssignmentIndicationAssignedInList",
+        "port": "EpAssignmentIndicationAssignedInList_outScopeSingleSelectionPort"
+      },
+      "target": {
+        "view": "EpAssignmentIndicationAssignedInListPopup",
+        "port": "EpAssignmentIndicationAssignedInListPopup_navigateToOutOfScopeNode"
+      }
+    },
+    "indicationToggleToMfeTaskBarAreaSyncStrategy": {
+      "source": {
+        "view": "EpAssignmentIndicationToggle",
+        "port": "EpAssignmentIndicationToggle_assignmentIndicationMode"
+      },
+      "target": {
+        "view": "EpCalculatePVTaskBar",
+        "port": "EpCalculatePVTaskBar_changeIndicationMode"
+      }
+    },
+    "AssemblyAreaToIndicationToggleSyncStrategy": {
+      "source": {
+        "view": "AssemblyPlanningSubpage",
+        "port": "AssemblyPlanningSubpage_updateIndicationContextPort"
+      },
+      "target": {
+        "view": "EpAssignmentIndicationToggle",
+        "port": "EpAssignmentIndicationToggle_updateSharedSelectionData"
+      }
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToEpVisualArea": {
+      "source": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpVisualsArea",
+        "port": "EpVisualsArea_inputObject"
+      }
+    },
+    "syncStrategySelectedProcessInWIPageSyncManagerToWiVisualArea": {
+      "source": {
+        "view": "epSelectedProcessInWIPageSyncManager",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpVisualsArea",
+        "port": "EpVisualsArea_inputObject"
+      }
+    },
+    "syncStrategyAssemblyProcessTreeSelectionToSelectedProcessInAssemblyPlanningPageSyncMgr": {
+      "source": {
+        "view": "ApProcessTree_EpTreeTable",
+        "port": "EpTreeTable_selectedObjects"
+      },
+      "target": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_setSyncObject"
+      }
+    },
+    "epSelectedProcessInAssemblyPlanningPageSyncMgrToEpProcessTreeSyncStrategy": {
+      "source": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "ApProcessTree_EpTreeTable",
+        "port": "EpTreeTable_selectedObjects"
+      }
+    },
+    "epProcessPlanningProcessSequenceToEpSelectedProcessInHighLevelPlanningPageSyncMg": {
+      "source": {
+        "view": "EpPert",
+        "port": "EpPert_singleSelection"
+      },
+      "target": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_setSyncObject"
+      }
+    },
+    "epProcessPlanningPRISelectedOperationToEpSelectedProcessInAssemblyPlanningPageSyncMgr": {
+      "source": {
+        "view": "EpPlanningOperationsSequence",
+        "port": "EpPlanningOperationsSequence_sequenceSelectedInProcessPlanningPRI"
+      },
+      "target": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_setSyncObject"
+      }
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToPartsTable": {
+      "source": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "WiPartsTable_EpDetailsTable",
+        "port": "EpDetails_inputObject"
+      }
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToResourcesTable": {
+      "source": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "WiResourcesTable_EpDetailsTable",
+        "port": "EpDetails_inputObject"
+      }
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToWorkareaTable": {
+      "source": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpWorkareaTable_EpDetailsTable",
+        "port": "EpDetails_inputObject"
+      }
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToWiWorkareaTable": {
+      "source": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "WiWorkareaTable_EpDetailsTable",
+        "port": "EpDetails_inputObject"
+      }
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToInformation": {
+      "source": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpInformation",
+        "port": "EpInformation_inputObject"
+      }
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToFiles": {
+      "source": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpFiles",
+        "port": "EpFiles_inputObjects"
+      }
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToDocuments": {
+      "source": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpDocuments",
+        "port": "EpDocuments_inputObject"
+      }
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToEpValidationResultTable": {
+      "source": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getMultipleSyncObject"
+      },
+      "target": {
+        "view": "EpValidationResultTable",
+        "port": "EpValidationResultTable_inputObject"
+      }
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToEpValidationMessage": {
+      "source": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getMultipleSyncObject"
+      },
+      "target": {
+        "view": "EpValidationMessage",
+        "port": "EpValidationMessage_inputObject"
+      }
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToEpValidationProcessTreeSelectionLabel": {
+      "source": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getMultipleSyncObject"
+      },
+      "target": {
+        "view": "EpValidationProcessTreeSelectionLabel",
+        "port": "EpValidationProcessTreeSelectionLabel_inputObject"
+      }
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToEpValidationProcessTreeSelectionLabelOnResults": {
+      "source": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getMultipleSyncObject"
+      },
+      "target": {
+        "view": "EpValidationProcessTreeSelectionLabelOnResults",
+        "port": "EpValidationProcessTreeSelectionLabelOnResults_inputObject"
+      }
+    },
+    "syncStrategyAssemblyProcessTreeToEpValidationMessage": {
+      "source": {
+        "view": "ApProcessTree_EpTreeTable",
+        "port": "EpTreeTable_selectedObjects"
+      },
+      "target": {
+        "view": "EpValidationMessage",
+        "port": "EpValidationMessage_inputObject"
+      }
+    },
+    "syncStrategyAssemblyProcessTreeToEpValidationProcessTreeSelectionLabel": {
+      "source": {
+        "view": "ApProcessTree_EpTreeTable",
+        "port": "EpTreeTable_selectedObjects"
+      },
+      "target": {
+        "view": "EpValidationProcessTreeSelectionLabel",
+        "port": "EpValidationProcessTreeSelectionLabel_inputObject"
+      }
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToEpDetailsArea": {
+      "source": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpDetailsArea",
+        "port": "EpDetailsArea_inputObjects"
+      }
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToEpVisualsList": {
+      "source": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpVisualsGallery",
+        "port": "EpVisualsGallery_inputObject"
+      }
+    },
+    "epSelectedProcessInAssemblyPlanningPageSyncMgrToEpExternalFlows": {
+      "source": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpExternalFlows_EpDetailsTable",
+        "port": "EpDetails_inputObject"
+      }
+    },
+    "syncStrategyAssemblyTreeSelectionToSelectedAssemblyInAssemblyPlanningPageSyncMgr": {
+      "source": {
+        "view": "EpAssemblyTree_EpTreeTable",
+        "port": "EpTreeTable_selectedObjects"
+      },
+      "target": {
+        "view": "EpSelectedAssemblyInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_setSyncObject"
+      }
+    },
+    "configurationUpdateByPanelToProcessTreeTableView": {
+      "source": {
+        "view": "EpStructureConfigurationFilter",
+        "port": "epConfigurationClearInputSelectionPort"
+      },
+      "target": {
+        "view": "ApProcessTree_EpTreeTable",
+        "port": "EpTreeTable_selectedObjects"
+      }
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToDCDs": {
+      "source": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpDCDsTable_EpDetailsTable",
+        "port": "EpDetails_inputObject"
+      }
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToInspectionDefinitionsDetailsTable": {
+      "source": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpInspectionDefinitionsTable_EpDetailsTable",
+        "port": "EpDetails_inputObject"
+      }
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToInspectionDefinitionsTable": {
+      "source": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpInspectionDefinitionsTable",
+        "port": "EpInspectionDefinitionsTable_inputObject"
+      }
+    },
+    "apProcessTreeStructureSearchToSelectedProcessInAssemblyPlanningPageSyncMgr": {
+      "source": {
+        "view": "ApProcessTree_EpStructureSearch",
+        "port": "EpStructureSearch_selectedObjects"
+      },
+      "target": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_setSyncObject"
+      }
+    },
+    "epAssignWorkAreaSyncStrategy": {
+      "source": {
+        "view": "AssemblyPlanningBoeTree_EpBoeTreeTable",
+        "port": "EpBoeTreeTable_selectedObjects"
+      },
+      "target": {
+        "view": "ApProcessTree",
+        "port": "apProcessTree_workAreaAssignment"
+      }
+    },
+    "epBoeTreeStructureTreeStructureSearchToSelectedResourceInAssemblyPlanningPageSyncMgr": {
+      "source": {
+        "view": "EpBoeTreeTable_EpStructureSearch",
+        "port": "EpStructureSearch_selectedObjects"
+      },
+      "target": {
+        "view": "AssemblyPlanningBoeTree_EpBoeTreeTable",
+        "port": "EpBoeTreeTable_selectedObjects"
+      }
+    },
+    "syncStrategyWIClassicSubPageToIndicationToggle": {
+      "source": {
+        "view": "WorkInstructionsClassicSubpage",
+        "port": "WiClassicSubPage_updateIndicationContextPort"
+      },
+      "target": {
+        "view": "EpAssignmentIndicationToggle",
+        "port": "EpAssignmentIndicationToggle_updateSharedSelectionData"
+      }
+    },
+    "syncStrategySelectedProcessInWIPageSyncManagerToEpPartsTable4": {
+      "source": {
+        "view": "epSelectedProcessInWIPageSyncManager",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "WiPartsTable_EpDetailsTable",
+        "port": "EpDetails_inputObject"
+      }
+    },
+    "syncStrategySelectedProcessInWIPageSyncManagerToEpResourcesTable5": {
+      "source": {
+        "view": "epSelectedProcessInWIPageSyncManager",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "WiResourcesTable_EpDetailsTable",
+        "port": "EpDetails_inputObject"
+      }
+    },
+    "syncStrategySelectedProcessInWIPageSyncManagerToEpWorkareaTable6": {
+      "source": {
+        "view": "epSelectedProcessInWIPageSyncManager",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpWorkareaTable_EpDetailsTable",
+        "port": "EpDetails_inputObject"
+      }
+    },
+    "syncStrategySelectedProcessInWIPageSyncManagerToWiWorkareaTable6": {
+      "source": {
+        "view": "epSelectedProcessInWIPageSyncManager",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "WiWorkareaTable_EpDetailsTable",
+        "port": "EpDetails_inputObject"
+      }
+    },
+    "syncStrategySelectedProcessInWIPageSyncManagerToEpInformation7": {
+      "source": {
+        "view": "epSelectedProcessInWIPageSyncManager",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpInformation",
+        "port": "EpInformation_inputObject"
+      }
+    },
+    "syncStrategySelectedProcessInWIPageSyncManagerToEpFilesTab26": {
+      "source": {
+        "view": "epSelectedProcessInWIPageSyncManager",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpFiles",
+        "port": "EpFiles_inputObjects"
+      }
+    },
+    "syncStrategySelectedProcessInWIPageSyncManagerToEpDocuments8": {
+      "source": {
+        "view": "epSelectedProcessInWIPageSyncManager",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpDocuments",
+        "port": "EpDocuments_inputObject"
+      }
+    },
+    "syncStrategySelectedProcessInWIPageSyncManagerToEpDCDsTable9": {
+      "source": {
+        "view": "epSelectedProcessInWIPageSyncManager",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpDCDsTable_EpDetailsTable",
+        "port": "EpDetails_inputObject"
+      }
+    },
+    "syncStrategyepSelectedProcessInWIPageSyncMgrToEpExternalFlows": {
+      "source": {
+        "view": "epSelectedProcessInWIPageSyncManager",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpExternalFlows_EpDetailsTable",
+        "port": "EpDetails_inputObject"
+      }
+    },
+    "syncStrategySelectedProcessInWIPageSyncManagerToWiEditor15": {
+      "source": {
+        "view": "epSelectedProcessInWIPageSyncManager",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "WiEditor",
+        "port": "WiEditor_selectedObjects"
+      }
+    },
+    "syncStrategySelectedProcessInWIPageSyncManagerToWiAssemblyPmiTable16": {
+      "source": {
+        "view": "epSelectedProcessInWIPageSyncManager",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "WiAssemblyPmiTable",
+        "port": "WiAssemblyPmiTable_selectedOperation"
+      }
+    },
+    "syncStrategySelectedProcessInWIPageSyncManagerToWiAssignedPmiTable17": {
+      "source": {
+        "view": "epSelectedProcessInWIPageSyncManager",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "WiAssignedPmiTable",
+        "port": "WiAssignedPmiTable_inputObject"
+      }
+    },
+    "syncStrategySelectedProcessInWIPageSyncManagerToWiVisualsList23": {
+      "source": {
+        "view": "epSelectedProcessInWIPageSyncManager",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpVisualsGallery",
+        "port": "EpVisualsGallery_inputObject"
+      }
+    },
+    "syncStrategyEpVisViewerVisibilityToWiVisualsList27": {
+      "source": {
+        "view": "epVisViewer",
+        "port": "publishVisWebInstanceId"
+      },
+      "target": {
+        "view": "EpVisualsGallery",
+        "port": "EpVisualsGallery_visViewerInstanceId"
+      }
+    },
+    "syncStrategyWiVisualsListToEpImageViewer1": {
+      "source": {
+        "view": "EpVisualsGallery",
+        "port": "EpVisualsGallery_selectedObjects"
+      },
+      "target": {
+        "view": "EpViewerArea/EpImageViewer",
+        "port": "EpImageViewer_inputObject"
+      }
+    },
+    "syncStrategySelectedProcessInWIPageSyncManagerToEpDetailsArea28": {
+      "source": {
+        "view": "epSelectedProcessInWIPageSyncManager",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpDetailsArea",
+        "port": "EpDetailsArea_inputObjects"
+      }
+    },
+    "syncStrategyWiProcessTreeToEpValidationResultTable": {
+      "source": {
+        "view": "WiProcessTree_EpTreeTable",
+        "port": "EpTreeTable_selectedObjects"
+      },
+      "target": {
+        "view": "EpValidationResultTable",
+        "port": "EpValidationResultTable_inputObject"
+      }
+    },
+    "syncStrategyWiProcessTreeToEpValidationMessage": {
+      "source": {
+        "view": "WiProcessTree_EpTreeTable",
+        "port": "EpTreeTable_selectedObjects"
+      },
+      "target": {
+        "view": "EpValidationMessage",
+        "port": "EpValidationMessage_inputObject"
+      }
+    },
+    "syncStrategyWiProcessTreeToEpValidationProcessTreeSelectionLabel": {
+      "source": {
+        "view": "WiProcessTree_EpTreeTable",
+        "port": "EpTreeTable_selectedObjects"
+      },
+      "target": {
+        "view": "EpValidationProcessTreeSelectionLabel",
+        "port": "EpValidationProcessTreeSelectionLabel_inputObject"
+      }
+    },
+    "syncStrategyWiProcessTreeToSelectedProcessInWIPageSyncManager37": {
+      "source": {
+        "view": "WiProcessTree_EpTreeTable",
+        "port": "EpTreeTable_selectedObjects"
+      },
+      "target": {
+        "view": "epSelectedProcessInWIPageSyncManager",
+        "port": "MfeSyncManager_setSyncObject"
+      }
+    },
+    "syncStrategyWiAssemblyTreeToMfeSyncManager36": {
+      "source": {
+        "view": "EpAssemblyTree_EpTreeTable",
+        "port": "EpTreeTable_selectedObjects"
+      },
+      "target": {
+        "view": "epAssemblyTreeSelectionManager",
+        "port": "MfeSyncManager_setSyncObject"
+      }
+    },
+    "syncStrategyAssemblyTreeSelectionManagerToWiAssemblyPmiTable38": {
+      "source": {
+        "view": "epAssemblyTreeSelectionManager",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "WiAssemblyPmiTable",
+        "port": "wiAssemblyPmiTalbe_selectedAssembly"
+      }
+    },
+    "syncStrategyWiEditorToSelectedProcessInWIPageSyncManager41": {
+      "source": {
+        "view": "WiEditor",
+        "port": "WiEditor_selectedObjects"
+      },
+      "target": {
+        "view": "epSelectedProcessInWIPageSyncManager",
+        "port": "MfeSyncManager_setSyncObject"
+      }
+    },
+    "syncStrategySelectedProcessInWIPageSyncManagerToWiScopeLabel43": {
+      "source": {
+        "view": "epSelectedProcessInWIPageSyncManager",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "WiScopeLabel",
+        "port": "WiScopeLabel_inputObject"
+      }
+    },
+    "configurationUpdateByPanelToWiEditor": {
+      "source": {
+        "view": "EpStructureConfigurationFilter",
+        "port": "epConfigurationClearInputSelectionPort"
+      },
+      "target": {
+        "view": "epSelectedProcessInWIPageSyncManager",
+        "port": "MfeSyncManager_setSyncObject"
+      }
+    },
+    "syncStrategySelectedProcessInWIPageSyncManagerToEpInspectionDefinitionsDetailsTable52": {
+      "source": {
+        "view": "epSelectedProcessInWIPageSyncManager",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpInspectionDefinitionsTable_EpDetailsTable",
+        "port": "EpDetails_inputObject"
+      }
+    },
+    "syncStrategySelectedProcessInWIPageSyncManagerToInspectionDefinitionsTable52": {
+      "source": {
+        "view": "epSelectedProcessInWIPageSyncManager",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpInspectionDefinitionsTable",
+        "port": "EpInspectionDefinitionsTable_inputObject"
+      }
+    },
+    "syncStrategyFromWiEditorToProcessTree": {
+      "source": {
+        "view": "epSelectedProcessInWIPageSyncManager",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "WiProcessTree_EpTreeTable",
+        "port": "EpTreeTable_selectedObjects"
+      }
+    },
+    "wiProcessTreeStructureSearchToSelectedProcessInWIPageSyncMgr": {
+      "source": {
+        "view": "WiProcessTree_EpStructureSearch",
+        "port": "EpStructureSearch_selectedObjects"
+      },
+      "target": {
+        "view": "epSelectedProcessInWIPageSyncManager",
+        "port": "MfeSyncManager_setSyncObject"
+      }
+    },
+    "syncStrategyEpSelectedEntityBalancingPageSyncManagerToEpBalancingOperationsTableInput": {
+      "source": {
+        "view": "EpBalancingOperationsTable",
+        "port": "EpBalancingOperationsTable_inputObject"
+      },
+      "target": {
+        "view": "EpBalancingOperationsTable_EpDetailsTable",
+        "port": "EpDetails_inputObject"
+      }
+    },
+    "syncStrategyEpStructureConfigurationFilterNavToEpBalancingStationTilesList": {
+      "source": {
+        "view": "EpStructureConfigurationFilterNav",
+        "port": "epConfigurationClearInputSelectionPort"
+      },
+      "target": {
+        "view": "EpBalancingStationTilesList",
+        "port": "EpBalancingStationTilesList_clearSelection"
+      }
+    },
+    "syncActivitiesToFiles": {
+      "source": {
+        "view": "EpPartPlanningActivitiesTreeTable",
+        "port": "EpTreeTable_selectedObjects"
+      },
+      "target": {
+        "view": "EpActivitiesFiles",
+        "port": "EpFiles_inputObjects"
+      }
+    },
+    "filesTabActivityListSummarySyncStrategy": {
+      "source": {
+        "view": "EpActivitiesFiles",
+        "port": "EpFiles_selectedObjects"
+      },
+      "target": {
+        "view": "EpActivitiesFiles/EpFiles_epInformation",
+        "port": "EpInformation_inputObject"
+      }
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToActivitiesPartPlanning": {
+      "source": {
+        "view": "EpSelectedProcessInAssemblyPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpPartPlanningActivitiesTreeArea",
+        "port": "EpPartPlanningActivitiesTreeArea_selectedObjects"
+      }
+    },
+    "assignmentIndicationToggleToAssignedPmisTableSync": {
+      "source": {
+        "view": "EpAssignmentIndicationToggle",
+        "port": "EpAssignmentIndicationToggle_assignmentIndicationMode"
+      },
+      "target": {
+        "view": "WiAssignedPmiTable",
+        "port": "WiAssignedPmiTable_missingInSourceToggle"
+      }
+    },
+    "assignmentIndicationToggleToAssignedPmisTableSync2": {
+      "source": {
+        "view": "EpAssignmentIndicationToggle",
+        "port": "EpAssignmentIndicationToggle_selectedPmis"
+      },
+      "target": {
+        "view": "WiAssignedPmiTable",
+        "port": "WiAssignedPmiTable_setPmiSelection"
+      }
+    },
+    "assignmentIndicationToggleToAssignedPmisTableSync3": {
+      "source": {
+        "view": "EpAssignmentIndicationToggle",
+        "port": "EpAssignmentIndicationToggle_toBeSelectedAssignedPmis"
+      },
+      "target": {
+        "view": "WiAssignedPmiTable",
+        "port": "WiAssignedPmiTable_syncPmiSelectionForOperation"
+      }
+    },
+    "syncStrategyWiAssemblyPmiTableToEpSingleVisViewer": {
+      "source": {
+        "view": "WiAssemblyPmiTable",
+        "port": "WiAssemblyPmiTable_selectedPmis"
+      },
+      "target": {
+        "view": "EpSingleVisViewer",
+        "port": "EpSingleVisViewer_setSelection"
+      }
+    },
+    "syncStrategyWiAssignedPmiTableToEpSingleVisViewer": {
+      "source": {
+        "view": "WiAssignedPmiTable",
+        "port": "WiAssignedPmiTable_selectedPmis"
+      },
+      "target": {
+        "view": "EpSingleVisViewer",
+        "port": "EpSingleVisViewer_setSelection"
+      }
+    },
+    "syncStrategyWiPmiinfoTableToEpSingleVisViewer": {
+      "source": {
+        "view": "WiPmiInformation",
+        "port": "wiPmiInfoTable_selectedParts"
+      },
+      "target": {
+        "view": "EpSingleVisViewer",
+        "port": "EpSingleVisViewer_setSelection"
+      }
+    },
+    "syncStrategyWiAssignedInOperationsPopupToOutScope": {
+      "source": {
+        "view": "EpAssignmentIndicationAssignedInList",
+        "port": "EpAssignmentIndicationAssignedInList_outScopeSingleSelectionPort"
+      },
+      "target": {
+        "view": "WiAssignedInOperationsPopup",
+        "port": "WiAssignedInOperationsPopup_navigateToOutOfScopeNode"
+      }
+    },
+    "EpSelectedAssemblyInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningProcessTree": {
+      "source": {
+        "view": "EpSelectedAssemblyInHighLevelPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpHighLevelPlanningProcessTree",
+        "port": "EpHighLevelPlanningProcessTree_setAssemblySelection"
+      }
+    },
+    "externalFlowsTabCountSyncStrategyHighLevelPlanningDetailsArea": {
+      "source": {
+        "view": "EpExternalFlows_EpDetailsTable",
+        "port": "EpDetailsTable_updateTabContentCountPort"
+      },
+      "target": {
+        "view": "EpHighLevelPlanningDetailsArea",
+        "port": "EpHighLevelPlanningDetailsArea_updateTabContentCountPort"
+      }
+    },
+    "targetAssembliesTabCountSyncStrategyHighLevelPlanningDetailsArea": {
+      "source": {
+        "view": "EpScoping_EpDetailsTable",
+        "port": "EpDetailsTable_updateTabContentCountPort"
+      },
+      "target": {
+        "view": "EpHighLevelPlanningDetailsArea",
+        "port": "EpHighLevelPlanningDetailsArea_updateTabContentCountPort"
+      }
+    },
+    "epHighLevelPlanningProcessTreeToEpSelectedProcessInHighLevelPlanningPageSyncMgr": {
+      "source": {
+        "view": "EpHighLevelPlanningProcessTree_EpTreeTable",
+        "port": "EpTreeTable_selectedObjects"
+      },
+      "target": {
+        "view": "EpSelectedProcessInHighLevelPlanningPageSyncMgr",
+        "port": "MfeSyncManager_setSyncObject"
+      }
+    },
+    "epHighLevelPlanningAssociatedProcessToEpSelectedProcessInHighLevelPlanningPageSyncMgr": {
+      "source": {
+        "view": "EpAssociatedProcessesForOldMbomRevision",
+        "port": "EpAssociatedProcessesForOldMbomRevision_selectedProcess"
+      },
+      "target": {
+        "view": "EpSelectedProcessInHighLevelPlanningPageSyncMgr",
+        "port": "MfeSyncManager_setSyncObject"
+      }
+    },
+    "epSelectedProcessInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningSelectProcess": {
+      "source": {
+        "view": "EpSelectedProcessInHighLevelPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpHighLevelPlanningProcessTree_EpTreeTable",
+        "port": "EpTreeTable_selectedObjects"
+      }
+    },
+    "epHighLevelPlanningProcessSequenceToEpSelectedProcessInHighLevelPlanningPageSyncMg": {
+      "source": {
+        "view": "EpPert",
+        "port": "EpPert_singleSelection"
+      },
+      "target": {
+        "view": "EpSelectedProcessInHighLevelPlanningPageSyncMgr",
+        "port": "MfeSyncManager_setSyncObject"
+      }
+    },
+    "epSelectedProcessInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningGuidanceMsg": {
+      "source": {
+        "view": "EpSelectedProcessInHighLevelPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpHighLevelPlanningGuidanceMessage",
+        "port": "EpHighLevelPlanningGuidanceMessage_ProcessTreeSelection"
+      }
+    },
+    "epHighLevelPlanningMbomTreeToEpSelectedAssemblyInHighLevelPlanningPageSyncMgr": {
+      "source": {
+        "view": "EpHighLevelPlanningMbomTree_EpTreeTable",
+        "port": "EpTreeTable_selectedObjects"
+      },
+      "target": {
+        "view": "EpSelectedAssemblyInHighLevelPlanningPageSyncMgr",
+        "port": "MfeSyncManager_setSyncObject"
+      }
+    },
+    "epSelectedAssemblyInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningGuidanceMsg": {
+      "source": {
+        "view": "EpSelectedAssemblyInHighLevelPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpHighLevelPlanningGuidanceMessage",
+        "port": "EpHighLevelPlanningGuidanceMessage_MbomTreeSelection"
+      }
+    },
+    "epSelectedProcessInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningInformation": {
+      "source": {
+        "view": "EpSelectedProcessInHighLevelPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpInformation",
+        "port": "EpInformation_inputObject"
+      }
+    },
+    "epSelectedProcessInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningFiles": {
+      "source": {
+        "view": "EpSelectedProcessInHighLevelPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpFiles",
+        "port": "EpFiles_inputObjects"
+      }
+    },
+    "epSelectedProcessInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningDocuments": {
+      "source": {
+        "view": "EpSelectedProcessInHighLevelPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpDocuments",
+        "port": "EpDocuments_inputObject"
+      }
+    },
+    "epSelectedProcessInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningDetailsArea": {
+      "source": {
+        "view": "EpSelectedProcessInHighLevelPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpHighLevelPlanningDetailsArea",
+        "port": "EpHighLevelPlanningDetailsArea_inputObjects"
+      }
+    },
+    "epSelectedProcessInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningEBOPToScoping": {
+      "source": {
+        "view": "EpSelectedProcessInHighLevelPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpScoping_EpDetailsTable",
+        "port": "EpDetails_inputObject"
+      }
+    },
+    "epSelectedProcessInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningExternalFlows": {
+      "source": {
+        "view": "EpSelectedProcessInHighLevelPlanningPageSyncMgr",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpExternalFlows_EpDetailsTable",
+        "port": "EpDetails_inputObject"
+      }
+    },
+    "filesTabCountSyncStrategyHighLevelPlanningDetailsArea": {
+      "source": {
+        "view": "EpFiles",
+        "port": "EpFiles_updateTabContentCountPort"
+      },
+      "target": {
+        "view": "EpHighLevelPlanningDetailsArea",
+        "port": "EpHighLevelPlanningDetailsArea_updateTabContentCountPort"
+      }
+    },
+    "syncStrategyBackgroundPartsToEbomBackgroundPartsSelectionManager": {
+      "source": {
+        "view": "EpBackgroundPartsTable",
+        "port": "EpBackgroundPartsTable_updateFindInPort"
+      },
+      "target": {
+        "view": "EpBackgroundPartsEbomTree_EpTreeTable",
+        "port": "EpTreeTable_selectedObjects"
+      }
+    },
+    "syncStrategyEpDetailsTableSelectionManager": {
+      "source": {
+        "view": "EpBackgroundPartsTable_EpDetailsTable",
+        "port": "EpDetailsTable_updateTabContentCountPort"
+      },
+      "target": {
+        "view": "EpBackgroundPartsSubPage",
+        "port": "EpBackgroundPartsSubPage_updateTabContentCountPort"
+      }
+    },
+    "syncStrategySelectedProcessInCNPageSyncManagerToWiScopeLabel": {
+      "source": {
+        "view": "epSelectedProcessInWIPageSyncManager",
+        "port": "MfeSyncManager_getSingularSyncObject"
+      },
+      "target": {
+        "view": "EpBOPLowLevelTaskBarLeftBar",
+        "port": "changeScopeLabel_inputObject"
+      }
+    },
+    "epAllocationIndicationAllocatedInListToInScopeEpAllocationIndicationToggleSyncStrategy": {
+      "source": {
+        "view": "EpAssignmentIndicationAssignedInList",
+        "port": "EpAssignmentIndicationAssignedInList_inScopeSingleSelectionPort"
+      },
+      "target": {
+        "view": "EpAllocationIndicationToggle",
+        "port": "EpAllocationIndicationToggle_selectedSourceOperation"
+      }
+    },
+    "epAllocationIndicationMissingInSourceListToEpAllocationIndicationToggleSyncStrategy": {
+      "source": {
+        "view": "EpMissingInSource",
+        "port": "EpMissingInSource_inputObject"
+      },
+      "target": {
+        "view": "EpAllocationIndicationToggle",
+        "port": "EpAllocationIndicationToggle_selectedMissingInSourceOperation"
+      }
+    },
+    "syncStrategyEpBalancingSubPageToEpAllocationIndicationToggle": {
+      "source": {
+        "view": "EpBalancingSubPage",
+        "port": "EpBalancingSubPage_updateIndicationContext"
+      },
+      "target": {
+        "view": "EpAllocationIndicationToggle",
+        "port": "EpAllocationIndicationToggle_updateIndicationContext"
+      }
+    },
+    "syncStrategyEpBalancingManagerToEpAllocationIndicationToggle": {
+      "source": {
+        "view": "EpBalancingManager",
+        "port": "EpBalancingManager_getBalancingData"
+      },
+      "target": {
+        "view": "EpAllocationIndicationToggle",
+        "port": "EpAllocationIndicationToggle_setBalancingData"
+      }
+    }
+  },
+  "syncStrategyHandlers": {
+    "EpOperationToActivitiesSyncHandler": {
+      "id": "syncStrategyEpProcessOperationToEpActivitiesTable",
+      "activeWhen": true
+    },
+    "EpOperationToActivitiesMultipleSelectionSyncHandler": {
+      "id": "syncStrategyEpProcessOperationToEpActivitiesTableMultipleSelection",
+      "activeWhen": true
+    },
+    "EpActivitiesSyncHandler2": {
+      "id": "syncStrategyEpActivitiesTableToSelectedProcessInWIPageSyncManager",
+      "activeWhen": true
+    },
+    "EpActivitiesSyncHandler3": {
+      "id": "syncStrategyEpActivitiesTableToSelectedProcessInAssemblyPlanningPageSyncMgr",
+      "activeWhen": true
+    },
+    "WiEditorToEpActivitiesTableSyncHandler": {
+      "id": "syncStrategyWiEditorToEpActivitiesTable",
+      "activeWhen": true
+    },
+    "syncStrategyEpRevisionRuleListWidgetToEpAddObjectHandler": {
+      "id": "syncStrategyEpRevisionRuleListWidgetToEpAddObject",
+      "activeWhen": true
+    },
+    "syncStrategyEpSearchObjectToEpAddObjectHandler": {
+      "id": "syncStrategyEpSearchObjectToEpAddObject",
+      "activeWhen": true
+    },
+    "syncStrategyEpSearchObjectToEpCreateObjectWithTemplateHandler": {
+      "id": "syncStrategyEpSearchObjectToEpCreateObjectWithTemplate",
+      "activeWhen": true
+    },
+    "syncStrategyEpRevisionRuleListWidgetToEpCreateObjectWithTemplateHandler": {
+      "id": "syncStrategyEpRevisionRuleListWidgetToEpCreateObjectWithTemplate",
+      "activeWhen": true
+    },
+    "syncStrategyHandlerEpProductBopStructureTreeSelectionToSelectedProcessInAssemblyPlanningPage": {
+      "id": "epProductBopStructureTreeSelectionToSelectedProcessInAssemblyPlanningPageSyncMgr",
+      "activeWhen": true
+    },
+    "epProductBopStructureTreeStructureSearchToSelectedProcessInAssemblyPlanningPageSyncMgrHandler": {
+      "id": "epProductBopStructureTreeStructureSearchToSelectedProcessInAssemblyPlanningPageSyncMgr",
+      "activeWhen": true
+    },
+    "syncStrategyHandlerSelectedProcessInAssemblyPlanningPageSyncMgrToEpProductBopStructureTree": {
+      "id": "selectedProcessInAssemblyPlanningPageSyncMgrToEpProductBopStructureTreeSyncMgr",
+      "activeWhen": true
+    },
+    "filesTabHandler": {
+      "id": "filesTabListSummarySyncStrategy",
+      "activeWhen": true
+    },
+    "documensTabHandler": {
+      "id": "documensTabListSummarySyncStrategy",
+      "activeWhen": true
+    },
+    "documensTabCountHandler": {
+      "id": "documensTabCountSyncStrategy",
+      "activeWhen": true
+    },
+    "partsTabCountHandler": {
+      "id": "partsTabCountSyncStrategy",
+      "activeWhen": true
+    },
+    "resourceTabCountHandler": {
+      "id": "resourceTabCountSyncStrategy",
+      "activeWhen": true
+    },
+    "workAreaTabCountHandler": {
+      "id": "workAreaTabCountSyncStrategy",
+      "activeWhen": true
+    },
+    "wiWorkAreaTabCountHandler": {
+      "id": "workAreaTabCountSyncStrategy",
+      "activeWhen": true
+    },
+    "epFilesTabCountHandler": {
+      "id": "epFilesTabCountSyncStrategy",
+      "activeWhen": true
+    },
+    "assignedPmiTabCountHandler": {
+      "id": "assignedPmiTabCountSyncStrategy",
+      "activeWhen": true
+    },
+    "dcdTabCountHandler": {
+      "id": "dcdTabCountSyncStrategy",
+      "activeWhen": true
+    },
+    "epStructureConfigurationFilterNavToEpDetailsTablesHandler": {
+      "id": "epStructureConfigurationFilterNavToEpDetailsTablesSyncStrategy",
+      "activeWhen": true
+    },
+    "syncStrategyEpRevisionRuleListWidgetToEpCloneObjectHandler": {
+      "id": "syncStrategyEpRevisionRuleListWidgetToEpCloneObject",
+      "activeWhen": true
+    },
+    "syncStrategyEpSearchObjectToEpCloneObjectHandler": {
+      "id": "syncStrategyEpSearchObjectToEpCloneObject",
+      "activeWhen": true
+    },
+    "EpValidationHandler4": {
+      "id": "syncStrategyEpValidationResultTableToEpValidation",
+      "activeWhen": true
+    },
+    "EpValidationHandler5": {
+      "id": "syncStrategyEpValidationResultTableToEpValidationResultSelectionLabel",
+      "activeWhen": true
+    },
+    "EpValidationHandler6": {
+      "id": "syncStrategyEpValidationResultTableToSelectedProcessInWIPageSyncManager",
+      "activeWhen": true
+    },
+    "EpValidationHandler7": {
+      "id": "syncStrategyEpValidationResultTableToSelectedProcessInAssemblyPageSyncManager",
+      "activeWhen": true
+    },
+    "structureSearchSyncStrategyForAssemblyTreeHandler": {
+      "id": "structureSearchSyncStrategyForAssemblyTree",
+      "activeWhen": true
+    },
+    "structureSearchSyncStrategyForHighLevelPlanningMbomTreeHandler": {
+      "id": "structureSearchSyncStrategyForHighLevelPlanningMbomTree",
+      "activeWhen": true
+    },
+    "structureSearchSyncStrategyForBackgroundPartsEbomTreeHandler": {
+      "id": "structureSearchSyncStrategyForBackgroundPartsEbomTree",
+      "activeWhen": true
+    },
+    "structureSearchSyncStrategyForProductBopMbomTreeHandler": {
+      "id": "structureSearchSyncStrategyForProductBopMbomTree",
+      "activeWhen": true
+    },
+    "structureSearchSyncStrategyForBalancingProductBOPTreeHandler": {
+      "id": "structureSearchSyncStrategyForBalancingProductBOPTree",
+      "activeWhen": true
+    },
+    "indicationToggleToepSelectedProcessInAssemblyPlanningPageSyncHandler": {
+      "id": "indicationToggleToepSelectedProcessInAssemblyPlanningPageSyncMgr",
+      "activeWhen": true
+    },
+    "missingInSrcToEpAssignmentIndicationToggleSyncHandler": {
+      "id": "missingInSrcToEpAssignmentIndicationToggleSyncStrategy",
+      "activeWhen": true
+    },
+    "assignmentIndicationToggleToEpDetailsTableSyncHandler": {
+      "id": "assignmentIndicationToggleToEpDetailsTableSyncStrategy",
+      "activeWhen": true
+    },
+    "indicationToggleToSelectedProcessInWIPageSyncHandler": {
+      "id": "indicationToggleToSelectedProcessInWIPageSyncStrategy",
+      "activeWhen": true
+    },
+    "epAssignmentIndicationAssignedInListToInScopeEpAssignmentIndicationToggleSyncHandler": {
+      "id": "epAssignmentIndicationAssignedInListToInScopeEpAssignmentIndicationToggleSyncStrategy",
+      "activeWhen": true
+    },
+    "epAssignmentIndicationAssignedInListToOutScopeEpAssignmentIndicationToggleSyncHandler": {
+      "id": "epAssignmentIndicationAssignedInListPopupToOutScopeEpAssignmentIndicationToggleSyncStrategy",
+      "activeWhen": true
+    },
+    "indicationToggleToMfeTaskBarAreaSyncStrategyHandler": {
+      "id": "indicationToggleToMfeTaskBarAreaSyncStrategy",
+      "activeWhen": true
+    },
+    "AssemblyAreaToIndicationToggleSyncStrategyHandler": {
+      "id": "AssemblyAreaToIndicationToggleSyncStrategy",
+      "activeWhen": true
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToEpVisualAreaHandler": {
+      "id": "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToEpVisualArea",
+      "activeWhen": true
+    },
+    "syncStrategySelectedProcessInWIPageSyncManagerToWiVisualAreaHandler": {
+      "id": "syncStrategySelectedProcessInWIPageSyncManagerToWiVisualArea",
+      "activeWhen": true
+    },
+    "epSelectedProcessInAssemblyPlanningPageSyncMgrToEpProcessTreeSyncStrategyHandler": {
+      "id": "epSelectedProcessInAssemblyPlanningPageSyncMgrToEpProcessTreeSyncStrategy",
+      "activeWhen": true
+    },
+    "epProcessPlanningProcessSequenceToEpSelectedProcessInHighLevelPlanningPageSyncMgHandler": {
+      "id": "epProcessPlanningProcessSequenceToEpSelectedProcessInHighLevelPlanningPageSyncMg",
+      "activeWhen": true
+    },
+    "epProcessPlanningPRISelectedOperationToEpSelectedProcessInAssemblyPlanningPageSyncMgrHandler": {
+      "id": "epProcessPlanningPRISelectedOperationToEpSelectedProcessInAssemblyPlanningPageSyncMgr",
+      "activeWhen": true
+    },
+    "syncStrategyAssemblyProcessTreeSelectionToSelectedProcessInAssemblyPlanningPageSyncMgrHandler": {
+      "id": "syncStrategyAssemblyProcessTreeSelectionToSelectedProcessInAssemblyPlanningPageSyncMgr",
+      "activeWhen": true
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToPartsTableHandler": {
+      "id": "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToPartsTable",
+      "activeWhen": true
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToResourcesTableHandler": {
+      "id": "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToResourcesTable",
+      "activeWhen": true
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToWorkareaTableHandler": {
+      "id": "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToWorkareaTable",
+      "activeWhen": true
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToWiWorkareaTableHandler": {
+      "id": "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToWiWorkareaTable",
+      "activeWhen": true
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToInformationHandler": {
+      "id": "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToInformation",
+      "activeWhen": true
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToFilesHandler": {
+      "id": "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToFiles",
+      "activeWhen": true
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToDocumentsHandler": {
+      "id": "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToDocuments",
+      "activeWhen": true
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToEpValidationResultTableHandler": {
+      "id": "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToEpValidationResultTable",
+      "activeWhen": true
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToEpValidationMessageHandler": {
+      "id": "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToEpValidationMessage",
+      "activeWhen": true
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToEpValidationProcessTreeSelectionLabelHandler": {
+      "id": "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToEpValidationProcessTreeSelectionLabel",
+      "activeWhen": true
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToEpValidationProcessTreeSelectionLabelOnResultsHandler": {
+      "id": "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToEpValidationProcessTreeSelectionLabelOnResults",
+      "activeWhen": {
+        "condition": "conditions.epValidationSyncResultLabel"
+      }
+    },
+    "syncStrategyAssemblyProcessTreeToEpValidationMessageHandler": {
+      "id": "syncStrategyAssemblyProcessTreeToEpValidationMessage",
+      "activeWhen": true
+    },
+    "syncStrategyAssemblyProcessTreeToEpValidationProcessTreeSelectionLabelHandler": {
+      "id": "syncStrategyAssemblyProcessTreeToEpValidationProcessTreeSelectionLabel",
+      "activeWhen": true
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToEpDetailsAreaHandler": {
+      "id": "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToEpDetailsArea",
+      "activeWhen": true
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToDCDsHnadler": {
+      "id": "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToDCDs",
+      "activeWhen": true
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToEpVisualsListHandler": {
+      "id": "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToEpVisualsList",
+      "activeWhen": true
+    },
+    "epSelectedProcessInAssemblyPlanningPageSyncMgrToEpExternalFlowsHandler": {
+      "id": "epSelectedProcessInAssemblyPlanningPageSyncMgrToEpExternalFlows",
+      "activeWhen": true
+    },
+    "syncStrategyAssemblyTreeSelectionToSelectedAssemblyInAssemblyPlanningPageSyncMgrHandler": {
+      "id": "syncStrategyAssemblyTreeSelectionToSelectedAssemblyInAssemblyPlanningPageSyncMgr",
+      "activeWhen": true
+    },
+    "configurationUpdateByPanelToProcessTreeTableViewHandler": {
+      "id": "configurationUpdateByPanelToProcessTreeTableView",
+      "activeWhen": true
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToInspectionDefinitionsDetailsTableHandler": {
+      "id": "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToInspectionDefinitionsDetailsTable",
+      "activeWhen": true
+    },
+    "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToInspectionDefinitionsTableHandler": {
+      "id": "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToInspectionDefinitionsTable",
+      "activeWhen": true
+    },
+    "apProcessTreeStructureSearchToSelectedProcessInAssemblyPlanningPageSyncMgrHandler": {
+      "id": "apProcessTreeStructureSearchToSelectedProcessInAssemblyPlanningPageSyncMgr",
+      "activeWhen": true
+    },
+    "epAssignWorkAreaSyncStrategyHandler": {
+      "id": "epAssignWorkAreaSyncStrategy",
+      "activeWhen": true
+    },
+    "epBoeTreeStructureTreeStructureSearchToSelectedResourceInAssemblyPlanningPageSyncMgrHandler": {
+      "id": "epBoeTreeStructureTreeStructureSearchToSelectedResourceInAssemblyPlanningPageSyncMgr",
+      "activeWhen": true
+    },
+    "WIClassicSubPageToIndicationToggleSyncHandler": {
+      "id": "syncStrategyWIClassicSubPageToIndicationToggle",
+      "activeWhen": true
+    },
+    "syncStrategyFromWiEditorToProcessTreeHandler": {
+      "id": "syncStrategyFromWiEditorToProcessTree",
+      "activeWhen": true
+    },
+    "WiSyncHandler4": {
+      "id": "syncStrategySelectedProcessInWIPageSyncManagerToEpPartsTable4",
+      "activeWhen": true
+    },
+    "WiSyncHandler5": {
+      "id": "syncStrategySelectedProcessInWIPageSyncManagerToEpResourcesTable5",
+      "activeWhen": true
+    },
+    "WiSyncHandler6": {
+      "id": "syncStrategySelectedProcessInWIPageSyncManagerToEpWorkareaTable6",
+      "activeWhen": true
+    },
+    "WiSyncHandler7": {
+      "id": "syncStrategySelectedProcessInWIPageSyncManagerToEpInformation7",
+      "activeWhen": true
+    },
+    "WiSyncHandler26": {
+      "id": "syncStrategySelectedProcessInWIPageSyncManagerToEpFilesTab26",
+      "activeWhen": true
+    },
+    "WiSyncHandler8": {
+      "id": "syncStrategySelectedProcessInWIPageSyncManagerToEpDocuments8",
+      "activeWhen": true
+    },
+    "WiSyncHandler9": {
+      "id": "syncStrategySelectedProcessInWIPageSyncManagerToEpDCDsTable9",
+      "activeWhen": true
+    },
+    "WiSyncHandler15": {
+      "id": "syncStrategySelectedProcessInWIPageSyncManagerToWiEditor15",
+      "activeWhen": true
+    },
+    "WiSyncHandler16": {
+      "id": "syncStrategySelectedProcessInWIPageSyncManagerToWiAssemblyPmiTable16",
+      "activeWhen": true
+    },
+    "WiSyncHandler17": {
+      "id": "syncStrategySelectedProcessInWIPageSyncManagerToWiAssignedPmiTable17",
+      "activeWhen": true
+    },
+    "WiSyncHandler46": {
+      "id": "syncStrategyepSelectedProcessInWIPageSyncMgrToEpExternalFlows",
+      "activeWhen": true
+    },
+    "WiSyncHandler23": {
+      "id": "syncStrategySelectedProcessInWIPageSyncManagerToWiVisualsList23",
+      "activeWhen": true
+    },
+    "WiSyncHandler27": {
+      "id": "syncStrategyEpVisViewerVisibilityToWiVisualsList27",
+      "activeWhen": true
+    },
+    "WiSyncHandler33": {
+      "id": "syncStrategyWiVisualsListToEpImageViewer1",
+      "activeWhen": true
+    },
+    "WiSyncHandler28": {
+      "id": "syncStrategySelectedProcessInWIPageSyncManagerToEpDetailsArea28",
+      "activeWhen": true
+    },
+    "WiSyncHandler29": {
+      "id": "syncStrategyWiProcessTreeToEpValidationResultTable",
+      "activeWhen": true
+    },
+    "WiSyncHandler30": {
+      "id": "syncStrategyWiProcessTreeToEpValidationMessage",
+      "activeWhen": true
+    },
+    "WiSyncHandler31": {
+      "id": "syncStrategyWiProcessTreeToEpValidationProcessTreeSelectionLabel",
+      "activeWhen": true
+    },
+    "WiSyncHandler37": {
+      "id": "syncStrategyWiProcessTreeToSelectedProcessInWIPageSyncManager37",
+      "activeWhen": {
+        "condition": "conditions.isSelectionForEditorEnabled"
+      }
+    },
+    "WiSyncHandler36": {
+      "id": "syncStrategyWiAssemblyTreeToMfeSyncManager36",
+      "activeWhen": true
+    },
+    "WiSyncHandler38": {
+      "id": "syncStrategyAssemblyTreeSelectionManagerToWiAssemblyPmiTable38",
+      "activeWhen": true
+    },
+    "WiSyncHandler41": {
+      "id": "syncStrategyWiEditorToSelectedProcessInWIPageSyncManager41",
+      "activeWhen": {
+        "condition": "conditions.isInputObjectUpdatedWiEditorToSelectedInProcessTreeSyncManager"
+      }
+    },
+    "WiSyncHandler43": {
+      "id": "syncStrategySelectedProcessInWIPageSyncManagerToWiScopeLabel43",
+      "activeWhen": true
+    },
+    "WiSyncHandler44": {
+      "id": "syncStrategySelectedProcessInWIPageSyncManagerToWiWorkareaTable6",
+      "activeWhen": true
+    },
+    "configurationUpdateByPanelToWiEditorHandler": {
+      "id": "configurationUpdateByPanelToWiEditor",
+      "activeWhen": true
+    },
+    "WiSyncHandler52": {
+      "id": "syncStrategySelectedProcessInWIPageSyncManagerToEpInspectionDefinitionsDetailsTable52",
+      "activeWhen": true
+    },
+    "WiSyncHandler53": {
+      "id": "syncStrategySelectedProcessInWIPageSyncManagerToInspectionDefinitionsTable52",
+      "activeWhen": true
+    },
+    "wiProcessTreeStructureSearchToSelectedProcessInWIPageSyncMgrHandler": {
+      "id": "wiProcessTreeStructureSearchToSelectedProcessInWIPageSyncMgr",
+      "activeWhen": true
+    },
+    "syncStrategyEpSelectedEntityBalancingPageSyncManagerToEpBalancingOperationsTableInputHandler": {
+      "id": "syncStrategyEpSelectedEntityBalancingPageSyncManagerToEpBalancingOperationsTableInput",
+      "activeWhen": true
+    },
+    "syncStrategyEpStructureConfigurationFilterNavToEpBalancingStationTilesListHandler": {
+      "id": "syncStrategyEpStructureConfigurationFilterNavToEpBalancingStationTilesList",
+      "activeWhen": true
+    },
+    "epPartPlanningActivitiesTreeAreaHandler1": {
+      "id": "syncStrategySelectedProcessInAssemblyPlanningPageSyncMgrToActivitiesPartPlanning",
+      "activeWhen": true
+    },
+    "filesTabActivityHandler": {
+      "id": "filesTabActivityListSummarySyncStrategy",
+      "activeWhen": true
+    },
+    "syncActivitiesToFilesHandler": {
+      "id": "syncActivitiesToFiles",
+      "action": "changeToSingleSelection",
+      "activeWhen": true
+    },
+    "assignmentIndicationToggleToAssignedPmisTableSyncHandler": {
+      "id": "assignmentIndicationToggleToAssignedPmisTableSync",
+      "activeWhen": true
+    },
+    "assignmentIndicationToggleToAssignedPmisTableSyncHandler2": {
+      "id": "assignmentIndicationToggleToAssignedPmisTableSync2",
+      "activeWhen": true
+    },
+    "assignmentIndicationToggleToAssignedPmisTableSyncHandler3": {
+      "id": "assignmentIndicationToggleToAssignedPmisTableSync3",
+      "activeWhen": true
+    },
+    "syncHandlerWiAssemblyPmiTableToEpSingleVisViewer": {
+      "id": "syncStrategyWiAssemblyPmiTableToEpSingleVisViewer",
+      "activeWhen": true
+    },
+    "syncHandlerWiAssignedPmiTableToEpSingleVisViewer": {
+      "id": "syncStrategyWiAssignedPmiTableToEpSingleVisViewer",
+      "activeWhen": true
+    },
+    "syncHandlerWiPmiinfoTableToEpSingleVisViewer": {
+      "id": "syncStrategyWiPmiinfoTableToEpSingleVisViewer",
+      "activeWhen": true
+    },
+    "syncHandlerWiAssignedInOperationsPopupToOutScope": {
+      "id": "syncStrategyWiAssignedInOperationsPopupToOutScope",
+      "activeWhen": true
+    },
+    "epSelectedProcessInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningSelectProcessHandler": {
+      "id": "epSelectedProcessInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningSelectProcess",
+      "activeWhen": true
+    },
+    "epHighLevelPlanningAssociatedProcessToEpSelectedProcessInHighLevelPlanningPageSyncMgrHandler": {
+      "id": "epHighLevelPlanningAssociatedProcessToEpSelectedProcessInHighLevelPlanningPageSyncMgr",
+      "activeWhen": true
+    },
+    "EpSelectedAssemblyInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningProcessTreeHandler": {
+      "id": "EpSelectedAssemblyInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningProcessTree",
+      "activeWhen": true
+    },
+    "epHighLevelPlanningProcessTreeToEpSelectedProcessInHighLevelPlanningPageSyncMgrHandler": {
+      "id": "epHighLevelPlanningProcessTreeToEpSelectedProcessInHighLevelPlanningPageSyncMgr",
+      "activeWhen": true
+    },
+    "epHighLevelPlanningProcessSequenceToEpSelectedProcessInHighLevelPlanningPageSyncMgrHandler": {
+      "id": "epHighLevelPlanningProcessSequenceToEpSelectedProcessInHighLevelPlanningPageSyncMg",
+      "activeWhen": true
+    },
+    "epSelectedProcessInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningGuidanceMsgHandler": {
+      "id": "epSelectedProcessInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningGuidanceMsg",
+      "activeWhen": true
+    },
+    "epHighLevelPlanningMbomTreeToEpSelectedAssemblyInHighLevelPlanningPageSyncMgrHandler": {
+      "id": "epHighLevelPlanningMbomTreeToEpSelectedAssemblyInHighLevelPlanningPageSyncMgr",
+      "activeWhen": true
+    },
+    "epSelectedAssemblyInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningGuidanceMsgSyncHandler": {
+      "id": "epSelectedAssemblyInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningGuidanceMsg",
+      "activeWhen": true
+    },
+    "epSelectedProcessInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningInformationSyncHandler": {
+      "id": "epSelectedProcessInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningInformation",
+      "activeWhen": true
+    },
+    "epSelectedProcessInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningFilesSyncHandler": {
+      "id": "epSelectedProcessInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningFiles",
+      "activeWhen": true
+    },
+    "epSelectedProcessInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningEBOPToScopingHandler": {
+      "id": "epSelectedProcessInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningEBOPToScoping",
+      "activeWhen": true
+    },
+    "externalFlowsTabCountSyncStrategyHighLevelPlanningDetailsAreaHandler": {
+      "id": "externalFlowsTabCountSyncStrategyHighLevelPlanningDetailsArea",
+      "activeWhen": true
+    },
+    "targetAssembliesTabCountSyncStrategyHighLevelPlanningDetailsAreaHandler": {
+      "id": "targetAssembliesTabCountSyncStrategyHighLevelPlanningDetailsArea",
+      "activeWhen": true
+    },
+    "epSelectedProcessInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningDocumentsSyncHandler": {
+      "id": "epSelectedProcessInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningDocuments",
+      "activeWhen": true
+    },
+    "epSelectedProcessInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningDetailsAreaSyncHandler": {
+      "id": "epSelectedProcessInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningDetailsArea",
+      "activeWhen": true
+    },
+    "epSelectedProcessInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningExternalFlowsHandler": {
+      "id": "epSelectedProcessInHighLevelPlanningPageSyncMgrToEpHighLevelPlanningExternalFlows",
+      "activeWhen": true
+    },
+    "filesTabCountSyncStrategyHighLevelPlanningDetailsAreaHandler": {
+      "id": "filesTabCountSyncStrategyHighLevelPlanningDetailsArea",
+      "activeWhen": true
+    },
+    "EpBkPartSyncHandler1": {
+      "id": "syncStrategyBackgroundPartsToEbomBackgroundPartsSelectionManager",
+      "activeWhen": true
+    },
+    "EpBkPartSyncHandler2": {
+      "id": "syncStrategyEpDetailsTableSelectionManager",
+      "activeWhen": true
+    },
+    "changeSelectedProcessInCNPageSyncManagerToWiScopeHandler": {
+      "id": "syncStrategySelectedProcessInCNPageSyncManagerToWiScopeLabel",
+      "activeWhen": true
+    },
+    "epAllocationIndicationAllocatedInListToInScopeEpAllocationIndicationToggleSyncStrategyHandler": {
+      "id": "epAllocationIndicationAllocatedInListToInScopeEpAllocationIndicationToggleSyncStrategy",
+      "activeWhen": true
+    },
+    "epAllocationIndicationMissingInSourceListToEpAllocationIndicationToggleSyncStrategyHandler": {
+      "id": "epAllocationIndicationMissingInSourceListToEpAllocationIndicationToggleSyncStrategy",
+      "activeWhen": true
+    },
+    "syncStrategyEpBalancingSubPageToEpAllocationIndicationToggleHandler": {
+      "id": "syncStrategyEpBalancingSubPageToEpAllocationIndicationToggle",
+      "activeWhen": true
+    },
+    "syncStrategyEpBalancingManagerToEpAllocationIndicationToggleHandler": {
+      "id": "syncStrategyEpBalancingManagerToEpAllocationIndicationToggle",
+      "activeWhen": true
+    }
+  },
+  "conditions": {
+    "epValidationSyncResultLabel": {
+      "expression": "ctx.epValidationContext.epValidationResultLabelSync === 'true'"
+    },
+    "isSelectionForEditorEnabled": {
+      "expression": "ctx.epWiSelectionMode === 'EDITOR'"
+    },
+    "isInputObjectUpdatedWiEditorToSelectedInProcessTreeSyncManager": {
+      "expression": "syncContext.sourceViewModel.ports.WiEditor_selectedObjects.syncObject.uid ? syncContext.sourceViewModel.ports.WiEditor_selectedObjects.syncObject.uid !== syncContext.targetViewModel.ports.MfeSyncManager_getSingularSyncObject.syncObject.uid : syncContext.sourceViewModel.ports.WiEditor_selectedObjects.syncObject[0].uid !== syncContext.targetViewModel.ports.mfeSyncManager_getSingularSyncObject.syncObject.uid"
+    }
+  },
+  "actions": {
+    "changeToSingleSelection": {
+      "actionType": "JSFunction",
+      "method": "setSingleSelectionInResponse",
+      "inputData": {
+        "value": "{{syncContext.sourceViewModel.ports.EpTreeTable_selectedObjects.syncObject[0]}}"
+      },
+      "outputData": {},
+      "deps": "js/epPartPlanningActivitiesService"
+    }
+  }
+}

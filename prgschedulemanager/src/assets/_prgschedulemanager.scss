@@ -1,0 +1,139 @@
+// Copyright 2022 Siemens Product Lifecycle Management Software Inc.
+
+//Kanban Styling starts here
+.aw-prgSchedulemanager-kanban {
+    display: flex;
+    -webkit-flex: 1 1 auto;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    overflow-x: scroll
+}
+
+.aw-prgSchedulemanager-kanban .webix_list_item {
+    padding: rem-calc(5);
+}
+.aw-prgschedulemanager-hint {
+    font-style: italic;
+}
+
+.aw-prgSchedulemanager-kanbanBoardCard.webix_kanban_list_item .webix_kanban_tag {
+    background: none;
+    font-size: $fontsize_normal;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    padding-left: rem-calc(5);
+}
+
+.aw-prgSchedulemanager-kanbanBoardCard.webix_kanban_list_item .webix_kanban_footer {
+    padding: 0
+}
+
+.aw-prgSchedulemanager-kanbanBoardCard .webix_kanban_body {
+    font-size: $fontsize_large;
+    width: rem-calc(40)
+}
+
+.aw-prgSchedulemanager-kanbanBoardCard .webix_kanban_user_avatarLeft {
+    float: left;
+    position: initial;
+    border-radius: 0;
+    width: 3.375rem;
+    height: 3.375rem;
+}
+
+.aw-prgSchedulemanager-kanbanBoardCard {
+    .webix_kanban_user_avatarRight {
+        visibility: hidden;
+    }
+
+    &:hover {
+        .webix_kanban_user_avatarRight {
+            visibility: visible;
+        }
+    }
+}
+
+.webix_list_item.webix_selected {
+    .webix_kanban_user_avatarRight {
+        visibility: visible;
+    }
+}
+
+.aw-prgSchedulemanager-kanbanBoardCard .webix_kanban_user_avatarRight {
+    float: right;
+    position: initial;
+    border-radius: 0;
+    width: rem-calc(24);
+    height: rem-calc(24);
+    background-image: url("image/cmdOpen24.svg");
+
+    .avatar {
+        width: rem-calc(16);
+        height: rem-calc(16);
+    }
+}
+
+.aw-prgSchedulemanager-kanbanBoardCard .avatar {
+    width: 3.375rem;
+    height: 3.375rem;
+}
+
+.aw-prgSchedulemanager-kanbanBoardCard .webix_kanban_footer {
+    flex: 1;
+    width: rem-calc(50);
+}
+
+//Kanban Styling ends here
+
+.aw-prgSchedulemanager-topPanel {
+    height: 100%;
+    width: 100%;
+}
+
+.aw-prgSchedulemanager-loadingLabel {
+    font-size: $fontsize_small;
+}
+
+.aw-prgSchedulemanager-setupProgramBoardClearAll aw-link {
+    float: right;
+}
+
+.aw-prgSchedulemanager-checklistStopColor,
+.aw-prgSchedulemanager-checklistWarningColor,
+.aw-prgSchedulemanager-checklistGoodColor {
+    margin-left: $margin_normal;
+}
+
+.aw-xrt-htmlPanelEnableResize aw-walker-view .aw-xrt-htmlPanelResizeSection .aw-layout-panelSectionContent .aw-prgscheduleManager-relationBrowser aw-command-bar *,
+.aw-xrt-htmlPanelEnableResize aw-walker-view .aw-xrt-htmlPanelResizeSection .aw-layout-panelSectionContent .aw-prgscheduleManager-relationBrowser .aw-commandBars {
+    @include flex-direction(unset);
+}
+
+.aw-xrt-htmlPanelEnableResize aw-walker-view .aw-xrt-htmlPanelResizeSection .aw-layout-panelSectionContent .aw-prgscheduleManager-relationBrowser aw-command-bar:nth-child(2) * {
+    justify-content: flex-end;
+    -webkit-justify-content: flex-end;
+}
+
+.aw-xrt-htmlPanelEnableResize aw-walker-view .aw-xrt-htmlPanelResizeSection .aw-layout-panelSectionContent .aw-prgscheduleManager-relationBrowser aw-command-bar * {
+    @include flex(0 1 auto);
+}
+
+.aw-xrt-htmlPanelEnableResize aw-walker-view .aw-xrt-htmlPanelResizeSection .aw-layout-panelSectionContent .aw-prgscheduleManager-relationBrowser .aw-commandIcon {
+    margin-right: 5px;
+}
+
+div.aw-splm-tableCellContents .aw-prgSchedulemanager-checklistTableStopColor,
+div.aw-splm-tableCellContents .aw-prgSchedulemanager-checklistTableWarningColor,
+div.aw-splm-tableCellContents .aw-prgSchedulemanager-checklistTableGoodColor,
+div.aw-widgets-gridCellColorContainer .aw-prgSchedulemanager-checklistTableStopColor,
+div.aw-widgets-gridCellColorContainer .aw-prgSchedulemanager-checklistTableWarningColor,
+div.aw-widgets-gridCellColorContainer .aw-prgSchedulemanager-checklistTableGoodColor {
+    border-style: solid;
+    visibility: visible;
+}
+div.aw-prgSchedulemanager-eventDependencies .aw-graph-canvas {
+    height: rem-calc(500);
+}

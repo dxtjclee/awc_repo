@@ -1,0 +1,19 @@
+<aw-popup2>
+    <aw-panel>
+        <aw-panel-body>
+            <aw-link-with-popup-menu prop="data.currentServiceReq" dataprovider="data.dataProviders.customServiceReq" visible-when="data.dataProviders.customServiceReq.viewModelCollection.loadedVMObjects.length > 1"></aw-link-with-popup-menu>
+            <div class="aw-serviceplanning-popupLabel">
+                <aw-label prop="data.currentServiceReq" visible-when="data.dataProviders.customServiceReq.viewModelCollection.loadedVMObjects.length ===1"></aw-label>
+            </div>
+            <aw-xrt type="CREATE" object-type="{{data.selectedType.dbValue}}" xrt-state="data.xrtState" visible-when="data.dataProviders.customServiceReq.viewModelCollection.loadedVMObjects.length>0"></aw-xrt>
+        </aw-panel-body>
+        <aw-panel-footer>
+            <aw-button button-type="base" action="closePopup" size="auto">
+                <aw-i18n>i18n.Cancel</aw-i18n>
+            </aw-button>
+            <aw-button action="createServiceReqBatchJob" visible-when="formProp.attributes.valid && data.totalFound > 0" size="auto">
+                <aw-i18n>i18n.Add</aw-i18n>
+            </aw-button>
+        </aw-panel-footer>
+    </aw-panel>
+</aw-popup2>

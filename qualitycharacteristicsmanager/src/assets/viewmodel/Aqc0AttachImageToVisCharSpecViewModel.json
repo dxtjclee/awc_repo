@@ -1,0 +1,412 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-panel-section.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-file-upload.directive",
+        "js/exist-when.directive",
+        "js/aw-textbox.directive",
+        "js/aw-textarea.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive",
+        "js/enable-when.directive",
+        "js/visible-when.directive",
+        "js/aw-command-panel.directive",
+        "js/aw-i18n.directive"
+    ],
+    "actions": {
+        "startDatasetCreation": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                        "name": "dataset.initDSCreateParams",
+                        "eventData": {
+                            "fileName": "{{parameters.fileName}}",
+                            "fileNameNoExt": "{{parameters.fileNameNoExt}}",
+                            "fileExt": "{{parameters.fileExt}}",
+                            "validFile ": "{{parameters.validFile}}",
+                            "formData": "{{parameters.formData}}"
+                        }
+                    }
+                ]
+            }
+        },
+        "initDSCreateParams": {
+            "actionType": "JSFunctionAsync",
+            "method": "initDSCreateParams",
+            "inputData": {
+                "data": "{{data}}",
+                "addPanelState": "{{subPanelContext.addPanelState}}"
+            },
+            "outputData": {
+                "isDatasetCreate": "isDatasetCreate",
+                "datasetName": "datasetName",
+                "datasetDesc": "datasetDesc",
+                "datasetType": "datasetType",
+                "reference": "reference",
+                "fileName": "fileName",
+                "fileNameNoExt": "fileNameNoExt",
+                "fileExt": "fileExt",
+                "validFile ": "validFile",
+                "formData": "formData"
+            },
+            "events":{
+                "success": [
+                    {
+                        "name": "aqc0.validateImageResolution",
+                        "condition": "data.fileName"
+                    }
+                ]
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "validateImageResolution": {
+            "actionType": "JSFunction",
+            "method": "validateImageResolution",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "validFileResolution": "validFileResolution"
+            },
+            "deps": "js/Aqc0CharLibraryUtilService"
+        },
+        "createImageDatasetForVisCharSpec": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-04-DataManagement",
+            "method": "createDatasets",
+            "inputData": {
+                "input": [ {
+                    "clientId": "{{data.datasetName.dbValue}}",
+                    "container": {
+                        "uid": "AAAAAAAAAAAAAA",
+                        "type": "unknownType"
+                    },
+                    "datasetFileInfos": [ {
+                        "fileName": "{{data.fileName}}",
+                        "namedReferenceName": "Image",
+                        "isText": false
+                    } ],
+                    "relationType": "",
+                    "description": "{{data.datasetDesc.dbValue}}",
+                    "name": "{{data.datasetName.dbValue}}",
+                    "type": "Image"
+                } ]
+            },
+            "outputData": {
+                "fmsTicket": "datasetOutput[0].commitInfo[0].datasetFileTicketInfos[0].ticket",
+                "commitInfos": "datasetOutput[0].commitInfo[0]",
+                "relatedModified": "datasetOutput[0].dataset",
+                "createdObject": "datasetOutput[0].dataset",
+                "createdImageDatasetObjectInVisChar": "datasetOutput[0].dataset"
+            },
+            "events": {
+                "success": [ {
+                    "name": "fmsTicket.update"
+
+                } ],
+                "failure": [ {
+                    "name": "aqc0.addOprfailed"
+                } ]
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "updateFormData": {
+            "actionType": "JSFunction",
+            "method": "updateFormData",
+            "deps": "js/fileUploadUtils",
+            "inputData": {
+                "formData": "{{data.formData}}",
+                "key": "fmsTicket",
+                "value": "{{data.fmsTicket}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "fmsFile.correctFormFileOrientation"
+                } ]
+            }
+        },
+        "correctFormFileOrientation": {
+            "actionType": "JSFunctionAsync",
+            "method": "correctFormFileOrientation",
+            "inputData": {
+                "formData": "{{data.formData}}",
+                "formFileKey": "fmsFile"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "aqc0.datasetCreated"
+                    }
+                ]
+            },
+            "deps": "js/imageOrientationUtils"
+        },
+        "uploadFile": {
+            "actionType": "RESTService",
+            "serviceName": "",
+            "method": "POST",
+            "inputData": {
+                "request": {
+                    "method": "POST",
+                    "url": "{{Constants.fmsUrl}}",
+                    "headers": {
+                        "Content-type": "undefined"
+                    },
+                    "data": "{{data.formData}}"
+                }
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "aqc0.fileUploaded"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "aqc0.commitFailed"
+                    },
+                    {
+                        "name": "aqc0.addOprfailed"
+                    }
+                ]
+            }
+        },
+        "commitDatasetFiles": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-FileManagement",
+            "method": "commitDatasetFiles",
+            "inputData": {
+                "commitInput": [ {
+                    "dataset": "{{data.commitInfos.dataset}}",
+                    "createNewVersion": true,
+                    "datasetFileTicketInfos": [ {
+                        "datasetFileInfo": {
+                            "clientId": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.clientId}}",
+                            "fileName": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.fileName}}",
+                            "namedReferencedName": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.namedReferenceName}}",
+                            "isText": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.isText}}",
+                            "allowReplace": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.allowReplace}}"
+                        },
+                        "ticket": "{{data.fmsTicket}}"
+                    } ]
+                } ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name":"fileReplace.success"
+                    },
+                    {
+                        "name": "aqc0.attachImageToCharSpecification"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "aqc0.commitFailed"
+                    },
+                    {
+                        "name": "aqc0.addOprfailed"
+                    }
+                ]
+            }
+        },
+        "updateCtxVariableFalse": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "inputData": {
+                "name": "addItemEventProgressing"
+            },
+            "deps": "js/appCtxService"
+        },
+        "deleteDataset": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "deleteObjects",
+            "inputData": {
+                "objects": [
+                    "{{data.createdObject}}"
+                ]
+            }
+        },
+        "attachImageToCharSpecification": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-09-DataManagement",
+            "method": "setProperties",
+            "inputData": {
+                "info": [ {
+                    "object": "{{ctx.selected}}",
+                    "timestamp": "",
+                    "vecNameVal": [ {
+                        "name": "IMAN_specification",
+                        "values":
+                        [
+                            "{{data.createdImageDatasetObjectInVisChar.uid}}"
+                        ]
+                    } ]
+                } ]
+            },
+            "events": {
+                "success": [ {
+                    "name":"cdm.relatedModified",
+                    "eventData": {
+                        "refreshLocationFlag": true,
+                        "relatedModified": [
+                            "{{ctx.selected}}"
+                        ]
+                    }
+                },
+                {
+                    "name":"fileReplace.success"
+                },
+                {
+                    "name": "complete",
+                    "eventData":
+                    {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ],
+                "failure": [ {
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "attachImageToVisCharSpecSuccessMessage"
+                    }
+                ],
+                "failure": [
+                    {
+                        "message": "attachImageToVisCharSpecErrorMessage"
+                    }
+                ]
+            }
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "fmsTicket.update",
+            "action": "updateFormData"
+        },
+        {
+            "eventId": "fmsFile.correctFormFileOrientation",
+            "action": "correctFormFileOrientation"
+        },
+        {
+            "eventId": "aqc0.datasetCreated",
+            "action": "uploadFile"
+        },
+        {
+            "eventId": "aqc0.fileUploaded",
+            "action": "commitDatasetFiles"
+        },
+        {
+            "eventId": "aqc0.addOprfailed",
+            "action": "updateCtxVariableFalse"
+        },
+        {
+            "eventId": "aqc0.commitFailed",
+            "action": "deleteDataset"
+        },
+        {
+            "eventId": "invalidFileSelected",
+            "message": "invalidFileError"
+        },
+        {
+            "eventId": "dataset.initDSCreateParams",
+            "action": "initDSCreateParams",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "aqc0.validateImageResolution",
+            "action": "validateImageResolution"
+        },
+        {
+            "eventId": "aqc0.attachImageToCharSpecification",
+            "action": "attachImageToCharSpecification"
+        }
+    ],
+    "conditions": {
+        "isValidFileExt":{
+            "expression" : "(data.eventData.fileExt).toLowerCase() === 'gif' || (data.eventData.fileExt).toLowerCase() === 'jpg' || (data.eventData.fileExt).toLowerCase() === 'jpeg' || (data.eventData.fileExt).toLowerCase() === 'png'"
+        },
+        "enableAqc0Attach":{
+            "expression" : "data.validFileResolution == true && data.fileName && data.fileName !== '' && data.datasetName && data.datasetName.dbValue && conditions.isValidFileExt"
+        }
+    },
+    "data": {
+        "typeFilter": ".png, .gif, .jpg, .jpeg",
+        "datasetName": {
+            "displayName": "{{i18n.Name}}",
+            "type": "STRING",
+            "isRequired": "true"
+        },
+        "datasetDesc": {
+            "displayName": "{{i18n.Description}}",
+            "type": "STRING"
+        },
+        "datasetType": {
+            "displayName": "{{i18n.type}}",
+            "type": "STRING",
+            "dbValue": "Image"
+        },
+        "reference": {
+            "displayName": "{{i18n.reference}}",
+            "type": "STRING",
+            "dbValue": "Image"
+        },
+        "performAddOperation": true
+    },
+    "messages": {
+        "invalidFileError": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.Aqc0InvalidImageFileError}}",
+            "navigationOptions": [ {
+                "option": "Cancel",
+                "text": "{{i18n.Aqc0Cancel}}"
+            } ]
+        },
+        "attachImageToVisCharSpecSuccessMessage": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.Aqc0AttachImageToVisCharSpecSuccessMessage}}",
+            "messageTextParams": [
+                "{{data.datasetName.dbValue}}"
+            ]
+        },
+        "attachImageToVisCharSpecErrorMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "i18n": {
+        "Aqc0AttachImageToVisCharSpecTitle": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "UploadImageFile": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Aqc0Attach": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Name": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Description": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Aqc0AttachImageToVisCharSpecSuccessMessage": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Aqc0InvalidImageFileError": [
+             "qualitycharacteristicsmanagerMessages"
+        ],
+        "Aqc0Cancel": [
+            "qualitycharacteristicsmanagerMessages"
+        ]
+    }
+}

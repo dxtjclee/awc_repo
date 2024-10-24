@@ -1,0 +1,375 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "actions": {
+        "createCondAndAddExpr": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2008-06-DataManagement",
+            "method": "createObjects",
+            "inputData": {
+                "input": [ {
+                    "clientId": "",
+                    "data": {
+                        "boName": "Acp0RuleCondition",
+                        "tagProps": {
+                            "acp0NamingConventionRef": {
+                                "type": "Acp0NamingConvention",
+                                "uid": "{{data.acp0NamingConvention.dbValue.uid}}"
+                            }
+                        },
+                        "stringArrayProps": {
+                            "acp0Expresison": [
+                                "{{data.sourceAttribute.dbValue}} {{data.relation.uiValue}} {{data.attributeValue.uiValue}}"
+                            ]
+                        }
+                    }
+                } ]
+            },
+            "outputData": {
+                "createdCondObject": "output[0].objects[0]"
+            },
+            "events": {
+                "success": [ {
+                    "name": "acp0.setPropForAddConditionOnRule"
+                } ]
+            }
+        },
+        "setPropForAddConditionOnRule": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-09-DataManagement",
+            "method": "setProperties",
+            "inputData": {
+                "info": [ {
+                    "object": "{{ctx.selected}}",
+                    "timestamp": "",
+                    "vecNameVal": [ {
+                        "name": "acp0RuleCondition",
+                        "values": "{{function:getCondorExpToAdd}}"
+                    } ]
+                } ]
+            },
+            "events": {
+                "success": [ {
+                        "name": "condExprGrid.plTable.reload",
+                        "condition": "ctx.selected.type === 'Acp0Rule'"
+                    },
+                    {
+                        "name": "acp0exprsCreated",
+                        "eventData": {
+                            "createdGroups": [
+                                "{{data.createdCondObject}}"
+                            ],
+                            "isPinnedFlag": "{{subPanelContext.panelPinned}}"
+                        }
+                    },
+                    {
+                        "name": "complete",
+                        "condition": "!subPanelContext.panelPinned",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    },
+                    {
+                        "name": "cdm.relatedModified",
+                        "condition": "ctx.editInProgress && ctx.selected && ctx.selected.modelType.typeHierarchyArray.indexOf('Acp0Rule') > -1",
+                        "eventData": {
+                            "refreshLocationFlag": true,
+                            "relatedModified": [
+                                "{{ctx.selected}}"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "primaryWorkarea.reset",
+                        "condition": "ctx.editInProgress && ctx.selected && ctx.selected.modelType.typeHierarchyArray.indexOf('Acp0Rule') > -1"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [ {
+                    "message": "addConditionSuccessfulMessage"
+                } ]
+            },
+            "deps": "js/Acp0RuleNCCondUtils"
+        },
+        "addExprInCond": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-09-DataManagement",
+            "method": "setProperties",
+            "inputData": {
+                "info": [ {
+                    "object": "{{ctx.selected}}",
+                    "timestamp": "",
+                    "vecNameVal": [ {
+                        "name": "acp0Expresison",
+                        "values": "{{function:getCondorExpToAdd}}"
+                    } ]
+                } ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "condExprGrid.plTable.reload",
+                        "condition": "ctx.selected.type === 'Acp0Rule'"
+                    },
+                    {
+                        "name": "complete",
+                        "condition": "!subPanelContext.panelPinned",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    },
+                    {
+                        "name": "cdm.relatedModified",
+                        "condition": "ctx.editInProgress && ctx.pselected && ctx.pselected.modelType.typeHierarchyArray.indexOf('Acp0Rule') > -1",
+                        "eventData": {
+                            "refreshLocationFlag": true,
+                            "relatedModified": [
+                                "{{ctx.pselected}}"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Acp0RuleNCCondUtils"
+        },
+        "loadRequiredLOVValues": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadRequiredLOVValues",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "NamingConvention": "NamingConvention",
+                "operator":"Operator",
+                "acp0NamingConvention":"acp0NamingConvention"
+            },
+            "deps": "js/Acp0RuleNCCondUtils"
+        },
+        "ncSelectionChange": {
+            "actionType": "JSFunction",
+            "method": "loadSourceAttributeLOVValues",
+            "inputData": {
+                "fields":"{{fields}}",
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "SourceAttribute": "SourceAttributeList",
+                "sourceAttribute":"sourceAttributeVal"
+            },
+            "deps": "js/Acp0RuleNCCondUtils"
+        }
+    },
+    "conditions": {
+        "isWithOperatorPanelVisible": {
+            "expression": "ctx.selected && ctx.selected.type === 'Acp0RuleCondition'"
+        },
+        "ncVisibleOnPanel": {
+            "expression": "ctx.selected && ctx.selected.type === 'Acp0Rule'"
+        },
+        "namingConventionChangeCondition": {
+            "expression": "data.acp0NamingConvention.dbValue",
+            "trackValues": true
+        },
+        "opertaorChangeCondition": {
+            "expression": "data.operator.dbValue",
+            "trackValues": true
+        },
+        "createCondAndAddExprVisibleWhen": {
+            "expression": "data.acp0NamingConvention.dbValue !=='' && data.acp0NamingConvention.dbValue !==null && data.acp0NamingConvention.dbValue !== undefined && data.sourceAttribute.dbValue !=='' && data.sourceAttribute.dbValue !==null && data.sourceAttribute.dbValue !== undefined && data.relation.dbValue !=='' && data.relation.dbValue !==null && data.relation.dbValue !== undefined && data.attributeValue.dbValue !=='' && data.attributeValue.dbValue !==null && data.attributeValue.dbValue !== undefined"
+        },
+        "addExprInCondVisibleWhen": {
+            "expression": "data.operator.dbValue !=='' && data.operator.dbValue !==null && data.operator.dbValue !== undefined && data.sourceAttribute.dbValue !=='' && data.sourceAttribute.dbValue !==null && data.sourceAttribute.dbValue !== undefined && data.relation.dbValue !=='' && data.relation.dbValue !==null && data.relation.dbValue !== undefined && data.attributeValue.dbValue !=='' && data.attributeValue.dbValue !==null && data.attributeValue.dbValue !== undefined"
+        }
+    },
+    "onEvent": [ {
+            "eventId": "acp0.setPropForAddConditionOnRule",
+            "action": "setPropForAddConditionOnRule"
+        },
+        {
+            "eventId": "acp0.expandCondNodeAftrAddExpr",
+            "action": "expandCondNodeAftrAddExpr"
+        },
+        {
+            "eventId": "condition.expressionValueChanged",
+            "action": "ncSelectionChange",
+            "criteria": {
+                "condition": "conditions.namingConventionChangeCondition"
+            },
+            "cacheEventData": true
+        },
+        {
+            "eventId": "condition.expressionValueChanged",
+            "action": "ncSelectionChange",
+            "criteria": {
+                "condition": "conditions.opertaorChangeCondition"
+            },
+            "cacheEventData": true
+        }
+    ],
+    "functions": {
+        "getCondorExpToAdd": {
+            "functionName": "getCondorExpToAdd",
+            "parameters": [
+                "{{ctx}}",
+                "{{data}}",
+                "{{ctx.panelContext}}"
+            ]
+        },
+        "loadRequiredLOVValues": {
+            "functionName": "loadRequiredLOVValues",
+            "parameters": [
+                "{{data}}"
+            ]
+        }
+    },
+    "data": {
+        "acp0NamingConvention": {
+            "displayName": "{{i18n.namingConvention}}",
+            "type": "STRING",
+            "hasLov": true,
+            "isRequired": true,
+            "dataProvider": "getNamingConventionListDataProvider"
+        },
+        "operator": {
+            "displayName": "{{i18n.operator}}",
+            "type": "STRING",
+            "hasLov": true,
+            "isRequired": false,
+            "dataProvider": "getOperatorListDataProvider",
+            "uiValue": "{{i18n.AND}}",
+            "dbValue": "&&"
+        },
+        "OperatorValues": {
+            "type": "STRING",
+            "dbValue": [ {
+                    "propDisplayValue": "{{i18n.AND}}",
+                    "dispValue": "{{i18n.AND}}",
+                    "propInternalValue": "&&"
+                },
+                {
+                    "propDisplayValue": "{{i18n.OR}}",
+                    "dispValue": "{{i18n.OR}}",
+                    "propInternalValue": "||"
+                }
+            ]
+        },
+        "sourceAttribute": {
+            "displayName": "{{i18n.sourceAttribute}}",
+            "type": "STRING",
+            "hasLov": true,
+            "isRequired": true,
+            "dataProvider": "getSourceAttributeListDataProvider"
+        },
+        "relation": {
+            "displayName": "{{i18n.relation}}",
+            "type": "STRING",
+            "hasLov": true,
+            "isRequired": true,
+            "dataProvider": "getRelationListDataProvider",
+            "uiValue": "==",
+            "dbValue": "=="
+        },
+        "RelationValues": {
+            "type": "STRING",
+            "dbValue": [ {
+                    "propDisplayValue": "==",
+                    "dispValue": "==",
+                    "propInternalValue": "=="
+                },
+                {
+                    "propDisplayValue": "!=",
+                    "dispValue": "!=",
+                    "propInternalValue": "!="
+                },
+                {
+                    "propDisplayValue": ">",
+                    "dispValue": ">",
+                    "propInternalValue": ">"
+                },
+                {
+                    "propDisplayValue": ">=",
+                    "dispValue": ">=",
+                    "propInternalValue": ">="
+                },
+                {
+                    "propDisplayValue": "<",
+                    "dispValue": "<",
+                    "propInternalValue": "<"
+                },
+                {
+                    "propDisplayValue": "<=",
+                    "dispValue": "<=",
+                    "propInternalValue": "<="
+                }
+            ]
+        },
+        "attributeValue": {
+            "displayName": "{{i18n.attributeValue}}",
+            "type": "STRING",
+            "isRequired": true
+        }
+    },
+    "dataProviders": {
+        "getNamingConventionListDataProvider": {
+            "response": "{{data.NamingConvention}}"
+        },
+        "getSourceAttributeListDataProvider": {
+            "response": "{{data.SourceAttribute}}"
+        },
+        "getRelationListDataProvider": {
+            "response": "{{data.RelationValues.dbValue}}"
+        },
+        "getOperatorListDataProvider": {
+            "response": "{{data.OperatorValues.dbValue}}"
+        }
+    },
+    "ctx": {
+        "selected": {
+            "type": "object"
+        }
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "lifecycleHooks": {
+        "onInit": "loadRequiredLOVValues"
+   },
+    "messages": {
+        "addConditionSuccessfulMessage": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.addCondition}}",
+            "messageTextParams": [
+                "{{data.acp0NamingConvention.uiValue}}"
+            ]
+        }
+    },
+    "i18n": {
+        "addCondition": [
+            "ControlInspectionPlanMessages"
+        ],
+        "attributeValue": [
+            "ControlInspectionPlanMessages"
+        ],
+        "commandPanelTitle": [
+            "ControlInspectionPlanMessages"
+        ],
+        "namingConvention": [
+            "ControlInspectionPlanMessages"
+        ],
+        "operator": [
+            "ControlInspectionPlanMessages"
+        ],
+        "propertiesForAddExpr": [
+            "ControlInspectionPlanMessages"
+        ],
+        "relation": [
+            "ControlInspectionPlanMessages"
+        ],
+        "sourceAttribute": [
+            "ControlInspectionPlanMessages"
+        ]
+    }
+}

@@ -1,0 +1,22 @@
+<aw-panel>
+    <aw-panel-body>
+        <aw-scrollpanel>
+            <div class="aw-ngp-assignmentMappingFailures">
+                <div class="aw-ngp-assignmentMappingFailuresIcon">
+                    <aw-image source="data.errorIcon" is-icon="true"></aw-image>
+                </div>
+
+                <div class="aw-ngp-assignmentMappingFailuresMsg">
+                    {{data.totalAssignmentFailures}}
+                </div>
+            </div>
+            <div aw-repeat="tableInfo : subPanelContext.tablesInfo">
+                <ngp-assignment-mapping-failures-table sub-panel-context="tableInfo"></ngp-assignment-mapping-failures-table>
+            </div>
+        </aw-scrollpanel>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button button-type="base" action="saveAssignmentMappingFailures" size="auto">Save to File</aw-button>
+        <aw-button action="closeDialog" size="auto">{{i18n.close}}</aw-button>
+    </aw-panel-footer>
+</aw-panel>

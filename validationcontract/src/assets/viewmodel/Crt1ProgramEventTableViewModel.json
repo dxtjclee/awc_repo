@@ -1,0 +1,235 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-splm-table.directive",
+        "js/aw-command-bar.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-am-table-panel.directive",
+        "js/exist-when.directive"
+    ],
+
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        },
+        "obj-vr-state": {
+            "type": "object"
+        }
+    },
+
+    "lifecycleHooks": {
+        "onUpdate": [ {
+                "action": "callDataProvider",
+                "observers": [ "props.objVrState.scopeSelObj" ]
+            },
+            {
+                "action": "handleSelectionChange",
+                "observers": [ "viewModel.atomicData.selectionData" ]
+            }
+        ]
+    },
+
+    "actions": {
+        "handleSelectionChange": {
+            "actionType": "JSFunction",
+            "method": "handleSelectionChange",
+            "inputData": {
+                "data": "{{data.dataProviders.programEventTableProvider}}",
+                "subPanelContext": "{{subPanelContext}}"
+            },
+            "outputData": {},
+            "deps": "js/Crt1ProgramEventTableService"
+        },
+        "callDataProvider": {
+            "actionType": "dataProvider",
+            "method": "programEventTableProvider"
+        },
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/columnArrangeService"
+        },
+        "saveColumnConfigLoadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "operationType": "as_arranged",
+                    "clientScopeURI": "Pgp0EventTableColumnConfig"
+                },
+                "saveColumnConfigData": {
+                    "clientScopeURI": "Pgp0EventTableColumnConfig",
+                    "columnConfigId": "{{data.dataProviders.programEventTableProvider.columnConfig.columnConfigId}}",
+                    "columns": "{{data.dataProviders.programEventTableProvider.newColumns}}",
+                    "scope": "LoginUser",
+                    "scopeName": ""
+                },
+                "searchInput": {
+                    "maxToLoad": 10,
+                    "maxToReturn": 10,
+                    "providerName": "Awp0ObjectSetRowProvider",
+                    "searchCriteria": {
+                        "parentUid": "{{props.subPanelContext.context.vrSublocationState.mselected[0].uid}}",
+                        "objectSet": "S2P:Psi0EventPrgDel.Prg0AbsEvent"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "searchSortCriteria": "{{data.columnProviders.programEventColumnProvider.sortCriteria}}",
+                    "startIndex": "{{data.dataProviders.programEventTableProvider.startIndex}}"
+                },
+                "inflateProperties": true
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}",
+                "dataProviders.programEventTableProvider.columnConfig": "columnConfig"
+            },
+            "deps": "js/analysisRequestUtils"
+        },
+        "resetColumnConfig": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "getOrResetUIColumnConfigs4",
+            "inputData": {
+                "getOrResetUiConfigsIn": [ {
+
+                    "scope": "LoginUser",
+                    "scopeName": "",
+                    "clientName": "AWClient",
+                    "resetColumnConfig": true,
+                    "columnConfigQueryInfos": [ {
+
+                        "clientScopeURI": "Pgp0EventTableColumnConfig",
+                        "operationType": "configured",
+                        "typeNames": [
+                            "Prg0AbsEvent"
+                        ],
+                        "columnsToExclude": []
+                    } ],
+
+                    "businessObjects": [
+                        {}
+                    ]
+                } ]
+
+            },
+            "outputData": {
+                "dataProviders.programEventTableProvider.columnConfig": "columnConfigurations[0].columnConfigurations[0]"
+            },
+            "deps": "js/analysisRequestUtils"
+        },
+        "loadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "clientScopeURI": "Pgp0EventTableColumnConfig",
+                    "operationType": "as_configured"
+                },
+                "searchInput": {
+                    "maxToLoad": 10,
+                    "maxToReturn": 10,
+                    "providerName": "Awp0ObjectSetRowProvider",
+                    "searchCriteria": {
+                        "parentUid": "{{function:getProgramEventParentUid}}",
+                        "objectSet": "S2P:Psi0EventPrgDel.Prg0AbsEvent",
+                        "dcpSortByDataProvider": "true"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "searchSortCriteria": "{{data.columnProviders.programEventColumnProvider.sortCriteria}}",
+                    "startIndex": "{{data.dataProviders.programEventTableProvider.startIndex}}",
+                    "columnFilters": "{{data.columnProviders.programEventColumnProvider.columnFilters}}"
+
+                },
+                "inflateProperties": true
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}",
+                "dataProviders.programEventTableProvider.columnConfig": "columnConfig"
+            },
+            "events": {},
+
+            "deps": "js/Crt1ProgramEventTableService"
+        },
+        "updateSelectionAfterProgramRemove": {
+            "actionType": "JSFunction",
+            "method": "updateSelectionAfterProgramRemove",
+            "deps": "js/Crt1ProgramEventTableService"
+        }
+    },
+    "functions": {
+        "getProgramEventParentUid": {
+            "functionName": "getProgramEventParentUid",
+            "parameters": [
+                "{{props.subPanelContext}}"
+            ]
+        }
+    },
+    "columnProviders": {
+        "programEventColumnProvider": {
+            "saveColumnAndLoadAction": "saveColumnConfigLoadData",
+            "resetColumnAction": "resetColumnConfig",
+            "sortCriteria": [],
+            "columnConfigId": "Crt1ProgramEventTable",
+            "enableSorting": true
+        }
+    },
+    "dataProviders": {
+        "programEventTableProvider": {
+            "action": "loadData",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "selectionModelMode": "multiple",
+            "editContext": "TABLE_CONTEXT",
+            "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectCellListActionCommands",
+            "contextMenuCommandsAnchor": "crt1_programEventCommands",
+            "inputData": {
+                "selectionData": "{{fields.selectionData}}"
+            }
+
+        }
+    },
+    "grids": {
+        "programEventTable": {
+            "columnProvider": "programEventColumnProvider",
+            "dataProvider": "programEventTableProvider",
+            "enableArrangeMenu": true,
+            "gridOptions": {
+                "enableSorting": true,
+                "maxRowsToShow": 4,
+                "isFilteringEnabled": true
+            }
+        }
+    },
+    "data": {
+        "selectionData": {
+            "initialValues": {},
+            "meta": {}
+        }
+    },
+    "onEvent": [ {
+
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        },
+
+        {
+            "eventId": "updateSelectionAfterProgramRemove",
+            "action": "updateSelectionAfterProgramRemove"
+        }
+    ],
+
+    "i18n": {
+
+    }
+}

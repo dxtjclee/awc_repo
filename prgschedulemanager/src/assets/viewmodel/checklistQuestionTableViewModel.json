@@ -1,0 +1,276 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-splm-table.directive"
+    ],
+
+    "actions": {
+        "doArrangeEvent" : {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },"events": {
+                "success": [
+                    {
+                       "name": "primaryWorkarea.reset"
+                    }
+                ]
+            },
+            "deps": "js/columnArrangeService"
+        },
+        "doGridDataProvider": {
+            "actionType": "dataProvider",
+            "method": "checklistQuestionDataProvider"
+        },
+        "getChecklistQuestionData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "clientScopeURI": "Psi0ChecklistQuestion"
+                },
+                "searchInput": {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Awp0ObjectSetRowProvider",
+                    "searchCriteria": {
+                        "objectSet": "psi0ChecklistQuestions.Psi0ChecklistQuestion",
+                        "parentUid": "{{subPanelContext.openedObject.uid}}"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "startIndex": "{{data.dataProviders.checklistQuestionDataProvider.startIndex}}",
+                    "searchSortCriteria": "{{data.columnProviders.checklistQuestionColumnProvider.sortCriteria}}",
+                    "columnFilters": "{{data.columnProviders.checklistQuestionColumnProvider.columnFilters}}"
+
+                },
+                "inflateProperties": true,
+                "noServiceData": false
+            },
+            "outputData": {
+                "checklistQuestionsTotalFound": "totalFound",
+                "checklistQuestionTotalLoaded": "totalLoaded",
+                "ctx.search.totalFound": "totalFound",
+                "ctx.search.totalLoaded": "totalLoaded",
+                "checklistQuestionsSearchResults": "{{function:processChecklistObjects}}",
+                "dataProviders.checklistQuestionDataProvider.columnConfig": "{{function:setNonModifiablePropForAbsChecklist}}"
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            },
+            "deps": "js/Psi0ChecklistService"
+        },
+        "saveColumnConfigLoadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "clientScopeURI": "Psi0ChecklistQuestion"
+                },
+                "saveColumnConfigData": {
+                    "clientScopeURI": "Psi0ChecklistQuestion",
+                    "columnConfigId": "{{data.dataProviders.checklistQuestionDataProvider.columnConfig.columnConfigId}}",
+                    "columns": "{{data.dataProviders.checklistQuestionDataProvider.newColumns}}",
+                    "scope": "LoginUser",
+                    "scopeName": ""
+                },
+                "searchInput": {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Awp0ObjectSetRowProvider",
+                    "searchCriteria": {
+                        "objectSet": "psi0ChecklistQuestions.Psi0ChecklistQuestion",
+                        "parentUid": "{{subPanelContext.openedObject.uid}}"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "startIndex": "{{data.dataProviders.checklistQuestionDataProvider.startIndex}}",
+                    "searchSortCriteria": "{{data.columnProviders.checklistQuestionColumnProvider.sortCriteria}}",
+                    "columnFilters": "{{data.columnProviders.checklistQuestionColumnProvider.columnFilters}}"
+
+                },
+                "inflateProperties": true,
+                "noServiceData": false
+            },
+            "outputData": {
+                "checklistQuestionsTotalFound": "totalFound",
+                "checklistQuestionTotalLoaded": "totalLoaded",
+                "ctx.search.totalFound": "totalFound",
+                "ctx.search.totalLoaded": "totalLoaded",
+                "checklistQuestionsSearchResults": "{{function:processChecklistObjects}}",
+                "dataProviders.checklistQuestionDataProvider.columnConfig": "{{function:setNonModifiablePropForAbsChecklist}}"
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            },
+            "deps": "js/Psi0ChecklistService"
+        },
+        "saveColumnConfig": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "saveUIColumnConfigs2",
+            "inputData": {
+                "columnConfigurations": [ {
+                    "clientScopeURI": "Psi0ChecklistQuestion",
+                    "columnConfigId": "{{data.dataProviders.checklistQuestionDataProvider.columnConfig.columnConfigId}}",
+                    "columns": "{{data.dataProviders.checklistQuestionDataProvider.newColumns}}",
+                    "scope": "LoginUser",
+                    "scopeName": ""
+                } ]
+            },
+            "outputData": {},
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            }
+        },
+        "resetColumnConfig": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "getOrResetUIColumnConfigs4",
+            "inputData": {
+                "getOrResetUiConfigsIn": [ {
+                    "scope": "LoginUser",
+                    "scopeName": "",
+                    "clientName": "AWClient",
+                    "resetColumnConfig": true,
+                    "columnConfigQueryInfos": [ {
+                        "clientScopeURI": "Psi0ChecklistQuestion",
+                        "operationType": "configured",
+                        "typeNames": [
+                            "Psi0ChecklistQuestion"
+                        ],
+                        "columnsToExclude": []
+                    } ],
+                    "businessObjects": [ {} ]
+                } ]
+            },
+            "outputData": {
+                "dataProviders.checklistQuestionDataProvider.columnConfig": "columnConfigurations[0].columnConfigurations[0]"
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            }
+        },
+        "ensureChecklistQuestionModelType": {
+            "actionType": "JSFunctionAsync",
+            "method": "ensureModelTypesLoaded",
+            "inputData": {
+                "typeNames": [ "Psi0ChecklistQuestion" ]
+            },
+            "deps": "soa/kernel/soaService"
+        },
+        "groupObjectsForDecorators": {
+            "actionType": "JSFunction",
+            "method": "groupObjectsForDecorators",
+            "inputData": {
+                "vmos": "{{data.dataProviders.checklistQuestionDataProvider.viewModelCollection.loadedVMObjects}}"
+            },
+            "deps": "js/Psi0ChecklistService"
+        },
+        "plTableClientRefresh": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "checklistQuestionTable.plTable.clientRefresh"
+                    }
+                ]
+            }
+        }
+    },
+    "functions": {
+        "processChecklistObjects": {
+            "functionName": "processChecklistObjects",
+            "parameters": []
+        },
+        "setNonModifiablePropForAbsChecklist": {
+            "functionName": "setNonModifiablePropForAbsChecklist",
+            "parameters": []
+        }
+    },
+    "dataProviders": {
+        "checklistQuestionDataProvider": {
+            "action": "getChecklistQuestionData",
+            "response": "{{data.checklistQuestionsSearchResults}}",
+            "totalFound": "{{data.checklistQuestionsTotalFound}}",
+            "totalLoaded": "{{data.checklistQuestionTotalLoaded}}",
+            "selectionModelMode": "multiple",
+            "editContext": "TABLE_CONTEXT",
+            "inputData": {
+                "selectionModel": "{{subPanelContext.selectionModel}}"
+            },
+            "showDecorators": "true",
+            "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectObjectNavigationCellListActionCommands"
+        }
+    },
+    "columnProviders": {
+        "checklistQuestionColumnProvider": {
+            "saveColumnAndLoadAction": "saveColumnConfigLoadData",
+            "resetColumnAction": "resetColumnConfig",
+            "saveColumnAction": "saveColumnConfig",
+            "sortCriteria": [
+
+            ]
+        }
+    },
+    "grids": {
+        "checklistQuestionTable": {
+            "dataProvider": "checklistQuestionDataProvider",
+            "columnProvider": "checklistQuestionColumnProvider",
+            "addIconColumn": true,
+            "enableArrangeMenu": true,
+            "gridOptions": {
+                "enableGridMenu": true
+            }
+        }
+    },
+    "messages": {
+        "SOAFailureMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "onEvent": [ {
+            "eventId": "checklistQuestionTable.initialized",
+            "action": "doGridDataProvider"
+        },
+        {
+            "eventId": "checklistQuestionTable.contentLoaded",
+            "action": "ensureChecklistQuestionModelType"
+        },
+        {
+            "eventId": "checklistQuestionTable.contentLoaded",
+            "action": "doGridDataProvider"
+        },
+        {
+            "eventId": "checklistQuestionDataProvider.modelObjectsUpdated",
+            "action": "groupObjectsForDecorators"
+        },
+        {
+            "eventId": "viewModelObject.propsUpdated",
+            "action": "groupObjectsForDecorators"
+        },
+        {
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        },
+        {
+            "eventId": "primaryWorkarea.multiSelectAction",
+            "action": "plTableClientRefresh"
+        }
+    ]
+}

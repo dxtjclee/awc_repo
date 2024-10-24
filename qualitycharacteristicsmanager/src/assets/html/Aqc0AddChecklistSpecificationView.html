@@ -1,0 +1,23 @@
+<aw-command-panel caption="i18n.Aqc0Add" context="subPanelContext">
+    <div class="aw-layout-flexColumn" show-when="data.activeState.value.activeView==='AddObjectPrimarySub'">
+        <aw-form name="commandPanelForm" visible-when="data.activeView!='AssignProjectSub'&&data.activeView!='addReferenceSub'">
+            <aw-add
+                target-object=""
+                visible-tabs="new"
+                include-types="Qc0ChecklistSpecification"
+                auto-select-on-unique-type="true"
+                add-panel-state="fields.addPanelState"
+                type-filter="Qc0ChecklistSpecification"
+                active-state="data.activeState"
+                xrt-state="data.xrtState"
+                edit-handler="editHandlers.addPanelEditHandler"></aw-add>
+        </aw-form>
+        <aw-panel-footer>
+            <!-- panel-footer button for New tab -->
+            <aw-button default="true" action="createObjects" visible-when="formProp.attributes.valid">
+                <aw-i18n>i18n.Aqc0Add</aw-i18n>
+            </aw-button>
+        </aw-panel-footer>
+    </div>
+    <aw-add-navigate active-state="data.activeState" action="actions.setActiveView"></aw-add-navigate>
+ </aw-command-panel>

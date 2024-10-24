@@ -1,0 +1,16 @@
+<aw-command-panel caption="i18n.relationTitle" context="subPanelContext">
+    <aw-panel-body>
+        <aw-tab-set tabs="data.tabsModel.dbValues"></aw-tab-set>
+        <aw-panel-section visible-when="data.totalFound > 0">
+            <aw-command-bar anchor="ase0_inverseSelectionCommand" alignment="HORIZONTAL" context="subPanelContext"></aw-command-bar>
+            <aw-list-filter prop="data.filterBox" dataprovider="data.dataProviders.dataProviderRelatedNodeList">
+                <div class="aw-architectureModeler-relationsPanel">
+                    <aw-occmgmt-cell vmo="item"></aw-occmgmt-cell>
+                </div>
+            </aw-list-filter>
+        </aw-panel-section>
+        <aw-panel-section visible-when="data.dataProviders.dataProviderRelatedNodeList.noResults">
+            <aw-i18n>i18n.noResultsFound</aw-i18n>
+        </aw-panel-section>
+    </aw-panel-body>
+</aw-command-panel>

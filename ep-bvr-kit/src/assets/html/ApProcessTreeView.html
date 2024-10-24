@@ -1,0 +1,8 @@
+<div class="sw-column w-12">
+    <div class="sw-row aw-ep-searchBoxStyle">
+        <ep-structure-search  view-id="ApProcessTree_EpStructureSearch" sub-panel-context="fields.apProcessSearchContext"></ep-structure-search>
+    </div>
+    <div class="sw-row h-12">
+        <ep-tree-table exist-when="conditions.isProcessObjectUidAvailable" view-id="ApProcessTree_EpTreeTable" sub-panel-context="{...data.processTreeContext, ...props.subPanelContext}" structure-search-context="fields.apProcessSearchContext" selection-data="data.selectionData"></ep-tree-table>
+    </div>
+</div>

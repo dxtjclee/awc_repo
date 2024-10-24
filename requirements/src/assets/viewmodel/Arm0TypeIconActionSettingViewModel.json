@@ -1,0 +1,27 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-image.directive",
+        "js/aw-click.directive",
+        "js/visible-when.directive"
+    ],
+    "actions": {
+        "selectAction":{
+            "actionType" : "JSFunction",
+            "method": "selectActionClickListener",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps" : "js/ImportPreview"
+        }
+    },
+    "data": {
+        "isIcon": true
+    },
+    "onEvent":[
+        {
+            "eventId": "Arm0TypeIconActionSetting.contentLoaded",
+            "action": "selectAction"
+        }
+    ]
+}

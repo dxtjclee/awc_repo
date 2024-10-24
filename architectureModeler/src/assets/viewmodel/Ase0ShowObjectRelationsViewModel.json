@@ -1,0 +1,291 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "actions": {
+        "updateRelationPanel": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "clientScopeURI": ""
+                },
+                "inflateProperties": true,
+                "searchInput": {
+                    "maxToLoad": 150,
+                    "maxToReturn": 150,
+                    "providerName": "Ase0RelationObjectProvider",
+                    "searchCriteria": {
+                        "elementUids": "{{ctx.selected.uid}}",
+                        "rootElementUids": "{{function:getRootElementUids}}",
+                        "productContextUids": "{{function:getProductContextUids}}",
+                        "processConnections": "{{function:isProcessConnection}}",
+                        "processTracelinks": "{{function:isProcessTracelink}}"
+                    },
+                    "attributesToInflate": [
+                        "awp0CellProperties",
+                        "ase0SelectedElement",
+                        "ase0RelatedElement",
+                        "ase0RelationElement",
+                        "ase0Direction",
+                        "ase0RelationTypeName"
+                    ],
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "searchFilterMap6": {},
+                    "searchSortCriteria": [],
+                    "startIndex": 0
+                }
+            },
+
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}"
+            },
+
+            "events": {
+                "success": [ {
+                    "name": "architectureRelationPanel.updatePanel"
+                } ]
+            },
+
+            "deps": "js/Ase0ShowObjectRelationsService",
+            "policy": {
+                "types": [ {
+                    "name": "Ase0TracelinkRelationProxy",
+                    "properties": [ {
+                            "name": "ase0RelatedElementType"
+                        },
+                        {
+                            "name": "ase0IsOccurrenceTracelink"
+                        }
+                    ]
+                } ]
+            }
+        },
+
+        "processSoaResponse": {
+            "actionType": "JSFunction",
+            "method": "processSoaResponseFunc",
+            "inputData": {
+                "data": "{{data}}",
+                "subPanelContext": "{{subPanelContext}}"
+            },
+
+            "events": {
+                "success": [ {
+                        "name": "architectureRelationPanel.loadCells"
+                    }
+                ]
+            },
+
+            "deps": "js/Ase0ShowObjectRelationsService"
+        },
+
+        "actionFilterList": {
+            "actionType": "JSFunction",
+            "method": "actionFilterList",
+            "inputData": {
+                "data": "{{data}}"
+            },
+
+            "deps": "js/Ase0ShowObjectRelationsService"
+        },
+
+        "loadCellList": {
+            "actionType": "dataProvider",
+            "method": "dataProviderRelatedNodeList"
+        },
+
+        "updateTabSelection": {
+            "actionType": "JSFunction",
+            "method": "updateTabSelection",
+            "inputData": {
+                "data": "{{data}}",
+                "pageState": "{{subPanelContext.pageState}}"
+            },
+            "outputData": {
+                "lastSelectedTab": "isLastSelectedTab"
+            },
+            "events": {
+                "success": [ {
+                    "name": "architectureRelationPanel.updatelist"
+                } ]
+            },
+
+            "deps": "js/Ase0ShowObjectRelationsService"
+        },
+        "reveal": {
+            "actionType": "JSFunction",
+            "method": "setLastSelectedTab",
+            "inputData": {
+                "data": "{{data}}",
+                "pageState": "{{subPanelContext.pageState}}"
+            },
+            "outputData": {
+                "lastSelectedTab": "isLastSelectedTab"
+            },
+            "events": {
+                "success": [ {
+                    "name": "awTab.selected"
+                } ]
+            },
+            "deps": "js/Ase0ShowObjectRelationsService"
+        }
+    },
+
+    "onEvent": [ {
+            "eventId": "awTab.selected",
+            "action": "updateTabSelection"
+        },
+
+        {
+            "eventId": "architectureRelationPanel.updatePanel",
+            "action": "processSoaResponse"
+        },
+
+        {
+            "eventId": "architectureRelationPanel.updatelist",
+            "action": "updateRelationPanel"
+        },
+
+        {
+            "eventId": "architectureRelationPanel.loadCells",
+            "action": "loadCellList"
+        },
+        {
+            "eventId": "appCtx.register",
+            "criteria": {
+                "name": "selected"
+            },
+            "action": "updateRelationPanel"
+        },
+        {
+            "eventId": "awPanel.reveal",
+            "action": "reveal"
+
+        }
+    ],
+
+    "preferences": [
+        "AWC_Relations_Panel_Tabs"
+    ],
+
+    "data": {
+        "tabsModel": {
+            "isArray": "true",
+            "dbValue": [ {
+                    "name": "{{i18n.connectionTabView}}",
+                    "tabKey": "connections"
+                },
+
+                {
+                    "name": "{{i18n.tracelinkTabView}}",
+                    "tabKey": "tracelinks"
+                }
+            ]
+        },
+
+        "relatedClientId": {
+            "type": "STRING",
+            "dbValue": "getRelated"
+        },
+
+        "filterBox": {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "false",
+            "requiredText": "Filter",
+            "dbValue": ""
+        },
+
+        "relatedDataList": {
+            "isArray": "true",
+            "dbValue": [
+
+            ]
+        },
+
+        "relatedDataFilterList": {
+            "isArray": "true",
+            "dbValue": [
+
+            ]
+        },
+
+        "inflatedVal": {
+            "type": "BOOLEAN",
+            "dbValue": true
+        },
+
+        "isInitialized" : false
+    },
+
+    "dataProviders": {
+        "dataProviderRelatedNodeList": {
+            "action": "actionFilterList",
+            "response": "{{data.relatedDataFilterList.dbValue}}",
+            "totalFound": "{{data.relatedDataFilterList.dbValue.length}}",
+            "selectionModelMode": "multiple",
+            "deps": "js/Ase0ShowObjectRelationsService"
+        }
+    },
+
+    "functions": {
+        "isProcessTracelink": {
+            "functionName": "isProcessTracelink",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+
+        "isProcessConnection": {
+            "functionName": "isProcessConnection",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+
+        "getRootElementUids": {
+            "functionName": "getRootElementUids",
+            "parameters": [
+                "{{subPanelContext.occContext}}"
+            ]
+        },
+
+        "getProductContextUids": {
+            "functionName": "getProductContextUids",
+            "parameters": [
+                "{{subPanelContext.occContext}}"
+            ]
+        }
+    },
+
+    "conditions": {
+        "isProcessConnection": {
+            "expression": "data.selectedTab.tabKey ==='connections'"
+        },
+
+        "isProcessTracelink": {
+            "expression": "data.selectedTab.tabKey !=='tracelinks'"
+        }
+    },
+
+    "i18n": {
+        "connectionTabView": [
+            "ArchitectureModelerConstants"
+        ],
+
+        "tracelinkTabView": [
+            "ArchitectureModelerConstants"
+        ],
+
+        "relationTitle": [
+            "ArchitectureModelerConstants"
+        ],
+
+        "noResultsFound": [
+            "ArchitectureModelerConstants"
+        ]
+    }
+}

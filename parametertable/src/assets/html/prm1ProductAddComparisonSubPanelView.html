@@ -1,0 +1,25 @@
+<aw-panel-body scrollable="false" visible-when="data.selectedType.dbValue === ''">
+    <aw-panel-section caption="i18n.compareType" >
+
+    <aw-list dataprovider="data.dataProviders.getParamComparisonTypes">
+        <aw-type-cell vmo="item"> </aw-type-cell>
+    </aw-list></aw-panel-section>
+</aw-panel-body>
+<aw-panel-body scrollable="false" exist-when="data.selectedType.dbValue !== ''">
+    <aw-panel-header>
+        <aw-back-button prop="data.selectedType" title={{data.selectedType.uiValue}} action="clearSelectedType" exist-when="data.selectedType.dbValue !== ''"></aw-back-button>
+           </aw-panel-header>
+
+        <aw-list-filter prop="data.filterBox" dataprovider="data.dataProviders.compareDataProvider">
+            <aw-default-cell vmo="item"></aw-default-cell>
+        </aw-list-filter>
+        <div exist-when="data.totalFound === 0">
+            <aw-i18n>i18n.noResultsFound</aw-i18n>
+        </div>
+
+</aw-panel-body>
+<aw-panel-footer>
+    <aw-button action="addObjectsToCompareInProduct" visible-when="conditions.isAddButtonVisible">
+        <aw-i18n>i18n.ParamAdd</aw-i18n>
+    </aw-button>
+</aw-panel-footer>

@@ -1,0 +1,3334 @@
+{
+    "schemaVersion": "1.0.0",
+
+    "props": {
+        "page-state": {
+            "type": "object"
+        },
+        "primary-selection": {
+            "type": "object"
+        },
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+
+    "actions": {
+        "dropNodeOnOpenedAction":{
+            "actionType": "JSFunction",
+            "method": "newdropNodeOnOpenedElement",
+            "inputData": {
+                "data": "{{data.eventMap['AMGraphEvent.dropNodeOnOpenedElement']}}",
+                "occContext": "{{subPanelContext.context.occContext}}"
+            },
+            "deps": "js/Ase0ArchitectureGraphDragAndDropHandler"
+        },
+        "onArchitectureGraphMount": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "registerLaunchToVisProvider"
+                },
+                {
+                    "action": "registerCellVisiblilityHandlers"
+                },
+                {
+                    "action": "getLegendData"
+                }
+            ]
+        },
+        "registerLaunchToVisProvider": {
+            "actionType": "JSFunction",
+            "method": "handleArchitectureGraphLoad",
+            "inputData": {},
+            "deps": "js/Ase0ArchitectureGraphOpenInVisService"
+        },
+        "registerCellVisiblilityHandlers": {
+            "actionType": "JSFunction",
+            "method": "registerVisiblilityHandlers",
+            "inputData": {
+                "occContextKey": "{{subPanelContext.context.occContext.viewKey}}"
+            },
+            "deps": "js/AMVisibilityHandler"
+        },
+        "onArchitectureGraphUnmount": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "unRegisterLaunchToVisProvider"
+                },
+                {
+                    "action": "unRegisterCellVisiblilityHandlers"
+                }
+            ]
+        },
+        "unRegisterLaunchToVisProvider": {
+            "actionType": "JSFunction",
+            "method": "resetProductContextInfo",
+            "inputData": {},
+            "deps": "js/openInVisualizationProductContextInfoProvider"
+        },
+        "unRegisterCellVisiblilityHandlers": {
+            "actionType": "JSFunction",
+            "method": "unRegisterVisiblilityHandlers",
+            "inputData": {
+                "occContextKey": "{{subPanelContext.context.occContext.viewKey}}"
+            },
+            "events": {
+                "success": [ {
+                        "name": "occMgmt.visibilityStateChanged",
+                        "eventData": {
+                            "viewToReact": "{{subPanelContext.context.occContext.viewKey}}"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/AMVisibilityHandler"
+        },
+        "drawGraph": {
+            "actionType": "JSFunction",
+            "method": "drawGraph",
+            "inputData": {
+                "graphData": "{{data.eventMap['AMGraphEvent.drawGraph'].graphData}}",
+                "data": "{{data}}",
+                "isOpenDiagram": "{{data.eventMap['AMGraphEvent.drawGraph'].isOpenDiagram}}",
+                "isApplyGlobalLayout": "{{data.eventMap['AMGraphEvent.drawGraph'].isApplyGlobalLayout}}",
+                "graphContext": "{{ctx.graph}}",
+                "pageState": "{{props.pageState}}",
+                "graphState": "{{fields.graphState}}",
+                "occContext": "{{subPanelContext.context.occContext}}"
+            },
+            "events": {
+                "success": [ {
+                        "name": "AMGraphEvent.syncGraphSelections",
+                        "eventData": {
+                            "selectedObjects": "{{subPanelContext.context.occContext.pwaSelection}}"
+                        },
+                        "condition": "!data.eventMap['AMGraphEvent.drawGraph'].isOpenDiagram"
+                    },
+                    {
+                        "condition": "data.isRecall",
+                        "name": "AM.ResetRecallState"
+                    },
+                    {
+                        "condition": "data.eventMap['AMGraphEvent.drawGraph'].isOpenDiagram",
+                        "name": "AMGraphEvent.registerEditHandler"
+                    },
+                    {
+                        "name": "occMgmt.visibilityStateChanged"
+                    }
+                ]
+            },
+            "deps": "js/Ase0ArchitectureGraphService"
+        },
+        "handleUpdateDiagramEvent": {
+            "actionType": "JSFunction",
+            "method": "updateDiagramElements",
+            "inputData": {
+                "data": "{{data}}",
+                "activeLegendView":"{{ctx.graph.legendState.activeView}}"
+            },
+            "deps": "js/Ase0ArchitectureGraphService"
+        },
+        "handleUpdateAndAddDiagramEvent": {
+            "actionType": "JSFunction",
+            "method": "updateDiagramElementsAndTriggerAddDiagram",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Ase0ArchitectureGraphService"
+        },
+        "handleDepAddObjectsToDiagramEvent": {
+            "actionType": "JSFunction",
+            "method": "addTracelinkAndEndsToDiagram",
+            "inputData": {
+                "data": "{{data}}",
+                "activeLegendView":"{{ctx.graph.legendState.activeView}}"
+            },
+            "deps": "js/Ase0AddToDiagramService"
+        },
+        "handleGraphItemsMoved": {
+            "actionType": "JSFunction",
+            "method": "handleGraphItemsMoved",
+            "inputData": {
+                "items": "{{data.eventMap['awGraph.graphItemsMoved'].items}}",
+                "graphModel": "{{data.graphModel}}"
+            },
+            "deps": "js/Ase0GraphModificationEventHandler"
+        },
+        "getLegendData": {
+            "actionType": "JSFunctionAsync",
+            "method": "getLegendData",
+            "inputData": {
+                "viewName": "Architecture",
+                "occContext": "{{subPanelContext.context.occContext}}"
+            },
+            "outputData": {
+                "legendData": ""
+            },
+            "deps": "js/Ase0ArchitectureGraphLegendManager"
+        },
+        "initLegendData": {
+            "actionType": "JSFunction",
+            "method": "initLegendData",
+            "inputData": {
+                "graphCtx": "{{ctx.graph}}",
+                "data": "{{data}}",
+                "graphState": "{{fields.graphState}}"
+            },
+            "events": {
+                "success": [ {
+                        "name": "AMManageDiagramEvent",
+                        "eventData": {
+                            "userAction": "OpenDiagram"
+                        },
+                        "condition":"ctx.graph && data.legendData"
+                    }
+                ]
+            },
+            "deps": "js/Ase0ArchitectureGraphLegendManager"
+        },
+        "handleGraphItemsAdded": {
+            "actionType": "JSFunction",
+            "method": "handleGraphItemsAdded",
+            "inputData": {
+                "graphModel": "{{data.graphModel}}",
+                "addedBoundaries": "{{data.eventMap['awGraph.itemsAdded'].boundaries}}",
+                "graphState": "{{fields.graphState}}"
+            },
+            "events": {
+                "success": [ {
+                        "name": "AMDiagram.ModelChange"
+                    }
+                ]
+            },
+            "deps": "js/Ase0GraphModificationEventHandler"
+        },
+        "handleGraphItemsRemoved": {
+            "actionType": "JSFunction",
+            "method": "handleGraphItemsRemoved",
+            "inputData": {
+                "data": "{{data}}",
+                "graphModel": "{{data.graphModel}}",
+                "removedNodes": "{{data.eventMap['awGraph.itemsRemoved'].nodes}}",
+                "removedEdges": "{{data.eventMap['awGraph.itemsRemoved'].edges}}",
+                "removedPorts": "{{data.eventMap['awGraph.itemsRemoved'].ports}}",
+                "graphState": "{{fields.graphState}}",
+                "primarySelection": "{{props.primarySelection}}"
+            },
+            "events": {
+                "success": [ {
+                        "name": "AMDiagram.ModelChange"
+                    }
+                ]
+            },
+            "deps": "js/Ase0GraphModificationEventHandler"
+        },
+        "handleGraphItemsRemovedFromACE": {
+            "actionType": "JSFunction",
+            "method": "removeElementsFromDiagram",
+            "inputData": {
+                "elements": "{{actionState.AMItemsRemovedFromACE}}",
+                "graphModel":"{{data.graphModel}}"
+            },
+            "events": {
+                "success": [ {
+                        "name": "occMgmt.visibilityStateChanged"
+                    }
+                ]
+            },
+            "deps": "js/Ase0RemoveFromDiagramService"
+        },
+        "manageDiagram2SOA": {
+            "actionType": "JSFunctionAsync",
+            "method": "manageDiagramSoa",
+            "inputData": {
+                "eventData": "{{data.eventMap['AMManageDiagramEvent']}}",
+                "manageDiagramQueue": "{{data.manageDiagramQueue}}",
+                "graphModel": "{{data.graphModel}}",
+                "occmgmtContext": "{{subPanelContext.context.occContext}}",
+                "activeLegendView": "{{ctx.graph.legendState.activeView}}",
+                "loadFullPolicy": "{{ctx.preferences.ASE0_Architecture_load_property_policy[0]}}",
+                "policy": {
+                    "types": [ {
+                            "name": "Awb0Element",
+                            "properties": [ {
+                                    "name": "awb0UnderlyingObject"
+                                },
+                                {
+                                    "name": "awb0Parent"
+                                },
+                                {
+                                    "name": "object_string"
+                                }
+                            ]
+                        },
+                        {
+                        "name": "Awb0ConditionalElement",
+                            "properties": [ {
+                                    "name": "awp0CellProperties"
+                                },
+                                {
+                                    "name": "awb0NumberOfChildren"
+                                },
+                                {
+                                    "name": "awp0ThumbnailImageTicket"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Ase0LogicalElement",
+                            "properties": [ {
+                                    "name": "awp0CellProperties"
+                                },
+                                {
+                                    "name": "awb0NumberOfChildren"
+                                },
+                                {
+                                    "name": "awp0ThumbnailImageTicket"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Awb0Connection",
+                            "properties": [ {
+                                "name": "ase0ConnectedState"
+                            } ]
+                        },
+                        {
+                            "name": "Awb0Interface",
+                            "properties": [ {
+                                    "name": "awb0Direction"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "FND_TraceLink",
+                            "properties": [ {
+                                "name": "name"
+                            } ]
+                        },
+                        {
+                            "name": "Sys1PhysCompElement",
+                            "properties": [ {
+                                    "name": "sys1IsActor"
+                                },
+                                {
+                                    "name": "sys1IsParent"
+                                },
+                                {
+                                    "name": "sys1Nature"
+                                },
+                                {
+                                    "name": "object_string"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Sys1LogicalCompElement",
+                            "properties": [ {
+                                    "name": "sys1IsActor"
+                                },
+                                {
+                                    "name": "sys1IsParent"
+                                },
+                                {
+                                    "name": "object_string"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Sys1SystemElement",
+                            "properties": [ {
+                                    "name": "sys1IsActor"
+                                },
+                                {
+                                    "name": "sys1IsParent"
+                                },
+                                {
+                                    "name": "object_string"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "outputData": {
+                "graphData": "{{function:getManageDiagram2Response}}"
+            },
+            "deps": "js/Ase0ManageDiagramSoaService",
+            "actionMessages": {
+                "failure": [
+                    {
+                        "message": "manageDiagram2SOAFailure"
+                    }
+                ]
+            }
+        },
+        "handleManageDiagram2Complete": {
+            "actionType": "JSFunction",
+            "method": "handleManageDiagram2Complete",
+            "inputData": {
+                "manageDiagramQueue": "{{data.manageDiagramQueue}}",
+                "graphData": "{{data.eventMap['AMManageDiagramComplete'].graphData}}"
+            },
+            "deps": "js/Ase0ArchitectureGraphService"
+        },
+        "fitDiagram": {
+            "actionType": "JSFunction",
+            "method": "fitGraphVisibility",
+            "inputData": {
+                "graphModel": "{{data.graphModel}}"
+            },
+            "deps": "js/Ase0VisibilityControlGroupHandler"
+        },
+        "fitSelectedDiagram": {
+            "actionType": "JSFunction",
+            "method": "fitSelectedDiagram",
+            "inputData": {
+                "graphModel": "{{data.graphModel}}"
+            },
+            "deps": "js/Ase0VisibilityControlGroupHandler"
+        },
+        "mainGraphDoubleClicked": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "deps": "js/Ase0FloatingWindowHandler",
+            "inputData": {
+                "searchInput" : "{{function:getAssociatedDiagramsInput}}"
+            },
+            "policy":
+            {
+                "types":
+                [
+                    {
+                        "name": "Ase0AssocRelationProxy",
+                        "properties":
+                        [
+                            {
+                                "name": "ase0Relation",
+                                "modifiers":
+                                [
+                                    {
+                                    "name": "withProperties",
+                                    "Value": "true"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "ase0EndObject",
+                                "modifiers":
+                                [
+                                    {
+                                    "name": "withProperties",
+                                    "Value": "true"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name":"Ase0DiagramRelation",
+                        "properties":
+                        [
+                            {
+                                "name":"ase0IsDefaultDiagram"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "outputData":
+            {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}",
+                "searchResultObjects": "ServiceData.modelObjects"
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "awFloatGraphPopup.showFloatingWindow",
+                        "condition": "data.totalFound > 0"
+                    },
+                    {
+                        "name": "awFloatGraphPopup.openDiagramsPanel",
+                        "condition": "data.totalFound === 0"
+                    }
+                ]
+            }
+        },
+        "selectedOnlyInDiagram": {
+            "actionType": "JSFunction",
+            "method": "selectedOnlyInDiagram",
+            "inputData": {
+                "graphModel": "{{data.graphModel}}"
+            },
+            "deps": "js/Ase0VisibilityControlGroupHandler"
+        },
+        "selectedOffInDiagram": {
+            "actionType": "JSFunction",
+            "method": "selectedOffInDiagram",
+            "inputData": {
+                "graphModel": "{{data.graphModel}}"
+            },
+            "deps": "js/Ase0VisibilityControlGroupHandler"
+        },
+        "handleClearDiagram": {
+            "actionType": "JSFunction",
+            "method": "handleClearDiagram",
+            "inputData": {
+                "archGraphModel": "{{data.archGraphModel}}",
+                "graphModel": "{{data.graphModel}}",
+                "graphState": "{{fields.graphState}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "AMManageDiagramEvent",
+                    "condition": "data.eventMap['AMGraphEvent.clearDiagram'].userAction",
+                    "eventData": {
+                        "userAction": "{{data.eventMap['AMGraphEvent.clearDiagram'].userAction}}",
+                        "isApplyGlobalLayout": "{{data.eventMap['AMGraphEvent.clearDiagram'].isApplyGlobalLayout}}"
+                    }
+                },
+                {
+                    "name": "occMgmt.visibilityStateChanged"
+                } ]
+            },
+            "deps": "js/Ase0VisibilityControlGroupHandler"
+        },
+        "setDiagramSelection": {
+            "actionType": "JSFunction",
+            "method": "setDiagramSelection",
+            "inputData": {
+                "selected": "{{data.eventMap['awGraph.selectionChanged'].selected}}",
+                "unselected": "{{data.eventMap['awGraph.selectionChanged'].unSelected}}",
+                "graphModel": "{{data.graphModel}}",
+                "occContext": "{{subPanelContext.context.occContext}}",
+                "primarySelection": "{{props.primarySelection}}",
+                "activeLegendView": "{{ctx.graph.legendState.activeView}}",
+                "graphState": "{{fields.graphState}}"
+            },
+            "deps": "js/Ase0ArchitectureGraphSelectionService"
+        },
+        "setDiagramHover": {
+            "actionType": "JSFunction",
+            "method": "setDiagramHover",
+            "inputData": {
+                "hoveredItem": "{{data.eventMap['awGraph.hoverChanged'].hoveredItem}}",
+                "unHoveredItem": "{{data.eventMap['awGraph.hoverChanged'].unHoveredItem}}",
+                "graphModel": "{{data.graphModel}}",
+                "activeLegendView": "{{ctx.graph.legendState.activeView}}"
+            },
+            "deps": "js/Ase0ArchitectureGraphSelectionService"
+        },
+        "syncSelectionsInGraph": {
+            "actionType": "JSFunction",
+            "method": "syncSelectionsInGraph",
+            "inputData": {
+                "graphModel": "{{data.graphModel}}",
+                "occContext": "{{subPanelContext.context.occContext}}",
+                "primarySelection": "{{props.primarySelection}}",
+                "graphState": "{{fields.graphState}}"
+            },
+            "deps": "js/Ase0ArchitectureGraphSelectionService"
+        },
+        "addElementsToDiagram": {
+            "actionType": "JSFunction",
+            "method": "addElementsToDiagram",
+            "inputData": {
+                "eventData": "{{actionState.AMElementAdded}}",
+                "createNodeQueue": "{{data.createNodeQueue}}",
+                "graphModel": "{{data.graphModel}}",
+                "hasSystemModelerLicense": "{{props.pageState.hasSystemModelerLicense}}",
+                "activeLegendView": "{{ctx.graph.legendState.activeView}}"
+            },
+            "outputData": {
+                "actionState": "actionState"
+            },
+            "deps": "js/Ase0AddToDiagramService"
+        },
+        "addElementsToDiagramPWA": {
+            "actionType": "JSFunction",
+            "method": "addElementsToDiagram",
+            "inputData": {
+                "eventData": "{{data.eventMap['AM.PwaSelectionUpdated']}}",
+                "createNodeQueue": "{{data.createNodeQueue}}",
+                "graphModel": "{{data.graphModel}}",
+                "hasSystemModelerLicense": "{{props.pageState.hasSystemModelerLicense}}"
+            },
+            "deps": "js/Ase0AddToDiagramService"
+        },
+        "addTracelinksToDiagram": {
+            "actionType": "JSFunction",
+            "method": "addTracelinksToDiagram",
+            "inputData": {
+                "relationObject": "{{data.eventMap['RM.PostTraceLinkCreated'].relationObjects}}",
+                "startItems": "{{data.eventMap['RM.PostTraceLinkCreated'].startItems}}",
+                "endItems": "{{data.eventMap['RM.PostTraceLinkCreated'].endItems}}",
+                "graphModel": "{{data.graphModel}}",
+                "activeLegendView":"{{ctx.graph.legendState.activeView}}"
+            },
+            "deps": "js/Ase0AddToDiagramService"
+        },
+        "registerHandlers": {
+            "actionType": "JSFunction",
+            "method": "registerVisiblilityHandlers",
+            "deps": "js/AMVisibilityHandler",
+            "events": {
+                "success": [ {
+                    "name": "occMgmt.visibilityStateChanged"
+                } ]
+            }
+        },
+        "isToggleOffElementAnchor": {
+            "actionType": "JSFunction",
+            "method": "isToggleOffElementAnchor",
+            "inputData": {
+                "eventData": "{{data.eventMap['AM.toggleOffVisibilityEvent']}}",
+                "data": "{{data}}",
+                "hasSystemModelerLicense": "{{props.pageState.hasSystemModelerLicense}}"
+            },
+            "outputData": {
+                "selectedAnchorNodes" : "selectedAnchorNodes",
+                "nodeContainsAnchor" : "nodeContainsAnchor",
+                "msgCount" : "msgCount",
+                "nodeExpandedOrHasRelation" : "nodeExpandedOrHasRelation"
+            },
+            "events": {
+                "success": [ {
+                    "name": "AM.toggleOffEvent",
+                    "condition": "data.msgCount === 0",
+                    "eventData": {
+                        "elementsToRemove": "{{data.eventMap['AM.toggleOffVisibilityEvent'].elementsToRemove}}",
+                        "isFadeRequired": "{{data.eventMap['AM.toggleOffVisibilityEvent'].isFadeRequired}}"
+                    }
+                } ]
+            },
+            "actionMessages": {
+                "success": [ {
+                        "condition": "data.msgCount === 1 && data.selectedAnchorNodes && data.selectedAnchorNodes.length > 0 && data.nodeExpandedOrHasRelation && data.graphModel.rootNodeList.length > 1",
+                        "message": "confirmAnchorNode"
+                    },
+                    {
+                        "condition": "data.msgCount === 1 && data.selectedAnchorNodes && data.selectedAnchorNodes.length === 1 && data.nodeExpandedOrHasRelation && data.graphModel.rootNodeList.length === 1",
+                        "message": "removeOnlyAnchor"
+                    },
+                    {
+                        "condition": "data.msgCount === 1 && data.selectedAnchorNodes && data.selectedAnchorNodes.length === 0 && !data.nodeExpandedOrHasRelation && data.nodeContainsAnchor",
+                        "message": "removeNodeIfChildIsAnchor"
+                    },
+                    {
+                        "condition": "data.msgCount > 1",
+                        "message": "toggleOffMultipleAnchorNode"
+                    }
+                ]
+            },
+            "deps": "js/Ase0RemoveFromDiagramService"
+        },
+        "toggleOffVisibilityEventAction": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "AM.toggleOffEvent",
+                    "eventData": {
+                        "elementsToRemove": "{{data.eventMap['AM.toggleOffVisibilityEvent'].elementsToRemove}}",
+                        "isFadeRequired": "{{data.eventMap['AM.toggleOffVisibilityEvent'].isFadeRequired}}"
+                    }
+                } ]
+            }
+        },
+        "toggleOffVisibility": {
+            "actionType": "JSFunction",
+            "method": "toggleOffVisibility",
+            "inputData": {
+                "eventData": "{{data.eventMap['AM.toggleOffEvent']}}",
+                "hasSystemModelerLicense": "{{props.pageState.hasSystemModelerLicense}}"
+            },
+            "outputData": {
+                "isItemRemovedFromDiagram" : ""
+            },
+            "deps": "js/Ase0RemoveFromDiagramService"
+        },
+        "removeObjectsFromDiagram": {
+            "actionType": "JSFunction",
+            "method": "removeFromDiagram",
+            "inputData": {
+                "data": "{{data}}",
+                "eventData": "{{data.eventMap['AM.toggleOffEvent']}}"
+            },
+            "deps": "js/Ase0RemoveFromDiagramService"
+        },
+        "toggleOnVisibility": {
+            "actionType": "JSFunction",
+            "method": "toggleOnVisibility",
+            "inputData": {
+                "data": "{{data}}",
+                "eventData": "{{data.eventMap['AM.toggleOnVisibilityEvent']}}",
+                "activeLegendView": "{{ctx.graph.legendState.activeView}}",
+                "hasSystemModelerLicense": "{{props.pageState.hasSystemModelerLicense}}"
+            },
+            "deps": "js/Ase0AddToDiagramService"
+        },
+        "quickEdgeCreateAction": {
+            "actionType": "JSFunction",
+            "method": "quickEdgeCreateAction",
+            "inputData": {
+                "data": "{{data}}",
+                "eventData": "{{data.eventMap['AM.edgeCreated']}}"
+            },
+            "deps": "js/Ase0ArchitectureCreateObjectsService"
+        },
+        "quickNodeCreateAction": {
+            "actionType": "JSFunction",
+            "method": "quickNodeCreateAction",
+            "inputData": {
+                "data": "{{data}}",
+                "eventData": "{{data.eventMap['AM.nodeCreated']}}",
+                "graphModel":"{{data.graphModel}}"
+            },
+            "deps": "js/Ase0ArchitectureNodeCreateService"
+        },
+        "quickPortCreateAction": {
+            "actionType": "JSFunction",
+            "method": "quickPortCreateAction",
+            "inputData": {
+                "eventData": "{{data.eventMap['AM.portCreated']}}"
+            },
+            "deps": "js/Ase0ArchitectureCreateObjectsService"
+        },
+        "edgeCreatedCompletionAction": {
+            "actionType": "JSFunction",
+            "method": "edgeCreatedCompletionAction",
+            "inputData": {
+                "graphDataResponse": "{{data.eventMap['AMGraphEvent.createEdgeCompleted'].graphData}}",
+                "eventData": "{{data.eventMap['AM.edgeCreated']}}",
+                "data": "{{data}}",
+                "legendState": "{{ctx.graph.legendState}}",
+                "occContext":"{{subPanelContext.context.occContext}}",
+                "graphState": "{{fields.graphState}}"
+
+            },
+            "deps": "js/Ase0ArchitectureCreateObjectsService"
+        },
+        "nodeCreatedCompletionAction": {
+            "actionType": "JSFunction",
+            "method": "nodeCreatedCompletionAction",
+            "inputData": {
+                "data": "{{data}}",
+                "graphDataResponse": "{{data.eventMap['AMGraphEvent.createNodeCompleted'].graphData}}",
+                "eventData": "{{data.eventMap['AM.nodeCreated']}}",
+                "legendState":"{{ctx.graph.legendState}}",
+                "occContext":"{{subPanelContext.context.occContext}}"
+            },
+            "deps": "js/Ase0ArchitectureNodeCreateService"
+        },
+        "updateSelectionInPWA": {
+            "actionType": "JSFunction",
+            "method": "go",
+            "inputData": {
+                "transitionTo": ".",
+                "toParams": {
+                    "c_uid": "{{data.eventData.objectToSelect}}"
+                },
+                "options": {
+                    "inherit": true
+                }
+            },
+            "deps": "js/locationNavigation.service"
+        },
+        "portCreatedCompletionAction": {
+            "actionType": "JSFunction",
+            "method": "portCreatedCompletionAction",
+            "inputData": {
+                "graphDataResponse": "{{data.eventMap['AMGraphEvent.createPortCompleted'].graphData}}",
+                "graphModel":"{{data.graphModel}}",
+                "legendState": "{{ctx.graph.legendState}}",
+                "occContext":"{{subPanelContext.context.occContext}}",
+                "graphState": "{{fields.graphState}}"
+            },
+            "deps": "js/Ase0ArchitectureCreateObjectsService"
+        },
+        "changeView": {
+            "actionType": "JSFunction",
+            "method": "changeDiagramView",
+            "inputData": {
+                "graphModel": "{{data.graphModel}}",
+                "activeLegendView":"{{ctx.graph.legendState.activeView}}",
+                "graphState": "{{fields.graphState}}"
+            },
+            "outputData": {
+                "actionState": "actionState"
+            },
+            "events": {
+                "success": [ {
+                    "name": "AMDiagram.viewModeChange"
+                } ]
+            },
+            "deps": "js/Ase0ArchitectureGraphService"
+        },
+        "removeElementMessages": {
+            "actionType": "JSFunction",
+            "method": "populateMsgRelatedConditions",
+            "inputData": {
+                "data": "{{data}}",
+                "selObjects":"{{ctx.mselected}}"
+            },
+            "outputData": {
+                "selectedElements" : "selectedElements",
+                "isNodeHasVisibleRelation" : "isNodeHasVisibleRelation",
+                "isNodeExpanded" : "isNodeExpanded",
+                "selectedAnchorNodes" : "selectedAnchorNodes",
+                "isHeterogeneousSelection" : "isHeterogeneousSelection",
+                "isOnlySinglePortSelected" : "isOnlySinglePortSelected",
+                "isOnlyConnectionSelected" : "isOnlyConnectionSelected",
+                "isConnectionsValidToDisconnect" : "isConnectionsValidToDisconnect"
+            },
+            "actionMessages": {
+                "success": [ {
+                        "condition": "data.selectedAnchorNodes.length === 1 && data.graphModel.rootNodeList.length === 1 && data.isHeterogeneousSelection === false",
+                        "message": "removeRootIfOnlyAnchor"
+                    },
+                    {
+                        "condition": "data.selectedElements.length === 1 && data.selectedAnchorNodes.length === 1 && data.graphModel.rootNodeList.length > 1 && (data.isNodeHasVisibleRelation || data.isNodeExpanded) && data.isHeterogeneousSelection === false",
+                        "message": "removeRootIfNotOnlyAnchor"
+                    },
+                    {
+                        "condition": "data.selectedElements.length === 1 && data.selectedAnchorNodes.length === 1 && data.graphModel.rootNodeList.length > 1 && (data.isNodeHasVisibleRelation === false && data.isNodeExpanded === false)",
+                        "message": "removeElementConfirmation"
+                    },
+                    {
+                        "condition": "data.selectedElements.length === 1 &&  data.selectedAnchorNodes.length === 0 && data.isOnlyConnectionSelected === false && data.isOnlySinglePortSelected === false",
+                        "message": "removeElementConfirmation"
+                    },
+                    {
+                        "condition": "data.selectedElements.length > 1 &&  data.selectedAnchorNodes.length > 0 && data.isHeterogeneousSelection === false",
+                        "message": "removeMultipleAnchorNode"
+                    },
+                    {
+                        "condition": "data.selectedElements.length > 1 &&  data.selectedAnchorNodes.length === 0 && data.isOnlyConnectionSelected === false",
+                        "message": "removeElementsConfirmation"
+                    },
+                    {
+                        "condition": "data.selectedElements.length > 1 &&  data.selectedAnchorNodes.length > 0 && data.isHeterogeneousSelection ",
+                        "message": "removeHeterogeneousSelectionsWithAnchors"
+                    },
+                    {
+                        "condition": "data.selectedElements.length === 1 && data.isOnlyConnectionSelected && data.isConnectionsValidToDisconnect",
+                        "message": "disconnectSingleConnection"
+                    },
+                    {
+                        "condition": "data.selectedElements.length > 1 && data.isOnlyConnectionSelected && data.isConnectionsValidToDisconnect === true",
+                        "message": "disconnectMultipleConnections"
+                    },
+                    {
+                        "condition": "data.selectedElements.length === 1 && data.isOnlyConnectionSelected && data.isConnectionsValidToDisconnect === false",
+                        "message": "removeElementConfirmation"
+                    },
+                    {
+                        "condition": "data.selectedElements.length > 1 && data.isOnlyConnectionSelected && data.isConnectionsValidToDisconnect === false",
+                        "message": "removeElementsConfirmation"
+                    },
+                    {
+                        "condition": "data.isOnlySinglePortSelected",
+                        "message": "removePortConfirmation"
+                    }
+                ]
+            },
+            "deps": "js/Ase0DeleteElementService"
+        },
+        "removeElement": {
+            "actionType": "JSFunction",
+            "method": "deleteElement",
+            "inputData": {
+                "data": "{{data}}",
+                "selObjects": "{{ctx.mselected}}",
+                "occContext":"{{subPanelContext.context.occContext}}"
+            },
+            "outputData": {
+                "removeElementUids" : "removeElementUids",
+                "deletedPortUids" : "deletedPortUids",
+                "deletedTracelinkUids" : "deletedTracelinkUids"
+            },
+            "deps": "js/Ase0DeleteElementService"
+        },
+        "processDeleteElement": {
+            "actionType": "JSFunction",
+            "method": "performDeleteOperationCompleted",
+            "inputData": {
+                "graphData": "{{data.eventMap['AMGraphEvent.deleteElement'].graphData}}",
+                "data": "{{data}}",
+                "selObjects": "{{ctx.mselected}}",
+                "occContext":"{{subPanelContext.context.occContext}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "occMgmt.visibilityStateChanged"
+                } ]
+            },
+            "deps": "js/Ase0DeleteElementService"
+        },
+        "updateModelOnObjectChanged": {
+            "actionType": "JSFunction",
+            "method": "updateModelOnObjectChanged",
+            "inputData": {
+                "modelObjects": "{{data.eventMap['cdm.updated'].updatedObjects}}",
+                "graphModel": "{{data.graphModel}}"
+            },
+            "deps": "js/Ase0ArchitectureGraphService"
+        },
+        "onNodeEditCommitted": {
+            "actionType": "JSFunction",
+            "method": "onNodeEditCommitted",
+            "inputData": {
+                "eventData": "{{data.eventMap['AM.nodeEditCommitted']}}"
+            },
+            "deps": "js/Ase0ArchitectureNodeCreateService"
+        },
+        "onNodeEditCancelled": {
+            "actionType": "JSFunction",
+            "method": "onNodeEditCancelled",
+            "inputData": {
+                "graphModel": "{{data.graphModel}}",
+                "eventData": "{{data.eventMap['AM.nodeCreated']}}",
+                "data": "{{data}}"
+            },
+            "deps": "js/Ase0ArchitectureNodeCreateService"
+        },
+        "createObject": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-Core-2012-10-DataManagement",
+            "method": "createRelateAndSubmitObjects",
+            "inputData": {
+                "inputs": "{{data.eventMap['AMCreateObjectEvent'].createInput}}"
+            },
+            "outputData": {
+                "outputCreatedObject": "output[0].objects[0]"
+            },
+            "events": {
+                "success": [ {
+                    "name": "AMAddObjectEvent"
+                } ]
+            }
+        },
+        "addAceElements": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceBom-2021-06-OccurrenceManagement",
+            "method": "addObject3",
+            "inputData": {
+                "input": {
+                    "objectsToBeAdded": "{{function:getObjectsToBeAdd}}",
+                    "parentElement": "{{function:getParentElementsToAdd}}",
+                    "inputCtxt": {
+                        "productContext": "{{subPanelContext.context.occContext.productContextInfo}}"
+                    },
+                    "sortCriteria": {
+                        "propertyName": "{{subPanelContext.context.occContext.sortCriteria[0].fieldName}}",
+                        "sortingOrder": "{{subPanelContext.context.occContext.sortCriteria[0].sortDirection}}"
+                    },
+                    "addObjectIntent": "{{subPanelContext.context.occContext.addElement.addObjectIntent}}",
+                    "fetchPagedOccurrences": true,
+                    "requestPref": {
+                        "displayMode": [ "Tree" ],
+                        "structExpanded": [ "{{function:getExpandedValue}}" ]
+                    },
+                    "numberOfElements": 1
+                }
+            },
+            "outputData": {
+                "addElementResponse": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "addElement.elementsAdded",
+                        "eventData": {
+                            "objectsToSelect": "{{function:getNewlyAddedChildElements}}",
+                            "addElementResponse": "{{data.addElementResponse}}",
+                            "viewToReact": "{{props.subPanelContext.provider.contextKey}}",
+                            "updatedParentElement" : "{{function:getParentElementsToAdd}}"
+                        },
+                        "condition": "data.addElementResponse.selectedNewElementInfo.newElements.length > 0"
+                    }
+                ],
+                "failure": [ {
+                    "name": "AM.nodeEditCancelled"
+                } ]
+            },
+            "deps": "js/Ase0ArchitectureCreateObjectsService",
+            "actionMessages": {
+                "failure": [
+                    {
+                        "message": "addAceElementsFailure"
+                    }
+                ]
+            }
+        },
+        "hideNode": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "AM.toggleOffVisibilityEvent",
+                    "eventData": {
+                        "sourceGraph": "{{data.eventMap['awGraph.executeTileCommand'].sourceGraph}}",
+                        "elementsToRemove": [
+                            "{{data.eventMap['awGraph.executeTileCommand'].node.modelObject}}"
+                        ],
+                        "isFadeRequired": true
+                    }
+                } ]
+            }
+        },
+        "showContextMenuOnPort": {
+            "actionType": "JSFunction",
+            "method": "showContextMenuOnPort",
+            "inputData": {
+                "graphModel": "{{data.graphModel}}",
+                "item": "{{data.eventMap['awGraph.rightClicked'].item}}"
+            },
+            "deps": "js/Ase0ArchitectureGraphService"
+        },
+        "loadDataForEditing": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2017-12-DataManagement",
+            "method": "loadViewModelForEditing2",
+            "inputData": {
+                "inputs": "{{function:buildInputForLoadEditing}}"
+            },
+            "outputData": {
+                "viewModelObjectsJsonStrings": "viewModelObjectsJsonStrings"
+            },
+            "deps": "js/Ase0ArchitectureGraphService",
+            "policy": {
+                "types": [ {
+                    "name": "{{data.eventMap['architecture.loadDataForEditing'].modelObject.type}}",
+                    "modifiers": [ {
+                        "name": "includeIsModifiable",
+                        "Value": "true"
+                    } ],
+                    "properties": "{{data.propertyPolicyRetrieved}}"
+                } ]
+            },
+            "events": {
+                "success": [ {
+                    "name": "AMLoadEdit.success",
+                    "eventData": {
+                        "modelObject": "{{data.eventMap['architecture.loadDataForEditing'].modelObject}}",
+                        "propertyName": "{{data.eventMap['architecture.loadDataForEditing'].property}}",
+                        "propertyValue": "{{data.eventMap['architecture.loadDataForEditing'].updatePropertyValue}}",
+                        "viewModelObjectsJsonStrings": "{{data.viewModelObjectsJsonStrings}}"
+                    }
+                } ]
+            }
+        },
+        "saveEditProperty": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2018-05-DataManagement",
+            "method": "saveViewModelEditAndSubmitWorkflow2",
+            "inputData": {
+                "inputs": "{{function:buildInputForSaveEditing}}"
+            },
+            "deps": "js/Ase0ArchitectureGraphService"
+        },
+        "dndEdgeCreateAction": {
+            "actionType": "JSFunction",
+            "method": "dragAndDropEdgeCreateAction",
+            "inputData": {
+                "eventData": "{{data.eventMap['AMGraphEvent.createTracelinkOnDnd']}}"
+            },
+            "deps": "js/Ase0ArchitectureCreateObjectsService"
+        },
+        "changeAlignment": {
+            "actionType": "JSFunction",
+            "method": "changeAlignment",
+            "inputData": {
+                "eventData": "{{data.eventData}}",
+                "graphModel":"{{data.graphModel}}"
+            },
+            "deps": "js/Ase0ArchitectureGraphAlignmentService"
+        },
+        "quickNodeDndCreateAction": {
+            "actionType": "JSFunction",
+            "method": "createOccuranceOnDrop",
+            "inputData": {
+                "data": "{{data}}",
+                "eventData": "{{data.eventMap['AMGraphEvent.createOccuranceOnDnd']}}"
+            },
+            "deps": "js/Ase0ArchitectureCreateObjectsService"
+        },
+        "updateSavedWorkingContext": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceBom-2012-10-OccurrenceManagement",
+            "method": "updateSavedBookmark",
+            "inputData": {
+                "savedBookmarkObjects": [
+                    "{{subPanelContext.context.occContext.workingContextObj}}"
+                ]
+            },
+            "events": {
+                "success": [ {
+                    "name": "AMUpdateSavedWorkingContext.completed"
+                } ]
+            },
+            "deps": "js/Ase0ArchitectureDiagramSaveService"
+        },
+        "updateDiagramChangeAction": {
+            "actionType": "JSFunction",
+            "method": "markDiagramAsDirty",
+            "inputData": {
+                "hasPendingChanges": true,
+                "occContext": "{{subPanelContext.context.occContext}}",
+                "graphState": "{{fields.graphState}}",
+                "data": "{{data}}"
+            },
+            "deps": "js/Ase0ArchitectureDiagramSaveService"
+        },
+        "saveAutoBookMark": {
+            "actionType": "JSFunction",
+            "method": "saveDiagramInAutoBookMarkOnly",
+            "inputData": {
+                "graphState": "{{fields.graphState}}",
+                "graphModel":"{{data.graphModel}}",
+                "legendState":"{{ctx.graph.legendState}}"
+            },
+            "deps": "js/Ase0ArchitectureDiagramSaveService"
+        },
+        "setHasPendingChangeAfterSaveAction": {
+            "actionType": "JSFunction",
+            "method": "setHasPendingChange",
+            "inputData": {
+                "hasPendingChanges": false,
+                "graphState": "{{fields.graphState}}"
+            },
+            "deps": "js/Ase0ArchitectureDiagramSaveService"
+        },
+        "saveDiagramCompleteAction": {
+            "actionType": "JSFunction",
+            "method": "setHasPendingChangeInDiagram",
+            "inputData": {
+                "hasPendingChangesInDiagram": false,
+                "graphState": "{{fields.graphState}}"
+            },
+            "deps": "js/Ase0ArchitectureDiagramSaveService"
+        },
+        "registerEditHandler": {
+            "actionType": "JSFunction",
+            "method": "registerDiagramEditHandler",
+            "inputData": {
+                "data": "{{data}}",
+                "graphState": "{{fields.graphState}}"
+            },
+            "events": {
+                "success": [ {
+                        "name": "AMGraphEvent.syncGraphSelections",
+                        "eventData": {
+                            "selectedObjects": "{{subPanelContext.context.occContext.pwaSelection}}"
+                        }
+                    }]
+            },
+            "deps": "js/Ase0ArchitectureDiagramSaveService"
+        },
+        "editNodeData": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "AMLoadEdit.success",
+                    "eventData": {
+                        "modelObject": "{{data.eventMap['awGraph.nodeEditCommitted'].editNode.modelObject}}",
+                        "propertyName": "awb0DisplayedName",
+                        "propertyValue": "{{data.eventMap['awGraph.nodeEditCommitted'].newValue}}",
+                        "lsdData": null
+                    }
+                } ]
+            }
+        },
+        "hotspotClicked": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "AM.toggleOffEvent",
+                    "eventData": {
+                        "elementsToRemove": [
+                            "{{data.eventMap['awGraph.hotspotClicked'].edge.modelObject}}"
+                        ]
+                    }
+                } ]
+            }
+        },
+        "labelTextChangeAction": {
+            "actionType": "JSFunction",
+            "method": "labelTextChangeAction",
+            "inputData": {
+                "eventData": "{{data.eventMap['awGraph.labelTextChanged']}}"
+            },
+            "deps": "js/Ase0ArchitectureLabelService"
+        },
+        "saveAnnotationLabelChange": {
+            "actionType": "JSFunction",
+            "method": "markDiagramAsDirty",
+            "inputData": {
+                "hasPendingChanges": true,
+                "occContext": "{{subPanelContext.context.occContext}}",
+                "graphState": "{{fields.graphState}}",
+                "data": "{{data}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "StartSaveAutoBookmarkEvent"
+                } ]
+            },
+            "deps": "js/Ase0ArchitectureDiagramSaveService"
+        },
+        "reconnectConnection": {
+            "actionType": "JSFunction",
+            "method": "reconnectConnection",
+            "inputData": {
+                "data": "{{data}}",
+                "selObjects": "{{ctx.mselected}}",
+                "activeLegendView": "{{ctx.graph.legendState.activeView}}",
+                "graphState": "{{fields.graphState}}"
+            },
+            "outputData": {
+                "reconnect": ""
+            },
+            "deps": "js/Ase0ReconnectConnectionService"
+        },
+        "processEndElements": {
+            "actionType": "JSFunction",
+            "method": "processEndElements",
+            "inputData": {
+                "data": "{{data}}",
+                "graphData": "{{data.eventMap['AMGraphEvent.GetEndElements'].graphData}}",
+                "selObjects":"{{ctx.mselected}}",
+                "activeLegendView": "{{ctx.graph.legendState.activeView}}"
+            },
+            "outputData": {
+                "reconnect": ""
+            },
+            "deps": "js/Ase0ReconnectConnectionService"
+        },
+        "reconnectCompletionAction": {
+            "actionType": "JSFunction",
+            "method": "reconnectCompletionAction",
+            "inputData": {
+                "eventData": "{{data}}",
+                "graphData": "{{data.eventMap['AMGraphEvent.reconnectCompleted'].graphData}}",
+                "legendState": "{{ctx.graph.legendState}}",
+                "graphState": "{{fields.graphState}}"
+            },
+            "outputData": {
+                "reconnect": ""
+            },
+            "deps": "js/Ase0ArchitectureCreateObjectsService"
+        },
+        "filterStatusChangedAction": {
+            "actionType": "JSFunction",
+            "method": "handleFilterStatusChangedAction",
+            "inputData": {
+                "input": {
+                    "data": "{{data.eventMap['awGraphLegend.filterStatusChanged'].category.categoryType}}"
+                }
+            },
+            "outputData": {
+                "doUpdateAceVisibilityState": ""
+            },
+            "events": {
+                "success": [ {
+                        "name": "occMgmt.visibilityStateChanged",
+                        "condition": "data.doUpdateAceVisibilityState === true"
+                    },
+                    {
+                        "name": "AM.evaluateShowPortsCondition",
+                        "condition": "data.doUpdateAceVisibilityState === false"
+                    },
+                    {
+                        "name": "AMDiagram.filterStatusChanged",
+                        "condition": "data.doUpdateAceVisibilityState === true"
+                    }
+                ]
+            },
+            "deps": "js/Ase0ArchitectureGraphService"
+        },
+        "setNodeHeightOnWrappedHeightChanged": {
+            "actionType": "JSFunction",
+            "method": "setNodeHeightOnWrappedHeightChanged",
+            "inputData": {
+                "graphModel": "{{data.graphModel}}",
+                "nodes": "{{data.eventMap['awGraph.wrappedHeightChanged'].wrappedHeightChangedNodes}}"
+            },
+            "deps": "js/Ase0ArchitectureNodeService"
+        },
+        "resetRecallState": {
+            "actionType": "JSFunction",
+            "method": "resetRecallState",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Ase0ArchitectureGraphService"
+        },
+        "clearDiagramSelection": {
+            "actionType": "JSFunction",
+            "deps": "lodash",
+            "method": "invoke",
+            "inputData": {
+                "0": "{{props.primarySelection}}",
+                "1": "update",
+                "2": {
+                    "nodeModels": [],
+                    "edgeModels": [],
+                    "portModels": [],
+                    "selected": []
+                }
+            }
+        },
+        "evaluateShowPortsConditionAction": {
+            "actionType": "JSFunction",
+            "method": "evaluateShowPortsCondition",
+            "inputData": {
+                "graphModel": "{{data.graphModel}}",
+                "graphState": "{{fields.graphState}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "AM.updateEdgeStyle"
+                } ]
+            },
+            "deps": "js/Ase0ArchitecturePortService"
+        },
+        "updateEdgeStyle": {
+            "actionType": "JSFunction",
+            "method": "updateEdgeStyle",
+            "inputData": {
+                "graphModel": "{{data.graphModel}}",
+                "activeLegendView": "{{ctx.graph.legendState.activeView}}"
+            },
+            "deps": "js/Ase0ArchitectureEdgeService"
+        },
+        "resetCreationCategoryLegendState": {
+            "actionType": "JSFunction",
+            "method": "resetCreationCategoryLegendState",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Ase0ArchitectureGraphService"
+        },
+        "graphItemResized": {
+            "actionType": "JSFunction",
+            "method": "graphItemResized",
+            "inputData": {
+                "graphItem": "{{data.eventMap['awGraph.graphItemsResized'].items}}",
+                "graphModel": "{{data.graphModel}}"
+            },
+            "deps": "js/Ase0ArchitectureNodeService"
+        },
+        "updateGraphNodeDegree": {
+            "actionType": "JSFunction",
+            "method": "updateGraphInfoOnNodes",
+            "inputData": {
+                "affectedNodeList": "{{data.eventMap['AMDiagram.updateGraphNodeDegree'].affectedNodeList}}",
+                "graphModel": "{{data.graphModel}}",
+                "data": "{{data}}",
+                "activeLegendView": "{{ctx.graph.legendState.activeView}}"
+            },
+            "deps": "js/Ase0ArchitectureNodeCommandService"
+        },
+        "validateForUpdateGraphNodeDegree": {
+            "actionType": "JSFunction",
+            "method": "validateForUpdateGraphNodeDegree",
+            "inputData": {
+                "graphModel": "{{data.graphModel}}"
+            },
+            "deps": "js/Ase0ArchitectureNodeCommandService"
+        },
+        "associateIDsToIOI": {
+            "actionType": "JSFunction",
+            "method": "invokeCommandAction",
+            "inputData": {
+                "userAction": "AssociateIDsToIOI",
+                "eventData": {},
+                "graphState": "{{fields.graphState}}",
+                "occContext": "{{subPanelContext.context.occContext}}"
+            },
+            "deps": "js/Ase0CommandActionInvoker"
+        },
+        "applyLayout": {
+            "actionType": "JSFunction",
+            "method": "setLayoutType",
+            "inputData": {
+                "data": "{{data}}",
+                "layoutCommandId": "{{data.eventMap['architecture.LayoutCommandEvent'].layoutCommandId}}",
+                "layoutOption": "{{data.eventMap['architecture.LayoutCommandEvent'].layoutOption}}",
+                "layoutString": "{{data.eventMap['architecture.LayoutCommandEvent'].layoutString}}"
+            },
+            "deps": "js/Ase0ArchitectureLayoutService",
+            "events": {
+                "success": [ {
+                    "condition": "data.graphModel.config.layout.defaultOption === data.layoutOption",
+                    "name": "Ase0ArchitectureLayoutService.setLayout"
+                } ]
+            },
+            "actionMessages": {
+                "success": [ {
+                    "condition": "data.graphModel.config.layout.defaultOption !== data.layoutOption ",
+                    "message": "layoutChangeWarningMessage"
+                } ]
+            }
+        },
+        "setLayout": {
+            "actionType": "JSFunction",
+            "method": "setActiveLayout",
+            "inputData": {
+                "graphModel": "{{data.graphModel}}",
+                "layoutCommandId": "{{data.layoutCommandId}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "AMDiagram.LayoutChange"
+                } ]
+            },
+            "deps": "js/awGraphService"
+        },
+        "refreshOwningNode": {
+            "actionType": "JSFunction",
+            "method": "refreshOwningNode",
+            "inputData": {
+                "data": "{{data.eventData}}"
+            },
+            "deps": "js/Ase0ArchitectureGraphService"
+        },
+        "showFloatingWindowPopup": {
+            "actionType": "popup",
+            "method": "showFloatingWindowPopup",
+            "deps": "js/Ase0FloatingWindowHandler",
+            "inputData": {
+                "options": {
+                    "view": "Ase0FloatingWindowPopup",
+                    "placement": "CENTER",
+                    "anchor": "fg_commandbar_close",
+                    "preset": "modal",
+                    "width": "100vh",
+                    "draggable": true,
+                    "detachMode": true,
+                    "disableClose": true,
+                    "caption": "{{i18n.preview}}",
+                    "clickOutsideToClose": false,
+                    "autoFocus": true,
+                    "subPanelContext": {
+                        "searchResults": "{{data.searchResults}}",
+                        "searchResultObjects": "{{data.searchResultObjects}}",
+                        "object": "{{data.eventMap['awGraph.doubleClicked'].item.modelObject}}",
+                        "context": "{{props.subPanelContext.context}}",
+                        "pageState": "{{props.pageState}}",
+                        "graphState": "{{fields.graphState}}",
+                        "graphContext": "{{ctx.graph}}"
+                    }
+                }
+            }
+        },
+        "openDiagramsPanel": {
+            "actionType": "JSFunction",
+            "method": "activateCommandPanel",
+            "deps": "js/commandPanel.service",
+            "inputData": {
+                "commandId": "Ase0CreateAssociatedDiagram",
+                "location": "aw_toolsAndInfo"
+            }
+        },
+        "moveConnectionAction": {
+            "actionType": "JSFunction",
+            "method": "moveConnectionAction",
+            "inputData": {
+                "eventData": "{{data.eventMap['AM.edgeMoved']}}"
+            },
+            "deps": "js/Ase0ArchitectureCreateObjectsService"
+        },
+        "moveConnectionCompleteAction": {
+            "actionType": "JSFunction",
+            "method": "moveConnectionCompleteAction",
+            "inputData": {
+                "data": "{{data}}",
+                "graphData": "{{data.eventMap['AMGraphEvent.moveConnectionCompleted'].graphData}}",
+                "activeLegendView":"{{ctx.graph.legendState.activeView}}"
+            },
+            "deps": "js/Ase0ArchitectureCreateObjectsService"
+        },
+        "aceElementAdded": {
+            "actionType": "JSFunction",
+            "method": "aceElementAdded",
+            "inputData": {
+                "eventData": "{{data.eventMap['addElement.elementsAdded']}}",
+                "pageState": "{{props.pageState}}"
+            },
+            "outputData": {
+                "actionState": ""
+            },
+            "deps": "js/Ase0ArchitecturePageService"
+        },
+        "aceElementRemoved": {
+            "actionType": "JSFunction",
+            "method": "aceElementRemoved",
+            "inputData": {
+                "eventData": "{{data.eventMap['ace.elementsRemoved']}}",
+                "graphModel":"{{data.graphModel}}",
+                "data": "{{data}}",
+                "activeLegendView": "{{ctx.graph.legendState.activeView}}"
+            },
+            "outputData": {
+                "actionState": ""
+            },
+            "deps": "js/Ase0ArchitecturePageService"
+        },
+        "toggleParent": {
+            "actionType": "JSFunction",
+            "method": "toggleParentVisibilityHandler",
+            "inputData": {
+                "clickedGraphItem": "{{data.actionState.toggleParent.node}}",
+                "graphModel": "{{data.graphModel}}",
+                "graphState": "{{fields.graphState}}"
+            },
+            "outputData": {
+                "actionState": "actionState"
+            },
+            "events": {
+                "success": [ {
+                        "name": "occMgmt.visibilityStateChanged",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            },
+            "deps": "js/Ase0VisibilityControlGroupHandler"
+        },
+        "hideAllChildren": {
+            "actionType": "JSFunction",
+            "method": "toggleAllChildrenVisibilityHandler",
+            "inputData": {
+                "clickedGraphItem": "{{data.actionState.hideAllChildren.node}}",
+                "visible": false,
+                "graphModel": "{{data.graphModel}}"
+            },
+            "outputData": {
+                "actionState": "actionState"
+            },
+            "deps": "js/Ase0VisibilityControlGroupHandler"
+        },
+        "showAllChildren": {
+            "actionType": "JSFunction",
+            "method": "toggleAllChildrenVisibilityHandler",
+            "inputData": {
+                "clickedGraphItem": "{{data.actionState.showAllChildren.node}}",
+                "visible": true,
+                "graphModel": "{{data.graphModel}}"
+            },
+            "outputData": {
+                "actionState": "actionState"
+            },
+            "deps": "js/Ase0VisibilityControlGroupHandler"
+        },
+        "toggleChildren": {
+            "actionType": "JSFunction",
+            "method": "toggleChildrenVisibilityHandler",
+            "inputData": {
+                "clickedGraphItem": "{{data.actionState.toggleChildren.node}}",
+                "graphModel":"{{data.graphModel}}"
+            },
+            "outputData": {
+                "actionState": "actionState"
+            },
+            "deps": "js/Ase0VisibilityControlGroupHandler"
+        },
+        "toggleIncomingRelations": {
+            "actionType": "JSFunction",
+            "method": "toggleRelationsVisibilityHandler",
+            "inputData": {
+                "clickedGraphItem": "{{data.actionState.toggleIncomingRelations.node}}",
+                "direction": "IN",
+                "graphModel": "{{data.graphModel}}",
+                "activeLegendView" : "{{ctx.graph.legendState.activeView}}"
+            },
+            "outputData": {
+                "actionState": "actionState"
+            },
+            "deps": "js/Ase0VisibilityControlGroupHandler"
+        },
+        "hideAllIncomingRelations": {
+            "actionType": "JSFunction",
+            "method": "toggleAllRelationsVisibilityHandler",
+            "inputData": {
+                "clickedGraphItem": "{{data.actionState.hideAllIncomingRelations.node}}",
+                "direction": "IN",
+                "visible": false,
+                "graphModel":"{{data.graphModel}}"
+            },
+            "outputData": {
+                "actionState": "actionState"
+            },
+            "deps": "js/Ase0VisibilityControlGroupHandler"
+        },
+        "showAllIncomingRelations": {
+            "actionType": "JSFunction",
+            "method": "toggleAllRelationsVisibilityHandler",
+            "inputData": {
+                "clickedGraphItem": "{{data.actionState.showAllIncomingRelations.node}}",
+                "direction": "IN",
+                "visible": true,
+                "graphModel":"{{data.graphModel}}"
+            },
+            "outputData": {
+                "actionState": "actionState"
+            },
+            "deps": "js/Ase0VisibilityControlGroupHandler"
+        },
+        "toggleOutgoingRelations": {
+            "actionType": "JSFunction",
+            "method": "toggleRelationsVisibilityHandler",
+            "inputData": {
+                "clickedGraphItem": "{{data.actionState.toggleOutgoingRelations.node}}",
+                "direction": "OUT",
+                "graphModel":"{{data.graphModel}}",
+                "activeLegendView" : "{{ctx.graph.legendState.activeView}}"
+            },
+            "outputData": {
+                "actionState": "actionState"
+            },
+            "deps": "js/Ase0VisibilityControlGroupHandler"
+        },
+        "hideAllOutgoingRelations": {
+            "actionType": "JSFunction",
+            "method": "toggleAllRelationsVisibilityHandler",
+            "inputData": {
+                "clickedGraphItem": "{{data.actionState.hideAllOutgoingRelations.node}}",
+                "direction": "OUT",
+                "visible": false,
+                "graphModel":"{{data.graphModel}}"
+            },
+            "outputData": {
+                "actionState": "actionState"
+            },
+            "deps": "js/Ase0VisibilityControlGroupHandler"
+        },
+        "showAllOutgoingRelations": {
+            "actionType": "JSFunction",
+            "method": "toggleAllRelationsVisibilityHandler",
+            "inputData": {
+                "clickedGraphItem": "{{data.actionState.showAllOutgoingRelations.node}}",
+                "direction": "OUT",
+                "visible": true,
+                "graphModel":"{{data.graphModel}}"
+            },
+            "outputData": {
+                "actionState": "actionState"
+            },
+            "deps": "js/Ase0VisibilityControlGroupHandler"
+        },
+        "saveAsDiagramAndOpen": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "saveAsDiagram.navigateToDiagram",
+                    "eventData": {"diagramUid":"{{data.eventMap['saveAsDiagram.postProcessSuccess'].diagramObject.uid}}"
+                    }
+                } ]
+            }
+        },
+        "updateCtxForPendingChangesInDiagram": {
+            "actionType": "JSFunction",
+            "method": "updateCtxForPendingChangesInDiagram",
+            "inputData": {
+                "graphState": "{{fields.graphState}}"
+            },
+            "deps": "js/saveAsDiagramService",
+            "events": {
+                "success": [ {
+                        "name": "saveAsDiagram.objectSaved",
+                        "eventData":{"diagramUid":"{{data.eventMap['saveAsDiagram.navigateToDiagram'].diagramUid}}"
+                        }
+                    }
+                ]
+            }
+        },
+        "showConnectedPortsAction": {
+            "actionType": "JSFunction",
+            "method": "showConnectedPorts",
+            "inputData": {
+                "graphModel": "{{data.graphModel}}",
+                "graphState": "{{fields.graphState}}"
+            },
+            "outputData": {
+                "actionState": "actionState"
+            },
+            "deps": "js/Ase0ArchitecturePortService"
+        },
+        "hideParentAction": {
+            "actionType": "JSFunction",
+            "method": "hideParentVisibilityHandler",
+            "inputData": {
+                "graphModel": "{{data.graphModel}}",
+                "graphState": "{{fields.graphState}}"
+            },
+            "outputData": {
+                "actionState": "actionState"
+            },
+            "events": {
+                "success": [ {
+                        "name": "occMgmt.visibilityStateChanged",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            },
+            "deps": "js/Ase0VisibilityControlGroupHandler"
+        },
+        "unsetAnchor": {
+            "actionType": "JSFunction",
+            "method": "unsetAnchor",
+            "inputData": {
+                "graphModel": "{{data.graphModel}}",
+                "graphState": "{{fields.graphState}}"
+            },
+            "outputData": {
+                "actionState": "actionState"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "AMDiagram.AnchorStateChange"
+                    }
+                ]
+            },
+            "deps": "js/Ase0ArchitectureSetUnsetAnchorService"
+        },
+        "setUnsetAnchorAction": {
+            "actionType": "JSFunction",
+            "method": "setAnchor",
+            "inputData": {
+                "graphModel": "{{data.graphModel}}",
+                "graphState": "{{fields.graphState}}"
+            },
+            "outputData": {
+                "previousAnchorState": "previousAnchorState",
+                "actionState": "actionState"
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "condition": "data.previousAnchorState === true && data.graphModel.rootNodeList.length === 1",
+                        "message": "confirmLastUnsetRoot"
+                    },
+                    {
+                        "condition": "data.previousAnchorState === true && props.primarySelection.nodeModels.length === 1 && data.graphModel.rootNodeList.length > 1",
+                        "message": "confirmSingleNotLastUnsetRoot"
+                    },
+                    {
+                        "condition": "data.previousAnchorState === true && props.primarySelection.nodeModels.length > 1",
+                        "message": "confirmMultiUnsetRoot"
+                    }
+                ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "AMDiagram.AnchorStateChange",
+                        "condition": "data.previousAnchorState === false"
+                    }
+                ]
+            },
+            "deps": "js/Ase0ArchitectureSetUnsetAnchorService"
+        },
+        "enableAutoLayout": {
+            "actionType": "JSFunction",
+            "method": "enableAutoLayout",
+            "inputData": {
+                "graphModel": "{{data.graphModel}}",
+                "graphState": "{{fields.graphState}}"
+            },
+            "outputData": {
+                "actionState": "actionState"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "AMDiagram.AutoLayoutToggled"
+                    }
+                ]
+            },
+            "deps": "js/Ase0ArchitectureAutoLayoutHandler"
+        },
+        "disableAutoLayout": {
+            "actionType": "JSFunction",
+            "method": "disableAutoLayout",
+            "inputData": {
+                "graphModel":"{{data.graphModel}}",
+                "graphState": "{{fields.graphState}}"
+            },
+            "outputData": {
+                "previousAutoLayoutState": "autoLayoutState",
+                "actionState": "actionState"
+            },
+            "events": {
+                "success": [
+                    {
+                        "condition": "data.previousAutoLayoutState === true ",
+                        "name": "AMDiagram.AutoLayoutToggled"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "condition": "data.previousAutoLayoutState === false ",
+                        "message": "enableAutoLayoutConfirmation"
+                    }
+                ]
+            },
+            "deps": "js/Ase0ArchitectureAutoLayoutHandler"
+        },
+        "deleteAnnotationCmdAction": {
+            "actionType": "JSFunction",
+            "method": "populateDeleteAnnotationInformation",
+            "inputData": {
+                "graphModel":"{{data.graphModel}}"
+            },
+            "outputData": {
+                "annotationData": ""
+            },
+            "deps": "js/Ase0AnnotationService",
+            "actionMessages": {
+                "success": [
+                    {
+                        "condition": "data.annotationData.selectedAnnotations && data.annotationData.selectedAnnotations.length === 1",
+                        "message": "confirmSingleAnnotationDelete"
+                    },
+                    {
+                        "condition": "data.annotationData.selectedAnnotations && data.annotationData.selectedAnnotations.length > 1",
+                        "message": "confirmMultipleAnnotationDelete"
+                    }
+                ]
+            }
+        },
+        "deleteAnnotationAction": {
+            "actionType": "JSFunction",
+            "method": "deleteAnnotations",
+            "inputData": {
+                "selectedAnnotations": "{{data.annotationData.selectedAnnotations}}",
+                "graphModel":"{{data.graphModel}}",
+                "graphState": "{{fields.graphState}}"
+            },
+            "outputData": {
+                "actionState": "actionState"
+            },
+            "deps": "js/Ase0AnnotationService"
+        },
+        "configurationChanged": {
+            "actionType": "JSFunction",
+            "method": "configurationChanged",
+            "inputData": {
+                "eventdata": "{{data.eventData.value}}"
+            },
+
+            "deps": "js/Ase0ArchitectureGraphService"
+        },
+        "refreshDiagram": {
+            "actionType": "JSFunction",
+            "method": "refreshDiagram",
+            "inputData": {},
+            "deps": "js/Ase0ArchitectureGraphService"
+        },
+        "resetContent": {
+            "actionType": "JSFunction",
+            "method": "resetContent",
+            "inputData": {
+                "graphState": "{{fields.graphState}}",
+                "occContext": "{{subPanelContext.context.occContext}}"
+            },
+            "deps": "js/Ase0ArchitectureGraphService"
+        },
+
+        "resetContentOnEffectivityAdded": {
+            "actionType": "JSFunction",
+            "method": "resetContentOnEffectivityAdded",
+            "inputData": {},
+            "deps": "js/Ase0ArchitectureGraphService"
+        }
+    },
+    "preferences": [
+        "MBSE_AM_EnableEditing"
+    ],
+    "functions": {
+        "getManageDiagram2Response": {
+            "functionName": "getManageDiagram2Response",
+            "parameters": []
+        },
+        "getManageDiagram2Input": {
+            "functionName": "getManageDiagram2Input",
+            "parameters": [
+                "{{data.eventMap['AMManageDiagramEvent']}}",
+                "{{data.manageDiagramQueue}}",
+                "{{data.graphModel}}",
+                "{{subPanelContext.context.occContext}}",
+                "{{ctx.graph.legendState.activeView}}"
+            ]
+        },
+        "getParentElementsToAdd": {
+            "functionName": "getParentElementsToAdd",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getObjectsToBeAdd": {
+            "functionName": "getObjectsToBeAdd",
+            "parameters": [
+                "{{data.outputCreatedObject}}"
+            ]
+        },
+        "getNewlyAddedChildElementUid": {
+            "functionName": "getNewlyAddedChildElementUid",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getNewlyAddedChildElements": {
+            "functionName": "getNewlyAddedChildElements",
+            "parameters": [
+                "{{data}}",
+                "{{subPanelContext.context.occContext}}"
+            ]
+        },
+        "buildInputForLoadEditing": {
+            "functionName": "buildInputForLoadEditing",
+            "parameters": [
+                "{{data.eventMap['architecture.loadDataForEditing']}}"
+            ]
+        },
+        "getAllModifiedValues": {
+            "functionName": "getAllModifiedValues",
+            "parameters": [
+                "{{data.vmo}}"
+            ]
+        },
+        "buildInputForSaveEditing": {
+            "functionName": "buildInputForSaveEditing",
+            "parameters": [
+                "{{data.eventMap['AMLoadEdit.success']}}"
+            ]
+        },
+        "getAssociatedDiagramsInput": {
+            "functionName": "getAssociatedDiagramsInput",
+            "parameters": [
+                "{{ctx}}",
+                "{{data}}",
+                "{{data.eventMap['awGraph.doubleClicked'].item}}",
+                "{{subPanelContext.context.occContext}}"
+            ]
+        },
+        "getExpandedValue": {
+            "functionName": "getExpandedValue",
+            "parameters": [
+                "{{data}}",
+                "{{subPanelContext.context.occContext}}"
+            ]
+        }
+    },
+
+    "lifecycleHooks": {
+        "onMount": "onArchitectureGraphMount",
+        "onUnmount": "onArchitectureGraphUnmount",
+        "onUpdate": [{
+            "action": "initLegendData",
+            "observers": [ "viewModel.legendData" ]
+        },
+        {
+            "action": "toggleParent",
+            "observers": [ "viewModel.atomicData.actionState.toggleParent" ]
+        },
+        {
+            "action": "hideAllChildren",
+            "observers": [ "viewModel.atomicData.actionState.hideAllChildren" ]
+        },
+        {
+            "action": "showAllChildren",
+            "observers": [ "viewModel.atomicData.actionState.showAllChildren" ]
+        },
+        {
+            "action": "toggleChildren",
+            "observers": [ "viewModel.atomicData.actionState.toggleChildren" ]
+        },
+        {
+            "action": "toggleIncomingRelations",
+            "observers": [ "viewModel.atomicData.actionState.toggleIncomingRelations" ]
+        },
+        {
+            "action": "hideAllIncomingRelations",
+            "observers": [ "viewModel.atomicData.actionState.hideAllIncomingRelations" ]
+        },
+        {
+            "action": "showAllIncomingRelations",
+            "observers": [ "viewModel.atomicData.actionState.showAllIncomingRelations" ]
+        },
+        {
+            "action": "toggleOutgoingRelations",
+            "observers": [ "viewModel.atomicData.actionState.toggleOutgoingRelations" ]
+        },
+        {
+            "action": "hideAllOutgoingRelations",
+            "observers": [ "viewModel.atomicData.actionState.hideAllOutgoingRelations" ]
+        },
+        {
+            "action": "showAllOutgoingRelations",
+            "observers": [ "viewModel.atomicData.actionState.showAllOutgoingRelations" ]
+        },
+        {
+            "action": "changeView",
+            "observers": [ "viewModel.atomicData.actionState.changeView" ]
+        },
+        {
+            "action": "addElementsToDiagram",
+            "observers": [ "viewModel.atomicData.actionState.AMElementAdded" ]
+        },
+        {
+            "action": "handleGraphItemsRemovedFromACE",
+            "observers": [ "viewModel.atomicData.actionState.AMItemsRemovedFromACE" ]
+        },
+        {
+            "action": "showConnectedPortsAction",
+            "observers": [ "viewModel.atomicData.actionState.showConnectedPorts" ]
+        },
+        {
+            "action": "hideParentAction",
+            "observers": [ "viewModel.atomicData.actionState.hideParent" ]
+        },
+        {
+            "action": "setUnsetAnchorAction",
+            "observers": [ "viewModel.atomicData.actionState.setUnsetAnchor" ]
+        },
+        {
+            "action": "deleteAnnotationCmdAction",
+            "observers": [ "viewModel.atomicData.actionState.deleteAnnotations" ]
+        },
+        {
+            "action": "syncSelectionsInGraph",
+            "observers": [ "props.subPanelContext.selection", "props.subPanelContext.context.occContext.pwaSelectionSource" ]
+        },
+        {
+            "action": "disableAutoLayout",
+            "observers": [ "viewModel.atomicData.actionState.disableAutoLayout" ]
+        },
+        {
+            "action": "removeObjectsFromDiagram",
+            "observers": [ "viewModel.data.isItemRemovedFromDiagram" ]
+        }]
+    },
+    "data": {
+        "actionState": {
+            "initialValues": {
+            },
+            "meta": {}
+        },
+        "graphState": {
+            "initialValues": {
+            },
+            "meta": {}
+        },
+        "singleNodeHasVisibleRelations": false,
+        "isNodeExpanded": false,
+        "selectedAnchorNodes": [],
+        "createNodeQueue": [],
+        "isHeterogeneousSelection": false,
+        "isRecall": false,
+        "legend": {
+            "tabModel": []
+        },
+        "manageDiagramQueue": [],
+        "archGraphModel": {
+            "isGraphFitted": false
+        },
+        "isItemRemovedFromDiagram": false,
+        "primaryWorkAreaExcludedTypes": [
+            "Ase0Signal"
+        ],
+        "rootNodeList": [],
+        "reconnect": {
+            "selectedConnection": null,
+            "previousInputMode": null,
+            "isGraphInRelationCreationMode": false,
+            "existingPortEndObjects": [],
+            "existingNodeEndObjects": []
+        },
+        "graphModel": {
+            "uid": "Ase0ArchitectureGraph",
+            "config": {
+                "autoRotatePortIcon": true,
+                "enableEdit": true,
+                "minZoom": 0,
+                "maxZoom": 1,
+                "autoEdgeRoutingType": "HV_SEGMENT3",
+                "fitViewPosition": "CENTER",
+                "hoverDelayTime": 75,
+                "nodeHeightUpdateStrategy": "KEEP_LARGE",
+                "movableItems": [
+                    "Node",
+                    "Edge",
+                    "Port",
+                    "Label",
+                    "Boundary"
+                ],
+                "enableJumper": true,
+                "jumper": {
+                    "jumperType": "ARC",
+                    "jumperSize": {
+                        "width": 10,
+                        "height": 10
+                    },
+                    "jumperPriority": "HORIZONTAL"
+                },
+                "selectableItems": [
+                    "Node",
+                    "Edge",
+                    "Port",
+                    "Label",
+                    "Boundary"
+                ],
+                "layout": {
+                    "layoutMode": "IncUpdateLayout",
+                    "defaultOption": "TopToBottom",
+                    "options": [
+                        "TopToBottom",
+                        "RightToLeft",
+                        "LeftToRight",
+                        "Incremental",
+                        "BottomToTop"
+                    ],
+                    "config": {
+                        "nodeToNodeDistance": {
+                            "x": 48,
+                            "y": 48
+                        },
+                        "edgeToEdgeDistance": {
+                            "x": 24,
+                            "y": 24
+                        },
+                        "portSize": {
+                            "width": 16,
+                            "height": 16
+                        }
+                    }
+                },
+                "syncPortEdgeVisibility": true,
+                "showNodeOverlay": true,
+                "nodeOverlay": {
+                    "zoomThreshold": 0.7,
+                    "graphOverlayHandler": "js/Ase0ArchitectureGraphOverlayHandler"
+                },
+                "inputMode": "viewInputMode",
+                "graphEditHandler": "js/Ase0ArchitectureGraphEditHandler",
+                "tooltipHandler": "js/Ase0ArchitectureGraphTooltipHandler",
+                "moveWithoutSelection": true,
+                "enableAutoPan": true,
+                "enableMarqueeSelection": true,
+                "marqueeSelectionModifierKey": [
+                    [
+                        "Ctrl"
+                    ]
+                ],
+                "dragAndDropModifierKey": {
+                    "copy": [
+                        "Ctrl"
+                    ]
+                },
+                "showOverview": true,
+                "dragAndDropHandler": "js/Ase0ArchitectureGraphDragAndDropHandler",
+                "defaults": {
+                    "nodeSize": {
+                        "width": 312,
+                        "height": 120
+                    },
+                    "nodeStyle": {
+                        "templateId": "Ase0ArchitectureDummyNodeTemplate"
+                    },
+                    "edgeStyle": {
+                        "dashStyle": "DASH",
+                        "thickness": 2,
+                        "color": "(0,0,0)"
+                    },
+                    "portStyle": {
+                        "portShape": "SQUARE",
+                        "borderColor": "(70, 70, 70)",
+                        "fillColor": "(255, 255, 255)",
+                        "thickness": 1,
+                        "size": 24,
+                        "iconId": "RedoMarkup",
+                        "normalStyleClass":"aw-architecture-portFilter",
+                        "hoverStyleClass": "aw-architecture-portFilterHover",
+                        "selectedStyleClass":"aw-architecture-portFilterSelected"
+                    },
+                    "boundaryStyle": {
+                        "thickness": 1,
+                        "strokeDash": "DASH",
+                        "fillColor": "(235,235,227)",
+                        "borderColor": "(150, 150, 130)"
+                    },
+                    "portLabel": {
+                        "placementRule": "ROTATE"
+                    },
+                    "edgeLabel": {
+                        "allowWrapping": false,
+                        "maxWidth": 128,
+                        "contentStyleClass": "aw-widgets-label aw-base-normal aw-graph-label",
+                        "placementRule": {
+                            "positionOption": "CENTER_OF_LONGEST_SEGMENT_HORIZONTAL",
+                            "rotationMode": "AlongWithSegment"
+                        }
+                    }
+                },
+                "shadowEffects": [],
+                "customerFilter": "js/Ase0GraphFilterService",
+                "showFilter": true,
+                "grid": true,
+                "alignment": true
+            },
+            "inputModes": {
+                "viewInputMode": {
+                    "editMode": false,
+                    "enableManualEdgeRouting": false,
+                    "enableNodeResize": false,
+                    "enableLabelEdit": false,
+                    "dragableCursorUrl": "cursor/openhand.cur",
+                    "draggingCursorUrl": "cursor/closedhand.cur"
+                },
+                "editInputMode": {
+                    "editMode": true,
+                    "enableManualEdgeRouting": true,
+                    "enableNodeResize": true,
+                    "enableLabelEdit": true,
+                    "creatableItem": "",
+                    "dragableCursorUrl": "cursor/openhand.cur",
+                    "draggingCursorUrl": "cursor/closedhand.cur"
+                },
+                "edgeCreationMode": {
+                    "editMode": true,
+                    "enableManualEdgeRouting": true,
+                    "enableNodeResize": true,
+                    "enableLabelEdit": true,
+                    "creatableItem": "Edge",
+                    "defaultCursor": "hand",
+                    "dragableCursorUrl": "cursor/openhand.cur",
+                    "draggingCursorUrl": "cursor/closedhand.cur",
+                    "enableSelfLoopConnection": false
+                },
+                "nodeCreationMode": {
+                    "editMode": true,
+                    "enableManualEdgeRouting": true,
+                    "enableNodeResize": true,
+                    "enableLabelEdit": true,
+                    "creatableItem": "Node",
+                    "dragableCursorUrl": "cursor/openhand.cur",
+                    "draggingCursorUrl": "cursor/closedhand.cur"
+                },
+                "portCreationMode": {
+                    "editMode": true,
+                    "enableManualEdgeRouting": true,
+                    "enableNodeResize": true,
+                    "enableLabelEdit": true,
+                    "creatableItem": "Port",
+                    "defaultCursor": "hand",
+                    "dragableCursorUrl": "cursor/openhand.cur",
+                    "draggingCursorUrl": "cursor/closedhand.cur"
+                },
+                "boundaryCreationMode": {
+                    "editMode": true,
+                    "enableManualEdgeRouting": true,
+                    "enableNodeResize": true,
+                    "enableLabelEdit": true,
+                    "creatableItem": "Boundary",
+                    "dragableCursorUrl": "cursor/openhand.cur",
+                    "draggingCursorUrl": "cursor/closedhand.cur"
+                }
+            }
+        }
+    },
+    "editHandlers": {
+        "ase0EditHandler": {
+            "context": "ARCHITECTURE_EDIT_CONTEXT"
+        }
+    },
+    "messages": {
+        "typeFilteredOutMsg": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.typeFilteredOutMsg}}",
+            "messageTextParams": [
+                "{{data.eventMap['AMGraphEvent.filteredType'].filteredObject.props.object_string.dbValues[0]}}"
+            ]
+        },
+        "invalidObjectAdd": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.invalidObjectAdd}}",
+            "messageTextParams": [
+                "{{data.eventMap['AMGraphEvent.notValidObjectToAdd'].notValidObject.props.object_string.dbValues[0]}}",
+                "{{data.eventMap['AMGraphEvent.notValidObjectToAdd'].notValidObject.modelType.displayName}}"
+            ]
+        },
+        "objectsAddedSuccessfully": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.objectsAddedSuccessfully}}",
+            "messageTextParams": [
+                "{{data.eventMap['AMGraphEvent.objectsAddedSuccessfully'].noOfObjectToggleOn }}",
+                "{{data.eventMap['AMGraphEvent.objectsAddedSuccessfully'].totalObjects}}"
+            ]
+        },
+        "confirmAnchorNode": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.warningForToggleOffAnchorElement}}",
+            "messageTextParams": [
+                "{{data.eventData.elementsToRemove[0].props.object_string.dbValues[0]}}"
+            ],
+            "navigationOptions": [ {
+                    "option": "Cancel",
+                    "text": "{{i18n.cancel}}",
+                    "action": ""
+                },
+                {
+                    "option": "Hide",
+                    "text": "{{i18n.hide}}",
+                    "action": "toggleOffVisibilityEventAction"
+                }
+            ]
+        },
+        "removeOnlyAnchor": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.removeOnlyAnchor}}",
+            "messageTextParams": [
+                "{{data.eventData.elementsToRemove[0].props.object_string.dbValues[0]}}"
+            ],
+            "navigationOptions": [ {
+                    "option": "Cancel",
+                    "text": "{{i18n.cancel}}",
+                    "action": ""
+                },
+                {
+                    "option": "Hide",
+                    "text": "{{i18n.hide}}",
+                    "action": "toggleOffVisibilityEventAction"
+                }
+            ]
+        },
+        "removeNodeIfChildIsAnchor": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.removeNodeIfChildIsAnchor}}",
+            "messageTextParams": [
+                "{{data.eventData.elementsToRemove[0].props.object_string.dbValues[0]}}"
+            ],
+            "navigationOptions": [ {
+                    "option": "Cancel",
+                    "text": "{{i18n.cancel}}",
+                    "action": ""
+                },
+                {
+                    "option": "Hide",
+                    "text": "{{i18n.hide}}",
+                    "action": "toggleOffVisibilityEventAction"
+                }
+            ]
+        },
+        "removeElementConfirmation": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.removeElementConfirmation}}",
+            "messageTextParams": [
+                "{{data.selectedElements[0].props.object_string.uiValues[0]}}"
+            ],
+            "navigationOptions": [ {
+                    "option": "Cancel",
+                    "text": "{{i18n.cancel}}",
+                    "action": ""
+                },
+                {
+                    "option": "Remove",
+                    "text": "{{i18n.remove}}",
+                    "action": "removeElement"
+                }
+            ]
+        },
+        "removeElementsConfirmation": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.removeElementsConfirmation}}",
+            "messageTextParams": [
+                "data.selectedElements.length"
+            ],
+            "navigationOptions": [ {
+                    "option": "Cancel",
+                    "text": "{{i18n.cancel}}",
+                    "action": ""
+                },
+                {
+                    "option": "Remove",
+                    "text": "{{i18n.remove}}",
+                    "action": "removeElement"
+                }
+            ]
+        },
+        "removeHeterogeneousSelectionsWithAnchors": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.removeHeterogeneousSelectionsWithAnchors}}",
+            "messageTextParams": [
+                "data.selectedElements.length"
+            ],
+            "navigationOptions": [ {
+                    "option": "Cancel",
+                    "text": "{{i18n.cancel}}",
+                    "action": ""
+                },
+                {
+                    "option": "Remove",
+                    "text": "{{i18n.remove}}",
+                    "action": "removeElement"
+                }
+            ]
+        },
+        "disconnectSingleConnection": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.disconnectSingleConnection}}",
+            "messageTextParams": [
+                "{{props.primarySelection.edgeModels[0].modelObject.props.object_string.uiValues[0]}}"
+            ],
+            "navigationOptions": [ {
+                    "option": "Cancel",
+                    "text": "{{i18n.cancel}}",
+                    "action": ""
+                },
+                {
+                    "option": "Disconnect",
+                    "text": "{{i18n.disconnect}}",
+                    "action": "removeElement"
+                }
+            ]
+        },
+        "disconnectMultipleConnections": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.disconnectMultipleConnections}}",
+            "messageTextParams": [
+                "data.selectedElements.length"
+            ],
+            "navigationOptions": [ {
+                    "option": "Cancel",
+                    "text": "{{i18n.cancel}}",
+                    "action": ""
+                },
+                {
+                    "option": "Disconnect",
+                    "text": "{{i18n.disconnect}}",
+                    "action": "removeElement"
+                }
+            ]
+        },
+        "removeRootIfOnlyAnchor": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.removeRootIfOnlyAnchor}}",
+            "messageTextParams": [
+                "{{props.primarySelection.nodeModels[0].modelObject.props.object_string.uiValues[0]}}"
+            ],
+            "navigationOptions": [ {
+                    "option": "Cancel",
+                    "text": "{{i18n.cancel}}",
+                    "action": ""
+                },
+                {
+                    "option": "Remove",
+                    "text": "{{i18n.remove}}",
+                    "action": "removeElement"
+                }
+            ]
+        },
+        "removeRootIfNotOnlyAnchor": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.removeRootIfNotOnlyAnchor}}",
+            "messageTextParams": [
+                "{{props.primarySelection.nodeModels[0].modelObject.props.object_string.uiValues[0]}}"
+            ],
+            "navigationOptions": [ {
+                    "option": "Cancel",
+                    "text": "{{i18n.cancel}}",
+                    "action": ""
+                },
+                {
+                    "option": "Remove",
+                    "text": "{{i18n.remove}}",
+                    "action": "removeElement"
+                }
+            ]
+        },
+        "removeMultipleAnchorNode": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.removeMultipleAnchorNode}}",
+            "messageTextParams": [
+                "data.selectedElements.length"
+            ],
+            "navigationOptions": [ {
+                    "option": "Cancel",
+                    "text": "{{i18n.cancel}}",
+                    "action": ""
+                },
+                {
+                    "option": "Remove",
+                    "text": "{{i18n.remove}}",
+                    "action": "removeElement"
+                }
+            ]
+        },
+        "removePortConfirmation": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.removeElementConfirmation}}",
+            "messageTextParams": [
+                "{{data.selectedElements[0].props.object_string.uiValues}}"
+            ],
+            "navigationOptions": [ {
+                    "option": "Cancel",
+                    "text": "{{i18n.cancel}}",
+                    "action": ""
+                },
+                {
+                    "option": "Remove",
+                    "text": "{{i18n.remove}}",
+                    "action": "removeElement"
+                }
+            ]
+        },
+        "parentObjectNotModifiableMessage": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.parentObjectNotModifiableMsg}}",
+            "messageTextParams": [
+                "{{data.eventMap['AM.parentObjectNotModifiable'].objectType}}",
+                "{{data.eventMap['AM.parentObjectNotModifiable'].nonModifiableObject.props.object_string.dbValues[0]}}"
+            ]
+        },
+        "portNotCreatedParentNotModifiableMessage": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.portNotCreatedParentNotModifiableMsg}}",
+            "messageTextParams": [
+                "{{data.eventMap['AM.portNotCreatedParentObjectNotModifiable'].nonModifiableObject.props.object_string.dbValues[0]}}",
+                "{{data.eventMap['AM.portNotCreatedParentObjectNotModifiable'].nonModifiableObject.props.object_string.dbValues[0]}}"
+            ]
+        },
+        "layoutChangeWarningMessage": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.layoutChangeWarningMsg}}",
+            "messageTextParams": [
+                "{{data.layoutString}}"
+            ],
+            "navigationOptions": [ {
+                    "option": "Cancel",
+                    "text": "{{i18n.cancel}}",
+                    "action": ""
+                },
+                {
+                    "option": "Change",
+                    "text": "{{i18n.change}}",
+                    "action": "setLayout"
+                }
+            ]
+        },
+        "toggleOffMultipleAnchorNode": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.toggleOffMultipleAnchorNode}}",
+            "messageTextParams": [],
+            "navigationOptions": [ {
+                    "option": "Cancel",
+                    "text": "{{i18n.cancel}}",
+                    "action": ""
+                },
+                {
+                    "option": "Hide",
+                    "text": "{{i18n.hide}}",
+                    "action": "toggleOffVisibilityEventAction"
+                }
+            ]
+        },
+        "manageDiagram2SOAFailure": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        },
+        "addAceElementsFailure": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        },
+        "confirmSingleNotLastUnsetRoot": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.commandWarningIfNotLastAnchor}}",
+            "messageTextParams": [
+                "{{props.primarySelection.nodeModels[0].modelObject.props.object_string.uiValues[0]}}"
+            ],
+            "navigationOptions": [
+                {
+                    "option": "Cancel",
+                    "text": "{{i18n.cancel}}",
+                    "action": ""
+                },
+                {
+                    "option": "Unset",
+                    "text": "{{i18n.unset}}",
+                    "action": "unsetAnchor"
+                }
+            ]
+        },
+        "confirmLastUnsetRoot": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.commandWarningForLastAnchor}}",
+            "messageTextParams": [
+                "{{props.primarySelection.nodeModels[0].modelObject.props.object_string.uiValues[0]}}"
+            ],
+            "navigationOptions": [
+                {
+                    "option": "Cancel",
+                    "text": "{{i18n.cancel}}",
+                    "action": ""
+                },
+                {
+                    "option": "Unset",
+                    "text": "{{i18n.unset}}",
+                    "action": "unsetAnchor"
+                }
+            ]
+        },
+        "confirmMultiUnsetRoot": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.commandWarningForAnchorMultiple}}",
+            "messageTextParams": [
+                "props.primarySelection.nodeModels.length"
+            ],
+            "navigationOptions": [
+                {
+                    "option": "Cancel",
+                    "text": "{{i18n.cancel}}",
+                    "action": ""
+                },
+                {
+                    "option": "Unset",
+                    "text": "{{i18n.unset}}",
+                    "action": "unsetAnchor"
+                }
+            ]
+        },
+        "confirmSingleAnnotationDelete": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.diagramSingleDeleteConfirmMsg}}",
+            "messageTextParams": [
+                "{{data.annotationData.label}}"
+            ],
+            "navigationOptions": [
+                {
+                    "option": "Cancel",
+                    "text": "{{i18n.cancel}}"
+                },
+                {
+                    "option": "Delete",
+                    "text": "{{i18n.delete}}",
+                    "action": "deleteAnnotationAction"
+                }
+            ]
+        },
+        "confirmMultipleAnnotationDelete": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.diagramMultiDeleteConfirmMsg}}",
+            "messageTextParams": [
+                "{{data.annotationData.selectedAnnotations.length}}"
+            ],
+            "navigationOptions": [
+                {
+                    "option": "Cancel",
+                    "text": "{{i18n.cancel}}"
+                },
+                {
+                    "option": "Delete",
+                    "text": "{{i18n.delete}}",
+                    "action": "deleteAnnotationAction"
+                }
+            ]
+        },
+        "enableAutoLayoutConfirmation": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.enableAutoLayoutConfirmation}}",
+            "navigationOptions": [
+                {
+                    "option": "Cancel",
+                    "text": "{{i18n.cancel}}",
+                    "action": ""
+                },
+                {
+                    "option": "Change",
+                    "text": "{{i18n.change}}",
+                    "action": "enableAutoLayout"
+                }
+            ]
+        }
+    },
+    "onEvent": [ {
+            "eventId": "awGraph.initialized",
+            "action": "initLegendData",
+            "condition": "conditions.isMainGraphEvent"
+        },
+        {
+            "eventId": "AMGraphEvent.drawGraph",
+            "action": "drawGraph",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "awGraph.graphItemsMoved",
+            "action": "handleGraphItemsMoved",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "awGraph.itemsAdded",
+            "action": "handleGraphItemsAdded",
+            "condition": "conditions.isMainGraphEvent",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "awGraph.itemsRemoved",
+            "action": "handleGraphItemsRemoved",
+            "condition": "conditions.isMainGraphEvent",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AMManageDiagramEvent",
+            "action": "manageDiagram2SOA",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AMManageDiagramComplete",
+            "action": "handleManageDiagram2Complete",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AMGraphEvent.clearDiagram",
+            "action": "handleClearDiagram",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AMGraphFitEvent",
+            "action": "fitDiagram"
+        },
+        {
+            "eventId": "AMGraphFitSelectedEvent",
+            "action": "fitSelectedDiagram"
+        },
+        {
+            "eventId": "AMGraphSelectedOnlyEvent",
+            "action": "selectedOnlyInDiagram"
+        },
+        {
+            "eventId": "AMGraphSelectedOffEvent",
+            "action": "selectedOffInDiagram"
+        },
+        {
+            "eventId": "awGraph.selectionChanged",
+            "action": "setDiagramSelection",
+            "condition": "conditions.processGraphSelectionEvent",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "awGraph.hoverChanged",
+            "action": "setDiagramHover",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AMGraphEvent.syncGraphSelections",
+            "action": "syncSelectionsInGraph",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AM.PwaSelectionUpdated",
+            "action": "addElementsToDiagramPWA",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "RM.PostTraceLinkCreated",
+            "action": "addTracelinksToDiagram",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AMGraphEvent.filteredType",
+            "message": "typeFilteredOutMsg",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AM.toggleOnVisibilityEvent",
+            "action": "toggleOnVisibility",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AM.toggleOffVisibilityEvent",
+            "condition": "!sourceGraph || sourceGraph.uid === data.graphModel.uid",
+            "action": "isToggleOffElementAnchor",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AM.toggleOffEvent",
+            "action": "toggleOffVisibility",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AMGraphEvent.notValidObjectToAdd",
+            "message": "invalidObjectAdd",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AM.edgeCreated",
+            "action": "quickEdgeCreateAction",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AM.nodeCreated",
+            "action": "quickNodeCreateAction",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AM.portCreated",
+            "action": "quickPortCreateAction",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AMGraphEvent.createEdgeCompleted",
+            "action": "edgeCreatedCompletionAction",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AMGraphEvent.createNodeCompleted",
+            "action": "nodeCreatedCompletionAction",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AMGraphElementAdded.updateSelectionInPWA",
+            "action": "updateSelectionInPWA",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AMGraphEvent.objectsAddedSuccessfully",
+            "message": "objectsAddedSuccessfully",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AMGraphEvent.createPortCompleted",
+            "action": "portCreatedCompletionAction",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "cdm.updated",
+            "action": "updateModelOnObjectChanged",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "architecture.RemoveElementCommandEvent",
+            "action": "removeElementMessages"
+        },
+        {
+            "eventId": "awGraph.doubleClicked",
+            "action": "mainGraphDoubleClicked",
+            "condition": "conditions.isNodeDblClicked",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AMGraphEvent.deleteElement",
+            "action": "processDeleteElement",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "architecture.RemoveTrackLinkEvent",
+            "action": "removeElement"
+        },
+        {
+            "eventId": "AM.nodeEditCommitted",
+            "action": "onNodeEditCommitted",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AM.nodeEditCancelled",
+            "action": "onNodeEditCancelled",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AMCreateObjectEvent",
+            "action": "createObject",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AMAddObjectEvent",
+            "action": "addAceElements"
+        },
+        {
+            "eventId": "awGraph.executeTileCommand",
+            "criteria": {
+                "commandId": "Ase0HideNode"
+            },
+            "action": "hideNode",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "archModeler.AlignmentEvent",
+            "action": "changeAlignment",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "awGraph.rightClicked",
+            "action": "showContextMenuOnPort",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "architecture.loadDataForEditing",
+            "cacheEventData": true,
+            "action": "loadDataForEditing"
+        },
+        {
+            "eventId": "AMLoadEdit.success",
+            "cacheEventData": true,
+            "action": "saveEditProperty"
+        },
+        {
+            "eventId": "AMGraphEvent.createTracelinkOnDnd",
+            "action": "dndEdgeCreateAction",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AMGraphEvent.createOccuranceOnDnd",
+            "action": "quickNodeDndCreateAction",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AM.parentObjectNotModifiable",
+            "message": "parentObjectNotModifiableMessage",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AM.portNotCreatedParentObjectNotModifiable",
+            "message": "portNotCreatedParentNotModifiableMessage",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AMDiagram.ModelChange",
+            "action": "updateDiagramChangeAction"
+        },
+        {
+            "eventId": "AMDiagram.LayoutChange",
+            "action": "updateDiagramChangeAction"
+        },
+        {
+            "eventId": "AMDiagram.AnchorStateChange",
+            "action": "updateDiagramChangeAction"
+        },
+        {
+            "eventId": "AMDiagram.Modified",
+            "action": "updateDiagramChangeAction"
+        },
+        {
+            "eventId": "AMDiagram.GraphItemLabelChange",
+            "action": "updateDiagramChangeAction"
+        },
+        {
+            "eventId": "AMDiagram.annotationLabelChange",
+            "action": "saveAnnotationLabelChange"
+        },
+        {
+            "eventId": "AMDiagram.viewModeChange",
+            "action": "updateDiagramChangeAction"
+        },
+        {
+            "eventId": "awGraph.viewportChanged",
+            "condition": "sourceGraph === data.graphModel && oldZoom !== newZoom",
+            "action": "updateDiagramChangeAction"
+        },
+        {
+            "eventId": "awGraph.labelTextChanged",
+            "action": "updateDiagramChangeAction",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "awGraph.visibilityChanged",
+            "action": "updateDiagramChangeAction"
+        },
+        {
+            "eventId": "awGraphLegend.filterStatusChanged",
+            "action": "filterStatusChangedAction",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AMGraphEvent.toggleGrid",
+            "action": "updateDiagramChangeAction"
+        },
+        {
+            "eventId": "AMDiagram.AutoLayoutToggled",
+            "action": "updateDiagramChangeAction"
+        },
+        {
+            "eventId": "AMGraphEvent.registerEditHandler",
+            "action": "registerEditHandler"
+        },
+        {
+            "eventId": "StartSaveAutoBookmarkEvent",
+            "action": "saveAutoBookMark"
+        },
+        {
+            "eventId": "AMGraph.AutoSaveDiagramCompleted",
+            "action": "setHasPendingChangeAfterSaveAction"
+        },
+        {
+            "eventId": "AMGraphEvent.updateSavedWorkingContext",
+            "action": "updateSavedWorkingContext"
+        },
+        {
+            "eventId": "AMUpdateSavedWorkingContext.completed",
+            "action": "saveDiagramCompleteAction"
+        },
+        {
+            "eventId": "awGraph.hotspotClicked",
+            "action": "hotspotClicked",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "awGraph.nodeEditCommitted",
+            "action": "editNodeData",
+            "condition": "conditions.isNotDummyNodeEdited",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "awGraph.labelTextChanged",
+            "action": "labelTextChangeAction",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AMGraphEvent.reconnect",
+            "action": "reconnectConnection"
+        },
+        {
+            "eventId": "AMGraphEvent.GetEndElements",
+            "action": "processEndElements",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AMGraphEvent.reconnectCompleted",
+            "action": "reconnectCompletionAction",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "awGraph.wrappedHeightChanged",
+            "action": "setNodeHeightOnWrappedHeightChanged",
+            "cacheEventData": true,
+            "condition": "!data.isRecall"
+        },
+        {
+            "eventId": "AM.ResetRecallState",
+            "action": "resetRecallState"
+        },
+        {
+            "eventId": "awGraph.graphCleared",
+            "action": "clearDiagramSelection"
+        },
+        {
+            "eventId": "AM.evaluateShowPortsCondition",
+            "action": "evaluateShowPortsConditionAction"
+        },
+        {
+            "eventId": "awPanel.reveal",
+            "action": "resetCreationCategoryLegendState",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "awGraph.graphItemsResized",
+            "action": "graphItemResized",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AMDiagram.updateGraphNodeDegree",
+            "action": "updateGraphNodeDegree",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AMDiagram.filterStatusChanged",
+            "action": "validateForUpdateGraphNodeDegree",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "architecture.LayoutCommandEvent",
+            "action": "applyLayout",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "Ase0ArchitectureLayoutService.setLayout",
+            "cacheEventData": true,
+            "action": "setLayout"
+        },
+        {
+            "eventId": "AM.updateEdgeStyle",
+            "action": "updateEdgeStyle"
+        },
+        {
+            "eventId": "AM.owningNodeRefresh",
+            "cacheEventData": true,
+            "action": "refreshOwningNode"
+        },
+        {
+            "eventId": "AMUpdateDiagramEvent",
+            "action": "handleUpdateDiagramEvent",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AMGraphEvent.updateDiagramCompleted",
+            "action": "handleUpdateDiagramEvent",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AMGraphEvent.updateDiagramCompleteTriggerAddDiagram",
+            "action": "handleUpdateAndAddDiagramEvent",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "DepAddObjectsToDiagramEvent",
+            "action": "handleDepAddObjectsToDiagramEvent",
+            "cacheEventData": true
+        },
+
+        {
+            "eventId": "awFloatGraphPopup.showFloatingWindow",
+            "action": "showFloatingWindowPopup",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "awFloatGraphPopup.openDiagramsPanel",
+            "action": "openDiagramsPanel"
+        },
+        {
+            "eventId": "AM.edgeMoved",
+            "action": "moveConnectionAction",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "AMGraphEvent.moveConnectionCompleted",
+            "action": "moveConnectionCompleteAction",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "addElement.elementsAdded",
+            "action": "aceElementAdded",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "ace.elementsRemoved",
+            "action": "aceElementRemoved",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "saveAsDiagram.postProcessSuccess",
+            "action": "saveAsDiagramAndOpen",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "saveAsDiagram.navigateToDiagram",
+            "action": "updateCtxForPendingChangesInDiagram",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "configurationChangeStarted",
+            "action": "configurationChanged",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "architectureModeler.Refresh",
+            "action": "refreshDiagram"
+        },
+        {
+            "eventId": "ace.ResetContentEvent",
+            "action": "resetContent",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "occurrenceUpdatedByEffectivityEvent",
+            "action": "resetContentOnEffectivityAdded",
+            "condition" : "deleted && deleted.includes(ctx.selected.uid)",
+            "cacheEventData": true
+        },
+
+        {
+            "eventId": "appCtx.register",
+            "criteria": {
+                "name": "systemLocator"
+            },
+            "action": "resetContent"
+        },
+        {
+            "eventId": "AMGraphEvent.dropNodeOnOpenedElement",
+            "action": "dropNodeOnOpenedAction",
+            "cacheEventData": true
+        }
+    ],
+    "conditions": {
+        "legendNeedsInitialized": {
+            "expression": "data.legend.legendViews === undefined"
+        },
+        "isMainGraphEvent": {
+            "expression": "sourceGraph.uid === data.graphModel.uid"
+        },
+        "processGraphSelectionEvent": {
+            "expression": "sourceGraph.uid === data.graphModel.uid && userData !== 'syncPwaSelectionEvent'"
+        },
+        "visibilityChangeOnFilter": {
+            "expression": "category.categoryType === 'objects' || category.categoryType === 'relations'"
+        },
+        "isNotDummyNodeEdited": {
+            "expression": "editNode.modelObject !== null && editNode.modelObject !== undefined"
+        },
+        "isNodeDblClicked": {
+            "expression": "item.getItemType() === 'Node' && sourceGraph.uid === data.graphModel.uid"
+        }
+    },
+    "i18n": {
+        "typeFilteredOutMsg": [
+            "ArchitectureModelerMessages"
+        ],
+        "invalidObjectAdd": [
+            "ArchitectureModelerMessages"
+        ],
+        "objectsAddedSuccessfully": [
+            "ArchitectureModelerMessages"
+        ],
+        "warningForToggleOffAnchorElement": [
+            "ArchitectureModelerMessages"
+        ],
+        "cancel": [
+            "ArchitectureModelerConstants"
+        ],
+        "hide": [
+            "ArchitectureModelerConstants"
+        ],
+        "disconnect": [
+            "ArchitectureModelerConstants"
+        ],
+        "preview":[
+            "ArchitectureModelerConstants"
+        ],
+        "removeElementConfirmation": [
+            "ArchitectureModelerMessages"
+        ],
+        "removeElementsConfirmation": [
+            "ArchitectureModelerMessages"
+        ],
+        "remove": [
+            "ArchitectureModelerConstants"
+        ],
+        "removeRootIfOnlyAnchor": [
+            "ArchitectureModelerMessages"
+        ],
+        "removeRootIfNotOnlyAnchor": [
+            "ArchitectureModelerMessages"
+        ],
+        "removeMultipleAnchorNode": [
+            "ArchitectureModelerMessages"
+        ],
+        "removeHeterogeneousSelectionsWithAnchors": [
+            "ArchitectureModelerMessages"
+        ],
+        "disconnectSingleConnection": [
+            "ArchitectureModelerMessages"
+        ],
+        "disconnectMultipleConnections": [
+            "ArchitectureModelerMessages"
+        ],
+        "parentObjectNotModifiableMsg": [
+            "ArchitectureModelerMessages"
+        ],
+        "portNotCreatedParentNotModifiableMsg": [
+            "ArchitectureModelerMessages"
+        ],
+        "removeOnlyAnchor": [
+            "ArchitectureModelerMessages"
+        ],
+        "removeNodeIfChildIsAnchor": [
+            "ArchitectureModelerMessages"
+        ],
+        "toggleOffMultipleAnchorNode": [
+            "ArchitectureModelerMessages"
+        ],
+        "layoutChangeWarningMsg": [
+            "ArchitectureModelerMessages"
+        ],
+        "showParentCmdTitle": [
+            "ArchitectureModelerConstants"
+        ],
+        "hideParentCmdTitle": [
+            "ArchitectureModelerConstants"
+        ],
+        "hideChildren": [
+            "ArchitectureModelerConstants"
+        ],
+        "showChildren": [
+            "ArchitectureModelerConstants"
+        ],
+        "hideAllChildren": [
+            "ArchitectureModelerConstants"
+        ],
+        "showAllChildren": [
+            "ArchitectureModelerConstants"
+        ],
+        "hideIncomingRelations": [
+            "ArchitectureModelerConstants"
+        ],
+        "showIncomingRelations": [
+            "ArchitectureModelerConstants"
+        ],
+        "hideAllIncomingRelations": [
+            "ArchitectureModelerConstants"
+        ],
+        "showAllIncomingRelations": [
+            "ArchitectureModelerConstants"
+        ],
+        "hideOutgoingRelations": [
+            "ArchitectureModelerConstants"
+        ],
+        "showOutgoingRelations": [
+            "ArchitectureModelerConstants"
+        ],
+        "hideAllOutgoingRelations": [
+            "ArchitectureModelerConstants"
+        ],
+        "showAllOutgoingRelations": [
+            "ArchitectureModelerConstants"
+        ],
+        "associateIDsConfirmMsg": [
+            "ArchitectureModelerMessages"
+        ],
+        "proceed": [
+            "ArchitectureModelerConstants"
+        ],
+        "hideNodeTooltip": [
+            "ArchitectureModelerConstants"
+        ],
+        "change": [
+            "ArchitectureModelerConstants"
+        ],
+        "pasteMultipleSuccessMsg": [
+            "ArchitectureModelerMessages"
+        ],
+        "commandWarningIfNotLastAnchor": [
+            "ArchitectureModelerMessages"
+        ],
+        "commandWarningForLastAnchor": [
+            "ArchitectureModelerMessages"
+        ],
+        "commandWarningForAnchorMultiple": [
+            "ArchitectureModelerMessages"
+        ],
+        "unset": [
+            "ArchitectureModelerConstants"
+        ],
+        "diagramSingleDeleteConfirmMsg": [
+            "ArchitectureModelerMessages"
+        ],
+        "diagramMultiDeleteConfirmMsg": [
+            "ArchitectureModelerMessages"
+        ],
+        "delete": [
+            "ArchitectureModelerConstants"
+        ],
+        "enableAutoLayoutConfirmation": [
+            "ArchitectureModelerMessages"
+        ]
+    }
+}

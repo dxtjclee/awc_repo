@@ -1,0 +1,160 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "actions": {
+        "doDataProvider": {
+            "actionType": "dataProvider",
+            "method": "interfacesGridDataProvider"
+        },
+        "updateGridView": {
+            "actionType": "JSFunction",
+            "method": "getColumnInfos",
+            "inputData": {
+                "modelData": "{{subPanelContext.pageState.modelData}}",
+                "selectedLabelProperty": "{{subPanelContext.pageState.selectedLabelProperty}}"
+            },
+            "outputData": {
+                "dataProviders.interfacesGridDataProvider.columnInfos": "columnInfos",
+                "dataProviders.interfacesGridDataProvider.cols": "columnInfos",
+                "columns": "columnInfos",
+                "dataProviders.interfacesGridDataProvider.columnConfig.columns": "columnInfos"
+            },
+            "events": {
+                "success": [ {
+                    "name": "Ase1InterfacesGrid.plTable.reload",
+                    "condition": "conditions.isGridViewActive"
+                } ]
+            },
+            "deps": "js/Ase1InterfacesGridService"
+        },
+
+        "loadData": {
+            "actionType": "JSFunction",
+            "method": "loadDataForInterfacesGrid",
+            "inputData": {
+                "data": "{{data}}",
+                "modelData": "{{subPanelContext.pageState.modelData}}",
+                "selectedLabelProperty": "{{subPanelContext.pageState.selectedLabelProperty}}",
+                "interfaceCellDisplayValue":"{{ctx.preferences.ASE1_Interfaces_Cell_Display[0]}}"
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "searchResults"
+            },
+            "deps": "js/Ase1InterfacesGridService"
+        },
+
+        "loadColumns": {
+            "actionType": "JSFunction",
+            "method": "getColumnInfos",
+            "inputData": {
+                "modelData": "{{subPanelContext.pageState.modelData}}",
+                "selectedLabelProperty": "{{subPanelContext.pageState.selectedLabelProperty}}"
+            },
+            "outputData": {
+                "dataProviders.interfacesGridDataProvider.columnInfos": "columnInfos",
+                "dataProviders.interfacesGridDataProvider.cols": "columnInfos",
+                "columns": "columnInfos",
+                "dataProviders.interfacesGridDataProvider.columnConfig.columns": "columnInfos"
+            },
+            "deps": "js/Ase1InterfacesGridService"
+        },
+
+        "interfacesGridNavigateSystem": {
+            "actionType": "JSFunction",
+            "method": "interfacesGridNavigateSystem",
+            "inputData": {
+                "eventData": "{{data.eventData.doubleClickedObject}}",
+                "pageState": "{{subPanelContext.pageState}}"
+            },
+            "deps": "js/Ase1InterfacesGridService"
+        }
+        ,
+        "setInterfacesCellSelection": {
+            "actionType": "JSFunction",
+            "method": "setInterfacesCellSelection",
+            "inputData": {
+                "eventData": "{{data.eventData.selection}}",
+                "selectionData": "{{subPanelContext.primarySelectionData}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "Ase1InterfacesPage.UpdateInterfaceTable",
+                    "excludeLocalDataCtx": true
+                } ]
+            },
+            "deps": "js/Ase1InterfacesGridService"
+        }
+    },
+    "dataProviders": {
+        "interfacesGridDataProvider": {
+            "action": "loadData",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "selectionModelMode": "single",
+            "inputData": {
+                "selectionData": "{{props.subPanelContext.primarySelectionData}}"
+            },
+            "commandsAnchor": "aw_interfacesGridTableCommandsAnchor"
+        }
+    },
+    "columnProviders": {
+        "clientScopeUI": {
+            "loadColumnAction": "loadColumns",
+            "columns": "{{data.columns}}",
+            "sortCriteria": []
+        }
+    },
+    "grids": {
+        "Ase1InterfacesGrid": {
+            "dataProvider": "interfacesGridDataProvider",
+            "columnProvider": "clientScopeUI",
+            "addIconColumn": true,
+            "enableArrangeMenu": false,
+            "gridOptions": {
+                "enableGridMenu": false,
+                "isFilteringEnabled": false,
+                "enablePinning": false,
+                "headerHeight": 200,
+                "enableCellHeaderSelection": true,
+                "enableColumnSelection": true
+            }
+        }
+    },
+    "lifecycleHooks": {
+        "onUpdate": [ {
+            "action": "updateGridView",
+            "observers": [ "viewModel.subPanelContext.actionState.modelUpdated" ]
+        }]
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data": { },
+    "preferences": [
+        "ASE1_Interfaces_Cell_Display"
+    ],
+    "onEvent": [
+        {
+            "eventId": "Ase1InterfacesGrid.rowDoubleClick",
+            "cacheEventData": true,
+            "action": "interfacesGridNavigateSystem"
+        },
+        {
+            "eventId": "interfacesGridDataProvider.gridCellSelection",
+            "cacheEventData": true,
+            "action": "setInterfacesCellSelection"
+        }
+    ],
+    "conditions": {
+        "validSelectionToShowInterfacesGrid": {
+            "expression": "subPanelContext.pageState.modelData"
+        },
+        "isGridViewActive": {
+            "expression": "subPanelContext.pageState.isInterfacesActive && subPanelContext.pageState.viewName === 'Ase1InterfacesGrid' && subPanelContext.pageState.modelData.systemInView"
+        }
+    }
+
+}

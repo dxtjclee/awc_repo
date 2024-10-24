@@ -1,0 +1,60 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [ ],
+
+    "actions" : {
+
+        "initBreadcrumbsDataProvider": {
+            "actionType": "dataProvider",
+            "method": "fwBreadcrumbDataProvider"
+        },
+
+        "buildCrumbs": {
+            "actionType": "JSFunction",
+            "method": "buildFwBreadcrumb",
+            "inputData": {
+                "data": "{{data}}",
+                "context": "{{subPanelContext}}",
+                "breadcrumbConfig": "{{data.breadcrumb.config}}"
+            },
+            "outputData": {
+                "crumbs": "crumbs"
+            },
+            "deps": "js/Ase0FloatingWindowBreadcrumbHandler"
+        },
+
+        "onSelect": {
+            "actionType": "JSFunction",
+            "method": "onSelectCrumb",
+            "inputData": {
+                "data": "{{data}}",
+                "crumb": "{{data.eventData}}"
+            },
+            "deps": "js/Ase0FloatingWindowBreadcrumbHandler"
+        }
+
+    },
+
+    "dataProviders": {
+        "fwBreadcrumbDataProvider": {
+            "action": "buildCrumbs",
+            "response": "{{data.crumbs}}",
+            "totalFound": "{{data.crumbs.length}}"
+        }
+    },
+
+    "onEvent" : [
+
+        {
+            "eventId": "Ase0FloatingWindowPopupBreadcrumb.selectCrumb",
+            "action": "onSelect",
+            "cacheEventData": true
+        },
+
+        {
+            "eventId": "Ase0FloatingWindowPopupBreadcrumb.refresh",
+            "action": "initBreadcrumbsDataProvider"
+        }
+
+    ]
+}

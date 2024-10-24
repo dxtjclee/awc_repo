@@ -1,0 +1,77 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/aw-xrt.directive"
+    ],
+
+    "actions": {
+        "createObject": {
+            "actionType": "JSFunction",
+            "method": "createObject",
+            "inputData": {
+                "data": "{{data}}",
+                "panelContext": "{{ctx.panelContext}}",
+                "editHandler": "{{editHandlers.addPanelEditHandler}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ],
+                "failure": [ {
+                        "name": "AMCreateEvent.failedCreation"
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Ase0ArchitectureCreateObjectsService"
+        },
+        "handleFailureFromCreateObjectWithReqProp": {
+            "actionType": "JSFunction",
+            "method": "handleFailureFromCreateObjectWithReqProp",
+            "deps": "js/Ase0ArchitectureCreateObjectsService"
+        }
+    },
+    "data": {
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "onEvent": [ {
+        "eventId": "AMCreateEvent.failedCreation",
+        "action": "handleFailureFromCreateObjectWithReqProp"
+    } ],
+    "i18n": {
+        "add": [
+            "ArchitectureModelerConstants"
+        ]
+    }
+
+}

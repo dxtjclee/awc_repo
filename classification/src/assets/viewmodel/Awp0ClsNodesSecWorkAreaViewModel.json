@@ -1,0 +1,80 @@
+{
+    "schemaVersion": "1.0.0",
+    "lifecycleHooks": {
+        "onInit": "initializeNodesSWA",
+        "onUpdate": {
+            "action": "initializeNodesSWA",
+            "observers": [
+                "props.subPanelContext.context.searchState.propertiesSWA"
+            ]
+        }
+    },
+    "props":{
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data":{
+        "headerProperties": [
+            {
+                "propertyName": "NodeId"
+            },
+            {
+                "propertyName": "owning_user"
+            },
+            {
+                "propertyName": "dateModified"
+            },
+            {
+                "propertyName": "object_type"
+            }
+        ],
+        "tabModels": [
+            {
+                "tabKey": "Awp0ClsNodesOverview",
+                "name": "{{i18n.overview}}"
+            },
+            {
+                "tabKey": "Awp0ClsNodesAppClass",
+                "name": "{{i18n.applicationClass}}"
+            }
+        ],
+        "classifyImageCommands": "classify_imgCommands"
+    },
+    "actions":{
+        "initializeNodesSWA": {
+            "actionType": "JSFunction",
+            "method": "initializeSWA",
+            "inputData": {
+                "subPanelContext": "{{subPanelContext.context.searchState}}",
+                "subLocationName": "Nodes"
+            },
+            "outputData": {
+                "currentSecData": "currentSecData",
+                "hasImages": "hasImages",
+                "selectedUid": "selectedUid",
+                "parentProp": "parentProp",
+                "appClassProp": "appClassProp"
+            },
+            "deps":"js/classifyAdminService"
+        }
+    },
+    "onEvent": [
+    ],
+    "conditions": {
+        "showOverviewPage": {
+            "expression": "data.selectedTab.tabKey === 'Awp0ClsNodesOverview'"
+        },
+        "showAppclassPage": {
+            "expression": "data.selectedTab.tabKey === 'Awp0ClsNodesAppClass'"
+        }
+    },
+    "i18n": {
+        "applicationClass":  [ "ClassificationAdminMessages" ],
+        "attributes":        [ "ClassificationAdminMessages" ],
+        "overview":          ["ClassificationAdminMessages"],
+        "parent":            ["ClassificationAdminMessages"],
+        "preview":           ["ClassificationAdminMessages"],
+        "propertiesTitle":   [ "ClassificationAdminMessages" ]
+    }
+}

@@ -1,0 +1,64 @@
+[
+  {
+    "name": {
+      "source": "/i18n/ClassificationPanelMessages",
+      "key": "standAloneClassification"
+    },
+    "priority": 10,
+    "view": "Ics1ClassificationStdWrapper",
+    "visibleWhen": "context.searchState.standAlone===true && selection.length === 0 && context.searchState && ctx.sublocation.nameToken === 'com_siemens_splm_classificationLocation:showClassificationSubLocation'"
+  },
+  {
+    "name": "",
+    "priority": 10,
+    "view": "AwSecondaryWorkareaNoSkeleton",
+    "visibleWhen": "(!context.searchState.standAlone || context.searchState.standAlone===false) && selection.length === 0 && context.searchState && ctx.sublocation.nameToken === 'com_siemens_splm_classificationLocation:showClassificationSubLocation' && context.clientScopeURI === 'Awp0SearchResults'"
+  },
+  {
+    "name": {
+      "source": "/i18n/ClassificationAdminMessages",
+      "key": "propertiesTitle"
+    },
+    "priority": 100,
+    "view": "Awp0ClsPropertiesSecWorkArea",
+    "visibleWhen": "ctx.sublocation.nameToken === 'com_siemens_splm_classificationManagerLocation:propertiesSubLocation' && context.searchState.propertiesSWA.currentSecData"
+  },
+  {
+    "name": {
+      "source": "/i18n/ClassificationAdminMessages",
+      "key": "keylovTitle"
+    },
+    "priority": 100,
+    "view": "Awp0ClsKeyLOVSecWorkArea",
+    "visibleWhen": "ctx.sublocation.nameToken === 'com_siemens_splm_classificationManagerLocation:keyLovSubLocation' && context.searchState.propertiesSWA.currentSecData"
+  },
+  {
+    "name": {
+      "source": "/i18n/ClassificationAdminMessages",
+      "key": "classesTitle"
+    },
+    "priority": 100,
+    "view": "Awp0ClsClassesSecWorkArea",
+    "visibleWhen": "ctx.sublocation.nameToken === 'com_siemens_splm_classificationManagerLocation:classesSubLocation' && (ctx.tcSessionData.tcMajorVersion < 14 || (ctx.tcSessionData.tcMajorVersion === 14 && ctx.tcSessionData.tcMinorVersion < 3)) && context.searchState.propertiesSWA.currentSecData"
+  },
+  {
+    "name": {
+      "source": "/i18n/ClassificationAdminMessages",
+      "key": "classesTitle"
+    },
+    "priority": 100,
+    "view": "Awp0ClsClassesSWA",
+    "visibleWhen": "ctx.sublocation.nameToken === 'com_siemens_splm_classificationManagerLocation:classesSubLocation' && (ctx.tcSessionData.tcMajorVersion > 14 || (ctx.tcSessionData.tcMajorVersion === 14 && ctx.tcSessionData.tcMinorVersion >= 3)) && context.searchState.propertiesSWA.currentSecData"
+  },
+  {
+    "priority": 100,
+    "view": "Awp0ClsNodesSecWorkArea",
+    "visibleWhen": "ctx.sublocation.nameToken === 'com_siemens_splm_classificationManagerLocation:nodesSubLocation' && context.searchState.propertiesSWA.selectedObject"
+  },
+  {
+    "name": "",
+    "priority": 100,
+    "view": "AwSecondaryWorkareaNoSkeleton",
+    "visibleWhen": "ctx.sublocation.nameToken === 'com_siemens_splm_classificationManagerLocation:nodesSubLocation' && !context.searchState.propertiesSWA.selectedObject"
+  }
+]

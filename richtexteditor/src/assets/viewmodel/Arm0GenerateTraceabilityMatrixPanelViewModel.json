@@ -1,0 +1,389 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "data": {
+        "typeFilter": "WorkspaceObject",
+        "isMatrixButtonEnabled": false,
+        "searchBox": {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "true",
+            "dbValue": "",
+            "autofocus": "true"
+        },
+        "searchBoxPlaceHolder": {
+            "dbValue": "{{i18n.requiredPlaceHolder}}"
+        },
+        "keyWord": {
+            "displayName": "{{i18n.keywordsLabel}}",
+            "type": "STRING",
+            "isEditable": "false",
+            "labelPosition": "PROPERTY_LABEL_AT_TOP",
+            "dispValue": "{{ctx.KeyWordsString}}"
+        },
+        "matrixTypeLabel": {
+            "displayName": "{{i18n.MatrixType}}"
+        },
+        "oppositeStructureLabel": {
+            "displayName": "{{i18n.OppositeStructure}}"
+        },
+        "matrixTypeListBox": {
+            "displayName": "{{i18n.MatrixType}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "hasLov": "true",
+            "dbValue": "Quick Matrix",
+            "uiValue": "{{i18n.QuickMatrix}}",
+            "labelPosition": "PROPERTY_LABEL_AT_TOP",
+            "emptyLOVEntry": false,
+            "dataProvider": "getMatrixTypes"
+        },
+        "matrixTypeListBoxValues": [
+            {
+                "propDisplayValue": "{{i18n.QuickMatrix}}",
+                "propInternalValue": "Quick Matrix"
+            },
+            {
+                "propDisplayValue": "{{i18n.FullRollup}}",
+                "propInternalValue": "Full-Rollup Matrix"
+            },
+            {
+                "propDisplayValue": "{{i18n.Dynamic}}",
+                "propInternalValue": "Dynamic Matrix"
+            }],
+        "replaceType": {
+            "type": "BOOLEAN",
+            "propertyRadioTrueText": "{{i18n.row}}",
+            "propertyRadioFalseText": "{{i18n.column}}",
+            "dbValue": false
+        },
+        "symmectricMatrix": {
+            "displayName": "{{i18n.symmetricMatrix}}",
+            "dbValue": true,
+            "type": "BOOLEAN",
+            "isEditable": "true",
+            "dispValue": "{{i18n.symmetricMatrix}}",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "matrixTypeHelptooltipView": {
+            "view": "Arm0MatrixTypeHelpTooltip"
+        },
+        "addPanelState": {
+            "initialValues": {
+                "sourceObjects": ""
+            },
+            "meta": {}
+        }
+    },
+    "actions": {
+        "validateSelection": {
+            "actionType": "JSFunction",
+            "method": "validateSelection",
+            "inputData": {
+                "ctx": "{{ctx}}",
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "matrixTypeListBoxValues": "matrixTypeListBoxValues",
+                "matrixTypeListBox": "matrixTypeListBox",
+                "isMatrixButtonEnabled": "matrixButtonVal",
+                "isShowSearch": "showSearchVal"
+            },
+            "deps": "js/Arm0GenerateTraceabilityMatrixPanel"
+        },
+        "closePanelDialog": {
+            "actionType": "JSFunction",
+            "method": "closeDialog",
+            "inputData": {
+                "editContext": "INFO_PANEL_CONTEXT",
+                "popupId": "{{subPanelContext.popupOptions.popupId}}"
+             },
+          "deps": "js/dialogService"
+        },
+        "updateUI": {
+            "actionType": "JSFunction",
+            "method": "updateUIOnSelectionChange",
+            "inputData": {
+                "ctx": "{{ctx}}",
+                "data": "{{data}}",
+                "selectedMatrixType": "{{data.matrixTypeListBox.dbValue}}"
+            },
+            "outputData": {
+                "isMatrixButtonEnabled": "matrixButtonVal",
+                "isShowSearch": "showSearchVal"
+            },
+            "deps": "js/Arm0GenerateTraceabilityMatrixPanel"
+        },
+        "selectionChange": {
+            "actionType": "JSFunction",
+            "method": "updateSelectedMatrixType",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "outputData": {
+                "isMatrixButtonEnabled": "matrixButtonVal",
+                "isShowSearch": "showSearchVal"
+            },
+            "deps": "js/Arm0GenerateTraceabilityMatrixPanel"
+        },
+        "handleRadioButtonSelection": {
+            "actionType": "JSFunction",
+            "method": "validateSelection",
+            "inputData": {
+                "ctx": "{{ctx}}",
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0GenerateTraceabilityMatrixPanel"
+        },
+        "handleSearchSelection": {
+            "actionType": "JSFunction",
+            "method": "handleSearchSelection",
+            "inputData": {
+                "data": "{{data}}",
+                "selectedObjects": "{{data.eventData.selectedUids}}",
+                "ctx": "{{ctx}}"
+            },
+            "deps": "js/Arm0GenerateTraceabilityMatrixPanel"
+        },
+        "handleGenarateMatrixButton": {
+            "actionType": "JSFunction",
+            "method": "generateTraceabilityMatrix",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "outputData": {
+                "sourcePCI": "sourcePCI",
+                "targetPCI": "targetPCI",
+                "source": "source",
+                "target": "target"
+            },
+            "deps": "js/Arm0GenerateTraceabilityMatrixPanel"
+        },
+        "handleGenerateTraceabilityMatrixCommand": {
+            "actionType": "JSFunction",
+            "method": "captureUserSelection",
+            "inputData": {
+                "ctx": "{{ctx}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirements.generateTraceabilityMatrix",
+                        "condition": "ctx.generateTracebilityMatrixOnReveal"
+                    }
+                ]
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "openTraceabilityMatrix": {
+            "actionType": "Navigate",
+            "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+            "navigationParams": {
+                "locale": "{{ctx.userSession.props.fnd0locale.dbValues[0]}}",
+                "uid": "{{data.matrixObject.uid}}"
+            },
+            "navigateIn": "newTab",
+            "events": {
+                "success": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            }
+        },
+        "generateTraceabilityMatrix": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AwReqMgmtSe-2021-06-SpecNavigation",
+            "method": "getTraceabilityMatrix2",
+            "inputData": {
+                "inputData": "{{function:getTraceMatrixInput}}"
+            },
+            "outputData": {
+                "matrixObject": "traceabilityMatrixObject",
+                "serviceDataInfo": "ServiceData"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirements.openTraceabilityMatrix"
+                    },
+                    {
+                        "name": "closeDialog"
+                    }
+                ]
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "getChildRollup": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AwReqMgmtSe-2021-06-SpecNavigation",
+            "method": "getTraceabilityMatrix2",
+            "inputData": {
+                "inputData": "{{function:rollupMatrixDefaultInput}}"
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "message": "RequestFailureMessage"
+                    }
+                ],
+                "success": [
+                    {
+                        "message": "NotificationForFullRollup"
+                    }
+                ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Arm0GenerateTraceabilityMatrixPanel"
+        },
+        "destroyGenerateTraceabilityMatrixContext": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "deps": "js/appCtxService",
+            "inputData": {
+                "path": "generateTracebilityMatrixOnReveal"
+            }
+        }
+    },
+    "dataProviders": {
+        "getMatrixTypes": {
+            "response": "{{data.matrixTypeListBoxValues}}"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "performSearch.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "handleSearchSelection"
+        },
+        {
+            "eventId":"closeDialog",
+            "action": "closePanelDialog"
+        },
+        {
+            "eventId": "requirements.generateTraceabilityMatrix",
+            "action": "generateTraceabilityMatrix"
+        },
+        {
+            "eventId": "requirements.openTraceabilityMatrix",
+            "action": "openTraceabilityMatrix"
+        },
+        {
+            "eventId": "requirements.handleGenerateTraceabilityMatrixCommand",
+            "action": "handleGenerateTraceabilityMatrixCommand"
+        },
+        {
+            "eventId": "requirements.getChildRollup",
+            "action": "getChildRollup"
+        },
+        {
+            "eventId": "primaryWorkArea.selectionChangeEvent",
+            "action": "validateSelection"
+        },
+        {
+            "eventId": "Arm0GenerateTraceabilityMatrix.uploadServiceDataFile",
+            "action": "uploadServiceDataFile"
+        }
+    ],
+    "functions": {
+        "getTraceMatrixInput": {
+            "functionName": "getTraceMatrixInput",
+            "parameters": [
+                "{{ctx}}"
+            ]
+        },
+        "rollupMatrixDefaultInput": {
+            "functionName": "rollupMatrixDefaultInput",
+            "parameters": [
+                "{{ctx}}",
+                "{{data}}"
+            ]
+        }
+    },
+    "conditions": {
+        "isGenerateMatrixButtonEnabled": {
+            "expression": "data.isMatrixButtonEnabled === true || ( addPanelState.sourceObjects && addPanelState.sourceObjects.length > 0 )"
+        },
+        "isSymmectricMatrixClicked": {
+            "expression": "data.symmectricMatrix.dbValue === false"
+        }
+    },
+    "i18n": {
+        "results": [
+            "UIMessages"
+        ],
+        "filterTabTitle": [
+            "awAddDirectiveMessages"
+        ],
+        "keywordsLabel": [
+            "awAddDirectiveMessages"
+        ],
+        "row": [
+            "MatrixMessages"
+        ],
+        "column": [
+            "MatrixMessages"
+        ],
+        "replace": [
+            "ReplaceFileMessages"
+        ],
+        "GenerateTracelinkMatrixPanelTitle": [
+            "MatrixMessages"
+        ],
+        "GenerateButtonText": [
+            "MatrixMessages"
+        ],
+        "RollupMatrixMsg": [
+            "MatrixMessages"
+        ],
+        "requiredPlaceHolder": [
+            "MatrixMessages"
+        ],
+        "symmetricMatrix": [
+            "MatrixMessages"
+        ],
+        "QuickMatrix": [
+            "MatrixMessages"
+        ],
+        "FullRollup": [
+            "MatrixMessages"
+        ],
+        "Dynamic": [
+            "MatrixMessages"
+        ],
+        "MatrixType": [
+            "MatrixMessages"
+        ],
+        "OppositeStructure": [
+            "MatrixMessages"
+        ]
+    },
+    "messages": {
+        "NotificationForFullRollup": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.RollupMatrixMsg}}"
+        },
+        "RequestFailureMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.requestFailureMsg}}"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "validateSelection",
+        "onUnmount": "destroyGenerateTraceabilityMatrixContext"
+    }
+}

@@ -1,0 +1,15 @@
+<aw-command-panel caption="i18n.Aqc0AddRatingRule" context="subPanelContext">
+    <aw-panel-body scrollable="false">
+        <aw-tab-set tabs="data.tabs">
+            <aqc0-add-rating-rule-new-tab sub-panel-context="{...subPanelContext, xrtState: data.xrtState, selectedType: data.selectedType, editHandler: editHandlers.addPanelEditHandler,
+                triggerCreate: data.triggerCreate, addPanelState: fields.addPanelState}" visible-when="data.selectedTab.tabKey === 'Aqc0AddRatingRuleNewTab'">                
+            </aqc0-add-rating-rule-new-tab>
+        </aw-tab-set>
+    </aw-panel-body>   
+    <aw-panel-footer>
+         <!-- Add button for New tab -->
+        <aw-button action="createRatingRuleObject" visible-when="formProp.attributes.valid && conditions.isNewTabAddButtonVisible">
+            <aw-i18n>i18n.Aqc0Add</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

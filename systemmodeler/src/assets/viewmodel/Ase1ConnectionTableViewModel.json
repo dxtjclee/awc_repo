@@ -1,0 +1,272 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "actions": {
+
+        "resetColumnConfig": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "getOrResetUIColumnConfigs4",
+            "inputData": {
+                "getOrResetUiConfigsIn": [ {
+                    "scope": "LoginUser",
+                    "scopeName": "",
+                    "clientName": "AWClient",
+                    "resetColumnConfig": true,
+                    "columnConfigQueryInfos": [ {
+                        "clientScopeURI": "{{function:getColumnConfigForConnections}}",
+                        "operationType": "",
+                        "typeNames": [
+                            "WorkspaceObject"
+                        ],
+
+                        "columnsToExclude": []
+                    } ],
+
+                    "businessObjects": [ {} ]
+                } ]
+            },
+            "outputData": {
+                "dataProviders.connectionDataProvider.columnConfig": "columnConfigurations[0].columnConfigurations[0]"
+            },
+            "events": {
+                "success": [ {
+                    "name": "connectionTable.plTable.reload"
+                } ]
+            },
+            "deps": "js/Ase1InterfacesUtilService"
+        },
+        "resetConnectionGridDataProvider": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "connectionTable.plTable.reload"
+                } ]
+            }
+        },
+
+        "saveColumnConfigLoadData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadConnectionData",
+            "inputData": {
+                "serviceName": "Internal-AWS2-2023-06-Finder",
+                "operationName": "performSearchViewModel5",
+                "body": {
+                    "columnConfigInput": {
+                        "clientName": "AWClient",
+                        "operationType": "as_arranged",
+                        "clientScopeURI": "{{function:getColumnConfigForConnections}}"
+                    },
+
+                    "saveColumnConfigData": {
+                        "clientScopeURI": "{{function:getColumnConfigForConnections}}",
+                        "columnConfigId": "{{data.dataProviders.connectionDataProvider.columnConfig.columnConfigId}}",
+                        "columns": "{{data.dataProviders.connectionDataProvider.newColumns}}",
+                        "scope": "LoginUser",
+                        "scopeName": ""
+                    },
+
+                    "searchInput": {
+                        "maxToLoad": 25,
+                        "maxToReturn": 25,
+                        "providerName": "Ase1UnbundledConnProvider",
+                        "searchCriteria": {
+                            "dcpSortByDataProvider": "true",
+                            "bundledConnectionUid": "{{props.primarySelection.selected[0].uid}}",
+                            "objectOfInterest": "{{props.pageState.modelData.systemOfInterest.nodeObject.uid}}",
+                            "productContextUid": "{{subPanelContext.context.occContext.productContextInfo.uid}}",
+                            "internalSystemsUids": "{{props.primarySelection.internalSystemsUids}}",
+                            "selectionType": "{{props.primarySelection.systemType}}"
+                        },
+
+                        "searchFilterFieldSortType": "Alphabetical",
+                        "searchFilterMap6": {},
+                        "searchSortCriteria": "{{data.columnProviders.connectionTableClientScopeUI.sortCriteria}}",
+                        "startIndex": "{{data.dataProviders.connectionDataProvider.startIndex}}"
+                    },
+
+                    "inflateProperties": true
+                },
+                "propertyPolicyOverride": "{{data.connectionPolicy}}"
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}",
+                "dataProviders.connectionDataProvider.columnConfig": "columnConfig"
+            },
+            "deps": "js/Ase1InterfacesUtilService"
+        },
+
+        "loadConnectionData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadConnectionData",
+            "inputData": {
+                "serviceName": "Internal-AWS2-2023-06-Finder",
+                "operationName": "performSearchViewModel5",
+                "body": {
+                    "columnConfigInput": {
+                        "clientName": "AWClient",
+                        "clientScopeURI": "{{function:getColumnConfigForConnections}}"
+                    },
+                    "inflateProperties": true,
+                    "searchInput": {
+                        "maxToLoad": 25,
+                        "maxToReturn": 25,
+                        "providerName": "Ase1UnbundledConnProvider",
+                        "searchCriteria": {
+                            "dcpSortByDataProvider": "true",
+                            "bundledConnectionUid": "{{props.primarySelection.selected[0].uid}}",
+                            "objectOfInterest": "{{props.pageState.modelData.systemOfInterest.nodeObject.uid}}",
+                            "productContextUid": "{{subPanelContext.context.occContext.productContextInfo.uid}}",
+                            "internalSystemsUids": "{{props.primarySelection.internalSystemsUids}}",
+                            "selectionType": "{{props.primarySelection.systemType}}"
+                        },
+
+                        "searchFilterFieldSortType": "Alphabetical",
+                        "searchFilterMap6": {},
+                        "searchSortCriteria": "{{data.columnProviders.connectionTableClientScopeUI.sortCriteria}}",
+                        "startIndex": "{{data.dataProviders.connectionDataProvider.startIndex}}"
+                    }
+                },
+                "propertyPolicyOverride": "{{data.connectionPolicy}}"
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}",
+                "dataProviders.connectionDataProvider.columnConfig": "columnConfig"
+            },
+            "deps": "js/Ase1InterfacesUtilService"
+        },
+
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}",
+                "props": "{{props}}"
+            },
+            "deps": "js/Ase1InterfacesUtilService"
+        }
+    },
+
+    "props": {
+        "page-state": {
+            "type": "object"
+        },
+        "primary-selection": {
+            "type": "object"
+        },
+        "primary-selection-data": {
+            "type": "object"
+        },
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+
+    "data": {
+        "connectionPolicy": {
+            "types": [ {
+                    "name": "BusinessObject",
+                    "properties": [
+                        { "name": "object_string" }
+                    ]
+                },
+                {
+                    "name": "Awb0Connection",
+                    "properties": [ {
+                        "name": "awb0UnderlyingObject",
+                        "modifiers": [ {
+                                "name": "includeIsModifiable",
+                                "Value": "true"
+                            },
+                            {
+                                "name": "withProperties",
+                                "Value": "true"
+                            }
+                        ]
+                    } ]
+                }
+            ]
+        }
+    },
+    "dataProviders": {
+        "connectionDataProvider": {
+            "action": "loadConnectionData",
+            "nextAction": "loadConnectionData",
+            "previousAction": "loadConnectionData",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "selectionModelMode": "multiple",
+            "inputData": {
+                "selectionData": "{{props.primarySelectionData}}"
+            },
+            "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectCellListActionCommands"
+        }
+    },
+
+    "columnProviders": {
+        "connectionTableClientScopeUI": {
+            "saveColumnAndLoadAction": "saveColumnConfigLoadData",
+            "resetColumnAction": "resetColumnConfig",
+            "sortCriteria": [],
+            "id": "unbundledConnColConfigDCP"
+        }
+    },
+
+    "grids": {
+        "connectionTable": {
+            "dataProvider": "connectionDataProvider",
+            "columnProvider": "connectionTableClientScopeUI",
+            "addIconColumn": true,
+            "enableArrangeMenu": true,
+            "gridOptions": {
+                "enablePinning": true,
+                "useStaticFirstCol": true
+            }
+        }
+    },
+
+    "onEvent": [ {
+            "eventId": "Ase1InterfacesPage.UpdateInterfaceTable",
+            "action": "resetConnectionGridDataProvider"
+        },
+        {
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        }
+    ],
+
+    "conditions": {
+        "validSelectionToShowConnectionTable": {
+            "expression": "props.primarySelection.selected.length === 1"
+        },
+        "isBundledConnectionSelected": {
+            "expression": "props.primarySelection.selected[0].modelType.typeHierarchyArray.indexOf('Ase0BundledConnection') > -1"
+        }
+    },
+
+    "i18n": {
+        "connectionsTable": [
+            "SystemModelerConstants"
+        ],
+        "internalConnectionsTable": [
+            "SystemModelerConstants"
+        ],
+        "externalConnectionsTable": [
+            "SystemModelerConstants"
+        ]
+    },
+
+    "functions": {
+        "getColumnConfigForConnections": {
+            "functionName": "getColumnConfigForConnections",
+            "parameters": [
+                "{{subPanelContext}}"
+            ]
+        }
+    }
+}

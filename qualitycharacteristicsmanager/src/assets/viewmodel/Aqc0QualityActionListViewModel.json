@@ -1,0 +1,100 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "reveal": {
+            "actionType": "dataProvider",
+            "method": "listDataProvider"
+        },
+        "getSearchResults": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "clientScopeURI": ""
+                },
+                "inflateProperties": false,
+                "saveColumnConfigData": {},
+                "searchInput": {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Aqc0QualityBaseProvider",
+                    "searchCriteria": {
+                        "qualityActionStatusFirst": "Template",
+                        "objectType": "Qam0QualityAction",
+                        "objectName": "{{props.subPanelContext.searchState.criteria.searchString}}",
+                        "searchString": "{{props.subPanelContext.searchState.criteria.searchString}}",
+                        "catalogueObjectType": "Qam0QualityAction"
+                    },
+                    "searchSortCriteria": [
+                        {
+                            "fieldName": "object_name",
+                            "sortDirection": "ASC"
+                        }
+                    ]
+                }
+            },
+            "outputData": {
+                "searchResults": "{{json:searchResultsJSON}}",
+                "totalFound": "totalFound",
+                "totalLoaded": "totalLoaded",
+                "output": "{{function:processOutput}}"
+            },
+            "deps": "js/awSearchService"
+        }
+    },
+    "lifecycleHooks": {
+        "onUpdate": {
+            "action": "reveal",
+            "observers": [
+                "props.subPanelContext.searchState.criteria.searchString"
+            ]
+        }
+    },
+    "dataProviders": {
+        "listDataProvider": {
+            "action": "getSearchResults",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "totalLoaded": "{{data.totalLoaded}}",
+            "selectionModelMode": "multiple",
+            "inputData": {
+                "selectionModel": "{{subPanelContext.selectionModel}}"
+            },
+            "commands": {
+                "Awp0ShowObjectCell": {
+                    "id": "cmdOpen",
+                    "title": "Open",
+                    "areas": [
+                        "aw_oneStep"
+                    ],
+                    "priorities": [
+                        300
+                    ],
+                    "dependencies": [
+                        "js/showObjectCommandHandler"
+                    ],
+                    "displayOption": "ON_HOVER_AND_SELECTION",
+                    "position": "TOP_RIGHT"
+                }
+            },
+            "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectObjectNavigationCellListActionCommands"
+        }
+    },
+    "functions": {
+        "processOutput": {
+            "functionName": "processOutput",
+            "parameters": [
+                "{{data}}",
+                "{{subPanelContext.searchState}}"
+            ]
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "dataProvider.reset",
+            "action": "reveal"
+        }
+    ]
+}

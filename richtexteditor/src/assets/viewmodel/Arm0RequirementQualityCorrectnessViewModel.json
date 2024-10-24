@@ -1,0 +1,191 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports":
+    [
+        "js/aw-splm-table.directive"
+    ],
+
+    "actions": {
+        "loadAllMetricData": {
+            "actionType": "JSFunction",
+            "method": "filterQualityResultWithSort",
+            "inputData": {
+                "data": "{{data}}",
+                "sortCriteria": "{{data.columnProviders.metricAllColumnProvider.sortCriteria}}",
+                "startIndex": "{{data.dataProviders.metricAllDataProvider.startIndex}}",
+                "pageSize": "{{data.pageSize}}"
+            },
+            "outputData": {
+                "qualityMetricResult": ""
+            },
+            "deps": "js/Arm0RequirementQualityService"
+        },
+         "refreshAllMetricData":
+        {
+            "actionType": "dataProvider",
+            "method": "metricAllDataProvider"
+        },
+        "qualityRuleSelected": {
+            "actionType": "JSFunction",
+            "method": "qualityRuleSelected",
+            "deps": "js/Arm0RequirementQualityService",
+            "inputData": {
+                "data": "{{data}}",
+                "selectedRule": "{{data.eventMap['metricAllDataProvider.selectionChangeEvent'].selectedObjects}}"
+            }
+        },
+        "setQualityRuleSelection":{
+            "actionType": "JSFunction",
+            "method": "setQualityRuleSelection",
+            "deps": "js/Arm0RequirementQualityService",
+            "inputData": {
+                "data": "{{data}}",
+                "selectedRule": "{{data.eventMap['Arm0ShowQualityMetricData.setQualityRuleSelection'].metricId}}"
+            }
+        },
+        "setPrimaryObjectAsSelected": {
+            "actionType": "JSFunction",
+            "method": "registerCtx",
+            "inputData": {
+                "name": "selected",
+                "value": "{{ctx.pselected}}"
+            },
+            "deps": "js/appCtxService"
+        },
+        "setPrimaryObjectInMSelected": {
+            "actionType": "JSFunction",
+            "method": "registerCtx",
+            "inputData": {
+                "name": "mselected",
+                "value": ["{{ctx.pselected}}"]
+            },
+            "deps": "js/appCtxService"
+        }
+    },
+
+    "data": {
+
+    },
+    "columnProviders": {
+        "metricAllColumnProvider": {
+            "frozenColumnIndex": -1,
+            "sortCriteria": [ {
+                "fieldName": "qualityCorrectness",
+                "sortDirection": "DESC"
+            } ],
+            "columns": [
+                {
+                    "name": "metric",
+                    "displayName": "{{i18n.metricLabel}}",
+                    "minWidth": 100,
+                    "width": 300
+                },
+                {
+                    "name": "qualityCorrectness",
+                    "displayName": "{{i18n.correctnessLabel}}",
+                    "minWidth": 60,
+                    "width": 100
+                },
+                {
+                    "name": "value",
+                    "displayName": "{{i18n.valueLabel}}",
+                    "minWidth": 50,
+                    "width": 80,
+                    "enableSorting": false
+                },
+                {
+                    "name": "summary",
+                    "displayName": "{{i18n.summaryLabel}}",
+                    "minWidth": 100,
+                    "width": 300,
+                    "enableSorting": false
+                },
+                {
+                    "name": "mandatory",
+                    "displayName": "{{i18n.mandatoryLabel}}",
+                    "minWidth": 50,
+                    "width": 100
+                },
+                {
+                    "name": "weight",
+                    "displayName": "{{i18n.weightLabel}}",
+                    "minWidth": 50,
+                    "width": 80
+                }
+            ]
+        }
+    },
+    "dataProviders": {
+        "metricAllDataProvider": {
+            "action": "loadAllMetricData",
+            "response": "{{data.qualityMetricResult}}",
+            "totalFound": "{{data.qualityMetricResult.length}}",
+            "commandsAnchor": "aw_splmTableCellMenu",
+            "selectionModelMode": "single"
+        }
+    },
+
+    "grids": {
+        "MetricAll": {
+            "dataProvider": "metricAllDataProvider",
+            "columnProvider": "metricAllColumnProvider",
+            "addIconColumn": false,
+            "selectionOption": "single",
+            "gridOptions": {
+                "enablePinning": false,
+                "enableSorting": true,
+                "enableRowSelection": false,
+                "maxRowsToShow": 5
+
+            }
+        }
+    },
+
+    "onEvent": [
+        {
+            "eventId": "metricAllDataProvider.selectionChangeEvent",
+            "action": "qualityRuleSelected",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementDocumentation.refreshAllMetricData",
+            "action": "refreshAllMetricData"
+        },
+        {
+            "eventId": "appCtx.register",
+            "condition": "name === 'selected' && value.props !== undefined && value.props.metric !== undefined",
+            "action": "setPrimaryObjectAsSelected"
+        },
+        {
+            "eventId": "appCtx.register",
+            "condition": "name === 'selected' && value.props !== undefined && value.props.metric !== undefined",
+            "action": "setPrimaryObjectInMSelected"
+        },
+        {
+            "eventId":"Arm0ShowQualityMetricData.setQualityRuleSelection",
+            "action":"setQualityRuleSelection",
+            "cacheEventData": true
+        }
+    ],
+    "i18n":
+    {
+        "correctnessLabel": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "metricLabel": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "valueLabel": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "summaryLabel": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "mandatoryLabel": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "weightLabel": [
+            "RichTextEditorCommandPanelsMessages"
+        ]
+    }
+}

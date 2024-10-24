@@ -1,0 +1,7 @@
+<aw-panel-body>
+    <mfe-loading-message exist-when="conditions.isInLoadingState"></mfe-loading-message>
+    <mfe-message-panel exist-when="conditions.showNoProductFoundMessage" messages-data="{messageLines: data.noContextMsg}"></mfe-message-panel>
+    <div exist-when="conditions.shouldShowTable" class="aw-ngp-table" >
+        <aw-splm-table command-context="{tableSettings: data.tableSettings, ...props.subPanelContext}" gridid="ngpProductScopeTable" show-decorators="true" use-tree="true"></aw-splm-table>
+    </div>
+</aw-panel-body>

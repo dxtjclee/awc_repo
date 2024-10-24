@@ -1,0 +1,323 @@
+{
+  "commands": {
+    "mfeCloseModalPopupCommand": {
+      "iconId": "cmdClosePanel",
+      "isGroup": false,
+      "title": "{{i18n.close}}"
+    },
+    "mfeDisabledCloseModalPopupCommand": {
+      "iconId": "cmdClosePanel",
+      "isGroup": false,
+      "title": "{{i18n.close}}"
+    },
+    "mfeSelectAllCommand": {
+      "iconId": "cmdSelectAll",
+      "title": "{{i18n.selectAll}}",
+      "description": "{{i18n.mfeSelectAllDesc}}"
+    },
+    "mfeDeselectAllCommand": {
+      "iconId": "cmdClearAllSelections",
+      "title": "{{i18n.clearSelections}}",
+      "description": "{{i18n.mfeDeselectAllDesc}}"
+    },
+    "mfeDisableMultiSelectCommand": {
+      "iconId": "cmdClearSelections",
+      "title": "{{i18n.selectionMode}}",
+      "description": "{{i18n.mfeDisableMultiSelectDesc}}"
+    },
+    "mfeEnableMultiSelectCommand": {
+      "iconId": "cmdMultiSelect",
+      "title": "{{i18n.selectionMode}}",
+      "description": "{{i18n.mfeEnableMultiSelectDesc}}"
+    },
+    "mfePinToolBarCommand": {
+      "iconId": "cmdPinBlue",
+      "title": "{{i18n.switchToToolbar}}"
+    },
+    "mfeUnpinToolBarCommand": {
+      "iconId": "cmdUnpinFill",
+      "title": "{{i18n.switchToMenu}}"
+    },
+    "mfeMaximizeVerticallyCommand": {
+      "iconId": "cmdFullSizeVertical",
+      "title": "{{i18n.mfeMaximizeVerticallyCmdTitle}}"
+    },
+    "mfeRestoreVerticallyCommand": {
+      "iconId": "cmdExitFullSizeVertical",
+      "title": "{{i18n.mfeRestoreVerticallyCmdTitle}}"
+    },
+    "pertContextMenuCommand": {
+      "isGroup": true,
+      "title": "{{i18n.pertContextMenuCommand}}"
+    },
+    "setAsPredecessorCommand": {
+      "iconId": "cmdSetAsPredecessor",
+      "title": "{{i18n.setAsPredecessorTitle}}",
+      "description": "{{i18n.setAsPredecessorDescription}}"
+    },
+    "setAsSuccessorCommand": {
+      "iconId": "cmdSetAsSuccessor",
+      "title": "{{i18n.setAsSuccessorTitle}}",
+      "description": "{{i18n.setAsSuccessorDescription}}"
+    }
+  },
+  "commandPlacements": {
+    "mfeCloseModalPopupCommandPlacement": {
+      "id": "mfeCloseModalPopupCommand",
+      "uiAnchor": "mfeModalPopupCommandAnchor",
+      "priority": 300
+    },
+    "mfeDisabledCloseModalPopupCommandPlacement": {
+      "id": "mfeDisabledCloseModalPopupCommand",
+      "uiAnchor": "mfeDisabledCloseModalPopupCommandAnchor",
+      "priority": 300
+    },
+    "mfePinToolBarCommandPlacement": {
+      "id": "mfePinToolBarCommand",
+      "uiAnchor": "mfePinToolBarCommandAnchor"
+    },
+    "mfeUnpinToolBarCommandPlacement": {
+      "id": "mfeUnpinToolBarCommand",
+      "uiAnchor": "mfeUnpinToolBarCommandAnchor"
+    },
+    "pertContextMenuCommandDisplay": {
+      "id": "pertContextMenuCommand",
+      "uiAnchor": "aw_graph_node",
+      "priority": 200
+    }
+  },
+  "commandHandlers": {
+    "mfeCloseModalPopupCommandHandler": {
+      "id": "mfeCloseModalPopupCommand",
+      "action": "mfeCloseModalPopupAction",
+      "activeWhen": true,
+      "visibleWhen": true
+    },
+    "mfeDisabledCloseModalPopupCommandHandler": {
+      "id": "mfeDisabledCloseModalPopupCommand",
+      "action": "mfeDisabledCloseModalPopupAction",
+      "activeWhen": true,
+      "visibleWhen": true
+    },
+    "mfeSelectAllCommandHandler": {
+      "id": "mfeSelectAllCommand",
+      "activeWhen": true,
+      "action": "mfeSelectAllCommandAction",
+      "visibleWhen": {
+        "condition": "conditions.mfeSelectAllCondition"
+      }
+    },
+    "mfeDeselectAllHandler": {
+      "id": "mfeDeselectAllCommand",
+      "action": "mfeDeselectAllCommandAction",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.mfeDeselectAllCondition"
+      }
+    },
+    "mfeEnableMultiSelectCommandHandler": {
+      "id": "mfeEnableMultiSelectCommand",
+      "action": "mfeEnableMultiSelectCommandAction",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.mfeMultiSelectEnableCondition"
+      }
+    },
+    "mfeDisableMultiSelectCommandHandler": {
+      "id": "mfeDisableMultiSelectCommand",
+      "action": "mfeDisableMultiSelectCommandAction",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.mfeMultiSelectDisableCondition"
+      }
+    },
+    "mfePinToolBarCommandHandler": {
+      "id": "mfePinToolBarCommand",
+      "action": "showToolbarBelowTabs",
+      "activeWhen": {
+        "condition": "conditions.isMenuShown"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isMenuShown"
+      }
+    },
+    "mfeUnpinToolBarCommandHandler": {
+      "id": "mfeUnpinToolBarCommand",
+      "action": "hideMfeToolBar",
+      "activeWhen": {
+        "condition": "conditions.isToolbarBelowTabsShown"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isToolbarBelowTabsShown"
+      }
+    },
+    "mfeMaximizeVerticallyCommandHandler": {
+      "id": "mfeMaximizeVerticallyCommand",
+      "action": "mfeMaximizeRestoreVerticallyAction",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.mfeIsVerticallyRestored"
+      }
+    },
+    "mfeRestoreVerticallyCommandHandler": {
+      "id": "mfeRestoreVerticallyCommand",
+      "action": "mfeMaximizeRestoreVerticallyAction",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.mfeIsVerticallyMaximized"
+      }
+    }
+  },
+  "actions": {
+    "mfeCloseModalPopupAction": {
+      "actionType": "JSFunction",
+      "method": "hide",
+      "deps": "js/popupService"
+    },
+    "mfeDisabledCloseModalPopupAction": {
+      "actionType": "Event",
+      "method": "Event",
+      "inputData": {
+        "events": [
+          {
+            "name": "mfePopup.closePopupWindow"
+          }
+        ]
+      }
+    },
+    "mfeSelectAllCommandAction": {
+      "actionType": "JSFunction",
+      "method": "selectAllOrSelectNoneAction",
+      "inputData": {
+        "selectAll": true,
+        "selectionModel": "{{commandContext.selectionModel}}"
+      },
+      "deps": "js/mfeTableService"
+    },
+    "mfeDeselectAllCommandAction": {
+      "actionType": "JSFunction",
+      "method": "selectAllOrSelectNoneAction",
+      "inputData": {
+        "selectAll": false,
+        "selectionModel": "{{commandContext.selectionModel}}"
+      },
+      "deps": "js/mfeTableService"
+    },
+    "mfeEnableMultiSelectCommandAction": {
+      "actionType": "JSFunction",
+      "method": "multiSelectAction",
+      "inputData": {
+        "multiSelect": true,
+        "selectionModel": "{{commandContext.selectionModel}}"
+      },
+      "deps": "js/mfeTableService"
+    },
+    "mfeDisableMultiSelectCommandAction": {
+      "actionType": "JSFunction",
+      "method": "multiSelectAction",
+      "inputData": {
+        "multiSelect": false,
+        "selectionModel": "{{commandContext.selectionModel}}"
+      },
+      "deps": "js/mfeTableService"
+    },
+    "showToolbarBelowTabs": {
+      "actionType": "JSFunction",
+      "method": "showToolbarBelowTabs",
+      "inputData": {
+        "contentPanelData": "{{commandContext.contentPanelData}}"
+      },
+      "deps": "js/mfeContentPanelUtil"
+    },
+    "hideMfeToolBar": {
+      "actionType": "JSFunction",
+      "method": "setMfeToolBarMode",
+      "inputData": {
+        "contentPanelData": "{{commandContext}}",
+        "mode": "menu"
+      },
+      "deps": "js/mfeContentPanelUtil"
+    },
+    "mfeMaximizeRestoreVerticallyAction": {
+      "actionType": "JSFunction",
+      "method": "maximizeRestoreViewVertically",
+      "deps": "js/mfeMaximizeAndRestoreViewService"
+    }
+  },
+  "conditions": {
+    "isReadOnlyMode": {
+      "expression": "ctx.mfgReadOnlyMode.readOnlyMode"
+    },
+    "isNotReadOnlyMode": {
+      "expression": "!conditions.isReadOnlyMode"
+    },
+    "mfeSelectAllCondition": {
+      "expression": "commandContext.selectionModel.mode === 'multiple' && commandContext.selectionModel.selectionState !== 'all'"
+    },
+    "mfeDeselectAllCondition": {
+      "expression": "commandContext.selectionModel.mode === 'multiple' && commandContext.selectionModel.selectionState === 'all'"
+    },
+    "mfeMultiSelectEnableCondition": {
+      "expression": "!commandContext.selectionModel.multiSelectEnabled && commandContext.selectionModel.mode === 'multiple'"
+    },
+    "mfeMultiSelectDisableCondition": {
+      "expression": "commandContext.selectionModel.multiSelectEnabled && commandContext.selectionModel.mode === 'multiple'"
+    },
+    "isToolbarBelowTabsShown": {
+      "expression": "commandContext.cmdDisplayOption === 'toolbarBelowTabs'"
+    },
+    "isMenuShown": {
+      "expression": "commandContext.contentPanelData.cmdDisplayOption === 'menu'"
+    },
+    "mfeIsVerticallyRestored": {
+      "expression": "ctx.maximizedVertically === undefined"
+    },
+    "mfeIsVerticallyMaximized": {
+      "expression": "ctx.maximizedVertically === true"
+    }
+  },
+  "i18n": {
+    "close": [
+      "mfeUtilsMessages"
+    ],
+    "mfeSelectAllDesc": [
+      "mfeUtilsMessages"
+    ],
+    "mfeDeselectAllDesc": [
+      "mfeUtilsMessages"
+    ],
+    "mfeEnableMultiSelectDesc": [
+      "mfeUtilsMessages"
+    ],
+    "mfeDisableMultiSelectDesc": [
+      "mfeUtilsMessages"
+    ],
+    "switchToToolbar": [
+      "mfeUiMessages"
+    ],
+    "switchToMenu": [
+      "mfeUiMessages"
+    ],
+    "mfeMaximizeVerticallyCmdTitle": [
+      "mfeUiMessages"
+    ],
+    "mfeRestoreVerticallyCmdTitle": [
+      "mfeUiMessages"
+    ],
+    "setAsPredecessorTitle": [
+      "mfePertMessages"
+    ],
+    "setAsPredecessorDescription": [
+      "mfePertMessages"
+    ],
+    "setAsSuccessorTitle": [
+      "mfePertMessages"
+    ],
+    "setAsSuccessorDescription": [
+      "mfePertMessages"
+    ],
+    "pertContextMenuCommand": [
+      "mfePertMessages"
+    ]
+  }
+}

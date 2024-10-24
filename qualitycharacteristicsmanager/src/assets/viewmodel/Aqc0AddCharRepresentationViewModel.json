@@ -1,0 +1,576 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "actions": {
+        "setCtxAddElementInputParentElementToSelectedElement": {
+            "actionType": "JSFunction",
+            "method": "setCtxAddElementInputParentElementToSelectedElement",
+            "inputData": {
+                "parent": "{{ctx.selected}}"
+            },
+            "outputData": {},
+            "deps": "js/addElementService"
+        },
+        "processAddElementInput": {
+            "actionType": "JSFunction",
+            "method": "processAddElementInput",
+            "inputData": {},
+            "outputData": {},
+            "deps": "js/addElementService"
+        },
+        "createRepresentationObjects": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2016-09-DataManagement",
+            "method": "createAttachAndSubmitObjects",
+            "inputData": {
+                "inputs": "{{function:getCreateInput}}"
+            },
+            "outputData": {
+                "createdCharRepRev": "{{function:getCreatedRepresentationRevision}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "aqc0RelateSpecificationToCharRep"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "complete",
+                        "condition": "!subPanelContext.panelPinned",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Aqc0CipUtilService"
+        },
+        "createRelation": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "createRelations",
+            "inputData": {
+                "input": [
+                    {
+                        "primaryObject": "{{data.createdCharRepRev}}",
+                        "secondaryObject": "{{data.sharedData.selectedSpecificationObject}}",
+                        "relationType": "Aqc0LinkToSpec",
+                        "clientId": "CreateObject",
+                        "userData": ""
+                    }
+                ]
+            },
+            "outputData": {},
+            "events": {
+                "success": [
+                    {
+                        "name": "gwt.CreateOrAddObjectCompleteEvent",
+                        "eventData": {
+                            "createdObjs": [
+                                "{{data.createdCharRepRev}}"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "refreshLocationFlag": false,
+                            "isPinnedFlag": "{{subPanelContext.panelPinned}}",
+                            "relatedModified": [
+                                "{{ctx.mselected[0]}}"
+                            ],
+                            "createdObjects": [
+                                "{{data.createdCharRepRev}}"
+                            ]
+                        },
+                        "condition": "!(ctx.sublocation.nameToken === 'com.siemens.splm.client.occmgmt:OccurrenceManagementSubLocation')"
+                    },
+                    {
+                        "name": "aqc0AddCharRepPanel.loadNextValues",
+                        "condition": "subPanelContext.panelPinned"
+                    },
+                    {
+                        "name": "addCharRepAsChild",
+                        "condition": "ctx.sublocation.nameToken === 'com.siemens.splm.client.occmgmt:OccurrenceManagementSubLocation'"
+                    },
+                    {
+                        "name": "complete",
+                        "condition": "!subPanelContext.panelPinned && !(ctx.sublocation.nameToken === 'com.siemens.splm.client.occmgmt:OccurrenceManagementSubLocation')",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    },
+                    {
+                        "name": "qfm0.addToFormsheet",
+                        "condition": "ctx.panelContext.refreshFormsheet"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "refreshLocationFlag": false,
+                            "isPinnedFlag": "{{subPanelContext.panelPinned}}",
+                            "relatedModified": [
+                                "{{ctx.mselected}}"
+                            ],
+                            "createdObjects": [
+                                "{{data.createdCharRepRev}}"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "complete",
+                        "condition": "!subPanelContext.panelPinned",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "Aqc0CharRepresentationCreatedMessage"
+                    }
+                ]
+            }
+        },
+        "addCharRepElementAsChild": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceBom-2019-06-OccurrenceManagement",
+            "method": "addObject2",
+            "inputData": {
+                "input": {
+                    "objectsToBeAdded": [
+                        "{{data.createdCharRepRev}}"
+                    ],
+                    "parentElement": "{{ctx.aceActiveContext.context.addElement.parent}}",
+                    "siblingElement": "{{ctx.aceActiveContext.context.addElement.siblingElement}}",
+                    "inputCtxt": {
+                        "productContext": "{{ctx.aceActiveContext.context.productContextInfo}}"
+                    },
+                    "sortCriteria": {
+                        "propertyName": "{{ctx.aceActiveContext.context.sortCriteria[0].fieldName}}",
+                        "sortingOrder": "{{ctx.aceActiveContext.context.sortCriteria[0].sortDirection}}"
+                    },
+                    "addObjectIntent": "{{ctx.aceActiveContext.context.addElement.addObjectIntent}}",
+                    "fetchPagedOccurrences": "{{ctx.aceActiveContext.context.addElement.fetchPagedOccurrences}}",
+                    "requestPref": {
+                        "displayMode": [
+                            "Tree"
+                        ]
+                    },
+                    "numberOfElements": 1
+                }
+            },
+            "outputData": {
+                "addElementResponse": "",
+                "charRepElementObj": "{{function:getCreatedRepresentationElement}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "addElement.elementsAdded",
+                        "eventData": {
+                            "objectsToSelect": ["{{data.charRepElementObj}}"],
+                            "addElementResponse": "{{data.addElementResponse}}",
+                            "viewToReact": "{{props.subPanelContext.provider.contextKey}}",
+                            "updatedParentElement": "{{ctx.aceActiveContext.context.addElement.parent}}"
+                        }
+                    },
+                    {
+                        "name": "aceElementsSelectionUpdatedEvent",
+                        "eventData": {
+                            "objectsToSelect": ["{{data.charRepElementObj}}"],
+                            "viewToReact": "{{props.subPanelContext.provider.contextKey}}"
+                        },
+                        "condition": "!subPanelContext.panelPinned"
+                    },
+                    {
+                        "name": "addElement.updateSelectionInPWA",
+                        "eventData": {
+                            "objectToSelect": "{{props.subPanelContext.addElementState.parent.uid}}"
+                        },
+                        "condition": "props.subPanelContext.addElementState.parentElement.uid !== props.subPanelContext.addElementState.parent.uid"
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        },
+                        "condition": "!subPanelContext.panelPinned"
+                    },
+                    {
+                        "name": "addedAsChild"
+                    }
+                ]
+            },
+            "deps": "js/Aqc0CipUtilService"
+        },
+        "generateNextValues": {
+            "actionType": "JSFunction",
+            "method": "autoAssignAllProperties",
+            "inputData": {
+                "data": "{{data}}",
+                "operationType": "CREATE",
+                "createType": "Aqc0CharElement",
+                "editHandler": "{{editHandlers.addPanelEditHandler}}"
+            },
+            "deps": "js/autoAssignService"
+        },
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            }
+        },
+        "createInspectionDefinition": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2016-09-DataManagement",
+            "method": "createAttachAndSubmitObjects",
+            "inputData": {
+                "inputs": "{{function:getInspectiondefCreateInput}}"
+            },
+            "outputData": {
+                "createdCharRepRev": "{{function:getCreatedRepresentationRevision}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "getViewModelSystemElement"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "complete",
+                        "condition": "!subPanelContext.panelPinned",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Aqc0CipUtilService"
+        },
+        "getViewModelSystemElement": {
+            "actionType": "JSFunction",
+            "method": "createViewModelObjectById",
+            "inputData": {
+                "uid": "{{ctx.selected.props.qfm0ParentElement.dbValues[0]}}",
+                "operationName": "CREATE"
+            },
+            "outputData": {
+                "itemReference": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "getItemReference"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "complete",
+                        "condition": "!subPanelContext.panelPinned",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/tcViewModelObjectService"
+        },
+        "getItemReference": {
+            "actionType": "JSFunction",
+            "method": "createViewModelObjectById",
+            "inputData": {
+                "uid": "{{data.itemReference.props.qfm0SourceRevision.dbValue}}",
+                "operationName": "CREATE"
+            },
+            "outputData": {
+                "itemReferenceNew": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "createRelationWithCharSpec"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "complete",
+                        "condition": "!subPanelContext.panelPinned",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/tcViewModelObjectService"
+        },
+        "createRelationWithCharSpec": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "createRelations",
+            "inputData": {
+                "input": [
+                    {
+                        "primaryObject": "{{data.createdCharRepRev}}",
+                        "secondaryObject": "{{data.sharedData.selectedSpecificationObject}}",
+                        "relationType": "Aqc0LinkToSpec",
+                        "clientId": "CreateObject",
+                        "userData": ""
+                    }
+                ]
+            },
+            "outputData": {},
+            "events": {
+                "success": [
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "refreshLocationFlag": false,
+                            "isPinnedFlag": "{{subPanelContext.panelPinned}}",
+                            "relatedModified": [
+                                "{{ctx.mselected[0]}}"
+                            ],
+                            "createdObjects": [
+                                "{{data.createdCharRepRev}}"
+                            ]
+                        },
+                        "condition": "!(ctx.sublocation.nameToken === 'com.siemens.splm.client.occmgmt:OccurrenceManagementSubLocation') "
+                    },
+                    {
+                        "name": "aqc0AddCharRepPanel.loadNextValues",
+                        "condition": "subPanelContext.panelPinned "
+                    },
+                    {
+                        "name": "complete",
+                        "condition": "!subPanelContext.panelPinned",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "refreshLocationFlag": false,
+                            "isPinnedFlag": "{{subPanelContext.panelPinned}}",
+                            "relatedModified": [
+                                "{{ctx.mselected}}"
+                            ],
+                            "createdObjects": [
+                                "{{data.createdCharRepRev}}"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "complete",
+                        "condition": "!subPanelContext.panelPinned",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "Aqc0CharRepresentationCreatedMessage",
+                        "condition": "!(ctx.sublocation.nameToken === 'com.siemens.splm.client.occmgmt:OccurrenceManagementSubLocation')"
+                    }
+                ]
+            }
+        },
+        "aqc0NavigateBackToAqc0AddSpecificationsToRepresentation": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "aqc0.aqc0NavigateBack",
+                        "eventData": {
+                            "nextActiveView": "Aqc0AddSpecificationsToRepresentation"
+                        }
+                    }
+                ]
+            }
+        },
+        "aqc0NavigateBackToAqc0AddCharRepresentaion": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "aqc0.aqc0NavigateBack",
+                        "eventData": {
+                            "nextActiveView": "Aqc0AddCharRepresentation"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "conditions": {
+        "isCreateRepresentaionVisible": {
+            "expression": "data.sharedData.selectedSpecificationObject"
+        }
+    },
+    "data": {
+        "activeView": "Aqc0AddCharRepresentation",
+        "linkSpecificationSectionCommands": "aw_aqc0AddCharSpecificationToRep",
+        "sharedData": {
+            "initialValues": {
+                "activeView": "Aqc0AddCharRepresentation"
+            },
+            "meta": {}
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "props": {
+        "updateHook": {
+            "type": "object"
+        },
+        "update-activeView": {
+            "type": "object"
+        }
+    },
+    "messages": {
+        "Aqc0CharRepresentationCreatedMessage": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.Aqc0CharSpecificationCreated}}",
+            "messageTextParams": [
+                "{{data.createdCharRepRev.props.object_name.dbValues[0]}}"
+            ]
+        }
+    },
+    "functions": {
+        "getCreatedRepresentationRevision": {
+            "functionName": "getCreatedRepresentationRevision",
+            "parameters": [
+                "{{response}}"
+            ]
+        },
+        "getCreatedRepresentationElement": {
+            "functionName": "getCreatedRepresentationElement",
+            "parameters": [
+                "{{response}}"
+            ]
+        },
+        "getCreateInput": {
+            "functionName": "getCreateInput",
+            "parameters": [
+                "{{data}}",
+                "Aqc0CharElement",
+                "{{editHandlers.addPanelEditHandler}}"
+            ]
+        },
+        "getInspectiondefCreateInput": {
+            "functionName": "getInspectiondefCreateInput",
+            "parameters": [
+                "{{data}}",
+                "Aqc0CharElement",
+                "{{editHandlers.addPanelEditHandler}}"
+            ]
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "addCharSpecPanel.Aqc0SetPin",
+            "cacheEventData": true,
+            "action": "Aqc0SetPin"
+        },
+        {
+            "eventId": "addCharSpecPanel.Aqc0SetUnPin",
+            "cacheEventData": true,
+            "action": "Aqc0SetUnPin"
+        },
+        {
+            "eventId": "aqc0RelateSpecificationToCharRep",
+            "cacheEventData": true,
+            "action": "createRelation"
+        },
+        {
+            "eventId": "aqc0AddCharRepPanel.loadNextValues",
+            "action": "generateNextValues"
+        },
+        {
+            "eventId": "addCharRepAsChild",
+            "action": "addCharRepElementAsChild"
+        },
+        {
+            "eventId": "awPanel.reveal",
+            "criteria": {
+                "panelId": "Aqc0AddCharRepresentation"
+            },
+            "action": "setCtxAddElementInputParentElementToSelectedElement",
+            "condition": "ctx.sublocation.nameToken === 'com.siemens.splm.client.occmgmt:OccurrenceManagementSubLocation'"
+        },
+        {
+            "eventId": "awPanel.reveal",
+            "action": "processAddElementInput",
+            "condition": "ctx.sublocation.nameToken === 'com.siemens.splm.client.occmgmt:OccurrenceManagementSubLocation'"
+        },
+        {
+            "eventId": "primaryWorkArea.selectionChangeEvent",
+            "action": "closePanel"
+        },
+        {
+            "eventId": "getViewModelSystemElement",
+            "cacheEventData": true,
+            "action": "getViewModelSystemElement"
+        },
+        {
+            "eventId": "getItemReference",
+            "cacheEventData": true,
+            "action": "getItemReference"
+        },
+        {
+            "eventId": "createRelationWithCharSpec",
+            "cacheEventData": true,
+            "action": "createRelationWithCharSpec"
+        }
+    ],
+    "i18n": {
+        "Aqc0AddCharRepresentationTitle": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "addButtonTitle": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Aqc0CharSpecificationCreated": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "backButtontitle": [
+            "qualitycharacteristicsmanagerMessages"
+        ]
+    }
+}

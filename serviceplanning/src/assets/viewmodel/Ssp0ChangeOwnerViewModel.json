@@ -1,0 +1,175 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "ssp0ChangeOwner": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "changeOwnership",
+            "inputData": {
+                "input": "{{function:getChangeOwnerInput}}"
+            },
+            "outputData": {
+                "changeOwnershipPartialErrors": "partialErrors"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    },
+                    {
+                        "name": "closePanelDialog"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    },
+                    {
+                        "name": "closePanelDialog"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "condition": "(ctx.mselected && ctx.mselected.length === 1)",
+                        "message": "singleObjectChangeOwnershipSuccess"
+                    },
+                    {
+                        "condition": "(ctx.mselected && ctx.mselected.length > 1)",
+                        "message": "multipleObjectsChangeOwnershipSuccess"
+                    }
+                ],
+                "failure": [
+                    {
+                        "condition": "(ctx.mselected && ctx.mselected.length === 1 && data.changeOwnershipPartialErrors )",
+                        "message": "changeOwnershipForObjectFailure"
+                    },
+                    {
+                        "condition": "(ctx.mselected && ctx.mselected.length > 1 && data.changeOwnershipPartialErrors )",
+                        "message": "partialObjectsChangeOwnershipFailure"
+                    }
+                ]
+            },
+            "deps": "js/Ssp0AssignOwnerService"
+        },
+        "closePanelDialog": {
+            "actionType": "JSFunction",
+            "method": "closeDialog",
+            "inputData": {
+                "editContext": "INFO_PANEL_CONTEXT",
+                "popupId": "{{subPanelContext.popupOptions.popupId}}"
+            },
+            "deps": "js/dialogService"
+        }
+    },
+    "data": {
+        "addUserPanelState": {
+            "initialValues": {
+                "provider": "Awp0PeoplePickerProvider",
+                "selectionModelMode": "single",
+                "criteria": {
+                    "providerContentType": "GroupMember",
+                    "searchString": "*",
+                    "selectedObject": "",
+                    "searchSubGroup": "true",
+                    "group": "",
+                    "role": "",
+                    "participantType": ""
+                },
+                "selectedUsers": "",
+                "isAddButtonNeeded": false
+            },
+            "meta": {
+                "selectedUsers": {
+                    "field": "true",
+                    "type": "OBJECTARRAY"
+                }
+            }
+        }
+    },
+    "messages": {
+        "singleObjectChangeOwnershipSuccess": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.singleObjectChangeOwnershipSuccess}}",
+            "messageTextParams": [
+                "{{ctx.mselected[0].props.object_string.uiValues[0]}}"
+            ]
+        },
+        "multipleObjectsChangeOwnershipSuccess": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.multipleObjectsChangeOwnershipSuccess}}",
+            "messageTextParams": [
+                "{{ctx.mselected.length}}",
+                "{{ctx.mselected.length}}"
+            ]
+        },
+        "partialObjectsChangeOwnershipFailure": {
+            "expression": {
+                "successCount": "ctx.mselected.length - data.changeOwnershipPartialErrors.length"
+            },
+            "messageType": "ERROR",
+            "messageKey": "changeOwnerNotyError",
+            "messageTextParams": [
+                "{{expression.successCount}}",
+                "{{ctx.mselected.length}}"
+            ],
+            "messageData": {
+                "partialErrors": "{{data.changeOwnershipPartialErrors}}"
+            }
+        },
+        "changeOwnershipForObjectFailure": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.changeOwnershipForObjectFailure}}",
+            "messageTextParams": [
+                "{{ctx.mselected[0].props.object_string.uiValues[0]}}"
+            ]
+        }
+    },
+    "conditions": {
+        "isValidToAdd": {
+            "expression": "addUserPanelState.selectedUsers && addUserPanelState.selectedUsers.length > 0"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "closePanelDialog",
+            "action": "closePanelDialog"
+        }
+    ],
+    "functions": {
+        "getChangeOwnerInput": {
+            "functionName": "getChangeOwnerInput",
+            "parameters": [
+                "{{ctx.mselected}}",
+                "{{addUserPanelState.selectedUsers}}"
+            ]
+        }
+    },
+    "i18n": {
+        "user": [
+            "ssp0Messages"
+        ],
+        "change": [
+            "ssp0Messages"
+        ],
+        "Ssp0ChangeOwner": [
+            "ssp0Messages"
+        ],
+        "singleObjectChangeOwnershipSuccess": [
+            "ssp0Messages"
+        ],
+        "multipleObjectsChangeOwnershipSuccess": [
+            "ssp0Messages"
+        ],
+        "changeOwnershipForObjectFailure": [
+            "ssp0Messages"
+        ]
+    }
+}

@@ -1,0 +1,22 @@
+<aw-command-panel caption="i18n.addButtonTitle" anchor="data.addObjectPanelPinCommands" context="subPanelContext">
+    <aw-form name="commandPanelForm" visible-when="data.activeView!='AssignProjectSub'&&data.activeView!='addReferenceSub'">
+        <aw-add
+            relations="{{data.panelContext.addObject.relationType}}"
+            include-types="{{data.panelContext.addObject.includedTypes}}"
+            target-object="data.panelContext.addObject.targetObject"
+            type-filter="{{data.panelContext.addObject.typeFilterNames}}"
+            relation-map="data.panelContext.addObject.relationMap"
+            visible-tabs="new,palette,search"
+            active-state="data.activeState"
+            xrt-state="data.xrtState"
+            edit-handler="editHandlers.addPanelEditHandler"
+            add-panel-state="fields.addPanelState"
+            sub-panel-context="{ ...subPanelContext,triggerCreate: data.triggerCreate }"
+            auto-select-on-unique-type="true"></aw-add>
+    </aw-form>
+    <aw-panel-footer>
+        <aw-button default="true" action="createObject" enable-when="(conditions.isPaletteSearchTabAddButtonVisible) || (formProp.attributes.valid && conditions.isNewTabAddButtonVisible)">
+            <aw-i18n>i18n.addButtonTitle</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

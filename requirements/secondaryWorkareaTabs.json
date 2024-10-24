@@ -1,0 +1,85 @@
+{
+  "schema": "1.0.0.0",
+  "tabs": {
+    "documentationTitle": {
+      "name": {
+        "source": "/i18n/RequirementsCommandPanelsMessages",
+        "key": "documentationTitle"
+      },
+      "priority": 20,
+      "view": "ImportPreview",
+      "visibleWhen": "ctx.sublocation.clientScopeURI === 'ImportPreviewURI' || ctx.sublocation.clientScopeURI === 'RequirementMergePreviewURI' || ctx.sublocation.clientScopeURI === 'RequirementRoundTripPreviewURI'"
+    },
+    "Arm0HTMLSpecTemplateEdit": {
+      "name": "",
+      "priority": 20,
+      "view": "Arm0HTMLSpecTemplateEdit",
+      "visibleWhen": "context.name === 'htmlSpecSubLocation'"
+    },
+    "arm0CompareText": {
+      "name": {
+        "source": "/i18n/RequirementsCommandPanelsMessages",
+        "key": "arm0CompareText"
+      },
+      "priority": 200,
+      "view": "multiSelectCompareText",
+      "visibleWhen": "selection.length === 2 && (selection[0].modelType.typeHierarchyArray.indexOf('SpecElementRevision') > -1 || selection[0].modelType.typeHierarchyArray.indexOf('RequirementSpec Revision') > -1 ) && (selection[1].modelType.typeHierarchyArray.indexOf('SpecElementRevision') > -1 || selection[1].modelType.typeHierarchyArray.indexOf('RequirementSpec Revision') > -1)"
+    },
+    "Arm0RequirementDocumentationACEEditor": {
+      "name": {
+        "source": "/i18n/RequirementsCommandPanelsMessages",
+        "key": "documentationTitle"
+      },
+      "priority": 3,
+      "id": "tc_xrt_Documentation",
+      "view": "Arm0RequirementDocumentationACEEditor",
+      "visibleWhen": "ctx.state.urlAttributes.flexibleLayouts === undefined && ctx.preferences && ctx.preferences.AWC_show_documentation_tab_for_types && !(ctx.splitView && ctx.splitView.mode) && ( selection[0].modelType.typeHierarchyArray.indexOf( \"Arm0RequirementSpecElement\" ) > -1 || selection[0].modelType.typeHierarchyArray.indexOf( \"Arm0RequirementElement\" ) > -1 || selection[0].modelType.typeHierarchyArray.indexOf( \"Arm0ParagraphElement\" ) > -1)"
+    },
+    "multiSelectCompareText": {
+      "name": {
+        "source": "/i18n/RequirementsCommandPanelsMessages",
+        "key": "arm0CompareText"
+      },
+      "priority": 100,
+      "view": "multiSelectCompareText",
+      "visibleWhen": {
+        "condition": "conditions.multiSelectCompareTextCondition"
+      }
+    }
+  },
+  "conditions": {
+    "multiSelectCompareTextCondition": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "selection.length",
+            "$query": {
+              "$eq": 2
+            }
+          },
+          {
+            "$source": "ctx.sublocation.clientScopeURI",
+            "$query": {
+              "$eq": "Awb0OccurrenceManagement"
+            }
+          },
+          {
+            "$source": "selection",
+            "$query": {
+              "$all": {
+                "$source": "modelType.typeHierarchyArray",
+                "$query": {
+                  "$in": [
+                    "Arm0RequirementElement",
+                    "Arm0ParagraphElement",
+                    "Arm0RequirementSpecElement"
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

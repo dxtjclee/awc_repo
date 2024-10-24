@@ -1,0 +1,7 @@
+<div class="sw-column h-12 w-12">
+    <aw-splm-table aw-class="['ep-planning-operationsTable', conditions.pvsNotSelected ? 'h-9' : 'h-12']"
+        gridid="EpOperationsGridTable" show-context-menu="false" show-check-box="false"></aw-splm-table>
+    <div class="h-3 w-12" exist-when="conditions.pvsNotSelected">
+        <mfe-message sub-panel-context="data.selectPVMessage"></mfe-message>
+    </div>
+</div>

@@ -1,0 +1,200 @@
+// Copyright 2018 Siemens Product Lifecycle Management Software Inc.
+/* attrtargetmgmt */
+
+.aw-attrtargetmgmt-desc {
+    padding-top: rem-calc(13);
+    font-size: $fontsize_small;
+    padding-bottom: rem-calc(10);
+}
+
+.aw-attrtargetmgmt-cfxTemplateLink {
+    text-align: right;
+}
+
+.aw-attrtargetmgmt-chip {
+    margin: rem-calc(10) 0 rem-calc(10) rem-calc(10);
+}
+
+.aw-attrtargetmgmt-legendItem {
+    .aw-attrtargetmgmt-legendItemMarker {
+        display: inline-block;
+        width: rem-calc(18);
+        height: rem-calc(18);
+    }
+
+    .aw-attrtargetmgmt-legendItemLabel {
+        display: inline-block;
+        font-size: $fontsize_large;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding-left: rem-calc(5);
+        padding-right: $padding_xlarge;
+    }
+}
+
+.aw-engrtable-separator {
+    margin-top: 0;
+}
+
+.aw-engrtable-cell text {
+    font-size: $fontsize_normal;
+}
+
+.aw-engrtable-header text {
+    font-size: $fontsize_normal;
+    font-weight: 600;
+}
+
+.aw-engrtable-rowNumber text {
+    text-anchor: middle;
+}
+
+.aw-engrtable-seriesHeader text {
+    text-anchor: middle;
+}
+
+.aw-engrtable-seriesHeader text {
+    text-anchor: middle;
+}
+
+.aw-engrtable-cell .copying {
+    stroke-width: rem-calc(2);
+    stroke-dasharray: 4;
+}
+
+.aw-engrtable-mainSvg {
+    stroke-width: 0.7;
+}
+
+.aw-engrtable-cell .cell {
+    stroke-width: 0.3;
+}
+
+.aw-engrtable-mainSvg text {
+    stroke: none;
+}
+
+.aw-engrtable-mainSvg text::selection,
+tspan::selection {
+    background: none;
+}
+
+.aw-engrtable-tooltip {
+    .sw-row {
+        @include flexbox();
+        justify-content: center;
+        align-items: center;
+
+        .sw-property {
+            @include flexbox();
+            flex-direction: row;
+            align-items: center;
+            width: rem-calc(70);
+            margin: 0 $margin_normal 0 0;
+
+            .sw-property-name {
+                min-width: rem-calc(35);
+                width: rem-calc(35);
+                margin: 0;
+            }
+
+            .sw-property-val {
+                height: rem-calc(20);
+                width: rem-calc(35);
+            }
+        }
+    }
+}
+
+.aw-engrtable-tooltipIcon.aw-xrt-thumbnailImagePanel .aw-base-icon {
+    height: rem-calc(20);
+    width: rem-calc(20);
+    cursor: default;
+}
+
+.aw-engrtable-popupPanel {
+    padding: 0.5rem;
+}
+
+.aw-engrtable-popupPanel.aw-layout-popup[x-placement^="right"] {
+    margin-left: rem-calc(-15);
+}
+
+.aw-engrtable-popupPanel.aw-layout-popup[x-placement^="right"] .popupArrow {
+    left: rem-calc(-18);
+}
+
+.aw-engrtable-contextPopupPanel {
+    padding: 0;
+}
+
+.aw-attrtargetmgmt-measurementsHeader {
+    display: flex;
+    justify-content: space-between;
+    font-size: $radiobutton_font_size;
+    font-weight: 700;
+    margin-top: $margin_normal;
+}
+
+.aw-attrtargetmgmt-importPanelHelpIcon {
+    width: 20px;
+    height: 20px;
+    float: right;
+    vertical-align: middle;
+    margin-left: 11px;
+}
+
+.aw-attrtargetmgmt-headerProperty {
+    padding-right: rem-calc(30);
+}
+
+.aw-attrtargetmgmt-widePanel {
+    padding-bottom: 0;
+    padding-top: $horizontal_tool_bar_margin_bottom;
+    padding-left: $horizontal_command_bar_default_padding;
+    padding-right: $horizontal_command_bar_default_padding;
+}
+
+.aw-attrtargetmgmt-addPanel {
+    .sw-tabSet {
+        padding-top: 0;
+    }
+}
+.aw-engrTable-columnSizeControl {
+    cursor: col-resize;
+    opacity: 0;
+    stroke-width: 5;
+}
+
+.aw-attrtargetmgmt-importNewHelpTooltip {
+    .sw-property.sw-row .sw-property-name {
+        width: rem-calc(14);
+        min-width: rem-calc(14);
+    }
+
+    .sw-property.sw-component .sw-property-name:not(:empty)::after {
+        content: ".";
+    }
+}
+
+.aw-attrtargetmgmt-importInProgressMsg {
+    font-size: .85rem;
+    font-weight: 500;
+    padding-bottom: rem-calc(10);
+    padding-top: rem-calc(10);
+    padding-left: rem-calc(10);
+}
+
+.aw-attrtargetmgmt-GMMCreateField {
+    margin-bottom: 0;
+}
+
+.aw-splm-table .aw-splm-tableCellTop.aw-requiredIcon {
+    background: url(image/indicatorRequired16.svg) left no-repeat;
+    background-size: 16px 16px;
+
+    .aw-visual-indicator {
+        vertical-align: middle;
+    }
+}

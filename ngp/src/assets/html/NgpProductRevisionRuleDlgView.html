@@ -1,0 +1,15 @@
+<aw-popup2>
+    <aw-panel class="aw-ngp-productRevisionRulesPanel">
+        <mfe-loading-message class="aw-ngp-productRevisionRulesLoadingMsg" exist-when="!conditions.finishedRevisionRulesLoad"></mfe-loading-message>
+        <aw-panel-body class="aw-ngp-productRevisionRulesPanelBody" visible-when="conditions.finishedRevisionRulesLoad"  scrollable="false">
+            <div class="aw-ngp-productScopeObjectName">{{data.productScopeName}}</div>
+            <div class="sw-row" display="flex">
+                <aw-listbox class="aw-ngp-productRevisionRulesPanelBodyList" prop="data.revisionRuleLabel" list="data.revisionRuleList" action="revisionRuleSelectionChange" ></aw-listbox>
+            </div>
+        </aw-panel-body>
+        <aw-panel-footer class="aw-ngp-productRevisionRulesFooter" exist-when="conditions.finishedRevisionRulesLoad">
+            <aw-button button-type="base" action="closeDialog" size="auto">{{i18n.cancel}}</aw-button>
+            <aw-button action="setRevisionRuleAndCloseDlg" size="auto" aw-class="{'disabled': !conditions.enableDoneButtonCondition}">{{i18n.doneProductRevisionRule}}</aw-button>
+        </aw-panel-footer>
+    </aw-panel>
+</aw-popup2>

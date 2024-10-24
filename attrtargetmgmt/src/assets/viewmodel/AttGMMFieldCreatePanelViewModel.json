@@ -1,0 +1,262 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "render": {
+            "method": "att1GMMFieldCreatePanelRenderFn",
+            "deps": "js/Att1GMMFieldCreatePanelService"
+        },
+        "setGMMDropDownValues":{
+            "actionType": "JSFunction",
+            "method": "setGMMDropDownValues",
+            "inputData": {
+                "parameterDefinition": "{{ctx.panelContext.selectedParameterDefinition}}",
+                "isSetValues":true
+            },
+            "outputData": {
+                "gmmLOVValues": "gmmLOVValues",
+                "isShowTextbox":"isShowTextbox"
+            },
+            "deps": "js/addMeasurableAttr"
+        }
+    },
+    "data": {
+        "goalTextBoxStr": {
+            "displayName": "{{i18n.Goal}}",
+            "type": "STRING",
+            "isRequired": false,
+            "isEditable": true,
+            "dbValue": "",
+            "dispValue": "",
+            "renderingHint": "textbox",
+            "labelPosition": "NO_PROPERTY_LABEL"
+        },
+        "goalTextBoxInt": {
+            "displayName": "{{i18n.Goal}}",
+            "type": "INTEGER",
+            "isRequired": false,
+            "isEditable": true,
+            "dbValue": "",
+            "dispValue": "",
+            "renderingHint": "textbox",
+            "labelPosition": "NO_PROPERTY_LABEL"
+        },
+        "goalTextBoxDbl": {
+            "displayName": "{{i18n.Goal}}",
+            "type": "DOUBLE",
+            "isRequired": false,
+            "isEditable": true,
+            "dbValue": "",
+            "dispValue": "",
+            "renderingHint": "textbox",
+            "labelPosition": "NO_PROPERTY_LABEL"
+        },
+        "minTextBoxStr": {
+            "displayName": "{{i18n.Min}}",
+            "type": "STRING",
+            "isRequired": false,
+            "isEditable": true,
+            "dbValue": "",
+            "dispValue": "",
+            "renderingHint": "textbox",
+            "labelPosition": "NO_PROPERTY_LABEL"
+        },
+        "minTextBoxInt": {
+            "displayName": "{{i18n.Min}}",
+            "type": "INTEGER",
+            "isRequired": false,
+            "isEditable": true,
+            "dbValue": "",
+            "dispValue": "",
+            "renderingHint": "textbox",
+            "labelPosition": "NO_PROPERTY_LABEL"
+        },
+        "minTextBoxDbl": {
+            "displayName": "{{i18n.Min}}",
+            "type": "DOUBLE",
+            "isRequired": false,
+            "isEditable": true,
+            "dbValue": "",
+            "dispValue": "",
+            "renderingHint": "textbox",
+            "labelPosition": "NO_PROPERTY_LABEL"
+        },
+        "maxTextBoxStr": {
+            "displayName": "{{i18n.Max}}",
+            "type": "STRING",
+            "isRequired": false,
+            "isEditable": true,
+            "dbValue": "",
+            "dispValue": "",
+            "renderingHint": "textbox",
+            "labelPosition": "NO_PROPERTY_LABEL"
+        },
+        "maxTextBoxInt": {
+            "displayName": "{{i18n.Max}}",
+            "type": "INTEGER",
+            "isRequired": false,
+            "isEditable": true,
+            "dbValue": "",
+            "dispValue": "",
+            "renderingHint": "textbox",
+            "labelPosition": "NO_PROPERTY_LABEL"
+        },
+        "maxTextBoxDbl": {
+            "displayName": "{{i18n.Max}}",
+            "type": "DOUBLE",
+            "isRequired": false,
+            "isEditable": true,
+            "dbValue": "",
+            "dispValue": "",
+            "renderingHint": "textbox",
+            "labelPosition": "NO_PROPERTY_LABEL"
+        },
+        "goalLOVInt": {
+            "displayName": "{{i18n.Goal}}",
+            "name": "goalLOV",
+            "type": "INTEGER",
+            "isRequired": false,
+            "isSelectOnly": false,
+            "dbValue": "",
+            "uiValue":"",
+            "hasLOV":true,
+            "dataProvider": "gmmValuesListProvider",
+            "labelPosition": "NO_PROPERTY_LABEL"
+        },
+        "minLOVInt": {
+            "displayName": "{{i18n.Min}}",
+            "name": "minLOV",
+            "type": "INTEGER",
+            "isRequired": false,
+            "isEditable": true,
+            "isSelectOnly": false,
+            "dbValue": "",
+            "uiValue":"",
+            "hasLOV":true,
+            "dataProvider": "gmmValuesListProvider",
+            "labelPosition": "NO_PROPERTY_LABEL"
+        },
+        "maxLOVInt": {
+            "displayName": "{{i18n.Max}}",
+            "name": "maxLOV",
+            "type": "INTEGER",
+            "isRequired": false,
+            "isEditable": true,
+            "isSelectOnly": false,
+            "dbValue": "",
+            "uiValue":"",
+            "hasLOV":true,
+            "dataProvider": "gmmValuesListProvider",
+            "labelPosition": "NO_PROPERTY_LABEL"
+        },
+        "goalLOVDbl": {
+            "displayName": "{{i18n.Goal}}",
+            "name": "goalLOV",
+            "type": "DOUBLE",
+            "isRequired": false,
+            "isSelectOnly": false,
+            "dbValue": "",
+            "uiValue":"",
+            "hasLOV":true,
+            "dataProvider": "gmmValuesListProvider",
+            "labelPosition": "NO_PROPERTY_LABEL"
+        },
+        "minLOVDbl": {
+            "displayName": "{{i18n.Min}}",
+            "name": "minLOV",
+            "type": "DOUBLE",
+            "isRequired": false,
+            "isEditable": true,
+            "isSelectOnly": false,
+            "dbValue": "",
+            "uiValue":"",
+            "hasLOV":true,
+            "dataProvider": "gmmValuesListProvider",
+            "labelPosition": "NO_PROPERTY_LABEL"
+        },
+        "maxLOVDbl": {
+            "displayName": "{{i18n.Max}}",
+            "name": "maxLOV",
+            "type": "DOUBLE",
+            "isRequired": false,
+            "isEditable": true,
+            "isSelectOnly": false,
+            "dbValue": "",
+            "uiValue":"",
+            "hasLOV":true,
+            "dataProvider": "gmmValuesListProvider",
+            "labelPosition": "NO_PROPERTY_LABEL"
+        },
+        "goalLOVStr": {
+            "displayName": "{{i18n.Goal}}",
+            "name": "goalLOV",
+            "type": "STRING",
+            "isRequired": false,
+            "isSelectOnly": false,
+            "dbValue": "",
+            "uiValue":"",
+            "hasLOV":true,
+            "dataProvider": "gmmValuesListProvider",
+            "labelPosition": "NO_PROPERTY_LABEL"
+        },
+        "minLOVStr": {
+            "displayName": "{{i18n.Min}}",
+            "name": "minLOV",
+            "type": "STRING",
+            "isRequired": false,
+            "isEditable": true,
+            "isSelectOnly": false,
+            "dbValue": "",
+            "uiValue":"",
+            "hasLOV":true,
+            "dataProvider": "gmmValuesListProvider",
+            "labelPosition": "NO_PROPERTY_LABEL"
+        },
+        "maxLOVStr": {
+            "displayName": "{{i18n.Max}}",
+            "name": "maxLOV",
+            "type": "STRING",
+            "isRequired": false,
+            "isEditable": true,
+            "isSelectOnly": false,
+            "dbValue": "",
+            "uiValue":"",
+            "hasLOV":true,
+            "dataProvider": "gmmValuesListProvider",
+            "labelPosition": "NO_PROPERTY_LABEL"
+        }
+    },
+    "dataProviders":
+    {
+        "gmmValuesListProvider": {
+            "action": "setGMMDropDownValues",
+            "response": "{{data.gmmLOVValues}}"
+        }
+    },
+    "conditions": {},
+    "onEvent": [],
+    "lifecycleHooks": {
+        "render": "render"
+    },
+    "props": {
+        "vmo": {
+            "type": "object"
+        }
+    },
+    "ctx": {
+        "panelContext": {}
+    },
+    "i18n": {
+        "Goal": [
+            "Att1Messages"
+        ],
+        "Min": [
+            "Att1Messages"
+        ],
+        "Max": [
+            "Att1Messages"
+        ],
+        "SelectDefinition": [
+            "Att1AttrMappingMessages"
+        ]
+    }
+}

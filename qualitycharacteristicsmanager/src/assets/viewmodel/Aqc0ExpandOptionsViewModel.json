@@ -1,0 +1,51 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "actions": {
+        "render": {
+            "method": "Aqc0ExpandOptionsRenderFunction",
+            "deps": "js/Aqc0ExpandOptionService"
+        },
+        "performExpandToLevel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "aqc0.performExpandToLevel",
+                    "eventData": {
+                        "selected": "{{data.ctx.selected}}",
+                        "levelsToExpand": "{{data.expansionLevel.dbValue}}"         
+                    }
+                } ]
+            }
+        }
+
+    },
+    "data": {
+        "expansionLevel": {
+            "type": "INTEGER",
+            "displayName": "{{i18n.Aqc0expandToLevel}}",
+            "propertyDisplayName": "{{i18n.Aqc0expandToLevel}}",
+            "requiredText": "{{i18n.Aqc0n}}",
+            "isEnabled": "true"
+        }
+    },
+    "lifecycleHooks": {
+        "render":"render"
+    },
+
+    "onEvent": [
+        {
+            "eventId": "aqc0.performExpandToLevel",
+            "cacheEventData": true
+        }
+    ],
+    "i18n": {
+        "Aqc0expandToLevel": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Aqc0n": [
+            "qualitycharacteristicsmanagerMessages"
+        ]
+    }
+}

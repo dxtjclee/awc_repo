@@ -1,0 +1,351 @@
+{
+    "schemaVersion": "1.0.0",
+
+    "actions": {
+        "reveal":
+        {
+            "actionType": "dataProvider",
+            "method": "customSkill"
+        },
+        "loadTypes": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2016-03-Finder",
+            "method": "performSearch",
+            "inputData":
+            {
+                "searchInput":
+                {
+                    "maxToLoad": 25,
+                    "maxToReturn": 25,
+                    "providerName": "Awp0TypeSearchProvider",
+                    "searchCriteria":
+                    {
+                        "searchString": "",
+                        "typeSelectorId": "",
+                        "listOfIncludeObjectTypes": "SSP0Skill",
+                        "loadSubTypes": "true"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "startIndex": "{{data.dataProviders.performSearch.startIndex}}",
+                    "attributesToInflate": [
+                        "parent_types",
+                        "type_name"
+                    ]
+                }
+            },
+            "outputData":
+            {
+                "totalFound": "totalFound",
+                "skillList": "{{function:skillList}}"
+            },
+            "deps": "js/ssp0CreateAssignSkillService"
+        },
+        "AddSkill":{
+            "actionType": "JSFunction",
+            "method": "getCreateInputSkill",
+            "inputData": {
+                "data": "{{data}}",
+                "createType": "{{data.selectedType.dbValue}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "skillsTable.plTable.reload"
+                    },
+                    {
+                        "name": "ssp0SkillsList.dataProvider"
+                    }
+                ]
+            },
+            "deps": "js/ssp0CreateObjectService"
+        },
+        "attachSkills": {
+            "actionType": "JSFunction",
+            "method": "attachSkills",
+            "inputData": {
+                "skills": "{{data.dataProviders.skillsListProvider.selectedObjects}}",
+                "selectedObject": "{{data.ctx.selectedVMO}}",
+                "data": "{{data}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "skillsTable.plTable.reload"
+                    },
+                    {
+                        "name": "ssp0SkillsList.dataProvider"
+                    }
+                ]
+            },
+            "deps": "js/ssp0CreateAssignSkillService"
+        },
+        "AddSkillBatchJob": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "AddSkill"
+                },
+                {
+                    "action": "ClosePopUpAction"
+                }
+            ]
+        },
+        "attachSkillsBatchJob": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "attachSkills"
+                },
+                {
+                    "action": "ClosePopUpAction"
+                }
+            ]
+        },
+        "ClosePopUpAction": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        },
+        "setSelectedType": {
+            "actionType": "JSFunction",
+            "method": "changeAction",
+            "inputData": {
+                "data": "{{data}}",
+                "fields": "{{fields}}"
+            },
+            "outputData": {
+                "selectedType": "selectedType"
+            },
+            "deps": "js/ssp0CreateAssignSkillService"
+        },
+        "setSkillBatchJob": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "setSkillDbValueData"
+                },
+                {
+                    "action": "setSkillUiValueData",
+                    "condition": "conditions.isTotalLengthOne"
+                },
+                {
+                    "action": "setSelectedType"
+                }
+            ]
+        },
+        "setSkillDbValueData": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "propertyToUpdate": "dbValue",
+                "value": "{{data.eventMap['ssp0CreateAssignSkill.updateCurrentSkill'].currentSkillType.propInternalValue}}",
+                "dataToUpdate": "{{data.currentSkill}}"
+            },
+            "outputData": {
+                "currentSkill": ""
+            },
+            "deps": "js/ssp0CreateObjectService"
+        },
+        "setSkillUiValueData": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "propertyToUpdate": "uiValue",
+                "value": "{{data.eventMap['ssp0CreateAssignSkill.updateCurrentSkill'].currentSkillType.propDisplayValue}}",
+                "dataToUpdate": "{{data.currentSkill}}"
+            },
+            "outputData": {
+                "currentSkill": ""
+            },
+            "deps": "js/ssp0CreateObjectService"
+        },
+        "findSavedQuery": {
+            "actionType": "TcSoaService",
+            "serviceName": "Query-2010-04-SavedQuery",
+            "method": "findSavedQueries",
+            "inputData": {
+                "inputCriteria": [
+                    {
+                        "queryNames": [
+                            "MRO Skill"
+                        ]
+                    }
+                ]
+            },
+            "outputData": {
+                "generalQuery": "savedQueries[0]"
+            }
+        },
+        "doSearch": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "searchInitiated"
+                    }
+                ]
+            }
+        },
+        "getSkills": {
+            "actionType": "dataProvider",
+            "method": "skillsListProvider"
+        },
+        "searchSkills": {
+            "actionType": "TcSoaService",
+            "serviceName": "Query-2006-03-SavedQuery",
+            "method": "executeSavedQuery",
+            "inputData": {
+                "query": "{{data.generalQuery}}",
+                "limit": 0,
+                "entries": [
+                    "Name"
+                ],
+                "values": [
+                    "{{data.searchBox.dbValue}}"
+                ]
+            },
+            "outputData": {
+                "searchResponse": "objects",
+                "totalFound": "nFound"
+            }
+        }
+    },
+    "lifecycleHooks": {
+        "onInit": "reveal",
+        "onMount": "findSavedQuery"
+    },
+    "onEvent": [
+        {
+            "eventId": "awlinkPopup.selected",
+            "action": "setSelectedType"
+        },
+        {
+            "eventId": "ssp0CreateAssignSkill.updateCurrentSkill",
+            "action": "setSkillBatchJob",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "searchInitiated",
+            "condition": "data.searchBox.dbValue && data.searchBox.dbValue.length>0",
+            "action": "getSkills"
+        }
+    ],
+    "conditions": {
+        "isTotalLengthOne": {
+            "expression": "data.dataProviders.customSkill.viewModelCollection.loadedVMObjects.length === 1"
+        }
+    },
+    "functions": {
+        "getCreateInputSkill": {
+            "functionName": "getCreateInputSkill",
+            "parameters": [
+                "{{data}}",
+                "",
+                "{{data.selectedType.dbValue}}",
+                "{{editHandlers.addPanelEditHandler}}"
+            ]
+        },
+        "skillList": {
+            "functionName": "skillList",
+            "parameters":
+            [
+                "{{data}}"
+            ]
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "data": {
+        "currentSkill": {
+            "type": "STRING",
+            "displayName": "{{i18n.CurrentSkill}}",
+            "isRequired": "false",
+            "dbValue": ""
+        },
+        "selectedType":{
+            "type": "STRING",
+            "dbValue": ""
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        },
+        "addPanelTabModels": [
+            {
+                "tabKey": "newNotice",
+                "name": "{{i18n.newNotice}}"
+            },
+            {
+                "tabKey": "search",
+                "name": "{{i18n.Search}}",
+                "recreatePanel": true
+            }
+        ],
+        "searchBox": {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "false",
+            "dbValue": ""
+        }
+    },
+
+    "dataProviders":
+    {
+        "customSkill": {
+            "dataProviderType": "TcLOV",
+            "action": "loadTypes",
+            "response": "{{data.skillList}}",
+            "totalFound": "{{data.totalFound}}"
+        },
+        "skillsListProvider": {
+            "action": "searchSkills",
+            "response": "{{data.searchResponse}}",
+            "totalFound": "{{data.totalFound}}",
+            "selectionModelMode": "multiple"
+        }
+    },
+    "i18n": {
+        "noResultsFound": [
+            "ServicePlannerConstants"
+        ],
+        "Add":[
+            "ServicePlannerConstants"
+        ],
+        "Cancel":[
+            "ServicePlannerConstants"
+        ],
+        "CurrentSkill":[
+            "ServicePlannerConstants"
+        ],
+        "newSkillCreated":[
+            "ServicePlannerConstants"
+        ],
+        "newNotice": [
+            "ServicePlannerConstants"
+        ],
+        "Search": [
+            "ServicePlannerConstants"
+        ],
+        "Assign": [
+            "ssp0Messages"
+        ],
+        "Skill":[
+            "ServicePlannerConstants"
+        ]
+    }
+}

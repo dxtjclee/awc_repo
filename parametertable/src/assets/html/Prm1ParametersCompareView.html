@@ -1,0 +1,36 @@
+<aw-base-sublocation >
+    <aw-panel-body class="afx-content-background">
+        <div class="aw-compareSection sw-section">
+            <aw-dialog action="launchAddComparisonPanel">
+            </aw-dialog>
+            <div class="aw-layout-panelSectionTitle">
+                <span>{{i18n.ComparisonSectionTitle}}</span>
+            </div>
+            <aw-row height="4f">
+                <aw-toolbar first-anchor="aw_comparisonTableCommandBar"
+                    second-anchor="aw_comparisonTableOptCommandBar" orientation="HORIZONTAL" context="{dataProvider:dataProviders,paramCompareViewContext:fields.paramCompareViewContext}"></aw-toolbar>
+            </aw-row>
+            <aw-row height="fill">
+                <aw-scrollpanel>
+                    <div class="aw-comparisoncontext-list aw-comparisoncontext-cell"
+                            exist-when="data.paramCompareViewContext.ComparisonContextViewMode === 'list'">
+                            <aw-list command-context="{paramCompareViewContext:fields.paramCompareViewContext}" dataprovider="data.dataProviders.comparisonContextListDataProvider">
+                                <aw-default-cell  vmo="item"></aw-default-cell>
+                            </aw-list>
+                        </div>
+                        <div exist-when="data.paramCompareViewContext.ComparisonContextViewMode === 'table'">
+                            <aw-splm-table gridid="ComparisonContextTable"></aw-splm-table>
+                        </div>
+                </aw-scrollpanel>
+            </aw-row>
+        </div>
+        <br>
+        <div class="aw-compareSection">
+            <aw-row height="fill" exist-when="data.paramCompareViewContext.isContextInitailized===true" >
+                <aw-include name="Att1ShowParametersTableForSync" sub-panel-context="{...subPanelContext, paramCompareViewContext:fields.paramCompareViewContext}"></aw-include>
+                <!-- <att1-show-parameters-table-for-sync sub-panel-context="{...subPanelContext, paramCompareViewContext:fields.paramCompareViewContext}"></att1-show-parameters-table-for-sync> -->
+            </aw-row>
+        </div>
+    </aw-panel-body>
+
+</aw-base-sublocation>

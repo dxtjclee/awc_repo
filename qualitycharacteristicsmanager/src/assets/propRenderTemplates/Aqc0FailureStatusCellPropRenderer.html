@@ -1,0 +1,11 @@
+<% if(vmo.props && vmo.props.qc0Status){
+    var status = vmo.props.qc0Status.dbValue;
+    if ( status === false ){
+        var imagePath = basePath +'/image/';
+        imagePath += "indicatorNo16.svg"
+        var toolTip = vmo.props.qc0Status.uiValue;
+    %>
+    <img src ="<%=imagePath%>" alt="<%=toolTip%>" title="<%=toolTip%>"  class="aw-visual-indicator">
+    <%}%>
+<%}
+%>

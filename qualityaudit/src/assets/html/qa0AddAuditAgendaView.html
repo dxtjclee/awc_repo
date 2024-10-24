@@ -1,0 +1,21 @@
+<aw-command-panel caption="i18n.qa0Add" context="subPanelContext">
+    <div class="aw-layout-flexColumn" show-when="data.activeState.value.activeView==='AddObjectPrimarySub'">
+        <aw-add target-object="ctx.xrtSummaryContextObject"
+            auto-select-on-unique-type="true"
+            include-types="Qa0QualityAuditAgenda"
+            type-filter="Qa0QualityAuditAgenda"
+            relation-map="data._relationMap"
+            visible-tabs="new"
+            active-state="data.activeState"
+            add-panel-state="fields.addPanelState"
+            xrt-state="data.xrtState"
+            edit-handler="editHandlers.addPanelEditHandler">
+        </aw-add>
+        <aw-panel-footer>
+            <aw-button default="true" action="createObjects">
+                <aw-i18n>i18n.qa0Add</aw-i18n>
+            </aw-button>
+        </aw-panel-footer>
+    </div>
+    <aw-add-navigate active-state="data.activeState" action="actions.setActiveView"></aw-add-navigate>
+</aw-command-panel>

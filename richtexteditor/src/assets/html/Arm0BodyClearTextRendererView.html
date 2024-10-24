@@ -1,0 +1,8 @@
+<div aw-class="[{'aw-splm-tableCellText':conditions.bodyClearTextIsNotEmpty},
+{'aw-splm-tableCellTextDynamic': conditions.bodyClearTextIsNotEmpty && conditions.wrappedCondition},
+{'flex-auto':!conditions.bodyClearTextIsNotEmpty}]">
+    {{subPanelContext.vmo.props['REF(arm0UnderlyingObject,SpecElementRevision).body_cleartext'].dbValues[0]}}
+</div>
+<aw-icon-button class="aw-requirement-editIcon aw-requirementsmanager-summaryTableIcon" command="data.editBodyTextCmd"
+    visible-when="conditions.canShowBodyClearText">
+</aw-icon-button>

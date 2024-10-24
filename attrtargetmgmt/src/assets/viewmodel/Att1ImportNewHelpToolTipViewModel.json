@@ -1,0 +1,63 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-column.directive",
+        "js/aw-label.directive"
+    ],
+    "actions": {},
+    "data": {
+        "att1XLSTemplate": {
+            "displayName": "1",
+            "dispValue": "{{i18n.att1XLSTemplate}}"
+        },
+        "att1PopulateInfo": {
+            "displayName": "2",
+            "dispValue": "{{i18n.att1PopulateInfo}}"
+        },
+        "att1FileSelectionInfo": {
+            "displayName": "3",
+            "dispValue": "{{i18n.att1FileSelectionInfo}}"
+        },
+        "att1OpenedParameterImportInfo": {
+            "displayName": "1",
+            "dispValue": "{{i18n.att1OpenedParameterImportInfo}}"
+        },
+        "att1PopulateDefInfo": {
+            "displayName": "2",
+            "dispValue": "{{i18n.att1PopulateDefInfo}}"
+        },
+        "att1FileSelectionDefInfo": {
+            "displayName": "3",
+            "dispValue": "{{i18n.att1FileSelectionDefInfo}}"
+        }
+    },
+    "messages": {},
+    "conditions": {
+        "isParameterOpenedInWidePanelOrInOwnLocation":{
+            "expression":"ctx.panelContext.parametersTable === undefined || (ctx.panelContext.parametersTable && ctx.panelContext.parametersTable.isParameterWidePanelOpen === true)"
+        },
+        "isParameterDictionary":{
+            "expression":"ctx.selected.modelType.typeHierarchyArray.indexOf('Att0ParamDictionary') > -1"
+        }
+    },
+    "i18n": {
+        "att1XLSTemplate": [
+            "Att1AttrMappingMessages"
+        ],
+        "att1PopulateInfo": [
+            "Att1AttrMappingMessages"
+        ],
+        "att1FileSelectionInfo": [
+            "Att1AttrMappingMessages"
+        ],
+        "att1OpenedParameterImportInfo": [
+            "Att1AttrMappingMessages"
+        ],
+        "att1PopulateDefInfo": [
+            "Att1AttrMappingMessages"
+        ],
+        "att1FileSelectionDefInfo": [
+            "Att1AttrMappingMessages"
+        ]
+    }
+}

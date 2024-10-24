@@ -1,0 +1,28 @@
+<aw-panel>
+    <aw-panel-body>
+
+        <aw-row height="{{(ctx.SystemRequirements.pageSplit === 'doc' || ctx.SystemRequirements.pageSplit === 'off') ? 'fill' : '40f'}}">
+
+            <aw-column width="{{ctx.Ase0SystemRequirements.tableWidthProprtion ? ctx.Ase0SystemRequirements.tableWidthProprtion : '45%'}}">
+                <div class="aw-xrt-objectSetCommandPanel">
+                    <aw-server-visibility-toolbar first-anchor="aw_sysReqViewer" second-anchor="aw_requirementsTreeCommandbar" context="{...subPanelContext, pageState:fields.pageState}"></aw-server-visibility-toolbar>
+                </div>
+                <aw-splm-table gridid="RequirementsTree" use-tree="true"></aw-splm-table>
+            </aw-column>
+            <aw-splitter  direction="vertical" exist-when="conditions.showSysReqDoc"></aw-splitter>
+            <aw-column width="fill" exist-when="conditions.showSysReqDoc">
+                <aw-scrollpanel>
+                    <aw-command-sub-panel panel-id="Arm0RequirementDocumentation" sub-panel-context='{...subPanelContext}' isolate-mode="true" exist-when="conditions.checktypeHierarchyArray"></aw-command-sub-panel>
+                </aw-scrollpanel>
+            </aw-column>
+
+        </aw-row>
+
+        <aw-splitter direction="HORIZONTAL" exist-when="conditions.showSysReqAttr" ></aw-splitter>
+
+        <aw-row width="fill" height="{{(ctx.SystemRequirements.pageSplit === 'all' || ctx.SystemRequirements.pageSplit === 'attr') ? '40f' : 'fill'}}" exist-when="conditions.showSysReqAttr">
+            <aw-include name="Att1ShowParametersTableForSync" sub-panel-context="{...subPanelContext, selection:data.selection? data.selection:[]}"></aw-include>
+        </aw-row>
+
+    </aw-panel-body>
+</aw-panel>

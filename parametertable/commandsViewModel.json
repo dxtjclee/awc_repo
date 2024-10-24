@@ -1,0 +1,756 @@
+{
+  "commands": {
+    "Prm1CompareParametersCmd": {
+      "iconId": "cmdCompareView",
+      "isGroup": false,
+      "title": "{{i18n.comparisonParamTitle}}",
+      "description": "{{i18n.Prm1ComparisonViewCmdDesc}}"
+    },
+    "Prm1AddComparisonInProduct": {
+      "iconId": "cmdAdd",
+      "isGroup": false,
+      "title": "{{i18n.AddComparisonCmd}}",
+      "description": "{{i18n.Prm1AddComparisonInProductDesc}}"
+    },
+    "Prm1CmdPinToGateway": {
+      "iconId": "cmdPin",
+      "title": "{{i18n.PinToGatewayCmdTitle}}",
+      "description": "{{i18n.Prm1CmdPinToGatewayDesc}}"
+    },
+    "Prm1ResetFilter": {
+      "iconId": "cmdRefreshFilter",
+      "title": "{{i18n.ResetFilterCmdTitle}}",
+      "description": "{{i18n.Prm1ResetFilterDesc}}"
+    },
+    "Prm1RemoveComparisonElement": {
+      "iconId": "cmdRemove",
+      "title": "{{i18n.RemoveComparisonCmd}}"
+    },
+    "Prm1RemoveMultipleComparisonElement": {
+      "iconId": "cmdRemove",
+      "title": "{{i18n.RemoveComparisonCmd}}"
+    },
+    "Prm1ComparisonViewGroup": {
+      "isShuttle": true
+    },
+    "Prm1ComparisonSetListView": {
+      "iconId": "cmdListView",
+      "title": "{{i18n.prm1ListView}}",
+      "description": "{{i18n.prm1ListViewDesc}}"
+    },
+    "Prm1ComparisonSetTableView": {
+      "iconId": "cmdTableView",
+      "title": "{{i18n.prm1TableView}}",
+      "description": "{{i18n.prm1TableViewDesc}}"
+    },
+    "Prm1PublishToSourceCmd": {
+      "iconId": "cmdPublish",
+      "title": "{{i18n.PublishToSource}}",
+      "description": "{{i18n.PublishToSourceDesc}}"
+    },
+    "Prm1PublishToSourceElementCmd": {
+      "iconId": "cmdPublish",
+      "title": "{{i18n.PublishToSource}}",
+      "description": "{{i18n.PublishToSourceDesc}}"
+    }
+  },
+  "commandHandlers": {
+    "Prm1CompareParametersCommandHandler": {
+      "id": "Prm1CompareParametersCmd",
+      "action": "OpenComparisonViewAction",
+      "activeWhen": {
+        "condition": "conditions.prm1EnableCompareParameters"
+      },
+      "visibleWhen": true,
+      "enableWhen": {
+        "condition": "conditions.compareParametersCmdCondition"
+      }
+    },
+    "Prm1AddComparisonInProductCommandHandler": {
+      "id": "Prm1AddComparisonInProduct",
+      "action": "getProductAddComparisonPanel",
+      "activeWhen": true,
+      "visibleWhen": true
+    },
+    "Prm1CmdPinToGatewayHandler": {
+      "id": "Prm1CmdPinToGateway",
+      "action": "getPinParameterCompareInput",
+      "activeWhen": {
+        "condition": "conditions.showCmdPinToGateway"
+      },
+      "visibleWhen": {
+        "condition": "conditions.showCmdPinToGateway"
+      }
+    },
+    "Prm1ResetFilterHandler": {
+      "id": "Prm1ResetFilter",
+      "action": "activateResetFilter",
+      "activeWhen": {
+        "condition": "conditions.showCmdResetFilter"
+      },
+      "visibleWhen": {
+        "condition": "conditions.showCmdResetFilter"
+      }
+    },
+    "Prm1StartEditTableCommandHandler": {
+      "id": "Awp0StartEditTable",
+      "action": "startEditAction",
+      "activeWhen": {
+        "condition": "conditions.isStartEditVisible"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isStartEditVisible"
+      }
+    },
+    "Prm1CancelEditTableCommandHandler": {
+      "id": "Awp0CancelEditsPWA",
+      "action": "isDirtyOnCancelEdits",
+      "activeWhen": {
+        "condition": "conditions.isParamCompareEditInProgress"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isParamCompareEditInProgress"
+      }
+    },
+    "Prm1SaveEditsTableCommandHandler": {
+      "id": "Awp0SaveEditsPWA",
+      "action": "saveEdits",
+      "activeWhen": {
+        "condition": "conditions.isParamCompareEditInProgress"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isParamCompareEditInProgress"
+      }
+    },
+    "Prm1PinObjectCommandHandler": {
+      "id": "Awp0PinObject",
+      "activeWhen": {
+        "condition": "conditions.hidePinObjectCmd"
+      },
+      "visibleWhen": false
+    },
+    "Prm1RemoveComparisonElementCommandHandler": {
+      "id": "Prm1RemoveComparisonElement",
+      "action": "removeComparison",
+      "activeWhen": true,
+      "visibleWhen": true
+    },
+    "Prm1RemoveMultipleComparisonElementCommandHandler": {
+      "id": "Prm1RemoveMultipleComparisonElement",
+      "action": "removeComparison",
+      "activeWhen": {
+        "condition": "conditions.isComparisonContextObjSelected"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isComparisonContextObjSelected"
+      }
+    },
+    "Prm1ComparisonViewGroupHandler": {
+      "id": "Prm1ComparisonViewGroup",
+      "activeWhen": true
+    },
+    "Prm1ComparisonSetListViewCommandHandler": {
+      "id": "Prm1ComparisonSetListView",
+      "action": "Prm1ComparisonSwitchToListView",
+      "activeWhen": true,
+      "visibleWhen": true,
+      "selectWhen": {
+        "condition": "conditions.isListViewSelected"
+      }
+    },
+    "Prm1ComparisonSetTableViewCommandHandler": {
+      "id": "Prm1ComparisonSetTableView",
+      "action": "Prm1ComparisonSwitchToTableView",
+      "activeWhen": true,
+      "visibleWhen": true,
+      "selectWhen": {
+        "condition": "conditions.isTableViewSelected"
+      }
+    },
+    "Prm1PublishToSourceParameterCommandHandler": {
+      "id": "Prm1PublishToSourceCmd",
+      "action": "prepareInputForPublishParameter",
+      "activeWhen": {
+        "condition": "conditions.isParameterCompareViewVisible"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isParameterCompareViewVisible"
+      },
+      "enableWhen": {
+        "condition": "conditions.isParametersSelectedForPublish"
+      }
+    },
+    "Prm1PublishToSourceElementCommandHandler": {
+      "id": "Prm1PublishToSourceElementCmd",
+      "action": "prepareInputForPublishComparisonEle",
+      "activeWhen": {
+        "condition": "conditions.isParameterCompareViewVisible"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isParameterCompareViewVisible"
+      },
+      "enableWhen": {
+        "condition": "conditions.isComparisonContextSelectedForPublish"
+      }
+    }
+  },
+  "commandPlacements": {
+    "Prm1CompareParameterCommandPlacement": {
+      "id": "Prm1CompareParametersCmd",
+      "uiAnchor": "aw_showParamViewCommandBar",
+      "priority": 10
+    },
+    "Prm1EditCompareTableCommandPlacement": {
+      "id": "Awp0StartEditTable",
+      "uiAnchor": "aw_parameterCompareCommandBar",
+      "priority": 1
+    },
+    "Prm1SaveEditCompareTableCommandPlacement": {
+      "id": "Awp0SaveEditsPWA",
+      "uiAnchor": "aw_parameterCompareCommandBar",
+      "priority": 2
+    },
+    "Prm1CancelEditCompareTableCommandPlacement": {
+      "id": "Awp0CancelEditsPWA",
+      "uiAnchor": "aw_parameterCompareCommandBar",
+      "priority": 3
+    },
+    "Prm1AddComparisonInProductCommandPlacement": {
+      "id": "Prm1AddComparisonInProduct",
+      "uiAnchor": "aw_comparisonTableOptCommandBar",
+      "priority": 200
+    },
+    "Prm1CmdPinToGatewayCommandPlacement": {
+      "id": "Prm1CmdPinToGateway",
+      "uiAnchor": "aw_parameters_compare_taskbar",
+      "priority": 120
+    },
+    "Prm1ResetFilterCommandPlacement": {
+      "id": "Prm1ResetFilter",
+      "uiAnchor": "aw_primaryWorkArea",
+      "priority": 1001
+    },
+    "Prm1RemoveSingleComparisonCommandPlacement": {
+      "id": "Prm1RemoveComparisonElement",
+      "uiAnchor": "aw_ComparisonElementList",
+      "priority": 100,
+      "cellDisplay": {
+        "hover": true,
+        "position": "TOP_RIGHT",
+        "selected": true
+      }
+    },
+    "Prm1RemoveMultipleComparisonCommandPlacement": {
+      "id": "Prm1RemoveMultipleComparisonElement",
+      "uiAnchor": "aw_comparisonTableOptCommandBar",
+      "priority": 100
+    },
+    "Prm1OpenComparisonCommandPlacement": {
+      "id": "Awp0ShowObjectCell",
+      "uiAnchor": "aw_ComparisonElementList",
+      "priority": 100,
+      "cellDisplay": {
+        "hover": true,
+        "position": "BOTTOM_RIGHT",
+        "selected": true
+      }
+    },
+    "Prm1OpenComparisonElementCmdPlacement": {
+      "id": "Awp0ShowObjectCell",
+      "uiAnchor": "aw_ComparisonElementTable",
+      "priority": 100,
+      "cellDisplay": {
+        "hover": true,
+        "position": "TOP_RIGHT",
+        "selected": true
+      }
+    },
+    "Prm1OpenComparisonElementFromPanelCmdPlacement": {
+      "id": "Awp0ShowObjectCell",
+      "uiAnchor": "aw_AddComparisonElementList",
+      "priority": 300,
+      "cellDisplay": {
+        "hover": true,
+        "position": "TOP_RIGHT",
+        "selected": true
+      }
+    },
+    "Prm1ComparisonViewGroupPlacement": {
+      "id": "Prm1ComparisonViewGroup",
+      "uiAnchor": "aw_comparisonTableCommandBar",
+      "priority": 10
+    },
+    "Prm1ComparisonSetListViewPlacement": {
+      "id": "Prm1ComparisonSetListView",
+      "uiAnchor": "aw_comparisonTableCommandBar",
+      "priority": 30,
+      "parentGroupId": "Prm1ComparisonViewGroup"
+    },
+    "Prm1ComparisonSetTableViewPlacement": {
+      "id": "Prm1ComparisonSetTableView",
+      "uiAnchor": "aw_comparisonTableCommandBar",
+      "priority": 20,
+      "parentGroupId": "Prm1ComparisonViewGroup"
+    },
+    "Prm1PublishToSourceCompareTablePlacement": {
+      "id": "Prm1PublishToSourceCmd",
+      "uiAnchor": "aw_showParamOptCommandBar",
+      "priority": 20
+    },
+    "Prm1PublishToSourceComparisonElePlacement": {
+      "id": "Prm1PublishToSourceElementCmd",
+      "uiAnchor": "aw_comparisonTableOptCommandBar",
+      "priority": 80
+    }
+  },
+  "actions": {
+    "OpenComparisonViewAction": {
+      "actionType": "JSFunction",
+      "method": "goToPreviousIntView",
+      "inputData": {
+        "commandContext": "{{commandContext}}"
+      },
+      "deps": "js/prm1ParameterViewService"
+    },
+    "getProductAddComparisonPanel": {
+      "actionType": "dialog",
+      "inputData": {
+        "options": {
+          "view": "prm1ProductAddComparisonPanel",
+          "parent": ".aw-layout-workarea",
+          "placement": "right",
+          "width": "SMALL",
+          "height": "FULL",
+          "isCloseVisible": false,
+          "push": false,
+          "subPanelContext": "{{commandContext}}"
+        }
+      }
+    },
+    "activateResetFilter": {
+      "actionType": "JSFunction",
+      "method": "resetFilter",
+      "deps": "js/prm1ResetFilterService",
+      "inputData": {}
+    },
+    "startEditAction": {
+      "actionType": "JSFunction",
+      "method": "execute",
+      "deps": "js/startEditGroupCommandService",
+      "inputData": {
+        "handleContext": "TABLE_CONTEXT"
+      }
+    },
+    "removeComparison": {
+      "actionType": "JSFunction",
+      "method": "removeComparisonElements",
+      "deps": "js/prm1ParameterViewService",
+      "inputData": {
+        "context": "{{commandContext.vmo}}",
+        "paramCompareViewContext": "{{commandContext}}"
+      }
+    },
+    "getPinParameterCompareInput": {
+      "actionType": "JSFunction",
+      "method": "getPinParameterCompareInput",
+      "deps": "js/prm1AddViewToGatewayService",
+      "inputData": {
+        "data": "{{data}}",
+        "ctx": "{{ctx}}"
+      },
+      "outputData": {
+        "PinCompareViewInput": ""
+      },
+      "events": {
+        "success": [
+          {
+            "name": "Prm1PinParameterCompareSOACall"
+          }
+        ]
+      }
+    },
+    "Prm1PinParameterCompareSOACall": {
+      "actionType": "TcSoaService",
+      "serviceName": "AttrTargetMgmtAW-2021-06-AttributeTargetManagement",
+      "method": "pinCompareParametersView",
+      "inputData": {
+        "inputs": "{{data.PinCompareViewInput}}"
+      },
+      "outputData": {
+        "response": ""
+      },
+      "actionMessages": {
+        "success": [
+          {
+            "message": "pinCompareViewSuccess"
+          }
+        ],
+        "failure": [
+          {
+            "message": "PinCompareViewFailureMessage"
+          }
+        ]
+      },
+      "deps": "js/prm1AddViewToGatewayService"
+    },
+    "Prm1ComparisonSwitchToListView": {
+      "actionType": "JSFunction",
+      "method": "changeComparisonViewMode",
+      "deps": "js/prm1ParameterViewService",
+      "inputData": {
+        "newViewMode": "list",
+        "paramCompareViewContext": "{{commandContext.paramCompareViewContext}}"
+      },
+      "events": {
+        "success": [
+          {
+            "name": "prm1CompareTable.loadComparisonContextListView"
+          }
+        ]
+      }
+    },
+    "Prm1ComparisonSwitchToTableView": {
+      "actionType": "JSFunction",
+      "method": "changeComparisonViewMode",
+      "deps": "js/prm1ParameterViewService",
+      "inputData": {
+        "newViewMode": "table",
+        "paramCompareViewContext": "{{commandContext.paramCompareViewContext}}"
+      },
+      "events": {
+        "success": [
+          {
+            "name": "prm1CompareTable.loadComparisonContextTableView"
+          }
+        ]
+      }
+    },
+    "callPublishParameters": {
+      "actionType": "TcSoaService",
+      "serviceName": "AttrTargetMgmtAW-2021-12-AttributeTargetManagement",
+      "method": "publishParameters",
+      "inputData": {
+        "inputs": "{{data.publishInput}}"
+      },
+      "outputData": {
+        "publishResponse": "",
+        "partialError": "{{function:handlePartialError}}"
+      },
+      "events": {
+        "success": [
+          {
+            "name": "uniformParamTable.reloadTable"
+          }
+        ],
+        "failure": [
+          {
+            "name": "uniformParamTable.reloadTable"
+          }
+        ]
+      },
+      "actionMessages": {
+        "success": [
+          {
+            "message": "publishParameterSuccess"
+          }
+        ]
+      },
+      "deps": "js/prm1ParameterViewService"
+    },
+    "refreshCompareTable": {
+      "actionType": "JSFunction",
+      "method": "refreshCompareTable",
+      "deps": "js/prm1ParameterViewService"
+    },
+    "prepareInputForPublishParameter": {
+      "actionType": "JSFunction",
+      "method": "prepareInputForPublishParameter",
+      "inputData": {
+        "parametetersTable": "{{commandContext.parametersTable}}"
+      },
+      "outputData": {
+        "publishInput": ""
+      },
+      "actionMessages": {
+        "success": [
+          {
+            "message": "publishParameterConfirmationMsg"
+          }
+        ]
+      },
+      "deps": "js/prm1ParameterViewService"
+    },
+    "prepareInputForPublishComparisonEle": {
+      "actionType": "JSFunction",
+      "method": "prepareInputForPublishComparisonEle",
+      "inputData": {
+        "context": "{{commandContext.dataProvider}}",
+        "paramCompareViewContext": "{{commandContext.paramCompareViewContext}}"
+      },
+      "outputData": {
+        "publishInput": ""
+      },
+      "actionMessages": {
+        "success": [
+          {
+            "message": "publishParameterConfirmationMsg"
+          }
+        ]
+      },
+      "deps": "js/prm1ParameterViewService"
+    }
+  },
+  "functions": {
+    "handlePartialError": {
+      "functionName": "handlePartialError",
+      "parameters": [
+        "{{data}}"
+      ]
+    }
+  },
+  "conditions": {
+    "isShowChildLinesView": {
+      "expression": "commandContext.parametersTable.parametersTableViewMode.viewModeContext === 'showChildLines'"
+    },
+    "isParameterCompareViewVisible": {
+      "expression": "ctx.sublocation.nameToken === 'prm1ParameterCompareSublocation'"
+    },
+    "isStartEditVisible": {
+      "expression": "conditions.isParameterCompareViewVisible  && !ctx['NONE']._editing && !ctx['TABLE_CONTEXT']._editing"
+    },
+    "isParamCompareEditInProgress": {
+      "expression": "conditions.isParameterCompareViewVisible  && ctx['TABLE_CONTEXT']._editing"
+    },
+    "canAddRevisionRule": {
+      "expression": "conditions.isParameterCompareViewVisible && commandContext.paramCompareViewContext.compareType === 'ProjectParamComparison' && ctx.state.params.uid"
+    },
+    "canAddProductComparison": {
+      "expression": "conditions.isParameterCompareViewVisible && commandContext.paramCompareViewContext.compareType === 'ProductParamComparison' && ctx.state.params.uid"
+    },
+    "showCmdPinToGateway": {
+      "expression": "conditions.isParameterCompareViewVisible && ctx.state.params.uid"
+    },
+    "showCmdResetFilter": {
+      "expression": "conditions.isParameterCompareViewVisible && commandContext.paramCompareViewContext && commandContext.paramCompareViewContext.resetFilter"
+    },
+    "hidePinObjectCmd": {
+      "expression": "ctx.sublocation.nameToken === 'prm1ParameterCompareSublocation'"
+    },
+    "isParamTableEmpty": {
+      "expression": "commandContext.viewModelCollection.loadedVMObjects.length == 0 || commandContext.dataProvider.viewModelCollection.loadedVMObjects.length == 0"
+    },
+    "is4GDBOM": {
+      "expression": "commandContext.context.baseSelection.uid.endsWith('AWB4GD')"
+    },
+    "prm1EnableCompareParameters": {
+      "expression": "commandContext.parametersTable.disabledCommands.compare === undefined"
+    },
+    "prm1IsParametersSelected": {
+      "expression": "commandContext.parametersTable.selectedObjects !== undefined && commandContext.parametersTable.selectedObjects.length >0"
+    },
+    "compareParametersCmdCondition": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "commandContext.context.baseSelection",
+            "$query": {
+              "$all": {
+                "$source": "modelType.typeHierarchyArray",
+                "$query": {
+                  "$in": [
+                    "Att0ParamProject",
+                    "Att0ParamGroup",
+                    "Awb0Element",
+                    "Awb0SavedBookmark"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "$source": "conditions.prm1IsParametersSelected",
+            "$query": {
+              "$eq": false
+            }
+          },
+          {
+            "$source": "conditions.is4GDBOM",
+            "$query": {
+              "$eq": false
+            }
+          },
+          {
+            "$source": "conditions.isParamTableEmpty",
+            "$query": {
+              "$eq": false
+            }
+          },
+          {
+            "$source": "conditions.isShowChildLinesView",
+            "$query": {
+              "$eq": false
+            }
+          }
+        ]
+      }
+    },
+    "isListViewSelected": {
+      "expression": "commandContext.paramCompareViewContext.ComparisonContextViewMode === 'list'"
+    },
+    "isTableViewSelected": {
+      "expression": "commandContext.paramCompareViewContext.ComparisonContextViewMode === 'table'"
+    },
+    "isComparisonContextObjSelected": {
+      "expression": "commandContext.paramCompareViewContext.selectedComparisonContextObjects.length > 0"
+    },
+    "isComparisonContextSelectedForPublish": {
+      "expression": "commandContext.paramCompareViewContext.selectedComparisonContextObjects.length === 1"
+    },
+    "isParametersSelectedForPublish": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "commandContext.paramCompareViewContext.isPublishCommandEnabled",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.prm1IsParametersSelected",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "commandContext.parametersTable.selectedObjects",
+            "$query": {
+              "$all": {
+                "$source": "levelNdx",
+                "$query": {
+                  "$gt": 0
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "messages": {
+    "pinCompareViewSuccess": {
+      "messageType": "INFO",
+      "messageText": "{{i18n.ViewPinedToGatewayMsg}}",
+      "messageTextParams": [
+        "null"
+      ]
+    },
+    "PinCompareViewFailureMessage": {
+      "messageType": "ERROR",
+      "messageText": "{{errorCode}}"
+    },
+    "publishParameterConfirmationMsg": {
+      "messageType": "WARNING",
+      "messageText": "{{i18n.publishParameterConfirmationMessage}}",
+      "navigationOptions": [
+        {
+          "option": "Cancel",
+          "text": "{{i18n.Cancel}}",
+          "action": ""
+        },
+        {
+          "option": "Ok",
+          "text": "{{i18n.Proceed}}",
+          "action": "callPublishParameters"
+        }
+      ]
+    },
+    "publishParameterSuccess": {
+      "messageType": "INFO",
+      "messageText": "{{i18n.publishParameterSuccess}}"
+    }
+  },
+  "onEvent": [
+    {
+      "eventId": "Prm1PinParameterCompareSOACall",
+      "action": "Prm1PinParameterCompareSOACall"
+    },
+    {
+      "eventId": "refreshCompareTableCall",
+      "action": "refreshCompareTable"
+    }
+  ],
+  "i18n": {
+    "AddRevisionRule": [
+      "prm1ParameterTableMessages"
+    ],
+    "ParamAdd": [
+      "prm1ParameterTableMessages"
+    ],
+    "comparisonViewTitle": [
+      "prm1ParameterTableMessages"
+    ],
+    "comparisonParamTitle": [
+      "prm1ParameterTableMessages"
+    ],
+    "PinToGatewayCmdTitle": [
+      "prm1ParameterTableMessages"
+    ],
+    "ViewPinedToGatewayMsg": [
+      "prm1ParameterTableMessages"
+    ],
+    "ResetFilterCmdTitle": [
+      "prm1ParameterTableMessages"
+    ],
+    "gatewayTileTitle": [
+      "prm1ParameterTableMessages"
+    ],
+    "AddComparisonCmd": [
+      "prm1ParameterTableMessages"
+    ],
+    "Prm1ComparisonViewCmdDesc": [
+      "prm1ParameterTableMessages"
+    ],
+    "Prm1AddComparisonInProductDesc": [
+      "prm1ParameterTableMessages"
+    ],
+    "Prm1CmdPinToGatewayDesc": [
+      "prm1ParameterTableMessages"
+    ],
+    "Prm1ResetFilterDesc": [
+      "prm1ParameterTableMessages"
+    ],
+    "RemoveComparisonCmd": [
+      "prm1ParameterTableMessages"
+    ],
+    "prm1TableView": [
+      "prm1ParameterTableMessages"
+    ],
+    "prm1ListView": [
+      "prm1ParameterTableMessages"
+    ],
+    "prm1TableViewDesc": [
+      "prm1ParameterTableMessages"
+    ],
+    "prm1ListViewDesc": [
+      "prm1ParameterTableMessages"
+    ],
+    "PublishToSource": [
+      "prm1ParameterTableMessages"
+    ],
+    "PublishToSourceDesc": [
+      "prm1ParameterTableMessages"
+    ],
+    "Proceed": [
+      "prm1ParameterTableMessages"
+    ],
+    "Cancel": [
+      "prm1ParameterTableMessages"
+    ],
+    "publishParameterConfirmationMessage": [
+      "prm1ParameterTableMessages"
+    ],
+    "publishParameterSuccess": [
+      "prm1ParameterTableMessages"
+    ]
+  }
+}

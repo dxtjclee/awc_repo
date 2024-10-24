@@ -1,0 +1,126 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-command-panel-section.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-add.directive",
+        "js/aw-form.directive",
+        "js/visible-when.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive"
+    ],
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data": {
+        "addPanelState": {
+            "initialValues": {
+                "creationType": "",
+                "sourceObjects": "",
+                "selectedTab": ""
+            },
+            "meta": {}
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "AddObjectPrimarySub",
+                "context": {}
+            },
+            "meta": {}
+        },
+        "projectState": {
+            "initialValues": {
+                "selectedProjects": [],
+                "triggerAssign": false
+            },
+            "meta": {
+                "selectedProjects": {
+                    "field": "true",
+                    "type": "OBJECT"
+                },
+                "triggerAssign": {
+                    "field": "true",
+                    "type": "BOOLEAN"
+                }
+            }
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "actions": {
+        "createObject":
+        {
+            "actionType": "JSFunction",
+            "method": "updateCreateTrigger",
+            "inputData": {
+                "triggerCreate": "{{data.triggerCreate}}",
+                "value": true
+            },
+            "outputData": {
+                "triggerCreate": "triggerCreate"
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "createRelationForPaletteOrSearch":
+        {
+            "actionType": "JSFunction",
+            "method": "updateCreateTrigger",
+            "inputData": {
+                "triggerCreate": "{{data.triggerCreate}}",
+                "value": true
+            },
+            "outputData": {
+                "triggerCreate": "triggerCreate"
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "setActiveView":{
+            "actionType": "JSFunction",
+            "method": "resetActiveView",
+            "inputData": {
+                "stateName": "{{data.activeState}}",
+                "destPanelId": "AddObjectPrimarySub"
+            },
+            "outputData": {
+                "activeState": ""
+            },
+            "deps": "js/addObjectUtils"
+        }
+    },
+    "conditions": {
+        "isNewTabAddButtonVisible":
+        {
+            "expression":"addPanelState.selectedTab.view=='NewTabPageSub' && addPanelState.creationType && !addPanelState.creationType.uid.includes('Dataset') && !addPanelState.creationType.type.includes('DatasetType') "
+        },
+        "isPaletteSearchTabAddButtonVisible":
+        {
+            "expression":"addPanelState.selectedTab.view!='NewTabPageSub' && addPanelState.sourceObjects.length>0"
+        },
+        "isActiveStateAddPanel": {
+            "expression": "data.activeState.activeView ==='AddObjectPrimarySub'"
+        }
+    },
+    "i18n": {
+        "AddTitle": [
+            "AnalysisRequestCommandPanelsMessages"
+        ]
+    }
+}

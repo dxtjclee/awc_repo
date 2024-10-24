@@ -1,0 +1,11 @@
+<aw-panel-body>
+    <aw-xrt type="INFO" vmo="ctx.selected" xrt-state="data.xrtState"></aw-xrt>
+</aw-panel-body>
+<aw-panel-footer>
+    <aw-button action="startEdit" default="false" visible-when="ctx.INFO_PANEL_CONTEXT.canEdit === true && ctx.INFO_PANEL_CONTEXT._editing !== true">
+        <aw-i18n>i18n.startEditButtonText</aw-i18n>
+    </aw-button>
+    <aw-button action="save" default="false" visible-when="ctx.INFO_PANEL_CONTEXT._editing === true">
+        <aw-i18n>i18n.save</aw-i18n>
+    </aw-button>
+</aw-panel-footer>

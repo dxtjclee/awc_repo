@@ -1,0 +1,102 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "lifecycleHooks": {
+        "onMount": "mountAction"
+    },
+    "actions":{
+        "mountAction":
+        {
+            "actionType": "JSFunction",
+            "method": "updateOptionsOnLoad",
+            "inputData":
+            {
+                "data":"{{data}}"
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "importPreview.refreshOptions"
+                    }
+                ]
+            },
+            "outputData": {
+                "allowedTypesInfo": "allowedTypesInfo"
+            },
+            "deps": "js/Arm0ShowTypeChangePanel"
+        },
+        "updateOptions":
+        {
+            "actionType": "dataProvider",
+            "method": "actionsList"
+        },
+        "handleCommandSelection":{
+            "actionType": "JSFunction",
+            "method": "handleCommandSelection",
+            "inputData":
+            {
+                "data":"{{data.eventData}}"
+            },
+            "deps": "js/Arm0ShowTypeChangePanel"
+        },
+        "changeTypeIcon":{
+            "actionType": "JSFunction",
+            "method": "changeTypeIconClickListener",
+            "inputData": {
+                "data": "{{data}}"
+
+            },
+            "deps" : "js/ImportPreview"
+        },
+        "closePopupWindow": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.actionsPopupId}}"
+            },
+            "deps": "js/popupService"
+        }
+    },
+    "data": {
+
+    },
+    "messages":
+    {
+
+    },
+    "onEvent":
+    [
+        {
+            "eventId": "importPreview.refreshOptions",
+            "action": "updateOptions"
+
+        },
+        {
+            "eventId": "requirements.handleCommandSelection",
+            "cacheEventData": true,
+            "action": "handleCommandSelection"
+        },
+        {
+            "eventId": "importPreview.closeExistingBalloonPopup",
+            "action": "closePopupWindow"
+        },
+        {
+            "eventId": "actionsList.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "changeTypeIcon"
+        }
+    ],
+    "dataProviders":
+    {
+        "actionsList":
+        {
+            "response":"{{data.allowedTypesInfo}}",
+            "selectionModelMode": "single"
+         }
+    },
+    "i18n": {
+
+    }
+}

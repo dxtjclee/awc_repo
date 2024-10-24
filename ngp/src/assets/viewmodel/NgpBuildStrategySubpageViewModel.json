@@ -1,0 +1,209 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "ports": {
+        "input": {
+            "syncObject": {},
+            "onChangeAction": "onInputChange"
+        }
+    },
+    "data": {
+        "contentPanelData": {
+            "tabs": [ {
+                "name": "{{i18n.buildStrategySubpageTitle}}",
+                "tabKey": "NgpBuildStrategyTable",
+                "input": null,
+                "selection": [],
+                "cmdObjects": [],
+                "moveCandidates":[]
+            } ]
+        },
+        "leftContentPanelData": {
+            "tabs": [ {
+                "name": "{{i18n.productScope}}",
+                "showTitle": false,
+                "tabKey": "NgpProductScopeTable",
+                "input": null,
+                "productScopeDefinition": null,
+                "selection": [],
+                "cmdObjects": [],
+                "tabNamePrefix":  "{{i18n.productScope}}"
+            } ]
+        },
+        "rightContentPanelData": {
+            "tabs": [ {
+                "name": "{{i18n.assignments}}",
+                "tabKey": "NgpAssignedPartsTable",
+                "input": null,
+                "selection": [],
+                "cmdObjects": []
+            } ]
+        }
+    },
+    "actions": {
+        "onInputChange":{
+            "actionType":"batchJob",
+            "steps":[
+                {
+                    "action":"getInitialPanelSize"
+                },
+                {
+                    "action":"setContentPanelData"
+                },
+                {
+                    "action":"setLeftContentPanelData"
+                },
+                {
+                    "action": "toggleContentPanelReload"
+                },
+                {
+                    "action": "toggleLeftContentPanelReload"
+                }
+            ]
+        },
+        "setContentPanelData": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInViewModelUsingPath",
+            "inputData": {
+                "targetObj": "{{data.contentPanelData}}",
+                "path": "tabs.0",
+                "value": {
+                    "input": "{{ports.input.syncObject}}",
+                    "selection": [],
+                    "cmdObjects": [],
+                    "moveCandidates": []
+                }
+            },
+            "outputData":{
+                "contentPanelData": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "getInitialPanelSize":{
+            "actionType":"JSFunction",
+            "method":"getPanelSizes",
+            "inputData":{
+                "splitterName": [
+                    "ngpLeftLayoutPanelSplitter",
+                    "ngpRightLayoutPanelSplitter"
+                ]
+            },
+            "outputData":{
+                "leftPanelWidth": "ngpLeftLayoutPanelSplitter.width",
+                "rightPanelWidth": "ngpRightLayoutPanelSplitter.width"
+            },
+            "deps":"js/services/ngpUiPanelSizingService"
+        },
+        "initialization": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "getInitialPanelSize"
+                },
+                {
+                    "action": "updateCtxWithLayoutPanelModes"
+                }
+            ]
+        },
+        "updateCtxWithLayoutPanelModes": {
+            "actionType": "JSFunction",
+            "method": "updateCtxWithLayoutPanelModes",
+            "inputData":{
+                "layoutNames": ["buildStrategyAssignmentsLayout", "buildStrategyProductScopeLayout"]
+            },
+            "deps": "js/services/ngpBuildStrategyService"
+        },
+        "setLeftContentPanelData": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInViewModelUsingPath",
+            "inputData":{
+                "targetObj": "{{data.leftContentPanelData}}",
+                "path": "tabs.0",
+                "value": {
+                    "name": "{{i18n.productScope}}",
+                    "showTitle": false,
+                    "input": "{{ports.input.syncObject}}",
+                    "productScopeDefinition": null
+                }
+            },
+            "outputData": {
+                "leftContentPanelData": ""
+            },
+            "deps":"js/mfeViewModelUtils"
+        },
+        "updateTabTitle": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInViewModelUsingPath",
+            "inputData": {
+                "targetObj": "{{data.leftContentPanelData}}",
+                "path": "tabs.0",
+                "value": {
+                    "name": "{{data.eventMap['ngp.updateTabTitle'].title}}"
+                }
+            },
+            "outputData": {
+                "leftContentPanelData": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "toggleContentPanelReload": {
+            "actionType": "JSFunction",
+            "method": "getToggledBoolean",
+            "inputData": {
+                "booleanToToggle": "{{data.contentPanelData.reloadSelectedTab}}"
+            },
+            "outputData": {
+                "contentPanelData.reloadSelectedTab": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "toggleLeftContentPanelReload": {
+            "actionType": "JSFunction",
+            "method": "getToggledBoolean",
+            "inputData": {
+                "booleanToToggle": "{{data.leftContentPanelData.reloadSelectedTab}}"
+            },
+            "outputData": {
+                "leftContentPanelData.reloadSelectedTab": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        }
+    },
+    "conditions": {
+        "isAssignmentsLayoutMode": {
+            "expression": {
+                "$source": "ctx.ngp.buildStrategyAssignmentsLayout",
+                "$query": {
+                    "$eq": true
+                }
+            }
+        },
+        "isProductScopeLayoutMode": {
+            "expression": {
+                "$source": "ctx.ngp.buildStrategyProductScopeLayout",
+                "$query": {
+                    "$eq": true
+                }
+            }
+        }
+    },
+    "onEvent":
+    [
+        {
+            "eventId": "ngp.updateTabTitle",
+            "action": "updateTabTitle",
+            "cacheEventData": true
+        }
+    ],
+    "lifecycleHooks": {
+        "onMount": "initialization"
+    },
+    "i18n": {
+        "buildStrategySubpageTitle": [ "NgpSubpagesMessages" ],
+        "productScope": [ "NgpBuildStrategyMessages" ],
+        "assignments": [ "NgpBuildStrategyMessages" ]
+    }
+}

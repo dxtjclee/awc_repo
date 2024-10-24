@@ -1,0 +1,72 @@
+{
+    "schemaVersion": "1.0.0",
+    "props":{
+        "panels-data":{
+            "type":"object"
+        },
+        "scope-object":{
+            "type":"object"
+        }
+    },
+    "data":{
+        "subsetPanelData":{
+            "tabs": [{
+                "name": "{{i18n.partsTabTitle}}",
+                "tabKey": "NgpPartsTable",
+                "input": null
+            },
+            {
+                "name": "{{i18n.featuresTabTitle}}",
+                "tabKey": "NgpFeaturesTable",
+                "input": null
+            }]
+        },
+        "graphicsPanelData":{
+            "tabs":[{
+                "name": "{{i18n.graphicsTabTitle}}",
+                "tabKey": "NgpGraphicsViewer",
+                "input": null
+            }]
+        }
+    },
+    "actions":{
+        "getInitialPanelSize":{
+            "actionType":"JSFunction",
+            "method":"getPanelSizes",
+            "inputData":{
+                "splitterNames":["ngpDetailedPlanningVerticalSplitter", "ngpDetailedPlanningLeftHorizontalSplitter", "ngpDetailedPlanningRightHorizontalSplitter"]
+            },
+            "outputData":{
+                "leftPanelWidth":"ngpDetailedPlanningVerticalSplitter.width",
+                "topLeftPanelHeight": "ngpDetailedPlanningLeftHorizontalSplitter.height",
+                "topRightPanelHeight":"ngpDetailedPlanningRightHorizontalSplitter.height"
+            },
+            "deps":"js/services/ngpUiPanelSizingService"
+        },
+        "updateData":{
+            "actionType":"JSFunction",
+            "method":"getValueInViewModel",
+            "inputData":{
+                "value":"{{props.scopeObject}}"
+            },
+            "outputData":{
+                "subsetPanelData.tabs.0.input":"",
+                "subsetPanelData.tabs.1.input":"",
+                "graphicsPanelData.tabs.0.input":""
+            },
+            "deps":"js/mfeViewModelUtils"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "getInitialPanelSize",
+        "onUpdate": {
+            "action":"updateData",
+            "observers":["props.scopeObject"]
+        }
+    },
+    "i18n":{
+        "partsTabTitle":["NgpDetailedPlanningMessages"],
+        "featuresTabTitle":["NgpDetailedPlanningMessages"],
+        "graphicsTabTitle":["NgpGraphicsMessages"]
+    }
+}

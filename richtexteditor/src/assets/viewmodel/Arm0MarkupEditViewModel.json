@@ -1,0 +1,298 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports":
+    [
+        "js/aw-panel-body.directive",
+        "js/aw-panel-header.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-tab-set.directive",
+        "js/aw-button.directive",
+        "js/aw-slider.directive",
+        "js/aw-property-lov-val.directive",
+        "js/visible-when.directive",
+        "js/aw-listbox.directive"
+    ],
+
+    "actions":
+    {
+        "startMarkupEdit":
+        {
+            "actionType": "JSFunction",
+            "method": "startMarkupEdit",
+            "inputData":
+            {
+                "data": "{{data}}"
+            },
+            "outputData":
+            {
+                "markup" : "markup",
+                "saveButtonText" : "saveButtonText"
+            },
+            "deps": "js/Arm0MarkupService"
+        },
+        "saveMarkupEdit":
+        {
+            "actionType": "JSFunction",
+            "method": "saveCommentEditInPanel",
+            "inputData":
+            {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0MarkupService"
+        },
+        "endMarkupEdit":
+        {
+            "actionType": "JSFunction",
+            "method": "endCommentEditInPanel",
+            "inputData":
+            {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0MarkupService"
+        },
+        "showOnPageChanged":
+        {
+            "actionType": "JSFunction",
+            "method": "showOnPageChanged",
+            "inputData":
+            {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0MarkupService"
+        },
+        "shareAsChanged":
+        {
+            "actionType": "JSFunctionAsync",
+            "method": "shareAsChanged",
+            "inputData":
+            {
+                "data": "{{data}}"
+            },
+            "events":
+            {
+                "success": [ { "name": "Arm0Markup.confirmOfficial" } ]
+            },
+            "deps": "js/Arm0MarkupService"
+        },
+        "cancelOfficial":
+        {
+            "actionType": "JSFunction",
+            "method": "cancelOfficial",
+            "inputData":
+            {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0MarkupService"
+        }
+    },
+
+    "data":
+    {
+        "tabsEditModel":
+        {
+            "isArray": "true",
+            "dbValue":
+            [
+                {
+                    "name": "{{i18n.text}}",
+                    "tabKey": "text",
+                    "selectedTab": true
+                },
+                {
+                    "name": "{{i18n.style}}",
+                    "tabKey": "style"
+                }
+            ]
+        },
+        "shareAs":
+        {
+            "displayName": "{{i18n.share}}",
+            "type": "STRING",
+            "hasLov": "true",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "public"
+        },
+        "shareAsValues":
+        {
+            "type": "STRING",
+            "dbValue":
+            [
+                {
+                    "propDisplayValue": "{{i18n.public}}",
+                    "propDisplayDescription": "{{i18n.publicTip}}",
+                    "propInternalValue": "public"
+                },
+                {
+                    "propDisplayValue": "{{i18n.official}}",
+                    "propDisplayDescription": "{{i18n.officialTip}}",
+                    "propInternalValue": "official"
+                },
+                {
+                    "propDisplayValue": "{{i18n.private}}",
+                    "propDisplayDescription": "{{i18n.privateTip}}",
+                    "propInternalValue": "private"
+                },
+                {
+                    "propDisplayValue": "{{i18n.authors}}",
+                    "propDisplayDescription": "{{i18n.authorsTip}}",
+                    "propInternalValue": "authors"
+                },
+                {
+                    "propDisplayValue": "{{i18n.users}}",
+                    "propDisplayDescription": "{{i18n.usersTip}}",
+                    "propInternalValue": "users"
+                }
+            ]
+        },
+        "shareWith": {
+            "displayName": "",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": false,
+            "dispValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "shareWithValues": [],
+        "status":
+        {
+            "displayName": "{{i18n.status}}",
+            "type": "STRING",
+            "hasLov": "true",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": ""
+        },
+        "statusValues":
+        {
+            "type": "STRING",
+            "dbValue":
+            [
+                {
+                    "propDisplayValue": "{{i18n.replied}}",
+                    "propInternalValue": "replied"
+                },
+                {
+                    "propDisplayValue": "{{i18n.resolved}}",
+                    "propInternalValue": "resolved"
+                },
+                {
+                    "propDisplayValue": "{{i18n.rejected}}",
+                    "propInternalValue": "rejected"
+                },
+                {
+                    "propDisplayValue": "{{i18n.reopened}}",
+                    "propInternalValue": "reopened"
+                }
+            ]
+        },
+        "showOnPage":
+        {
+            "displayName": "{{i18n.textShown}}",
+            "type": "STRING",
+            "hasLov": "true",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "none"
+        },
+        "showOnPageValues":
+        {
+            "type": "STRING",
+            "dbValue": [
+                {
+                    "propDisplayValue": "{{i18n.none}}",
+                    "propInternalValue": "none"
+                },
+                {
+                    "propDisplayValue": "{{i18n.firstLine}}",
+                    "propInternalValue": "first"
+                },
+                {
+                    "propDisplayValue": "{{i18n.all}}",
+                    "propInternalValue": "all"
+                }
+            ]
+        }
+    },
+
+    "messages":
+    {
+        "confirmOfficial":
+        {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.confirmOfficial}}",
+            "navigationOptions":
+            [
+                {
+                    "option": "Cancel",
+                    "text": "{{i18n.cancel}}",
+                    "action": "cancelOfficial"
+                },
+                {
+                    "option": "Set",
+                    "text": "{{i18n.set}}"
+                }
+            ]
+        }
+    },
+
+    "i18n":
+    {
+        "comments": [ "RichTextEditorCommandPanelsMessages" ],
+        "text": [ "RichTextEditorCommandPanelsMessages" ],
+        "style": [ "RichTextEditorCommandPanelsMessages" ],
+        "share": [ "RichTextEditorCommandPanelsMessages" ],
+        "save": [ "RichTextEditorCommandPanelsMessages" ],
+        "create": [ "RichTextEditorCommandPanelsMessages" ],
+        "edit": [ "RichTextEditorCommandPanelsMessages" ],
+        "reply": [ "RichTextEditorCommandPanelsMessages" ],
+        "public": [ "RichTextEditorCommandPanelsMessages" ],
+        "publicTip": [ "RichTextEditorCommandPanelsMessages" ],
+        "official": [ "RichTextEditorCommandPanelsMessages" ],
+        "officialTip": [ "RichTextEditorCommandPanelsMessages" ],
+        "private": [ "RichTextEditorCommandPanelsMessages" ],
+        "privateTip": [ "RichTextEditorCommandPanelsMessages" ],
+        "authors": [ "RichTextEditorCommandPanelsMessages" ],
+        "authorsTip": [ "RichTextEditorCommandPanelsMessages" ],
+        "users": [ "RichTextEditorCommandPanelsMessages" ],
+        "usersTip": [ "RichTextEditorCommandPanelsMessages" ],
+        "confirmOfficial": [ "RichTextEditorCommandPanelsMessages" ],
+        "cancel": [ "RequirementsCommandPanelsMessages" ],
+        "set": [ "RichTextEditorCommandPanelsMessages" ],
+        "open": [ "RichTextEditorCommandPanelsMessages" ],
+        "replied": [ "RichTextEditorCommandPanelsMessages" ],
+        "resolved": [ "RichTextEditorCommandPanelsMessages" ],
+        "rejected": [ "RichTextEditorCommandPanelsMessages" ],
+        "reopened": [ "RichTextEditorCommandPanelsMessages" ],
+        "textShown": [ "RichTextEditorCommandPanelsMessages" ],
+        "none": [ "RichTextEditorCommandPanelsMessages" ],
+        "firstLine": [ "RichTextEditorCommandPanelsMessages" ],
+        "all": [ "RichTextEditorCommandPanelsMessages" ]
+    },
+
+    "conditions":
+    { },
+
+    "onEvent":
+    [
+        {
+            "eventId": "awPanel.reveal",
+            "action": "startMarkupEdit",
+            "criteria": { "panelId": "Arm0MarkupEdit" }
+        },
+        {
+            "eventId": "awPanel.navigate",
+            "action": "endMarkupEdit",
+            "criteria": { "destPanelId": "Arm0Markup" }
+        },
+        {
+            "eventId": "Arm0MarkupEditMain.contentUnloaded",
+            "action": "endMarkupEdit"
+        },
+        {
+            "eventId": "Arm0Markup.confirmOfficial",
+            "message": "confirmOfficial"
+        }
+    ]
+}

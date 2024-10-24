@@ -1,0 +1,10 @@
+<aw-tab-set tabs="data.tabsInContext">
+  <aw-panel-body>
+        <ase1-show-exchange-items-table exist-when="conditions.isConnectionTableRowSelected && conditions.showExchangeItems" sub-panel-context="{ ...props.subPanelContext}" primary-selection="props.primarySelection" secondary-selection="props.secondarySelection"></ase1-show-exchange-items-table>
+        <ase1-show-component-exchanges-table exist-when="conditions.isConnectionTableRowSelected && conditions.showComponentExchanges" sub-panel-context="{ ...props.subPanelContext}" primary-selection="props.primarySelection" secondary-selection="props.secondarySelection"></ase1-show-component-exchanges-table>
+        <ase1-show-functional-exchanges-table exist-when="conditions.isConnectionTableRowSelected && conditions.showFunctionalExchanges" sub-panel-context="{ ...props.subPanelContext}" primary-selection="props.primarySelection" secondary-selection="props.secondarySelection"></ase1-show-functional-exchanges-table>
+        <ase1-show-interface-table exist-when="conditions.isConnectionTableRowSelected && conditions.showInterfaceAlignment" sub-panel-context="{ ...props.subPanelContext}" primary-selection="props.primarySelection" secondary-selection="props.secondarySelection"></ase1-show-interface-table>
+
+        <aw-label prop="data.selectMessage" visible-when="!conditions.isConnectionTableRowSelected"></aw-label>
+   </aw-panel-body>
+</aw-tab-set>

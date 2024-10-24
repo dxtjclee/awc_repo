@@ -1,0 +1,128 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "props": {
+        "primary-selection": {
+            "type": "object"
+        },
+        "secondary-selection": {
+            "type": "object"
+        },
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+
+    "data": {
+        "tabsInContext": [ {
+                "name": "{{i18n.exchangeItemsTab}}",
+                "tabKey": "exchangeItemsTab"
+            },
+            {
+                "name": "{{i18n.functionalExchangesTab}}",
+                "tabKey": "functionalExchangesTab",
+                "visibleWhen": {
+                    "condition": "conditions.isFunctionRevisionNotSelected"
+                }
+            },
+            {
+                "name": "{{i18n.componentExchangesTab}}",
+                "tabKey": "componentExchangesTab",
+                "visibleWhen": {
+                    "condition": "conditions.isFunctionRevisionSelected"
+                }
+            },
+            {
+                "name": "{{i18n.interfacesAlignmentTab}}",
+                "tabKey": "interfacesAlignmentTab",
+                "visibleWhen": {
+                    "condition": "conditions.isFunctionRevisionNotSelected"
+                }
+            }
+        ],
+        "selectMessage": {
+            "displayName": "",
+            "type": "STRING",
+            "isEditable": "false",
+            "dbValue": "",
+            "dispValue": "{{i18n.connectionSelectMessage}}",
+            "labelPosition": "NO_PROPERTY_LABEL"
+        },
+        "functionExchangeSelected": false
+    },
+
+    "actions": {
+        "updateTableForPrimarySelection": {
+            "actionType": "JSFunction",
+            "method": "updateTableForPrimarySelection",
+            "inputData": {
+                "input": "{{props.primarySelection.selected[0]}}",
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "functionExchangeSelected": ""
+            },
+            "deps": "js/Ase1InterfacesUtilService"
+        }
+    },
+
+    "dataProviders": {},
+
+    "columnProviders": {},
+
+    "grids": {},
+
+    "dataParseDefinitions": {},
+    "onEvent": [
+
+    ],
+
+    "lifecycleHooks": {
+        "onUpdate": [ {
+            "action": "updateTableForPrimarySelection",
+            "observers": [ "props.primarySelection.selected" ]
+        } ]
+    },
+
+    "i18n": {
+        "exchangeItemsTab": [
+            "SystemModelerConstants"
+        ],
+        "functionalExchangesTab": [
+            "SystemModelerConstants"
+        ],
+        "componentExchangesTab": [
+            "SystemModelerConstants"
+        ],
+        "interfacesAlignmentTab": [
+            "SystemModelerConstants"
+        ],
+        "connectionSelectMessage": [
+            "SystemModelerMessages"
+        ]
+    },
+    "messages": {},
+    "conditions": {
+        "showExchangeItems": {
+            "expression": "data.selectedTab.tabKey === 'exchangeItemsTab'"
+        },
+        "showFunctionalExchanges": {
+            "expression": "data.selectedTab.tabKey === 'functionalExchangesTab'"
+        },
+        "showComponentExchanges": {
+            "expression": "data.selectedTab.tabKey === 'componentExchangesTab'"
+        },
+        "showInterfaceAlignment": {
+            "expression": "data.selectedTab.tabKey === 'interfacesAlignmentTab'"
+        },
+        "isFunctionRevisionNotSelected": {
+            "expression": "data.functionExchangeSelected !== true && subPanelContext.selected.modelType.typeHierarchyArray.indexOf('Ase0FunctionalElement') == -1"
+        },
+        "isFunctionRevisionSelected": {
+            "expression": "data.functionExchangeSelected === true || subPanelContext.selected.modelType.typeHierarchyArray.indexOf('Ase0FunctionalElement') > -1"
+        },
+        "isConnectionTableRowSelected": {
+            "expression": "props.primarySelection.selected && props.primarySelection.selected.length > 0"
+        }
+    }
+}

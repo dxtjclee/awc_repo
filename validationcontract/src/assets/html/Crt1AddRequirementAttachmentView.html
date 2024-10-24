@@ -1,0 +1,25 @@
+<aw-command-panel caption="i18n.attachFile" context="subPanelContext">
+    <aw-panel-body>
+        <aw-panel-section caption="{{i18n.to}}" collapsed="false">
+            <div class="sw-row aw-vrcontent-targetSectionRow">
+                <aw-scrollpanel>
+                    <aw-list dataprovider="data.dataProviders.attachTargets">
+                        <aw-default-cell vmo="item"></aw-default-cell>
+                    </aw-list>
+                </aw-scrollpanel>
+            </div>
+        </aw-panel-section>
+        <aw-add target-object="data.tableSelection.objects[0] ? data.tableSelection.objects[0] : data.tableSelection[0]" relations="" include-types="Dataset" type-filter="Dataset" visible-tabs="new,palette,search"
+            add-panel-state="fields.addPanelState"
+            sub-panel-context="{ ...subPanelContext, triggerCreate: data.triggerCreate ,showDataSetUploadPanel:true}"
+            active-state="data.activeState" xrt-state="data.xrtState" edit-handler="editHandlers.addPanelEditHandler">
+        </aw-add>
+    </aw-panel-body>
+    <aw-panel-footer visible-when="data.activeView!='AssignProjectSub'&&data.activeView!='addReferenceSub'">
+        <!-- panel-footer button for Palette and Search tab -->
+        <aw-button default="true" action="createRelationForPaletteOrSearch"
+            visible-when="conditions.isPaletteSearchTabAddButtonVisible">
+            <aw-i18n>i18n.ADD_BUTTON_TITLE</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

@@ -1,0 +1,59 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "sharedData": {
+            "initialValues": {
+                "selectedPlans": []
+            },
+            "meta": {
+                "selectedPlans": {
+                    "field": "true",
+                    "type": "OBJECT"
+                }
+            }
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "Pgp0ComparePlanSub",
+                "prePanelId": "Pgp0ComparePlanSub",
+                "context": {}
+            },
+            "meta": {
+                "activeView": {
+                    "field": "true",
+                    "type": "STRING"
+                },
+                "prePanelId": {
+                    "field": "true",
+                    "type": "STRING"
+                },
+                "context": {
+                    "field": "true",
+                    "type": "OBJECT"
+                }
+            }
+        }
+    },
+    "actions": {
+        "setActiveView": {
+            "actionType": "JSFunction",
+            "method": "resetActiveView",
+            "inputData": {
+                "stateName": "{{data.activeState}}",
+                "destPanelId": "Pgp0ComparePlanSub"
+            },
+            "outputData": {
+                "activeState": ""
+            },
+            "deps": "js/addObjectUtils"
+        }
+    },
+    "i18n": {
+        "Pgp0ComparePlans": [
+            "ProgramPlanningCommandPanelsMessages"
+        ],
+        "addButtonCommandTitle": [
+            "ProgramPlanningCommandPanelsMessages"
+        ]
+    }
+}

@@ -1,0 +1,83 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "lifecycleHooks": {
+        "onInit": "initializePropertiesSWA",
+        "onUpdate": {
+            "action": "initializePropertiesSWA",
+            "observers": [
+                "props.subPanelContext.context.searchState.propertiesSWA"
+            ]
+        }
+    },
+    "props":{
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data":{
+        "headerProperties": [
+            {
+                "propertyName": "ID"
+            },
+            {
+                "propertyName": "IRDI"
+            },
+            {
+                "propertyName": "owning_user"
+            },
+            {
+                "propertyName": "dateModified"
+            },
+            {
+                "propertyName": "Status"
+            },
+            {
+                "propertyName": "object_type"
+            }
+        ],
+        "clsadminPropCommands": "clsadmin_propCommands"
+    },
+    "actions":{
+        "initializePropertiesSWA":{
+            "actionType": "JSFunction",
+            "method": "initializeSWA",
+            "inputData": {
+                "subPanelContext": "{{subPanelContext.context.searchState}}",
+                "subLocationName": "Properties"
+            },
+            "outputData": {
+                "currentSecData": "currentSecData",
+                "dataTypeMetric": "dataTypeMetric",
+                "dataTypeNonMetric": "dataTypeNonMetric",
+                "keyLOVTreeDataMetric": "keyLOVTreeDataMetric",
+                "keyLOVTreeDataNonMetric": "keyLOVTreeDataNonMetric",
+                "multiSiteData": "multiSiteData",
+                "referenceAttrData": "referenceAttrData",
+                "isAvailable": "isAvailable"
+            },
+            "deps":"js/classifyAdminService"
+        }
+    },
+    "conditions":{
+        "showKeyLovMetric": {
+            "expression": "props.subPanelContext.context.searchState.value.propertiesSWA.keyLOVTreeDataMetric"
+        },
+        "showKeyLovNonMetric": {
+            "expression": "props.subPanelContext.context.searchState.value.propertiesSWA.keyLOVTreeDataNonMetric"
+        },
+        "isSummaryHeaderHidden": {
+            "expression": "!(ctx.state && ctx.state.urlAttributes && ctx.state.urlAttributes.flexibleLayouts !== undefined)"
+        }
+    },
+    "i18n": {
+        "dataType":           [ "ClassificationAdminMessages" ],
+        "entries":            [ "ClassificationAdminMessages" ],
+        "keylovTitle":        [ "ClassificationAdminMessages" ],
+        "metric":             [ "ClassificationAdminMessages" ],
+        "multiSite":          [ "ClassificationAdminMessages" ],
+        "nonMetric":          [ "ClassificationAdminMessages" ],
+        "propertiesTitle":    [ "ClassificationAdminMessages" ],
+        "referenceAttribute": [ "ClassificationAdminMessages" ]
+    }
+}

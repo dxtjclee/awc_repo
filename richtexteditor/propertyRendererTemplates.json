@@ -1,0 +1,134 @@
+{
+  "qualityCorrectness_rendering_prop": {
+    "grids": [],
+    "columns": [
+      "qualityCorrectness"
+    ],
+    "template": "",
+    "templateUrl": "",
+    "renderFunction": "generateCorrectnessRendererFn",
+    "deps": "propRenderTemplates/generateQualityStatusProperty",
+    "dependentServices": []
+  },
+  "awb0IsSuspect_rendering_prop": {
+    "grids": [
+      "showReqSummaryTable",
+      "showReqDashboardTable"
+    ],
+    "columns": [
+      "awb0IsSuspect",
+      "REF(arm0SourceElement,Awb0Element).awb0IsSuspect"
+    ],
+    "template": "",
+    "templateUrl": "",
+    "renderFunction": "propertyIconRenderer",
+    "deps": "propRenderTemplates/Arm0PropertyIconRenderer",
+    "dependentServices": []
+  },
+  "awb0BodyText_rendering_prop": {
+    "grids": [
+      "showReqSummaryTable"
+    ],
+    "columns": [
+      "REF(arm0UnderlyingObject,SpecElementRevision).body_cleartext"
+    ],
+    "template": "",
+    "templateUrl": "",
+    "renderFunction": "bodyClearTextPropertyIconRenderer",
+    "deps": "propRenderTemplates/Arm0PropertyIconRenderer",
+    "dependentServices": []
+  },
+  "awb0ReleaseStatus_rendering_prop": {
+    "grids": [
+      "showReqSummaryTable",
+      "showReqDashboardTable"
+    ],
+    "columns": [
+      "REF(arm0UnderlyingObject,ItemRevision).release_status_list",
+      "REF(awb0UnderlyingObject,WorkspaceObject).release_status_list"
+    ],
+    "template": "",
+    "templateUrl": "",
+    "renderFunction": "generateRmReleaseStatusIconRendererFn",
+    "deps": "propRenderTemplates/generateRmReleaseStatusProperty",
+    "dependentServices": []
+  },
+  "awb0ArchetypeRevName_rendering_prop": {
+    "grids": [
+      "showReqSummaryTable",
+      "showReqDashboardTable"
+    ],
+    "columns": [
+      "awb0ArchetypeRevName",
+      "REF(arm0SourceElement,Awb0ConditionalElement).awb0ArchetypeRevName"
+    ],
+    "template": "",
+    "templateUrl": "",
+    "renderFunction": "generateRmArchetypeRevNameRendererFn",
+    "deps": "propRenderTemplates/generateRmRevisionNameProperty",
+    "dependentServices": []
+  },
+  "arm0CommentsCount_rendering_prop": {
+    "grids": [
+      "showReqSummaryTable"
+    ],
+    "columns": [
+      "arm0CommentsCount"
+    ],
+    "template": "",
+    "templateUrl": "",
+    "renderFunction": "generateRmCommentsCountRendererFn",
+    "deps": "propRenderTemplates/generateCommentsCountProperty",
+    "dependentServices": []
+  },
+  "arm0AttachmentCount_rendering_prop": {
+    "grids": [
+      "showReqSummaryTable"
+    ],
+    "columns": [
+      "arm0AttachmentCount"
+    ],
+    "template": "",
+    "templateUrl": "",
+    "renderFunction": "propertyIconRenderer",
+    "deps": "propRenderTemplates/Arm0PropertyIconRenderer",
+    "dependentServices": []
+  },
+  "arm0ParameterCount_rendering_prop": {
+    "grids": [
+      "showReqSummaryTable"
+    ],
+    "columns": [
+      "arm0ParameterCount"
+    ],
+    "template": "",
+    "templateUrl": "",
+    "renderFunction": "propertyIconRenderer",
+    "deps": "propRenderTemplates/Arm0PropertyIconRenderer",
+    "dependentServices": []
+  },
+  "arm0TracelinkCount_rendering_prop": {
+    "grids": [
+      "showReqSummaryTable"
+    ],
+    "columns": [
+      "arm0TracelinkCount"
+    ],
+    "template": "",
+    "templateUrl": "",
+    "renderFunction": "propertyIconRenderer",
+    "deps": "propRenderTemplates/Arm0PropertyIconRenderer",
+    "dependentServices": []
+  },
+  "compare_object_release_status_fn": {
+    "grids": [],
+    "columns": [
+      "object_release_status"
+    ],
+    "template": "",
+    "templateUrl": "",
+    "renderFunction": "compareObjectReleaseStatusRendererFn",
+    "deps": "propRenderTemplates/generateRmReleaseStatusProperty",
+    "dependentServices": []
+  }
+}

@@ -1,0 +1,40 @@
+<aw-panel>
+    <aw-row height="50% flex-grow">
+        <aw-column width="50%">
+            <aw-panel-section caption="i18n.testCasePieChartTitle" collapsed="false">
+                <div exist-when="conditions.noTestCaseCoverageDataForPie">
+                    <aw-i18n>i18n.noRequestsToDisplayChart</aw-i18n>
+                </div>
+                <aw-row height="19f">
+                    <aw-chart exist-when="!conditions.noTestCaseCoverageDataForPie" chart-provider="data.chartProviders.testCasePieChartProvider" chart-points="data.pieChartForTestCoverage_chartPoints"></aw-chart>
+                </aw-row>
+            </aw-panel-section>
+        </aw-column>
+        <aw-splitter direction="VERTICAL"></aw-splitter>
+        <aw-column width="50%">
+            <aw-panel-section caption="i18n.testCaseBarChartTitle" collapsed="false">
+                <div exist-when="conditions.noTestCaseCoverageDataForBar">
+                    <aw-i18n>i18n.noRequestsToDisplayChart</aw-i18n>
+                </div>
+                <aw-row height="19f">
+                    <aw-chart exist-when="!conditions.noTestCaseCoverageDataForBar" chart-provider="data.chartProviders.testCaseBarChartProvider" chart-points="data.barChartForTestCoverage_chartPoints"></aw-chart>
+                </aw-row>
+            </aw-panel-section>
+        </aw-column>
+    </aw-row>
+    <aw-splitter direction="HORIZONTAL"></aw-splitter>
+    <aw-row height="50%">
+        <aw-panel-section caption="i18n.testCaseTableTitle" collapsed="false" class="aw-validationcontracts-section">
+            <aw-column>
+                <div class="aw-xrt-objectSetToolbar">
+                    <div class="aw-xrt-objectSetCommandPanel aw-toolbar-layout aw-toolbar-horizontal" aw-transclude>
+                        <aw-command-bar anchor="aw_ExpandCollapseCommandbar" class="aw-commands-commandBarHorizontalLeft" alignment="HORIZONTAL" context="{data:data, crt1ExpandCollapse:fields.crt1ExpandCollapse}"></aw-command-bar>
+                        <aw-command-bar anchor="aw_addTestCaseCommandbar" class="aw-commands-commandBarHorizontalRight" alignment="HORIZONTAL" context="{data:data, vrTestCaseTableSelection:fields.vrTestCaseTableSelection}"></aw-command-bar>
+                    </div>
+                </div>
+                <aw-splm-table gridid="testCaseCoverageTable" use-tree="true" show-decorators="true" show-context-menu="true"></aw-splm-table>
+            </aw-column>
+        </aw-panel-section>
+    </aw-row>
+
+</aw-panel>

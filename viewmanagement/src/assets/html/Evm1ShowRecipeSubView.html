@@ -1,0 +1,15 @@
+<aw-panel-body>
+    <aw-panel-section visible-when="data.totalFound > 0">
+        <aw-list-filter prop="data.filterBox" dataprovider="data.dataProviders.dataProviderRecipeList">
+            <aw-default-cell vmo="item"></aw-default-cell>
+        </aw-list-filter>
+    </aw-panel-section>
+    <aw-panel-section visible-when="conditions.noResultsFound">
+        <aw-i18n>i18n.NoResults</aw-i18n>
+    </aw-panel-section>
+</aw-panel-body>
+<aw-panel-footer visible-when="!conditions.noResultsFound">
+    <aw-button action="updateRecipeSelectionState" visible-when="conditions.isRecipeSelected">
+        <aw-i18n>i18n.execute</aw-i18n>
+    </aw-button>
+</aw-panel-footer>

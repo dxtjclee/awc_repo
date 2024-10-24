@@ -1,0 +1,53 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+    ],
+    "actions":{
+
+        "handleOkAction":{
+            "actionType": "JSFunction",
+            "method": "createTableWithDimension",
+            "inputData": {
+                "data": "{{data}}",
+                "engrTable": "{{subPanelContext.engrTable}}"
+            },
+            "deps": "js/Att1ParameterWidePanelService"
+        },
+        "handleCancleAction":{
+            "actionType": "JSFunction",
+            "method": "hidePopupPanel",
+            "inputData": {
+                "parametersTable": "{{subPanelContext.parametersTable}}"
+            },
+            "deps": "js/Att1ParameterWidePanelService"
+        }
+    },
+    "data": {
+        "NoOfRows": {
+            "displayName": "{{i18n.noOfRows}}",
+            "type": "INTEGER",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "",
+            "dispValue": ""
+        },
+        "NoOfCols": {
+            "displayName": "{{i18n.noOfCols}}",
+            "type": "INTEGER",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "",
+            "dispValue": ""
+        }
+    },
+    "onEvent":
+    [
+    ],
+    "i18n": {
+        "noOfRows": ["Att1Messages"],
+        "noOfCols": ["Att1Messages"],
+        "ok": ["Att1Messages"],
+        "cancel": ["Att1Messages"],
+        "tableDimensions":["Att1Messages"]
+    }
+}

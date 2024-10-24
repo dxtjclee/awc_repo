@@ -1,0 +1,26 @@
+<aw-balloon-popup-panel>
+    <aw-panel>
+        <div class="aw-engrtable-tooltip" context="{engrTable:subPanelContext.engrTable, openedObject:subPanelContext.openedObject}">
+            <div class="sw-row">
+                <span class="aw-engrtable-textboxSpan" visible-when="subPanelContext.cellTooltipInfo.index === 'Measurement'">
+                    <aw-textbox prop="data.Goal"></aw-textbox>
+                </span>
+                <aw-textbox prop="data.Min"></aw-textbox>
+                <aw-textbox prop="data.Max"></aw-textbox>
+
+                <div class="aw-engrtable-tooltipIcon aw-xrt-thumbnailImagePanel" visible-when="data.isTooltipDirty === false && ( subPanelContext.openedObject.props.is_modifiable.dbValues[0] === '1' || subPanelContext.parametersTable.selectedObjects[0].props.is_modifiable.dbValues[0] === '1') && subPanelContext.canShowEditCommand===true">
+                    <span class="aw-ImageSpan"  aw-click="actions.startEditOnGMMPopup" tabindex="0">
+                        <aw-image class="aw-base-icon" source="data.editImagePath" is-icon="data.isIcon"></aw-image>
+                    </span>
+                </div>
+
+                <div class="aw-engrtable-tooltipIcon aw-xrt-thumbnailImagePanel" visible-when="data.isTooltipDirty === true && (subPanelContext.openedObject.props.is_modifiable.dbValues[0] === '1' || subPanelContext.parametersTable.selectedObjects[0].props.is_modifiable.dbValues[0] === '1')">
+                    <span class="aw-ImageSpan"  aw-click="actions.saveGMMPopup" tabindex="0">
+                        <aw-image class="aw-base-icon" source="data.saveImagePath" is-icon="data.isIcon"></aw-image>
+                    </span>
+                </div>
+
+            </div>
+        </div>
+    </aw-panel>
+</aw-balloon-popup-panel>

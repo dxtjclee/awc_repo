@@ -1,0 +1,472 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "initBatchAction": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "initSearchState"
+                },
+                {
+                    "action": "doMeasurementsGridDataProvider"
+                }
+            ]
+        },
+        "initSearchState": {
+            "actionType": "JSFunction",
+            "method": "initSearchState",
+            "inputData": {
+                "searchState": "{{props.subPanelContext.context.searchState}}"
+            },
+            "deps": "js/Dpv1DpvMeasurementsService"
+        },
+        "clearSearchState": {
+            "actionType": "JSFunction",
+            "method": "clearSearchState",
+            "inputData": {
+                "searchState": "{{props.subPanelContext.context.searchState}}"
+            },
+            "deps": "js/Dpv1DpvMeasurementsService"
+        },
+        "loadMeasurementData":{
+            "actionType": "JSFunctionAsync",
+            "method": "loadMeasurementData",
+            "inputData": {
+                "plantId":"{{ctx.locationContext.modelObject.props.awb0ArchetypeId.uiValues[0]}}",
+                "routineId":"{{props.subPanelContext.context.searchState.routineId}}",
+                "fromDate": "{{props.subPanelContext.context.searchState.fromDate}}",
+                "toDate":"{{props.subPanelContext.context.searchState.toDate}}",
+                "jsn":"{{props.subPanelContext.context.searchState.jsn}}",
+                "defaultTitle": "{{i18n.measurementsTable}}"
+            },
+            "dataParsers": [
+                {
+                    "id": "myDPVTableDataParser",
+                    "responseObjs": "dpvEvents"
+                }
+            ],
+            "outputData": {
+                "totalFound ": "totalFound",
+                "dpvEvents": "{{function:filterRowsWithSort}}",
+                "measTitle": "measTitle"
+            },
+            "deps": "js/Dpv1DpvMeasurementsService"
+        },
+        "refreshMeasTable":{
+            "actionType": "JSFunction",
+            "method": "refreshMeasTable",
+            "deps": "js/Dpv1DpvMeasurementsService"
+        },
+        "activateRow": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "activateEvents"
+                },
+                {
+                    "action": "refreshMeasTable"
+                }
+            ]
+        },
+        "deactivateRow": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "deactivateEvents"
+                },
+                {
+                    "action": "refreshMeasTable"
+                }
+            ]
+        },
+        "activateEvents": {
+            "actionType": "JSFunction",
+            "method": "activateDeactiveEvents",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.measurementsDataProvider}}",
+                "flagActive": true
+            },
+            "deps": "js/Dpv1DpvMeasurementsService",
+            "events": {
+                "success": [
+                            {
+                                "name": "measurementsDataProvider.modelObjectsUpdated"
+                            } 
+                        ]
+                }
+        },
+        "deactivateEvents": {
+            "actionType": "JSFunction",
+            "method": "activateDeactiveEvents",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.measurementsDataProvider}}",
+                "flagDeactive": false
+            },
+            "deps": "js/Dpv1DpvMeasurementsService",
+            "events": {
+                "success": [
+                            {
+                                "name": "measurementsDataProvider.modelObjectsUpdated"
+                            } 
+                        ]
+                }
+        },
+        "doMeasurementsGridDataProvider": {
+            "actionType": "dataProvider",
+            "method": "measurementsDataProvider"
+        }      
+    },
+    "dataProviders": {
+        "measurementsDataProvider": {
+            "action": "loadMeasurementData",
+            "selectionModelMode": "multiple",
+            "response": "{{data.dpvEvents}}",
+            "totalFound": "{{data.totalFound}}"
+        }
+    },
+    "columnProviders": {
+        "measurementsColumnProvider": {
+           "frozenColumnIndex": -1,
+           "headerHeight": "LARGE",
+           "columns": [
+            {
+                "name": "active",
+                "displayName": "Active",
+                "typeName": "String", 
+                "minWidth": 60,
+                "width": 60,
+                "enableColumnMenu": false
+            },
+            {
+                "name": "buildLabel",
+                "displayName": "Build label",
+                "typeName": "String", 
+                "minWidth": 80,
+                "width": 80,
+                "enableColumnMenu": false
+            },
+            {
+                "name": "eventType",
+                "displayName": "Event type",
+                "typeName": "String", 
+                "maxWidth": 300,
+                "minWidth": 80,
+                "width": 80,
+                "enableColumnMenu": true
+            },
+            {
+                "name": "eventDatetime",
+                "displayName": "Event date and time",
+                "typeName": "String", 
+                "minWidth": 100,
+                "width": 125,
+                "enableColumnMenu": true
+            },
+            {
+                "name": "insertionDateTime",
+                "displayName": "Insertion date and time",
+                "typeName": "String", 
+                "minWidth": 80,
+                "width": 80,
+                "enableColumnMenu": true
+            },
+            {
+                "name": "vehicleProgram",
+                "displayName": "Vehicle program",
+                "typeName": "String", 
+                "minWidth": 100,
+                "width": 100,
+                "enableColumnMenu": false
+            },
+            {
+                "name": "partName",
+                "displayName": "Part name",
+                "typeName": "String", 
+                "minWidth": 80,
+                "width": 80,
+                "enableColumnMenu": false
+            },
+            {
+                "name": "routineId",
+                "displayName": "Routine ID",
+                "typeName": "String", 
+                "minWidth": 70,
+                "width": 70,
+                "enableColumnMenu": false
+            },
+            {
+                "name": "routineRev",
+                "displayName": "Routine revision",
+                "typeName": "String", 
+                "minWidth": 110,
+                "width": 110,
+                "enableColumnMenu": false
+            },
+            {
+                "name": "deviceType",
+                "displayName": "Device type",
+                "typeName": "String", 
+                "minWidth": 80,
+                "width": 80,
+                "enableColumnMenu": false
+            },
+            {
+                "name": "phaseName",
+                "displayName": "Phase name",
+                "typeName": "String", 
+                "minWidth": 100,
+                "width": 100,
+                "enableColumnMenu": false
+            },
+            {
+                "name": "device",
+                "displayName": "Device",
+                "typeName": "String", 
+                "minWidth": 80,
+                "width": 80,
+                "enableColumnMenu": false
+            },
+            {
+                "name": "plantId",
+                "displayName": "Plant ID",
+                "typeName": "String", 
+                "minWidth": 70,
+                "width": 70,
+                "enableColumnMenu": false
+            },
+            {
+                "name": "shiftNumber",
+                "displayName": "Shift number",
+                "typeName": "String", 
+                "minWidth": 80,
+                "width": 80,
+                "enableColumnMenu": false
+            },
+            {
+                "name": "eventSysId",
+                "displayName": "Event sys ID",
+                "typeName": "String", 
+                "minWidth": 100,
+                "width": 100,
+                "enableColumnMenu": false
+            },
+            {
+                "name": "utcTime",
+                "displayName": "UTC time",
+                "typeName": "String", 
+                "minWidth": 80,
+                "width": 80,
+                "enableColumnMenu": false
+            },
+            {
+                "name": "shiftDay",
+                "displayName": "Shift day",
+                "typeName": "String", 
+                "minWidth": 80,
+                "width": 80,
+                "enableColumnMenu": false
+            },
+            {
+                "name": "hiLow",
+                "displayName": "High Low",
+                "typeName": "String", 
+                "minWidth": 80,
+                "width": 80,
+                "enableColumnMenu": false
+            }
+            ]
+        }
+    },
+    "grids": {
+        "measurementsTable": {
+            "dataProvider": "measurementsDataProvider",
+            "columnProvider": "measurementsColumnProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "enablePinning": true,
+                "enableSorting": true
+            }
+        }
+    },
+    "dataParseDefinitions": {
+        "myDPVTableDataParser": {
+            "identifier": "{{response.clientId}}",
+            "type": "",
+            "props": {
+                "active": {
+                    "name": "active",
+                    "displayName": "active",
+                    "value": "{{response.active}}",
+                    "displayValue": "{{response.active}}",
+                    "type": "String"
+                },
+                "buildLabel": {
+                    "name": "buildLabel",
+                    "displayName": "buildLabel",
+                    "value": "{{response.buildLabel}}",
+                    "displayValue": "{{response.buildLabel}}",
+                    "type": "String"
+                },
+                "eventType": {
+                    "name": "eventType",
+                    "displayName": "eventType",
+                    "value": "{{response.eventType}}",
+                    "displayValue": "{{response.eventType}}",
+                    "type": "String"
+                },
+                "eventDatetime": {
+                    "name": "eventDatetime",
+                    "displayName": "eventDatetime",
+                    "value": "{{response.eventDatetime}}",
+                    "displayValue": "{{response.eventDatetime}}",
+                    "type": "String"
+                },
+                "insertionDateTime": {
+                    "name": "insertionDateTime",
+                    "displayName": "insertionDateTime",
+                    "value": "{{response.insertionDateTime}}",
+                    "displayValue": "{{response.insertionDateTime}}",
+                    "type": "String"
+                },
+                "vehicleProgram": {
+                    "name": "vehicleProgram",
+                    "displayName": "vehicleProgram",
+                    "value": "{{response.vehicleProgram}}",
+                    "displayValue": "{{response.vehicleProgram}}",
+                    "type": "String"
+                },
+                "partName": {
+                    "name": "partName",
+                    "displayName": "partName",
+                    "value": "{{response.partName}}",
+                    "displayValue": "{{response.partName}}",
+                    "type": "String"
+                },
+                "routineId": {
+                    "name": "routineId",
+                    "displayName": "routineId",
+                    "value": "{{response.routineId}}",
+                    "displayValue": "{{response.routineId}}",
+                    "type": "String"
+                },
+                "routineRev": {
+                    "name": "routineRev",
+                    "displayName": "routineRev",
+                    "value": "{{response.routineRev}}",
+                    "displayValue": "{{response.routineRev}}",
+                    "type": "String"
+                },
+                "deviceType": {
+                    "name": "deviceType",
+                    "displayName": "deviceType",
+                    "value": "{{response.deviceType}}",
+                    "displayValue": "{{response.deviceType}}",
+                    "type": "String"
+                },
+                "phaseName": {
+                    "name": "phaseName",
+                    "displayName": "phaseName",
+                    "value": "{{response.phaseName}}",
+                    "displayValue": "{{response.phaseName}}",
+                    "type": "String"
+                },
+                "device": {
+                    "name": "device",
+                    "displayName": "device",
+                    "value": "{{response.device}}",
+                    "displayValue": "{{response.device}}",
+                    "type": "String"
+                },
+                "plantId": {
+                    "name": "plantId",
+                    "displayName": "plantId",
+                    "value": "{{response.plantId}}",
+                    "displayValue": "{{response.plantId}}",
+                    "type": "String"
+                },
+                "shiftNumber": {
+                    "name": "shiftNumber",
+                    "displayName": "shiftNumber",
+                    "value": "{{response.shiftNumber}}",
+                    "displayValue": "{{response.shiftNumber}}",
+                    "type": "String"
+                },
+                "eventSysId": {
+                    "name": "eventSysId",
+                    "displayName": "eventSysId",
+                    "value": "{{response.eventSysId}}",
+                    "displayValue": "{{response.eventSysId}}",
+                    "type": "String"
+                },
+                "utcTime": {
+                    "name": "utcTime",
+                    "displayName": "utcTime",
+                    "value": "{{response.utcTime}}",
+                    "displayValue": "{{response.utcTime}}",
+                    "type": "String"
+                },
+                "shiftDay": {
+                    "name": "shiftDay",
+                    "displayName": "shiftDay",
+                    "value": "{{response.shiftDay}}",
+                    "displayValue": "{{response.shiftDay}}",
+                    "type": "String"
+                },
+                "hiLow": {
+                    "name": "hiLow",
+                    "displayName": "hiLow",
+                    "value": "{{response.hiLow}}",
+                    "displayValue": "{{response.hiLow}}",
+                    "type": "String"
+                }
+            }
+        }
+    },
+    "data": {
+        "measTitle": "{{i18n.measurementsTable}}"
+    },
+    "functions":{
+        "getDateString_fromDate": {
+            "functionName": "getDateString",
+            "parameters": [
+                "{{data.fromDate.dateApi.dateObject}}"
+            ]
+        },
+        "getDateString_toDate": {
+            "functionName": "getDateString",
+            "parameters": [
+                "{{data.toDate.dateApi.dateObject}}"
+            ]
+        },
+        "filterRowsWithSort": {
+            "functionName": "filterRowsWithSort",
+            "parameters": [
+                "{{data.columnProviders.measurementsColumnProvider.sortCriteria}}"
+            ]
+        }
+    },    
+    "conditions":{
+        "requireDatesEntered":{
+            "expression":"!data.fromDate.uiValue && !data.toDate.uiValue"
+        }
+    },
+    "i18n":{
+        "measurementsTable": [ "DpvMessages"]
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "measurementsTable.activateRow",
+            "action": "activateRow"
+        },
+        {
+            "eventId": "measurementsTable.deactivateRow",
+            "action": "deactivateRow"
+        }
+    ],
+    "lifecycleHooks": {
+        "onMount": "initBatchAction",
+        "onUnmount": "clearSearchState"
+    }
+}

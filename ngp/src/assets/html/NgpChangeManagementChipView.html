@@ -1,0 +1,9 @@
+<div class="aw-ngp-mcnIndication" exist-when="conditions.isScopeAnActivityObject">
+    <div exist-when="conditions.scopeHasActiveMcn" extended-tooltip="MfeGenericTooltip" extended-tooltip-context="data.activeMcnTooltipData">
+        <aw-icon-button command="data.activeMcnIconCmd" class="aw-ngp-activeMcnIndication"></aw-icon-button>
+    </div>
+    <div exist-when="!conditions.scopeHasActiveMcn" extended-tooltip="MfeGenericTooltip" extended-tooltip-context="data.nonActiveMcnTooltipData">
+        <aw-icon-button command="data.notTrackedByMcnIconCmd" class="aw-ngp-notTrackedIndication"></aw-icon-button>
+        <aw-popup options="actions.displayCreateMcnPopup.options"></aw-popup>
+    </div>
+</div>

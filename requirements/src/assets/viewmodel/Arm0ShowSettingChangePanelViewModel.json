@@ -1,0 +1,174 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+
+    "lifecycleHooks": {
+        "onMount": "mountAction"
+    },
+
+    "actions":{
+        "mountAction":
+        {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData":
+            {
+                 "events":
+                 [
+                     {
+                         "name": "importPreview.refreshOptions"
+                     }
+                 ]
+            }
+        },
+        "updateOptions":
+        {
+            "actionType": "dataProvider",
+            "method": "actionsList"
+        },
+        "handleCommandSelection":{
+            "actionType": "JSFunction",
+            "method": "handleCommandSelection",
+            "inputData":
+            {
+                "data":"{{data.eventData}}"
+            },
+            "deps": "js/Arm0ShowSettingChangePanel"
+        },
+        "changeSettingIcon":{
+            "actionType": "JSFunction",
+            "method": "selectActionClickListener",
+            "inputData": {
+                "data": "{{data}}"
+
+            },
+            "deps" : "js/ImportPreview"
+        },
+
+        "updateSetting": {
+            "actionType": "JSFunction",
+            "method": "changeSettingOfElement",
+            "inputData": {
+                "selectedRow": "{{data.eventData}}"
+            },
+            "deps": "js/Arm0ImportPreviewJsonHandlerService"
+        },
+        "getSetting": {
+            "actionType": "JSFunction",
+            "method": "getSetting",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "actionItems.dbValue": ""
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "actionsList.selectionChangeEvent"
+                    }
+                ]
+            },
+            "deps": "js/Arm0ImportPreviewJsonHandlerService"
+        },
+        "closeSettingChangePopupWindow": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.actionsPopupId}}"
+            },
+            "deps": "js/popupService"
+        }
+    },
+    "data": {
+        "actionItems":{
+            "isArray": "true",
+                "dbValue": [ {
+                        "displayName": "{{i18n.revise}}",
+                        "internalName": "Revise"
+                    },
+                    {
+                        "displayName": "{{i18n.update}}",
+                        "internalName": "Update"
+                    },
+                    {
+                        "displayName": "{{i18n.delete}}",
+                        "internalName": "Delete"
+                    },
+                    {
+                        "displayName": "{{i18n.Add}}",
+                        "internalName": "Add"
+                    },
+                    {
+                        "displayName": "{{i18n.NoChange}}",
+                        "internalName": "NoChange"
+                    }
+                ]
+            }
+    },
+    "messages":
+    {
+
+    },
+    "onEvent":
+    [
+        {
+            "eventId": "importPreview.refreshOptions",
+            "action": "updateOptions"
+        },
+        {
+            "eventId": "importPreview.closeExistingBalloonPopup",
+            "cacheEventData": true,
+            "action": "closeExistingBalloonPopup"
+        },
+        {
+            "eventId": "requirements.handleCommandSelectionSetting",
+            "cacheEventData": true,
+            "action": "handleCommandSelection"
+        },
+        {
+            "eventId": "actionsList.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "changeSettingIcon"
+        },
+        {
+            "eventId": "importpreview.updateSetting",
+            "cacheEventData": true,
+            "action": "updateSetting"
+        },
+        {
+            "eventId": "importPreview.closeSettingChangePopupWindow",
+            "action": "closeSettingChangePopupWindow"
+        }
+
+    ],
+    "dataProviders":{
+        "actionsList":{
+            "action": "getSetting",
+            "response":"{{data.actionItems.dbValue}}",
+            "selectionModelMode": "single"
+         }
+    },
+    "i18n": {
+        "revise": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "update": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "delete": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "Add": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "NoChange": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "AcceptUpdate": [
+            "RequirementsCommandPanelsMessages"
+        ]
+    }
+}

@@ -1,0 +1,744 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "actions": {
+        "loadData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableData",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}",
+                "treeLoadInput": "request.treeLoadInput",
+                "delayTimeTree": "{{data.delayTimeTree}}",
+                "maxTreeLevel": "{{data.maxTreeLevel}}"
+            },
+            "outputData": {
+                "treeLoadResult": "action.result.treeLoadResult",
+                "dataProviders.importPreviewTreeProvider.columnConfig": "result.columnInfos"
+
+            },
+            "events": {
+                "failure": [ {
+                    "name": "importPreview.redirectToHome"
+                } ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "notificationForImportFailureMsg"
+                } ]
+            },
+            "deps": "js/Arm0TreeDataService"
+        },
+        "multiSelectModeActionBatchJob": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "Awp0EnableMultiSelectObjectACLCommandAction"
+                },
+                {
+                    "action": "setShowCheckBoxValue"
+                },
+                {
+                    "action": "publishClientRefreshEventForPlTable"
+                }
+            ]
+        },
+
+        "setShowCheckBoxValue": {
+            "actionType": "JSFunction",
+            "method": "multiSelectHtmlSpectemplate",
+            "inputData": {
+                "eventData": "{{data.eventData}}"
+            },
+            "outputData": {
+                "showCheckBox": ""
+            },
+            "deps": "js/Arm0TreeDataService"
+        },
+        "Awp0EnableMultiSelectObjectACLCommandAction": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+
+                        "name": "importPreviewTreeProvider.multiSelectModeAction",
+                        "eventData": {
+                            "multiSelect": true
+                        }
+                    }
+                ]
+            }
+        },
+        "multiSelectModeDisableActionBatchJob": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "Awp0DisableMultiSelectObjectACLCommandAction"
+                },
+                {
+                    "action": "setShowCheckBoxValue"
+                },
+                {
+                    "action": "publishClientRefreshEventForPlTable"
+                }
+            ]
+        },
+        "Awp0DisableMultiSelectObjectACLCommandAction": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+
+                        "name": "importPreviewTreeProvider.multiSelectModeAction",
+                        "eventData": {
+                            "multiSelect": false
+                        }
+                    }
+                ]
+            }
+        },
+
+        "publishClientRefreshEventForPlTable": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "importPreviewTreeTable.plTable.clientRefresh"
+                } ]
+            }
+        },
+        "selectAllModeEnableAction": {
+            "actionType": "JSFunction",
+            "method": "selectActionForHtmlSpec",
+            "inputData": {
+                "data": "{{data}}",
+                "selectAll":true
+            },
+            "deps": "js/Arm0TreeDataService"
+        },
+        "selectAllModeDisableAction": {
+            "actionType": "JSFunction",
+            "method": "selectActionForHtmlSpec",
+            "inputData": {
+                "data": "{{data}}",
+                "selectAll":false
+            },
+            "deps": "js/Arm0TreeDataService"
+        },
+        "loadProperties": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableProperties",
+            "inputData": {
+                "propertyLoadInput": "request.propertyLoadInput",
+                "delayTimeProperty": "{{data.delayTimeProperty}}"
+            },
+            "outputData": {},
+            "deps": "js/Arm0TreeDataService"
+        },
+        "changeTypeOfSpecElement": {
+            "actionType": "JSFunction",
+            "inputData": {
+                "data": "{{data}}",
+                "eventData": "{{parameters.eventData}}"
+            },
+            "method": "changeTypeOfSpecElement",
+            "deps": "js/Arm0TreeDataService"
+        },
+        "refreshTreeDataProvider": {
+            "actionType": "dataProvider",
+            "method": "importPreviewTreeProvider"
+        },
+        "activateImportPreviewPanel": {
+            "actionType": "JSFunction",
+            "method": "activateCommandPanel",
+            "deps": "js/commandPanel.service",
+            "inputData": {
+                "commandId": "Arm0ImportFromOffice",
+                "location": "aw_toolsAndInfo",
+                "context": null,
+                "push": true
+            }
+        },
+        "selectionChanged": {
+            "actionType": "JSFunction",
+            "method": "selectionChanged",
+            "inputData": {
+                "selectedObject": "{{data.dataProviders.importPreviewTreeProvider}}",
+                "ctx": "{{ctx}}",
+                "data":"{{data}}"
+            },
+            "deps": "js/Arm0TreeDataService"
+        },
+        "redirectToHome": {
+            "actionType": "Navigate",
+            "navigateTo": "showHome",
+            "navigationParams": {
+            }
+        },
+        "navigateToBack": {
+            "actionType": "JSFunction",
+            "method": "goBack",
+            "deps": "js/locationNavigation.service"
+        },
+        "selectTreeObjForCrossProb":
+        {
+            "actionType": "JSFunction",
+            "method": "selectTreeObjForCrossProb",
+            "inputData":
+            {
+                "data": "{{data}}",
+                "eventData": "{{parameters.eventData}}"
+            },
+            "deps": "js/Arm0TreeDataService"
+        },
+        "registerCxtForActionsPanel": {
+            "actionType": "JSFunction",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData":{
+                "selectedObjectUid":"selectedObjectUid"
+            },
+            "method": "registerCxtForActionsPanel",
+            "deps": "js/Arm0PopupMenuPanel"
+        },
+        "showActionsPanel": {
+            "actionType": "JSFunction",
+            "method": "show",
+            "inputData": {
+                "data": {
+                    "declView": "Arm0PopupMenuPanel",
+                    "options": {
+                        "reference": "{{data.eventData.target}}",
+                        "height": "auto",
+                        "width": "160",
+                        "placement": "right-start",
+                        "hasArrow": true,
+                        "draggable":false,
+                        "clickOutsideToClose": true
+                    }
+                }
+            },
+            "outputData": {
+                "actionsPopupId": "id",
+                "actionsPopupElement": "panelEl"
+            },
+            "deps": "js/popupService"
+        },
+
+        "closePopupWindow": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.actionsPopupId}}"
+            },
+            "deps": "js/popupService"
+        },
+        "MoveUp":
+        {
+            "actionType": "JSFunction",
+            "method": "moveUp",
+            "inputData":
+            {
+                "data": "{{data}}",
+                "moveAction": "{{data.i18n.moveUpCommandTitle}}"
+            },
+            "actionMessages": {
+                "success": [{
+                    "condition": "data.moveRestricted",
+                    "message": "notificationMoveOperationRestricted"
+                },
+                {
+                    "condition": "conditions.moveOperationFailed",
+                    "message": "notificationMoveUpOperationFailed"
+                }
+            ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "showActionPopup.close"
+                    }
+
+                ]
+            },
+
+            "deps": "js/Arm0TreeDataService"
+        },
+        "MoveDown":
+        {
+            "actionType": "JSFunction",
+            "method": "moveDown",
+            "inputData":
+            {
+                "data": "{{data}}",
+                "moveAction": "{{data.i18n.moveDownCommandTitle}}"
+            },
+            "actionMessages": {
+                "success": [ {
+                    "condition": "data.moveRestricted",
+                    "message": "notificationMoveOperationRestricted"
+                },
+                {
+                    "condition": "conditions.moveOperationFailed",
+                    "message": "notificationMoveDownOperationFailed"
+                } ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "showActionPopup.close"
+                    }
+                ]
+            },
+            "deps": "js/Arm0TreeDataService"
+        },
+        "Promote":
+        {
+            "actionType": "JSFunction",
+            "method": "promote",
+            "inputData":
+            {
+                "data": "{{data}}",
+                "moveAction": "{{data.i18n.promoteCommandTitle}}"
+            },
+            "actionMessages": {
+                "success": [ {
+                    "condition": "data.moveRestricted",
+                    "message": "notificationMoveOperationRestricted"
+                },
+                {
+                    "condition": "conditions.moveOperationFailed",
+                    "message": "notificationPromoteOperationFailed"
+                } ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "showActionPopup.close"
+                    }
+                ]
+            },
+            "deps": "js/Arm0TreeDataService"
+        },
+        "Demote":
+        {
+            "actionType": "JSFunction",
+            "method": "demote",
+            "inputData":
+            {
+                "data": "{{data}}",
+                "moveAction": "{{data.i18n.demoteCommandTitle}}"
+            },
+            "actionMessages": {
+                "success": [ {
+                    "condition": "data.moveRestricted",
+                    "message": "notificationMoveOperationRestricted"
+                },
+                {
+                    "condition": "conditions.moveOperationFailed",
+                    "message": "notificationDemoteOperationFailed"
+                } ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "showActionPopup.close"
+                    }
+                ]
+            },
+            "deps": "js/Arm0TreeDataService"
+        },
+        "expandNode": {
+            "actionType": "JSFunction",
+            "method": "expandNode",
+            "inputData": {
+                "data": "{{data}}",
+                "parentObjectUid": "{{data.eventData.parentObjectUid}}"
+            },
+            "deps": "js/Arm0HTMLSpecTemplateTree"
+        },
+
+
+        "displayTypeForMultiObjSelection": {
+            "actionType": "JSFunction",
+            "method": "displayTypeForMultiObjSelection",
+            "inputData": {
+                "data": "{{data}}"
+            },
+
+            "deps": "js/ImportPreview"
+        },
+
+        "showWarningMsgExistingSelectedObject": {
+            "actionType": "Event",
+            "method": "Event",
+            "actionMessages": {
+                "success": [ {
+                    "message": "notificationWarningMsgAllReadyLoaded"
+                } ]
+            }
+        },
+        "showWarningMsg": {
+            "actionType": "Event",
+            "method": "Event",
+            "actionMessages": {
+                "success": [ {
+                    "message": "notificationWarningMessageEmtyList"
+                } ]
+            }
+        }
+    },
+    "data": {
+        "delayTimeTree": {
+            "displayName": "",
+            "type": "INTEGER",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "1000",
+            "dispValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        },
+        "delayTimeProperty": {
+            "displayName": "",
+            "type": "INTEGER",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "2000",
+            "dispValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        },
+        "maxTreeLevel": {
+            "displayName": "",
+            "type": "INTEGER",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "100",
+            "dispValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        },
+        "actionItems": {
+            "isArray": "true",
+            "dbValue": [
+                {
+                    "displayName": "{{i18n.moveUpCommandTitle}}",
+                    "internalName": "Move Up",
+                    "eventName" : "Arm0HTMLSpecTemplateEditAndPreview.MoveUp",
+                    "iconId" : "cmdMoveUp"
+                },
+                {
+                    "displayName": "{{i18n.moveDownCommandTitle}}",
+                    "internalName": "Move Down",
+                    "eventName" : "Arm0HTMLSpecTemplateEditAndPreview.MoveDown",
+                    "iconId" : "cmdMoveDown"
+                },
+                {
+                    "displayName": "{{i18n.promoteCommandTitle}}",
+                    "internalName": "Promote",
+                    "eventName" : "Arm0HTMLSpecTemplateEditAndPreview.Promote",
+                    "iconId" : "cmdPromote"
+                },
+                {
+                    "displayName": "{{i18n.demoteCommandTitle}}",
+                    "internalName": "Demote",
+                    "eventName" : "Arm0HTMLSpecTemplateEditAndPreview.Demote",
+                    "iconId" : "cmdDemote"
+                }
+            ]
+        }
+    },
+    "dataProviders": {
+        "importPreviewTreeProvider": {
+            "action": "loadData",
+            "initializeAction": "loadData",
+            "nextAction": "loadData",
+            "previousAction": "loadData",
+            "treeLoadResult":"action.result.treeLoadResult",
+            "selectionModelMode": "multiple",
+
+            "inputData": {
+                "selectionData": "{{subPanelContext.selectionData}}",
+                "accessMode": "tree"
+            }
+        },
+        "importPreviewPropertyProvider": {
+            "action": "loadProperties",
+            "propertyLoadResult": "action.result.propertyLoadResult"
+        },
+        "revisionLink": {
+            "dataProviderType": "TcLOV",
+            "lovConfiguration": {
+                "filterStr": "",
+                "lovPageSize": 10000,
+                "viewModelObj": "{{ctx.userSession}}",
+                "viewProp": "{{ctx.userSession.props.awp0RevRule}}",
+                "operationName": "Edit"
+            },
+            "totalFound": ""
+        }
+    },
+    "columnProviders": {
+        "importPreviewColumnProvider": {
+            "soaEnabled": false,
+            "sortCriteria": [],
+            "columns": [
+                {
+                    "name": "Name",
+                    "displayName": "{{i18n.nameLabel}}",
+                    "minWidth": 100,
+                    "width": 200
+                },
+                {
+                    "name": "Type",
+                    "displayName": "{{i18n.specType}}",
+                    "minWidth": 60,
+                    "width": 300
+                }
+            ]
+        }
+    },
+    "grids": {
+        "importPreviewTreeTable": {
+            "dataProvider": "importPreviewTreeProvider",
+            "propertyProvider": "importPreviewPropertyProvider",
+            "columnProvider": "importPreviewColumnProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "useStaticFirstCol": true,
+                "enableSorting": true,
+                "enablePinning":false
+
+            }
+        }
+    },
+
+
+    "conditions": {
+        "moveOperationFailed": {
+            "expression":"!data.movedSuccessfully && !data.moveRestricted"
+        }
+
+    },
+
+    "messages":
+    {
+        "notificationForImportFailureMsg":
+        {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.notificationForImportFailureMsg}}"
+        },
+        "notificationMoveUpOperationFailed": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.notificationMoveUpOperationFailed}}"
+        },
+        "notificationMoveDownOperationFailed": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.notificationMoveDownOperationFailed}}"
+        },
+        "notificationPromoteOperationFailed": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.notificationPromoteOperationFailed}}"
+        },
+        "notificationDemoteOperationFailed": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.notificationDemoteOperationFailed}}"
+        },
+        "notificationMoveOperationRestricted": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.notificationMoveOperationRestricted}}",
+            "messageTextParams": [
+                "{{data.dataProviders.importPreviewTreeProvider.selectedObjects[0].displayName}}"
+            ]
+        },
+        "notificationWarningMsgAllReadyLoaded": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.showWarningMsgAllReadyLoaded}}",
+             "messageTextParams": [
+                "{{data.selectedObjectUid.length}}"
+            ]
+
+        },
+        "notificationWarningMessageEmtyList": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.warningMessageEmtyList}}",
+             "messageTextParams": [
+                "{{data.selectedObjectUid.length}}"
+            ]
+
+        }
+    },
+
+    "onEvent": [
+
+        {
+            "eventId": "importPreview.refreshTreeDataProvider",
+            "action": "refreshTreeDataProvider"
+        },
+        {
+            "eventId": "importPreview.changeTypeEvent",
+            "action": "changeTypeOfSpecElement",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            },
+            "cacheEventData": true
+        },
+        {
+            "eventId": "Arm0ImportFromOffice.activateImportPreviewPanel",
+            "action": "activateImportPreviewPanel"
+        },
+        {
+            "eventId": "importPreviewTreeProvider.selectionChangeEvent",
+            "action": "selectionChanged"
+        },
+        {
+            "eventId": "importPreview.redirectToHome",
+            "action": "redirectToHome"
+        },
+        {
+            "eventId": "importPreview.navigateToBack",
+            "action": "navigateToBack"
+        },
+        {
+            "eventId": "importPreview.secAreaHeaderSelectForCrossProb",
+            "action": "selectTreeObjForCrossProb",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            },
+            "cacheEventData": true
+        },
+        {
+            "eventId": "Arm0HTMLSpecTemplateEditAndPreview.MoveUp",
+            "action": "MoveUp"
+
+        },
+        {
+            "eventId": "Arm0HTMLSpecTemplateEditAndPreview.MoveDown",
+            "action": "MoveDown"
+
+        },
+        {
+            "eventId": "Arm0HTMLSpecTemplateEditAndPreview.Promote",
+            "action": "Promote"
+
+        },
+        {
+            "eventId": "Arm0HTMLSpecTemplateEditAndPreview.Demote",
+            "action": "Demote"
+
+        },
+        {
+            "eventId": "requirementDocumentation.registerCxtForActionsPanel",
+            "cacheEventData": true,
+            "action": "registerCxtForActionsPanel"
+        },
+
+        {
+            "eventId": "requirementDocumentation.showActionsPanel",
+            "action": "showActionsPanel",
+            "cacheEventData": true
+        },
+        {
+
+            "eventId": "importPreviewTree.expandNode",
+            "action": "expandNode",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "showActionPopup.close",
+            "action": "closePopupWindow"
+        },
+        {
+            "eventId": "primaryWorkarea.multiSelectEnableModeAction",
+            "cacheEventData": true,
+            "action": "multiSelectModeActionBatchJob"
+        },
+        {
+            "eventId": "primaryWorkarea.multiSelectDisableModeAction",
+            "cacheEventData": true,
+            "action": "multiSelectModeDisableActionBatchJob"
+        },
+        {
+            "eventId": "primaryWorkarea.selectAllEnableModeAction",
+            "cacheEventData": true,
+            "action": "selectAllModeEnableAction"
+        },
+        {
+            "eventId": "primaryWorkarea.selectAllDisableModeAction",
+            "cacheEventData": true,
+            "action": "selectAllModeDisableAction"
+        },
+
+        {
+            "eventId": "primaryWorkarea.displayTypeForMultiObjSelection",
+            "action": "displayTypeForMultiObjSelection"
+        },
+        {
+            "eventId": "primaryWorkarea.showWarningMsgExistingSelectedObject",
+            "action": "showWarningMsgExistingSelectedObject",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "primaryWorkarea.showWarningMsg",
+            "action": "showWarningMsg"
+        }
+
+    ],
+    "i18n": {
+        "nameLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "specType": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "actionLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "moveUpCommandTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "moveDownCommandTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "promoteCommandTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "demoteCommandTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "notificationMoveUpOperationFailed": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "notificationMoveDownOperationFailed": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "notificationPromoteOperationFailed": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "notificationDemoteOperationFailed": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "notificationMoveOperationRestricted": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "update": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "delete": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "revise": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "Add": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "showWarningMsgAllReadyLoaded":[
+            "RequirementsCommandPanelsMessages"
+        ],
+        "warningMessageEmtyList":[
+            "RequirementsCommandPanelsMessages"
+        ]
+    }
+}

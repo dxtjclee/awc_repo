@@ -1,0 +1,152 @@
+{
+  "commands": {
+    "Pch0RemoveChange": {
+      "iconId": "cmdRemove",
+      "title": "{{i18n.RemoveChangeCommandTitle}}",
+      "description": "{{i18n.Pch0RemoveChangeDesc}}"
+    },
+    "Pch0AddChange": {
+      "iconId": "cmdAdd",
+      "isGroup": false,
+      "title": "{{i18n.RelateChangeTitle}}",
+      "description": "{{i18n.Pch0AddChangeDesc}}"
+    },
+    "Pch0AddPlan": {
+      "iconId": "cmdAdd",
+      "isGroup": false,
+      "title": "{{i18n.Awp0AddObjectTitle}}",
+      "description": "{{i18n.Pch0AddPlanDesc}}"
+    }
+  },
+  "commandHandlers": {
+    "RemoveProgramChangeCommandHandler": {
+      "id": "Pch0RemoveChange",
+      "action": "removeProgramChangeOperation",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.removeProgramChangeVisibility"
+      }
+    },
+    "Pch0AddChangeCommandHandler": {
+      "id": "Pch0AddChange",
+      "action": "getAddChangePanel",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.addChangeCommandVisibility"
+      }
+    },
+    "Pch0AddPlanCommandHandler": {
+      "id": "Pch0AddPlan",
+      "action": "Pch0AddPlanCommandAction",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.addPlanCommandVisibility"
+      }
+    }
+  },
+  "commandPlacements": {
+    "Pch0RemoveChange": {
+      "id": "Pch0RemoveChange",
+      "uiAnchor": "aw_rightWall",
+      "priority": 311,
+      "parentGroupId": "Awp0EditGroup"
+    }
+  },
+  "actions": {
+    "removeProgramChangeOperation": {
+      "actionType": "TcSoaService",
+      "serviceName": "Core-2006-03-DataManagement",
+      "method": "deleteRelations",
+      "inputData": {
+        "input": "{{function:removeProgramChangeOperation}}"
+      },
+      "events": {
+        "success": [
+          {
+            "name": "cdm.relatedModified",
+            "eventData": {
+              "relatedModified": [
+                "{{ctx.pselected}}"
+              ]
+            }
+          }
+        ]
+      },
+      "actionMessages": {
+        "failure": [
+          {
+            "message": "SOAFailureMessage"
+          }
+        ]
+      },
+      "deps": "js/programChangeService"
+    },
+    "getAddChangePanel": {
+      "actionType": "activateCommandPanel",
+      "inputData": {
+        "commandId": "Pch0AddChange",
+        "location": "aw_toolsAndInfo",
+        "config": {
+          "isPinUnpinEnabled": true
+        }
+      }
+    },
+    "Pch0AddPlanCommandAction": {
+      "actionType": "activateCommandPanel",
+      "inputData": {
+        "commandId": "Pch0AddPlan",
+        "location": "aw_toolsAndInfo"
+      }
+    },
+    "Pch0AddProgramChangePanel": {
+      "actionType": "activateCommandPanel",
+      "inputData": {
+        "commandId": "Pch0AddChange",
+        "location": "aw_toolsAndInfo",
+        "config": {
+          "isPinUnpinEnabled": true
+        }
+      }
+    }
+  },
+  "functions": {
+    "removeProgramChangeOperation": {
+      "functionName": "removeChangeOperation",
+      "parameters": []
+    }
+  },
+  "conditions": {
+    "removeProgramChangeVisibility": {
+      "expression": "( ctx.selected.modelType.typeHierarchyArray.indexOf('ChangeItemRevision') > -1 ) && ( ( commandContext.openedObject.modelType.typeHierarchyArray.indexOf('Prg0AbsPlan') > -1 && commandContext.pageContext.primaryActiveTabId === 'tc_xrt_Changes' ) || ( ctx.pselected.modelType.typeHierarchyArray.indexOf('Prg0AbsPlan') > -1  && commandContext.pageContext.primaryActiveTabId === 'tc_xrt_Timeline' ) )"
+    },
+    "addChangeCommandVisibility": {
+      "expression": "( commandContext.openedObject.modelType.typeHierarchyArray.indexOf('Prg0AbsPlan') > -1 ) && ( commandContext.pageContext.primaryActiveTabId === 'tc_xrt_Changes' || commandContext.pageContext.secondaryActiveTabId === 'tc_xrt_Changes' || commandContext.pageContext.primaryActiveTabId === 'tc_xrt_Timeline' || commandContext.pageContext.secondaryActiveTabId === 'tc_xrt_Timeline') && !ctx.editInProgress"
+    },
+    "addPlanCommandVisibility": {
+      "expression": "( commandContext.pageContext.primaryActiveTabId === 'tc_xrt_ReferenceItems' || commandContext.pageContext.secondaryActiveTabId === 'tc_xrt_ReferenceItems' ) && ( commandContext.objectSetSource === 'S2P:Pch0PlanChangeRelation.Prg0AbsPlan' )"
+    }
+  },
+  "messages": {
+    "SOAFailureMessage": {
+      "messageType": "ERROR",
+      "messageText": "{{errorCode}}"
+    }
+  },
+  "i18n": {
+    "RemoveChangeCommandTitle": [
+      "ProgramChangeConstants"
+    ],
+    "RelateChangeTitle": [
+      "ProgramChangeConstants"
+    ],
+    "Pch0RemoveChangeDesc": [
+      "ProgramChangeConstants"
+    ],
+    "Pch0AddChangeDesc": [
+      "ProgramChangeConstants"
+    ],
+    "Pch0AddPlanDesc": [
+      "ProgramChangeConstants"
+    ]
+  }
+}

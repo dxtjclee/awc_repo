@@ -1,0 +1,11 @@
+<aw-scrollpanel>
+    <span class="aw-widgets-propertyNonEditValue aw-search-inContentSearchBox" exist-when="conditions.noResultsFound">
+        {{i18n.noFiltersFound}}</span>
+    <aw-list dataprovider="data.dataProviders.listDataProvider" show-check-box="subPanelContext.showCheckBox"
+        exist-when="conditions.showResultsFound">
+        <aw-default-cell vmo="item"></aw-default-cell>
+    </aw-list>
+    <div class="w-12" visible-when="conditions.showVNCsInPWA">
+        <awp0-classification-vncs-full selected="subPanelContext.searchState.selectedClassNode" childclasses="subPanelContext"></awp0-classification-vncs-full>
+    </div>
+</aw-scrollpanel>

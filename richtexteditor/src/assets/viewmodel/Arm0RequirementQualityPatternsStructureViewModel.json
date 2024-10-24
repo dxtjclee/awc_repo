@@ -1,0 +1,224 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports":
+    [
+        "js/aw-splm-table.directive",
+        "js/aw-row.directive",
+        "js/aw-listbox.directive",
+        "js/exist-when.directive"
+    ],
+
+    "actions": {
+        "getNextElementTerms":
+        {
+            "actionType": "JSFunction",
+            "method": "getNextElementTerms",
+            "inputData": {
+                "data": "{{data.eventMap['Arm0ReqPatternStructure.getNextElementTerms']}}"
+            },
+            "deps": "js/Arm0RequirementQualityService"
+        },
+        "initializePatternsGroups": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                        "name": "Arm0ReqPatternStructure.GetPatternGroups"
+                    },
+                    {
+                        "name": "Arm0ReqPatternStructure.CalculateQuality"
+                    }
+                ]
+            },
+            "deps": "js/Arm0RequirementQualityService"
+        },
+        "loadPatternStructureData": {
+            "actionType": "JSFunction",
+            "method": "filterPatternStructureResult",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "patternStructureResult": ""
+            },
+            "deps": "js/Arm0RequirementQualityService"
+        },
+         "refreshPatternStructureData":
+        {
+            "actionType": "dataProvider",
+            "method": "patternStructureDataProvider"
+        },
+        "patternGroupChanged": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                        "name": "Arm0ReqPatternStructure.GetPatternsByPatternGroup",
+                        "condition": "data.ReuseSessionId !== undefined"
+                    },
+                    {
+                        "name": "Arm0ReqPatternStructure.CalculateQuality",
+                        "condition": "data.ReuseSessionId !== undefined"
+                    }
+                ]
+            }
+        },
+        "CalculateQuality": {
+            "actionType": "JSFunction",
+            "method": "CalculateQuality",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "events": {
+                "success": [ {
+                        "name": "progress.end"
+                    }
+                ],
+                "failure": [ {
+                    "name": "progress.end"
+                }
+            ]
+            },
+            "deps": "js/Arm0RequirementQualityService"
+        },
+        "GetPatternsByPatternGroup" :{
+            "actionType": "JSFunction",
+            "method": "GetPatternsByPatternGroup",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "patternComboList.dbValue": ""
+            },
+            "deps": "js/Arm0RequirementQualityService"
+        },
+        "GetPatternGroups": {
+            "actionType": "JSFunction",
+            "method": "GetPatternGroups",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "patternGroupComboList.dbValue": "patternGroups",
+                "ReuseSessionId":"ReuseSessionId"
+            },
+            "deps": "js/Arm0RequirementQualityService"
+        }
+    },
+
+    "data": {
+        "patternGroupCombo": {
+            "displayName": "{{i18n.patternGroup}}",
+            "type": "STRING",
+            "hasLov": "true",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "-1"
+        },
+        "patternGroupComboList": {
+            "type": "STRING",
+            "dbValue": [ {
+                    "propDisplayValue": "",
+                    "propInternalValue": "-1"
+                }
+            ]
+        },
+        "patternCombo": {
+            "displayName": "{{i18n.pattern}}",
+            "type": "STRING",
+            "hasLov": "true",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": ""
+        },
+        "patternComboList": {
+            "type": "STRING",
+            "dbValue": [ {
+                    "propDisplayValue": "",
+                    "propInternalValue": "-1"
+                }
+            ]
+        }
+
+    },
+
+    "columnProviders": {
+        "patternStructureColumnProvider": {
+            "frozenColumnIndex": -1,
+            "columns": [
+                {
+                    "name": "matchingPatternStructure",
+                    "displayName": "{{i18n.matchingPatternStructure}}",
+                    "minWidth": 925,
+                    "width": 925,
+                    "enableSorting": false,
+                    "pinnedLeft":false
+                }
+            ]
+        }
+    },
+    "dataProviders": {
+        "patternStructureDataProvider": {
+            "action": "loadPatternStructureData",
+            "response": "{{data.patternStructureResult}}",
+            "totalFound": "{{data.patternStructureResult.length}}",
+            "commandsAnchor": "aw_splmTableCellMenu",
+            "selectionModelMode": "none"
+        }
+    },
+
+    "grids": {
+        "PatternStructure": {
+            "dataProvider": "patternStructureDataProvider",
+            "columnProvider": "patternStructureColumnProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "enableGridMenu": false,
+                "enablePinning": false,
+                "enableSorting": false,
+                "enableDynamicRowHeight":true,
+                "maxRowsToShow":5
+            }
+        }
+    },
+    "lifecycleHooks": {
+        "onInit": "initializePatternsGroups"
+    },
+
+    "onEvent": [
+        {
+            "eventId": "requirementDocumentation.refreshPatternStructureData",
+            "action": "refreshPatternStructureData"
+        },
+        {
+            "eventId": "Arm0ReqPatternStructure.GetPatternsByPatternGroup",
+            "action": "GetPatternsByPatternGroup"
+        },
+        {
+            "eventId": "Arm0ReqPatternStructure.GetPatternGroups",
+            "action": "GetPatternGroups"
+        },
+        {
+            "eventId": "Arm0ReqPatternStructure.CalculateQuality",
+            "action": "CalculateQuality",
+            "cacheEventData":true
+        },
+        {
+            "eventId": "Arm0ReqPatternStructure.getNextElementTerms",
+            "action": "getNextElementTerms",
+            "cacheEventData":true
+        }
+    ],
+    "i18n":
+    {
+        "matchingPatternStructure": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "pattern": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "patternGroup": [
+            "RichTextEditorCommandPanelsMessages"
+        ]
+    }
+}

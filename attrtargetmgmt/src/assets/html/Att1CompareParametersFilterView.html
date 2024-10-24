@@ -1,0 +1,34 @@
+<div id="{{subPanelContext.menuContainerId}}" class="aw-splm-tableMenuContainer afx-content-background aw-hierarchical-popup">
+    <div id="{{subPanelContext.menuId}}" class="aw-splm-tableMenu aw-splm-tableMenuPopup" role="menu">
+        <div>
+            <aw-popup-command-bar anchor="{{subPanelContext.anchor}}" context="subPanelContext" own-popup="true"> </aw-popup-command-bar>
+        </div>
+        <hr>
+        <div class="aw-splm-tableMenuItem aw-widgets-cellTop column-filter-container" role="menuitem" exist-when="conditions.filteringEnabled">
+            <div class="column-filter">
+                <div class="text-filter">
+                    <div>
+                        <aw-flex-row height="2f">
+                            <aw-link dataprovider="data.dataProviders.operationsDataProvider" prop="operation" link-options="data._linkOptions_operationsLink"></aw-link>
+                        </aw-flex-row>
+                    </div>
+                    <aw-search-box prop="textValue" visible-when="!data.isCompareFilter" placeholder="{{i18n.searchText}}" action="filterAction"></aw-search-box>
+                </div>
+            </div>
+            <div class="submit-buttons-filter">
+                <aw-flex-row height="2.75f">
+                    <div class="sw-column w-6 column-menu-button">
+                        <aw-button id="columnMenuClearButton" button-type="negative" action="clearFilter" aw-class="{'disabled': !data.isFilterApplied || subPanelContext.gridContext.columnDef.filter.isFilterApplied !== true}">
+                            <aw-i18n>i18n.clearButtonTitle</aw-i18n>
+                        </aw-button>
+                    </div>
+                    <div class="sw-column w-6 column-menu-button">
+                        <aw-button id="columnMenuFilterButton" class="filter-button" action="filterAction" aw-class="{'disabled': data.isFilterDisabled.value}">
+                            <aw-i18n>i18n.FILTER_TEXT</aw-i18n>
+                        </aw-button>
+                    </div>
+                </aw-flex-row>
+            </div>
+        </div>
+    </div>
+</div>

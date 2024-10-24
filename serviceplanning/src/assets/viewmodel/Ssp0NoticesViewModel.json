@@ -1,0 +1,83 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "messages": {
+            "SelectionIsNotWcOrActivity": [
+                {
+                    "text": "{{i18n.SelectionIsNotWcOrActivity}}"
+                }
+            ]
+        }
+    },
+    "ports": {
+        "setNoticesTreeData": {
+            "syncObject": {}
+        }
+    },
+    "actions": {
+        "loadData": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "getDataForNoticesTable"
+                },
+                {
+                    "action": "updateNoticesTreeDataPort"
+                }
+            ]
+        },
+        "getDataForNoticesTable": {
+            "actionType": "JSFunctionAsync",
+            "method": "getCreateInput",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "treeLoadResult": "{{function:setNodeProperties}}"
+            },
+            "deps": "js/ssp0CreateOrAssignNoticeService"
+        },
+        "updateNoticesTreeDataPort": {
+            "actionType": "Sync",
+            "inputData": {
+                "port": "setNoticesTreeData",
+                "syncObject": {
+                    "treeLoadResult": "{{data.treeLoadResult}}",
+                    "selection": "{{data.eventMap['Ssp0Notices.triggerFunction'].selection}}"
+                }
+            }
+        }
+    },
+    "functions": {
+        "getCreateInput": {
+            "functionName": "getCreateInput",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "setNodeProperties": {
+            "functionName": "setNodeProperties",
+            "parameters": []
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "Ssp0Notices.triggerFunction",
+            "action": "loadData",
+            "cacheEventData": true
+        }
+    ],
+    "lifecycleHooks": {
+        "onMount": "loadData"
+    },
+    "conditions": {
+        "IsSelectionValid": {
+            "expression": "ctx.selectedVMO.modelType.typeHierarchyArray.includes('SSP0BvrWorkCard') || ctx.selectedVMO.modelType.typeHierarchyArray.includes('SSP0BvrWorkCard')"
+        }
+    },
+    "i18n": {
+        "SelectionIsNotWcOrActivity": [
+            "ssp0Messages"
+        ]
+      }
+}

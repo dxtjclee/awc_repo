@@ -1,0 +1,41 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-command-sub-panel.directive",
+        "js/visible-when.directive",
+        "js/aw-init.directive"
+    ],
+    "actions":{
+        "backAction": {
+            "actionType": "JSFunction",
+            "method": "updateSharedDataState",
+            "inputData": {
+                "state": "{{fields.sharedData}}",
+                "newValue": {
+                    "activeView": "Arm0ExportToReqIFSub"
+                }
+            },
+            "deps": "js/Arm0ExportToReqIF"
+        }
+    },
+    "i18n": {
+        "addType": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "addTraceLink": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "exportToReqIFCmdTitle": [
+            "RequirementsCommandPanelsMessages"
+        ]
+    },
+    "data": {
+        "sharedData": {
+            "initialValues": {
+                "activeView": "Arm0ExportToReqIFSub"
+            },
+            "meta": {}
+        }
+    }
+}

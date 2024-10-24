@@ -1,0 +1,261 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "remove": {
+            "action": "removeFromActivityList",
+            "iconName": "cmdMoveToLeftList",
+            "tooltip": "{{i18n.Remove}}"
+        },
+        "add": {
+            "action": "addToActivityList",
+            "iconName": "cmdMoveToRightList",
+            "tooltip": "{{i18n.Add}}"
+        },
+        "removeAll": {
+            "action": "removeAllFromActivityList",
+            "iconName": "cmdRemoveAll",
+            "tooltip": "{{i18n.RemoveAll}}"
+        },
+        "addAll": {
+            "action": "addAllToActivityList",
+            "iconName": "cmdSelectAll",
+            "tooltip": "{{i18n.AddAll}}"
+        }
+    },
+    "actions": {
+        "AddAndRemoveActivityAssignments": {
+            "actionType": "JSFunction",
+            "method": "addAndRemoveActivityAssignments",
+            "inputData": {
+                "activityList": "{{data.activityOccurrencesList}}",
+                "originalActivityList":"{{data.originalActivityAssignments}}",
+                "selectedActivity":"{{ctx.selectedActivity}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name":"Ssp0ActivityParts.reloadPartToolTables"
+                    },
+                    {
+                        "name": "ClosePopUp"
+                    }
+                ]
+            },
+            "deps": "js/Ssp0ActivityAssignmentsService"
+        },
+        "getActivityAssignments": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData": {
+                "attributes": [
+                    "al_activity_tool_bl_list"
+                ],
+                "objects": [
+                    {
+                        "uid": "{{ctx.selectedActivity.uid}}",
+                        "type": "BomLine"
+                    }
+                ]
+            },
+            "outputData": {
+                "activityOccurrencesList": "{{function:getRelatedObject}}",
+                "originalActivityAssignments": "{{function:getRelatedObject}}"
+            },
+            "deps": "js/Ssp0ActivityAssignmentsService"
+        },
+        "getWorkCardAssignments": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData": {
+                "attributes": [
+                    "bl_child_lines"
+                ],
+                "objects": [
+                    {
+                        "uid": "{{ctx.selectedWorkCard.uid}}",
+                        "type": "BomLine"
+                    }
+                ]
+            },
+            "outputData": {
+                "workCardOccurrencesList": "{{function:getRelatedObject}}"
+            },
+            "deps": "js/Ssp0ActivityAssignmentsService"
+        },
+        "addToActivityList": {
+            "actionType": "JSFunction",
+            "method": "addToActivityList",
+            "inputData": {
+                "dataProviders": "{{data.dataProviders}}",
+                "activityList": "{{data.activityOccurrencesList}}"
+            },
+            "outputData": {
+                "activityOccurrencesList": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name":"ssp0ActivityAssignments.updateActivityDataProvider",
+                        "eventData":{
+                            "data":"{{data}}"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Ssp0ActivityAssignmentsService"
+        },
+        "removeFromActivityList": {
+            "actionType": "JSFunction",
+            "method": "removeFromActivityList",
+            "inputData": {
+                "selectedObjects": "{{data.dataProviders.fetchActivityAssignments.selectedObjects}}",
+                "activityList": "{{data.activityOccurrencesList}}"
+            },
+            "outputData": {
+                "activityOccurrencesList": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name":"ssp0ActivityAssignments.updateActivityDataProvider",
+                        "eventData":{
+                            "data":"{{data}}"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Ssp0ActivityAssignmentsService"
+        },
+        "addAllToActivityList": {
+            "actionType": "JSFunction",
+            "method": "addAllToActivityList",
+            "inputData": {
+                "dataProviders": "{{data.dataProviders}}",
+                "activityList": "{{data.activityOccurrencesList}}"
+            },
+            "outputData": {
+                "activityOccurrencesList": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name":"ssp0ActivityAssignments.updateActivityDataProvider",
+                        "eventData":{
+                            "data":"{{data}}"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Ssp0ActivityAssignmentsService"
+        },
+        "removeAllFromActivityList": {
+            "actionType": "JSFunction",
+            "method": "removeAllFromActivityList",
+            "inputData": {
+            },
+            "outputData": {
+                "activityOccurrencesList": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name":"ssp0ActivityAssignments.updateActivityDataProvider",
+                        "eventData":{
+                            "data":"{{data}}"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Ssp0ActivityAssignmentsService"
+        },
+        "ClosePopUpAction": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        },
+        "initializeBatchAction": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "getWorkCardAssignments"
+                },
+                {
+                    "action": "getActivityAssignments"
+                },
+                {
+                    "action": "initializeWorkCardDataProvider"
+                },
+                {
+                    "action": "initializeActivityDataProvider"
+                }
+            ]
+        },
+        "initializeWorkCardDataProvider":{
+            "actionType": "dataProvider",
+            "method": "fetchWorkCardAssignments"
+        },
+        "initializeActivityDataProvider":{
+            "actionType": "dataProvider",
+            "method": "fetchActivityAssignments"
+        }
+    },
+    "dataProviders": {
+        "fetchWorkCardAssignments": {
+            "response": "{{data.workCardOccurrencesList}}",
+            "selectionModelMode": "multiple"
+        },
+        "fetchActivityAssignments": {
+            "response": "{{data.activityOccurrencesList}}",
+            "selectionModelMode": "multiple"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "ssp0ActivityAssignments.updateActivityDataProvider",
+            "action": "initializeActivityDataProvider"
+        },
+        {
+            "eventId": "ClosePopUp",
+            "action": "ClosePopUpAction"
+        }
+    ],
+    "lifecycleHooks": {
+
+        "onMount": "initializeBatchAction"
+
+    },
+    "i18n": {
+        "Cancel": [
+            "timeAnalysisMessages"
+        ],
+        "Remove": [
+            "timeAnalysisMessages"
+        ],
+        "Add": [
+            "timeAnalysisMessages"
+        ],
+        "RemoveAll": [
+            "timeAnalysisMessages"
+        ],
+        "AddAll": [
+            "timeAnalysisMessages"
+        ],
+        "Assign": [
+            "timeAnalysisMessages"
+        ],
+        "WorkCardOccurrencesTitle": [
+            "timeAnalysisMessages"
+        ],
+        "ActivityOccurrencesTitle": [
+            "timeAnalysisMessages"
+        ],
+        "OccurrenceType": [
+            "timeAnalysisMessages"
+        ]
+    }
+}

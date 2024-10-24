@@ -1,0 +1,79 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-icon.directive"
+    ],
+    "actions": {
+        "clickComponentObjectAction": {
+            "actionType": "Navigate",
+            "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+            "navigationParams": {
+                "uid": "{{data.objectUid}}"
+            }
+        },
+        "getPropData": {
+            "actionType": "JSFunction",
+            "method": "get",
+            "deps": "lodash",
+            "inputData": {
+                "0": "{{subPanelContext.vmo.props}}",
+                "1": "{{subPanelContext.propName}}"
+            },
+            "outputData": {
+                "objectUid": "dbValues[0]",
+                "objectLink.uiValue": "uiValues[0]"
+            }
+        },
+        "getModelObjectFromUID": {
+            "actionType": "JSFunction",
+            "method": "getObject",
+            "deps": "soa/kernel/clientDataModel",
+            "inputData": {
+                "uid": "{{data.objectUid}}"
+            },
+            "outputData": {
+                "underlyingModelObject": ""
+            }
+        },
+        "getIconURLFromModelObject": {
+            "actionType": "JSFunction",
+            "method": "getTypeIconFileUrl",
+            "deps": "js/awIconService",
+            "inputData": {
+                "vmo": "{{data.underlyingModelObject}}"
+            },
+            "outputData": {
+                "iconURL": ""
+            }
+        },
+        "componentIconsInit": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "getPropData"
+                },
+                {
+                    "action": "getModelObjectFromUID"
+                },
+                {
+                    "action": "getIconURLFromModelObject"
+                }
+            ]
+        }
+    },
+    "data": {
+        "objectLink": {
+            "type": "STRING",
+            "isRequired": "false"
+        }
+    },
+   
+    "lifecycleHooks": {
+        "onMount": "componentIconsInit"
+    },
+
+    "i18n": {
+        "functionalElement": [
+            "SystemModelerConstants"
+        ]
+    }
+}

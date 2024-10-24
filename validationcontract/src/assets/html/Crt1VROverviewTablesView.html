@@ -1,0 +1,20 @@
+<aw-panel-body >
+<aw-scrollpanel >
+<aw-panel-section exist-when="props.subPanelContext.context.vrSublocationState.isStateUpdated === true">
+    <div>
+        <aw-server-visibility-toolbar first-anchor="aw_showHideCommandbar" second-anchor="aw_fullScreen" orientation="HORIZONTAL" context="{'requirementCtx':{...fields.requirementCtx},...subPanelContext}">
+        </aw-server-visibility-toolbar>
+    </div>
+
+    <div aw-repeat="prop : props.subPanelContext.context.vrSublocationState.checkBoxesInfo" exist-when="prop.checkBoxValue && prop.checkBoxValue === true">
+        <aw-panel-section caption="{{prop.checkBoxName}}" exist-when="prop.checkBoxName && prop.checkBoxName != 'Parameters'" collapsed="false">
+            <aw-include name="{{prop.checkBoxTable}}" sub-panel-context="{...subPanelContext}"></aw-include>
+        </aw-panel-section>
+        <aw-panel-section exist-when="prop.checkBoxName && prop.checkBoxName === 'Parameters'" collapsed="false">
+            <aw-include name="{{prop.checkBoxTable}}" sub-panel-context="{...subPanelContext}"></aw-include>
+        </aw-panel-section>
+    </div>
+</aw-panel-section>
+</aw-scrollpanel>
+</aw-panel-body>
+

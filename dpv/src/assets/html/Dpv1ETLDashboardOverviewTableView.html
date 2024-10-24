@@ -1,0 +1,13 @@
+<div class="sw-row h-12">
+    <div class="sw-column flex-auto">
+        <div class="sw-row">
+            <div class="sw-column w-2">
+                <aw-widget prop="data.etlServer" action="selectETLServer"></aw-widget>
+            </div>
+        </div>
+        <div visible-when="conditions.isOverviewTableLoading">{{i18n.LOADING_TEXT}}</div>
+        <div class="sw-row h-12">
+            <aw-splm-table gridid="dashboardView" show-context-menu="true" show-decorators="true" show-check-box="true"></aw-splm-table>
+        </div>
+    </div>
+</div>

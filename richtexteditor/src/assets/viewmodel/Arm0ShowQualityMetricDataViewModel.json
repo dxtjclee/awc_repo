@@ -1,0 +1,220 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports":
+    [
+        "js/aw-tab-set.directive",
+        "js/exist-when.directive",
+        "js/aw-column.directive",
+        "js/aw-row.directive"
+    ],
+
+    "actions": {
+        "reveal": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "Arm0ShowQualityMetricData.CalculateQuality"
+                    },
+                    {
+                        "name": "Arm0ShowQualityMetricData.toggleButtonClicked"
+                    }
+                ]
+            },
+            "deps": "js/Arm0RequirementQualityService"
+        },
+        "checkForTab":{
+            "actionType": "JSFunction",
+            "method": "checkForTab",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0RequirementQualityService"
+        },
+
+        "CalculateQuality": {
+            "actionType": "JSFunction",
+            "method": "CalculateQuality",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "events": {
+                "success": [ {
+                        "name": "progress.end"
+                    },
+                    {
+                        "name":"requirementDocumentation.refreshQualityMetricTable"
+                    }
+                ],
+                "failure": [ {
+                    "name": "progress.end"
+                }
+            ]
+            },
+            "deps": "js/Arm0RequirementQualityService"
+        },
+        "processQualityResponse": {
+            "actionType": "JSFunction",
+            "method": "processQualityResponse",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "events": {
+                "success": [ {
+                        "name": "progress.end"
+                    }
+                ]
+            },
+            "deps": "js/Arm0RequirementQualityService"
+        },
+        "refreshQualityMetricTable": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "requirementDocumentation.refreshAllMetricData",
+                        "condition": "data.selectedTab.tabKey === 'Correctness'"
+                    },
+                    {
+                        "name": "requirementDocumentation.refreshPatternExamplesData",
+                        "condition": "data.selectedTab.tabKey === 'PatternsExamples'"
+                    },
+                    {
+                        "name": "requirementDocumentation.refreshPatternStructureData",
+                        "condition": "data.selectedTab.tabKey === 'MatchingPatternStructure'"
+                    }
+                ]
+            }
+        },
+        "clearHighlighting": {
+            "actionType": "JSFunction",
+            "method": "clearHighlighting",
+            "deps": "js/Arm0RequirementQualityService",
+            "inputData": {
+            }
+        },
+        "showPatternTabs": {
+            "actionType": "JSFunction",
+            "method": "showPatternTabs",
+            "deps": "js/Arm0RequirementQualityService",
+            "inputData": {
+                "data": "{{data}}"
+            }
+        },
+        "clearQualityContextOnUnMount": {
+            "actionType": "JSFunction",
+            "method": "clearQualityContextOnUnMount",
+            "deps": "js/Arm0RequirementQualityService",
+            "inputData": {
+                "subpanelContext" : "{{subPanelContext}}"
+            }
+        }
+    },
+    "data": {
+        "qualityTabs":
+            [
+                {
+                    "tabKey": "Correctness",
+                    "panelId": "Arm0RequirementQualityCorrectness",
+                    "name": "{{i18n.correctness}}",
+                    "recreatePanel": true,
+                    "isolateMode": false,
+                    "visibleWhen": "true"
+                },
+                {
+                    "tabKey": "MatchingPatternStructure",
+                    "panelId": "Arm0RequirementQualityPatternsStructure",
+                    "name": "{{i18n.matchingPatternStructure}}",
+                    "recreatePanel": true,
+                    "isolateMode": false,
+                    "visibleWhen": "true"
+                }
+            ]
+    },
+    "messages": {
+        "reuseAPICallFailedError": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.reuseAPICallFailedError}}"
+        }
+    },
+    "functions": {
+        "getGetPatternGroupsWebServicePath": {
+            "functionName": "getGetPatternGroupsWebServicePath",
+            "parameters": [
+            ]
+        }
+    },
+    "preferences": [
+        "AWC_REQ_Reuse_URL"
+    ],
+    "lifecycleHooks": {
+        "onInit": "reveal",
+        "onUnmount": "clearQualityContextOnUnMount"
+    },
+    "onEvent": [
+        {
+            "eventId": "requirementDocumentation.refreshQualityMetricTable",
+            "action": "refreshQualityMetricTable"
+        },
+        {
+            "eventId": "Arm0ShowQualityMetricData.reveal",
+            "action": "reveal",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "Arm0ShowQualityMetricData.callReuseAPI",
+            "action": "CalculateQuality",
+            "cacheEventData":true
+        },
+        {
+            "eventId": "Arm0ShowQualityMetricData.CalculateQuality",
+            "action": "checkForTab",
+            "cacheEventData":true
+        },
+        {
+            "eventId": "Arm0ShowQualityMetricData.processQualityResponse",
+            "action": "processQualityResponse"
+        },
+        {
+            "eventId": "requirementDocumentation.objectSelectionChanged",
+            "action": "CalculateQuality",
+            "cacheEventData":true
+        },
+        {
+            "eventId": "Arm0ShowQualityMetricData.contentUnloaded",
+            "action": "clearHighlighting"
+        },
+        {
+            "eventId": "Arm0ShowQualityMetricData.toggleButtonClicked",
+            "action": "showPatternTabs",
+            "cacheEventData": true
+        }
+
+    ],
+    "i18n":
+    {
+        "reuseAPICallFailedError": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "correctness": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "patternsExamples": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "matchingPatternStructure": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "matchingPatternState": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "pattern": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "patternGroup": [
+            "RichTextEditorCommandPanelsMessages"
+        ]
+    }
+}

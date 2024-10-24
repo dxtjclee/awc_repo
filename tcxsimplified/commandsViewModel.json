@@ -1,0 +1,2026 @@
+{
+  "commands": {
+    "tcxSimplifiedReleaseCmd": {
+      "iconId": "cmdReleaseObjects",
+      "isGroup": false,
+      "title": "{{i18n.release}}",
+      "description": "{{i18n.releaseDesc}}"
+    },
+    "tcxSimplifiedExportToExcelCmd": {
+      "iconId": "cmdExport",
+      "isGroup": false,
+      "title": "{{i18n.tcxSimplifiedExportToExcelTitle}}",
+      "description": "{{i18n.tcxSimplifiedExportToExcelDesc}}"
+    },
+    "tcxSimplifiedDeleteTaskCmd": {
+      "iconId": "cmdDelete",
+      "isGroup": false,
+      "title": "{{i18n.deleteTask}}",
+      "description": "{{deleteTaskDesc}}"
+    },
+    "tcxSimplifiedCreateDoTask": {
+      "iconId": "cmdNew",
+      "isGroup": false,
+      "title": "{{i18n.createDoTask}}",
+      "description": "{{i18n.createDoTaskDesc}}"
+    },
+    "tcxSimplifiedAddAttachmentCmd": {
+      "iconId": "cmdAdd",
+      "isGroup": false,
+      "title": "{{i18n.add}}",
+      "description": "{{i18n.createDoTaskDesc}}"
+    },
+    "tcxSimplifiedRemoveAttachmentCmd": {
+      "iconId": "cmdRemove",
+      "isGroup": false,
+      "title": "{{i18n.remove}}",
+      "description": "{{i18n.removeAttachementDesc}}"
+    },
+    "tcxSimplifiedReassignTask": {
+      "iconId": "cmdAssignTask",
+      "isGroup": false,
+      "title": "{{i18n.reassign}}",
+      "description": "{{i18n.Awp0ReassignTaskDesc}}"
+    },
+    "tcxSimplifiedAddAssigneeCmd": {
+      "iconId": "cmdAdd",
+      "isGroup": false,
+      "title": "{{i18n.add}}",
+      "description": "{{i18n.addAssigneeDesc}}"
+    },
+    "tcxSimplifiedRemoveAssigneeCmd": {
+      "iconId": "cmdRemove",
+      "isGroup": false,
+      "title": "{{i18n.remove}}",
+      "description": "{{i18n.removeAssigneeDesc}}"
+    },
+    "tcxSimplifiedAddDesignCmd": {
+      "iconId": "cmdAdd",
+      "isGroup": false,
+      "title": "{{i18n.tcxSimplifiedAddDesignTitle}}",
+      "description": "{{i18n.tcxSimplifiedAddDesignDesc}}"
+    },
+    "tcxSimplifiedAddFolderCmd": {
+      "iconId": "cmdAdd",
+      "isGroup": false,
+      "title": "{{i18n.tcxSimplifiedAddFolderTitle}}",
+      "description": "{{i18n.tcxSimplifiedAddFolderDesc}}"
+    },
+    "tcxSimplifiedAddDocumentCmd": {
+      "iconId": "cmdAdd",
+      "isGroup": false,
+      "title": "{{i18n.tcxSimplifiedAddDocumentTitle}}",
+      "description": "{{i18n.tcxSimplifiedAddDocumentDesc}}"
+    }
+  },
+  "commandHandlers": {
+    "tcxDisableReactiveLoggingHandler": {
+      "id": "Awp0ShowReactiveLogging",
+      "activeWhen": {
+        "condition": "conditions.disableLoggingCmdInTcX"
+      },
+      "visibleWhen": false
+    },
+    "tcxSimplifiedAddAttachmentCmdHandler": {
+      "id": "tcxSimplifiedAddAttachmentCmd",
+      "action": "openTaskAttachmentPanel",
+      "activeWhen": true,
+      "visibleWhen": true
+    },
+    "tcxSimplifiedRemoveAttachmentCmdHandler": {
+      "id": "tcxSimplifiedRemoveAttachmentCmd",
+      "action": "removeTargetAttachment",
+      "activeWhen": true,
+      "visibleWhen": true,
+      "enableWhen": {
+        "condition": "conditions.removeAttachmentCondition"
+      }
+    },
+    "tcxSimplifiedAddAssigneeCmdHandler": {
+      "id": "tcxSimplifiedAddAssigneeCmd",
+      "action": "openAddAssigneePanel",
+      "activeWhen": true,
+      "visibleWhen": true,
+      "enableWhen": {
+        "condition": "conditions.addAssignedUsersCondition"
+      }
+    },
+    "tcxSimplifiedRemoveAssigneeCmdHandler": {
+      "id": "tcxSimplifiedRemoveAssigneeCmd",
+      "action": "removeAssignedUsers",
+      "activeWhen": true,
+      "visibleWhen": true,
+      "enableWhen": {
+        "condition": "conditions.removeAssignedUsersCondition"
+      }
+    },
+    "tcxSimplifiedAddDesignCmdHandler": {
+      "id": "tcxSimplifiedAddDesignCmd",
+      "action": "tcxSimplifiedAddDesignAction",
+      "activeWhen": {
+        "condition": "conditions.isTcxSimplifiedAddFolderSimplifiedCondition"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isTcxSimplifiedAddFolderSimplifiedCondition"
+      }
+    },
+    "tcxSimplifiedAddFolderCmdHandler": {
+      "id": "tcxSimplifiedAddFolderCmd",
+      "action": "tcxSimplifiedAddFolderAction",
+      "activeWhen": {
+        "condition": "conditions.isTcxSimplifiedAddFolderSimplifiedCondition"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isTcxSimplifiedAddFolderSimplifiedCondition"
+      }
+    },
+    "tcxSimplifiedAddDocumentCmdHandler": {
+      "id": "tcxSimplifiedAddDocumentCmd",
+      "action": "tcxSimplifiedAddDocumentAction",
+      "activeWhen": {
+        "condition": "conditions.isTcxSimplifiedAddFolderSimplifiedCondition"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isTcxSimplifiedAddFolderSimplifiedCondition"
+      }
+    },
+    "tcxSimplifiedEditCommandHandler": {
+      "id": "Awp0StartEditTable",
+      "activeWhen": {
+        "condition": "conditions.tcxSimplifiedHideEditInFolderSublocation"
+      },
+      "visibleWhen": false
+    },
+    "tcxSimplifiedStartEditCommandHandler": {
+      "id": "Awp0EditGroup",
+      "activeWhen": {
+        "condition": "conditions.tcxSimplifiedIsTaskPerformableByUser"
+      },
+      "visibleWhen": false
+    },
+    "tcxSimplifiedSaveEditCommandHandler": {
+      "id": "Awp0SaveEditsPWA",
+      "activeWhen": {
+        "condition": "conditions.tcxSimplifiedHideEditInFolderSublocation"
+      },
+      "visibleWhen": false
+    },
+    "tcxSimplifiedCancelEditCommandHandler": {
+      "id": "Awp0CancelEditsPWA",
+      "activeWhen": {
+        "condition": "conditions.tcxSimplifiedHideEditInFolderSublocation"
+      },
+      "visibleWhen": false
+    },
+    "tcxSimplifiedReleaseCmdHandler": {
+      "id": "tcxSimplifiedReleaseCmd",
+      "action": "getReleasedInfo",
+      "activeWhen": {
+        "condition": "conditions.releaseCommandActiveCondition"
+      },
+      "enableWhen": {
+        "condition": "conditions.releaseCommandEnableCondition"
+      }
+    },
+    "tcxSimplifiedExportToExcelCmdHandler": {
+      "id": "tcxSimplifiedExportToExcelCmd",
+      "action": "Arm0ActivateExportToRoundTripExcelPanel",
+      "activeWhen": {
+        "condition": "conditions.isTcxSimplifiedExportToExcelSupported"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isTcxSimplifiedExportToExcelSupported"
+      }
+    },
+    "tcxSimplifiedDisableCutRCMHandler": {
+      "id": "Awp0CutContextMenu",
+      "activeWhen": {
+        "condition": "conditions.isTcxSimplifiedACEAndCutCmdActive"
+      },
+      "visibleWhen": false
+    },
+    "tcxSimplifiedDisablePasteRCMHandler": {
+      "id": "Awp0PasteContextMenu",
+      "activeWhen": {
+        "condition": "conditions.isTcxSimplifiedACEAndPasteCmdVisible"
+      },
+      "visibleWhen": false
+    },
+    "tcxSimplifiedDisableCutRWCHandler": {
+      "id": "Awp0Cut",
+      "activeWhen": {
+        "condition": "conditions.isTcxSimplifiedACEAndCutCmdActive"
+      },
+      "enableWhen": false
+    },
+    "tcxSimplifiedDisablePasteRWCHandler": {
+      "id": "Awp0Paste",
+      "activeWhen": {
+        "condition": "conditions.isTcxSimplifiedACEAndPasteCmdVisible"
+      },
+      "enableWhen": false
+    },
+    "tcxSimplifiedHideTreeViewInFoldersHandler": {
+      "id": "Awp0ShowTreeView",
+      "activeWhen": {
+        "condition": "conditions.isTcxSimplifiedInboxAndFolderPage"
+      },
+      "visibleWhen": false
+    },
+    "tcxSimplifiedHideSummaryViewHandler": {
+      "id": "Awp0ShowSummaryView",
+      "activeWhen": {
+        "condition": "conditions.isTcxSimplifiedInboxAndFolderPage"
+      },
+      "visibleWhen": false
+    },
+    "tcxSimplifiedHideListViewInFoldersHandler": {
+      "id": "Awp0ShowListView",
+      "activeWhen": {
+        "condition": "conditions.isTcxSimplifiedInboxAndFolderPage"
+      },
+      "visibleWhen": false
+    },
+    "tcxSimplifiedHideTableViewInFoldersHandler": {
+      "id": "Awp0ShowTableView",
+      "activeWhen": {
+        "condition": "conditions.isTcxSimplifiedInboxAndFolderPage"
+      },
+      "visibleWhen": false
+    },
+    "tcxSimplifiedHideTableSummaryViewInFoldersHandler": {
+      "id": "Awp0ShowTableSummaryView",
+      "activeWhen": {
+        "condition": "conditions.isTcxSimplifiedInboxAndFolderPage"
+      },
+      "visibleWhen": false
+    },
+    "tcxSimplifiedHideImageViewInFoldersHandler": {
+      "id": "Awp0ShowImageView",
+      "activeWhen": {
+        "condition": "conditions.isTcxSimplifiedInboxAndFolderPage"
+      },
+      "visibleWhen": false
+    },
+    "tcxSimplifiedHideTreeWithSummaryViewInFoldersHandler": {
+      "id": "Awp0ShowTreeSummaryView",
+      "activeWhen": {
+        "condition": "conditions.isTcxSimplifiedInboxAndFolderPage"
+      },
+      "visibleWhen": false
+    },
+    "tcxSimplifiedHideModelObjListDisplayTogglesInFoldersHandler": {
+      "id": "Awp0ModelObjListDisplayToggles",
+      "activeWhen": {
+        "condition": "conditions.isTcxSimplifiedInboxAndFolderPage"
+      },
+      "visibleWhen": false
+    },
+    "tcxSimplifiedShowListSummaryViewInSearchHandler": {
+      "id": "Awp0ShowSummaryView",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.tcxSimplifiedAndSearchPage"
+      }
+    },
+    "tcxSimplifiedShowListViewInSearchHandler": {
+      "id": "Awp0ShowListView",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.tcxSimplifiedAndSearchPage"
+      }
+    },
+    "tcxSimplifiedShowTableViewInSearchHandler": {
+      "id": "Awp0ShowTableView",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.tcxSimplifiedAndSearchPage"
+      }
+    },
+    "tcxSimplifiedShowTableSummaryViewViewInSearchHandler": {
+      "id": "Awp0ShowTableSummaryView",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.tcxSimplifiedAndSearchPage"
+      }
+    },
+    "tcxSimplifiedShowImageViewInSearchHandler": {
+      "id": "Awp0ShowImageView",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.tcxSimplifiedAndSearchPage"
+      }
+    },
+    "tcxSimplifiedDeleteTaskCmdHandler": {
+      "id": "tcxSimplifiedDeleteTaskCmd",
+      "action": "deleteTask",
+      "activeWhen": {
+        "condition": "conditions.tcxSimplifiedCreateTaskCondition"
+      },
+      "enableWhen": {
+        "condition": "conditions.tcxSimplifiedDeleteTaskVisibleCondition"
+      }
+    },
+    "tcxSimplifiedCreateDoTaskHandler": {
+      "id": "tcxSimplifiedCreateDoTask",
+      "action": "launchCreateTaskPanel",
+      "activeWhen": {
+        "condition": "conditions.tcxSimplifiedIsActiveCreateTask"
+      },
+      "enableWhen": {
+        "condition": "conditions.tcxSimplifiedIsEnableCreateDoTask"
+      }
+    },
+    "tcxSimplififedAwp0NewWorkflowProcessCommandHandler": {
+      "id": "Awp0NewWorkflowProcess",
+      "activeWhen": {
+        "condition": "conditions.tcxSimplifiedCreateDoTaskCondition"
+      },
+      "visibleWhen": false
+    },
+    "tcxSimplifiedReassignTaskCommandHandler": {
+      "id": "tcxSimplifiedReassignTask",
+      "action": "reassignTaskAction",
+      "visibleWhen": {
+        "condition": "conditions.tcxSimplifiedReassignTaskVisibleCondition"
+      },
+      "activeWhen": {
+        "condition": "conditions.ReassignTaskCommandCondition"
+      },
+      "enableWhen": {
+        "condition": "conditions.tcxSimplifiedReassignTaskCommandCondition"
+      }
+    },
+    "tcxEPMDoTaskShowObjectHandler": {
+      "id": "Awp0ShowObject",
+      "action": "openEPMDoTaskObject",
+      "activeWhen": {
+        "condition": "conditions.openTaskObjectCondition"
+      }
+    },
+    "tcxEPMDoTaskShowObjectCellHandler": {
+      "id": "Awp0ShowObjectCell",
+      "action": "openEPMDoTaskObject",
+      "activeWhen": {
+        "condition": "conditions.openTaskObjectCondition"
+      }
+    },
+    "tcxEPMDoTaskShowObjectInNewTabHandler": {
+      "id": "Awp0OpenInNewTab",
+      "action": "openEPMDoTaskObjectInNewTab",
+      "activeWhen": {
+        "condition": "conditions.openTaskObjectCondition"
+      }
+    },
+    "tcxAwn0NXAddComponentHostedCommandHandler": {
+      "id": "Awn0NXAddComponentHosted",
+      "activeWhen": {
+        "condition": "conditions.isNotAwn0NXAddComponentHosted"
+      },
+      "visibleWhen": false
+    },
+    "tcxAwn0NXOpenHostedCommandHandler": {
+      "id": "Awn0NXOpenHosted",
+      "activeWhen": {
+        "condition": "conditions.isNotAwn0NXOpenHosted"
+      },
+      "visibleWhen": false
+    },
+    "tcxAwn0NXOpenHostedCellCommandCommandHandler": {
+      "id": "Awn0NXOpenHostedCellCommand",
+      "activeWhen": {
+        "condition": "conditions.isNotAwn0NXOpenHosted"
+      },
+      "visibleWhen": false
+    },
+    "tcxAwn0NXSetDefaultFolderHostedCommandHandler": {
+      "id": "Awn0NXSetDefaultFolderHosted",
+      "activeWhen": {
+        "condition": "conditions.isNotAwn0NXSetDefaultFolderHosted"
+      },
+      "visibleWhen": false
+    },
+    "tcxAwn0NXOpenDatasetVersionCommandHandler": {
+      "id": "Awn0NXOpenDatasetVersion",
+      "activeWhen": {
+        "condition": "conditions.isNotAwn0NXOpenDatasetVersion"
+      },
+      "visibleWhen": false
+    },
+    "tcxAwn0NXOpenDatasetVersionHostedCommandHandler": {
+      "id": "Awn0NXOpenDatasetVersionHosted",
+      "activeWhen": {
+        "condition": "conditions.isNotAwn0NXOpenDatasetVersionHosted"
+      },
+      "visibleWhen": false
+    },
+    "tcxAwn0NXOpenDatasetVersionPanelCommandHandler": {
+      "id": "Awn0NXOpenDatasetVersionPanel",
+      "activeWhen": {
+        "condition": "conditions.isNotAwn0NXOpenDatasetVersion"
+      },
+      "visibleWhen": false
+    },
+    "tcxAwn0NXOpenDatasetVersionPanelHostedCommandHandler": {
+      "id": "Awn0NXOpenDatasetVersionPanelHosted",
+      "activeWhen": {
+        "condition": "conditions.isNotAwn0NXOpenDatasetVersionHosted"
+      },
+      "visibleWhen": false
+    },
+    "tcxAwn0OpenNxTcXmlCommandHandler": {
+      "id": "Awn0OpenNxTcXml",
+      "activeWhen": {
+        "condition": "conditions.isNotAwn0OpenNxTcXml"
+      },
+      "visibleWhen": false
+    },
+    "tcxcmdOpenInSWIMOneStepCommandHandler": {
+      "id": "cmdOpenInSWIMOneStep",
+      "activeWhen": {
+        "condition": "conditions.hideSWIfNotSupported"
+      },
+      "visibleWhen": false
+    },
+    "tcxAwp0OpenInSWIMCommandHandler": {
+      "id": "Awp0OpenInSWIM",
+      "activeWhen": {
+        "condition": "conditions.hideSWIfNotSupported"
+      },
+      "visibleWhen": false
+    },
+    "tcxAwp0OpenInSEECCommandHandler": {
+      "id": "Awp0OpenInSEEC",
+      "activeWhen": {
+        "condition": "conditions.hideSEIfNotSupported"
+      },
+      "visibleWhen": false
+    },
+    "tcxcmdOpenInSEECOneStepCommandHandler": {
+      "id": "cmdOpenInSEECOneStep",
+      "activeWhen": {
+        "condition": "conditions.hideSEIfNotSupported"
+      },
+      "visibleWhen": false
+    }
+  },
+  "commandPlacements": {
+    "tcxSimplifiedAddAttachmentCmdPlacement": {
+      "id": "tcxSimplifiedAddAttachmentCmd",
+      "uiAnchor": "tcx_addTargetCmd",
+      "priority": 100
+    },
+    "tcxSimplifiedReleaseCmdPlacement": {
+      "id": "tcxSimplifiedReleaseCmd",
+      "uiAnchor": "aw_rightWall",
+      "priority": 100,
+      "parentGroupId": "Awp0ManageGroup"
+    },
+    "tcxSimplifiedExportToExcelCmdPlacement": {
+      "id": "tcxSimplifiedExportToExcelCmd",
+      "uiAnchor": "aw_primaryWorkArea",
+      "priority": 50
+    },
+    "tcxSimplifiedDeleteTaskCmdPlacement": {
+      "id": "tcxSimplifiedDeleteTaskCmd",
+      "uiAnchor": "aw_primaryWorkArea",
+      "priority": 250
+    },
+    "tcxSimplifiedReleaseCmdPWAPlacement": {
+      "id": "tcxSimplifiedReleaseCmd",
+      "uiAnchor": "aw_primaryWorkArea",
+      "priority": 50
+    },
+    "tcxSimplifiedCreateDoTaskPlacement": {
+      "id": "tcxSimplifiedCreateDoTask",
+      "uiAnchor": "aw_primaryWorkArea",
+      "priority": 200
+    },
+    "tcxSimplifiedCreateDoTaskPWAPlacement": {
+      "id": "tcxSimplifiedCreateDoTask",
+      "uiAnchor": "aw_rightWall",
+      "priority": 110,
+      "parentGroupId": "Awp0ManageGroup"
+    },
+    "tcxSimplifiedRemoveAttachmentCmdPlacement": {
+      "id": "tcxSimplifiedRemoveAttachmentCmd",
+      "uiAnchor": "tcx_addTargetCmd",
+      "priority": 101
+    },
+    "tcxSimplifiedReassignTaskCmdPlacement": {
+      "id": "tcxSimplifiedReassignTask",
+      "uiAnchor": "aw_primaryWorkArea",
+      "priority": 250
+    },
+    "tcxSimplifiedAddAssigneeCmdPlacement": {
+      "id": "tcxSimplifiedAddAssigneeCmd",
+      "uiAnchor": "tcx_addAssignee",
+      "priority": 100
+    },
+    "tcxSimplifiedRemoveAssigneeCmdPlacement": {
+      "id": "tcxSimplifiedRemoveAssigneeCmd",
+      "uiAnchor": "tcx_addAssignee",
+      "priority": 101
+    },
+    "tcxSimplifiedAddDesignContextMenuPlacement": {
+      "id": "tcxSimplifiedAddDesignCmd",
+      "uiAnchor": "aw_contextMenu2",
+      "priority": 600
+    },
+    "tcxSimplifiedAddDocumentContextMenuPlacement": {
+      "id": "tcxSimplifiedAddDocumentCmd",
+      "uiAnchor": "aw_contextMenu2",
+      "priority": 600
+    },
+    "tcxSimplifiedAddFolderContextMenuPlacement": {
+      "id": "tcxSimplifiedAddFolderCmd",
+      "uiAnchor": "aw_contextMenu2",
+      "priority": 600
+    }
+  },
+  "actions": {
+    "openTaskAttachmentPanel": {
+      "actionType": "JSFunction",
+      "method": "openTaskAttachmentPanel",
+      "inputData": {
+        "data": "{{data}}",
+        "sharedData": "{{commandContext.createContext.sharedData}}"
+      },
+      "outputData": {
+        "sharedData": ""
+      },
+      "deps": "js/createTaskService"
+    },
+    "removeTargetAttachment": {
+      "actionType": "JSFunction",
+      "method": "removeTargetAttachment",
+      "inputData": {
+        "context": "{{commandContext}}"
+      },
+      "deps": "js/createTaskService"
+    },
+    "openAddAssigneePanel": {
+      "actionType": "JSFunction",
+      "method": "openAddAssigneePanel",
+      "inputData": {
+        "data": "{{data}}",
+        "sharedData": "{{commandContext.createContext.sharedData}}"
+      },
+      "outputData": {
+        "sharedData": ""
+      },
+      "deps": "js/createTaskService"
+    },
+    "removeAssignedUsers": {
+      "actionType": "JSFunction",
+      "method": "removeAssignedUsers",
+      "inputData": {
+        "context": "{{commandContext}}"
+      },
+      "deps": "js/createTaskService"
+    },
+    "tcxSimplifiedAddDesignAction": {
+      "actionType": "batchJob",
+      "steps": [
+        {
+          "action": "tcxSimplifiedGetRelationMapForDesign"
+        },
+        {
+          "action": "tcxSimplifiedRegisterAddPanelContext"
+        }
+      ]
+    },
+    "tcxSimplifiedGetRelationMapForDesign": {
+      "actionType": "JSFunction",
+      "method": "tcxLiteGetRelationMapForAdd",
+      "inputData": {
+        "type": "Design Revision"
+      },
+      "outputData": {
+        "relations": "relations"
+      },
+      "deps": "js/createTaskService"
+    },
+    "tcxSimplifiedAddFolderAction": {
+      "actionType": "batchJob",
+      "steps": [
+        {
+          "action": "tcxSimplifiedGetRelationMapForFolder"
+        },
+        {
+          "action": "tcxSimplifiedRegisterAddPanelContext"
+        }
+      ]
+    },
+    "tcxSimplifiedGetRelationMapForFolder": {
+      "actionType": "JSFunction",
+      "method": "tcxLiteGetRelationMapForAdd",
+      "inputData": {
+        "type": "Folder"
+      },
+      "outputData": {
+        "relations": "relations"
+      },
+      "deps": "js/createTaskService"
+    },
+    "tcxSimplifiedAddDocumentAction": {
+      "actionType": "batchJob",
+      "steps": [
+        {
+          "action": "tcxSimplifiedGetRelationMapForDocument"
+        },
+        {
+          "action": "tcxSimplifiedRegisterAddPanelContext"
+        }
+      ]
+    },
+    "tcxSimplifiedGetRelationMapForDocument": {
+      "actionType": "JSFunction",
+      "method": "tcxLiteGetRelationMapForAdd",
+      "inputData": {
+        "type": "DocumentRevision"
+      },
+      "outputData": {
+        "relations": "relations"
+      },
+      "deps": "js/createTaskService"
+    },
+    "tcxSimplifiedRegisterAddPanelContext": {
+      "actionType": "JSFunction",
+      "method": "updateAddObjectContext",
+      "deps": "js/addObjectUtils",
+      "inputData": {
+        "0": {
+          "target": "{{ctx.mselected[0]}}",
+          "relationMap": "{{data.relations}}",
+          "panelActive": "{{ctx.activeToolsAndInfoCommand.commandId === 'Awp0ShowCreateObject'}}",
+          "visibleTabs": "new",
+          "objectSetSourceHasDataset": false,
+          "showConfiguredRevision": false
+        }
+      },
+      "outputData": {
+        "addObjectContext": ""
+      },
+      "events": {
+        "success": [
+          {
+            "name": "addObject.ensureFilterTypesLoaded"
+          },
+          {
+            "name": "addObject.open"
+          }
+        ]
+      }
+    },
+    "getReleasedInfo": {
+      "actionType": "JSFunction",
+      "method": "getReleasedInfo",
+      "inputData": {
+        "data": "{{data}}"
+      },
+      "deps": "js/commonUtilService",
+      "events": {
+        "success": [
+          {
+            "name": "confirmReleaseObjectSingle",
+            "condition": "data.releasedCount === 0 && ctx.mselected.length === 1"
+          },
+          {
+            "name": "confirmReleaseObjects",
+            "condition": "data.releasedCount === 0 && ctx.mselected.length > 1 "
+          },
+          {
+            "name": "confirmReleaseObjectsForMixedSelection",
+            "condition": "data.releasedCount > 0 && ctx.mselected.length > 1 "
+          }
+        ]
+      }
+    },
+    "releaseObject": {
+      "actionType": "TcSoaService",
+      "serviceName": "Workflow-2008-06-Workflow",
+      "method": "createInstance",
+      "inputData": {
+        "startImmediately": true,
+        "observerKey": "",
+        "name": "{{ctx.selected.props.object_string.uiValues[0]}}",
+        "subject": "",
+        "description": "",
+        "contextData": {
+          "processTemplate": "Design_Release_Process",
+          "attachments": "{{function:getAttachedTargetObjects}}",
+          "attachmentCount": 1,
+          "attachmentTypes": "{{function:getTargetAttachmentTypes}}"
+        }
+      },
+      "outputData": {
+        "workflowOutput": ""
+      },
+      "events": {
+        "success": [
+          {
+            "name": "clp.customerListeningSurveyEvent",
+            "eventData": {
+              "source": "tcxSimplifiedReleaseCmd"
+            },
+            "condition": "ctx.isCLPInstalled === true"
+          }
+        ]
+      },
+      "actionMessages": {
+        "failure": [
+          {
+            "message": "releaseobjectFailure",
+            "condition": "data.workflowOutput.ServiceData.partialErrors.length > 0"
+          }
+        ]
+      },
+      "deps": "js/commonUtilService"
+    },
+    "deleteTask": {
+      "actionType": "JSFunctionAsync",
+      "method": "getTaskObjectsToDelete",
+      "deps": "js/Awp0InboxUtils",
+      "inputData": {
+        "selectedObjects": {
+          "$adapt": "{{commandContext.selectionData.value.selected}}"
+        }
+      },
+      "outputData": {
+        "deletedTaskObjects": ""
+      },
+      "actionMessages": {
+        "success": [
+          {
+            "condition": "( data.deletedTaskObjects && data.deletedTaskObjects.length === 1 && data.deletedTaskObjects[0] )",
+            "message": "singleClickDeleteTaskSuccess"
+          },
+          {
+            "condition": "(data.deletedTaskObjects && data.deletedTaskObjects.length > 1)",
+            "message": "multipleClickDeleteTaskSuccess"
+          }
+        ]
+      }
+    },
+    "launchCreateTaskPanel": {
+      "actionType": "JSFunction",
+      "method": "activateCommandPanel",
+      "deps": "js/commandPanel.service",
+      "inputData": {
+        "commandId": "tcxSimplifiedCreateDoTask",
+        "location": "aw_toolsAndInfo"
+      }
+    },
+    "openEPMDoTaskObjectInNewTab": {
+      "actionType": "batchJob",
+      "steps": [
+        {
+          "action": "loadFnd0StartedTasksProperty"
+        },
+        {
+          "action": "openEPMDoTaskInNewTabNavigateAction"
+        }
+      ]
+    },
+    "openEPMDoTaskObject": {
+      "actionType": "batchJob",
+      "steps": [
+        {
+          "action": "loadFnd0StartedTasksProperty"
+        },
+        {
+          "action": "openEPMDoTaskNavigateAction"
+        }
+      ]
+    },
+    "loadFnd0StartedTasksProperty": {
+      "actionType": "TcSoaService",
+      "serviceName": "Core-2006-03-DataManagement",
+      "method": "getProperties",
+      "inputData": {
+        "objects": [
+          {
+            "uid": "{{function:getUid}}",
+            "type": "EPMTask"
+          }
+        ],
+        "attributes": [
+          "fnd0StartedTasks"
+        ]
+      },
+      "policy": {
+        "types": [
+          {
+            "name": "EPMTask",
+            "properties": [
+              {
+                "name": "fnd0StartedTasks"
+              }
+            ]
+          }
+        ]
+      },
+      "outputData": {
+        "epmDoTaskUid": "{{function:getEPMDoTaskObject}}"
+      },
+      "deps": "js/createTaskService"
+    },
+    "openEPMDoTaskNavigateAction": {
+      "actionType": "Navigate",
+      "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+      "navigationParams": {
+        "uid": "{{data.epmDoTaskUid}}"
+      }
+    },
+    "openEPMDoTaskInNewTabNavigateAction": {
+      "actionType": "Navigate",
+      "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+      "navigationParams": {
+        "uid": "{{data.epmDoTaskUid}}"
+      },
+      "navigateIn": "newTab"
+    }
+  },
+  "onEvent": [
+    {
+      "eventId": "confirmReleaseObjectSingle",
+      "message": "promptToConfirmRelease"
+    },
+    {
+      "eventId": "confirmReleaseObjects",
+      "message": "promptToConfirmReleaseMultiple"
+    },
+    {
+      "eventId": "confirmReleaseObjectsForMixedSelection",
+      "message": "promptToConfirmReleaseMixedSelection"
+    }
+  ],
+  "messages": {
+    "promptToConfirmRelease": {
+      "messageType": "WARNING",
+      "messageText": "{{i18n.confirmReleaseMessage}}",
+      "messageTextParams": [
+        "{{ctx.selected.props.object_string.uiValues[0]}}"
+      ],
+      "navigationOptions": [
+        {
+          "option": "Cancel",
+          "text": "{{i18n.cancel}}",
+          "action": ""
+        },
+        {
+          "option": "Release",
+          "text": "{{i18n.release}}",
+          "action": "releaseObject"
+        }
+      ]
+    },
+    "promptToConfirmReleaseMultiple": {
+      "messageType": "WARNING",
+      "messageText": "{{i18n.confirmReleaseMultipleMessage}}",
+      "messageTextParams": [
+        "{{ctx.mselected.length}}"
+      ],
+      "navigationOptions": [
+        {
+          "option": "Cancel",
+          "text": "{{i18n.cancel}}",
+          "action": ""
+        },
+        {
+          "option": "Release",
+          "text": "{{i18n.release}}",
+          "action": "releaseObject"
+        }
+      ]
+    },
+    "promptToConfirmReleaseMixedSelection": {
+      "expression": {
+        "unreleasedCount": "ctx.mselected.length - data.releasedCount",
+        "length": "ctx.mselected.length"
+      },
+      "messageType": "WARNING",
+      "messageKey": "releasedObjectsInfo",
+      "messageData": {
+        "releasedObjects": "{{data.releasedObjects}}"
+      },
+      "messageTextParams": [
+        "{{expression.unreleasedCount}}",
+        "{{expression.length}}"
+      ],
+      "navigationOptions": [
+        {
+          "option": "Cancel",
+          "text": "{{i18n.cancel}}",
+          "action": ""
+        },
+        {
+          "option": "Release",
+          "text": "{{i18n.release}}",
+          "action": "releaseObject"
+        }
+      ]
+    },
+    "releaseobjectFailure": {
+      "messageType": "ERROR",
+      "messageText": "{{i18n.releaseFailure}}",
+      "messageTextParams": [
+        "{{data.workflowOutput.ServiceData.partialErrors[0].errorValues[0].message}}"
+      ]
+    },
+    "singleClickDeleteTaskSuccess": {
+      "messageType": "WARNING",
+      "messageText": "{{i18n.singleTaskDeleteConfirmationMessage}}",
+      "messageTextParams": [
+        "{{data.deletedTaskObjects[0].props.object_string.uiValues[0]}}"
+      ],
+      "navigationOptions": [
+        {
+          "option": "Discard",
+          "text": "{{i18n.discard}}"
+        },
+        {
+          "option": "Delete",
+          "text": "{{i18n.delete}}",
+          "action": "performTaskDelete"
+        }
+      ]
+    },
+    "multipleClickDeleteTaskSuccess": {
+      "messageType": "WARNING",
+      "messageText": "{{i18n.multiTaskDeleteConfirmationMessage}}",
+      "messageTextParams": [
+        "{{data.deletedTaskObjects.length}}"
+      ],
+      "navigationOptions": [
+        {
+          "option": "Discard",
+          "text": "{{i18n.discard}}"
+        },
+        {
+          "option": "Delete",
+          "text": "{{i18n.delete}}",
+          "action": "performTaskDelete"
+        }
+      ]
+    }
+  },
+  "functions": {
+    "getAttachedTargetObjects": {
+      "functionName": "getAttachedTargetObjects",
+      "parameters": [
+        "{{data}}"
+      ]
+    },
+    "getTargetAttachmentTypes": {
+      "functionName": "getTargetAttachmentTypes",
+      "parameters": [
+        "{{}}"
+      ]
+    },
+    "getEPMDoTaskObject": {
+      "functionName": "getEPMDoTaskObject",
+      "parameters": [
+        "{{}}"
+      ]
+    },
+    "getUid": {
+      "functionName": "getUid",
+      "parameters": [
+        "{{commandContext}}"
+      ]
+    }
+  },
+  "conditions": {
+    "disableLoggingCmdInTcX": {
+      "expression": "!ctx.preferences.TC_ALLOW_REACTIVE_LOGGING || ctx.preferences.TC_ALLOW_REACTIVE_LOGGING[0]==='false'"
+    },
+    "isTcPlatformAtLeast142": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "ctx.tcSessionData.tcMajorVersion",
+            "$query": {
+              "$eq": 14
+            }
+          },
+          {
+            "$source": "ctx.tcSessionData.tcMinorVersion",
+            "$query": {
+              "$gte": 2
+            }
+          }
+        ]
+      }
+    },
+    "tcxIsFolderPage": {
+      "expression": "ctx.sublocation.nameToken === 'com.siemens.splm.clientfx.tcui.xrt.objectNavigationSubLocation'"
+    },
+    "isTcxSimplifiedAndAcePage": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.isTcxSimplifiedCommandsAvailable",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.isOccurrenceManagementSubLocation",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "isTcxSimplifiedExportToExcelSupported": {
+      "expression": {
+        "$source": "conditions.isTcxSimplifiedAndAcePage",
+        "$query": {
+          "$eq": true
+        }
+      }
+    },
+    "isTcxSimplifiedAndFolderPage": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.isTcxSimplifiedCommandsAvailable",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.tcxIsFolderPage",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "isTcxSimplifiedInboxAndFolderPage": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.isTcxSimplifiedCommandsAvailable",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$or": [
+              {
+                "$source": "conditions.tcxIsFolderPage",
+                "$query": {
+                  "$eq": true
+                }
+              },
+              {
+                "$source": "conditions.tcxIsInbox",
+                "$query": {
+                  "$eq": true
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "isTcxSimplifiedACEAndCutCmdActive": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.isTcxSimplifiedAndAcePage",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.aceCutEnableCondition",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "isTcxSimplifiedACEAndPasteCmdVisible": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.isTcxSimplifiedAndAcePage",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.acePasteVisibleCondition",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "isCadLiteInstalled": {
+      "expression": "ctx.preferences.Is_CadLite_Installed[0]==='true'"
+    },
+    "releaseCommandActiveCondition": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.isCadLiteInstalled",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.isTcPlatformAtLeast142",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.tcxIsInbox",
+            "$query": {
+              "$eq": false
+            }
+          },
+          {
+            "$source": "conditions.isTcxSimplifiedCommandsAvailable",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.isNotDiscussionLocation",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.isNotSavedSearchSubLocation",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "isTcXNotReleased": {
+      "expression": {
+        "$or": [
+          {
+            "$source": "conditions.tcxNotReleasedAssembly",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.tcxNotReleasedObject",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "releaseCommandEnableCondition": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.isTcXNotReleased",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "ctx.mselected.length",
+            "$query": {
+              "$gt": 0
+            }
+          },
+          {
+            "$source": "conditions.IsItemCheckout",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "ctx.mselected",
+            "$query": {
+              "$all": {
+                "$source": "modelType.typeHierarchyArray",
+                "$query": {
+                  "$in": [
+                    "ItemRevision",
+                    "Awb0Element"
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "isTcxSimplifiedCommandsAvailable": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "ctx.workspace.includedCommands",
+            "$query": {
+              "$in": [
+                "tcxSimplifiedExportToExcelCmd",
+                "tcxSimplifiedReleaseCmd",
+                "tcxSimplifiedDeleteTaskCmd",
+                "tcxSimplifiedCreateDoTask"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "tcxSimplifiedIsActiveCreateTask": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.isTcxSimplifiedCommandsAvailable",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.isCadLiteInstalled",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.isNotDiscussionLocation",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.isNotSavedSearchSubLocation",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "tcxSimplifiedIsEnableCreateDoTask": {
+      "expression": {
+        "$and": [
+          {
+            "$or": [
+              {
+                "$source": "ctx.selected",
+                "$query": {
+                  "$all": {
+                    "$source": "modelType.typeHierarchyArray",
+                    "$query": {
+                      "$notin": [
+                        "EPMTask"
+                      ]
+                    }
+                  }
+                }
+              },
+              {
+                "$source": "conditions.tcxIsInbox",
+                "$query": {
+                  "$eq": true
+                }
+              }
+            ]
+          },
+          {
+            "$or": [
+              {
+                "$source": "conditions.IsItemCheckout",
+                "$query": {
+                  "$eq": true
+                }
+              },
+              {
+                "$source": "conditions.isSelectionEmpty",
+                "$query": {
+                  "$eq": true
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "tcxSimplifiedAndSearchPage": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.searchPageVisible",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.isTcxSimplifiedCommandsAvailable",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "isTcxSimplifiedAddFolderSimplifiedCondition": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.isTcxSimplifiedCommandsAvailable",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.isTcxSimplifiedAddFolderSelected",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "openTaskObjectCondition": {
+      "expression": {
+        "$and": [
+          {
+            "$or": [
+              {
+                "$source": "conditions.isTcxSimplifiedAndAcePage",
+                "$query": {
+                  "$eq": true
+                }
+              },
+              {
+                "$source": "conditions.searchPageVisible",
+                "$query": {
+                  "$eq": true
+                }
+              }
+            ]
+          },
+          {
+            "$or": [
+              {
+                "$source": "ctx.selected.modelType.typeHierarchyArray",
+                "$query": {
+                  "$in": [
+                    "EPMTask"
+                  ]
+                }
+              },
+              {
+                "$source": "commandContext.prop.srcObjectTypeName",
+                "$query": {
+                  "$eq": "EPMTask"
+                }
+              }
+            ]
+          },
+          {
+            "$source": "conditions.tcxSimplifiedIsActiveCreateTask",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "isTcXLiteModeInstalled": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "ctx.preferences.TcXLiteMode",
+            "$query": {
+              "$notNull": true
+            }
+          },
+          {
+            "$source": "ctx.preferences.TcXLiteMode[0]",
+            "$query": {
+              "$eq": "true"
+            }
+          }
+        ]
+      }
+    },
+    "isNXNotInSupportedCADIntegration": {
+      "expression": {
+        "$or": [
+          {
+            "$source": "ctx.preferences.Supported_CAD_Integration",
+            "$query": {
+              "$isNull": true
+            }
+          },
+          {
+            "$source": "ctx.preferences.Supported_CAD_Integration",
+            "$query": {
+              "$notin": [
+                "NX"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "isSENotInSupportedCADIntegration": {
+      "expression": {
+        "$or": [
+          {
+            "$source": "ctx.preferences.Supported_CAD_Integration",
+            "$query": {
+              "$isNull": true
+            }
+          },
+          {
+            "$source": "ctx.preferences.Supported_CAD_Integration",
+            "$query": {
+              "$notin": [
+                "SOLIDEDGE"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "isSWNotInSupportedCADIntegration": {
+      "expression": {
+        "$or": [
+          {
+            "$source": "ctx.preferences.Supported_CAD_Integration",
+            "$query": {
+              "$isNull": true
+            }
+          },
+          {
+            "$source": "ctx.preferences.Supported_CAD_Integration",
+            "$query": {
+              "$notin": [
+                "SOLIDWORKS"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "hideSEIfNotSupported": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.isTcXLiteModeInstalled",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.isSENotInSupportedCADIntegration",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$or": [
+              {
+                "$source": "conditions.Awp0OpenInSEECStandAloneNonAceModeCommandCondition",
+                "$query": {
+                  "$eq": true
+                }
+              },
+              {
+                "$source": "conditions.Awp0OpenInSEECStandAloneAceModeCommandCondition",
+                "$query": {
+                  "$eq": true
+                }
+              },
+              {
+                "$source": "conditions.Awp0OpenInSEECHostedNonAceModeCommandCondition",
+                "$query": {
+                  "$eq": true
+                }
+              },
+              {
+                "$source": "conditions.Awp0OpenInSEECHostedAceModeCommandCondition",
+                "$query": {
+                  "$eq": true
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "hideSWIfNotSupported": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.isTcXLiteModeInstalled",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.isSWNotInSupportedCADIntegration",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$or": [
+              {
+                "$source": "conditions.Awp0OpenInSWIMStandAloneAceModeCommandCondition",
+                "$query": {
+                  "$eq": true
+                }
+              },
+              {
+                "$source": "conditions.Awp0OpenInSWIMStandAloneNonAceModeCommandCondition",
+                "$query": {
+                  "$eq": true
+                }
+              },
+              {
+                "$source": "conditions.Awp0OpenInSWIMHostedNonAceModeCommandCondition",
+                "$query": {
+                  "$eq": true
+                }
+              },
+              {
+                "$source": "conditions.Awp0OpenInSWIMHostedAceModeCommandCondition",
+                "$query": {
+                  "$eq": true
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "isNotAwn0NXAddComponentHosted": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.isTcXLiteModeInstalled",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.isNXNotInSupportedCADIntegration",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.awn0addComponentCommandVisibility",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "isNotAwn0NXOpenHosted": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.isTcXLiteModeInstalled",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.isNXNotInSupportedCADIntegration",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.awn0openinnxCommandVisibility",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "isNotAwn0NXSetDefaultFolderHosted": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.isTcXLiteModeInstalled",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.isNXNotInSupportedCADIntegration",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.awn0setNxDefaultFolderCommandVisibility",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "isNotAwn0NXOpenDatasetVersion": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.isTcXLiteModeInstalled",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.isNXNotInSupportedCADIntegration",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.canOpenDatasetVersionStandalone",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "isNotAwn0NXOpenDatasetVersionHosted": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.isTcXLiteModeInstalled",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.isNXNotInSupportedCADIntegration",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.canOpenDatasetVersionHosted",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "isNotAwn0OpenNxTcXml": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.isTcXLiteModeInstalled",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.isNXNotInSupportedCADIntegration",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.hostedNxOpenNxTcXml",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "isSelectionEmpty": {
+      "expression": "commandContext.selectionData.selected === undefined || commandContext.selectionData.selected.length === 0 || ctx.locationContext['ActiveWorkspace:Location'] === 'com.siemens.splm.client.inbox.tasksLocation'"
+    },
+    "IsItemCheckout": {
+      "expression": "ctx.visibleServerCommands.Awp0Checkout === true"
+    },
+    "tcxIsInbox": {
+      "expression": "(ctx.locationContext['ActiveWorkspace:Location'] === 'com.siemens.splm.client.inbox.tasksLocation')"
+    },
+    "removeAttachmentCondition": {
+      "expression": "commandContext.selectedObject.length > 0"
+    },
+    "ReassignTaskCommandCondition": {
+      "expression": "ctx.visibleServerCommands.Awp0ReassignTask && !((ctx.selected.props.parent_task.dbValues[0]==='' && ctx.pselected))"
+    },
+    "addAssignedUsersCondition": {
+      "expression": "commandContext.assignedUserObject.modelObjects.length === 0"
+    },
+    "removeAssignedUsersCondition": {
+      "expression": "commandContext.assignedUserObject.modelObjects.length > 0 && commandContext.selectedObject.length > 0"
+    },
+    "tcxNotReleasedAssembly": {
+      "expression": "ctx.selected.props.awb0ArchetypeRevRelStatus && ctx.selected.props.awb0ArchetypeRevRelStatus.dbValues.length === 0"
+    },
+    "tcxNotReleasedObject": {
+      "expression": "ctx.selected.props.release_status_list && ctx.selected.props.release_status_list.dbValues.length === 0"
+    },
+    "tcxSimplifiedReassignTaskCommandCondition": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.tcxSimplifiedReassignTaskVisibleCondition",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.ReassignTaskCommandCondition",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "ctx.selected.modelType.typeHierarchyArray",
+            "$query": {
+              "$in": [
+                "EPMTask"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "isTcxSimplifiedAddFolderSelected": {
+      "expression": "ctx.selected.modelType.typeHierarchyArray.indexOf( 'Folder' ) > -1 && ctx.sublocation.nameToken === 'com.siemens.splm.clientfx.tcui.xrt.objectNavigationSubLocation' && ctx.mselected.length === 1"
+    },
+    "tcxSimplifiedCreateTaskCondition": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.isCadLiteInstalled",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.isTcxSimplifiedCommandsAvailable",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.tcxIsInbox",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "tcxSimplifiedReassignTaskVisibleCondition": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.isCadLiteInstalled",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.isTcxSimplifiedCommandsAvailable",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "tcxSimplifiedDeleteTaskCondition": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.tcxSimplifiedCreateTaskCondition",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.isDeleteTaskCommandActive",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "tcxSimplifiedDeleteTaskVisibleCondition": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.tcxSimplifiedCreateTaskCondition",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.isDeleteTaskCommandVisible",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "tcxSimplifiedCreateDoTaskCondition": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.createDoTaskCommandCondition",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.isTcxSimplifiedCommandsAvailable",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.isCadLiteInstalled",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "tcxSimplifiedIsTaskPerformableByUser": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.isTaskInTcxSimplified",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.tcxIsInbox",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    },
+    "createDoTaskCommandCondition": {
+      "expression": "ctx.visibleServerCommands.Awp0NewWorkflowProcess"
+    },
+    "searchPageVisible": {
+      "expression": "(ctx.sublocation.historyNameToken === 'teamcenter_search_search' || ctx.sublocation.historyNameToken === 'teamcenter_search_advancedSearch') "
+    },
+    "isTaskInTcxSimplified": {
+      "expression": "ctx.workspace.workspaceId === 'TcXSimplifiedWorkspace'"
+    },
+    "isNotDiscussionLocation": {
+      "expression": "commandContext.nameToken !== 'com_siemens_splm_client_activecollab_DiscussionsLocation:feedSubLocation' && commandContext.provider.nameToken !== 'com_siemens_splm_client_activecollab_DiscussionsLocation:feedSubLocation'"
+    },
+    "isNotSavedSearchSubLocation": {
+      "expression": "commandContext.nameToken !== 'com.siemens.splm.client.search:SavedSearchSubLocation' && commandContext.provider.nameToken !== 'com.siemens.splm.client.search:SavedSearchSubLocation'"
+    },
+    "tcxSimplifiedHideEditInFolderSublocation": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.isTcxSimplifiedCommandsAvailable",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "ctx.visibleServerCommands.Awp0StartEditTable",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.tcxIsFolderPage",
+            "$query": {
+              "$eq": true
+            }
+          }
+        ]
+      }
+    }
+  },
+  "data": {
+    "releasedCount": "",
+    "releasedObjects": []
+  },
+  "i18n": {
+    "add": [
+      "tcxsimplifiedMessages"
+    ],
+    "remove": [
+      "tcxsimplifiedMessages"
+    ],
+    "addAttachmentDesc": [
+      "tcxsimplifiedMessages"
+    ],
+    "removeAttachementDesc": [
+      "tcxsimplifiedMessages"
+    ],
+    "release": [
+      "tcxsimplifiedMessages"
+    ],
+    "releaseDesc": [
+      "tcxsimplifiedMessages"
+    ],
+    "confirmReleaseMessage": [
+      "tcxsimplifiedMessages"
+    ],
+    "confirmReleaseMultipleMessage": [
+      "tcxsimplifiedMessages"
+    ],
+    "confirmReleaseMixedSelectMessage": [
+      "tcxsimplifiedMessages"
+    ],
+    "cancel": [
+      "tcxsimplifiedMessages"
+    ],
+    "releaseFailure": [
+      "tcxsimplifiedMessages"
+    ],
+    "tcxSimplifiedExportToExcelTitle": [
+      "tcxsimplifiedMessages"
+    ],
+    "tcxSimplifiedExportToExcelDesc": [
+      "tcxsimplifiedMessages"
+    ],
+    "createTask": [
+      "tcxsimplifiedMessages"
+    ],
+    "createTaskDesc": [
+      "tcxsimplifiedMessages"
+    ],
+    "deleteTask": [
+      "tcxsimplifiedMessages"
+    ],
+    "deleteTaskDesc": [
+      "tcxsimplifiedMessages"
+    ],
+    "singleTaskDeleteConfirmationMessage": [
+      "tcxsimplifiedMessages"
+    ],
+    "multiTaskDeleteConfirmationMessage": [
+      "tcxsimplifiedMessages"
+    ],
+    "createDoTask": [
+      "tcxsimplifiedMessages"
+    ],
+    "createDoTaskDesc": [
+      "tcxsimplifiedMessages"
+    ],
+    "addAssigneeDesc": [
+      "tcxsimplifiedMessages"
+    ],
+    "removeAssigneeDesc": [
+      "tcxsimplifiedMessages"
+    ],
+    "tcxSimplifiedAddDesignTitle": [
+      "tcxsimplifiedMessages"
+    ],
+    "tcxSimplifiedAddDesignDesc": [
+      "tcxsimplifiedMessages"
+    ],
+    "tcxSimplifiedAddFolderDesc": [
+      "tcxsimplifiedMessages"
+    ],
+    "tcxSimplifiedAddFolderTitle": [
+      "tcxsimplifiedMessages"
+    ],
+    "tcxSimplifiedAddDocumentDesc": [
+      "tcxsimplifiedMessages"
+    ],
+    "tcxSimplifiedAddDocumentTitle": [
+      "tcxsimplifiedMessages"
+    ]
+  }
+}

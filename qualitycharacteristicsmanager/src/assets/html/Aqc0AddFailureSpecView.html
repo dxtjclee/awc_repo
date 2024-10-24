@@ -1,0 +1,26 @@
+<div class="aw-layout-flexColumn" show-when="data.activeState.value.activeView==='AddObjectPrimarySub'">
+    <aw-panel-header>
+        <aw-panel-section caption="i18n.toTitle" visible-when="(props.subPanelContext.searchState.parentElement !== undefined && props.subPanelContext.searchState.parentElement !== null) || (props.subPanelContext.pageContext.sublocationState.parentElement !== undefined && props.subPanelContext.pageContext.sublocationState.parentElement !== null)" >
+                <aw-default-cell vmo="props.subPanelContext.searchState ? props.subPanelContext.searchState.parentElement : props.subPanelContext.pageContext.sublocationState.parentElement"></aw-default-cell>
+        </aw-panel-section>
+    </aw-panel-header>
+    <aw-panel-body>
+        <aw-add
+            include-types="Qc0Failure"
+            visible-tabs="new"
+            type-filter="Qc0Failure"
+            auto-select-on-unique-type="true"
+            load-sub-types="true"
+            add-panel-state="fields.addPanelState"
+            active-state="data.activeState"
+            xrt-state="data.xrtState"
+            edit-handler="editHandlers.addPanelEditHandler">
+        </aw-add>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button action="createFailureSpec" visible-when="formProp.attributes.valid && conditions.isNewTabAddButtonVisible">
+            <aw-i18n>i18n.Aqc0Add</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</div>
+<aw-add-navigate active-state="data.activeState" action="actions.setActiveView"></aw-add-navigate>

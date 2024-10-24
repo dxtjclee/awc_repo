@@ -1,0 +1,60 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "ports": {
+        "EpPlanningOperationsSequence_sequenceSelectedInProcessPlanningPRI": {
+            "syncObject": {}
+        }
+    },
+    "actions": {
+        "updateSelection": {
+            "actionType": "Sync",
+            "inputData": {
+                "port": "EpPlanningOperationsSequence_sequenceSelectedInProcessPlanningPRI",
+                "syncObject": "{{data.selection.operation}}"
+            }
+        },
+        "registerReloadTiles": {
+            "actionType": "JSFunction",
+            "method": "registerReloadInput",
+            "inputData": {
+                "name": "StationTile",
+                "type": {
+                    "reloadTypeName": "StationTile",
+                    "object": "{{props.subPanelContext.sharedSelectionData.priStation}}"
+                }
+            },
+            "deps": "js/epReloadService"
+        },
+        "unregisterReloadTiles": {
+            "actionType": "JSFunction",
+            "method": "unregisterReloadInput",
+            "inputData": {
+                "name": "StationTile"
+            },
+            "deps": "js/epReloadService"
+        }
+    },
+    "data": {
+        "selection": {
+            "initialValues": {},
+            "meta": {}
+        }
+    },
+    "lifecycleHooks": {
+        "onUpdate": [
+            {
+                "action": "updateSelection",
+                "observers": [
+                    "viewModel.atomicData.selection"
+                ]
+            }
+        ],
+        "onMount": "registerReloadTiles",
+        "onUnmount": "unregisterReloadTiles"
+    }
+}

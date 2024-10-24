@@ -1,0 +1,636 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-splm-table.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-column.directive",
+        "js/aw-row.directive",
+        "js/aw-panel.directive",
+        "js/aw-splitter.directive",
+        "js/aw-chart.directive",
+        "js/aw-command-bar.directive"
+    ],
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "lifecycleHooks": {
+        "onUpdate": [ {
+                "action": "refreshSWATreeTable",
+                "observers": [
+                    "props.subPanelContext.selection"
+                ]
+            },
+            {
+                "action": "updateSelectionData",
+                "observers": [
+                    "viewModel.atomicData.selectionData"
+                ]
+            }
+        ]
+    },
+    "actions": {
+        "updateSelectionData": {
+            "actionType": "JSFunction",
+            "method": "updateSelectionData",
+            "inputData": {
+                "subPanelContext": "{{props.subPanelContext}}",
+                "localSelData": "{{data.selectionData}}"
+            },
+            "deps": "js/Crt1TestCaseCoveragePageService"
+        },
+        "loadTestCaseTreeData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTestCaseTreeData",
+            "inputData": {
+                "treeLoadInput": "request.treeLoadInput",
+                "data": "{{data}}",
+                "selectedObjects": "{{props.subPanelContext.selection}}",
+                "occContext": "{{props.subPanelContext}}"
+
+            },
+            "outputData": {
+                "totalFound": "result.treeLoadResult.totalChildCount",
+                "totalLoaded": "result.treeLoadResult.childNodes.length",
+                "searchResults": "result.treeLoadResult.childNodes",
+                "testCaseChartData": "result.testCaseChartData",
+                "drawTestCasePieChart": "result.drawTestCasePieChart",
+                "columnFilter": "result.columnFilter",
+                "isClickedOnChart": "result.isClickedOnChart",
+                "testCaseChartDataForRedraw": "result.testCaseChartDataForRedraw"
+            },
+            "deps": "js/Crt1TestCaseCoveragePageService",
+            "events": {
+                "success": [ {
+                        "name": "createPieChartAfterTreeTableLoaded",
+                        "condition": "data.drawTestCasePieChart === true"
+                    },
+                    {
+                        "name": "createBarChartAfterTreeTableLoaded",
+                        "condition": "data.drawTestCasePieChart === true"
+                    },
+                    {
+                        "name": "createBarChartAfterTreeTableLoaded",
+                        "condition": "ctx.workflowInitiated === true"
+                    }
+                ]
+            }
+        },
+        "loadTestCaseTreeTableProperties": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTestCaseTreeTableProperties",
+            "inputData": {
+                "propertyLoadInput": "request.propertyLoadInput",
+                "isExpandedobj": "{{data.crt1ExpandCollapse.isExpandedobj}}",
+                "isPanelPinned": "{{data.panelPinned.PanelPinned}}",
+                "selObject": "{{data.vrTestCaseTableSelection}}",
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "dataProviders.testCaseCoverageTableProvider.columnConfig": "result.propertyLoadResult.columnConfig"
+            },
+            "deps": "js/Crt1TestCaseCoveragePageService"
+        },
+        "loadTestCaseTreeColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableColumns",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.testCaseCoverageTableProvider}}",
+                "data": "{{data}}"
+            },
+            "deps": "js/Crt1TestCaseCoveragePageService"
+        },
+        "createTestCasePieChart": {
+            "actionType": "JSFunction",
+            "method": "createTestCasePieChart",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "pieChartForTestCoverage_chartPoints": "arrayOfSeriesDataForPieChart",
+                "redrawPIE": "redrawPIE",
+                "chartProviders": "chartProviders"
+            },
+            "deps": "js/Crt1TestCaseCoveragePageService"
+        },
+
+        "refreshTestCaseTreeTable": {
+            "actionType": "dataProvider",
+            "method": "testCaseCoverageTableProvider"
+        },
+        "changeSelectionForTcTreeTable": {
+            "actionType": "JSFunction",
+            "method": "changeSelectionForTcTreeTable",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "crt1ExpandCollapse.isCollapsedObj": "isCollapsedObj",
+                "crt1ExpandCollapse.isExpandedobj": "isExpandedobj",
+                "vrTestCaseTableSelection.selectedObjects": "vrTestCaseTableSelection"
+            },
+            "deps": "js/Crt1TestCaseCoveragePageService",
+            "events": {
+                "success": [ {
+                        "name": "testCaseCoverageTable.storeTestCaseTableSelection"
+                    } ]
+            }
+        },
+        "drawPieChartAsDoubleFilter": {
+            "actionType": "JSFunction",
+            "method": "drawPieChartAsDoubleFilter",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "pieChartForTestCoverage_chartPoints": "arrayOfSeriesDataForBarChart",
+                "redrawPIE": "redrawPIE"
+            },
+            "events": {
+                "success": [ {
+                    "name": "createPieChartAfterTreeTableLoaded"
+                } ]
+            },
+            "deps": "js/Crt1TestCaseCoveragePageService"
+        },
+        "drawBarChartAsDoubleFilter": {
+            "actionType": "JSFunction",
+            "method": "drawBarChartAsDoubleFilter",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "barChartForTestCoverage_chartPoints": "arrayOfSeriesDataForBarChart",
+                "redrawBAR": "redrawBAR"
+            },
+            "events": {
+                "success": [ {
+                    "name": "createBarChartAfterTreeTableLoaded"
+                } ]
+            },
+            "deps": "js/Crt1TestCaseCoveragePageService"
+        },
+        "createTestCaseBarChart": {
+            "actionType": "JSFunction",
+            "method": "createTestCaseBarChart",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "barChartForTestCoverage_chartPoints": "arrayOfSeriesDataForBarChart",
+                "crt1ExpandCollapse.isCollapsedObj": "isCollapsedObj",
+                "crt1ExpandCollapse.isExpandedobj": "isExpandedobj",
+                "redrawBAR": "redrawBAR",
+                "workflowInitiated": "workflowInitiated"
+            },
+            "deps": "js/Crt1TestCaseCoveragePageService"
+        },
+        "resetChartCounts": {
+            "actionType": "JSFunction",
+            "method": "resetChartCounts",
+            "inputData": {
+                "input": "{{data}}"
+            },
+            "deps": "js/Crt1TestCaseCoveragePageService"
+        },
+        "refreshSWATreeTable": {
+            "actionType": "JSFunction",
+            "method": "refreshSWATreeTable",
+            "inputData": {
+                "selectedObjects": "{{props.subPanelContext.selection}}",
+                "occContext": "{{props.subPanelContext}}"
+
+            },
+            "outputData": {
+                "columnFilter": "columnFilter",
+                "redrawPIE": "redrawPIE",
+                "redrawBAR": "redrawBAR"
+            },
+            "deps": "js/Crt1TestCaseCoveragePageService"
+        },
+        "filterTestCaseChart": {
+            "actionType": "JSFunction",
+            "method": "filterTestCaseChart",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "crt1ExpandCollapse.isCollapsedObj": "isCollapsedObj",
+                "crt1ExpandCollapse.isExpandedobj": "isExpandedobj",
+                "columnFilter": "columnFilter",
+                "workflowInitiated": "workflowInitiated",
+                "clickedOnChart": "clickedOnChart",
+                "redrawPIE": "redrawPIE",
+                "unSelectedChart": "unSelectedChart",
+                "redrawBAR": "redrawBAR"
+            },
+            "deps": "js/Crt1TestCaseCoveragePageService",
+            "events": {
+                "success": [ {
+                    "name": "testCaseCoverageTable.plTable.reload",
+                    "excludeLocalDataCtx": true
+                } ]
+            }
+        },
+        "displayAllTestCases": {
+            "actionType": "JSFunction",
+            "method": "displayAllTestCases",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "crt1ExpandCollapse.isCollapsedObj": "isCollapsedObj",
+                "crt1ExpandCollapse.isExpandedobj": "isExpandedobj",
+                "columnFilter": "testCaseTableColumnFilters",
+                "clickedOnChart": "clickedOnChart",
+                "unSelectedChart": "unSelectedChart"
+            },
+            "deps": "js/Crt1TestCaseCoveragePageService",
+            "events": {
+                "success": [ {
+                    "name": "testCaseCoverageTable.plTable.reload",
+                    "excludeLocalDataCtx": true
+                } ]
+            }
+        },
+        "refreshTableOnWorkflow": {
+            "actionType": "JSFunction",
+            "method": "refreshTableOnWorkflow",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "crt1ExpandCollapse.isCollapsedObj": "isCollapsedObj",
+                "crt1ExpandCollapse.isExpandedobj": "isExpandedobj",
+                "columnFilter": "columnFilter",
+                "workflowInitiated": "workflowInitiated",
+                "clickedOnChart": "clickedOnChart",
+                "redrawPIE": "redrawPIE",
+                "unSelectedChart": "unSelectedChart",
+                "redrawBAR": "redrawBAR"
+            },
+            "events": {
+                "success": [ {
+                    "name": "testCaseCoverageTable.plTable.reload",
+                    "excludeLocalDataCtx": true
+                } ]
+            },
+            "deps": "js/Crt1TestCaseCoveragePageService"
+        },
+        "setSelection": {
+            "actionType": "JSFunction",
+            "method": "setSelection",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Crt1TestCaseCoveragePageService"
+        },
+        "expandNode": {
+            "actionType": "JSFunction",
+            "method": "expandNode",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Crt1TestCaseCoveragePageService"
+        },
+        "collapseNode": {
+            "actionType": "JSFunction",
+            "method": "collapseNode",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "crt1ExpandCollapse.isCollapsedObj": "isCollapsedObj",
+                "crt1ExpandCollapse.isExpandedobj": "isExpandedobj"
+            },
+            "deps": "js/Crt1TestCaseCoveragePageService"
+        },
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/columnArrangeService"
+        },
+        "saveColumnConfigLoadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "saveUIColumnConfigs2",
+            "inputData": {
+                "columnConfigurations": [ {
+                    "clientScopeURI": "Crt1TestCaseCoverageTable",
+                    "columnConfigId": "testCaseCoverageColConfig",
+                    "columns": "{{data.dataProviders.testCaseCoverageTableProvider.newColumns}}",
+                    "scope": "LoginUser",
+                    "scopeName": ""
+                } ]
+            },
+            "outputData": {}
+        },
+        "resetColumnConfig": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "getOrResetUIColumnConfigs4",
+            "inputData": {
+                "getOrResetUiConfigsIn": [ {
+                    "scope": "LoginUser",
+                    "scopeName": "",
+                    "clientName": "AWClient",
+                    "resetColumnConfig": true,
+                    "columnConfigQueryInfos": [ {
+                        "clientScopeURI": "Crt1TestCaseCoverageTable",
+                        "operationType": "configured",
+                        "typeNames": [
+                            "WorkspaceObject"
+                        ],
+                        "columnsToExclude": []
+                    } ],
+                    "businessObjects": [
+                        {}
+                    ]
+                } ]
+            },
+            "outputData": {
+                "dataProviders.testCaseCoverageTableProvider.columnConfig": "columnConfigurations[0].columnConfigurations[0]"
+            }
+        },
+        "resetColumnFilter": {
+            "actionType": "JSFunction",
+            "method": "resetColumnFilter",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "crt1ExpandCollapse.isCollapsedObj": "isCollapsedObj",
+                "crt1ExpandCollapse.isExpandedobj": "isExpandedobj",
+                "columnFilter": "columnFilter",
+                "workflowInitiated": "workflowInitiated",
+                "clickedOnChart": "clickedOnChart",
+                "redrawPIE": "redrawPIE",
+                "unSelectedChart": "unSelectedChart",
+                "redrawBAR": "redrawBAR"
+            },
+            "events": {
+                "success": [ {
+                    "name": "testCaseCoverageTable.plTable.reload",
+                    "excludeLocalDataCtx": true
+                } ]
+            },
+            "deps": "js/Crt1TestCaseCoveragePageService"
+        },
+        "storeTestCaseTableSelection": {
+            "actionType": "JSFunction",
+            "method": "storeTestCaseTableSelection",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.testCaseCoverageTableProvider}}"
+            },
+            "outputData": {
+                "testCoverageSelection.selectedObjects": "testCoverageSelection"
+            },
+            "deps": "js/Crt1TestCaseCoveragePageService"
+        },
+        "setPanelPinnedState": {
+            "actionType": "JSFunction",
+            "method": "setPanelPinnedState",
+            "inputData": {
+                "panelPinned": "{{data.eventData}}"
+            },
+            "outputData": {
+                "panelPinned": ""
+            },
+            "deps": "js/Crt1TestCaseCoveragePageService"
+
+        }
+    },
+    "dataProviders": {
+        "testCaseCoverageTableProvider": {
+            "initializeAction": "loadTestCaseTreeData",
+            "nextAction": "loadTestCaseTreeData",
+            "treeLoadResult": "action.result.treeLoadResult",
+            "selectionModelMode": "multiple",
+            "inputData": {
+                "accessMode": "tree",
+                "selectionData": "{{fields.selectionData}}"
+            }
+        },
+        "GridTreePropertyProvider": {
+            "action": "loadTestCaseTreeTableProperties",
+            "propertyLoadResult": "action.result.propertyLoadResult"
+        }
+    },
+    "columnProviders": {
+        "testCaseCoverageColumnProvider": {
+            "loadColumnAction": "loadTestCaseTreeColumns",
+            "saveColumnAndLoadAction": "saveColumnConfigLoadData",
+            "resetColumnAction": "resetColumnConfig",
+            "columns": "{{data.columns}}",
+            "enableSorting": false,
+            "id": "Crt1TestCaseCoverageTable",
+            "sortCriteria": [],
+            "objectSetUri": "Crt1TestCaseCoverageTable"
+        }
+    },
+    "grids": {
+        "testCaseCoverageTable": {
+            "dataProvider": "testCaseCoverageTableProvider",
+            "columnProvider": "testCaseCoverageColumnProvider",
+            "propertyProvider": "GridTreePropertyProvider",
+            "enableArrangeMenu": true,
+            "addIconColumn": false,
+            "gridOptions": {
+                "enableSorting": true,
+                "maxRowsToShow": 15,
+                "isFilteringEnabled": false
+            }
+        }
+    },
+    "data": {
+        "selectionData": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "unSelectedChart": {
+            "displayName": "",
+            "type": "STRING"
+        },
+        "redrawPIE": false,
+        "redrawBAR": false,
+        "clickedOnChart": false,
+        "testCaseChartData": {
+            "displayName": "",
+            "type": "OBJECT"
+        },
+        "testCoverageSelection": {
+            "initialValues": {
+                "selectedObjects": []
+            },
+            "meta": {}
+        },
+        "testCaseChartDataForRedraw": {
+            "displayName": "",
+            "type": "OBJECTARRAY"
+        },
+        "columnFilter": {
+            "displayName": "",
+            "type": "OBJECTARRAY"
+        },
+        "drawTestCasePieChart": false,
+        "crt1ExpandCollapse": {
+            "initialValues": {
+                "isExpandedobj": true,
+                "isCollapsedObj": true
+            },
+            "meta": {}
+        },
+        "vrTestCaseTableSelection": {
+            "initialValues": {
+                "selectedObjects": []
+            },
+            "meta": {}
+        },
+        "chartProviders": {
+            "testCasePieChartProvider": {
+                "chartType": "pie",
+                "chartConfig": {
+                    "isChartZoomable": true,
+                    "isYAxisLinearOrLogarithmic": "logarithmic",
+                    "xAxisLabel": "",
+                    "yAxisLabel": "",
+                    "isDataLabelOnChartEnabled": true
+                }
+            },
+            "testCaseBarChartProvider": {
+                "chartType": "column",
+                "chartColorOverrideClass": "aw-verificationManagement-testCaseBarChartColor",
+                "chartConfig": {
+                    "isChartZoomable": true,
+                    "isYAxisLinearOrLogarithmic": "linear",
+                    "xAxisLabel": "",
+                    "yAxisLabel": "",
+                    "legend": {
+                        "enabled": false
+                    }
+                }
+            }
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "crt1TestCoverage.resetColumnFilter",
+            "cacheEventData": true,
+            "action": "resetColumnFilter"
+        }, {
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        },
+        {
+            "eventId": "testCaseCoverageTableProvider.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "changeSelectionForTcTreeTable"
+        },
+        {
+            "eventId": "createPieChartAfterTreeTableLoaded",
+            "action": "createTestCasePieChart"
+        },
+        {
+            "eventId": "createBarChartAfterTreeTableLoaded",
+            "action": "createTestCaseBarChart"
+        },
+        {
+            "eventId": "Crt1TestCaseCoveragePage.contentUnloaded",
+            "cacheEventData": true,
+            "action": "resetChartCounts"
+        },
+        {
+            "eventId": "undefined.selected",
+            "cacheEventData": true,
+            "action": "filterTestCaseChart"
+        },
+        {
+            "eventId": "undefined.unselected",
+            "cacheEventData": true,
+            "action": "displayAllTestCases"
+        },
+        {
+            "eventId": "drawPieChartAsDoubleFilter",
+            "action": "drawPieChartAsDoubleFilter"
+
+        },
+        {
+            "eventId": "drawBarChartAsDoubleFilter",
+            "action": "drawBarChartAsDoubleFilter"
+        },
+        {
+            "eventId": "refreshTestCaseTreeTable",
+            "action": "refreshTestCaseTreeTable"
+        },
+        {
+            "eventId": "workflow.updateTaskCount",
+            "cacheEventData": true,
+            "action": "refreshTableOnWorkflow"
+        },
+        {
+            "eventId": "testCaseTable.setSelection",
+            "cacheEventData": true,
+            "action": "setSelection"
+        },
+        {
+            "eventId": "testCaseTable.expandNode",
+            "cacheEventData": true,
+            "action": "expandNode"
+        },
+        {
+            "eventId": "testCaseCoverageTable.storeTestCaseTableSelection",
+            "cacheEventData": true,
+            "action": "storeTestCaseTableSelection"
+        },
+        {
+            "eventId": "testCaseCoverageTable.setPanelPinnedState",
+            "cacheEventData": true,
+            "action": "setPanelPinnedState"
+        }
+
+
+    ],
+    "conditions": {
+        "noTestCaseCoverageDataForPie": {
+            "expression": "data.pieChartForTestCoverage_chartPoints[0].keyValueDataForChart[0].value === 0 && data.pieChartForTestCoverage_chartPoints[0].keyValueDataForChart[1].value === 0"
+        },
+        "noTestCaseCoverageDataForBar": {
+            "expression": "(data.barChartForTestCoverage_chartPoints[0].keyValueDataForChart[0].value === 0 && data.barChartForTestCoverage_chartPoints[0].keyValueDataForChart[1].value === null) && (data.barChartForTestCoverage_chartPoints[1].keyValueDataForChart[0].value === null && data.barChartForTestCoverage_chartPoints[1].keyValueDataForChart[1].value === 0)"
+        }
+    },
+    "i18n": {
+        "testCaseTabTitle": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "testCasePieChartTitle": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "testCaseBarChartTitle": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "testCaseTableTitle": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "noTestCases": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "reqWithTestCases": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "released": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "notReleased": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "noRequestsToDisplayChart": [
+            "AnalysisRequestCommandPanelsMessages"
+        ]
+    }
+}

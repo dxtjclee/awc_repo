@@ -1,0 +1,10 @@
+<aw-scrollpanel class="aw-ep-missingInSourceList" exist-when="conditions.hasImpactIgnored">
+    <aw-list dataprovider="data.dataProviders.epImpactHandledDataProvider" class="aw-mfe-typeAndNameCellList">
+        <div class="sw-row">
+            <img src="{{item.thumbnailURL ? item.thumbnailURL : item.typeIconURL}}" class="aw-mfe-cellListItemTypeIcon">
+            <div class="aw-mfe-cellListItemName">
+                <span title="{{item.props.object_string.dbValues[0]}}">{{item.props.object_string.dbValues[0]}}</span>
+            </div>
+        </div>
+    </aw-list>
+</aw-scrollpanel>

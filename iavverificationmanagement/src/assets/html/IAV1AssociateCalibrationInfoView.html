@@ -1,0 +1,27 @@
+<aw-command-panel caption="i18n.AssociateCalibInfoPanelTitle" context="subPanelContext">
+    <aw-panel-body>
+        <aw-panel-section caption="i18n.TitleTo"
+            visible-when="props.subPanelContext.selectionData.selected[0].parentUid">
+            <aw-default-cell item="props.subPanelContext.selectionData.selected[0]"> </aw-default-cell>
+        </aw-panel-section>
+        <aw-panel-section caption="i18n.TitleTo"
+            visible-when="!props.subPanelContext.selectionData.selected[0].parentUid">
+            <aw-default-cell item="props.subPanelContext.openedObject"> </aw-default-cell>
+        </aw-panel-section>
+        <aw-break></aw-break>
+        <aw-i18n visible-when="data.totalFound === 0">i18n.CalibrationMessage</aw-i18n>
+        <aw-break></aw-break>
+        <aw-list-filter prop="data.filterBox" dataprovider="data.dataProviders.calibInfoDataProvider">
+            <aw-scrollpanel>
+                <aw-break></aw-break>
+                <aw-default-cell vmo="item"></aw-default-cell>
+            </aw-scrollpanel>
+        </aw-list-filter>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button action="createRelationForPaletteOrSearch"
+            visible-when="data.dataProviders.calibInfoDataProvider.selectedObjects.length === 1">
+            <aw-i18n>i18n.AssociateCalibInfoButton</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

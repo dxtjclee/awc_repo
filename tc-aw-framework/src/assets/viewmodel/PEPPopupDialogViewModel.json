@@ -1,0 +1,182 @@
+{
+    "schemaVersion": "1.0.0",
+    "lifecycleHooks": {
+        "onMount": "initialize"
+    },
+    "actions":
+    {
+        "initialize":
+            {
+                "actionType": "JSFunction",
+                "method": "initializePEPPopup",
+                "inputData": {
+                    "pepText2": "{{data.pepText2}}"
+                },
+                "outputData": {
+                    "pepText2": "pepText2"
+                },
+                "deps": "js/TcSessionData"
+        },
+        "pepTrustCenterAction": {
+            "actionType": "Navigate",
+            "navigateIn": "newTab",
+            "navigateTo": "https://www.sw.siemens.com/en-US/trust-center/product-excellence-program/",
+            "navigationParams": {}
+        },
+        "pepDecline":
+        {
+
+                "actionType": "batchJob",
+                "steps": [
+                    {
+                        "action": "setPepDeclinePrefValue"
+                    },
+                    {
+                        "action": "setDeclineValueOnCtx"
+                    },
+                    {
+                        "action": "closePopupWindow"
+                    }
+                ]
+            },
+            "setDeclineValueOnCtx":{
+                    "actionType": "JSFunction",
+                    "method": "updatePartialCtx",
+                    "deps": "js/appCtxService",
+                    "inputData": {
+                        "name": "Analytics_PEP",
+                        "value": "false"
+                    }
+                },
+            "setPepDeclinePrefValue": {
+                "actionType": "TcSoaService",
+                "serviceName": "Administration-2012-09-PreferenceManagement",
+                "method": "setPreferencesAtLocations",
+                "inputData": {
+                  "setPreferenceIn": [
+                    {
+                      "location": {
+                        "object": {
+                          "type": "",
+                          "uid": ""
+                        },
+                        "location": "user"
+                      },
+                      "preferenceInputs": {
+                        "preferenceName": "TC_Analytics_PEP_Message",
+                        "values": ["true"]
+                      }
+                    },
+                    {
+                        "location": {
+                          "object": {
+                            "type": "",
+                            "uid": ""
+                          },
+                          "location": "user"
+                        },
+                        "preferenceInputs": {
+                          "preferenceName": "TC_ProductExcellenceProgram",
+                          "values": ["false"]
+                        }
+                      }
+                  ]
+                }
+        },
+        "pepAgree":
+        {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "setPepAgreePrefValue"
+                },
+                {
+                    "action": "setAgreeValueOnCtx"
+                },
+                {
+                    "action": "closePopupWindow"
+                }
+            ]
+        },
+        "setAgreeValueOnCtx":{
+            "actionType": "JSFunction",
+            "method": "updatePartialCtx",
+            "deps": "js/appCtxService",
+            "inputData": {
+                "name": "Analytics_PEP",
+                "value": "true"
+            }
+        },
+        "setPepAgreePrefValue":{
+            "actionType": "TcSoaService",
+            "serviceName": "Administration-2012-09-PreferenceManagement",
+            "method": "setPreferencesAtLocations",
+            "inputData": {
+              "setPreferenceIn": [
+                {
+                  "location": {
+                    "object": {
+                      "type": "",
+                      "uid": ""
+                    },
+                    "location": "user"
+                  },
+                  "preferenceInputs": {
+                    "preferenceName": "TC_Analytics_PEP_Message",
+                    "values": ["true"]
+                  }
+                },
+                {
+                    "location": {
+                      "object": {
+                        "type": "",
+                        "uid": ""
+                      },
+                      "location": "user"
+                    },
+                    "preferenceInputs": {
+                      "preferenceName": "TC_ProductExcellenceProgram",
+                      "values": ["true"]
+                    }
+                  }
+              ]
+            }
+    },
+        "closePopupWindow": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        }
+        },
+    "data":{
+        "pepPopupText1":{
+            "type": "STRING",
+            "dispValue": "{{i18n.pepPopupText1}}",
+            "labelPosition": "NO_PROPERTY_LABEL"
+        },
+        "pepPopupText2":{
+            "type": "STRING",
+            "dispValue": "{{i18n.pepPopupText2}}",
+            "labelPosition": "NO_PROPERTY_LABEL"
+        },
+        "swTrustCenter":{
+            "displayName": "{{i18n.swTrustCenter}}",
+            "type": "STRING",
+            "isRequired": "false"
+        },
+        "pepText2":{
+            "dbValue": "{{i18n.pepText2}}"
+        }
+    },
+    "i18n": {
+        "pepPopupText1":["AnalyticsMessages"],
+        "pepText2":["AnalyticsMessages"],
+        "pepPopupText2":["AnalyticsMessages"],
+        "agreeText":["AnalyticsMessages"],
+        "declinetText":["AnalyticsMessages"],
+        "swTrustCenter":["AnalyticsMessages"]
+    }
+}

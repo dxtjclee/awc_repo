@@ -1,0 +1,6 @@
+<mfe-loading-message exist-when="conditions.showLoadingMsg"></mfe-loading-message>
+<mfe-message-panel exist-when="!conditions.isScopeObjectValid" messages-data="{messageLines: props.messagesTypes.invalidInputMsg}"></mfe-message-panel>
+<mfe-message-panel exist-when="conditions.showNoObjectsAssignedMsg" messages-data="{messageLines: props.messagesTypes.noAssignmentsMsg}"></mfe-message-panel>
+<div show-when="conditions.showTable" class="aw-ngp-table">
+    <aw-splm-table command-context="{tableSettings: data.tableSettings}" gridid="NgpAssignedObjectsTable"></aw-splm-table>
+</div>

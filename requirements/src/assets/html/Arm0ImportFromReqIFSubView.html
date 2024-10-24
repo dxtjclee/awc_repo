@@ -1,0 +1,44 @@
+<aw-panel-body class="aw-requirement-importPanel" >
+    <div class="aw-requirement-importSubViewContainer" visible-when="conditions.isValidFile">
+        <div class="sw-row">
+          <aw-checkbox prop="data.addFileAsAttachmnt"></aw-checkbox>
+      </div>
+      <div>
+        <aw-command-panel-section anchor="data.importFromReqIFMappingSubCommands" caption="i18n.mapping" visible-when="conditions.isValidFile">
+            <aw-listbox prop="data.savedMappings" list="data.savedMappingsListBoxValues"></aw-listbox>
+            <aw-panel-section caption="i18n.mapTypes" collapsed="false" visible-when="conditions.isValidFile && conditions.isReqIFTypes">
+                <div class="aw-requirement-reqIFTypeContainer" aw-repeat="reqIFTypes : data.viewModelPropForReqIFTypes">
+                    <aw-widget prop="reqIFTypes"></aw-widget>
+                    <div class="aw-requirement-reqIFPropertyContainer" aw-repeat="reqIFProperty : data.viewModelPropForReqIFPropertiesArray">
+                        <aw-widget prop="reqIFProperty" exist-when = "reqIFProperty.objectTypeName === reqIFTypes.propertyName"></aw-widget>
+                        <div class="aw-requirement-reqIFLovContainer" aw-repeat="reqIFLOVPropertyValue : data.viewModelPropForReqIFLOVPropertyArray">
+                            <aw-widget prop="reqIFLOVPropertyValue" exist-when = "(reqIFProperty.objectTypeName === reqIFTypes.propertyName) && (reqIFLOVPropertyValue.objectParentTypeName === reqIFTypes.propertyName) && (reqIFLOVPropertyValue.objectPropertyTypeName === reqIFProperty.propertyDisplayName)"></aw-widget>
+                        </div>
+                    </div>
+                </div>
+            </aw-panel-section>
+
+
+            <aw-panel-section caption="i18n.mapTraceLinks" collapsed="false" visible-when="conditions.isValidFile && conditions.isReqIFTraceLinks">
+                <div class="aw-requirement-reqIFTypeContainer" aw-repeat="reqIFTraceLinks : data.viewModelPropForReqIFTraceLinks ">
+                    <aw-widget prop="reqIFTraceLinks" ></aw-widget>
+                    <div class="aw-requirement-reqIFPropertyContainer" aw-repeat="reqIFTraceLinkProperty : data.viewModelPropForReqIFPropertiesArray">
+                        <aw-widget prop="reqIFTraceLinkProperty" exist-when = "reqIFTraceLinkProperty.objectTypeName === reqIFTraceLinks.propertyName"></aw-widget>
+                        <div class="aw-requirement-reqIFLovContainer" aw-repeat="reqIFTraceLinkLOVPropertyValue : data.viewModelPropForReqIFLOVPropertyArray">
+                            <aw-widget prop="reqIFTraceLinkLOVPropertyValue" exist-when = "(reqIFTraceLinkProperty.objectTypeName === reqIFTraceLinks.propertyName) && (reqIFTraceLinkLOVPropertyValue.objectParentTypeName === reqIFTraceLinks.propertyName) && (reqIFTraceLinkLOVPropertyValue.objectPropertyTypeName === reqIFTraceLinkProperty.propertyDisplayName)"></aw-widget>
+                        </div>
+                    </div>
+                </div>
+            </aw-panel-section>
+        </aw-command-panel-section>
+
+    </aw-panel-body>
+
+    <aw-panel-footer>
+        <aw-flex-row>
+                <aw-checkbox prop="data.runInBackgroundReqIF" enable-when="conditions.isReqIFImportAllowed"></aw-checkbox>
+            </aw-flex-row>
+        <aw-button  action="getNewReqIFImportInput" enable-when="conditions.isReqIFImportAllowed">
+            <aw-i18n>i18n.importTitle</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>

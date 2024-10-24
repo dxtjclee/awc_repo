@@ -1,0 +1,77 @@
+{
+  "actions": {
+    "mrm_tileCanvasdragStartFn": {
+      "actionType": "syncFunction",
+      "method": "dragStartFn",
+      "inputData": {},
+      "deps": "js/tileDragService"
+    },
+    "mrm_tileCanvasdragEndFn": {
+      "actionType": "syncFunction",
+      "method": "dragEndFn",
+      "inputData": {},
+      "deps": "js/tileDragService"
+    },
+    "mrm_tileCanvasdragOverFn": {
+      "actionType": "syncFunction",
+      "method": "dragOverFn",
+      "inputData": {},
+      "deps": "js/tileDragService"
+    },
+    "mrm_tileCanvasdragEnterFn": {
+      "actionType": "syncFunction",
+      "method": "dragEnterFn",
+      "inputData": {},
+      "deps": "js/tileDragService"
+    },
+    "mrm_tileCanvasdragLeaveFn": {
+      "actionType": "syncFunction",
+      "method": "dragLeaveFn",
+      "inputData": {},
+      "deps": "js/tileDragService"
+    },
+    "mrm_tileCanvasdropFn": {
+      "actionType": "syncFunction",
+      "method": "dropFn",
+      "inputData": {
+        "propertyName": "tileGroups"
+      },
+      "deps": "js/tileDragService"
+    }
+  },
+  "dragHandlers": {
+    "mrm_tileCanvasDragHandlers": {
+      "activeWhen": {
+        "condition": "conditions.isShowMRMLandingPage"
+      },
+      "views": [
+        "showMRMLandingPage"
+      ],
+      "dragActions": {
+        "dragStart": "mrm_tileCanvasdragStartFn",
+        "dragEnd": "mrm_tileCanvasdragEndFn"
+      }
+    }
+  },
+  "dropHandlers": {
+    "mrm_tileCanvasDropHandlers": {
+      "activeWhen": {
+        "condition": "conditions.isShowMRMLandingPage"
+      },
+      "views": [
+        "showMRMLandingPage"
+      ],
+      "dropActions": {
+        "dragOver": "mrm_tileCanvasdragOverFn",
+        "dragEnter": "mrm_tileCanvasdragEnterFn",
+        "dragLeave": "mrm_tileCanvasdragLeaveFn",
+        "drop": "mrm_tileCanvasdropFn"
+      }
+    }
+  },
+  "conditions": {
+    "isShowMRMLandingPage": {
+      "expression": "ctx.locationContext['ActiveWorkspace:Location'] === 'com.siemens.splm.mrl:showMRMLandingPage'"
+    }
+  }
+}

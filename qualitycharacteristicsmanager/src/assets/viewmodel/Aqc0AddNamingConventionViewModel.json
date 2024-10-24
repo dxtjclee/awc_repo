@@ -1,0 +1,171 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive",
+        "js/aw-xrt.directive",
+        "js/aw-i18n.directive"
+    ],
+    "actions": {
+        "createNamingConvention": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2008-06-DataManagement",
+            "method": "createObjects",
+            "inputData": {
+                "input": [ {
+                    "clientId": "createObjects",
+                    "data": {
+                        "boName": "{{data.selectedType.dbValue}}",
+                        "stringProps": "{{function:getObjCreateInfoDataProcessing}}"
+                    }
+                } ]
+            },
+            "outputData": {
+                "createdObject": "output[0].objects[0]"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "aqc0.addPanelObjectCreated"
+                    },
+                    {
+                        "name": "aqc0.closePanelHeader",
+                        "condition": "!subPanelContext.panelPinned"
+                    },
+                    {
+                        "name":"aqc0.generateNextId",
+                        "condition": "subPanelContext.panelPinned"
+                    }
+                ],
+                "failure":
+                [
+                    {
+                        "name": "aqc0.closePanelHeader",
+                        "condition": "!subPanelContext.panelPinned"
+                    }
+                ]
+            },
+            "deps": "js/Aqc0CharLibraryUtilService"
+        },
+        "generateNextValues": {
+            "actionType": "JSFunction",
+            "method": "autoAssignAllProperties",
+            "inputData": {
+                "data": "{{data}}",
+                "operationType": "CREATE",
+                "createType": "{{data.selectedType.dbValue}}",
+                "editHandler": "{{editHandlers.addPanelEditHandler}}"
+            },
+            "deps": "js/autoAssignService"
+        },
+        "addPanelObjectCreated":
+        {
+            "actionType": "JSFunction",
+            "method": "addPanelObjectCreated",
+            "inputData":
+            {
+                "data": "{{data.createdObject}}",
+                "searchState": "{{props.subPanelContext}}",
+                "pinUnpinnedFlag": "{{subPanelContext.panelPinned}}"
+            },
+            "deps": "js/Aqc0CharLibraryUtilService"
+        },
+        "setActiveView":{
+            "actionType": "JSFunction",
+            "method": "resetActiveView",
+            "inputData": {
+                "stateName": "{{data.activeState}}",
+                "destPanelId": "AddObjectPrimarySub"
+            },
+            "outputData": {
+                "activeState": ""
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "closePanelHeader": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "data": {
+        "selectedType":
+        {
+            "type": "STRING",
+            "dbValue": "Acp0NamingConvention"
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "AddObjectPrimarySub",
+                "context": {}
+            },
+            "meta": {}
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "functions": {
+        "getObjCreateInfoDataProcessing": {
+            "functionName": "getObjCreateInfoDataProcessing",
+            "parameters":
+            [
+                "{{data.selectedType}}",
+                "{{editHandlers.addPanelEditHandler}}"
+            ]
+        }
+    },
+    "onEvent": [
+          {
+            "eventId": "aqc0.generateNextId",
+            "action": "generateNextValues"
+          },
+          {
+            "eventId": "aqc0.addPanelObjectCreated",
+            "action": "addPanelObjectCreated"
+        },
+        {
+            "eventId": "primaryWorkArea.selectionChangeEvent",
+            "action": "closePanelHeader"
+        },
+        {
+            "eventId": "aqc0.closePanelHeader",
+            "action": "closePanelHeader"
+        }
+   ],
+    "i18n": {
+        "Aqc0addNamingConventionTitle": ["qualitycharacteristicsmanagerMessages"],
+        "addButtonTitle":["qualitycharacteristicsmanagerMessages"],
+        "BACK_BUTTON_TITLE":["BaseMessages"]
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    }
+}

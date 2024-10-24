@@ -1,0 +1,30 @@
+{
+  "slots": {
+    "senHeaderTitleSlot": {
+      "name": "aw_headerTitle",
+      "view": "senHeaderTitle",
+      "activeWhen": {
+        "condition": "conditions.isOnSEPage"
+      }
+    },
+    "senTaskBarSlot": {
+      "name": "aw_taskBar",
+      "view": "senTaskBar",
+      "activeWhen": {
+        "condition": "conditions.isOnSEPage"
+      }
+    },
+    "senPrimaryWorkAreaCommandBarSlot": {
+      "name": "aw_pwaCommandBar",
+      "view": "senPrimaryWorkAreaToolbar",
+      "activeWhen": {
+        "condition": "conditions.isOnSEPage"
+      }
+    }
+  },
+  "conditions": {
+    "isOnSEPage": {
+      "expression": "ctx.sublocation.nameToken==='ServiceEngineeringSublocation'"
+    }
+  }
+}

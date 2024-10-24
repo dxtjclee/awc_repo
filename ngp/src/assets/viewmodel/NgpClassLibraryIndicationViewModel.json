@@ -1,0 +1,52 @@
+{
+    "schemaVersion": "1.0.0",
+    "props":{
+        "scope-object":{
+            "type":"object"
+        }
+    },
+    "data": {
+        "chipData": {
+            "chipType": "STATIC",
+            "labelDisplayName": ""
+        },
+        "extendedTooltip": {
+            "title": ""
+        }
+    },
+    "actions": {
+        "getClassLibraryValue": {
+            "actionType": "JSFunction",
+            "method": "getClassLibraryIndicationValue",
+            "inputData": {
+                "modelObject": "{{props.scopeObject}}",
+                "prefix": "{{i18n.rootClassLibraryObjectMsg}}"
+            },
+            "outputData": {
+                "chipData.labelDisplayName": "",
+                "extendedTooltip.title": ""
+            },
+            "deps": "js/services/ngpClassLibraryService"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "getClassLibraryValue",
+        "onUpdate":{
+            "action": "getClassLibraryValue",
+            "observers": ["props.scopeObject"]
+        }
+    },
+    "conditions":{
+        "shouldDisplayChip":{
+            "expression":{
+                "$source":"data.chipData.labelDisplayName",
+                "$query":{
+                    "$ne":""
+                }
+            }
+        }
+    },
+    "i18n": {
+        "rootClassLibraryObjectMsg": [ "NgpHeaderMessages" ]
+    }
+}

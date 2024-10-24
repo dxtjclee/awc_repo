@@ -1,0 +1,414 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "ports": {
+        "wiPmiInfoTable_selectedParts":{
+            "syncObject": {}
+        }
+    },
+    "dataProviders": {
+        "connectedPartsDataProvider": {
+            "response": "{{data.connectedParts}}",
+            "totalFound": "{{data.connectedParts.length}}",
+            "selectionModelMode": "multiple"
+        },
+        "referencedDatumsDataProvider": {
+            "response": "{{data.referencedDatums}}",
+            "totalFound": "{{data.referencedDatums.length}}",
+            "selectionModelMode": "none"
+        }
+    },
+    "columnProviders": {
+        "connectedPartsColumnProvider": {
+            "columns": [
+                {
+                    "name": "graphicVisibility",
+                    "displayName": "{{i18n.GraphicVisibilityColumnName}}",
+                    "enableColumnMoving": false,
+                    "width": 30
+                },
+                {
+                    "name": "object_string",
+                    "displayName": "{{i18n.partName}}",
+                    "width": 285
+                },
+                {
+                    "name": "targetAssembly",
+                    "displayName": "{{i18n.targetAssembly}}",
+                    "width": 165
+                },
+                {
+                    "name": "targetProcess",
+                    "displayName": "{{i18n.targetProcess}}",
+                    "width": 165
+                }
+            ]
+        },
+        "referencedDatumsColumnProvider": {
+            "columns": [
+                {
+                    "name": "graphicVisibility",
+                    "displayName": "{{i18n.GraphicVisibilityColumnName}}",
+                    "enableColumnMoving": false,
+                    "width": 30
+                },
+                {
+                    "name": "mci0DatumLabel",
+                    "displayName": "{{i18n.id}}",
+                    "width": 30
+                },
+                {
+                    "name": "connectedParts",
+                    "displayName": "{{i18n.partName}}",
+                    "width": 585
+                }
+            ]
+        }
+    },
+    "grids": {
+        "connectedPartsTable": {
+            "dataProvider": "connectedPartsDataProvider",
+            "columnProvider": "connectedPartsColumnProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "enablePinning": false,
+                "enableSorting": false
+            }
+        },
+        "referencedDatumsTable": {
+            "dataProvider": "referencedDatumsDataProvider",
+            "columnProvider": "referencedDatumsColumnProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "enablePinning": false,
+                "enableSorting": false
+            }
+        }
+    },
+    "actions": {
+        "openWhereDefinedObjectInNewTab":{
+            "actionType": "Navigate",
+            "navigateIn": "newTab",
+            "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+            "navigationParams": {
+                "uid": "{{data.whereDefinedLinkData.uid}}"
+            }
+        },
+        "getWhereDefinedData":{
+            "actionType":"JSFunction",
+            "method":"getWhereDefinedInfo",
+            "inputData":{
+                "characteristicVmo": "{{subPanelContext}}"
+            },
+            "outputData":{
+                "whereDefinedLinkData.uid":"uid",
+                "whereDefinedLinkData.propertyDisplayName":"propertyDisplayName"
+            },
+            "deps":"js/wiPmiInfoService"
+        },
+        "getAndSaveConnectedParts": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action":"getWhereDefinedData"
+                },
+                {
+                    "action": "getPMIDetails"
+                },
+                {
+                    "action": "initializeConnectedPartsDataProvider"
+                },
+                {
+                    "action": "initializeReferencedDatumsDataProvider"
+                },
+                {
+                    "action": "selectDatumReferenceTab",
+                    "condition": "data.notes.uiValue === '' && data.referencedDatums.length > 0"
+                }
+            ]
+        },
+        "getPMIDetails":{
+            "actionType": "JSFunctionAsync",
+            "method": "getPMIDetails",
+            "inputData": {
+                "characteristicVmo": "{{subPanelContext}}",
+                "currentScopeUid": "{{ctx.epPageContext.loadedObject.uid}}",
+                "currentAssyUid": "{{ctx.ep.loadedProductObject.uid}}"
+            },
+            "outputData": {
+                "connectedParts": "connectedParts",
+                "referencedDatums" : "referencedDatums",
+                "notes.uiValue": "pmiText"
+            },
+            "deps": "js/wiPmiInfoService"
+        },
+        "initializeConnectedPartsDataProvider": {
+            "actionType": "dataProvider",
+            "method": "connectedPartsDataProvider"
+        },
+        "initializeReferencedDatumsDataProvider":{
+            "actionType": "dataProvider",
+            "method": "referencedDatumsDataProvider"
+        },
+        "selectDatumReferenceTab":{
+            "actionType": "JSFunctionAsync",
+            "method": "changeTab",
+            "inputData": {
+                "0": "pmiInfoViewTab",
+                "1": "ReferencedDatumsPage"
+            },
+            "deps": "js/tabRegistry.service"
+        },
+        "refreshTables":{
+            "actionType":"batchJob",
+            "steps":[
+                {
+                    "action":"connectedPartsTableRefresh"
+                },
+                {
+                    "action":"datumTableRefresh"
+                }
+            ]
+        },
+        "connectedPartsTableRefresh": {
+            "actionType": "JSFunction",
+            "method": "refreshTable",
+            "inputData": {
+                "tableId": "connectedPartsTable"
+            },
+            "deps": "js/mfeTableService"
+        },
+        "datumTableRefresh": {
+            "actionType": "JSFunction",
+            "method": "refreshTable",
+            "inputData": {
+                "tableId": "referencedDatumsTable"
+            },
+            "deps": "js/mfeTableService"
+        },
+        "updateAndRefreshReferencedDatumVmo":{
+            "actionType":"batchJob",
+            "steps":[
+                {
+                    "action":"updateReferencedDatumVmo"
+                },
+                {
+                    "action":"datumTableRefresh"
+                }
+            ]
+        },
+        "updateReferencedDatumVmo":{
+            "actionType": "JSFunction",
+            "method": "updateReferencedDatumVmo",
+            "inputData": {
+                "referencedDatumVmos": "{{data.dataProviders.referencedDatumsDataProvider.viewModelCollection.loadedVMObjects}}"
+            },
+            "deps": "js/wiPmiInfoService"
+        },
+        "closePmiInformationPopup": {
+            "actionType": "JSFunction",
+            "method": "closePmiInformationPopup",
+            "deps": "js/wiPmiInfoService"
+        },
+        "closeInformationPopupAfterUnassigningInspectionPmi": {
+            "actionType": "JSFunction",
+            "method": "closeInformationPopupAfterUnassigningInspectionPmi",
+            "inputData": {
+                "inspectionsRemoved": "{{parameters.eventData.AssignedPMIs.relatedEvents.removedFromRelation}}",
+                "pmiInformationPopupObj": "{{subPanelContext}}"
+            },
+            "deps": "js/wiPmiInfoService"
+        },
+        "updateConnectedPartsSyncObjectsPort": {
+            "actionType": "Sync",
+            "inputData":{
+                "port": "wiPmiInfoTable_selectedParts",
+                "syncObject": "{{data.dataProviders.connectedPartsDataProvider.selectedObjects}}"
+            }
+        },
+        "updateAndRefreshConnectedPartVmos":{
+            "actionType":"batchJob",
+            "steps":[
+                {
+                    "action":"updateConnectedPartVmos"
+                },
+                {
+                    "action":"connectedPartsTableRefresh"
+                }
+            ]
+        },
+        "updateConnectedPartVmos":{
+            "actionType": "JSFunction",
+            "method": "updateConnectedPartVmos",
+            "inputData": {
+                "connectedPartVmos": "{{data.dataProviders.connectedPartsDataProvider.viewModelCollection.loadedVMObjects}}",
+                "loadedAssyUid":"{{ctx.ep.loadedProductObject.uid}}",
+                "loadedProcessUid":"{{ctx.epPageContext.loadedObject.uid}}"
+            },
+            "deps": "js/wiPmiInfoService"
+        }
+    },
+    "data": {
+        "connectedParts":"",
+        "messages": {
+            "noReferencedDatums": [ {
+                "text": "{{i18n.noReferencedDatums}}"
+            } ],
+            "noConnectedPart": [ {
+                "text": "{{i18n.noConnectedPartMessage}}"
+            } ],
+            "noNotes": [ {
+                "text": "{{i18n.noNotesMessage}}"
+            } ]
+        },
+        "whereDefinedLinkData":{
+            "displayName":null,
+            "type": "STRING",
+            "uid":"",
+            "isRequired": "false",
+            "isEditable": "true"
+        },
+        "notes": {
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "false",
+            "dbValue": "",
+            "dispValue": ""
+        },
+        "tabModels": [
+            {
+                "name": "{{i18n.notes}}",
+                "tabKey": "PmiTextPage"
+            },
+            {
+                "name": "{{i18n.referencedDatums}}",
+                "tabKey": "ReferencedDatumsPage"
+            }
+        ]
+    },
+    "lifecycleHooks": {
+        "onMount":"getAndSaveConnectedParts"
+    },
+    "onEvent": [
+        {
+            "eventId": "referencedDatumsDataProvider.modelObjectsUpdated",
+            "action": "updateAndRefreshReferencedDatumVmo",
+            "condition": "data.referencedDatums.length > 0"
+        },
+        {
+            "eventId": "mfePopup.closePopupWindow",
+            "action": "closePmiInformationPopup"
+        },
+        {
+            "eventId": "pmiLoadMethodSelected",
+            "action": "closePmiInformationPopup"
+        },
+        {
+            "eventId": "LOCATION_CHANGE_COMPLETE",
+            "action": "closePmiInformationPopup"
+        },
+        {
+            "eventId": "ep.addRemoveEvents",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            },
+            "action": "closeInformationPopupAfterUnassigningInspectionPmi",
+            "condition": "AssignedPMIs !== undefined"
+        },
+        {
+            "eventId": "connectedPartsDataProvider.selectionChangeEvent",
+            "action": "updateConnectedPartsSyncObjectsPort"
+        },
+        {
+            "eventId": "connectedPartsDataProvider.modelObjectsUpdated",
+            "action": "updateAndRefreshConnectedPartVmos",
+            "condition": "data.connectedParts.length > 0"
+        }
+    ],
+    "conditions": {
+        "isLoading": {
+            "expression": {
+                "$source": "data.connectedParts",
+                "$query": {
+                    "$isNull": true
+                }
+            }
+        },
+        "hasReferencedDatums": {
+            "expression": {
+                "$source": "data.referencedDatums.length",
+                "$query": {
+                    "$gt": 0
+                }
+            }
+        },
+        "hasConnectedPart": {
+            "expression": {
+                "$source": "data.connectedParts.length",
+                "$query": {
+                    "$gt": 0
+                }
+            }
+        },
+        "hasNotes": {
+            "expression": {
+                "$source": "data.notes.uiValue",
+                "$query": {
+                    "$ne": ""
+                }
+            }
+        },
+        "hasConnectedPartOrReferencedDatums": {
+            "expression": {
+                "$or": [ {
+                        "$source": "conditions.hasConnectedPart",
+                        "$query": {
+                            "$eq": true
+                        }
+                    },
+                    {
+                        "$source": "conditions.hasReferencedDatums",
+                        "$query": {
+                            "$eq": true
+                        }
+                    }
+                ]
+            }
+        },
+        "showReferencedDatumsPage": {
+            "expression": {
+                "$source": "data.selectedTab.tabKey",
+                "$query": {
+                    "$eq": "ReferencedDatumsPage"
+                }
+            }
+        },
+        "showPmiTextPage": {
+            "expression": {
+                "$source": "data.selectedTab.tabKey",
+                "$query": {
+                    "$eq": "PmiTextPage"
+                }
+            }
+        }
+    },
+    "i18n":
+    {
+        "connectedParts":[ "wiPmiMessages" ],
+        "partName": [ "wiPmiMessages" ],
+        "GraphicVisibilityColumnName": [ "InstructionsMessages" ],
+        "referencedDatums": [ "wiPmiMessages" ],
+        "noReferencedDatums":[ "wiPmiMessages" ],
+        "id": [ "wiPmiMessages" ],
+        "definedIn":["wiPmiMessages"],
+        "targetAssembly":["wiPmiMessages"],
+        "targetProcess":["wiPmiMessages"],
+        "notes":["wiPmiMessages"],
+        "noConnectedPartMessage":["wiPmiMessages"],
+        "noNotesMessage":["wiPmiMessages"]
+    }
+}

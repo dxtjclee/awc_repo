@@ -1,0 +1,24 @@
+<aw-command-panel caption="i18n.SaveAs">
+    <aw-panel-body>
+        <aw-widget prop="data.GroupList"></aw-widget>
+        <aw-widget prop="data.objectName" exist-when="ctx.isTC13_2OnwardsSupported"></aw-widget>
+        <aw-widget prop="data.object_desc"></aw-widget>
+        <aw-widget prop="data.qc0Context"></aw-widget>
+        <aw-widget prop="data.qc0Criticality"></aw-widget>
+        <aw-widget prop="data.qc0limitation"></aw-widget>
+        <aw-widget prop="data.qc0UnitOfMeasure"></aw-widget>
+        <aw-widget prop="data.qc0NominalValue"></aw-widget>
+        <aw-widget prop="data.qc0ToleranceType" exist-when="ctx.isTC13_1OnwardsSupported"></aw-widget>
+        <aw-widget exist-when="data.qc0limitation.dbValue !='Up'" prop="data.qc0UpperTolerance"></aw-widget>
+        <aw-widget exist-when="(data.qc0limitation.dbValue =='Both Sides' || data.qc0limitation.dbValue =='Up')"
+            prop="data.qc0LowerTolerance"></aw-widget>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button action="generateNextValuesAndSubmit" exist-when="!ctx.isTC13_2OnwardsSupported" visible-when="formProp.attributes.valid">
+            <aw-i18n>i18n.Save</aw-i18n>
+        </aw-button>
+        <aw-button action="saveASVarCharSpec_tC13_2Onwards" exist-when="ctx.isTC13_2OnwardsSupported" visible-when="formProp.attributes.valid">
+            <aw-i18n>i18n.Save</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

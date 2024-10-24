@@ -1,0 +1,46 @@
+<aw-sublocation sub-location-preference="data._subLocation.awSubLocationPref" context='subPanelContext'>
+
+    <aw-flex-row class="h-10 aw-compare-workarea">
+        <aw-scrollpanel>
+        <div>
+        <!-- source Plan -->
+        <div class="sw-row demo-h-12f">
+            <div class="sw-column w-12">
+                <aw-break></aw-break>
+                <div class="aw-comparePlans-objectTitle">
+                    <label class="aw-widgets-propertyValue aw-comparePlans-objectTitleKey">{{i18n.sourceTitle}}:</label>
+                    <label class="aw-widgets-propertyValue aw-comparePlans-objectTitleValue">{{data.sourcePlanObjName.dispValue}}</label>
+                </div>
+                <aw-gantt-chart gantt-id="planNavigationTimeline" exist-when="conditions.isSelectedPlanReady" class="prgTimeline comparePlans" sub-panel-context="subPanelContext"
+                gantt-chart-state='data.sourcePlanGanttChartState' selection-data='data.ganttSourceSelectionData'>
+                </aw-gantt-chart>
+            </div>
+        </div>
+        <!-- Reference Plans -->
+        <div class="sw-row demo-h-12f" exist-when="conditions.isRefPlansStateReady" aw-repeat="result: data.ganttChartStates.chartState">
+            <div class="sw-column w-12">
+                <div class="sw-row">
+                    <div class="sw-column w-12">
+                        <aw-break></aw-break>
+                        <div class="aw-comparePlans-objectTitle">
+                            <label class="aw-widgets-propertyValue aw-comparePlans-objectTitleKey">{{i18n.Pgp0ComparePlansWith}}:</label>
+                            <label class="aw-widgets-propertyValue aw-comparePlans-objectTitleValue">{{data.refPlansName[$index].dispValue}}</label>
+                        </div>
+                    </div>
+                    <div class="sw-column">
+                        <aw-command-bar anchor="pgp0_removePlanFromPWAAnchor" class="aw-comparePlans-commandBar" alignment="HORIZONTAL" context="data.ganttChartStates.chartState[$index]" visible-when="data.ganttChartStates.chartState.length>1"></aw-command-bar>
+                    </div>
+                </div>
+                <aw-gantt-chart gantt-id="planNavigationTimeline" class="prgTimeline comparePlans" sub-panel-context="subPanelContext"
+                gantt-chart-state='data.ganttChartStates.chartState[$index]' selection-data='data.ganttReferenceSelectionDatas.selectionState[$index]'>
+                </aw-gantt-chart>
+            </div>
+        </div>
+        </div>
+        </aw-scrollpanel>
+    </aw-flex-row>
+
+
+    <aw-splitter exist-when="data.searchState.pwaSelection.length>1" direction="HORIZONTAL"></aw-splitter>
+    <aw-standard-secondary-workarea exist-when="data.searchState.pwaSelection.length>1" search-state="data.searchState" sub-panel-context="{provider:data._subLocation}"></aw-standard-secondary-workarea>
+</aw-sublocation>

@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1.0.0",
+  "syncStrategies": {
+    "syncCompareParamTable": {
+      "source": {
+        "view": "Prm1ParametersCompare",
+        "port": "inputSelectionForSync"
+      },
+      "target": {
+        "view": "Att1ShowParametersTableForSync",
+        "port": "syncUniformParamTable"
+      }
+    }
+  },
+  "syncStrategyHandlers": {
+    "att1CompareParamTableSyncHandler": {
+      "id": "syncCompareParamTable",
+      "activeWhen": true
+    }
+  },
+  "conditions": {
+    "canSyncParamTable": {
+      "expression": "ctx.locationContext['ActiveWorkspace:Location']==='parameterComapreTaskRoot'"
+    }
+  }
+}

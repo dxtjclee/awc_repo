@@ -1,0 +1,976 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "visConfiguration": {
+            "id": "spVisViewer",
+            "sceneType": "HIERARCHICAL",
+            "instanceCacheable": true
+        },
+        "visContext": {},
+        "currentRevisionRule": {
+            "displayName": "{{i18n.CurrentRevision}}",
+            "type": "STRING"
+        }
+    },
+    "ports": {
+        "listenspVisViewers": {
+            "syncObject": {},
+            "onChangeAction": "listenspVisViewersAction"
+        },
+        "spPartsVisibilityChangePort": {
+            "syncObject": {
+                "id": "unknown",
+                "show": false
+            }
+        },
+        "onSPPartsVisViewerVisibilityChanged": {
+            "syncObject": {},
+            "onChangeAction": "onSPPartsVisViewerVisibilityChanged"
+        },
+        "listenSRorWCChange": {
+            "syncObject": {}
+        }
+    },
+    "actions": {
+        "handleSelectionChangeforSkill": {
+            "actionType": "Sync",
+            "inputData": {
+                "port": "listenSRorWCChange",
+                "syncObject": "{{ctx.selectedVMO.props.bl_child_lines.dbValue}}"
+            }
+        },
+        "listenspVisViewersAction": {
+            "actionType": "JSFunction",
+            "method": "updateVisViewerInstanceId",
+            "inputData": {
+                "syncObject": "{{ports.listenspVisViewers.syncObject}}",
+                "data": "{{data}}",
+                "instanceId": "spVisViewer"
+            },
+            "deps": "js/ssp0VisViewerUtilityService"
+        },
+        "onSPPartsVisViewerVisibilityChanged": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "servicePlanTreeTable.plTable.clientRefresh",
+                        "condition": "ctx.is3DTabPresent === true"
+                    }
+                ]
+            }
+        },
+        "getChildNodeProperties": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData": {
+                "attributes": "{{function:getChildNodeAttributes}}",
+                "objects": "{{data.uids}}"
+            },
+            "outputData": {
+                "treeLoadResult": "{{function:setNodeProperties}}"
+            },
+            "policy": {
+                "types": [
+                    {
+                        "name": "BOMLine",
+                        "properties": [
+                            {
+                                "name": "bl_line_object",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SSP0BvrWorkCard",
+                        "properties": [
+                            {
+                                "name": "Mfg0predecessors",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "deps": "js/ssp0TreeLoadDataServiceOfServicePlan"
+        },
+        "getChildNodeData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData": {
+                "attributes": [
+                    "bl_child_lines",
+                    "bl_rev_fnd0objectId",
+                    "bl_bomview_rev"
+                ],
+                "objects": [
+                    {
+                        "uid": "{{data.treeLoadInput.parentNode.uid}}",
+                        "type": "BomLine"
+                    }
+                ]
+            },
+            "outputData": {
+                "uids": "{{function:getChildNodes}}"
+            },
+            "policy": {
+                "types": [
+                    {
+                        "name": "BOMLine",
+                        "properties": [
+                            {
+                                "name": "bl_line_object",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SSP0BvrWorkCard",
+                        "properties": [
+                            {
+                                "name": "Mfg0predecessors",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "deps": "js/ssp0TreeLoadDataServiceOfServicePlan"
+        },
+        "loadChildrenOfServicePlan": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "retrieveTreeLoadResult"
+                },
+                {
+                    "action": "getChildNodeData"
+                },
+                {
+                    "action": "getChildNodeProperties"
+                },
+                {
+                    "action": "updateRevRule"
+                }
+            ]
+        },
+        "consumePartBatchJob": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "getdefaultOccurrenceTypePref",
+                    "condition": "conditions.checkIfPreferenceIsLoaded"
+
+                },
+                {
+                    "action": "consumePart"
+                }
+            ]
+        },
+        "openContextBatchAction": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "openContext"
+                },
+                {
+                    "action": "getParentNodeProperties"
+                },
+                {
+                    "action": "getCurrentRevRule"
+                }
+            ]
+        },
+        "getParentNodeProperties": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData": {
+                "attributes": "{{function:getParentNodeAttributes}}",
+                "objects": [
+                    {
+                        "uid": "{{data.sourceContextUid.servicePlanUid}}"
+                    }
+                ]
+            },
+            "outputData": {
+                "treeLoadResult": "{{function:setNodeProperties}}"
+            },
+            "policy": {
+                "types": [
+                    {
+                        "name": "BOMLine",
+                        "properties": [
+                            {
+                                "name": "bl_line_object",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "bl_rev_fnd0objectId",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "SSP0BvrWorkCard",
+                        "properties": [
+                            {
+                                "name": "Mfg0predecessors",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "deps": "js/ssp0TreeLoadDataServiceOfServicePlan"
+        },
+        "openContext": {
+            "actionType": "TcSoaService",
+            "serviceName": "Manufacturing-2011-06-DataManagement",
+            "method": "openContexts",
+            "inputData": {
+                "input": [
+                    {
+                        "object": {
+                            "uid": "{{data.treeLoadInput.parentNode.uid}}"
+                        },
+                        "contextSettings": {
+                            "boolArrayProps": {},
+                            "boolProps": {
+                                "ShowSuppressedOccs": true,
+                                "ShowUnconfiguredAssignedOccurrences": true,
+                                "ShowUnconfiguredVariants": true,
+                                "ShowUnconfiguredChanges": true,
+                                "ShowUnconfiguredOccurrencesEffectivity": true,
+                                "IsProductConfigurator": false
+                            },
+                            "compoundCreateInput": {},
+                            "dateArrayProps": {},
+                            "dateProps": {},
+                            "doubleArrayProps": {},
+                            "doubleProps": {},
+                            "floatArrayProps": {},
+                            "floatProps": {},
+                            "intArrayProps": {},
+                            "intProps": {},
+                            "stringArrayProps": {},
+                            "stringProps": {},
+                            "tagArrayProps": {},
+                            "tagProps": {},
+                            "type": ""
+                        },
+                        "openAssociatedContexts": true,
+                        "openViews": true
+                    }
+                ]
+            },
+            "outputData": {
+                "sourceContextUid": "{{function:getSourceContextUid}}"
+            },
+            "deps": "js/ssp0TreeLoadDataServiceOfServicePlan"
+        },
+        "getCurrentRevRule": {
+            "actionType": "JSFunction",
+            "method": "getCurrentRevRule",
+            "inputData": {
+                "data": "{{data.sourceContextUid}}"
+            },
+            "deps": "js/ssp0TreeLoadDataServiceOfServicePlan"
+        },
+        "updateRevRule": {
+            "actionType": "JSFunction",
+            "method": "updateRevRule",
+            "inputData": {
+                "data": "{{data.currentRevisionRule}}"
+            },
+            "outputData": {
+                "currentRevisionRule": ""
+            },
+            "deps": "js/ssp0TreeLoadDataServiceOfServicePlan"
+        },
+        "selectionChanged": {
+            "actionType": "JSFunction",
+            "method": "saveVMOInCtx",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.servicePlanDataProvider.selectedObjects}}"
+            },
+            "deps": "js/ssp0TreeLoadDataServiceOfServicePlan"
+        },
+        "loadServicePlanTreeTableColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadServicePlanTreeTableColumns",
+            "inputData": {
+                "data": "{{data}}",
+                "resetFlag":false
+            },
+            "outputData": {
+                "dataProviders.servicePlanDataProvider.columnConfig": "columnConfig"
+            },
+            "deps": "js/ssp0TreeLoadDataServiceOfServicePlan"
+        },
+        "resetServicePlanTreeTableColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadServicePlanTreeTableColumns",
+            "inputData": {
+                "data": "{{data}}",
+                "resetFlag": true
+            },
+            "outputData": {
+                "dataProviders.servicePlanDataProvider.columnConfig": "columnConfig"
+            },
+            "deps": "js/ssp0TreeLoadDataServiceOfServicePlan"
+        },
+        "retrieveTreeLoadResult": {
+            "actionType": "JSFunction",
+            "method": "retrieveTreeLoadResult",
+            "inputData": {
+                "treeNode": "{{data.treeLoadInput.parentNode}}"
+            },
+            "outputData": {
+                "treeLoadResult": "{{function:retrieveTreeLoadResult}}"
+            },
+            "deps": "js/ssp0TreeLoadDataServiceOfServicePlan"
+        },
+        "reloadServicePlanTree": {
+            "actionType": "JSFunction",
+            "method": "reloadServicePlanTree",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.servicePlanDataProvider}}"
+            },
+            "deps": "js/ssp0TreeLoadDataServiceOfServicePlan"
+        },
+        "getdefaultOccurrenceTypePref": {
+            "actionType": "TcSoaService",
+            "serviceName": "Administration-2012-09-PreferenceManagement",
+            "method": "getPreferences",
+            "inputData": {
+                "preferenceNames": [
+                    "AWC_SLM_SelectOccurrenceTypeForParts",
+                    "AWC_SLM_SelectOccurrenceTypeForTools"
+                ],
+                "includePreferenceDescriptions": false
+            },
+            "outputData": {
+                "ctx.preferences.AWC_SLM_SelectOccurrenceTypeForParts": "response[0].values.values",
+                "ctx.preferences.AWC_SLM_SelectOccurrenceTypeForTools": "response[1].values.values"
+            }
+        },
+        "newNodeAdded": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData": {
+                "attributes": "{{function:getParentNodeAttributes}}",
+                "objects": [
+                    {
+                        "uid": "{{data.eventMap['SSP0ServicePlanTree.newNodeAdded'].childNodeUid}}"
+                    }
+                ]
+            },
+            "outputData": {
+                "treeLoadResult": "{{function:newNodeAdded}}"
+            },
+            "deps": "js/ssp0CreateObjectService"
+        },
+        "expandSelectedNode": {
+            "actionType": "JSFunction",
+            "method": "expandSelectedNode",
+            "inputData": {
+                "nodeToBeExpanded": "{{data.eventMap['expandSelectedNode'].nodeToBeExpanded}}",
+                "nodeToBeSelected": "{{data.eventMap['expandSelectedNode'].nodeToBeSelected}}",
+                "isForFirstLevel": "{{data.eventMap['expandSelectedNode'].isForFirstLevel}}",
+                "dataProvider": "{{data.dataProviders.servicePlanDataProvider}}"
+            },
+            "deps": "js/ssp0TreeLoadDataServiceOfServicePlan"
+        },
+        "refreshServicePlanTree": {
+            "actionType": "JSFunction",
+            "method": "refreshServicePlanTree",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.servicePlanDataProvider}}"
+            },
+            "deps": "js/ssp0TreeLoadDataServiceOfServicePlan"
+        },
+        "consumePart": {
+            "actionType": "TcSoaService",
+            "serviceName": "Manufacturing-2012-02-DataManagement",
+            "method": "connectObjects",
+            "inputData": {
+                "input": [
+                    {
+                        "targetObjects": [
+                            {
+                                "uid": "{{data.eventMap['Ssp0ServicePlanTree.consumePart'].consumePartData.targetObject.uid}}",
+                                "type": "{{data.eventMap['Ssp0ServicePlanTree.consumePart'].consumePartData.targetObject.type}}"
+                            }
+                        ],
+                        "sourceInfo": {
+                            "sourceObjects": "{{data.eventMap['Ssp0ServicePlanTree.consumePart'].consumePartData.sourceObject}}",
+                            "relationType": "",
+                            "relationName": "",
+                            "additionalInfo": {
+                                "stringArrayProps": {
+                                    "relationType": "{{function:getStringArrayProps}}"
+                                },
+                                "boolProps": {
+                                    "occTypeFromPreferenceFlag": true
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "outputData": {
+                "consumedPart": "{{function:consumeAndLoadParts}}"
+            },
+            "deps": "js/ssp0TreeLoadDataServiceOfServicePlan"
+        },
+        "loadGraphics": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "callPropertyProviderFunction"
+                },
+                {
+                    "action": "getCurrentVisibilityState"
+                },
+                {
+                    "action": "loadParts"
+                }
+            ]
+        },
+        "callPropertyProviderFunction": {
+            "actionType": "JSFunction",
+            "method": "rendererLoadingGraphicVisibilityIndicationBasedOnViewer",
+            "inputData": {
+                "vmo": "{{data.eventMap['spPartsVisGraphicsVisibilityChanged'].vmo}}",
+                "containerElement": "{{data.eventMap['spPartsVisGraphicsVisibilityChanged'].vmo.graphicsVisibilityContainerElement}}"
+            },
+            "deps": "js/ssp0GraphicVisibilityTablePropertyRenderer"
+        },
+        "loadParts": {
+            "actionType": "Sync",
+            "inputData": {
+                "port": "spPartsVisibilityChangePort",
+                "syncObject": {
+                    "id": "{{data.eventMap['spPartsVisGraphicsVisibilityChanged'].modelId}}",
+                    "show": "{{data.currentVisibilityState}}"
+                }
+            }
+        },
+        "getCurrentVisibilityState": {
+            "actionType": "JSFunction",
+            "method": "getCurrentVisibilityState",
+            "inputData": {
+                "vmo": "{{data.eventMap['spPartsVisGraphicsVisibilityChanged'].vmo}}",
+                "viewerId": "PartsViewer"
+            },
+            "outputData": {
+                "currentVisibilityState": "currentVisibilityState"
+            },
+            "deps": "js/ssp0VisViewerUtilityService"
+        },
+        "subscribeToNodesLoaded": {
+            "actionType": "JSFunction",
+            "method": "subscribeToNodesLoaded",
+            "deps": "js/ssp0TreeLoadDataServiceOfServicePlan"
+        },
+        "saveColumnConfigLoadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "saveUIColumnConfigs2",
+            "inputData": {
+                "columnConfigurations": [
+                    {
+                        "clientScopeURI": "Ssp0SpManagement",
+                        "columnConfigId": "{{data.dataProviders.servicePlanDataProvider.columnConfig.columnConfigId}}",
+                        "columns": "{{data.dataProviders.servicePlanDataProvider.newColumns}}",
+                        "scope": "LoginUser",
+                        "scopeName": ""
+                    }
+                ]
+            },
+            "outputData": {},
+            "events": {
+                "success": [
+                    {
+                        "name": "ssp0spColumnConfig.saved"
+                    }
+                ]
+            }
+        },
+        "loadDataForSavedColumnConfig": {
+            "actionType": "JSFunctionAsync",
+            "method": "getTableViewModelProperties",
+            "deps": "js/tcViewModelObjectService",
+            "inputData": {
+                "vmNodes": "{{data.dataProviders.servicePlanDataProvider.viewModelCollection.loadedVMObjects}}",
+                "context": {
+                    "clientScopeURI": "Ssp0SpManagement",
+                    "clientName": "AWClient",
+                    "columnConfigId": "Ssp0SpManagement",
+                    "columnsToExclude": "{{ctx.sbomProductContext.columnsToExclude}}",
+                    "operationType": "{{eventData.operationType}}"
+                }
+            },
+            "outputData": {
+                "newColumnConfig": "result.output.columnConfig"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "ssp0spColumnConfigAndLoaded.saved"
+                    }
+                ]
+            }
+        },
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/ssp0ColumnArrangeService"
+        },
+        "selectionChangedBatchJob": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "selectionChanged"
+                },
+                {
+                    "action": "getRevisionObject"
+                },
+                {
+                    "action": "reloadPERTGraph"
+                },
+                {
+                    "action": "checkParentType"
+                },
+                {
+                    "action": "handleSelectionChangeforSkill"
+                }
+            ]
+        },
+        "getRevisionObject": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData": {
+                "attributes": [
+                    "object_string"
+                ],
+                "objects": [
+                    {
+                        "uid": "{{data.dataProviders.servicePlanDataProvider.selectedObjects[0].props.bl_rev_fnd0objectId.dbValue}}"
+                    }
+                ]
+            },
+            "outputData": {
+                "revisionObject": "{{function:getRevisionObject}}"
+            },
+            "deps": "js/ssp0TreeLoadDataServiceOfServicePlan"
+        },
+        "saveServicePlanTreeTable": {
+            "actionType": "JSFunction",
+            "method": "createObjectOfModifyType",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.servicePlanDataProvider}}"
+            },
+            "deps": "js/ssp0CreateObjectService"
+        },
+        "saveServicePlanTreeTableBatchJob": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "saveServicePlanTreeTable"
+                },
+                {
+                    "action": "cancelServicePlanEditActionBatchJob"
+                }
+            ]
+        },
+        "editServicePlanTreeProperty": {
+            "actionType": "JSFunction",
+            "method": "startEdit",
+            "inputData": {
+                "handler": "servicePlanDataProvider"
+            },
+            "deps": "js/ssp0TreeLoadDataServiceOfServicePlan"
+        },
+        "cancelServicePlanEditActionBatchJob": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "removeEditInProgressParameter"
+                },
+                {
+                    "action": "cancelServicePlanEditAction"
+                }
+            ]
+        },
+        "removeEditInProgressParameter": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "inputData": {
+                "name": "ssp0ServicePlanTreeEditInProgress"
+            },
+            "deps": "js/appCtxService"
+        },
+        "cancelServicePlanEditAction": {
+            "actionType": "dataProvider",
+            "method": "servicePlanDataProvider",
+            "inputData": {
+                "action": "cancelEdits"
+            }
+        },
+        "editServicePlanTreeTable": {
+            "actionType": "dataProvider",
+            "method": "servicePlanDataProvider",
+            "inputData": {
+                "action": "startEdit"
+            }
+        },
+        "startEditForNewVmos": {
+            "actionType": "JSFunction",
+            "method": "startEditForNewVmos",
+            "inputData": {
+                "editContext": "{{data.dataProviders.servicePlanDataProvider.json.editContext}}"
+            },
+            "deps": "js/editEventsService"
+        },
+        "editEventAction": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "editHandlerStateChange",
+                        "eventData": {
+                            "state": "{{data.eventData === true ? 'starting' : 'saved'}}",
+                            "dataSource": "{{data.dataProviders.servicePlanDataProvider}}"
+                        }
+                    }
+                ]
+            }
+        },
+        "updateDisplayNames": {
+            "actionType": "JSFunction",
+            "method": "updateDisplayNames",
+            "inputData": {
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/occmgmtTreeTableDataService"
+        },
+        "removeCtxParameter": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "inputData": {
+                "name": "ssp0ServicePlanTreeEditInProgress"
+            },
+            "deps": "js/appCtxService"
+        },
+        "reloadPERTGraph": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "loadSRPERTGraphData"
+                    }
+                ]
+            }
+        },
+        "checkParentType": {
+            "actionType": "JSFunction",
+            "method": "checkParentType",
+            "deps": "js/ssp0TreeLoadDataServiceOfServicePlan"
+        }
+    },
+    "dataProviders": {
+        "servicePlanDataProvider": {
+            "initializeAction": "openContextBatchAction",
+            "action": "loadChildrenOfServicePlan",
+            "treeLoadResult": "{{data.treeLoadResult}}",
+            "editContext": "servicePlanDataProvider",
+            "cacheCollapse": false,
+            "enablePropEdit": true,
+            "inputData": {
+                "accessMode": "tree",
+                "topNodeUid": "{{ctx.state.params.uid}}"
+            },
+            "editConfig": {
+                "startEditAction": "editServicePlanTreeProperty",
+                "saveEditAction": "saveServicePlanTreeTable",
+                "identifier": "uid",
+                "editSupportParamKeys": [
+                    "uid"
+                ]
+            },
+            "selectionModelMode": "multiple"
+        }
+    },
+    "columnProviders": {
+        "servicePlanColumnProvider": {
+            "loadColumnAction": "loadServicePlanTreeTableColumns",
+            "columns": "{{data.columns}}",
+            "saveColumnAndLoadAction": "saveColumnConfigLoadData",
+            "resetColumnAction": "resetServicePlanTreeTableColumns",
+            "frozenColumnIndex": -1
+        }
+    },
+    "grids": {
+        "servicePlanTreeTable": {
+            "dataProvider": "servicePlanDataProvider",
+            "columnProvider": "servicePlanColumnProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "useStaticFirstCol": true,
+                "enableExpandAndPaginationInEdit": true
+            },
+            "enableArrangeMenu": true
+        }
+    },
+    "ctx": {
+        "spProductContext": {
+            "type": "object"
+        },
+        "selectedVMO": {
+            "type": "object"
+        }
+    },
+    "conditions": {
+        "checkIfPreferenceIsLoaded": {
+            "expression": "(ctx.preferences.AWC_SLM_SelectOccurrenceTypeForParts === undefined) && (ctx.preferences.AWC_SLM_SelectOccurrenceTypeForTools === undefined)"
+        },
+        "isTreeEditInProgressCondition": {
+            "expression": "ctx.ssp0ServicePlanTreeEditInProgress !== undefined"
+        },
+        "checkIfNodeIsNotLoaded": {
+            "expression": "data.treeLoadInput.parentNode.alreadyExpanded == false"
+        },
+        "checkIfNodeIsLoaded": {
+            "expression": "data.treeLoadInput.parentNode.alreadyExpanded == true"
+        },
+        "isCurrentRevRuleAvailable": {
+            "expression": "ctx.CurrentRevisionRule.length>0"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "subscribeToNodesLoaded",
+        "onUnmount": "removeCtxParameter"
+    },
+    "i18n": {
+        "servicePlanTitle": [
+            "ssp0Messages"
+        ],
+        "nameValueColumn": [
+            "ssp0Messages"
+        ],
+        "idValueColumn": [
+            "ssp0Messages"
+        ],
+        "descriptionValueColumn": [
+            "ssp0Messages"
+        ],
+        "CurrentRevision": [
+            "ServicePlannerConstants"
+        ]
+    },
+    "functions": {
+        "newNodeAdded": {
+            "functionName": "newNodeAdded",
+            "parameters": [
+                "{{data.dataProviders.servicePlanDataProvider}}"
+            ]
+        },
+        "getStringArrayProps": {
+            "functionName": "getStringArrayProps",
+            "parameters": [
+                "{{ctx.SelectedTab}}",
+                "{{ctx.preferences.AWC_SLM_SelectOccurrenceTypeForParts}}",
+                "{{ctx.preferences.AWC_SLM_SelectOccurrenceTypeForTools}}",
+                "{{data.eventMap['Ssp0ServicePlanTree.consumePart'].consumePartData.sourceObject.length}}"
+            ]
+        },
+        "setNodeProperties": {
+            "functionName": "setNodeProperties",
+            "parameters": [
+                "{{data.treeLoadInput.parentNode}}",
+                "{{data}}"
+            ]
+        },
+        "getChildNodes": {
+            "functionName": "getChildNodes",
+            "parameters": [
+                "{{data.treeLoadInput.parentNode}}"
+            ]
+        },
+        "consumeAndLoadParts": {
+            "functionName": "consumeAndLoadParts",
+            "parameters": [
+                "{{data.eventMap['Ssp0ServicePlanTree.consumePart'].consumePartData.selection}}"
+            ]
+        },
+        "retrieveTreeLoadResult": {
+            "functionName": "retrieveTreeLoadResult",
+            "parameters": [
+                "{{data.treeLoadInput.parentNode}}"
+            ]
+        },
+        "getSourceContextUid": {
+            "functionName": "getSourceContextUid",
+            "parameters": []
+        },
+        "getRevisionObject": {
+            "functionName": "getRevisionObject",
+            "parameters": []
+        },
+        "getChildNodeAttributes": {
+            "functionName": "getChildNodeAttributes",
+            "parameters": []
+        },
+        "getParentNodeAttributes": {
+            "functionName": "getParentNodeAttributes",
+            "parameters": []
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "servicePlanDataProvider.modelObjectsUpdated",
+            "cacheEventData": true,
+            "action": "updateDisplayNames"
+        },
+        {
+            "eventId": "vmc.modified.servicePlanDataProvider",
+            "cacheEventData": true,
+            "action": "updateDisplayNames"
+        },
+        {
+            "eventId": "servicePlanDataProvider.editInProgress",
+            "cacheEventData": true,
+            "action": "editEventAction"
+        },
+        {
+            "eventId": "servicePlanDataProvider.startEditForNewVmosRequested",
+            "action": "startEditForNewVmos"
+        },
+        {
+            "eventId": "SSP0ServicePlanTree.editTree",
+            "action": "editServicePlanTreeProperty",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "SSP0ServicePlanTree.editCancelTree",
+            "action": "cancelServicePlanEditActionBatchJob",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "SSP0ServicePlanTree.editSaveTree",
+            "action": "saveServicePlanTreeTableBatchJob",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "SSP0ServicePlanTree.newNodeAdded",
+            "action": "newNodeAdded",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "spPartsVisGraphicsVisibilityChanged",
+            "action": "loadGraphics",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "expandSelectedParentNode",
+            "action": "buttonAction1"
+        },
+        {
+            "eventId": "Ssp0ServicePlanTree.getParentNodeProperties",
+            "action": "getParentNodeProperties",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "servicePlanDataProvider.selectionChangeEvent",
+            "action": "selectionChangedBatchJob",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "servicePlanDataProvider.treeNodesLoaded",
+            "cacheEventData": true,
+            "action": "initialLoadProperties",
+            "condition": "!data.dataProviders.servicePlanDataProvider.columnConfigLoadingInProgress"
+        },
+        {
+            "eventId": "reloadServicePlanTree",
+            "action": "reloadServicePlanTree"
+        },
+        {
+            "eventId": "expandSelectedNode",
+            "action": "expandSelectedNode",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "Ssp0ServicePlanTree.consumePart",
+            "action": "consumePartBatchJob",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "Ssp0ServicePlanTree.refreshTree",
+            "action": "refreshServicePlanTree",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "ssp0spColumnConfig.saved",
+            "cacheEventData": true,
+            "action": "loadDataForSavedColumnConfig"
+        },
+        {
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        },
+        {
+            "eventId": "ssp0spColumnConfigAndLoaded.saved",
+            "action": "loadServicePlanTreeTableColumns"
+        }
+    ]
+}

@@ -1,0 +1,124 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "filterBox": {
+            "displayName": "{{i18n.filterPanelCategoryFilterPlaceholderText}}",
+            "type": "STRING",
+            "dbValue": ""
+        }
+    },
+    "actions": {
+        "doListDataProvider": {
+            "actionType": "dataProvider",
+            "method": "listDataProvider"
+        },
+        "loadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "searchInput": {
+                    "maxToLoad": "{{subPanelContext.provider.context.search.maxToLoad}}",
+                    "maxToReturn": "{{subPanelContext.provider.context.search.maxToReturn}}",
+                    "providerName": "Awp0SavedQuerySearchProvider",
+                    "searchCriteria": "{{function:getDpvTemplateSearchCriteria}}",
+                    "searchFilterFieldSortType": "{{subPanelContext.provider.context.search.sortType}}",
+                    "startIndex": "{{data.dataProviders.listDataProvider.startIndex}}",
+                    "searchFilterMap6": "{{subPanelContext.provider.context.search.activeFilterMap}}",
+                    "searchSortCriteria": "{{subPanelContext.provider.context.search.sortCriteria}}"
+                }
+            },
+            "policy": {
+                "types": [ {
+                    "name": "BusinessObject",
+                    "properties": [ {
+                        "name": "awp0CellProperties"
+                    } ]
+                } ]
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}",
+                "output": "{{function:processOutput}}"
+            },
+            "deps": "js/Dpv1ReportTemplateService"
+        },
+        "loadDataBatchAction": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "findDatasetSavedQuery",
+                    "condition": "!data.datasetQuery"
+                },
+                {
+                    "action": "loadData"
+                }
+            ]
+        },
+        "findDatasetSavedQuery": {
+            "actionType": "TcSoaService",
+            "serviceName": "Query-2010-04-SavedQuery",
+            "method": "findSavedQueries",
+            "inputData": {
+                "inputCriteria": [
+                    {
+                        "queryNames": [
+                            "Dataset..."
+                        ]
+                    }
+                ]
+            },
+            "outputData": {
+                "datasetQuery": "savedQueries[0]"
+            }
+        }
+    },
+    "functions": {
+        "getDpvTemplateSearchCriteria": {
+            "functionName": "getDpvTemplateSearchCriteria",
+            "parameters": [
+                "{{data.datasetQuery.uid}}",
+                "{{data.filterBox.dbValue}}"
+            ]
+        },
+        "processOutput": {
+            "functionName": "processOutput",
+            "parameters": [
+                "{{data}}",
+                "{{subPanelContext.searchState}}"
+            ]
+        }
+    },
+    "dataProviders": {
+        "listDataProvider": {
+            "action": "loadDataBatchAction",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "inputData": {
+                "selectionModel": "{{subPanelContext.selectionModel}}"
+            },
+            "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectCellListActionCommands"
+        }
+
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "onEvent": [],
+    "i18n": {
+        "filterPanelCategoryFilterPlaceholderText": [
+            "SearchMessages"
+        ]
+    },
+    "lifecycleHooks": {
+        "onUpdate": {
+            "action": "doListDataProvider",
+            "observers": [
+                "props.subPanelContext.searchState.criteria.searchString",
+                "props.subPanelContext.searchState.filterString"
+            ]
+        }
+    }
+}

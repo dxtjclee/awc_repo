@@ -1,0 +1,31 @@
+<mfe-loading-message exist-when="!data.availableColumns"></mfe-loading-message>
+<aw-panel-body class="aw-ngp-arrangeDlgPanel" scrollable="false" exist-when="data.availableColumns">
+    <div class="sw-row h-12 justify-justified">
+        <div class="w-5 aw-ngp-arrangeDlgListPanel">
+            <aw-command-panel-section caption="i18n.availableColumnsTitle"  name="arrangeAvailableColumnsSection" collapsed="disabled">
+                <aw-list-filter prop="data.availableColumnsFilter" dataprovider="data.dataProviders.availableColumnsDataProvider">
+                    <div class="aw-ngp-arrangeDlgListItem" title="{{item.displayName}}"> {{item.displayName}}</div>
+                </aw-list-filter>
+            </aw-command-panel-section>
+        </div>
+        <div class="w-1 justify-center align-self-center">
+            <aw-command-bar class="aw-ngp-arrangeDialogCmds" anchor="ngpArrangeDialogTwoPanelsCommandBar" context="data" alignment="VERTICAL"></aw-command-bar>
+        </div>
+        <div class="w-5 aw-ngp-arrangeDlgListPanel">
+            <aw-command-panel-section caption="i18n.tableColumnsTitle" name="arrangeTableColumnsSection" collapsed="disabled">
+                <aw-scrollpanel>
+                    <aw-list dataprovider="data.dataProviders.currentTableColumnsDataProvider">
+                        <div class="aw-ngp-arrangeDlgListItem" aw-class="{'aw-ngp-arrangeDlgFixedListItem': item.isFixed}" title="{{item.displayName}}"> {{item.displayName}}</div>
+                    </aw-list>
+                </aw-scrollpanel>
+            </aw-command-panel-section>
+        </div>
+        <div class="w-1 justify-center align-self-center">
+            <aw-command-bar class="aw-ngp-arrangeDialogCmds" anchor="ngpArrangeDialogCommandBar" context="data" alignment="VERTICAL"></aw-command-bar>
+        </div>
+    </div>
+</aw-panel-body>
+<aw-panel-footer exist-when="data.availableColumns">
+    <aw-button button-type="base" action="closeDialog" size="auto">{{i18n.cancel}}</aw-button>
+    <aw-button action="saveColumnsAndCloseDialog" size="auto" enable-when="conditions.willHaveColumnsInTable">{{i18n.done}}</aw-button>
+</aw-panel-footer>

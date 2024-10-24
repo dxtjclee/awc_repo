@@ -1,0 +1,263 @@
+{
+  "activitiesCategoryColumn_template": {
+    "grids": [
+      "EpActivitiesTable"
+    ],
+    "columns": [
+      "al_activity_time_system_category"
+    ],
+    "renderFunction": "renderActivityCategory",
+    "deps": "js/epActivitiesRenderService"
+  },
+  "epMissingInSourceColumn_template": {
+    "grids": [
+      "EpDetailsTable"
+    ],
+    "columns": [
+      "missingInSource"
+    ],
+    "renderFunction": "rendererMissingInSourceOrChangeIndication",
+    "deps": "js/epMissingInSrcIndicationTablePropertyRenderer",
+    "headerTemplateUrl": "",
+    "headerRenderFunction": "renderMissinInSrcColumnHeader"
+  },
+  "epExternalFlowsColumn_template": {
+    "grids": [
+      "EpDetailsTable"
+    ],
+    "columns": [
+      "externalFlowIndication"
+    ],
+    "renderFunction": "rendererForExternalFlowIndication",
+    "deps": "js/epExternalFlowIndicationTablePropertyRenderer",
+    "headerTemplateUrl": "",
+    "headerRenderFunction": "renderExternalFlowColumnHeader"
+  },
+  "epAssignmentIndicationColumn_template": {
+    "grids": [
+      "EpTreeTable"
+    ],
+    "columns": [
+      "assignmentIndication"
+    ],
+    "renderFunction": "rendererForAssignmentIndication",
+    "deps": "js/epAssignmentIndicationService",
+    "headerTemplateUrl": "",
+    "headerRenderFunction": "renderIndicationColumnHeader"
+  },
+  "epProcessReleasedFlagColumn_template": {
+    "grids": [
+      "EpTreeTable"
+    ],
+    "columns": [
+      "releaseStatusFlag"
+    ],
+    "renderFunction": "rendererReleaseStatusFlagVisibility",
+    "deps": "js/epReleaseStatusFlagTablePropertyRenderer",
+    "headerTemplateUrl": "",
+    "headerRenderFunction": "releaseStatusFlagHeaderRenderer"
+  },
+  "epChangeIndicationColumn_template": {
+    "grids": [
+      "EpTreeTable"
+    ],
+    "columns": [
+      "changeIndication"
+    ],
+    "renderFunction": "rendererForChangeIndication",
+    "deps": "js/epChangeIndicationService",
+    "headerTemplateUrl": "",
+    "headerRenderFunction": "changeIndicationHeaderRenderer"
+  },
+  "is_modifiable_template": {
+    "grids": [
+      "studyGridTable"
+    ],
+    "columns": [
+      "is_modifiable"
+    ],
+    "tooltip": [
+      "is_modifiable"
+    ],
+    "template": "",
+    "templateUrl": "/propRenderTemplates/isModifiablePropertyRenderer.html",
+    "deps": "propRenderTemplates/studyPropRenderService",
+    "renderFunction": "",
+    "headerRenderFunction": "renderIsModifiableHeader",
+    "dependentServices": []
+  },
+  "study_owning_user_template": {
+    "grids": [
+      "studyGridTable"
+    ],
+    "columns": [
+      "owning_user"
+    ],
+    "tooltip": [
+      "owning_user"
+    ],
+    "template": "",
+    "templateUrl": "/propRenderTemplates/studyOwnerPropertyRenderer.html",
+    "renderFunction": "",
+    "deps": "",
+    "dependentServices": []
+  },
+  "study_approved_for_briefcase_export_template": {
+    "grids": [
+      "studyGridTable"
+    ],
+    "columns": [
+      "briefcaseExport"
+    ],
+    "renderFunction": "rendererApprovedForBriefcaseExport",
+    "deps": "propRenderTemplates/studyPropRenderService",
+    "headerTemplateUrl": "",
+    "headerRenderFunction": "rendererApprovedForBriefcaseExportHeader"
+  },
+  "balancingProcessResourceColumn_template": {
+    "grids": [
+      "EpDetailsTable"
+    ],
+    "columns": [
+      "Mfg0processResource"
+    ],
+    "renderFunction": "renderProcessResourceName",
+    "deps": "js/epBalancingLabelsService"
+  },
+  "balancingAllocatedTimeColumn_template": {
+    "grids": [
+      "EpTreeTable"
+    ],
+    "columns": [
+      "Mfg0AllocatedTimeConverted"
+    ],
+    "renderFunction": "renderAllocatedTimeUnit",
+    "deps": "js/epBalancingLabelsService"
+  },
+  "balancingIndicationColumn_template": {
+    "grids": [
+      "EpDetailsTable"
+    ],
+    "columns": [
+      "allocationIndication"
+    ],
+    "renderFunction": "rendererAllocationIndicationForPlantBop",
+    "deps": "js/epAllocationIndicationService",
+    "headerTemplateUrl": "",
+    "headerRenderFunction": "renderIndicationColumnHeader"
+  },
+  "balancingReleasedFlagColumn_template": {
+    "grids": [
+      "EpDetailsTable"
+    ],
+    "columns": [
+      "releaseStatusFlag"
+    ],
+    "renderFunction": "rendererReleaseStatusFlagVisibility",
+    "deps": "js/epReleaseStatusFlagTablePropertyRenderer",
+    "headerTemplateUrl": "",
+    "headerRenderFunction": "releaseStatusFlagHeaderRenderer"
+  },
+  "balancingIndicationColumnForProductBOP_template": {
+    "grids": [
+      "EpTreeTable"
+    ],
+    "columns": [
+      "allocationIndication"
+    ],
+    "renderFunction": "rendererAllocationIndicationForProductBop",
+    "deps": "js/epAllocationIndicationService",
+    "headerTemplateUrl": "",
+    "headerRenderFunction": "renderIndicationColumnHeader"
+  },
+  "balancingExternalOperations_template": {
+    "grids": [
+      "EpDetailsTable"
+    ],
+    "columns": [
+      "ExternalUsage"
+    ],
+    "deps": "js/epBalancingService",
+    "renderFunction": "rendererExternalUsage",
+    "headerTemplateUrl": "",
+    "headerRenderFunction": "externalOperationHeaderRenderer"
+  },
+  "epOperationsGridTableHeaderRenderer": {
+    "grids": [
+      "EpOperationsGridTable"
+    ],
+    "columns": [],
+    "renderFunction": "",
+    "headerComponent": "EpOperationsPlanningHeader",
+    "deps": "js/epOperationsPlanningGridService"
+  },
+  "weighted_time_template": {
+    "grids": [
+      "EpOperationsGridTable"
+    ],
+    "columns": [
+      "weightedTime"
+    ],
+    "tooltip": [
+      "weightedTime"
+    ],
+    "deps": "propRenderTemplates/planningPropRenderService",
+    "renderFunction": "rendererWeightedTime"
+  },
+  "epOperationReleasedFlagColumn_template": {
+    "grids": [
+      "EpOperationsGridTable"
+    ],
+    "columns": [
+      "releaseStatusFlag"
+    ],
+    "renderFunction": "rendererReleaseStatusFlagVisibility",
+    "deps": "js/epReleaseStatusFlagTablePropertyRenderer"
+  },
+  "epPmiMissingInSourceColumn_template": {
+    "grids": [
+      "assignedPmisTable"
+    ],
+    "columns": [
+      "missingInSource"
+    ],
+    "renderFunction": "rendererMissingInSourceOrChangeIndication",
+    "deps": "js/wiPmiAssignmentStatusService",
+    "headerTemplateUrl": "",
+    "headerRenderFunction": "renderMissinInSrcColumnHeader"
+  },
+  "wiPmiAssignmentStatusColumn_template": {
+    "grids": [
+      "assemblyPmiTable"
+    ],
+    "columns": [
+      "assignmentIndication"
+    ],
+    "renderFunction": "renderPmiAssignmentStatusIndication",
+    "deps": "js/wiPmiAssignmentStatusService",
+    "headerTemplateUrl": "",
+    "headerRenderFunction": "renderIndicationColumnHeader"
+  },
+  "wiPmiDefindInColumn_template": {
+    "grids": [
+      "assignedPmisTable",
+      "assemblyPmiTable"
+    ],
+    "columns": [
+      "DefinedIn"
+    ],
+    "headerRenderFunction": "renderDefinedIn",
+    "deps": "js/wiPmiService",
+    "headerTemplateUrl": ""
+  },
+  "productionProgramProbabilityColumn_template": {
+    "grids": [
+      "productVariantsResultsTable"
+    ],
+    "columns": [
+      "probability"
+    ],
+    "renderFunction": "renderProductVariantProbability",
+    "deps": "js/epProductionProgramService"
+  }
+}

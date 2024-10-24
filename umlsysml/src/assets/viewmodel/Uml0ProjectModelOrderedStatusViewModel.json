@@ -1,0 +1,61 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "actions": {
+        "initPage": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "getProperty"
+                },
+                {
+                    "action": "loadLOV"
+                },
+                {
+                    "action": "getStates"
+                }
+            ]
+        },
+        "getProperty": {
+            "actionType": "JSFunctionAsync",
+            "deps": "soa/dataManagementService",
+            "method": "getProperties",
+            "inputData": {
+                "uids": [ "{{subPanelContext.xrtState.xrtVMO.uid}}" ],
+                "propNames": [ "{{data.propName}}" ]
+            }
+        },
+        "loadLOV": {
+            "actionType": "JSFunction",
+            "method": "loadLOV",
+            "inputData": {
+                "typeName": "{{subPanelContext.xrtState.xrtVMO.type}}",
+                "propertyName" : "{{data.propName}}"
+            },
+            "outputData": {
+                "loadedStates": ""
+            },
+            "deps": "js/Uml0ProjectModelOrderedStatusService"
+        },
+        "getStates": {
+            "actionType": "JSFunction",
+            "method": "getStates",
+            "inputData": {
+                "selectedObject": "{{subPanelContext.xrtState.xrtVMO}}",
+                "propName": "{{data.propName}}",
+                "loadedStates": "{{data.loadedStates}}"
+            },
+            "outputData": {
+                "steps": "states",
+                "currStep": "currState"
+            },
+            "deps": "js/Uml0ProjectModelOrderedStatusService"
+        }
+    },
+    "data": {
+        "propName": "uml0State"
+    },
+    "lifecycleHooks":{
+        "onMount": "initPage"
+    }
+}

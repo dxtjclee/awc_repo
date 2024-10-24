@@ -1,0 +1,16 @@
+<aw-command-panel caption="i18n.Dpv1ApplyCustomRuleSetTitle">
+
+    <aw-panel-body>
+        <aw-panel-section>
+            <aw-command-panel-section caption="i18n.availableRuleSets" collapsed="false">
+                <aw-list dataprovider="data.dataProviders.dataProviderRulesets">
+                    <aw-default-cell vmo="item"></aw-default-cell>
+                </aw-list>
+            </aw-command-panel-section>
+        </aw-panel-section>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button enable-when="conditions.isValidToShowApplyButton" action="createRelBwDsRoutineRev"> <aw-i18n>i18n.apply</aw-i18n> </aw-button>
+    </aw-panel-footer>
+
+</aw-command-panel>

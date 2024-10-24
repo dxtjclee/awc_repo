@@ -1,0 +1,185 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-panel-header.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-default-cell.directive",
+        "js/aw-command-panel.directive",
+        "js/aw-init.directive",
+        "js/aw-i18n.directive",
+        "js/aw-checkbox.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-button.directive",
+        "js/aw-sub-panel.directive",
+        "js/visible-when.directive"
+    ],
+    "data": {
+        "activeView": "Awn0ExportNXData",
+        "targetObject" : {},
+        "exportNonMasters" :{
+            "displayName": "{{i18n.exportNonMasters}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT",
+            "dbValue": false
+        },
+        "exportAssociatedFiles" :{
+            "displayName": "{{i18n.exportAssociatedFiles}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT",
+            "dbValue": false
+        }
+    },
+    "actions": {
+        "setTargetObjectOnReveal" : {
+            "actionType": "JSFunction",
+            "method": "createViewModelObject",
+            "inputData":
+            {
+                "selectedUid" : "{{ctx.selected.uid}}"
+            },
+            "outputData": {
+                "targetObject" : ""
+            },
+            "deps": "js/viewModelObjectService"
+        },
+        "setTargetObjectOnSelectionChange" : {
+            "actionType": "JSFunction",
+            "method": "createViewModelObject",
+            "inputData":
+            {
+                "selectedUid": "{{data.eventData.dataProvider.selectedObjects[0].uid}}"
+            },
+            "outputData":
+            {
+                "targetObject":""
+            },
+            "deps": "js/viewModelObjectService"
+        },
+        "exportDataToNX" : {
+            "actionType": "JSFunctionAsync",
+            "method": "objectExport",
+            "inputData":{
+                    "elementToExport": "{{data.targetObject}}",
+                    "exportNonMasters" : "{{data.exportNonMasters.dbValue.toString()}}",
+                    "exportAssociatedFiles" : "{{data.exportAssociatedFiles.dbValue.toString()}}"
+            },
+            "deps": "js/nxCommandHandlers",
+            "outputData":{
+                "serviceData":""
+            },
+            "events":{
+                "success":[
+                    {
+                        "name" : "exportNXData.closePanel"
+                    }
+                ],
+                "failure" : [
+                    {
+                        "name" : "exportNXData.closePanel"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "exportNXDataBackgroundSuccessMessage"
+                    }
+                ],
+                "failure": [
+                    {
+                        "message": "displayErrorCode"
+                    }
+                ]
+            }
+        },
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "complete",
+                        "condition": "!data._internal.isDestroyed",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "messages": {
+        "exportNXDataBackgroundSuccessMessage": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.exportNXDataBackgroundSuccessMessage}}",
+            "messageTextParams": [
+                "{{data.targetObject.props.object_string.uiValues[0]}}"
+            ]
+        },
+        "displayErrorCode": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "onEvent": [
+        {
+          "eventId": "awPanel.reveal",
+          "action": "setTargetObjectOnReveal"
+        },
+        {
+          "eventId": "primaryWorkArea.selectionChangeEvent",
+          "action": "setTargetObjectOnSelectionChange",
+          "condition": "!conditions.isMultiSelected",
+          "cacheEventData": true
+        },
+        {
+          "eventId": "primaryWorkArea.selectionChangeEvent",
+          "action": "closePanel",
+          "condition": "conditions.isMultiSelected",
+          "cacheEventData": true
+        },
+        {
+          "eventId": "exportNXData.closePanel",
+          "action": "closePanel"
+        }
+    ],
+    "lifecycleHooks": {
+        "onMount": "setTargetObjectOnReveal"
+    },
+    "conditions": {
+        "isMultiSelected": {
+            "expression": "ctx.selected.length > 1"
+        }
+    },
+    "i18n": {
+        "exportNXData": [
+            "NXConstants"
+        ],
+        "exportNonMasters": [
+            "NXConstants"
+        ],
+        "exportAssociatedFiles" : [
+            "NXConstants"
+        ],
+        "export": [
+            "NXConstants"
+        ],
+        "selected" : [
+            "NXConstants"
+        ],
+        "options" : [
+            "NXConstants"
+        ],
+        "runInBackground" : [
+            "NXConstants"
+        ],
+        "exportNXDataBackgroundSuccessMessage" : [
+            "NXMessages"
+        ]
+    }
+}

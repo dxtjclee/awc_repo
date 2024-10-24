@@ -1,0 +1,152 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "activityTreeContext": {
+            "tabs": [
+                {
+                    "name": "{{i18n.ActivityTitle}}",
+                    "tabKey": "Ssp0ActivityTree"
+                }
+            ]
+        },
+        "visContext": {}
+    },
+    "ports": {
+        "listenActViewersId": {
+            "syncObject": {},
+            "onChangeAction": "listenActViewersActionBatchJob"
+        },
+        "actVisibilityChangePort": {
+            "syncObject": {
+                "id": "unknown",
+                "show": false
+            }
+        }
+    },
+    "actions": {
+        "loadGraphics": {
+            "actionType": "Sync",
+            "inputData": {
+                "port": "actVisibilityChangePort",
+                "syncObject": {
+                    "id": "{{ctx.state.params.uid}}",
+                    "show": true
+                }
+            }
+        },
+        "listenActViewersAction": {
+            "actionType": "JSFunction",
+            "method": "updateVisViewerInstanceId",
+            "inputData": {
+                "x": "{{ports.listenActViewersId.syncObject}}",
+                "y": "{{data}}",
+                "z": "actVisViewer"
+            },
+            "deps": "js/ssp0ActVisViewerUtilityService"
+        },
+        "listenActViewersActionBatchJob": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "listenActViewersAction"
+                },
+                {
+                    "action": "loadGraphics"
+                }
+            ]
+        },
+        "removeCtxParams": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "inputData": {
+                "name": "selectedActivity"
+            },
+            "deps": "js/appCtxService"
+        },
+        "registerLocationName": {
+            "actionType": "JSFunction",
+            "method": "updateCtx",
+            "deps": "js/appCtxService",
+            "inputData": {
+                "name": "locationContext",
+                "value": {
+                    "ActiveWorkspace:SubLocation": "servicePlanningTimeAnalysis"
+                }
+            }
+        },
+        "registerLocationContext": {
+            "actionType": "JSFunction",
+            "method": "registerCtx",
+            "deps": "js/appCtxService",
+            "inputData": {
+                "name": "ssp0Location",
+                "value": {
+                    "taskName": "{{i18n.taskName}}",
+                    "taskTypeIconURL": "assets/image/typeMECollaborativeContext48.svg"
+                }
+            }
+        },
+        "initializerBatchJob": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "registerLocationName"
+                },
+                {
+                    "action": "registerLocationContext"
+                },
+                {
+                    "action": "setWorkCardDataInCtx"
+                }
+            ]
+        },
+        "setWorkCardDataInCtx": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData": {
+                "attributes": [
+                    "awb0RevisionOwningGroup",
+                    "bl_rev_checked_out",
+                    "awb0RevisionLastModifiedUser",
+                    "awb0RevisionOwningUser",
+                    "bl_has_children",
+                    "bl_item_object_name",
+                    "bl_item_item_id",
+                    "bl_item_object_desc",
+                    "awp0ThumbnailImageTicket",
+                    "Mfg0all_material",
+                    "bl_quick_num_children"
+                ],
+                "objects": [
+                    {
+                        "uid": "{{ctx.state.params.uid}}"
+                    }
+                ]
+            },
+            "outputData": {
+                "treeLoadResult": "{{function:setWorkCardDataInCtx}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Ssp0AddTitle.setData"
+                    }
+                ]
+            },
+            "deps": "js/ssp0ActivityUtilityService"
+        }
+    },
+    "lifecycleHooks": {
+        "onUnmount": "removeCtxParams",
+        "onInit": "initializerBatchJob"
+    },
+    "i18n": {
+        "taskName": [
+            "timeAnalysisMessages"
+        ],
+        "ActivityTitle": [
+            "timeAnalysisMessages"
+        ]
+    }
+}

@@ -1,0 +1,22 @@
+<aw-panel>
+    <aw-flex-row>
+        <aw-flex-column class="aw-xrt-columnContentPanel">
+            <code visible-when="false">
+                {{data.panelCaption=ctx.editInProgress?i18n.Acp0namingConventionBuilder:i18n.Acp0namingConvention;""}}
+            </code>
+            <aw-panel-section caption="{{data.panelCaption}}" collapsed="false">
+                <aw-widget prop="selected.properties.acp0SourceClassType"></aw-widget>
+                <aw-widget prop="data.selectedAttribute"></aw-widget>
+                <aw-widget prop="selected.properties.acp0delimiter"></aw-widget>
+            </aw-panel-section>
+        </aw-flex-column>
+        <aw-flex-column class="aw-xrt-columnContentPanel">
+            <aw-panel-section caption="{{i18n.Preview}}" collapsed="false">
+                <code visible-when="!ctx.editInProgress">
+                   {{data.NCString.dbValue}}  
+                </code>
+                <aw-textarea visible-when="ctx.editInProgress" prop="data.NCString"></aw-textarea>
+            </aw-panel-section>
+        </aw-flex-column>
+    </aw-flex-row>
+</aw-panel>

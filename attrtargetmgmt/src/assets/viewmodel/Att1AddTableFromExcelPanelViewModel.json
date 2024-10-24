@@ -1,0 +1,299 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports":
+    [
+    ],
+
+    "actions":
+    {
+        "getTransientFileTickets":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2007-01-FileManagement",
+            "method": "getTransientFileTicketsForUpload",
+            "inputData":
+            {
+
+                "transientFileInfos":
+                [
+                    {
+                        "fileName":"{{data.fileName}}",
+                        "isBinary":false,
+                        "deleteFlag":true
+                    }
+                ]
+            },
+            "outputData": {
+                "fmsTicket": "transientFileTicketInfos[0].ticket"
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                       "name": "updateFormData"
+                    }
+                ]
+            }
+        },
+        "initDSCreateParams":
+        {
+            "actionType": "JSFunction",
+            "method": "setFileParameters",
+            "inputData": {
+                "fileName": "{{parameters.fileName}}",
+                "validFile": "{{parameters.validFile}}",
+                "fileNameNoExt": "{{parameters.fileNameNoExt}}",
+                "fileExt": "{{parameters.fileExt}}",
+                "formData": "{{parameters.formData}}"
+            },
+            "outputData":{
+                "fileName": "fileName",
+                "validFile": "validFile",
+                "fileNameNoExt": "fileNameNoExt",
+                "fileExt": "fileExt",
+                "formData": "formData"
+            },
+            "deps": "js/fileUploadUtils"
+        },
+        "importComplexDataSoaCall":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "AttrTargetMgmtAW-2019-06-AttributeTargetManagement",
+            "method": "importParameterExcel",
+            "inputData":
+            {
+               "inputs": [{
+                   "clientId": "AWClient",
+                   "selectedObject": "{{function:getValidParameterInstance}}",
+                   "importFileFmsTicket": "{{data.fmsTicket}}"
+               }],
+                "importOptions": "{{function:getImportOptionsForComplexData}}"
+            },
+            "outputData": {
+                "setAttrComplexDataResp": "",
+                "importMessages":"{{function:processPartialErrorForComplexData}}"
+            },
+            "events":
+            {
+                "success":
+                [
+
+                    {
+                        "name": "openValuesTab",
+                        "condition": "subPanelContext.pageContext.primaryActiveTabId == 'tc_xrt_Overview'"
+                    },
+                    {
+                        "name": "MeasurementsTable.plTable.reload"
+                    },
+                    {
+                        "name": "uniformParamTable.updateMeasurementsIfUpdated",
+                        "condition": "subPanelContext.parametersTable && subPanelContext.parametersTable.isParameterWidePanelOpen === true"
+                    },
+                    {
+                        "name": "cdm.relatedModified",
+                        "condition": "subPanelContext.pageContext.primaryActiveTabId == 'tc_xrt_Values'",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{subPanelContext.openedObject}}"
+                            ],
+                            "refreshLocationFlag": true
+                        }
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "importDone"
+                    }
+                ],
+                "failure": [
+                    {
+                        "message": "importFailureMessage"
+                    }
+                ]
+            },
+            "deps": "js/Att1ParameterMgmtUtilService"
+        },
+        "updateFormData":
+        {
+            "actionType": "JSFunction",
+            "method": "updateFormData",
+            "inputData":
+            {
+                "formData": "{{data.formData}}",
+                "key": "fmsTicket",
+                "value": "{{data.fmsTicket}}"
+            },
+            "events":
+            {
+                "success":
+                [
+
+                    {
+                        "name": "uploadFile"
+                    }
+                ]
+            },
+            "deps": "js/fileUploadUtils"
+        },
+        "uploadFile":
+        {
+            "actionType": "RESTService",
+            "serviceName": "",
+            "method": "POST",
+            "inputData":
+            {
+                "request":
+                {
+                    "method": "POST",
+                    "url": "{{Constants.fmsUrl}}",
+                    "headers":
+                    {
+                        "Content-type": "undefined"
+                    },
+
+                    "data": "{{data.formData}}"
+                }
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "importComplexDataSoaCall"
+                    }
+                ]
+            }
+        },
+        "openValuesTab": {
+            "actionType": "Navigate",
+            "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+            "navigationParams": {
+                "uid": "{{subPanelContext.openedObject.uid}}",
+                "page": "Values",
+                "pageId": "tc_xrt_Values"
+            }
+        }
+    },
+
+    "onEvent":
+    [
+        {
+            "eventId" : "uploadFile",
+            "action" : "uploadFile"
+        },
+        {
+            "eventId": "importComplexDataSoaCall",
+            "action": "importComplexDataSoaCall"
+        },
+        {
+            "eventId": "updateFormData",
+            "action": "updateFormData"
+        },
+        {
+            "eventId": "openValuesTab",
+            "action": "openValuesTab"
+        }
+    ],
+
+    "data":
+    {
+        "datasetName":
+        {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "true"
+        },
+
+        "datasetFileName":
+        {
+            "displayName": "",
+            "type": "STRING",
+            "hasLov": true
+        },
+
+        "datasetDesc":
+        {
+            "displayName": "",
+            "type": "STRING"
+        },
+
+        "reference":
+        {
+            "displayName": "",
+            "type": "STRING",
+            "hasLov": true
+        },
+
+        "datasetType":
+        {
+            "displayName": "",
+            "type": "STRING",
+            "hasLov": true
+        }
+    },
+    "functions":
+    {
+        "getValidParameterInstance": {
+            "functionName": "getValidParameterInstance",
+            "parameters": [
+                "{{subPanelContext}}"
+            ]
+        },
+        "getImportOptionsForComplexData": {
+            "functionName": "getImportOptionsForComplexData",
+            "parameters": ["{{ctx.panelContext}}"]
+        },
+        "processPartialErrorForComplexData": {
+            "functionName": "processPartialErrorForComplexData",
+            "parameters": [
+                "{{setAttrComplexDataResp}}"
+            ]
+        },
+        "getFileDataInputForSetComplexDataSOA":{
+            "functionName":"getFileDataInputForSetComplexDataSOA",
+            "parameters":[
+                "{{ctx}}",
+                "{{data}}"
+            ]
+        }
+    },
+    "messages":
+    {
+        "importDone":
+        {
+            "messageType": "INFO",
+            "messageText": "{{i18n.ImportSuccessful}}"
+        },
+        "importFailureMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.att1FailureMessage}}",
+            "messageTextParams": [
+                "{{data.importMessages}}"
+            ]
+        }
+    },
+    "i18n":
+    {
+        "insert" : ["Att1Messages"],
+        "insertTable" : ["Att1Messages"],
+        "ImportSuccessful" : ["Att1AttrMappingMessages"],
+        "att1FailureMessage": ["Att1AttrMappingMessages"]
+    }
+}

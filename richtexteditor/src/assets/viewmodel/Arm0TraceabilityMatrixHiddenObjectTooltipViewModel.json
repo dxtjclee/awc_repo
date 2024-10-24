@@ -1,0 +1,38 @@
+{
+    "schemaVersion" : "1.0.0",
+    "imports":
+    [],
+
+    "actions":{
+        "reveal": {
+            "actionType": "JSFunction",
+            "method": "createPopupData",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "outputData": {
+                "hiddenObjectCountLabel": "hiddenObjectCountLabel",
+                "columnValues":"columnValues",
+                "columnValuesWithoutFilter":"columnValuesWithoutFilter"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        }
+    },
+    "data": {},
+    "onEvent": [],
+    "i18n": {
+        "hiddenColumnLabel":[
+            "MatrixMessages"
+        ],
+        "hiddenRowsLabel":[
+            "MatrixMessages"
+        ],
+        "doubleClickToUnhide":[
+            "MatrixMessages"
+        ]
+    },
+    "lifecycleHooks": {
+        "onMount": "reveal"
+    }
+}

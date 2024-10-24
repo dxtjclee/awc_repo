@@ -1,0 +1,1399 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-panel.directive",
+        "js/aw-splm-table.directive",
+        "js/aw-flex-row.directive",
+        "js/aw-flex-column.directive",
+        "js/aw-separator.directive",
+        "js/aw-toolbar.directive",
+        "js/aw-column.directive"
+    ],
+    "actions": {
+        "loadObjects":{
+            "actionType": "JSFunctionAsync",
+            "method": "loadObjects",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "isReviseOperation":{
+            "actionType": "JSFunctionAsync",
+            "method": "isReviseOperation",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx":"{{ctx}}"
+            },
+            "outputData": {
+                "isReviseOps": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "tracebilityMatrix2.request"
+                    }
+                ]
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "registerObjectQuotaContext": {
+            "actionType": "JSFunction",
+            "method": "registerPartialCtx",
+            "deps": "js/appCtxService",
+            "inputData": {
+                "path": "objectQuotaContext.useObjectQuota",
+                "value": "true"
+            }
+        },
+        "destroyTraceabilityMatrixContenxt": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "unregisterObjectQuotaContext"
+                },
+                {
+                    "action": "unRegisterTraceabilityMatrixCellSelectedCtx"
+                },
+                {
+                    "action": "destroyTraceabilityMatrix"
+                }
+            ]
+        },
+        "unregisterObjectQuotaContext": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "deps": "js/appCtxService",
+            "inputData": {
+                "path": "objectQuotaContext"
+            }
+        },
+        "actionOnMount": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "revealMatrix"
+                },
+                {
+                    "action": "registerObjectQuotaContext"
+                }
+            ]
+        },
+        "revealMatrix": {
+            "actionType": "JSFunction",
+            "method": "init",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.loadMatrixData",
+                        "condition": "ctx.generateTracebilityMatrixOnReveal"
+                    }
+                ]
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "setServiceData": {
+            "actionType": "JSFunction",
+            "method": "setServiceData",
+            "inputData": {
+                "serviceData": "{{data.serviceDataInfo}}"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "uploadFile": {
+            "actionType": "RESTService",
+            "serviceName": "",
+            "method": "POST",
+            "inputData": {
+                "request": {
+                    "method": "POST",
+                    "url": "{{Constants.fmsUrl}}",
+                    "headers": {
+                        "Content-type": "undefined"
+                    },
+                    "data": "{{data.formData}}"
+                }
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0TracelinkMatrixObject.printTraceabilityMatrix"
+                    }
+                ]
+            }
+        },
+        "getFMSFileTicket": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2007-01-FileManagement",
+            "method": "getTransientFileTicketsForUpload",
+            "inputData": {
+                "transientFileInfos": [
+                    {
+                        "fileName": "testFile123.svg",
+                        "isBinary": true
+                    }
+                ]
+            },
+            "outputData": {
+                "fmsTicket": "transientFileTicketInfos[0].ticket"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0TraceabilityMatrix.updateFileContentInFormData"
+                    }
+                ]
+            }
+        },
+        "updateFileContentInFormData": {
+            "actionType": "JSFunction",
+            "method": "updateFileContentInFormData",
+            "deps": "js/Arm0TraceabilityMatrix",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "formData": ""
+            }
+        },
+        "printTracelinkMatrix": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AwReqMgmtSe-2019-12-SpecNavigation",
+            "method": "convertSVG",
+            "inputData": {
+                "inputData": {
+                    "svgFileTicket": "{{data.fmsTicket}}",
+                    "height": "{{data.height}}",
+                    "width": "{{data.width}}",
+                    "outputType": "pdf",
+                    "options": []
+                }
+            },
+            "outputData": {
+                "printMatrixOutput": "{{function:processResponse}}"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "loadMatrixData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AwReqMgmtSe-2021-06-SpecNavigation",
+            "method": "getTraceabilityMatrix2",
+            "inputData": {
+                "inputData": "{{function:getTraceMatrixInput}}"
+            },
+            "outputData": {
+                "srcObjectInfo": "srcObjectInfo",
+                "targetObjectInfo": "targetObjectInfo",
+                "rowObjects": "rowObjects",
+                "colObjects": "colObjects",
+                "tracelinkInfo": "matrixCellInfo",
+                "srcContextInfo": "srcContextInfo",
+                "targetContextInfo": "targetContextInfo",
+                "targetParentObjectInfo": "targetParentObjectInfo",
+                "srcParentObjectInfo": "srcParentObjectInfo",
+                "serviceDataInfo":"ServiceData",
+                "filterOutput" :"filterOutput"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.processDataFromServer"
+                } ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "RequestFailureMessage"
+                } ]
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+
+        "loadMatrixFilterData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AwReqMgmtSe-2021-06-SpecNavigation",
+            "method": "getTraceabilityMatrix2",
+            "inputData": {
+                "inputData": "{{function:getTraceMatrixFilterInput}}"
+            },
+            "outputData": {
+                "srcObjectInfo": "srcObjectInfo",
+                "targetObjectInfo": "targetObjectInfo",
+                "rowObjects": "rowObjects",
+                "colObjects": "colObjects",
+                "tracelinkInfo": "matrixCellInfo",
+                "srcContextInfo": "srcContextInfo",
+                "targetContextInfo": "targetContextInfo",
+                "targetParentObjectInfo": "targetParentObjectInfo",
+                "srcParentObjectInfo": "srcParentObjectInfo",
+                "ServiceData": "ServiceData",
+                "traceabilityMatrixObject": "traceabilityMatrixObject",
+                "filterOutput": "filterOutput",
+                "tracelinkTypeInfo": "tracelinkTypeInfo"
+            },
+            "events": {
+                "success": [ {
+                    "name": "requirementDocumentation.processDataFromServer"
+                },
+                {
+                    "name": "requirementDocumentation.populateFilterInformation"
+                },
+                {
+                    "name": "Arm0FilterTM.updateFilterContextOnResponse",
+                    "eventData": {
+                        "filterOutput": "{{data.filterOutput}}"
+                    }
+                } ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "RequestFailureMessage"
+                } ]
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "tracelinkCreated": {
+            "actionType": "JSFunction",
+            "method": "tracelinkCreated",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "unRegisterMatrixCellSelectedCtx": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "inputData": {
+                "name": "matrixCellSelected",
+                "value": false
+            },
+            "deps": "js/appCtxService"
+        },
+        "unRegisterTraceabilityMatrixCellSelectedCtx": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "inputData": {
+                "name": "Arm0TraceabilityMatrixSelectedCell",
+                "value": false
+            },
+            "deps": "js/appCtxService"
+        },
+        "addObjectToTracelinkPanel": {
+            "actionType": "JSFunction",
+            "method": "addObjectToTracelinkPanel",
+            "inputData": {
+                "panelContext": "{{data.eventData}}"
+            },
+            "deps": "js/Arm0CreateTraceLink"
+        },
+        "getNoOfItemsPerPage": {
+            "actionType": "JSFunction",
+            "method": "getNoOfItemsPerPage",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "events": {},
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "performPagination": {
+            "actionType": "JSFunction",
+            "method": "performPagination",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "getSelectedTypeOfTraceLink": {
+            "actionType": "JSFunction",
+            "method": "getSelectedTypeOfTraceLink",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "navigateUpOrDown": {
+            "actionType": "JSFunction",
+            "method": "isNavigationRequired",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "uiPagination": {
+            "actionType": "JSFunction",
+            "method": "isSoapaginationRequired",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "clickRollupBtn": {
+            "actionType": "JSFunction",
+            "method": "rollupClicked",
+            "inputData": {
+                "ctx": "{{ctx}}",
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "requirementsMatrixNavigate": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AwReqMgmtSe-2021-06-SpecNavigation",
+            "method": "getTraceabilityMatrix2",
+            "inputData": {
+                "inputData": "{{function:getChildMatrixInput}}"
+            },
+            "outputData": {
+                "srcObjectInfo": "srcObjectInfo",
+                "rowObjects": "rowObjects",
+                "targetObjectInfo": "targetObjectInfo",
+                "colObjects": "colObjects",
+                "tracelinkInfo": "matrixCellInfo",
+                "srcContextInfo": "srcContextInfo",
+                "targetContextInfo": "targetContextInfo",
+                "targetParentObjectInfo": "targetParentObjectInfo",
+                "srcParentObjectInfo": "srcParentObjectInfo",
+                "serviceDataInfo":"ServiceData",
+                "filterOutput" :"filterOutput"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0TraceabilityMatrix.setServiceData"
+                    },
+                    {
+                        "name": "tracebilityMatrix.getDetails",
+                        "condition": "data.isReviseOps && data.isReviseOps === true"
+                    },
+                    {
+                        "name": "requirementDocumentation.processDataFromServer"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "requirementDocumentation.processDataFromServer"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "message": "RequestFailureMessage"
+                    }
+                ]
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "getChildRollup": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AwReqMgmtSe-2021-06-SpecNavigation",
+            "method": "getTraceabilityMatrix2",
+            "inputData": {
+                "inputData": "{{function:getChildMatrixInput}}"
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "message": "RequestFailureMessage"
+                    }
+                ],
+                "success": [
+                    {
+                        "message": "NotificationForFullRollup"
+                    }
+                ]
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "showTracelinksPopup": {
+            "actionType": "JSFunction",
+            "method": "showTracelinksPopup",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "processDataFromServer": {
+            "actionType": "JSFunction",
+            "method": "processDataFromServer",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "condition": "ctx.activeNavigationCommand && ctx.activeNavigationCommand.commandId==='Arm0FilterTM'",
+                        "name":"Arm0TraceabilityMatrix.resizeWindow"
+                    }
+                ]
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "resizeWindow": {
+            "actionType": "JSFunction",
+            "method": "resizeWindow",
+            "inputData": {},
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "loadData": {
+            "actionType": "JSFunction",
+            "method": "loadFlatTableData",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "searchResults",
+                "searchIndex": "searchIndex"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "resetTraceMatrix": {
+            "actionType": "JSFunction",
+            "method": "resetTraceMatrix",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+            "outputData" : {
+                "dataProviders.traceMatrixCellPropDataProvider.columnConfig": "columnConfig"
+            },
+        "refreshTableData": {
+            "actionType": "dataProvider",
+            "method": "traceMatrixCellPropDataProvider"
+        },
+        "plTMTableClientRefresh": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "traceMatrixCellPropTable.plTable.clientRefresh"
+                } ]
+            }
+        },
+        "OpenCreateTracelinkPanel": {
+            "actionType": "JSFunction",
+            "method": "OpenCreateTracelinkPanel",
+            "inputData": {
+                "elementsInCreateTracelink": "{{data.eventMap['Arm0Traceability.OpenCreateTracelinkPanel']}}",
+                "data":"{{data}}"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "OpenCloseCreateTracelinkPanel": {
+            "actionType": "JSFunction",
+            "method": "OpenCloseCreateTracelinkPanel",
+            "inputData": {
+                "elementsInCreateTracelink": "{{data.eventData}}",
+                "ctx": "{{ctx}}",
+                "data":"{{data}}"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "refreshTracelinkMatrixObject": {
+            "actionType": "JSFunction",
+            "method": "refreshTracelinkMatrixObject",
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "loadTMOproperties": {
+            "actionType": "JSFunction",
+            "method": "loadTMOproperties",
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "refreshSavedTraceabilityMatrix": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AwReqMgmtSe-2019-12-SpecNavigation",
+            "method": "saveTraceabilityMatrix",
+            "inputData": {
+                "inputData": "{{function:getTraceMatrixInputForSave}}"
+            },
+            "outputData": {
+                "updatedTlMatrixObjectUids": "updated"
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "condition": "data.matrixType !== 'Full-Rollup Matrix'",
+                        "message": "refreshTracelinkMatrixObjectMsg"
+                    },
+                    {
+                        "condition": "data.matrixType === 'Full-Rollup Matrix'",
+                        "message": "refreshRollupTracelinkMatrixObjectMsg"
+                    }
+                ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0TracelinkMatrixObject.showUpdatedTLMatrix"
+                    }
+                ]
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "saveTraceabilityMatrix": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AwReqMgmtSe-2019-12-SpecNavigation",
+            "method": "saveTraceabilityMatrix",
+            "inputData": {
+                "inputData": "{{function:getTraceMatrixInputForSave}}"
+            },
+            "outputData": {
+                "updatedTlMatrixObjectUids": "updated"
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "condition": "data.isSaved === true",
+                        "message": "saveAsOperationSuccessfulMsg"
+                    }
+                ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    },
+                    {
+                        "name": "Arm0TracelinkMatrixObject.updateMatrixAsSaved",
+                        "condition": "data.isSaved !== true"
+                    }
+                ]
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "updateMatrixAsSaved": {
+            "actionType": "JSFunction",
+            "method": "updateMatrixAsSaved",
+            "inputData": {
+                "ctx": "{{ctx}}",
+                "data": "{{data}}"
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "saveTracelinkMatrixObjectSaveMsg"
+                    }
+                ]
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "showUpdatedTLMatrix": {
+            "actionType": "JSFunction",
+            "method": "showUpdatedTLMatrix",
+            "inputData": {
+                "ctx": "{{ctx}}",
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "closeFunnelPopUp": {
+            "actionType": "JSFunction",
+            "method": "close",
+            "inputData": {
+                "popupId": null
+            },
+            "deps": "js/declpopupService"
+        },
+        "collapseNode": {
+            "actionType": "JSFunction",
+            "method": "collapseNode",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "sortTraceabilityMatrix": {
+            "actionType": "JSFunction",
+            "method": "sortTraceabilityMatrix",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "destroyTraceabilityMatrix": {
+            "actionType": "JSFunction",
+            "method": "destroyTraceabilityMatrix",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "tracelinkDeleted":
+        {
+            "actionType": "JSFunction",
+            "method": "tracelinkDeleted",
+            "inputData":
+             {
+                "elementsInDeleteTracelink":"{{data.elementsInDeleteTracelink}}",
+                "ctx":"{{ctx}}",
+                "data":"{{data}}"
+             },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "showDeleteTracelinkTMWarning":
+        {
+            "actionType": "JSFunction",
+            "method": "showDeleteTracelinkTMWarning",
+            "inputData":
+             {
+                "i18n":"{{data.i18n}}",
+                "eventData" : "{{data.eventMap['Arm0TraceabilityMatrix.showDeleteTracelinkTMWarning']}}"
+             },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "deleteTraceLinkInTM":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "deleteObjects",
+           "inputData":
+            {
+                "objects": "{{function:getInputDeleteTraceLinkInTM}}"
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "cdm.updated",
+                        "eventData": {
+                            "updatedObjects": "{{data.refreshObjects}}"
+                        }
+                    },
+                    {
+                        "name": "Arm0TraceabilityMatrix.tracelinkDeleted"
+                    },
+                    {
+                        "name": "Arm0ExistingTracelinkTree.refreshTracelinkedObjects"
+                    },
+                    {
+                        "name": "Arm0ExistingTracelinkTree.reloadTable"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "condition": "data.deleteObjectsPartialErrors.length>0",
+                    "message": "getMessageFromTLDeleteFailure"
+                } ],
+                "success": [
+                    {
+                        "condition": "data.deletedTracelinkedObject.length>0",
+                        "message": "notificationTracelinkDeletedSuccess"
+                    }
+                ]
+            },
+            "outputData":
+            {
+                "deletedTracelinkedObject": "deleted",
+                "deleteObjectsPartialErrors": "partialErrors"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "UnhideAllFromSelected": {
+            "actionType": "JSFunction",
+            "method": "UnhideAllFromSelected",
+            "inputData": {
+                "unhideObjects": "{{data.eventMap['Arm0Traceability.UnhideAllFromSelected']}}",
+                "data":"{{data}}",
+                "ctx":"{{ctx}}"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "hideRowOrColumn": {
+            "actionType": "JSFunction",
+            "method": "hideRowOrColumn",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx":"{{ctx}}"
+            },
+            "outputData":{
+                "rowObjects": "rowObjects",
+                "colObjects": "colObjects"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "unhideAll":{
+            "actionType": "JSFunction",
+            "method": "unhideAll",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx":"{{ctx}}"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "invokeSortPopupOnTraceMat": {
+            "actionType": "JSFunction",
+            "method": "invokeSortPopupOnTraceMat",
+            "inputData": {
+                "popupArguments": "{{data.eventMap['Arm0TraceabilityMatrix.invokeSortPopupOnTraceMat']}}"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "modelOnObjectsChanged": {
+            "actionType": "JSFunction",
+            "method": "updatePropertiesOnModelObjectChanged",
+            "inputData": {
+                "modelObjects": "{{data.eventMap['cdm.updated'].updatedObjects}}",
+                "data": "{{data}}",
+                "ctx":"{{ctx}}"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "populateFilterInformation": {
+            "actionType": "JSFunction",
+            "method": "populateFilterInformation",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        }
+    },
+    "dataProviders": {
+        "traceMatrixCellPropDataProvider": {
+            "action": "loadData",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "searchIndex": "{{data.searchIndex}}",
+            "selectionModelMode": "multiple"
+        }
+    },
+    "columnProviders": {
+        "clientScopeUI": {
+            "frozenColumnIndex": -1,
+            "columns": [ {
+                    "name": "object_defining",
+                    "propertyName": "object_defining",
+                    "displayName": "{{i18n.definingTracelinkTitle}}",
+                    "minWidth": 80,
+                    "width": 250,
+                    "typeName": "String",
+                    "pinnedLeft": false,
+                    "enableColumnMenu": false,
+                    "enableSorting": false,
+                    "enableColumnMoving": false
+                },
+                {
+                    "name": "defning_type",
+                    "displayName": "{{i18n.DefiningType}}",
+                    "minWidth": 80,
+                    "width": 250,
+                    "typeName": "String",
+                    "pinnedLeft": false,
+                    "enableColumnMenu": false,
+                    "enableSorting": false,
+                    "enableColumnMoving": false
+                },
+                {
+                    "name": "object_complying",
+                    "displayName": "{{i18n.complyingTracelinkTitle}}",
+                    "minWidth": 80,
+                    "width": 250,
+                    "typeName": "String",
+                    "pinnedLeft": false,
+                    "enableColumnMenu": false,
+                    "enableSorting": false,
+                    "enableColumnMoving": false
+                },
+                {
+                    "name": "complying_type",
+                    "displayName": "{{i18n.ComplyingType}}",
+                    "minWidth": 80,
+                    "width": 250,
+                    "typeName": "String",
+                    "pinnedLeft": false,
+                    "enableColumnMenu": false,
+                    "enableSorting": false,
+                    "enableColumnMoving": false
+                },
+                {
+                    "name": "tracelink_name",
+                    "displayName": "{{i18n.TracelinkDirection}}",
+                    "minWidth": 80,
+                    "width": 250,
+                    "typeName": "String",
+                    "pinnedLeft": false,
+                    "enableColumnMenu": false,
+                    "enableSorting": false,
+                    "enableColumnMoving": false
+                },
+                {
+                    "name": "tracelink_type",
+                    "displayName": "{{i18n.TracelinkType}}",
+                    "minWidth": 80,
+                    "width": 250,
+                    "typeName": "String",
+                    "pinnedLeft": false,
+                    "enableColumnMenu": false,
+                    "enableSorting": false,
+                    "enableColumnMoving": false
+                },
+                {
+                    "name": "defining_context_name",
+                    "displayName": "{{i18n.DefiningContext}}",
+                    "minWidth": 80,
+                    "width": 250,
+                    "typeName": "String",
+                    "pinnedLeft": false,
+                    "enableColumnMenu": false,
+                    "enableSorting": false,
+                    "enableColumnMoving": false
+                },
+                {
+                    "name": "complying_context_name",
+                    "displayName": "{{i18n.ComplyingType}}",
+                    "minWidth": 80,
+                    "width": 250,
+                    "typeName": "String",
+                    "pinnedLeft": false,
+                    "enableColumnMenu": false,
+                    "enableSorting": false,
+                    "enableColumnMoving": false
+                }
+            ]
+        }
+    },
+    "grids": {
+        "traceMatrixCellPropTable": {
+            "dataProvider": "traceMatrixCellPropDataProvider",
+            "columnProvider": "clientScopeUI",
+            "addIconColumn": false,
+            "gridOptions": {
+                "enableGridMenu": false,
+                "enablePinning": true,
+                "enableSorting": false
+            }
+        }
+    },
+    "data": {
+        "tlType": {
+            "displayName": "{{i18n.tlType}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "hasLov": true,
+            "labelPosition": "PROPERTY_LABEL_AT_LEFT",
+            "dbValue": "{{i18n.all}}"
+        },
+        "matrixType": "",
+        "matrixTypeDisplayName":"",
+        "noOfItem": {
+            "displayName": "{{i18n.noOfItem}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "hasLov": true,
+            "labelPosition": "PROPERTY_LABEL_AT_LEFT"
+        },
+        "noOfPageListIn": {
+            "type": "STRING",
+            "dbValue": [
+                "25",
+                "50",
+                "100"
+            ]
+        },
+        "tracelinkedItems": {
+            "isArray": "true",
+            "dbValue": []
+        },
+        "columnLabel": {
+            "type": "STRING"
+        },
+        "rowLabel": {
+            "type": "STRING"
+        },
+        "showColor": {
+            "displayName": "{{i18n.showColor}}",
+            "type": "BOOLEAN",
+            "isRequired": "true",
+            "dbValue": false,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "showChildCounts": {
+            "displayName": "{{i18n.showChildCounts}}",
+            "type": "BOOLEAN",
+            "isRequired": "true",
+            "dbValue": false,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "showChildCountsForFullRollup": {
+            "displayName": "{{i18n.showChildCounts}}",
+            "type": "BOOLEAN",
+            "isRequired": "true",
+            "dbValue": true,
+            "isEditable": false,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "refreshTracelinkMatrixObjectCommand": {
+            "dbValue": [
+                {
+                    "action": "refreshTracelinkMatrixObject",
+                    "iconName": "Refresh",
+                    "tooltip": "{{i18n.refreshTraceabilityMatrix}}"
+                }
+            ]
+        }
+    },
+    "functions": {
+        "getTraceMatrixInput": {
+            "functionName": "getTraceMatrixInput",
+            "parameters": [
+                "{{ctx}}",
+                "{{data}}"
+            ]
+        },
+        "getTraceMatrixFilterInput": {
+            "functionName": "getTraceMatrixFilterInput",
+            "parameters": [
+                "{{data}}",
+                "{{ctx}}"
+            ]
+        },
+        "getChildMatrixInput": {
+            "functionName": "getChildMatrixInput",
+            "parameters": [
+                "{{ctx}}",
+                "{{data}}"
+            ]
+        },
+        "getChildInterfacesInput": {
+            "functionName": "getChildInterfacesInput",
+            "parameters": [
+                "{{ctx}}",
+                "{{data}}"
+            ]
+        },
+        "getTraceMatrixInputForSave": {
+            "functionName": "getTraceMatrixInputForSave"
+        },
+        "processResponse": {
+            "functionName": "processResponse",
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "getInputDeleteTraceLinkInTM":
+        {
+            "functionName": "getInputDeleteTraceLinkInTM",
+            "parameters":
+            [
+                "{{data}}",
+                "{{data.eventMap['Arm0TraceabilityMatrix.deleteExistingTracelinkInTM']}}"
+            ]
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "Arm0TraceabilityMatrix.resizeWindow",
+            "action": "resizeWindow"
+        },
+        {
+            "eventId": "Arm0TraceabilityMatrix.showDeleteTracelinkTMWarning",
+            "cacheEventData": true,
+            "action": "showDeleteTracelinkTMWarning"
+        },
+        {
+            "eventId": "Arm0TraceabilityMatrix.deleteExistingTracelinkInTM",
+            "cacheEventData": true,
+            "action": "deleteTraceLinkInTM"
+        },
+        {
+            "eventId": "Arm0TraceabilityMatrix.tracelinkDeleted",
+            "cacheEventData": true,
+            "action" : "tracelinkDeleted"
+        },
+        {
+            "eventId": "requirementDocumentation.loadMatrixData",
+            "cacheEventData": true,
+            "action": "loadMatrixData"
+        },
+        {
+            "eventId": "Arm0FilterTM.loadMatrixFilterData",
+            "cacheEventData": true,
+            "action": "loadMatrixFilterData"
+        },
+        {
+            "eventId": "requirementDocumentation.processDataFromServer",
+            "action": "processDataFromServer"
+        },
+        {
+            "eventId": "requirementDocumentation.populateFilterInformation",
+            "action": "populateFilterInformation"
+        },
+        {
+            "eventId": "RM.PostTraceLinkCreated",
+            "cacheEventData": true,
+            "action": "tracelinkCreated"
+        },
+        {
+            "eventId": "Arm0Traceability.unRegisterMatrixCellSelectedCtx",
+            "action": "unRegisterMatrixCellSelectedCtx"
+        },
+        {
+            "eventId": "requirementDocumentation.navigate",
+            "cacheEventData": true,
+            "action": "requirementsMatrixNavigate"
+        },
+        {
+            "eventId": "reviseObject.assignProjects",
+            "action": "isReviseOperation"
+        },
+        {
+            "eventId": "tracebilityMatrix2.request",
+            "action": "requirementsMatrixNavigate"
+        },
+        {
+            "eventId": "tracebilityMatrix.getDetails",
+            "cacheEventData": true,
+            "action": "loadObjects"
+        },
+        {
+            "eventId": "requirementTraceability.navigateUpOrDown",
+            "cacheEventData": true,
+            "action": "navigateUpOrDown"
+        },
+        {
+            "eventId": "requirementTraceability.uiPagination",
+            "cacheEventData": true,
+            "action": "uiPagination"
+        },
+        {
+            "eventId": "requirementDocumentation.addObjectToTracelinkPanel",
+            "cacheEventData": true,
+            "action": "addObjectToTracelinkPanel"
+        },
+        {
+            "eventId": "Arm0Traceability.showTracelinksPopup",
+            "cacheEventData": true,
+            "action": "showTracelinksPopup"
+        },
+        {
+            "eventId": "Arm0Traceability.refreshTableData",
+            "action": "refreshTableData"
+        },
+        {
+            "eventId": "Arm0Traceability.refreshTable",
+            "action": "plTMTableClientRefresh"
+        },
+        {
+            "eventId": "requirementTraceabilityMatrix.performPagination",
+            "action": "performPagination"
+        },
+        {
+            "eventId": "requirementTraceabilityMatrix.getSelectedTypeOfTraceLink",
+            "action": "getSelectedTypeOfTraceLink"
+        },
+        {
+            "eventId": "requirementTraceabilityMatrix.getNoOfItemsPerPage",
+            "action": "getNoOfItemsPerPage"
+        },
+        {
+            "eventId": "requirementTraceabilityMatrix.getChildRollup",
+            "action": "getChildRollup"
+        },
+        {
+            "eventId": "requirementTraceabilityMatrix.clickRollupBtn",
+            "action": "clickRollupBtn"
+        },
+        {
+            "eventId": "Arm0Traceability.OpenCreateTracelinkPanel",
+            "cacheEventData": true,
+            "action": "OpenCreateTracelinkPanel"
+        },
+        {
+            "eventId": "Arm0Traceability.OpenCloseCreateTracelinkPanel",
+            "cacheEventData": true,
+            "action": "OpenCloseCreateTracelinkPanel"
+        },
+        {
+            "eventId": "Arm0TracelinkMatrix.closeFunnelPopup",
+            "cacheEventData": true,
+            "action": "closeFunnelPopUp"
+        },
+        {
+            "eventId": "Arm0TracelinkMatrixObject.loadTMOproperties",
+            "action": "loadTMOproperties"
+        },
+        {
+            "eventId": "Arm0TracelinkMatrixObject.saveTraceabilityMatrix",
+            "action": "saveTraceabilityMatrix"
+        },
+        {
+            "eventId": "Arm0TracelinkMatrixObject.refreshSavedTraceabilityMatrix",
+            "action": "refreshSavedTraceabilityMatrix"
+        },
+        {
+            "eventId": "Arm0TracelinkMatrixObject.showUpdatedTLMatrix",
+            "action": "showUpdatedTLMatrix"
+        },
+        {
+            "eventId": "Arm0TracelinkMatrixObject.printTraceabilityMatrix",
+            "action": "printTracelinkMatrix"
+        },
+        {
+            "eventId": "Arm0TraceabilityMatrix.updateFileContentInFormData",
+            "action": "updateFileContentInFormData"
+        },
+        {
+            "eventId": "Arm0TraceabilityMatrix.uploadFile",
+            "action": "uploadFile"
+        },
+        {
+            "eventId": "Arm0TraceabilityMatrix.reset",
+            "action": "resetTraceMatrix"
+        },
+        {
+            "eventId": "Arm0TraceabilityMatrix.print",
+            "action": "getFMSFileTicket"
+        },
+        {
+            "eventId": "Arm0TraceabilityMatrix.collapseNode",
+            "cacheEventData": true,
+            "action": "collapseNode"
+        },
+        {
+            "eventId": "Arm0TraceabilityMatrix.sortTraceabilityMatrix",
+            "cacheEventData": true,
+            "action": "sortTraceabilityMatrix"
+        },
+        {
+            "eventId": "Arm0TraceabilityMatrix.setServiceData",
+            "action": "setServiceData"
+        },
+        {
+            "eventId": "Arm0TraceabilityMatrix.init",
+            "action": "reveal"
+        },
+        {
+            "eventId": "Arm0Traceability.UnhideAllFromSelected",
+            "cacheEventData": true,
+            "action": "UnhideAllFromSelected"
+        },
+        {
+            "eventId": "Arm0Traceability.hideRowOrColumn",
+            "action": "hideRowOrColumn"
+        },
+        {
+            "eventId": "Arm0Traceability.unhideAll",
+            "action": "unhideAll"
+        },
+        {
+            "eventId": "Arm0TraceabilityMatrix.invokeSortPopupOnTraceMat",
+            "cacheEventData": true,
+            "action": "invokeSortPopupOnTraceMat"
+        },
+        {
+            "eventId": "Arm0TracelinkMatrixObject.updateMatrixAsSaved",
+            "action": "updateMatrixAsSaved"
+        },
+        {
+            "eventId": "cdm.updated",
+            "action": "modelOnObjectsChanged",
+            "cacheEventData": true
+        }
+
+    ],
+    "conditions": {
+        "showHeatMap": {
+            "expression": "ctx.mselected.length > 0"
+        },
+        "showTraclinkTable":{
+            "expression": "data.totalFound > 0"
+        }
+    },
+    "messages": {
+        "getMessageFromTLDeleteFailure": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.PartialError}}",
+            "messageTextParams": [
+                "{{data.deleteObjectsPartialErrors[0].errorValues[0].message}}"
+            ]
+        },
+        "notificationTracelinkDeletedSuccess":{
+            "messageType": "INFO",
+            "messageText": "{{i18n.tracelinkDeletedMessage}}"
+        },
+        "RequestFailureMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.requestFailureMsg}}"
+        },
+        "NotificationForFullRollup": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.notificationForFullRollup}}"
+        },
+        "refreshTracelinkMatrixObjectMsg": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.refreshTracelinkMatrixObjectMsg}}",
+            "messageTextParams": [
+                "{{ctx.MatrixContext.matrixObj.props.object_name.dbValues[0]}}"
+            ]
+        },
+        "refreshRollupTracelinkMatrixObjectMsg": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.refreshRollupTracelinkMatrixObjectMsg}}",
+            "messageTextParams": [
+                "{{ctx.MatrixContext.matrixObj.props.object_name.dbValues[0]}}"
+            ]
+        },
+        "saveTracelinkMatrixObjectSaveMsg": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.saveTracelinkMatrixObjectSaveMsg}}",
+            "messageTextParams": [
+                "{{ctx.MatrixContext.matrixObj.props.object_name.dbValues[0]}}"
+            ]
+        },
+        "saveAsOperationSuccessfulMsg": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.saveAsOperationSuccessful}}",
+            "messageTextParams": [
+                "{{ctx.MatrixContext.matrixObj.props.object_name.dbValues[0]}}"
+            ]
+        }
+    },
+    "props": {
+        "subPanelContext": {
+            "type": "object"
+        }
+    },
+    "i18n": {
+        "requestFailureMsg": [
+            "MatrixMessages"
+        ],
+        "notificationForFullRollup": [
+            "MatrixMessages"
+        ],
+        "showColor": [
+            "MatrixMessages"
+        ],
+        "showChildCounts": [
+            "MatrixMessages"
+        ],
+        "showChildren": [
+            "MatrixMessages"
+        ],
+        "replace": [
+            "ReplaceFileMessages"
+        ],
+        "reset": [
+            "MatrixMessages"
+        ],
+        "createTraceLink": [
+            "MatrixMessages"
+        ],
+        "saveTraceabilityMatrix": [
+            "MatrixMessages"
+        ],
+        "refreshTraceabilityMatrix": [
+            "MatrixMessages"
+        ],
+        "refreshTracelinkMatrixObjectMsg": [
+            "MatrixMessages"
+        ],
+        "refreshRollupTracelinkMatrixObjectMsg": [
+            "MatrixMessages"
+        ],
+        "saveTracelinkMatrixObjectSaveMsg": [
+            "MatrixMessages"
+        ],
+        "printTraceabilityMatrix": [
+            "MatrixMessages"
+        ],
+        "ComplyingType": [
+            "MatrixMessages"
+        ],
+        "DefiningType": [
+            "MatrixMessages"
+        ],
+        "TracelinkDirection": [
+            "MatrixMessages"
+        ],
+        "TracelinkType": [
+            "MatrixMessages"
+        ],
+        "ComplyingContext":[
+            "MatrixMessages"
+        ],
+        "DefiningContext": [
+            "MatrixMessages"
+        ],
+        "complyingTracelinkTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "definingTracelinkTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "all": [
+            "MatrixMessages"
+        ],
+        "noOfItem": [
+            "MatrixMessages"
+        ],
+        "tlType": [
+            "MatrixMessages"
+        ],
+        "PartialError":
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "tracelinkDeletedMessage" :
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "deleteTracelinkConfirmation" :
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "deleteMultipleTracelinkConfirmation" :
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "deleteAllTracelinkConfirmation" :
+        [
+            "MatrixMessages"
+        ],
+        "delete": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "cancel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "QuickMatrix": [
+            "MatrixMessages"
+        ],
+        "FullRollup": [
+            "MatrixMessages"
+        ],
+        "Dynamic": [
+            "MatrixMessages"
+        ],
+        "saveAsOperationSuccessful": [
+            "TCUICommandPanelsMessages"
+        ]
+    },
+    "lifecycleHooks": {
+        "onMount": "actionOnMount",
+        "onUnmount": "destroyTraceabilityMatrixContenxt",
+        "onUpdate": [ {
+            "action":"resizeWindow",
+            "observers":["props.subPanelContext.fullScreenState"]
+        }]
+    },
+    "ctx": {
+        "MatrixContext":{
+            "type": "object"
+        }
+    }
+}

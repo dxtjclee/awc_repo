@@ -1,0 +1,62 @@
+{
+  "actions": {
+    "tcxSimplifiedDragOverTreeTable": {
+      "actionType": "syncFunction",
+      "method": "dragOverTreeTable",
+      "deps": "js/tcxSimplifiedDragAndDropService"
+    },
+    "tcxSimplifiedDropOnTreeTable": {
+      "actionType": "syncFunction",
+      "method": "dropOnTreeTable",
+      "deps": "js/tcxSimplifiedDragAndDropService"
+    }
+  },
+  "dragHandlers": {
+    "dragHandlerForLiteTreeTable": {
+      "activeWhen": {
+        "condition": "conditions.isSimplifiedDragAndDropActive"
+      },
+      "views": [
+        "occMgmtTree"
+      ],
+      "dragActions": {
+        "dragStart": "tcxSimplifiedDragOverTreeTable"
+      }
+    }
+  },
+  "dropHandlers": {
+    "dropHandlerForLiteTreeTable": {
+      "activeWhen": {
+        "condition": "conditions.isSimplifiedDragAndDropActive"
+      },
+      "views": [
+        "occMgmtTree"
+      ],
+      "dropActions": {
+        "dragOver": "tcxSimplifiedDropOnTreeTable",
+        "dropStart": "tcxSimplifiedDropOnTreeTable",
+        "drop": "tcxSimplifiedDropOnTreeTable"
+      }
+    }
+  },
+  "conditions": {
+    "isSimplifiedDragAndDropActive": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "ctx.workspace.workspaceId",
+            "$query": {
+              "$eq": "TcXSimplifiedWorkspace"
+            }
+          },
+          {
+            "$source": "ctx.sublocation.clientScopeURI",
+            "$query": {
+              "$eq": "Awb0OccurrenceManagement"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

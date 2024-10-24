@@ -1,0 +1,10 @@
+<aw-panel>
+    <aw-panel-body>
+        <aw-flex-row>
+            <aw-tab-set tabs="data.tabsParametersAndRequirements">
+                <aw-include name="{{data.selectedTab.viewId}}" exist-when="conditions.nonEmptySelection" sub-panel-context="{...subPanelContext, processRelation:'REL_REV'}"></aw-include>
+                <aw-label prop="data.selectMessage" visible-when="!conditions.nonEmptySelection"></aw-label>
+            </aw-tab-set>
+        </aw-flex-row>
+    </aw-panel-body>
+</aw-panel>

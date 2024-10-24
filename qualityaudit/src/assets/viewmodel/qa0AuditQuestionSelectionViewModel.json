@@ -1,0 +1,142 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-list-filter.directive",
+        "js/aw-i18n.directive",
+        "js/aw-button.directive",
+        "js/aw-default-cell.directive"
+    ],
+    "data": {
+        "filterBox": {
+            "displayName": "{{i18n.filterBox}}",
+            "type": "STRING",
+            "dbValue": ""
+        }
+    },
+    "actions": {
+        "getSearchResults": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "clientScopeURI": ""
+                },
+                "inflateProperties": false,
+                "saveColumnConfigData": {},
+                "searchInput": {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Qa0AuditQuestionProvider",
+                    "searchFilterMap6": {},
+                    "searchCriteria": {
+                        "searchStatus": "true",
+                        "parentUid": "{{ctx.xrtSummaryContextObject.uid}}",
+                        "filterText": "{{data.filterBox.dbValue}}"
+                    },
+                    "startIndex": "{{data.dataProviders.loadFilteredList.startIndex}}",
+                    "searchSortCriteria": [ {
+                        "fieldName": "object_name",
+                        "sortDirection": "ASC"
+                    } ]
+                }
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResponse": "{{json:searchResultsJSON}}",
+                "ctx.search.totalFound": "totalFound",
+                "ctx.search.totalLoaded": "totalLoaded"
+            }
+        },
+        "loadList": {
+            "actionType": "dataProvider",
+            "method": "loadFilteredList"
+        },
+        "refreshSelection": {
+            "actionType": "JSFunction",
+            "method": "refreshSelection",
+            "inputData": {
+                "selectionModel": "{{ctx}}"
+            },
+            "deps": "js/qa0AuditQuestionAssignService"
+        },
+        "assignAuditQuestion": {
+            "actionType": "JSFunction",
+            "method": "assignAuditQuestion",
+            "inputData": {
+                "selectedQuestionList": "{{data.dataProviders.loadFilteredList.selectedObjects}}",
+                "selectedFindingList": "{{ctx.mselected}}"
+            },
+            "events": {
+                "success": [ {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    },
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{ctx.xrtSummaryContextObject}}"
+                            ],
+                            "refreshLocationFlag": false
+                        }
+                    },
+                    {
+                        "name": "refreshSelection"
+                    }
+                ],
+                "failure": [ {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    },
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{ctx.xrtSummaryContextObject}}"
+                            ],
+                            "refreshLocationFlag": true
+                        }
+                    }
+                ]
+            },
+            "deps": "js/qa0AuditQuestionAssignService"
+        }
+    },
+    "dataProviders": {
+        "loadFilteredList": {
+            "action": "getSearchResults",
+            "response": "{{data.searchResponse}}",
+            "totalFound": "{{data.totalFound}}"
+        }
+    },
+    "conditions": {
+        "qa0ShowQuestionAssignBtn": {
+            "expression": "data.dataProviders.loadFilteredList.selectedObjects.length > 0"
+        }
+    },
+    "onEvent": [ {
+        "eventId": "refreshSelection",
+        "cacheEventData": true,
+        "action": "refreshSelection"
+    } ],
+    "i18n": {
+        "qa0AssignAuditQuestion": [ "qualityauditMessages" ],
+        "qa0AssignAuditQuestionButton": [ "qualityauditMessages" ]
+    },
+    "messages": {
+
+    },
+    "lifecycleHooks": {
+        "onMount": "loadList"
+    }
+}

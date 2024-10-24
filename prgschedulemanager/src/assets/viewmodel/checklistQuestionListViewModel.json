@@ -1,0 +1,84 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-panel-body.directive",
+        "js/aw-list.directive",
+        "js/aw-default-cell.directive"
+    ],
+
+    "actions" : {
+        "reveal": {
+            "actionType": "dataProvider",
+            "method": "listDataProvider"
+        },
+        "getSearchResults": {
+            "actionType": "JSFunction",
+            "method": "getChecklistQuestionsSearchResults",
+            "inputData": {
+                "subPanelContext":"{{subPanelContext}}"
+            },
+            "outputData" : {
+                "searchResults": "",
+                "totalFound": "data.searchResults.length"
+            },
+            "deps": "js/Psi0ChecklistService"
+        },
+        "groupObjectsForDecorators":{
+            "actionType": "JSFunction",
+            "method": "groupObjectsForDecorators",
+            "inputData":
+            {
+                "vmos": "{{data.dataProviders.listDataProvider.viewModelCollection.loadedVMObjects}}"
+            },
+            "deps": "js/Psi0ChecklistService"
+        }
+
+    },
+
+    "dataProviders": {
+        "listDataProvider": {
+            "action": "getSearchResults",
+            "response": "{{data.searchResults}}",
+            "selectionModelMode": "multiple",
+            "inputData": {
+                "selectionModel": "{{subPanelContext.selectionModel}}"
+            },
+            "commands": {
+                "Awp0ShowObjectCell": {
+                    "id": "cmdOpen",
+                    "title": "Open",
+                    "areas": [ "aw_oneStep" ],
+                    "priorities": [ 300 ],
+                    "dependencies": [ "js/showObjectCommandHandler" ],
+                    "displayOption": "ON_HOVER_AND_SELECTION",
+                    "position": "TOP_RIGHT"
+                }
+            },
+            "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectObjectNavigationCellListActionCommands"
+        }
+    },
+
+    "onEvent": [
+        {
+            "eventId": "checklistQuestionList.contentLoaded",
+            "action": "reveal"
+        },
+        {
+            "eventId": "checklistQuestionList.reset",
+            "action": "reveal"
+        },
+        {
+            "eventId": "listDataProvider.modelObjectsUpdated",
+            "action": "groupObjectsForDecorators"
+        },
+        {
+            "eventId": "viewModelObject.propsUpdated",
+            "action": "groupObjectsForDecorators"
+        },
+        {
+            "eventId": "saveEditAndSubmitChecklistQuestionEvent",
+            "action": "groupObjectsForDecorators"
+        }
+    ]
+
+}

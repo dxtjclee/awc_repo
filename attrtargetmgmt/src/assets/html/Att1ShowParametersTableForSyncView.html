@@ -1,0 +1,8 @@
+<aw-column width="fill">
+    <div class="aw-layout-panelSectionTitle sw-sectionTitle" exist-when="conditions.showParameterHeader">
+        <span>{{i18n.attributeTitle}}</span>
+    </div>
+    <div class="aw-parameter-view-table">
+       <aw-include name="{{data.parametersTable.panelId}}" view-id="{{props.viewId}}" sub-panel-context="{...subPanelContext, parametersTable:fields.parametersTable}" exist-when="data.parametersTable.panelId"></aw-include>
+    </div>
+</aw-column>

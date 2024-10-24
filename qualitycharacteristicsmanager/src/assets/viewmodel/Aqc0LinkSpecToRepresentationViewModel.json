@@ -1,0 +1,40 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel-section.directive",
+        "js/aw-default-cell.directive",
+        "js/exist-when.directive"
+    ],
+    "actions": {
+        "updateDataSource": {
+            "actionType": "JSFunction",
+            "method": "addHtmlPanelInDataSource",
+            "inputData": {
+                "data": "{{data}}",
+                "type": "{{data.subPanelContext.xrtType}}",
+                "panelID": "Aqc0LinkSpecToRepresentation"
+            },
+            "deps": "js/addObjectUtils"
+        }
+    },
+    "data": {
+        "linkSpecificationSectionCommands": "aw_aqc0AddCharSpecificationToRep"
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "updateDataSource",
+        "onUpdate": {
+            "action": "updateDataSource",
+            "observers": [ "viewModel.data" ]
+        }
+    },
+    "i18n": {
+        "Aqc0AddCharSpecToInspectionTitle": [
+            "qualitycharacteristicsmanagerMessages"
+        ]
+    }
+}

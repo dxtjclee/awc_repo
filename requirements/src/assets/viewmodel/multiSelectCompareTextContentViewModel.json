@@ -1,0 +1,334 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-column.directive",
+        "js/aw-scrollpanel.directive",
+        "js/aw-advanced-bar.directive",
+        "js/aw-flex-row.directive",
+        "js/aw-flex-column.directive",
+        "js/aw-command-bar.directive",
+        "js/exist-when.directive",
+        "js/aw-i18n.directive"
+    ],
+    "actions": {
+        "requirementsComparison": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2017-06-RequirementsManagement",
+            "method": "exportToApplication3",
+            "inputData":
+            {
+                "input":
+                [
+                    {
+                        "templateName": "",
+                        "applicationFormat": "HTML",
+                        "objectsToExport": "{{function:getRevisionObject}}",
+                        "targetObjectsToExport": [],
+                        "exportOptions": "{{function:getExportOptions}}",
+                        "recipeSourceObjects": [],
+                        "recipeTargetObjects": [],
+                        "attributesToExport":[],
+                        "objectTemplateInputs": [],
+                        "includeAttachments": false
+
+                    }
+                ]
+            },
+            "outputData":
+            {
+                "content":""
+            },
+             "events":
+            {
+                 "success":
+                [
+                    {
+                        "name": "Arm0MultiSelectCompareText.postExportToApp3SOAResponse"
+                    }
+                ]
+            },
+            "deps": "js/Arm0MultiSelectCompareText"
+        },
+        "getReqSpecifications": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2019-06-RequirementsManagement",
+            "method": "getFullTextVersionInfo",
+            "inputData": {
+                "inputs": [
+                    {
+                        "operationType": "",
+                        "selectedObjects": "{{function:getObjectWithTypes}}"
+                    }
+                ]
+            },
+            "outputData": {
+                "revReqSpecifications": ""
+            },
+            "events":
+            {
+                 "success":
+                [
+                    {
+                        "name": "Arm0MultiSelectCompareText.latestReqSpecifications"
+                    }
+                ]
+            },
+            "deps": "js/Arm0MultiSelectCompareText"
+        },
+        "constructLoadingText": {
+            "actionType": "JSFunction",
+            "method": "constructLoadingText",
+            "deps": "js/Arm0MultiSelectCompareText",
+            "inputData": {
+                "data": "{{data.i18n.preloadText}}",
+                "selectedObjects": "{{ctx.mselected}}",
+                "inpData": "{data}"
+            },
+            "outputData": {
+                "Arm0RequirementCompareTextLoadMessage": "Arm0RequirementCompareTextLoadMessage"
+            }
+        },
+        "postExportToApp3SOAResponse": {
+            "actionType": "JSFunction",
+            "method": "postExportToApp3SOAResponse",
+            "deps": "js/Arm0MultiSelectCompareText",
+            "inputData": {
+                "data": "{{data.content.transientFileReadTickets}}"
+            }
+        },
+        "getReqSpecContentData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AwReqMgmtSe-2019-06-SpecNavigation",
+            "method": "getSpecificationSegment",
+            "inputData": {
+                "inputData": {
+                    "inputCtxt": "{{function:getDefaultInputContext}}",
+                    "inputObjects": "{{data.eventMap['Arm0MultiSelectCompareText.getReqSpecContentData']}}",
+                    "nextOccData": {},
+                    "options": [
+                        "SpecHistoryCompareMode"
+                    ]
+                }
+            },
+            "outputData": {
+                "htmlContents": "output.htmlContents"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0MultiSelectCompareText.setInnerHTMLsForFullTexts",
+                        "condition": "!ctx.Arm0CrossCompare"
+                    },
+                    {
+                        "name": "Arm0MultiSelectCompareText.setInnerHTMLsForCrossCompare",
+                        "condition": "ctx.Arm0CrossCompare === 'true'"
+                    }
+                ]
+            },
+            "deps": "js/Arm0MultiSelectCompareText"
+        },
+        "compareHtmlVersion": {
+            "actionType": "RESTService",
+            "serviceName": "",
+            "method": "POST",
+            "inputData":
+            {
+                "request":
+                {
+                    "method": "POST",
+                    "withCredentials": false,
+                    "url": "{{function:getCompareHtmlServiceURL}}",
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "data": "{{function:getSelectedObjectsHtml}}"
+                }
+            },
+            "outputData": {
+                "compareHtmlData": "data.output"
+            },
+            "events": {
+                "success": [ {
+                        "name": "Arm0MultiSelectCompareText.showHtmlCompareReport"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "MicroserviceInstallationErrorCompare"
+                } ]
+            },
+            "deps": "js/Arm0MultiSelectCompareText"
+
+        },
+        "showHtmlCompareReport": {
+            "actionType": "JSFunction",
+            "method": "showHtmlCompareReport",
+            "inputData": {
+                "htmlData": "{{data.compareHtmlData}}",
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "Arm0RequirementHistoryContextCompareToMsg": "Arm0RequirementHistoryContextCompareToMsg"
+            },
+            "deps": "js/Arm0MultiSelectCompareText"
+
+        },
+        "setInnerHTMLsForFullTexts": {
+            "actionType": "JSFunction",
+            "method": "setInnerHTMLsForFullTexts",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0MultiSelectCompareText"
+        },
+        "latestReqSpecifications": {
+            "actionType": "JSFunction",
+            "method": "latestReqSpecifications",
+            "inputData": {
+                "data": "{{data}}",
+                "selectedObjectsInOrder": "{{ctx.mselected}}"
+            },
+            "outputData": {
+                "loadingMsg": "{{data.Arm0RequirementCompareTextLoadMessage}}"
+            },
+            "deps": "js/Arm0MultiSelectCompareText"
+        },
+        "setInnerHTMLsForCrossCompare": {
+            "actionType": "JSFunction",
+            "method": "setInnerHTMLsForCrossCompare",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "loadingMsg": "{{data.Arm0RequirementCompareTextLoadMessage}}"
+            },
+            "deps": "js/Arm0MultiSelectCompareText"
+        }
+    },
+    "columnProviders": {
+
+    },
+    "dataProviders": {
+
+    },
+    "grids": {
+
+    },
+    "lifecycleHooks": {
+        "onMount": "constructLoadingText"
+    },
+    "onEvent": [
+        {
+            "eventId": "Arm0MultiSelectCompareText.requirementsComparison",
+            "action": "requirementsComparison"
+        },
+        {
+            "eventId": "Arm0MultiSelectCompareText.getReqSpecifications",
+            "action": "getReqSpecifications"
+        },
+        {
+            "eventId": "Arm0MultiSelectCompareText.postExportToApp3SOAResponse",
+            "action": "postExportToApp3SOAResponse"
+        },
+        {
+            "eventId": "Arm0MultiSelectCompareText.showHtmlCompareReport",
+            "action": "showHtmlCompareReport"
+        },
+        {
+            "eventId": "Arm0MultiSelectCompareText.compareHtmlVersion",
+            "action": "compareHtmlVersion"
+        },
+        {
+            "eventId": "Arm0MultiSelectCompareText.getReqSpecContentData",
+            "cacheEventData": true,
+            "action": "getReqSpecContentData"
+        },
+        {
+            "eventId": "Arm0MultiSelectCompareText.setInnerHTMLsForFullTexts",
+            "action": "setInnerHTMLsForFullTexts"
+        },
+        {
+            "eventId": "Arm0MultiSelectCompareText.latestReqSpecifications",
+            "action": "latestReqSpecifications"
+        },
+        {
+            "eventId": "Arm0MultiSelectCompareText.setInnerHTMLsForCrossCompare",
+            "action": "setInnerHTMLsForCrossCompare"
+        }
+    ],
+    "functions":
+    {
+        "getRevisionObject":
+        {
+            "functionName": "getRevisionObject",
+            "parameters":
+            [
+                 "{{ctx}}"
+            ]
+        },
+        "getExportOptions": {
+            "functionName": "getExportOptions",
+            "parameters": []
+        },
+        "getCompareHtmlServiceURL": {
+            "functionName": "getCompareHtmlServiceURL",
+            "parameters": [
+            ]
+        },
+        "getSelectedObjectsHtml": {
+            "functionName": "getSelectedObjectsHtml",
+            "parameters": [
+            ]
+        },
+        "getObjectWithTypes": {
+            "functionName": "getObjectWithTypes",
+            "parameters": [
+                "{{ctx.mselected}}"
+            ]
+        },
+        "getDefaultInputContext": {
+            "functionName": "getDefaultInputContext",
+            "parameters": []
+        }
+     },
+     "i18n": {
+        "preloadText": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "added": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "removed": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "modified": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "MicroserviceInstallationError":[
+            "RequirementsCommandPanelsMessages"
+        ],
+        "compare":[
+            "RequirementsCommandPanelsMessages"
+        ],
+        "comparingTo": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "Arm0EmptyReqSpecCompareError": [
+            "RequirementsCommandPanelsMessages"
+        ]
+     },
+     "data": {
+        "Arm0RequirementCompareTextLoadMessage": "",
+        "Arm0RequirementHistoryContextCompareToMsg": ""
+    },
+     "messages": {
+         "MicroserviceInstallationErrorCompare": {
+             "messageType": "ERROR",
+             "messageText": "{{i18n.MicroserviceInstallationError}}",
+             "messageTextParams": [
+                 "{{data.i18n.compare}}"
+             ]
+         }
+     }
+}

@@ -1,0 +1,81 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-popup2.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-list.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-default-cell.directive",
+        "js/aw-flex-row.directive",
+        "js/aw-button.directive",
+        "js/aw-flex-column.directive",
+        "js/aw-guidance-message.directive",
+        "js/aw-panel.directive"
+
+    ],
+    "conditions": {
+        "enableAddToBacgroundButton" :{
+            "expression" : "data.dataProviders.crossActivityPredecessorsToShow.selectedObjects.length > 0"
+        }
+    },
+    "dataProviders": {
+        "crossActivityPredecessorsToShow": {
+            "dataProviderType": "Static",
+            "response": "{{subPanelContext.crossActivityPredecessorsToShow}}",
+            "totalFound": "{{subPanelContext.crossActivityPredecessorsToShow.length}}",
+            "selectionModelMode": "multiple"
+        }
+    },
+    "data": {
+    },
+    "actions":{
+        "initializeDataProvider": {
+            "actionType": "dataProvider",
+            "method": "crossActivityPredecessorsToShow"
+        },
+        "closeDialog":{
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        },
+        "callAddBackgroundProcesses":{
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "addBackgroundProcesses"
+                },
+                {
+                    "action": "closeDialog"
+                }
+            ]
+        },
+        "addBackgroundProcesses":{
+            "actionType": "JSFunction",
+            "method": "addBackgroundProcesses",
+            "inputData": {
+                "contextObject": "{{subPanelContext.contextObject}}",
+                "selection" : "{{data.dataProviders.crossActivityPredecessorsToShow.selectedObjects}}"
+            },
+            "deps": "js/services/ngpBackgroundProcessesService"
+        }
+    },
+    "lifecycleHooks": {
+        "onInit": "initializeDataProvider"
+    },
+    "messages": {
+        "infoAddCrossActivityPredecessorsMessage": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.infoAddCrossActivityPredecessorsMessage}}"
+        }
+    },
+    "i18n": {
+        "addToBackground": [ "NgpModelViewsMessages" ],
+        "cancel": [ "NgpModelViewsMessages" ],
+        "infoAddCrossActivityPredecessorsMessage": [ "NgpModelViewsMessages" ],
+        "addCrossActivityPredecessorsInstruction": [ "NgpModelViewsMessages" ]
+
+    }
+}

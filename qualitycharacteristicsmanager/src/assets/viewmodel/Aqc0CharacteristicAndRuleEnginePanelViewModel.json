@@ -1,0 +1,65 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-radiobutton.directive"
+    ],
+    "actions": {
+        "changeType": {
+            "actionType": "JSFunction",
+            "method": "currentSelectionChanged",
+            "inputData": {
+                "aqc0CharacteristicAndRuleEngineData":"{{data.aqc0CharacteristicAndRuleEngine}}",
+                "searchState": "{{props.subPanelContext.searchState}}"
+            },
+            "deps": "js/Aqc0CharManagerUtils"
+        }
+    },
+    "dataProviders": {},
+    "messages": {},
+    "data": {
+        "aqc0CharacteristicAndRuleEngine": {
+            "displayName": "",
+            "type": "STRING",
+            "isEditable": "true",
+            "dbValue": "{{ctx.currentTypeSelection.dbValue}}",
+            "uiValue": "{{ctx.currentTypeSelection.uiValue}}",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE",
+            "vertical": true
+        },
+        "aqc0CharacteristicAndRuleEngineValues": {
+            "type": "STRING",
+            "uiValue": [
+                {
+                    "propDisplayValue": "{{i18n.Aqc0CharacteristicTitle}}",
+                    "propInternalValue": "Qc0CharacteristicsGroup"
+                },
+                {
+                    "propDisplayValue":"{{i18n.Aqc0NamingConventionTitle}}",
+                    "propInternalValue": "Acp0NamingConvention"
+                },
+                {
+                    "propDisplayValue": "{{i18n.Aqc0RuleTitle}}",
+                    "propInternalValue": "Acp0Rule"
+                }
+            ]
+        }
+    },
+    "conditions": {},
+    "i18n": {
+        "Aqc0CharacteristicAndRuleEnginePanelTitle": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Aqc0CharacteristicTitle": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Aqc0NamingConventionTitle": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Aqc0RuleTitle": [
+            "qualitycharacteristicsmanagerMessages"
+        ]
+    }
+}

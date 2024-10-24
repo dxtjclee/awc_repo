@@ -1,0 +1,236 @@
+{
+  "schemaVersion": "1.0.0",
+  "syncStrategies": {
+    "syncFromNgpHeaderToNgpToolbar": {
+      "source": {
+        "view": "NgpHeader",
+        "port": "scopeObject"
+      },
+      "target": {
+        "view": "NgpToolBar",
+        "port": "input_commandContext"
+      }
+    },
+    "syncFromNgpHeaderToBuildStrategySubpage": {
+      "source": {
+        "view": "NgpHeader",
+        "port": "scopeObject"
+      },
+      "target": {
+        "view": "NgpBuildStrategySubpage",
+        "port": "input"
+      }
+    },
+    "syncFromNgpBuildStrategyTableToNgpAssignedPartsTable": {
+      "source": {
+        "view": "NgpBuildStrategyTable",
+        "port": "output_selected_ngpBuildStrategyTable"
+      },
+      "target": {
+        "view": "NgpAssignedPartsTable",
+        "port": "contextObject"
+      }
+    },
+    "syncFromNgpHeaderToInformationSubpage": {
+      "source": {
+        "view": "NgpHeader",
+        "port": "scopeObject"
+      },
+      "target": {
+        "view": "NgpInformationPanel",
+        "port": "input_ngpInformationPanel"
+      }
+    },
+    "syncFromAttachmentsInformationToInformationDetails": {
+      "source": {
+        "view": "NgpAttachmentsAgsFormsLists",
+        "port": "selection_ngpAttachmentsAgsFormsLists"
+      },
+      "target": {
+        "view": "NgpInformationDetails",
+        "port": "input_ngpInformationDetails"
+      }
+    },
+    "syncFromNgpHeaderToContentSubpage": {
+      "source": {
+        "view": "NgpHeader",
+        "port": "scopeObject"
+      },
+      "target": {
+        "view": "NgpContentSubpage",
+        "port": "input_contentSubpage"
+      }
+    },
+    "syncFromNgpBuildStrategyTableToContentDetails": {
+      "source": {
+        "view": "NgpBuildStrategyTable",
+        "port": "output_selected_ngpBuildStrategyTable"
+      },
+      "target": {
+        "view": "NgpContentDetails",
+        "port": "input_ngpContentDetails"
+      }
+    },
+    "syncFromContentDetailsToInformationPanel": {
+      "source": {
+        "view": "NgpContentDetails",
+        "port": "output_ngpContentDetails"
+      },
+      "target": {
+        "view": "NgpInformationPanel",
+        "port": "input_ngpInformationPanel"
+      }
+    },
+    "syncFromNgpHeaderToActivityDetailedPlanningPage": {
+      "source": {
+        "view": "NgpHeader",
+        "port": "scopeObject"
+      },
+      "target": {
+        "view": "NgpActivityDetailedPlanning",
+        "port": "scopeObject_input"
+      }
+    },
+    "syncFromNgpHeaderToProcessDetailedPlanningPage": {
+      "source": {
+        "view": "NgpHeader",
+        "port": "scopeObject"
+      },
+      "target": {
+        "view": "NgpProcessDetailedPlanning",
+        "port": "scopeObject_input"
+      }
+    },
+    "syncFromNgpContentElementsTableToNgpProcessDependenciesTable": {
+      "source": {
+        "view": "NgpContentElementsTable",
+        "port": "selectedObjects_output"
+      },
+      "target": {
+        "view": "NgpProcessDependenciesTable",
+        "port": "scopeObject_input"
+      }
+    },
+    "syncFromNgpContentElementsTableToNgpProcessOperationsTable": {
+      "source": {
+        "view": "NgpContentElementsTable",
+        "port": "selectedObjects_output"
+      },
+      "target": {
+        "view": "NgpProcessOperationsTable",
+        "port": "scopeObject_input"
+      }
+    },
+    "syncFromNgpContentElementsTableToNgpAssignedObjectsTable": {
+      "source": {
+        "view": "NgpContentElementsTable",
+        "port": "selectedObjects_output"
+      },
+      "target": {
+        "view": "NgpAssignedObjectsTable",
+        "port": "scopeObject_input"
+      }
+    },
+    "syncFromNgpContentElementsToNgpContentElementsDetailsContentPanel": {
+      "source": {
+        "view": "NgpContentElementsTable",
+        "port": "selectTabRequest_output"
+      },
+      "target": {
+        "view": "NgpContentElementsDetailsContentPanel",
+        "port": "tabToSelect"
+      }
+    }
+  },
+  "syncStrategyHandlers": {
+    "ngpHeaderToNgpToolbarSyncHandler": {
+      "id": "syncFromNgpHeaderToNgpToolbar",
+      "activeWhen": true
+    },
+    "ngpHeaderToBuildStrategySubpageSyncHandler": {
+      "id": "syncFromNgpHeaderToBuildStrategySubpage",
+      "activeWhen": {
+        "condition": "conditions.isInBuildStrategySubPage"
+      }
+    },
+    "ngpBuildStrategyTableToNgpAssignedPartsTableSyncHandler": {
+      "id": "syncFromNgpBuildStrategyTableToNgpAssignedPartsTable",
+      "activeWhen": true
+    },
+    "ngpHeaderToInformationSubpageSyncHandler": {
+      "id": "syncFromNgpHeaderToInformationSubpage",
+      "activeWhen": {
+        "condition": "conditions.isInNgpInformationState"
+      }
+    },
+    "ngpFromInformToInformationDetails": {
+      "id": "syncFromAttachmentsInformationToInformationDetails",
+      "activeWhen": true
+    },
+    "ngpHeaderToContentSubpageSyncHandler": {
+      "id": "syncFromNgpHeaderToContentSubpage",
+      "activeWhen": {
+        "condition": "conditions.isInNgpContentPage"
+      }
+    },
+    "ngpBuildStrategyTableToContentDetailsSyncHandler": {
+      "id": "syncFromNgpBuildStrategyTableToContentDetails",
+      "activeWhen": true
+    },
+    "ngpContentDetailsToInformationPanelSyncHandler": {
+      "id": "syncFromContentDetailsToInformationPanel",
+      "activeWhen": true
+    },
+    "ngpHeaderToActivityDetailedPlanningPageSyncHandler": {
+      "id": "syncFromNgpHeaderToActivityDetailedPlanningPage",
+      "activeWhen": true
+    },
+    "ngpHeaderToProcessDetailedPlanningPageSyncHandler": {
+      "id": "syncFromNgpHeaderToProcessDetailedPlanningPage",
+      "activeWhen": true
+    },
+    "ngpContentElementsToProcessDependenciesSyncHandler": {
+      "id": "syncFromNgpContentElementsTableToNgpProcessDependenciesTable",
+      "activeWhen": true,
+      "action": "getSingleObject"
+    },
+    "ngpContentElementsToProcessOperationsSyncHandler": {
+      "id": "syncFromNgpContentElementsTableToNgpProcessOperationsTable",
+      "activeWhen": true,
+      "action": "getSingleObject"
+    },
+    "ngpContentElementsToAssignedObjectsSyncHandler": {
+      "id": "syncFromNgpContentElementsTableToNgpAssignedObjectsTable",
+      "activeWhen": true,
+      "action": "getSingleObject"
+    },
+    "ngpContentElementsToMfeContentPanelSyncHandler": {
+      "id": "syncFromNgpContentElementsToNgpContentElementsDetailsContentPanel",
+      "activeWhen": true
+    }
+  },
+  "conditions": {
+    "isInBuildStrategySubPage": {
+      "expression": "ctx.locationContext['ActiveWorkspace:SubLocation'] === 'buildStrategy'"
+    },
+    "isInNgpInformationState": {
+      "expression": "ctx.locationContext['ActiveWorkspace:SubLocation'] === 'information'"
+    },
+    "isInNgpContentPage": {
+      "expression": "ctx.locationContext['ActiveWorkspace:SubLocation'] === 'content'"
+    }
+  },
+  "actions": {
+    "getSingleObject": {
+      "actionType": "JSFunction",
+      "method": "getSingleObject",
+      "inputData": {
+        "objects": "{{syncContext.sourceViewModel.ports.selectedObjects_output.syncObject}}"
+      },
+      "outputData": {
+        "modelObj": ""
+      },
+      "deps": "js/services/ngpSyncStrategyConverterService"
+    }
+  }
+}

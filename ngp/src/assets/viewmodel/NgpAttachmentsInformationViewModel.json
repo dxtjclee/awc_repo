@@ -1,0 +1,42 @@
+{
+    "schemaVersion": "1.0.0",
+    "props":{
+        "scope-object":{
+            "type":"object"
+        }
+    },
+    "data": {
+        "contentPanelData": {
+            "tabs": [{
+                "name": "",
+                "tabKey": "NgpAttachmentsAgsFormsLists",
+                "input": null,
+                "disableCommandOverflow": false
+            }]
+        }
+    },
+    "actions": {
+        "setContext": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInViewModelUsingPath",
+            "inputData": {
+                "targetObj": "{{data.contentPanelData}}",
+                "path": "tabs.0",
+                "value": {
+                    "input": "{{props.scopeObject}}",
+                    "cmdObjects": ["{{props.scopeObject}}"]
+                }
+             },
+             "outputData":{
+                "contentPanelData": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        }
+    },
+    "lifecycleHooks": {
+        "onUpdate":{
+            "action": "setContext",
+            "observers": ["props.scopeObject"]
+        }
+    }
+}

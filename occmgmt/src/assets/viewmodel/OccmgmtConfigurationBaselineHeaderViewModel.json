@@ -1,0 +1,94 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "configUnitEndItem": {
+            "initialValues": {
+                "unitEndItemToRender": ""
+            },
+            "meta": { }
+        },
+        "configSvrEndItem": {
+            "initialValues": {
+                "svrOwningItemToRender": ""
+            },
+            "meta": { }
+        },
+        "effectiveDate": {
+            "type": "STRING",
+            "hasLov": true,
+            "dbValue": "",
+            "displayName": "{{i18n.dateEffectivity}}"
+        },
+        "units": {
+            "type": "STRING",
+            "hasLov": true,
+            "dbValue": "",
+            "displayName": "{{i18n.units}}"
+        },
+        "svrLabel": {
+            "type": "STRING",
+            "hasLov": true,
+            "dbValue": "",
+            "displayName": "{{i18n.variant}}"
+        },
+        "closureRuleLabel": {
+            "type": "STRING",
+            "hasLov": true,
+            "dbValue": "",
+            "displayName": "{{i18n.expansion}}"
+        },
+        "configLocation": {
+            "header": {
+                "type": "BOOLEAN",
+                "dbValue": true
+            },
+            "panel": {
+                "type": "BOOLEAN",
+                "dbValue": false
+            }
+        },
+        "Organization": {
+            "type": "STRING",
+            "hasLov": true,
+            "dbValue": "",
+            "displayName": "{{i18n.PartitionScheme}}"
+        }
+    },
+
+    "actions": {
+        "initializeConfigBaselineHeader": {
+            "actionType": "JSFunction",
+            "method": "initializeAceConfigHeader",
+            "inputData": {
+                "occContext":"{{props.subPanelContext.occContext}}"
+            },
+            "outputData":{
+                "effectivityEndItem":"effectivityEndItem",
+                "SVROwningItemRev":"SVROwningItemRev"
+            },
+            "deps": "js/aceConfigHeaderService"
+        }
+    },
+
+    "lifecycleHooks": {
+        "onMount": "initializeConfigBaselineHeader",
+        "onUpdate": [ {
+            "action": "initializeConfigBaselineHeader",
+            "observers": [ "props.subPanelContext.occContext.productContextInfo" ]
+        }]
+    },
+
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+
+    "i18n": {
+        "dateEffectivity": [ "OccurrenceManagementConstants" ],
+        "expansion": [ "OccurrenceManagementConstants" ],
+        "PartitionScheme":["OccmgmtPartitionMessages"],
+        "units" : [ "OccurrenceManagementConstants" ],
+        "variant": [ "OccurrenceManagementConstants" ]
+    }
+}

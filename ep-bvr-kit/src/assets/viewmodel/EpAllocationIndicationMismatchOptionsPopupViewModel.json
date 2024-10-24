@@ -1,0 +1,137 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "view-id": {
+            "type": "string"
+        },
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data": {
+        "comparePopupTitle": "",
+        "findInSource": {
+            "id": "findInSource",
+            "text": "{{i18n.findSourceInProductBOP}}"
+        },
+        "compareWithSource": {
+            "id": "compareWithSource",
+            "text": "{{i18n.compareWithSourceInProductBOP}}"
+        }
+    },
+    "actions": {
+        "initialize": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "initializePopupTitle"
+                },
+                {
+                    "action": "initializeDataProvider"
+                }
+            ]
+        },
+        "showComparePopup": {
+            "actionType": "JSFunction",
+            "method": "show",
+            "inputData": {
+                "options": {
+                    "view": "EpComparePopupAllocationIndication",
+                    "caption": "{{data.comparePopupTitle}}",
+                    "width": 700,
+                    "height": 400,
+                    "subPanelContext": {
+                        "target": "{{subPanelContext.contextObject.nodeToFindId}}"
+                    }
+                }
+            },
+            "outputData": {
+                "popupId": ""
+            },
+            "deps": "js/popupService"
+        },
+        "findMismatchInProductBOP": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "findMismatchSourceInProductBOP"
+                },
+                {
+                    "action": "closePopupWindow"
+                }
+            ]
+        },
+        "findMismatchSourceInProductBOP": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "ep.findMismatchInProductBOP",
+                    "eventData": {
+                        "contextObject": "{{subPanelContext.contextObject}}"
+                    }
+                } ]
+            }
+        },
+        "initializePopupTitle": {
+            "actionType": "JSFunction",
+            "method": "formatPopupTitle",
+            "inputData": {
+                "text": "{{i18n.comparePopupTitle}}",
+                "target": "{{subPanelContext.contextObject.nodeToFindId}}"
+            },
+            "outputData": {
+                "comparePopupTitle": ""
+            },
+            "deps": "js/epAllocationCompareService"
+        },
+        "initializeDataProvider": {
+            "actionType": "dataProvider",
+            "method": "allocationMismatchOptions"
+        },
+        "closePopupWindow": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        }
+    },
+    "dataProviders": {
+        "allocationMismatchOptions": {
+            "dataProviderType": "Static",
+            "response": [
+                "{{data.findInSource}}",
+                "{{data.compareWithSource}}"
+            ],
+            "totalFound": 2
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "allocationMismatchOptions.selectionChangeEvent",
+            "action": "findMismatchInProductBOP",
+            "condition": "data.dataProviders.allocationMismatchOptions.selectedObjects[0].id === 'findInSource'"
+        },
+        {
+            "eventId": "allocationMismatchOptions.selectionChangeEvent",
+            "action": "showComparePopup",
+            "condition": "data.dataProviders.allocationMismatchOptions.selectedObjects[0].id === 'compareWithSource'"
+        }
+    ],
+    "lifecycleHooks": {
+        "onMount": "initialize"
+    },
+    "i18n": {
+        "comparePopupTitle": [
+            "allocationIndicationMessages"
+        ],
+        "findSourceInProductBOP": [
+            "allocationIndicationMessages"
+        ],
+        "compareWithSourceInProductBOP": [
+            "allocationIndicationMessages"
+        ]
+    }
+}

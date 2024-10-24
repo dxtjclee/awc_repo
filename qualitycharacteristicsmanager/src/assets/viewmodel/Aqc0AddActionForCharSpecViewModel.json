@@ -1,0 +1,344 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-button.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-i18n.directive",
+        "js/aw-widget.directive"
+    ],
+    "actions": {
+        "createAddActionForCharSpec": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2008-06-DataManagement",
+            "method": "createObjects",
+            "inputData": {
+                "input": [ {
+                    "clientId": "",
+                    "data": {
+                        "boName": "Qam0QualityAction",
+                        "stringProps": {
+                            "fnd0ActionItemId": "{{data.fnd0ActionItemId.dbValue}}",
+                            "object_desc": "{{data.object_desc.dbValue}}",
+                            "object_name": "{{data.object_name.dbValue}}",
+                            "qam0QualityActionStatus":"Template"
+                        }
+
+                    }
+                } ]
+            },
+            "outputData": {
+                "createdActionObject": "output[0].objects[0]"
+            },
+            "events": {
+                "success": [
+                {
+                    "name": "aqc0.setPropAsPartOfActionCreate",
+                    "condition" : "!(ctx.tcSessionData.tcMajorVersion > 13 || ctx.tcSessionData.tcMajorVersion === 13 && ctx.tcSessionData.tcMinorVersion >= 2)"
+                },
+                {
+
+                    "name": "aqc0.setPropAsPartOfActionCreate_TC132Onwards",
+                    "condition" : "ctx.tcSessionData.tcMajorVersion > 13 || ctx.tcSessionData.tcMajorVersion === 13 && ctx.tcSessionData.tcMinorVersion >= 2"
+                }
+             ]
+            }
+        },
+        "setProperties_TC132Onwards":{
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-09-DataManagement",
+            "method": "setProperties",
+            "inputData": {
+                "info":
+                [
+                    {
+                        "object": "{{data.createdActionObject}}",
+                        "timestamp": "",
+                        "vecNameVal":
+                        [
+                            {
+                                "name": "qam0QualityActionType",
+                                "values":
+                                [
+                                    "Control Plan"
+                                ]
+                            },
+                            {
+                                "name": "qam0QualityActionSubtype",
+                                "values":
+                                [
+                                    "Containment Action"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                       "object": "{{ctx.selected}}",
+                        "timestamp": "",
+                        "vecNameVal":
+                        [
+                            {
+                                "name": "Qc0HasActions",
+                                "values":"{{function:getRequiredValuesForOperation}}"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name":"cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{ctx.selected}}"
+                            ]
+                        }
+                    },
+                    {
+                        "name":"complete",
+                        "eventData":{
+                            "source":"toolAndInfoPanel"
+                        }
+                    },
+                    {
+                        "name": "aqc0NullMapEventForActionAddition",
+                        "condition" : "ctx.ViewModeContext.ViewModeContext === 'TreeSummaryView'"
+                    }
+                ]
+            },
+            "deps": "js/Aqc0CharSpecOperationsService"
+        },
+        "setProperties":{
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-09-DataManagement",
+            "method": "setProperties",
+            "inputData": {
+                "info":
+                [
+                    {
+                        "object": "{{data.createdActionObject}}",
+                        "timestamp": "",
+                        "vecNameVal":
+                        [
+                            {
+                                "name": "qam0QualityActionType",
+                                "values":
+                                [
+                                    "Control Plan"
+                                ]
+                            },
+                            {
+                                "name": "qam0QualityActionSubtype",
+                                "values":
+                                [
+                                    "Containment Action"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "aqc0.getPropertiesforSelectedObject"
+                    }
+                ]
+            }
+        },
+        "createVersion": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-CharManagerAW-2018-12-QualityManagement",
+            "method": "createSpecificationVersion",
+            "inputData": {
+                "specificationInputs": "{{data.versionInputDataFVM}}"
+
+            },
+            "outputData": {
+                "createdObject":"specificationsOutput[0].newSpecification"
+            },
+            "events": {
+                "success": [ {
+                    "name":"aqc0.pushSelectedNodeInFailureContext",
+                    "condition":"ctx.mselected[0].modelType.name === 'Qc0Failure' && ctx.failureManagerContext !== undefined"
+                },
+                {
+                    "name":"aqc0.executePostVersionEventActionsForSpecifications"
+                }
+            ],
+            "failure": [
+                    {
+                        "name": "aqc0.versionCreationFailed"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [ {
+                    "message": "versioningSuccessfulMessage"
+                } ]
+            },
+            "deps": "js/Aqc0UtilService"
+        },
+        "executePostVersionEventActionsForSpecifications": {
+            "actionType": "JSFunction",
+            "method": "executePostVersionEventActionsForSpecifications",
+            "inputData":
+            {
+                "data": "{{data.createdObject}}",
+                "subPanelContext": "{{props.subPanelContext}}",
+                "removeOrEditActionflag": false
+            },
+            "deps": "js/Aqc0CharLibraryUtilService"
+        },
+        "closPanelHeader": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            }
+        },
+        "deleteQualityActionObject":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "deleteObjects",
+            "inputData":
+            {
+                "objects":
+                [
+                    "{{data.createdActionObject}}"
+                ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "aqc0.closPanelHeader"
+                    }
+                ]
+            }
+        },
+        "pushSelectedNodeInFailureContext":{
+            "actionType": "JSFunction",
+            "method": "pushSelectedNodeInFailureContext",
+            "inputData": {
+                "createdObject": "{{data.createdObject}}"
+            },
+
+            "deps": "js/Aqc0UtilService"
+        },
+        "getPropertiesforSelectedObjectForOperations":{
+            "actionType": "JSFunction",
+            "method": "getPropertiesforSelectedObject",
+            "inputData": {
+                "data": "{{data}}",
+                "selectedObject": "{{ctx.selected}}",
+                "onlyLoadProps": false
+            },
+            "deps": "js/Aqc0UtilService"
+        }
+    },
+    "functions": {
+        "getRequiredValuesForOperation":
+        {
+            "functionName": "getRequiredValuesForOperation",
+            "parameters":
+            [
+                "{{ctx}}","{{data}}","Qc0HasActions"
+            ]
+        }
+    },
+    "lifecycleHooks": {
+        "onInit": ""
+    },
+    "onEvent": [
+        {
+            "eventId": "aqc0.setPropAsPartOfActionCreate",
+            "action": "setProperties"
+        },
+        {
+            "eventId": "aqc0.setPropAsPartOfActionCreate_TC132Onwards",
+            "action": "setProperties_TC132Onwards"
+        },
+        {
+            "eventId": "aqc0.createVersion",
+            "action": "createVersion"
+        },
+        {
+            "eventId": "aqc0.closPanelHeader",
+            "action": "closPanelHeader"
+        },
+        {
+            "eventId": "aqc0.versionCreationFailed",
+            "action": "deleteQualityActionObject"
+        },
+        {
+            "eventId": "aqc0.pushSelectedNodeInFailureContext",
+            "action": "pushSelectedNodeInFailureContext"
+        },
+        {
+            "eventId": "aqc0.getPropertiesforSelectedObject",
+            "action": "getPropertiesforSelectedObjectForOperations"
+        },
+        {
+            "eventId":"aqc0.executePostVersionEventActionsForSpecifications",
+            "action": "executePostVersionEventActionsForSpecifications"
+        }
+    ],
+    "data": {
+        "fnd0ActionItemId": {
+            "displayName": "{{i18n.ActionItemId}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "dbValue": "{{ctx.gActionId}}"
+        },
+        "object_name": {
+            "displayName": "{{i18n.Name}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "dbValue": ""
+        },
+        "object_desc": {
+            "displayName": "{{i18n.Description}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "dbValue": ""
+        }
+    },
+    "messages": {
+        "versioningSuccessfulMessage": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.VersionCreated}}",
+            "messageTextParams": [
+                "{{ctx.selected.props.object_name.dbValues[0]}}"
+            ]
+        }
+    },
+    "i18n": {
+        "ActionItemId": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "addButtonTitle": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Name": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Description": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "create": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "VersionCreated": [
+            "qualitycharacteristicsmanagerMessages"
+        ]
+    }
+}

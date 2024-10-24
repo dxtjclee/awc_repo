@@ -1,0 +1,92 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "occContext": {
+            "initialValues": {
+                "selectedModelObjects": [],
+                "viewKey": "",
+                "productContextInfo": null,
+                "elementToPCIMapCount": null,
+                "supportedFeatures": null,
+                "skipReloadOnConfigParamChange": true
+            },
+            "meta": {}
+        },
+        "provider": {
+            "label": "{{i18n.productBOPTitle}}",
+            "priority": 3,
+            "name": "functionalPlan",
+            "clientScopeURI": "functionalPlan",
+            "nameToken": "functionalPlan"
+        },
+        "tabConfig": {
+            "tabTitle": "{{i18n.productBOPTitle}}",
+            "tabKey": "EpProductBopStructureTree"
+        },
+        "assemblyTabsConfig": {
+            "tabs": [
+                {
+                    "name": "{{i18n.mbomTitle}}",
+                    "tabKey": "EpProductBopMbomTree"
+                }
+            ]
+        },
+        "detailsTabsConfig": {
+            "tabs":
+            [
+                {
+                    "name": "{{i18n.partTitle}}",
+                    "tabKey": "WiPartsTable",
+                    "loadInputObject": {
+                        "propertiesToLoad": [ "Mfg0all_material" ]
+                    }
+                },
+                {
+                    "name": "{{i18n.resourcesTitle}}",
+                    "tabKey": "WiResourcesTable",
+                    "loadInputObject": {
+                        "propertiesToLoad": [ "Mfg0used_equipment" ]
+                    }
+                },
+                {
+                    "name": "{{i18n.summaryTitle}}",
+                    "tabKey": "EpInformation",
+                    "xrtType": "SUMMARY",
+                    "noElementSelectedMessageForXRT": [{
+                        "text": "{{i18n.epInformationNoSelectionMessage}}"
+                    }]
+                },
+                {
+                    "name": "{{i18n.filesTitle}}",
+                    "tabKey": "EpFiles",
+                    "xrtType": "SUMMARY",
+                    "loadInputObject": {
+                        "propertiesToLoad": [ "mbc0AttachedFiles" ]
+                    }
+                },
+                {
+                    "name": "{{i18n.documentsTitle}}",
+                    "tabKey": "EpDocuments",
+                    "xrtType": "SUMMARY",
+                    "loadInputObject": {
+                        "loadTypes": [ "GetWeblinks" ],
+                        "propertiesToLoad": [ "mbc0AssignedDocuments" ],
+                        "loadedObjectMapKeys": [ "WebLink" ]
+                    }
+                }
+            ]
+        }
+    },
+    "i18n": {
+        "productBOPTitle": [ "FunctionalPlanMessages" ],
+        "assemblyTreeTitle": [ "AssemblyMessages" ],
+        "mbomTitle": [ "FunctionalPlanMessages" ],
+        "partTitle": [ "DetailsMessages" ],
+        "resourcesTitle": [ "DetailsMessages" ],
+        "summaryTitle": [ "DetailsMessages" ],
+        "filesTitle": [ "DetailsMessages" ],
+        "documentsTitle": [ "DetailsMessages" ],
+        "assignedPmisTitle": [ "DetailsMessages" ],
+        "epInformationNoSelectionMessage": [ "DetailsMessages" ]
+    }
+}

@@ -1,0 +1,12 @@
+<aw-sublocation sub-location-preference="data.awSubLocationPref" sub-panel-context="{provider : data.provider}" class="aw-lineLayout-imageViewer afx-content-background">
+    <mfe-loading-message class="w-12 h-12" exist-when="data.loading === true"></mfe-loading-message>
+
+    <div class="w-12 h-12" exist-when="data.loading === false">
+        <aw-include name="{{ctx.ep.lineLayoutViewerData.fileData.viewer}}" sub-panel-context="ctx.ep.lineLayoutViewerData" class="aw-workinstr-viewerStyle" exist-when="ctx.ep.lineLayoutViewerData"></aw-include>
+
+        <div aw-click="actions.openPopup" aw-class="['aw-lineLayout-associatedElementCommandsPanel', {'aw-lineLayout-disabled':conditions.isReadOnlyMode}]" title="{{i18n.addLayout}}" show-when="!ctx.ep.lineLayoutViewerData">
+            <aw-icon class="aw-commands-svg" icon-id="cmdAdd"></aw-icon>
+            <aw-i18n class="aw-lineLayout-commandsLabel">i18n.addLayout</aw-i18n>
+        </div>
+    </div>
+</aw-sublocation>

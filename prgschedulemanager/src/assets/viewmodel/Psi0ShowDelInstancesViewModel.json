@@ -1,0 +1,111 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "reveal":
+        {
+            "actionType": "dataProvider",
+            "method": "deliverableInstanceSearch"
+        },
+        "searchDeliverableInstance": {
+            "actionType": "TcSoaService",
+            "serviceName": "Query-2014-11-Finder",
+            "method": "performSearch",
+            "inputData": {
+                "searchInput": {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Psi0ScheduleSearchProvider",
+                    "searchCriteria": {
+                        "searchContentType": "DeliverableInstances",
+                        "searchProperty": "object_name",
+                        "searchString": "{{data.filterBox.dbValue}}",
+                        "parentUid": "{{ctx.mselected[0].uid}}"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "searchFilterMap": {},
+                    "searchSortCriteria": [],
+                    "startIndex": "{{data.dataProviders.deliverableInstanceSearch.startIndex}}"
+                }
+            },
+            "policy": {
+                "types": [{
+                    "name": "WorkspaceObject",
+                    "properties": [{
+                            "name": "object_name"
+                        },
+                        {
+                            "name": "object_desc"
+                        },
+                        {
+                            "name": "object_type"
+                        }
+                    ]
+                }]
+            },
+            "events": {
+                "failure": [{
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                }]
+            },
+            "outputData": {
+                "searchResults": "{{function:processProviderResponse}}",
+                "totalFound": "totalFound",
+                "totalLoaded": "totalLoaded"
+            },
+            "deps": "js/ShowDeliverableInstances"
+        }
+    },
+    "dataProviders": {
+        "deliverableInstanceSearch": {
+            "action": "searchDeliverableInstance",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "totalLoaded": "{{data.totalLoaded}}",
+            "selectionModelMode": "single",
+            "commands": {
+                "Awp0ShowObjectCell": {
+                    "id": "cmdOpen",
+                    "areas": [
+                        "com.siemens.splm.clientfx.ui.modelObjectListActionCommands"
+                    ],
+                    "priorities": [
+                        300
+                    ],
+                    "dependencies": [
+                        "js/showObjectCommandHandler"
+                    ],
+                    "displayOption": "ON_HOVER_AND_SELECTION",
+                    "position": "TOP_RIGHT"
+                },
+                "Awp0ShowObjectCellDataset": {
+                    "id": "cmdOpen",
+                    "areas": [
+                        "com.siemens.splm.clientfx.ui.modelObjectListActionCommands"
+                    ],
+                    "priorities": [ 300 ],
+                    "dependencies": [ "js/showObjectDatasetCommandHandler" ],
+                    "displayOption": "ON_HOVER_AND_SELECTION",
+                    "position": "TOP_RIGHT"
+                }
+            }
+        }
+    },
+    "data": {
+        "filterBox": {
+            "displayName": "",
+            "type": "STRING",
+            "dbValue": ""
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "reveal"
+    },
+
+    "i18n": {
+        "deliverables": ["ScheduleManagerMessages"]
+    }
+
+}

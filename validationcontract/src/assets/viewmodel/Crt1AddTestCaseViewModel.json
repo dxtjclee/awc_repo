@@ -1,0 +1,453 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-panel-footer.directive",
+        "js/visible-when.directive",
+        "js/aw-button.directive",
+        "js/aw-checkbox.directive",
+        "js/enable-when.directive",
+        "js/aw-i18n.directive",
+        "js/aw-add.directive",
+        "js/aw-form.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-list.directive",
+        "js/aw-default-cell.directive",
+        "js/aw-command-panel-section.directive",
+        "js/aw-command-sub-panel.directive",
+        "js/aw-navigate-panel.directive"
+    ],
+    "props": {
+        "updateHook": {
+            "type": "object"
+        },
+        "update-activeView": {
+            "type": "object"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "getSpecandSubTypes",
+        "onUpdate": [
+            {
+                "action": "addTestCasetoSpec",
+                "observers": [
+                    "viewModel.data.aceElement"
+                ]
+            }
+        ]
+    },
+    "actions": {
+        "getSpecandSubTypes":{
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-04-DataManagement",
+            "method": "findDisplayableSubBusinessObjectsWithDisplayNames",
+            "inputData": {
+                "input": [ {
+                    "boTypeName": "RequirementSpec Revision",
+                    "exclusionBOTypeNames": []
+                } ]
+            },
+            "outputData": {
+                "sharedData.subBusinessObjects": "{{function:processSoaResponseForBOTypes}}"
+            },
+            "deps": "js/Crt1AddTestCaseService"
+        },
+        "backAction": {
+            "actionType": "JSFunction",
+            "method": "navigateToTestCasePanel",
+            "inputData": {
+                "commandContext": "{{data.sharedData}}"
+            },
+            "outputData": {
+                "sharedData": ""
+            },
+            "deps": "js/Crt1TestCaseCoveragePageService"
+        },
+        "createObject": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2016-09-DataManagement",
+            "method": "createAttachAndSubmitObjects",
+            "inputData": {
+                "inputs": "{{function:getCreateInput}}"
+            },
+            "outputData": {
+                "createdMainObject": "output[0].objects[0]",
+                "createdObject": "{{function:getCreatedObject}}"
+            },
+            "events": {
+                "success": [ {
+                        "name": "addObject.addObjectPostProcess"
+                    },
+                    {
+                        "name": "createTracelink.openObject",
+                        "condition": "data.openonCreate.dbValue && !subPanelContext.panelPinned"
+                    },
+                    {
+                        "name": "crt1TestCoveragePage.getElementFromRev",
+                        "condition": "data.sharedData.selObj && data.sharedData.selObj.length > 0"
+                    }
+                ],
+                "failure": [ {
+                    "name": "closePanel"
+                } ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMsg"
+                } ]
+            },
+            "deps": "js/Crt1AddTestCaseService"
+        },
+        "createTraceLink": {
+            "actionType": "TcSoaService",
+            "serviceName": "AWS2-2018-12-RequirementsManagement",
+            "method": "createTracelinks",
+            "inputData": {
+                "input": "{{function:getTracelinkInput}}"
+            },
+            "outputData": {
+                "outputCreateRelation": "output"
+            },
+            "deps": "js/Crt1AddTestCaseService",
+            "events": {
+                "success": [
+                    {
+                        "name": "closePanel",
+                        "condition": "!subPanelContext.panelPinned === true && !(data.sharedData.selObj && data.sharedData.selObj.length > 0)"
+                    },
+                    {
+                        "name": "awPanel.loadNextValues",
+                        "condition": "subPanelContext.panelPinned === true"
+                    },
+                    {
+                        "name": "TestCaseTableRefresh"
+                    }
+
+                ],
+                "failure": [ {
+                    "name": "closePanel"
+                } ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMsg"
+                } ]
+            }
+        },
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            }
+        },
+        "TestCaseTableRefresh": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "crt1TestCoverage.resetColumnFilter",
+                    "eventData": {
+                        "PanelPinned": "{{subPanelContext.panelPinned}}"
+                    }
+                },
+                {
+                    "name": "testCaseCoverageTable.setPanelPinnedState",
+                    "eventData": {
+                        "PanelPinned": "{{subPanelContext.panelPinned}}"
+                    }
+                } ]
+            }
+        },
+        "createRelationForPaletteOrSearch": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "addObject.addObjectPostProcess"
+                } ]
+            }
+        },
+        "openObject": {
+            "actionType": "Navigate",
+            "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+            "navigationParams": {
+                "uid": "{{data.createdObject.uid}}"
+            }
+        },
+        "addTestCase": {
+            "actionType": "JSFunction",
+            "method": "addTestCase",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Crt1AddTestCaseService"
+        },
+        "removeTestCase": {
+            "actionType": "JSFunction",
+            "method": "removeTestCase",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Crt1AddTestCaseService"
+        },
+        "setActiveView": {
+            "actionType": "JSFunction",
+            "method": "resetActiveView",
+            "inputData": {
+                "stateName": "{{data.activeState}}",
+                "destPanelId": "AddObjectPrimarySub"
+            },
+            "outputData": {
+                "activeState": ""
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "getElementFromRev":{
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceBom-2022-06-OccurrenceManagement",
+            "method": "getOccurrences4",
+            "inputData": {
+                "inputData": {
+                    "product": "{{function:getSelectedSpecification}}",
+                    "requestPref": {}
+                }
+            },
+            "outputData": {
+                "aceElement": "parentOccurrence.occurrence",
+                "parentProductContext":"parentProductContext"        
+            },
+            "deps": "js/Crt1AddTestCaseService"
+        },
+        "addTestCasetoSpec":{
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceBom-2019-06-OccurrenceManagement",
+            "method": "addObject2",
+            "inputData": {
+                "input":  {
+                    "objectsToBeAdded": ["{{function:getCreatedTestCase}}"],
+                    "parentElement": "{{data.aceElement}}",
+                    "inputCtxt": {
+                        "productContext": "{{data.parentProductContext}}"                        
+                    },                    
+                    "requestPref": {
+                        "displayMode": [ "Tree" ]
+                    },
+                    "siblingElement": "",                   
+                    "addObjectIntent": "",                    
+                    "numberOfElements": 1                    
+                }
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "closePanel",
+                        "condition": "!subPanelContext.panelPinned === true"
+                    }
+                ]
+            },
+            "deps": "js/Crt1AddTestCaseService"
+        }
+    },
+    "messages": {
+        "SOAFailureMsg": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "onEvent": [    
+        {
+            "eventId": "crt1TestCoveragePage.getElementFromRev",
+            "action": "getElementFromRev",
+            "cacheEventData": true
+        },
+        
+        {
+            "eventId": "crt1NewTest.addTestSpec",
+            "action": "addTestCase",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "addObject.objectcreated",
+            "action": "createTraceLink"
+        },
+        {
+            "eventId": "addObject.addObjectPostProcess",
+            "action": "createTraceLink"
+        },
+        {
+            "eventId": "closePanel",
+            "action": "closePanel"
+        },
+        {
+            "eventId": "awPanel.reveal",
+            "action": "reveal"
+        },
+        {
+            "eventId": "createTracelink.openObject",
+            "action": "openObject",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "TestCaseTableRefresh",
+            "action": "TestCaseTableRefresh"
+        }
+    ],
+    "dataProviders": {
+        "getAddedTestCaseProvider": {
+            "commandsAnchor": "crt1TestSpecCellCmds"
+        }
+    },
+    "functions": {
+        "getSelectedSpecification": {
+            "functionName": "getSelectedSpecification",
+            "parameters": [
+                "{{data}}",
+                "{{subPanelContext.selectionData.selected}}"
+            ]
+        },
+        "getCreatedTestCase": {
+            "functionName": "getCreatedTestCase",
+            "parameters": [
+                "{{data}}"
+            ]
+        },        
+        "getTracelinkInput": {
+            "functionName": "getTracelinkInput",
+            "parameters": [
+                "{{data}}",
+                "{{subPanelContext.selectionData.selected}}"
+            ]
+        },
+        "getCreateInput": {
+            "functionName": "getCreateInput",
+            "parameters": [
+                "{{data}}",
+                "{{addPanelState.creationType}}",
+                "{{editHandlers.addPanelEditHandler}}"
+            ]
+        },
+        "processSoaResponseForBOTypes": {
+            "functionName": "processSoaResponseForBOTypes",
+            "parameters": [
+                "{{data}}"
+            ],
+            "deps": "js/Crt1AddTestCaseService"
+        }
+    },
+    "data": {
+        "sharedData": {
+            "initialValues": {
+                "activeView": "Crt1AddTestCase"
+            },
+            "meta": {}
+        },
+        "specSectionCommands": "aw_addSpecCellCommand",
+        "openonCreate": {
+            "displayName": "{{i18n.openonCreate}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": false,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "addPanelState": {
+            "initialValues": {
+                "creationType": "",
+                "sourceObjects": "",
+                "selectedTab": ""
+            },
+            "meta": {}
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "AddObjectPrimarySub",
+                "context": {}
+            },
+            "meta": {}
+        },
+        "projectState": {
+            "initialValues": {
+                "selectedProjects": [],
+                "triggerAssign": false
+            },
+            "meta": {
+                "selectedProjects": {
+                    "field": "true",
+                    "type": "OBJECT"
+                },
+                "triggerAssign": {
+                    "field": "true",
+                    "type": "BOOLEAN"
+                }
+            }
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "conditions": {
+        "crt1MajorMinorVersion": {
+            "expression": "ctx.tcSessionData.tcMajorVersion > 13 || ctx.tcSessionData.tcMajorVersion === 13 && ctx.tcSessionData.tcMinorVersion >= 2"
+
+        },
+        "isProjectViewActive": {
+            "expression": "data.activeView === 'AssignProjectSub'"
+
+        },
+        "isAddSpecViewActive": {
+            "expression": "data.activeView === 'Crt1AddTestSpec'"
+        },
+        "isNewTabAddButtonVisible": {
+            "expression": "addPanelState.selectedTab.view==='NewTabPageSub' && addPanelState.selectedTab.view!='PaletteTabPageSub' && addPanelState.selectedTab.tabKey!='search' && ( addPanelState.creationType )"
+        },
+        "isCheckBoxVisible": {
+            "expression": "addPanelState.selectedTab.view==='NewTabPageSub' && addPanelState.selectedTab.view!='PaletteTabPageSub' && addPanelState.selectedTab.tabKey!='search'"
+        },
+        "isPalatteTabSelection": {
+            "expression": "addPanelState.selectedTab.view==='PaletteTabPageSub' && addPanelState.sourceObjects.length > 0"
+        },
+        "isSearchTabSelection": {
+            "expression": "addPanelState.selectedTab.view!='NewTabPageSub' && addPanelState.selectedTab.view!='PaletteTabPageSub'"
+        },
+        "isActiveStateAddPanel": {
+            "expression": "data.activeState.activeView ==='AddObjectPrimarySub'"
+        }
+    },
+    "i18n": {
+        "AddTestCase": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "AddTitle": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "openonCreate": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "addTestSpec": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "removeSpec": [
+            "AnalysisRequestCommandPanelsMessages"
+        ]
+    }
+}

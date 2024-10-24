@@ -1,0 +1,240 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "loadHealthReport": {
+            "actionType": "JSFunction",
+            "method": "loadHealthReportData",
+            "inputData": {
+                "selectedPlants": "{{props.subPanelContext.context.searchState.selectedPlants}}",
+                "selectedETLServer": "{{props.subPanelContext.context.searchState.selectedETLServer}}",
+                "searchInputHealthReport":{
+                    "maxToLoad": "{{props.subPanelContext.context.searchState.maxToLoad}}",
+                    "maxToReturn": "{{props.subPanelContext.context.searchState.maxToReturn}}",
+                    "cursor": {
+                        "startIndex": "{{data.dataProviders.healthReportGridDataProvider.startIndex}}"
+                    },
+                    "searchSortCriteria": "{{data.columnProviders.healthReportGridColumnProvider.sortCriteria}}",
+                    "searchFilterFieldSortType": "{{props.subPanelContext.context.searchState.sortType}}",
+                    "searchFilterMap6": "{{props.subPanelContext.context.searchState.activeFilterMap}}"
+                }
+            },
+            "dataParsers": [
+                {
+                    "id": "etlHealthReportDataParser",
+                    "responseObjs": "searchResults"
+                }
+            ],
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "searchResults",
+                "searchResultsWithIcon": "{{function:updateSearchResults}}",
+                "dataProviders.healthReportGridDataProvider.columnConfig": "columnConfig"
+            },
+            "deps": "js/Dpv1ETLHealthService"
+        },
+        "updateHealthInfo": {
+            "actionType": "JSFunction",
+            "method": "updateHealthInfo",
+            "inputData": {
+                "searchState": "{{props.subPanelContext.context.searchState}}",
+                "gridSelection": "{{data.eventMap['healthReportGridDataProvider.selectionChangeEvent'].selectedObjects}}",
+                "dataProvider": "{{dataProviders.healthReportGridDataProvider}}",
+                "selectionModel": "{{dataProviders.healthReportGridDataProvider.selectionModel}}"
+            },
+            "deps": "js/Dpv1ETLHealthService"
+        },
+        "selectTableRow":{
+            "actionType": "JSFunction",
+            "method": "selectTableRow",
+            "inputData": {
+                "healthInfo": "{{props.subPanelContext.context.searchState.healthInfo}}",
+                "dataProvider": "{{dataProviders.healthReportGridDataProvider}}"
+            },
+            "deps": "js/Dpv1ETLHealthService"
+        }
+    },
+    "data": {},
+    "onEvent": [
+        {
+            "eventId": "healthReportGridDataProvider.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "updateHealthInfo"
+        },
+        {
+            "eventId": "healthReportGridDataProvider.modelObjectsUpdated",
+            "action": "selectTableRow"
+        }
+    ],
+    "dataProviders": {
+        "healthReportGridDataProvider": {
+            "action": "loadHealthReport",
+            "selectionModelMode": "single",
+            "selectionModel": {
+                "multiSelectEnabled": false
+            },
+            "inputData": {
+                "selectionModel": "{{subPanelContext.selectionModel}}"
+            },
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "commandsAnchor": "dpvetlconfigfile"
+        }    
+    },
+    "dataParseDefinitions": {
+        "etlHealthReportDataParser": {
+            "type": "etlHealthReport",
+            "props": {
+                "PlantName": {
+                    "name": "PlantName",
+                    "value": "{{response.PlantName}}",
+                    "displayValue": "{{response.PlantName}}",
+                    "type": "String"
+                },
+                "PlantID": {
+                    "name": "PlantID",
+                    "value": "{{response.PlantId}}",
+                    "displayValue": "{{response.PlantId}}",
+                    "type": "String"
+                },
+                "DeviceName": {
+                    "name": "DeviceName",
+                    "value": "{{response.DeviceName}}",
+                    "displayValue": "{{response.DeviceName}}",
+                    "type": "String"
+                },
+                "DeviceId": {
+                    "name": "DeviceId",
+                    "value": "{{response.DeviceId}}",
+                    "displayValue": "{{response.DeviceId}}",
+                    "type": "String"
+                },
+                "FailedFiles": {
+                    "name": "FailedFiles",
+                    "value": "{{response.FailedFiles}}",
+                    "displayValue": "{{response.FailedFiles}}",
+                    "type": "INTEGER"
+                },
+                "SuccessFiles": {
+                    "name": "SuccessFiles",
+                    "value": "{{response.SuccessFiles}}",
+                    "displayValue": "{{response.SuccessFiles}}",
+                    "type": "INTEGER"
+                },
+                "PartialSuccessFiles": {
+                    "name": "PartialSuccessFiles",
+                    "value": "{{response.PartialSuccessFiles}}",
+                    "displayValue": "{{response.PartialSuccessFiles}}",
+                    "type": "INTEGER"
+                },
+                "ConfigurationXML": {
+                    "name": "ConfigurationXML",
+                    "value": "{{response.ConfigXmlUrl}}",
+                    "displayValue": "{{response.ConfigXmlUrl}}",
+                    "type": "String"
+                }
+            }
+        }
+    },
+    "columnProviders": {
+        "healthReportGridColumnProvider": {
+            "frozenColumnIndex": -1,
+            "headerHeight": "LARGE",
+            "columns": [
+                {
+                    "name": "PlantName",
+                    "typeName": "String",
+                    "minWidth": 120,
+                    "width": 120,
+                    "enableColumnMenu": false,
+                    "isTableCommand": true
+                },
+                {
+                    "name": "PlantID",
+                    "typeName": "String",
+                    "maxWidth": 300,
+                    "minWidth": 140,
+                    "width": 140,
+                    "enableColumnMenu": false
+                },
+                {
+                    "name": "DeviceName",
+                    "typeName": "String",
+                    "minWidth": 140,
+                    "width": 140,
+                    "enableColumnMenu": false
+                },
+                {
+                    "name": "DeviceId",
+                    "typeName": "String",
+                    "minWidth": 180,
+                    "width": 180,
+                    "enableColumnMenu": false
+                },
+                {
+                    "name": "FailedFiles",
+                    "typeName": "Integer",
+                    "minWidth": 140,
+                    "width": 140,
+                    "enableColumnMenu": false,
+                    "isTableCommand": true
+                },
+                {
+                    "name": "SuccessFiles",
+                    "typeName": "Integer",
+                    "minWidth": 150,
+                    "width": 150,
+                    "enableColumnMenu": false,
+                    "isTableCommand": true
+                },
+                {
+                    "name": "PartialSuccessFiles",
+                    "typeName": "Integer",
+                    "minWidth": 160,
+                    "width": 160,
+                    "enableColumnMenu": false,
+                    "isTableCommand": true
+                },
+                {
+                    "name": "ConfigurationXML",
+                    "typeName": "String",
+                    "minWidth": 250,
+                    "width": 250,
+                    "enableColumnMenu": false
+                }
+            ]
+        }
+    },
+    "grids": {
+        "healthReportGrid": {
+            "dataProvider": "healthReportGridDataProvider",
+            "columnProvider": "healthReportGridColumnProvider",
+            "enableArrangeMenu": true,
+            "gridOptions": {
+                "enableGridMenu": true
+            }
+        }
+    },
+    "functions": {
+        "updateSearchResults":
+        {
+            "functionName": "updateSearchResultsWithIcon",
+            "parameters": ["typeMEProcessRevision48.svg"]
+        }
+    },
+    "messages": {
+        "noPlantSelectedMsg": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.noPlantSelectedMsg}}"
+        }
+    },
+    "i18n": {
+        "noPlantSelectedMsg":[
+            "DpvMessages"
+        ]
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    }
+}

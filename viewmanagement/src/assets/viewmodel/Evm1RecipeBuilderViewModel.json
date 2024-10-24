@@ -1,0 +1,569 @@
+{
+    "schemaVersion": "1.0.0",
+
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data": {
+        "closureRuleState": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "recipeState": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "selectionData": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "closureRuleValues": {
+            "displayName": "{{i18n.ClosureRule}}",
+            "type": "STRINGARRAY",
+            "isArray": true,
+            "dataProvider": "closureRuleProvider",
+            "isEditable": false,
+            "isEnabled": false
+        },
+        "closureRuleValuesLabel": {
+            "type": "STRING",
+            "displayName": "{{i18n.ClosureRule}}"
+        },
+        "configPanelLabel": {
+            "displayName": "{{i18n.configPanelLabel}}",
+            "type": "STRING"
+        },
+        "revisionRule": {
+            "displayName": "{{i18n.revisionRuleLabel}}",
+            "type": "STRING",
+            "isEditable": "false",
+            "labelPosition": "PROPERTY_LABEL_AT_LEFT"
+        },
+        "effecDate": {
+            "displayName": "{{i18n.dateLabel}}",
+            "type": "DATE",
+            "isEditable": "false",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "effecUnits": {
+            "displayName": "{{i18n.unitsLabel}}",
+            "type": "INTEGER",
+            "isEditable": "false",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        },
+        "variantRule": {
+            "displayName": "{{i18n.variantRuleLabel}}",
+            "type": "STRING",
+            "isEditable": "false",
+            "labelPosition": "PROPERTY_LABEL_AT_TOP"
+        },
+        "configuration": {
+            "displayName": "{{i18n.configPanelLabel}}",
+            "type": "STRING",
+            "labelPosition": "PROPERTY_LABEL_AT_LEFT",
+            "contentStyleClass": "aw-widgets-label aw-base-normal aw-graph-label"
+        },
+        "effectivityUnitSectionAllUnitsValue": {
+            "uiValue": "{{i18n.effectivityUnitSectionAllUnitsValue}}",
+            "displayName": "{{i18n.effectivityUnitSectionAllUnitsValue}}",
+            "dbValue": "-1",
+            "type": "STRING"
+        },
+        "occurrenceManagementTodayTitle": {
+            "uiValue": "{{i18n.occurrenceManagementTodayTitle}}",
+            "displayName": "{{i18n.occurrenceManagementTodayTitle}}",
+            "type": "STRING"
+        },
+        "multipleGroups": {
+            "uiValue": "{{i18n.multipleGroups}}",
+            "type": "STRING"
+        },
+        "defaultVariantRule": {
+            "displayName": "{{i18n.useNoVariantRuleLabel}}",
+            "uiValue": "{{i18n.useNoVariantRuleLabel}}",
+            "type": "STRING"
+        },
+        "inContext": {
+            "displayName": "{{i18n.evm1InContext}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": false,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        }
+    },
+
+    "selectionModels": {
+        "seedTreeSelectionModel": {
+            "selectionMode": "single"
+        },
+        "resultsTableSelectionModel": {
+            "selectionMode": "multiple"
+        },
+        "resultsTreeSelectionModel": {
+            "selectionMode": "multiple"
+        }
+    },
+
+    "dataProviders": {
+        "closureRuleProvider": {
+            "action": "getClosureRuleValues",
+            "response": "{{data.closureRuleList}}"
+        }
+    },
+
+    "actions": {
+        "getClosureRuleValues": {
+            "actionType": "JSFunction",
+            "method": "getAllClosureRules",
+            "inputData": {
+                "filter": "{{data.closureRuleValues.filterString}}",
+                "data": "{{data}}",
+                "closureRuleState": "{{data.closureRuleState}}"
+            },
+            "outputData": {
+                "closureRuleList": "closureRuleList",
+                "closureRuleState.closureRuleList": "closureRuleList"
+            },
+            "deps": "js/Evm1RecipeBuilderService"
+        },
+        "editRecipeBuilderAction": {
+            "actionType": "JSFunction",
+            "method": "editRecipeBuilder",
+            "inputData": {
+                "data": "{{data}}",
+                "eventData": "{{data.eventMap['editHandlerStateChange']}}",
+                "recipeState": "{{data.recipeState}}"
+            },
+            "outputData": {
+                "recipeState": "newRecipeState",
+                "closureRuleValues": "data.closureRuleValues",
+                "data": "data"
+            },
+            "deps": "js/Evm1EditHandlerService",
+            "events": {
+                "success": [
+                    {
+                        "condition": "data.eventMap['editHandlerStateChange'].state === 'canceling'",
+                        "name": "emv1ManageRecipeSOA",
+                        "eventData": {
+                            "manageAction": "Read"
+                        }
+                    },
+                    {
+                        "condition": "data.eventMap['editHandlerStateChange'].state === 'starting'",
+                        "name": "evm1GetClosureRules"
+                    }
+                ]
+            }
+        },
+        "generateShowResultTable": {
+            "actionType": "JSFunction",
+            "method": "generateShowResultTable",
+            "deps": "js/Evm1RecipeBuilderService",
+            "inputData": {
+                "data": "{{data}}",
+                "recipeState": "{{data.recipeState}}"
+            },
+            "outputData": {
+                "recipeState": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "view.ReciepContextUpdated",
+                    "eventData": {}
+                } ]
+            }
+        },
+        "unloadContent": {
+            "actionType": "JSFunction",
+            "method": "unloadContent",
+            "deps": "js/Evm1RecipeBuilderService",
+            "inputData": {}
+        },
+        "getClosureRules": {
+            "actionType": "TcSoaService",
+            "serviceName": "GlobalMultiSite-2007-06-ImportExport",
+            "method": "getClosureRules",
+            "inputData": {
+                "inputs": {
+                    "schemaFormat": "ALL",
+                    "scope": "ALL"
+                }
+            },
+            "outputData": {
+                "closureRuleState.closureRules": "{{function:getClosureRulesSoa}}"
+            },
+            "deps": "js/Evm1RecipeBuilderService"
+        },
+        "executeManageRecipeAction": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ViewMgmtAW-2019-12-ViewDataManagement",
+            "method": "manageRecipes3",
+            "inputData": {
+                "inputs": "{{function:getManageRecipeInput}}"
+            },
+            "policy": {
+                "types": [ {
+                        "name": "Awb0Element",
+                        "properties": [ {
+                                "name": "awb0UnderlyingObject"
+                            },
+                            {
+                                "name": "awb0Parent"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "ItemRevision",
+                        "properties": [ {
+                            "name": "item_revision_id"
+                        } ]
+                    },
+                    {
+                        "name": "WorkspaceObject",
+                        "properties": [ {
+                            "name": "owning_user"
+                        } ]
+                    },
+                    {
+                        "name": "Awb0ProductContextInfo",
+                        "properties": [ {
+                                "name": "awb0Product"
+                            },
+                            {
+                                "name": "awb0CurrentRevRule"
+                            },
+                            {
+                                "name": "awb0EffDate"
+                            },
+                            {
+                                "name": "awb0EffUnitNo"
+                            },
+                            {
+                                "name": "awb0StartEffDates"
+                            },
+                            {
+                                "name": "awb0EndEffDates"
+                            },
+                            {
+                                "name": "awb0StartEffUnits"
+                            },
+                            {
+                                "name": "awb0EndEffUnits"
+                            },
+                            {
+                                "name": "awb0EffEndItem"
+                            },
+                            {
+                                "name": "awb0CurrentVariantRule"
+                            },
+                            {
+                                "name": "awb0CurrentVariantRules"
+                            },
+                            {
+                                "name": "awb0VariantRules"
+                            },
+                            {
+                                "name": "awb0VariantRuleOwningRev"
+                            },
+                            {
+                                "name": "awb0EffectivityGroups"
+                            }
+                        ]
+                    }
+                ]
+            },
+
+            "outputData": {
+                "recipeState": "{{function:getManageRecipeResponse}}"
+            },
+            "events": {
+                "failure": [ {
+                    "condition": "errorCode.code === 26025",
+                    "name": "view.noLicense"
+                } ],
+                "success": [ {
+                    "name": "evm1InitializeBuilderConfig"
+                } ]
+            },
+            "deps": "js/Evm1RecipeBuilderService"
+        },
+        "evm1ManageRecipeReadEvent": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "emv1ManageRecipeSOA",
+                    "eventData": {
+                        "manageAction": "Read"
+                    }
+                } ]
+            }
+        },
+        "initializeBuilderConfigAction": {
+            "actionType": "JSFunction",
+            "method": "initializeBuilderConfig",
+            "inputData": {
+                "data": "{{data}}",
+                "recipeState": "{{data.recipeState}}",
+                "awp0RevRule":"{{props.subPanelContext.session.current_user_session.properties.awp0RevRule}}"
+            },
+            "outputData": {
+                "recipeState": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "evm1seedTreeDataProvider.reset"
+                } ]
+            },
+            "deps": "js/Evm1RecipeBuilderService"
+        },
+        "closureRuleProviderReset": {
+            "actionType": "dataProvider",
+            "method": "closureRuleProvider"
+        },
+        "populateConfiguration": {
+            "actionType": "JSFunction",
+            "method": "populateConfiguration",
+            "inputData": {
+                "data": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/Evm1RecipeBuilderService"
+        },
+        "evm1RevRuleChangedAction": {
+            "actionType": "JSFunction",
+            "method": "updateRevisionRuleNB",
+            "inputData": {
+                "data": "{{data}}",
+                "eventData": "{{data.eventData}}",
+                "recipeState": "{{data.recipeState}}"
+            },
+            "outputData": {
+                "recipeState": ""
+            },
+            "deps": "js/Evm1RecipeBuilderService"
+        },
+        "processNoLicense": {
+            "actionType": "JSFunction",
+            "method": "disableCommandsVisibility",
+            "inputData": {
+                "recipeState": "{{data.recipeState}}"
+            },
+            "outputData": {
+                "recipeState": ""
+            },
+            "deps": "js/Evm1RecipeBuilderService"
+        },
+        "updateDataSource": {
+            "actionType": "JSFunction",
+            "method": "addViewDataInDataSource",
+            "inputData": {
+                "data": "{{data}}",
+                "panelID": "Evm1RecipeBuilder"
+            },
+            "deps": "js/Evm1RecipeBuilderService"
+        },
+        "builderContentLoaded": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "evm1ManageRecipeReadEvent"
+                }
+            ]
+        },
+        "handleSelectionChange": {
+            "actionType": "batchJob",
+            "steps": [ 
+                {
+                    "action": "getPropertiesforSelectedObjs",
+                    "condition": "(data.selectionData.selected.length > 0 && data.selectionData.selected[0].props.evm1SourceObject!==undefined)"
+                },
+                {
+                    "action": "updateTheFocussedComponent",
+                    "condition": "data.selectionData.selected.length > 0 || (data.focussedCompId === data.selectionData.id && data.selectionData.selected.length === 0)"
+                },
+                {
+                    "action": "handleSelectionChangeForMutuallyExclusion",
+                    "condition": "data.selectionData.selected.length > 0 || (data.focussedCompId === data.selectionData.id && data.selectionData.selected.length === 0)"
+                }
+            ]
+        },
+        "updateTheFocussedComponent": {
+            "actionType": "JSFunction",
+            "method": "updateTheFocussedComponent",
+            "inputData": {
+                "localSelectionData": "{{data.selectionData}}"
+            },
+            "outputData": {
+                "focussedCompId": ""
+            },
+            "deps": "js/Evm1RecipeBuilderService"
+        },
+        "handleSelectionChangeForMutuallyExclusion": {
+            "actionType": "JSFunction",
+            "method": "handleSelectionChangeForMutuallyExclusion",
+            "inputData": {
+                "localSelectionData": "{{data.selectionData}}",
+                "parentSelectionData": "{{props.subPanelContext.selectionData}}",
+                "selectionModels": [ "{{selectionModels.seedTreeSelectionModel}}", "{{selectionModels.resultsTableSelectionModel}}", "{{selectionModels.resultsTreeSelectionModel}}" ],
+                "xrtSummaryContextObjectUid":"{{props.subPanelContext.selected.uid}}"
+            },
+            "deps": "js/Evm1RecipeBuilderService"
+        },
+        "getPropertiesforSelectedObjs": {
+            "actionType": "JSFunctionAsync",
+            "method": "getPropertiesforSelectedObjs",
+            "deps": "js/Evm1RecipeBuilderService",
+            "inputData": {
+                "data": "{{data.selectionData}}"
+
+            }
+        },
+        "updateRecipeSearchCriteria": {
+            "actionType": "JSFunction",
+            "method": "updateRecipeSearchCriteria",
+            "inputData": {
+                "recipeState": "{{data.recipeState}}",
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "recipeState": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "view.changeRecipeResultsMode",
+                        "eventData": {
+                            "viewMode": "{{data.eventData.viewMode}}"
+                        },
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            },
+            "deps": "js/Evm1RecipeBuilderService"
+        }
+    },
+
+    "onEvent": [ {
+            "eventId": "emv1ManageRecipeSOA",
+            "action": "executeManageRecipeAction",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "evm1InitializeBuilderConfig",
+            "action": "initializeBuilderConfigAction"
+        },
+        {
+            "eventId": "editHandlerStateChange",
+            "action": "editRecipeBuilderAction",
+            "condition": "dataSource.panelId === 'AwShowObjectXrt'",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "evm1ConfigPanel.configAdded",
+            "action": "populateConfiguration",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "evm1ConfigurationChanged",
+            "action": "executeManageRecipeAction",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "evm1RevRuleChanged",
+            "action": "evm1RevRuleChangedAction",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "evm1ShowExecuteRecipeResults",
+            "action": "generateShowResultTable"
+        },
+        {
+            "eventId": "view.noLicense",
+            "action": "processNoLicense"
+        },
+        {
+            "eventId": "evm1GetClosureRules",
+            "action": "getClosureRules"
+        },
+        {
+            "eventId": "view.recipeResultViewChanged",
+            "action": "updateRecipeSearchCriteria",
+            "cacheEventData": true
+        }
+    ],
+    "functions": {
+        "getManageRecipeInput": {
+            "functionName": "getManageRecipeInput",
+            "parameters": [
+                "{{data.eventData}}",
+                "{{props.subPanelContext.selected}}"
+            ]
+        },
+        "getManageRecipeResponse": {
+            "functionName": "getManageRecipeResponse",
+            "parameters": [
+                "{{data}}",
+                "{{data.recipeState}}",
+                "{{props.subPanelContext.selected.uid}}"
+            ]
+        },
+        "getRevisionRuleList": {
+            "functionName": "getRevisionRuleList",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getClosureRulesSoa": {
+            "functionName": "getClosureRulesSoa"
+        }
+    },
+    "conditions": {
+        "hasViewManagementLicense": {
+            "expression": "data.recipeState.hasViewManagementLicense"
+        },
+        "isRecipeExecuting": {
+            "expression": "data.recipeState.isRecipeExecuting"
+        },
+        "isInScopeNavCheckboxVisible": {
+            "expression": "data.recipeState.isInScopeNavigationVisible"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "builderContentLoaded",
+        "onUnmount": "unloadContent",
+        "onUpdate": [ {
+                "action": "updateDataSource",
+                "observers": [ "viewModel.closureRuleValues.displayValues", "viewModel.atomicData.recipeState" ]
+            },
+            {
+                "action": "handleSelectionChange",
+                "observers": [ "viewModel.atomicData.selectionData" ]
+            }
+        ]
+    },
+    "i18n": {
+        "inclusionRule": [ "RecipeCommandPanelsMessages" ],
+        "results": [ "RecipeCommandPanelsMessages" ],
+        "Selection": [ "RecipeCommandPanelsMessages" ],
+        "RevisionRule": [ "RecipeCommandPanelsMessages" ],
+        "ClosureRule": [ "RecipeCommandPanelsMessages" ],
+        "showResults": [ "RecipeCommandPanelsMessages" ],
+        "effectivityUnitSectionAllUnitsValue": [ "OccurrenceManagementConstants" ],
+        "occurrenceManagementTodayTitle": [ "OccurrenceManagementConstants" ],
+        "multipleGroups": [ "RecipeCommandPanelsMessages" ],
+        "useNoVariantRuleLabel": [ "OccurrenceManagementConstants" ],
+        "closureRuleValidateMessage": [ "RecipeCommandPanelsMessages" ],
+        "configPanelLabel": [ "RecipeCommandPanelsMessages" ],
+        "revisionRuleLabel": [ "RecipeCommandPanelsMessages" ],
+        "dateLabel": [ "RecipeCommandPanelsMessages" ],
+        "unitsLabel": [ "RecipeCommandPanelsMessages" ],
+        "variantRuleLabel": [ "RecipeCommandPanelsMessages" ],
+        "evm1InContext": [ "RecipeCommandPanelsMessages" ],
+        "evm1InBom": [ "RecipeCommandPanelsMessages" ],
+        "evm1Seeds": [ "RecipeCommandPanelsMessages" ]
+    }
+}

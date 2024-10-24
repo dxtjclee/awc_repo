@@ -1,0 +1,205 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "initialize": {
+            "actionType": "JSFunction",
+            "method": "initialize",
+            "inputData": {},
+            "outputData": {
+                "uploadUrl": "uploadUrl",
+                "typeFilter": "typeFilter"
+            },
+            "deps": "js/Dpv1ETLHealthService"
+        },
+        "updateETLFormData": {
+            "actionType": "JSFunction",
+            "method": "updateETLFormData",
+            "inputData": {
+                "healthInfo": "{{props.subPanelContext.searchState.healthInfo}}",
+                "parameters": "{{parameters}}"
+            },
+            "outputData": {
+                "formData": "formData",
+                "fileCount": "fileCount"
+            },
+            "deps": "js/Dpv1ETLHealthService"
+        },
+        "uploadBatchAction": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "startToShowBusy"
+                },
+                {
+                    "action": "uploadETLFiles"
+                },
+                {
+                    "action": "endUploadBatchAction"
+                }
+            ]
+        },
+        "endUploadBatchAction": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "stopToShowBusy"
+                },
+                {
+                    "action": "closePanel"
+                }
+            ]
+        },
+        "uploadETLFiles":
+        {
+            "actionType": "RESTService",
+            "serviceName": "",
+            "method": "POST",
+            "inputData":
+            {
+                "request":
+                {
+                    "method": "POST",
+                    "url": "{{data.uploadUrl}}",
+                    "headers":
+                    {
+                        "Content-type": "undefined"
+                    },
+                    "data": "{{data.formData}}"
+                }
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "uploadFilesSuccessfulMessage"
+                    }
+                ],
+                "failure": [
+                    {
+                        "message": "uploadFilesFailedMessage"
+                    }
+                ]
+            }
+        },
+        "closePanel": {
+            "actionType": "JSFunction",
+            "method": "closeDialog",
+            "inputData": {
+                "editContext" : "INFO_PANEL_CONTEXT",
+                "popupId": "{{subPanelContext.popupOptions.popupId}}"
+            },
+            "deps": "js/dialogService"
+        },
+        "startToShowBusy": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "progress.start"
+                    }
+                ]
+            }
+        },
+        "stopToShowBusy": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "progress.end"
+                    }
+                ]
+            }
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "invalidFileSelected",
+            "message": "invalidFileErrorMsg"
+        }
+    ],
+    "data": {
+        "plantInfo": {
+            "displayName": "{{i18n.plant}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "false",
+            "dbValue": "{{props.subPanelContext.searchState.healthInfo.plantName}}",
+            "dispValue": "{{props.subPanelContext.searchState.healthInfo.plantName}}"
+        },
+        "deviceInfo": {
+            "displayName": "{{i18n.device}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "false",
+            "dbValue": "{{props.subPanelContext.searchState.healthInfo.deviceName}}",
+            "dispValue": "{{props.subPanelContext.searchState.healthInfo.deviceName}}"
+        }
+    },
+    "functions": {
+    },
+    "messages": {
+        "uploadFilesSuccessfulMessage": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.Dpv1UploadFilesRequestSuccessful}}",
+            "messageTextParams": [
+                "{{data.fileCount}}"
+            ]
+        },
+        "uploadFilesFailedMessage": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.Dpv1UploadFilesRequestFailed}}",
+            "messageTextParams": [
+                "{{data.fileCount}}"
+            ]
+        },
+        "invalidFileErrorMsg": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.Dpv1UploadFilesInvalidFileError}}",
+            "navigationOptions": [
+                {
+                    "option": "Cancel",
+                    "text": "{{i18n.cancel}}",
+                    "action": "endUploadBatchAction"
+                }
+            ]
+        }
+    },
+    "conditions": {
+        "isFileSelectedForUpload": {
+            "expression": "data.fileCount > 0"
+        }
+    },
+    "i18n": {
+        "Dpv1UploadFilesTitle": [
+            "DpvMessages"
+        ],
+        "selectETLFilesToUpload": [
+            "DpvMessages"
+        ],
+        "plant": [
+            "DpvMessages"
+        ],
+        "device": [
+            "DpvMessages"
+        ],
+        "upload": [
+            "TCUICommandPanelsMessages"
+        ],
+        "Dpv1UploadFilesRequestSuccessful": [
+            "DpvMessages"
+        ],
+        "Dpv1UploadFilesRequestFailed": [
+            "DpvMessages"
+        ],
+        "Dpv1UploadFilesInvalidFileError": [
+            "DpvMessages"
+        ],
+        "cancel": [
+            "ZeroCompileCommandMessages"
+        ]
+    },
+    "lifecycleHooks": {
+        "onMount": "initialize"
+    }
+}

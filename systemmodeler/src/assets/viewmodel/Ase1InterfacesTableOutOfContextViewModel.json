@@ -1,0 +1,216 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+
+    "actions": {
+        "resetColumnConfig": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "getOrResetUIColumnConfigs4",
+            "inputData": {
+                "getOrResetUiConfigsIn": [ {
+                    "scope": "LoginUser",
+                    "scopeName": "",
+                    "clientName": "AWClient",
+                    "resetColumnConfig": true,
+                    "columnConfigQueryInfos": [ {
+                        "clientScopeURI": "{{function:getColumnConfigBasedOnSelection}}",
+                        "operationType": "",
+                        "typeNames": [
+                            "WorkspaceObject"
+                        ],
+                        "columnsToExclude": []
+                    } ],
+                    "businessObjects": [ {} ]
+                } ]
+            },
+            "events": {
+                "success": [ {
+                    "name": "primaryTable.plTable.reload"
+                } ]
+            },
+            "outputData": {
+                "dataProviders.primaryTableDataProvider.columnConfig": "columnConfigurations[0].columnConfigurations[0]"
+            },
+            "deps": "js/Ase1InterfacesUtilService"
+        },
+        "loadDataForPrimaryTable": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "operationType": "as_arranged",
+                    "clientScopeURI": "{{function:getColumnConfigBasedOnSelection}}"
+                },
+                "saveColumnConfigData": {
+                    "clientScopeURI": "{{function:getColumnConfigBasedOnSelection}}",
+                    "columnConfigId": "{{data.dataProviders.primaryTableDataProvider.columnConfig.columnConfigId}}",
+                    "columns": "{{data.dataProviders.primaryTableDataProvider.newColumns}}",
+                    "scope": "LoginUser",
+                    "scopeName": ""
+                },
+                "searchInput": {
+                    "maxToLoad": 10,
+                    "maxToReturn": 10,
+                    "providerName": "{{function:getDataProviderBasedOnSelection}}",
+                    "searchCriteria": {
+                        "dcpSortByDataProvider": "true",
+                        "selectedElements": "{{function:getSelectedElementUids}}",
+                        "revision_rule": "{{ctx.userSession.props.awp0RevRule.dbValue}}"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "searchSortCriteria": [],
+                    "startIndex": 0
+                },
+                "inflateProperties": true
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}",
+                "dataProviders.primaryTableDataProvider.columnConfig": "columnConfig"
+            },
+            "deps": "js/Ase1InterfacesUtilService"
+        },
+        "handleVMCollectionUpdateForInterfacesTable": {
+            "actionType": "JSFunction",
+            "method": "handleHtmlPanelVMCollection",
+            "deps": "js/xrtUtilities",
+            "inputData": {
+                "callback": "{{subPanelContext.callback.updateVMCollectionCallback}}",
+                "response": {
+                    "dataProvider": "{{data.dataProviders.primaryTableDataProvider}}"
+                }
+            }
+        },
+        "editEventAction": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "plTable.editStateChange",
+                    "eventData": {
+                        "state": "{{data.eventData.state}}",
+                        "dataSource": {
+                            "dataProviders": "{{data.dataProviders}}"
+                        }
+                    }
+                } ]
+            }
+        },
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}",
+                "props": "{{props}}"
+            },
+            "deps": "js/Ase1InterfacesUtilService"
+        }
+    },
+
+    "data": {},
+
+    "dataProviders": {
+        "primaryTableDataProvider": {
+            "action": "loadDataForPrimaryTable",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "selectionModelMode": "multiple",
+            "editContext": "NONE",
+            "inputData": {
+                "selectionData": "{{props.primarySelection}}"
+            },
+            "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectCellListActionCommands"
+        }
+    },
+
+    "columnProviders": {
+        "primaryTableColumnProvider": {
+            "saveColumnAndLoadAction": "loadDataForPrimaryTable",
+            "resetColumnAction": "resetColumnConfig",
+            "sortCriteria": []
+        }
+    },
+
+    "functions": {
+        "getColumnConfigBasedOnSelection": {
+            "functionName": "getColumnConfigBasedOnSelection",
+            "parameters": [
+                "{{props.subPanelContext}}"
+            ]
+        },
+        "getDataProviderBasedOnSelection": {
+            "functionName": "getDataProviderBasedOnSelection",
+            "parameters": [
+                "{{props.subPanelContext}}"
+            ]
+        },
+        "getSelectedElementUids": {
+            "functionName": "getSelectedElementUids",
+            "parameters": [
+                "{{props.subPanelContext}}"
+            ]
+        }
+    },
+
+    "grids": {
+        "primaryTable": {
+            "dataProvider": "primaryTableDataProvider",
+            "columnProvider": "primaryTableColumnProvider",
+            "addIconColumn": true,
+            "enableArrangeMenu": true,
+            "gridOptions": {
+                "useStaticFirstCol": true,
+                "enableGridMenu": true,
+                "enableSorting": true,
+                "maxRowsToShow": 10
+            }
+        }
+    },
+
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        },
+        "primary-selection": {
+            "type": "object"
+        }
+    },
+
+    "lifecycleHooks": {},
+
+    "conditions": {
+        "isPrimaryObjectSelected": {
+            "expression": "subPanelContext.selected.modelType.typeHierarchyArray.indexOf('Fnd0LogicalBlockRevision') > -1 || subPanelContext.selected.modelType.typeHierarchyArray.indexOf('Ase0LogicalElement') > -1"
+        }
+    },
+
+    "onEvent": [ {
+            "eventId": "primaryTableDataProvider.modelObjectsUpdated",
+            "cacheEventData": true,
+            "action": "handleVMCollectionUpdateForInterfacesTable"
+        },
+        {
+            "eventId": "editHandlerStateChange",
+            "cacheEventData": true,
+            "action": "editEventAction"
+        },
+        {
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        }
+    ],
+
+    "i18n": {
+        "interfacesSection": [
+            "SystemModelerConstants"
+        ],
+        "functionPortsSection": [
+            "SystemModelerConstants"
+        ]
+    }
+}

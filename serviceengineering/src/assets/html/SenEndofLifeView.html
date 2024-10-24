@@ -1,0 +1,8 @@
+<aw-panel-body class="sw-section">
+    <aw-toolbar first-anchor="senEOLSectionLeft" second-anchor="senEOLSectionRight" context="props.subPanelContext.occContext" orientation="HORIZONTAL" exist-when="conditions.isEolPresentOnPart"></aw-toolbar>
+    <sen-end-of-life-list exist-when="conditions.enableListView"></sen-end-of-life-list>
+    <sen-end-of-life-table exist-when="conditions.enableTreeView"></sen-end-of-life-table>
+    <div class="sw-row demo-h-6f" align-content="center" exist-when="!conditions.isEolPresentOnPart">
+        <mfe-message sub-panel-context="data.messages.eolNotPresent"></mfe-message>
+    </div>
+</aw-panel-body>

@@ -1,0 +1,280 @@
+{
+    "schemaVersion": "1.0.0",
+    "ports": {
+        "EpBalancingSubPage_updateIndicationContext": {
+            "syncObject": {}
+        }
+    },
+    "data": {
+        "occContext": {
+            "initialValues": {
+                "selectedModelObjects": [],
+                "viewKey": "",
+                "productContextInfo": null,
+                "elementToPCIMapCount": null,
+                "supportedFeatures": null,
+                "skipReloadOnConfigParamChange": true,
+                "assignToAnotherPRView": {}
+            },
+            "meta": {}
+        },
+        "provider": {
+            "label": "{{i18n.BalancingTitle}}",
+            "priority": 2,
+            "name": "lineBalancing",
+            "clientScopeURI": "lineBalancing",
+            "nameToken": "lineBalancing"
+        },
+        "overviewContext": {
+            "tabs": [
+                {
+                    "name": "{{i18n.balancingOverviewTitle}}",
+                    "tabKey": "EpBalancingOverviewStationTilesList"
+                }
+            ]
+        },
+        "stationTilesContext": {
+            "tabs": [
+                {
+                    "name": "{{i18n.stationTilesTitle}}",
+                    "tabKey": "EpBalancingStationTilesList"
+                }
+            ]
+        },
+        "operationsContext": {
+            "tabs": [
+                {
+                    "name": "{{i18n.operationsTableTitle}}",
+                    "tabKey": "EpBalancingOperationsTable"
+                }
+            ],
+            "sharedCommandAnchor": "commandBalancingTabAnchor"
+        },
+        "sequenceContext": {
+            "tabs": [
+                {
+                    "name": "{{i18n.operationsSequenceTitle}}",
+                    "tabKey": "EpBalancingOperationsSequence"
+                }
+            ],
+            "additionalHeaderComponent": "EpBalancingStationCycleTime"
+        },
+        "productBOPContext": {
+            "tabs": [
+                {
+                    "name": "{{i18n.balancingProductBOPTitle}}",
+                    "tabKey": "EpBalancingProductBOP"
+                }
+            ]
+        },
+        "awSubLocationPref": {
+            "hideRightWall": true
+        },
+        "configurationChipsData": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "sharedSelectionData": {
+            "initialValues": {
+                "isAllocationIndicationOn": false
+            },
+            "meta": {}
+        },
+        "missingSourceContext": {
+            "tabs": [
+                {
+                    "name": "{{i18n.missingInSource}}",
+                    "tabKey": "EpMissingInSource"
+                }
+            ]
+        },
+        "balancingData": {
+            "initialValues": {
+                "loadedData": {
+                    "loading": true
+                },
+                "selectionData": {}
+            },
+            "meta": {}
+        }
+    },
+    "actions": {
+        "handleCompleteEvent": {
+            "actionType": "JSFunction",
+            "method": "handleCompleteEvent",
+            "inputData": {
+                "provider": "{{parameters.eventData}}"
+            },
+            "deps": "js/AwBaseSublocationService"
+        },
+        "hideOperations":{
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": true
+            },
+            "outputData": {
+                "hideOperations": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "initializeEPPage": {
+            "actionType": "JSFunctionAsync",
+            "method": "initializeEPPage",
+            "inputData": {
+                "provider": "{{data.provider}}"
+            },
+            "outputData": {
+                "stateContext": "stateContext",
+                "propertyPolicyId": "propertyPolicyId"
+            },
+            "deps": "js/epInitializationService"
+        },
+        "resetOperationsHeaderAndSetSelection": {
+            "actionType": "JSFunction",
+            "method": "resetOperationsHeaderAndSetSelection",
+            "inputData": {
+                "operationsTableTitle": "{{i18n.operationsTableTitle}}",
+                "operationsTableTitleWithStation": "{{i18n.operationsTableTitleWithStation}}",
+                "operationsTableTitleWithStationAndPR": "{{i18n.operationsTableTitleWithStationAndPR}}",
+                "station": "{{fields.balancingData.selectionData.station}}",
+                "processResource": "{{fields.balancingData.selectionData.processResource}}",
+                "unassigned": "{{fields.balancingData.selectionData.unassigned}}",
+                "contentPanelData": "{{data.operationsContext}}",
+                "tabKey": "EpBalancingOperationsTable"
+            },
+            "outputData": {
+                "operationsContext": ""
+            },
+            "deps": "js/epBalancingLabelsService"
+        },
+        "initializeConfigurationChips": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInAtomicData",
+            "inputData": {
+                "targetContext": "{{fields.configurationChipsData}}",
+                "updatedValues": {
+                    "ebomStructure": "{{ctx.epPageContext.ebomStructure}}",
+                    "ebomPCI": "{{ctx.epTaskPageContext.ebomPCI}}",
+                    "ebomStructureConfigFlags": "{{ctx.epTaskPageContext.ebomStructureConfigFlags}}",
+                    "mbomStructure": "{{ctx.epPageContext.mbomStructure}}",
+                    "mbomPCI": "{{ctx.epTaskPageContext.mbomPCI}}",
+                    "mbomStructureConfigFlags": "{{ctx.epTaskPageContext.mbomStructureConfigFlags}}",
+                    "processStructure": "{{ctx.epPageContext.processStructure}}",
+                    "processPCI": "{{ctx.epTaskPageContext.processPCI}}",
+                    "processStructureConfigFlags": "{{ctx.epTaskPageContext.processStructureConfigFlags}}",
+                    "rootPlant": "{{ctx.epPageContext.rootPlant}}",
+                    "plantPCI": "{{ctx.epTaskPageContext.plantPCI}}",
+                    "rootPlantConfigFlags": "{{ctx.epTaskPageContext.rootPlantConfigFlags}}",
+                    "functionalPlan": "{{ctx.epTaskPageContext.functionalPlan}}",
+                    "functionalPlanPCI": "{{ctx.epTaskPageContext.functionalPlanPCI}}",
+                    "functionalPlanConfigFlags": "{{ctx.epTaskPageContext.functionalPlanConfigFlags}}"
+                }
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "updateSharedSelectionPort": {
+            "actionType": "Sync",
+            "inputData": {
+                "port": "EpBalancingSubPage_updateIndicationContext",
+                "syncObject": {
+                    "sharedSelectionData": "{{fields.sharedSelectionData}}"
+                }
+            }
+        },
+        "initializeEPPageAndUpdateSharedSelectionPort": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "initializeEPPage"
+                },
+                {
+                    "action": "updateSharedSelectionPort"
+                },
+                {
+                    "action": "initializeConfigurationChips"
+                }
+            ]
+        },
+        "getMissingInSrcData": {
+            "actionType": "JSFunction",
+            "method": "getProperty",
+            "inputData": {
+                "name": "{{ctx.epPageContext.loadedObject.uid}}",
+                "propertyName": "accountabilityResponse"
+            },
+            "outputData": {
+                "missingInSrc": "result.missingInSrc",
+                "isMissingInSource": "result.missingInSrc.length"
+            },
+            "deps": "js/epObjectPropertyCacheService"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "ep.pageContext.changed",
+            "action": "initializeConfigurationChips"
+        },
+        {
+            "eventId": "epObjectPropertyCache.accountabilityResponseUpdated",
+            "action": "getMissingInSrcData"
+        },
+        {
+            "eventId":"ep.preSaveConfigurationEvent",
+            "action":"hideOperations"
+        },
+        {
+            "eventId": "complete",
+            "action": "handleCompleteEvent",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+                         }    
+        }
+    ],
+    "lifecycleHooks": {
+        "onMount": "initializeEPPageAndUpdateSharedSelectionPort",
+        "onUpdate": [
+            {
+                "action": "resetOperationsHeaderAndSetSelection",
+                "observers": [
+                    "viewModel.atomicData.balancingData.selectionData.station",
+                    "viewModel.atomicData.balancingData.selectionData.processResource"
+                ]
+            }
+        ]
+    },
+    "conditions": {
+        "epShowMissingTab": {
+            "expression": "data.missingInSrc.length > 0"
+        }
+    },
+    "i18n": {
+        "BalancingTitle": [
+            "BalancingMessages"
+        ],
+        "balancingOverviewTitle": [
+            "BalancingMessages"
+        ],
+        "stationTilesTitle": [
+            "BalancingMessages"
+        ],
+        "operationsTableTitle": [
+            "BalancingMessages"
+        ],
+        "operationsTableTitleWithStation": [
+            "BalancingMessages"
+        ],
+        "operationsTableTitleWithStationAndPR": [
+            "BalancingMessages"
+        ],
+        "operationsSequenceTitle": [
+            "BalancingMessages"
+        ],
+        "balancingProductBOPTitle": [
+            "BalancingMessages"
+        ],
+        "missingInSource": [
+            "assignmentIndicationMessages"
+        ]
+    }
+}

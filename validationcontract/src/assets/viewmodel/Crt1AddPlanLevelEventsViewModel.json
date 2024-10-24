@@ -1,0 +1,97 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/aw-add.directive"
+    ],
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data": {
+        "addPanelState": {
+            "initialValues": {
+                "sourceObjects": "",
+                "selectedTab": ""
+            },
+            "meta": {}
+        }
+    },
+    "actions": {
+        "createRelationForPaletteOrSearch": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "createRelations",
+            "inputData": {
+                "input": "{{function:getCreateRelationInputForPlanLevelEvents}}"
+            },
+            "deps": "js/Crt1ProgramEventTableService",
+            "events": {
+                "success": [ {
+                        "name": "closePanel",
+                        "condition": "!subPanelContext.panelPinned"
+                    },
+                    {
+                        "name": "programEventTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    }
+                ],
+                "failure": [ {
+                        "name": "closePanel",
+                        "condition": "!subPanelContext.panelPinned"
+                    },
+                    {
+                        "name": "programEventTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            }
+        },
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            }
+        }
+    },
+    "functions": {
+        "getCreateRelationInputForPlanLevelEvents": {
+            "functionName": "getCreateRelationInputForPlanLevelEvents",
+            "parameters": [
+                "{{props.subPanelContext.vrSublocationState.mselected[0]}}",
+                "{{addPanelState.sourceObjects}}",
+                "{{props.subPanelContext.selectionData.selected[0]}}"
+            ]
+        }
+    },
+    "onEvent": [ {
+        "eventId": "closePanel",
+        "action": "closePanel"
+    } ],
+    "ctx":{
+        "panelContext": null
+    },
+    "conditions": {
+        "isNewTabAddButtonVisible": {
+            "expression": "data.creationType"
+        },
+        "isNewTabSelection": {
+            "expression": "conditions.isNewTabAddButtonVisible ===  false"
+        }
+    },
+    "i18n": {
+        "AddTitle": [
+            "AnalysisRequestCommandPanelsMessages"
+        ]
+    }
+}

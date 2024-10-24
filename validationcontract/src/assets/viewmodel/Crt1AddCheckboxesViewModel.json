@@ -1,0 +1,276 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+    ],
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "lifecycleHooks": {       
+        "onMount": "registerCrt1Ctx",
+        "onUpdate": {
+            "action": "checkSelection",
+            "observers": [ "props.subPanelContext.selectionData.selected[0]" ]
+        }
+
+    },
+    "grids": {},
+    "functions": {
+        "getSelectedObj": {
+            "functionName": "getSelectedObj",
+            "parameters": [
+                "{{subPanelContext}}"
+            ]
+        }
+    },
+    "actions": {
+        "checkSelection": {
+            "actionType": "JSFunction",
+            "method": "checkSelection",
+            "inputData": {
+                "subPanelContext": "{{subPanelContext}}"
+            },
+            "outputData": {
+                "shouldRender": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "renderCheckboxes",
+                        "condition": "data.shouldRender === true"
+                    }
+                ]
+            },
+            "deps": "js/dynamicTableUtils"
+        },
+        "renderCheckboxes": {
+            "actionType": "JSFunction",
+            "method": "renderCheckboxes",
+            "inputData": {
+                "data": "{{data}}",
+                "selObj": "{{function:getSelectedObj}}",
+                "vrSublocationState":"{{subPanelContext.vrSublocationState}}"
+            },
+            "outputData": {
+                "checkBoxes": "checkBoxes",
+                "checkBoxesInfo": "checkBoxesInfo",
+                "tableList": "tableList",
+                "uid":"uid",
+                "columnConfig":"columnConfig",
+                "scopeURI":"scopeURI",
+                "typesToInclude":"typesToInclude",
+                "CountTablesLoaded":"CountTablesLoaded",
+                "objNckbxState":"objNckbxState",
+                "showChart": "showChart"
+            },
+            "events": {
+                "success": [ {
+                    "name": "Crt1VR.outputProcess"
+                } ]
+            },
+
+            "deps": "js/dynamicTableUtils"
+        },
+        "processOutput": {
+            "actionType": "JSFunction",
+            "method": "processOutput",
+            "inputData": {
+                "ckBoxes": "{{data.checkBoxesInfo}}",
+                "vrObj": "{{subPanelContext}}",
+                "columnConfig":"{{data.columnConfig}}",
+                "scopeURI":"{{data.scopeURI}}",
+                "typesToInclude":"{{data.typesToInclude}}",
+                "CountTablesLoaded":"{{data.CountTablesLoaded}}",
+                "objNckbxState":"{{data.objNckbxState}}",
+                "showChart": "{{data.showChart}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/dynamicTableUtils"
+        },
+        "updateCheckBoxInfo": {
+            "actionType": "JSFunction",
+            "method": "updateCheckBoxInfo",
+            "inputData": {
+                "ckBoxes": "{{data.checkBoxes}}",
+                "tableList": "{{data.tableList}}",
+                "vrObj": "{{props.subPanelContext}}",
+                "selObj":"{{function:getSelectedObj}}"
+            },
+            "outputData": {
+                "checkBoxesInfo": ""
+            },
+            "events": {
+                "success": [ {
+                        "name": "Crt1VR.outputProcess",
+                        "eventData": {
+                            "ckBoxEnabled": true
+                        }
+                    }
+                ]
+            },
+            "deps": "js/dynamicTableUtils"
+        },
+        "registerCrt1Ctx": {
+            "actionType": "JSFunction",
+            "method": "registerCtx",
+            "inputData": {
+                "name": "vrContext",
+                "value": {
+                    "scopeTableSelection": true
+                }
+            },
+            "deps": "js/appCtxService",
+            "events": {
+                "success": [ {
+                    "name": "renderCheckboxes"
+                } ]
+            }
+        }
+    },
+    "onEvent": [        
+    {
+        "eventId": "Crt1VR.outputProcess",
+        "cacheEventData": true,
+        "action": "processOutput"
+    },
+    {
+        "eventId": "Crt1AddCheckboxes.refreshCheckboxes",
+        "action": "renderCheckboxes"
+
+    },
+    {
+        "eventId":"renderCheckboxes",
+        "action": "renderCheckboxes"
+    }
+    ],
+    "dataProviders": {},
+    "columnProviders": {},
+    "data": {
+        "objVrState": {
+            "initialValues": {
+                "scopeSelObj": {},
+                "checkBoxesInfo": []
+            },
+            "meta": {}
+        },
+        "pieChartData":{
+            "initialValues": {
+                "secChartsData": {},
+                "topChartData": {},
+                "vrTables": {}
+            },
+            "meta": {}
+        }
+    },
+    "conditions": {
+    },
+    "ctx": {
+        "selected": null
+
+    },
+    "i18n": {
+        "AddTitle": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "PartialError": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "addAsOccurrence": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "throwErrorVRNotCreated": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "detailedInfoMessageForInvalidTypes": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Crt1TypesSection": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Crt1ProgramEventSection": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "TestResult": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Crt1ScopeSection": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Others": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Requirement": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "IAV0TestCase": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "IAV0TestProcedur": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Functionality": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Fnd0LogicalBlock": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Part": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "CAEModel": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "IAV0TestRequest": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "ProductAndTestEBOMs": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "PhysicalPart": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Att0MeasurableAttribute": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "reports": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "ShowTables": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "ConfigTableOne": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "ConfigTableTwo": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "ConfigTableThree": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "ConfigTableFour": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "ConfigTableFive": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "ConfigTableSix": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "ConfigTableSeven": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "ConfigTableEight": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "ConfigTableNine": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "ConfigTableTen": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Software": [
+            "AnalysisRequestCommandPanelsMessages"
+        ]
+    }
+}

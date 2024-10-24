@@ -1,0 +1,50 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-checkbox.directive"
+    ],
+    "actions": {
+        "Crt1ShowIssueAction": {
+            "actionType": "JSFunction",
+            "method": "showPanel",
+            "inputData": {
+                "data": {
+                    "declView": "Crt1ShowIssue",
+                    "locals": {
+                        "anchor": "previewPanel_anchor",
+                        "caption": "{{i18n.Issues}}"
+                    },
+                    "options": {
+                        "clickOutsideToClose": false,
+                        "present": "modal",
+                        "height": 853,
+                        "width": 600,
+                        "draggable": true,
+                        "isModal": false,
+                        "placement": "left-end",
+                        "reference": ".aw-layout-infoCommandbar",
+                        "detachMode": true,
+                        "subPanelContext": "{{props.subPanelContextForTooltipWithPropertyOverride}}"
+                    }
+                }
+            },
+            "outputData": {
+                "popupId": "Crt1ShowIssue"
+            },
+            "deps": "js/Crt1ShowPreviewService"
+        }
+    },
+    "data": {
+        "crt1issueIncludeData": {
+            "displayName": "{{props.subPanelContextForTooltipWithPropertyOverride.displayName}}",
+            "type": "STRING",
+            "isRequired": "false"
+        }
+    },
+    "i18n": {        
+        "Issues": [
+            "AnalysisRequestCommandPanelsMessages"
+        ]
+
+    }
+}

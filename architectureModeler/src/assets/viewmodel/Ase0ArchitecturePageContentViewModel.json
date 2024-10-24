@@ -1,0 +1,145 @@
+{
+    "schemaVersion": "1.0.0",
+
+    "actions": {
+        "restoreProductInArchitecture": {
+            "actionType": "JSFunction",
+            "method": "restoreProductInArchitecture",
+            "inputData": {},
+             "deps": "js/Ase0ArchitecturePageService"
+        },
+
+        "showDiagram": {
+            "actionType": "Navigate",
+            "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+            "navigationParams": {
+                "uid": "{{data.eventMap['saveAsDiagram.objectSaved'].diagramUid}}",
+                "spageId": "{{data.i18n.architectureModelerPageTitle}}"
+            }
+        },
+        "handleNativeArchitectureLoad": {
+            "actionType": "JSFunction",
+            "method": "handleNativeArchitectureLoad",
+            "inputData": {
+                "pageState": "{{data.pageState}}"
+            },
+            "outputData": {
+                "pageState": ""
+            },
+
+            "deps": "js/Ase0ArchitecturePageService"
+        },
+        "handleNativeArchitectureUnloaded": {
+            "actionType": "JSFunction",
+            "method": "handleNativeArchitectureUnloaded",
+            "inputData": {},
+
+            "deps": "js/Ase0ArchitecturePageService"
+        },
+        "firePwaSelectionUpdated": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "AM.PwaSelectionUpdated",
+                        "eventData": {
+                            "objectToSelect": "{{data.eventData.objectToSelect}}"
+                        }
+                    }
+                ]
+            }
+        },
+        "processSelectionChange": {
+            "actionType": "JSFunction",
+            "method": "processSelectionChange",
+            "inputData": {
+                "primarySelectionData": "{{data.primarySelectionData}}",
+                "secondarySelectionData": "{{fields.secondarySelectionData}}",
+                "selectionData": "{{subPanelContext.selectionData}}",
+                "occContext": "{{subPanelContext.context.occContext}}"
+            },
+            "outputData": {
+                "secondarySelections": ""
+            },
+
+            "deps": "js/Ase0ArchitecturePageService"
+        },
+        "updateSecondarySelections": {
+            "actionType": "JSFunction",
+            "method": "updateSecondarySelections",
+            "inputData": {
+                "secondarySelections": "{{data.secondarySelections}}",
+                "selectionData": "{{subPanelContext.selectionData}}",
+                "occContext": "{{subPanelContext.context.occContext}}"
+            },
+
+            "deps": "js/Ase0ArchitecturePageService"
+        }
+    },
+
+    "data": {
+        "pageState": {
+            "initialValues": {
+                "isModelerActive" : true,
+                "splitPanelLocation": "off"
+            },
+            "meta": {}
+        },
+        "primarySelectionData": {
+            "initialValues": {
+            },
+            "meta": {}
+        },
+        "secondarySelectionData": {
+            "initialValues": {
+            },
+            "meta": {}
+        }
+    },
+
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+
+    "onEvent": [{
+            "eventId": "saveAsDiagram.objectSaved",
+            "action": "showDiagram",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "addElement.updateSelectionInPWA",
+            "action": "firePwaSelectionUpdated",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "addElement.updatePwaDisplay",
+            "action": "firePwaSelectionUpdated",
+            "cacheEventData": true
+        }
+    ],
+    "i18n": {
+        "architectureModelerPageTitle": [
+            "ArchitectureModelerConstants"
+        ]
+    },
+
+    "lifecycleHooks": {
+        "onMount": "handleNativeArchitectureLoad",
+        "onUnmount": "handleNativeArchitectureUnloaded",
+        "onUpdate": [ {
+            "action": "processSelectionChange",
+            "observers": [ "viewModel.atomicData.primarySelectionData.amSelection", "viewModel.atomicData.secondarySelectionData.selected" ]
+        },
+        {
+            "action": "updateSecondarySelections",
+            "observers": [ "props.subPanelContext.context.occContext.selectionsToModify" ]
+        },
+        {
+            "action": "restoreProductInArchitecture",
+            "observers": [ "props.subPanelContext.context.occContext.transientRequestPref.restoreProduct" ]
+        }]
+    }
+}

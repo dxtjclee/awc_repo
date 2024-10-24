@@ -1,0 +1,301 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-chart.directive",
+        "js/aw-row.directive",
+        "js/aw-i18n.directive"
+    ],
+    "lifecycleHooks": {
+        "onMount": "getChartDataOnInit",
+        "onUnmount": "cleanUpBarChartData",
+
+        "onUpdate": {
+            "action": "getChartData",
+            "observers": [
+                "props.subPanelContext.selection[0].props.crt0ChildrenStudies.dbValues"
+            ]
+        }
+    },
+
+    "ports": {
+        "inputSearchCriteriaForSync": {
+            "syncObject": {}
+        }
+    },
+    "actions": {
+        "cleanUpBarChartData": {
+            "actionType": "JSFunction",
+            "method": "cleanUpBarChartData",
+            "deps": "js/Crt1BarChartService"
+        },
+
+        "getChartDataOnInit": {
+            "actionType": "JSFunction",
+            "method": "loadStudyObjects",
+            "inputData": {
+                "input": "{{ctx.xrtSummaryContextObject.uid}}"
+            },
+            "outputData": {
+                "ARStudyNames": "ARStudyNames",
+                "ARStudyUids": "ARStudyUids",
+                "ARStudies": "ARStudies",
+                "noRequests": "noRequests"
+            },
+            "deps": "js/Crt1BarChartService"
+        },
+        "processSyncActionForVRTrends": {
+            "actionType": "Sync",
+            "inputData": {
+                "port": "inputSearchCriteriaForSync",
+                "syncObject": "{{data.inputData}}"
+            }
+        },
+        "getChartData": {
+            "actionType": "JSFunction",
+            "method": "loadStudyObjects",
+            "inputData": {
+                "input":  "{{ctx.xrtSummaryContextObject.uid}}",
+                "data":  "{{data}}"
+
+            },
+            "outputData":{
+                "ARStudyNames" : "ARStudyNames",
+                "ARStudyUids": "ARStudyUids",
+                "ARStudies" : "ARStudies",
+                "noRequests":"noRequests",
+                "ARtotalStudies":"ARtotalStudies"
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "getParamOfStudies",
+                        "condition": "(data.ARStudyUids.length === 1 || data.ARStudyUids.length > 1) && data.ARtotalStudies === true"
+                    }
+
+                ]
+            },
+            "deps": "js/Crt1BarChartService"
+        },
+        "createChart": {
+            "actionType": "JSFunction",
+            "method": "createBarChart",
+            "inputData": {
+                "input":  "{{data}}"
+            },
+            "outputData": {
+                "pieChartProvider2_chartPoints": ""
+            },
+            "deps": "js/Crt1BarChartService"
+        },
+
+        "getParamOfStudies": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "clientScopeURI": ""
+                },
+                "searchInput": {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Att1ShowParametersProvider",
+                    "searchCriteria": {
+                        "parentUids": "{{data.ARStudies}}",
+                        "requestId":"",
+                        "separator":"#",
+                        "openedObjectUid":"{{ctx.xrtSummaryContextObject.uid}}"
+                    }
+                },
+                "inflateProperties": true
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "modelObjects": "ServiceData.modelObjects",
+                "selectedAttrProxyObjects2": []
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "Crt1BarChartViewModel.createChart"
+                    }
+
+                ]
+            }
+        },
+        "filterStudyTable": {
+            "actionType": "JSFunction",
+            "method": "filterStudyTable",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "inputData": "inputData"
+            },
+            "deps": "js/Crt1BarChartService",
+            "events": {
+                "success": [ {
+                    "condition": "data.inputData.columnFilters.length > 0",
+                    "name": "uniformParamTableForVRTrends.applySync"
+                } ]
+            }
+        },
+        "displayAll": {
+            "actionType": "JSFunction",
+            "method": "displayAll",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "inputData": "inputData"
+            },
+            "deps": "js/Crt1BarChartService",
+            "events": {
+                "success": [ {
+                    "condition": "data.inputData.columnFilters.length === 0",
+                    "name": "uniformParamTableForVRTrends.applySync"
+                } ]
+            }
+        },
+        "checkAndReloadBarChart": {
+            "actionType": "JSFunction",
+            "method": "checkAndReloadBarChart",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Crt1BarChartService"
+        },
+        "checkIfStudyORARSelected": {
+            "actionType": "JSFunction",
+            "method": "checkIfStudyORARSelected",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "inputData": "inputData"
+            },
+            "deps": "js/Crt1BarChartService",
+            "events": {
+                "success": [ {
+                    "name": "uniformParamTableForVRTrends.applySync"
+                } ]
+            }
+        },
+        "changeSelection": {
+            "actionType": "JSFunction",
+            "method": "handleSelectionChange",
+            "inputData": {
+                "data": "{{data.eventData}}",
+                "subPanelContext":"{{subPanelContext}}"
+            },
+            "deps": "js/Crt1BarChartService"
+        }
+
+    },
+    "data": {
+        "chartProviders" : {
+            "pieChartProvider2": {
+                "chartType": "column",
+                "chartColorOverrideClass":"aw-verificationManagement-chartStatusColor",
+                "loadDataAction": "getChartData",
+                "chartConfig": {
+                    "isChartZoomable": true,
+                    "isYAxisLinearOrLogarithmic": "linear",
+                    "xAxisLabel": "",
+                    "yAxisLabel": "",
+                    "isDataLabelOnChartEnabled": true
+                }
+            }
+        }
+    },
+    "conditions": {
+        "showMsgWhenOutputParamNotPresent": {
+            "expression": "data.noRequests === false && data.selectedAttrProxyObjects2 && !data.pieChartProvider2_chartPoints"
+        },
+        "showMsgWhenDataNotPresentInTestIterTable": {
+            "expression": "data.noRequests === true"
+        },
+        "conditionToShowBarChart": {
+            "expression": "conditions.showMsgWhenOutputParamNotPresent === false && conditions.showMsgWhenDataNotPresentInTestIterTable === false"
+        }
+    },
+    "onEvent": [
+
+    {
+        "eventId": "Crt1BarChartViewModel.createChart",
+        "cacheEventData": true,
+        "action": "createChart"
+    },
+    {
+        "eventId": "undefined.selected",
+        "cacheEventData": true,
+        "action": "filterStudyTable"
+    },
+    {
+        "eventId": "undefined.unselected",
+        "cacheEventData": true,
+        "action": "displayAll"
+    },
+    {
+        "eventId": "editHandlerStateChange",
+        "cacheEventData": true,
+        "action": "checkAndReloadBarChart"
+    },
+    {
+        "eventId": "getParamOfStudies",
+        "action": "getParamOfStudies"
+    },
+    {
+        "eventId": "uniformParamTableForVRTrends.applySync",
+        "cacheEventData": true,
+        "action": "processSyncActionForVRTrends"
+
+    },
+    {
+        "eventId": "ObjectSet_1_Provider.selectionChangeEvent",
+        "cacheEventData": true,
+        "action": "changeSelection"
+    },
+    {
+        "eventId": "ObjectSet_1_Provider.selectionChangeEvent",
+        "cacheEventData": true,
+        "action": "checkIfStudyORARSelected"
+    }
+
+],
+"i18n": {
+    "NoResult": [
+        "AnalysisRequestCommandPanelsMessages"
+    ],
+    "Fail": [
+        "AnalysisRequestCommandPanelsMessages"
+    ],
+    "Pass": [
+        "AnalysisRequestCommandPanelsMessages"
+    ],
+    "Contents": [
+        "verificationMgmtmMessages"
+    ],
+    "Parameters": [
+        "AnalysisRequestCommandPanelsMessages"
+    ],
+    "Output": [
+        "AnalysisRequestCommandPanelsMessages"
+    ],
+    "output": [
+        "AnalysisRequestCommandPanelsMessages"
+    ],
+    "noOutputParaToDidplayChart":[
+        "AnalysisRequestCommandPanelsMessages"
+    ],
+    "noRequestsToDisplayChart":[
+        "AnalysisRequestCommandPanelsMessages"
+    ]
+}
+
+}

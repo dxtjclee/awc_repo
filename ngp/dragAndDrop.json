@@ -1,0 +1,98 @@
+{
+  "actions": {
+    "ngpDragOverAssignmentBucket": {
+      "actionType": "syncFunction",
+      "method": "dragOverAssignmentBucket",
+      "deps": "js/ngpBuildStrategyDragAndDropService"
+    },
+    "ngpDropOnAssignmentBucket": {
+      "actionType": "syncFunction",
+      "method": "dropOnAssignmentBucket",
+      "deps": "js/ngpBuildStrategyDragAndDropService"
+    },
+    "ngpDragOverBuildStrategyTable": {
+      "actionType": "syncFunction",
+      "method": "dragOverBuildStrategyTable",
+      "deps": "js/ngpBuildStrategyDragAndDropService"
+    },
+    "ngpDropOnBuildStrategy": {
+      "actionType": "syncFunction",
+      "method": "dropOnBuildStrategy",
+      "deps": "js/ngpBuildStrategyDragAndDropService"
+    },
+    "ngpDragOverAssignedPartsTable": {
+      "actionType": "syncFunction",
+      "method": "dragOverAssignedPartsTable",
+      "deps": "js/ngpBuildStrategyDragAndDropService"
+    },
+    "ngpDropOnAssignedPartsTable": {
+      "actionType": "syncFunction",
+      "method": "dropOnAssignedPartsTable",
+      "deps": "js/ngpBuildStrategyDragAndDropService"
+    },
+    "ngpDragStartAssignedPartsTable": {
+      "actionType": "syncFunction",
+      "method": "dragStartAssignedPartsTable",
+      "deps": "js/ngpBuildStrategyDragAndDropService"
+    },
+    "ngpDragEndAssignedPartsTable": {
+      "actionType": "syncFunction",
+      "method": "dragEndAssignedPartsTable",
+      "deps": "js/ngpBuildStrategyDragAndDropService"
+    }
+  },
+  "dragHandlers": {
+    "ngpDragHandlerAssignedObjectsBuildStrategy": {
+      "activeWhen": true,
+      "views": [
+        "NgpAssignedPartsTable"
+      ],
+      "dragActions": {
+        "dragStart": "ngpDragStartAssignedPartsTable",
+        "dragEnd": "ngpDragEndAssignedPartsTable"
+      }
+    }
+  },
+  "dropHandlers": {
+    "ngpDropHandlerForAssignmentBucket": {
+      "activeWhen": true,
+      "views": [
+        "NgpProductScopeTable"
+      ],
+      "dropActions": {
+        "dragOver": "ngpDragOverAssignmentBucket",
+        "drop": "ngpDropOnAssignmentBucket"
+      }
+    },
+    "dropHandlerForBuildStrategy": {
+      "activeWhen": true,
+      "views": [
+        "NgpBuildStrategyTable"
+      ],
+      "dropActions": {
+        "dragOver": "ngpDragOverBuildStrategyTable",
+        "drop": "ngpDropOnBuildStrategy"
+      }
+    },
+    "dropHandlerForAssignedParts": {
+      "activeWhen": true,
+      "views": [
+        "NgpAssignedPartsTable"
+      ],
+      "dropActions": {
+        "dragOver": "ngpDragOverAssignedPartsTable",
+        "drop": "ngpDropOnAssignedPartsTable"
+      }
+    }
+  },
+  "conditions": {
+    "allowDragFromAssignments": {
+      "expression": {
+        "$source": "ctx.mfgReadOnlyMode.readOnlyMode",
+        "$query": {
+          "$typeOf": "Mpr0PlanningScope"
+        }
+      }
+    }
+  }
+}

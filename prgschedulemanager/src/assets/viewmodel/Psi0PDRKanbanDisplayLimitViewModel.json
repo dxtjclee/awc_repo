@@ -1,0 +1,160 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "displayLimit": {
+            "displayName": "{{i18n.Psi0KanbanDisplayLimitPropertyText}}",
+            "type": "INTEGER",
+            "dbValue": "",
+            "isRequired": "true",
+            "labelPosition": "PROPERTY_LABEL_AT_TOP"
+        },
+        "pdrKanbanDefaultDisplayLimit": "20"
+    },
+    "actions": {
+        "callSetPreferenceSOA": {
+            "actionType": "TcSoaService",
+            "serviceName": "Administration-2012-09-PreferenceManagement",
+            "method": "setPreferences2",
+            "inputData": {
+                "preferenceInput": [ {
+                    "preferenceName": "AWC_Kanban_Board_Display_Limit",
+                    "values": [
+                        "{{data.PDRKanbanDisplayLimit}}"
+                    ]
+                } ]
+            },
+            "events": {
+                "success": [ {
+                        "name": "updateDisplayLimit"
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "soaFailureMessage"
+                } ]
+            }
+        },
+
+        "updateDisplayLimit": {
+            "actionType": "JSFunction",
+            "method": "updateDisplayLimit",
+            "inputData": {
+                "searchState": "{{props.subPanelContext.searchState}}",
+                "data": "{{data.displayLimit.dbValue}}"
+            },
+            "deps": "js/PrgDelKanbanDisplayLimitService"
+        },
+        "populateDisplayLimit": {
+            "actionType": "JSFunction",
+            "method": "populateDisplayLimit",
+            "inputData": {
+                "data": "{{data}}",
+                "fields": "{{fields}}"
+            },
+            "deps": "js/PrgDelKanbanDisplayLimitService"
+        },
+        "updateDisplayLimitPreference": {
+            "actionType": "JSFunction",
+            "method": "updateDisplayLimitPreference",
+            "inputData": {
+                "value": "{{data.displayLimit.dbValue}}"
+            },
+            "outputData": {
+                "PDRKanbanDisplayLimit": ""
+            },
+            "deps": "js/PrgDelKanbanDisplayLimitService",
+            "events": {
+                "success": [ {
+                    "name": "callSetPreferenceSOA"
+                } ]
+            }
+        },
+        "resetDisplayLimit": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "resetValueInPanel"
+                },
+                {
+                    "action": "resetDisplayLimitPreference"
+                }
+            ]
+        },
+        "resetValueInPanel": {
+            "actionType": "JSFunction",
+            "method": "populateDisplayLimit",
+            "inputData": {
+                "data": "{{data}}",
+                "fields": "{{fields}}",
+                "newValue": "{{data.pdrKanbanDefaultDisplayLimit}}"
+            },
+            "deps": "js/PrgDelKanbanDisplayLimitService"
+        },
+        "resetDisplayLimitPreference": {
+            "actionType": "JSFunction",
+            "method": "updateDisplayLimitPreference",
+            "inputData": {
+                "value": "{{data.pdrKanbanDefaultDisplayLimit}}"
+            },
+            "outputData": {
+                "PDRKanbanDisplayLimit": ""
+            },
+            "deps": "js/PrgDelKanbanDisplayLimitService",
+            "events": {
+                "success": [ {
+                    "name": "callSetPreferenceSOA"
+                } ]
+            }
+        }
+    },
+    "onEvent": [ {
+            "eventId": "callSetPreferenceSOA",
+            "action": "callSetPreferenceSOA"
+        },
+        {
+            "eventId": "updateDisplayLimitPreference",
+            "action": "updateDisplayLimitPreference"
+        },
+        {
+            "eventId": "updateDisplayLimit",
+            "action": "updateDisplayLimit"
+        }
+    ],
+    "conditions": {
+        "isValidToShowSetButton": {
+            "expression": "data.displayLimit.dbValue > 0"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "populateDisplayLimit"
+    },
+    "preferences": [
+        "AWC_Kanban_Board_Display_Limit"
+    ],
+    "messages": {
+        "soaFailureMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "i18n": {
+        "Settings": [
+            "PrgScheduleManagerMessages"
+        ],
+        "setButtonText": [
+            "PrgScheduleManagerMessages"
+        ],
+        "Psi0KanbanDisplayLimitPropertyText": [
+            "PrgScheduleManagerMessages"
+        ],
+        "Psi0ResetButtonText": [
+            "PrgScheduleManagerMessages"
+        ]
+    }
+}

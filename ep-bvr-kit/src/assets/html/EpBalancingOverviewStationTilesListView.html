@@ -1,0 +1,9 @@
+<mfe-loading-message exist-when="conditions.loading"></mfe-loading-message>
+<div class="sw-column w-12 aw-epBalancing-stationTileList aw-epBalancing-overviewStationTileList" exist-when="!conditions.loading">
+    <aw-scrollpanel class="sw-column w-12 aw-epBalancing-processResourceTileList">
+        <div aw-repeat="station : props.subPanelContext.balancingData.loadedData.balancingStations">
+            <ep-balancing-overview-station-tile vmo="station" balancing-data="props.subPanelContext.balancingData">
+            </ep-balancing-overview-station-tile>
+        </div>
+    </aw-scrollpanel>
+</div>

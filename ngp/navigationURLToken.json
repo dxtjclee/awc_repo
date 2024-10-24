@@ -1,0 +1,79 @@
+[
+  {
+    "conditions": {
+      "$and": [
+        {
+          "modelType.typeHierarchyArray": {
+            "$in": [
+              "Mpr0ManufacturingElement",
+              "Mpr0BaseOperation"
+            ]
+          }
+        }
+      ]
+    },
+    "navigations": {
+      "navigateTo": "information",
+      "navigationParams": {
+        "uid": "{{navContext.vmo.uid}}"
+      }
+    }
+  },
+  {
+    "conditions": {
+      "$and": [
+        {
+          "modelType.typeHierarchyArray": {
+            "$in": [
+              "Mpr0BuildElement"
+            ]
+          }
+        }
+      ]
+    },
+    "navigations": {
+      "navigateTo": "buildStrategy",
+      "navigationParams": {
+        "uid": "{{navContext.vmo.uid}}"
+      }
+    }
+  },
+  {
+    "conditions": {
+      "$and": [
+        {
+          "modelType.typeHierarchyArray": {
+            "$in": [
+              "Mpr0Activity"
+            ]
+          }
+        }
+      ]
+    },
+    "navigations": {
+      "navigateTo": "workunitBuildup",
+      "navigationParams": {
+        "uid": "{{navContext.vmo.uid}}"
+      }
+    }
+  },
+  {
+    "conditions": {
+      "$and": [
+        {
+          "modelType.typeHierarchyArray": {
+            "$in": [
+              "Mpr0ProcessElementBase"
+            ]
+          }
+        }
+      ]
+    },
+    "navigations": {
+      "navigateTo": "operations",
+      "navigationParams": {
+        "uid": "{{navContext.vmo.uid}}"
+      }
+    }
+  }
+]

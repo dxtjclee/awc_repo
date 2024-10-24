@@ -1,0 +1,164 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-chart.directive",
+        "js/aw-row.directive",
+        "js/aw-i18n.directive"
+    ],
+    "ports": {
+        "inputColumnFiltersForSync": {
+            "syncObject": {}
+        }
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "actions": {
+        "processSyncActionForVR": {
+            "actionType": "Sync",
+            "inputData": {
+                "port": "inputColumnFiltersForSync",
+                "syncObject": "{{data.inputData}}"
+            }
+        },
+        "createPieChart": {
+            "actionType": "JSFunction",
+            "method": "createPieChart",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "pieChartProvider1_chartPoints": ""
+            },
+            "deps": "js/Crt1ChartService"
+        },
+        "filterTable": {
+            "actionType": "JSFunction",
+            "method": "filterTable",
+            "inputData": {
+                "data": "{{data}}",
+                "chartProp": "{{props.subPanelContext.context.vrSublocationState}}"
+            },
+            "outputData": {
+                "inputData": "inputData"
+            },
+            "deps": "js/Crt1ChartService",
+            "events": {
+                "success": [ {
+                    "condition": "data.eventMap[ 'undefined.selected' ].seriesName === data.i18n.Parameters && data.inputData.columnFilters.length > 0",
+                    "name": "uniformParamTableForVR.applySync"
+                } ]
+            }
+        },
+        "displayAll": {
+            "actionType": "JSFunction",
+            "method": "displayAll",
+            "inputData": {
+                "data": "{{data}}",
+                "chartProp": "{{props.subPanelContext.context.vrSublocationState}}"
+            },
+            "outputData": {
+                "inputData": "inputData"
+            },
+            "deps": "js/Crt1ChartService",
+            "events": {
+                "success": [ {
+                    "condition": "data.eventMap[ 'undefined.unselected' ].seriesName === data.i18n.Parameters && data.inputData.columnFilters.length === 0",
+                    "name": "uniformParamTableForVR.applySync"
+                } ]
+            }
+        },
+        "reloadTableForParameterProject": {
+            "actionType": "JSFunction",
+            "method": "reloadTableForParameterProject",
+            "inputData": {
+                "data":"{{data}}",
+                "subPanelContext": "{{subPanelContext}}"
+            },
+            "deps": "js/Crt1ChartService"
+        }
+    },
+    "functions": {
+    },
+    "data": {
+        "chartProviders" : {
+            "pieChartProvider1": {
+                "chartType": "pie",
+                "chartColorOverrideClass":"aw-verificationManagement-chartStatusColor",
+
+                "chartConfig": {
+                    "isChartZoomable": true,
+                    "isYAxisLinearOrLogarithmic": "logarithmic",
+                    "xAxisLabel": "",
+                    "yAxisLabel": "",
+                    "isDataLabelOnChartEnabled": true
+                }
+            }
+        }
+    },
+    "onEvent":
+    [
+        {
+            "eventId": "undefined.selected",
+            "cacheEventData": true,
+            "action": "filterTable"
+        },
+        {
+            "eventId": "undefined.unselected",
+            "cacheEventData": true,
+            "action": "displayAll"
+        },
+        {
+            "eventId": "uniformParamTable.processResponse",
+            "cacheEventData": true,
+            "action": "createPieChart"
+        },
+        {
+            "eventId": "uniformParamTableForVR.applySync",
+            "cacheEventData": true,
+            "action": "processSyncActionForVR"
+        },
+        {
+            "eventId": "editHandlerStateChange",
+            "cacheEventData": true,
+            "action": "reloadTableForParameterProject"
+        }
+    ],
+    "conditions": {
+        "showParaMessageString": {
+            "expression": "( data.pieChartProvider1_chartPoints && data.pieChartProvider1_chartPoints[0].keyValueDataForChart[0].value === 0 && data.pieChartProvider1_chartPoints[0].keyValueDataForChart[1].value === 0 && data.pieChartProvider1_chartPoints[0].keyValueDataForChart[2].value === 0) || (!data.pieChartProvider1_chartPoints)"
+        },
+        "showParaChart" : {
+            "expression": "!conditions.showParaMessageString && data.pieChartProvider1_chartPoints && data.pieChartProvider1_chartPoints[0] && data.pieChartProvider1_chartPoints[0].keyValueDataForChart[0].value != -1"
+        }
+    },
+    "i18n": {
+
+        "noOutputParaToDidplayChart": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "NoResult": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Fail": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Pass": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Contents": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Parameters": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Output": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "output": [
+            "AnalysisRequestCommandPanelsMessages"
+        ]
+    }
+}

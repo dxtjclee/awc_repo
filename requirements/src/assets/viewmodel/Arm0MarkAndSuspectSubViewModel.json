@@ -1,0 +1,105 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "actions":{
+        "updateDownstreamLinkSelection":{
+            "actionType": "JSFunction",
+            "method": "updateDownstreamLinkSelection",
+            "deps": "js/Arm0MarkAndSuspect",
+            "inputData": {
+                "data": "{{data}}",
+                "subPanelContext": "{{subPanelContext}}"
+            },
+            "events":
+            {
+                "success":
+                [
+                  {
+                    "name":"Arm0MarkAndSuspectMain.refreshDataProvider"
+                   }
+                 ]
+            }
+        },
+        "updateSelection": {
+            "actionType": "JSFunction",
+            "method": "updateSelection",
+            "deps": "js/Arm0MarkAndSuspect",
+            "inputData": {
+                "data": "{{data}}",
+                "subPanelContext": "{{subPanelContext}}"
+            }
+        },
+        "refreshTracelinkDataProvider": {
+            "actionType": "dataProvider",
+            "method": "tracelinkObjects"
+        },
+        "arm0EnableMultiSelectCommandAction": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "tracelinkObjects.multiSelectModeAction",
+                    "eventData": {
+                        "multiSelect": true
+                    }
+                } ]
+            }
+        },
+        "callRefreshDataProvider": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "refreshTracelinkDataProvider"
+                },
+                {
+                    "action": "arm0EnableMultiSelectCommandAction"
+                } ]
+        }
+    },
+    "dataProviders": {
+        "tracelinkObjects": {
+            "response": "{{props.subPanelContext.arrTracelinkedItems}}",
+            "selectionModelMode": "multiple"
+        }
+    },
+    "data": {
+    },
+    "onEvent":
+    [
+        {
+            "eventId": "Arm0MarkAndSuspectSub.refreshTracelinkDataProvider",
+            "action": "refreshTracelinkDataProvider"
+        },
+        {
+            "eventId": "Arm0MarkAndSuspectSub.arm0EnableMultiSelectCommandAction",
+            "action": "arm0EnableMultiSelectCommandAction"
+        },
+        {
+            "eventId": "Arm0MarkAndSuspectSub.updateSelection",
+            "action": "updateSelection"
+        },
+        {
+            "eventId":"Arm0MarkAndSuspectSub.callRefreshDataProvider",
+            "action": "callRefreshDataProvider"
+        }
+    ],
+    "i18n": {
+          "notifyLinks": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "UpdateSelection":[
+            "RequirementsCommandPanelsMessages"
+        ]
+    },
+    "props": {
+        "sub-panel-context":{
+            "type": "object"
+        }
+    },
+    "lifecycleHooks": {
+        "onInit":"callRefreshDataProvider",
+        "onUpdate":[{
+            "action": "callRefreshDataProvider",
+            "observers": [ "props.subPanelContext.arrTracelinkedItems" ]
+        }]
+    }
+}

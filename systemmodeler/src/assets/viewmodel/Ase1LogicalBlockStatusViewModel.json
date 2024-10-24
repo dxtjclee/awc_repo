@@ -1,0 +1,60 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "actions": {
+        "init": {
+            "actionType": "JSFunctionAsync",
+            "deps": "js/adapterService",
+            "method": "getAdaptedObjects",
+            "inputData":{
+                "sourceObjects": [ "{{subPanelContext.selected}}" ]
+            },
+            "outputData": {
+                "sourceObjs": ""
+            }
+        },
+        "loadPropsAndLovVals": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "loadProperties"
+                },
+                {
+                    "action": "loadSteps"
+                }
+            ]
+        },
+        "loadProperties": {
+            "actionType": "JSFunction",
+            "deps": "soa/dataManagementService",
+            "method": "getProperties",
+            "inputData":{
+                "uids": ["{{data.sourceObjs[0].uid}}"],
+                "propNames": [ "{{data.propName}}" ]
+            }
+        },
+        "loadSteps":
+        {
+            "actionType": "JSFunctionAsync",
+            "method": "getStates",
+            "inputData": {
+                "selectedObj": "{{data.sourceObjs[0]}}",
+                "propName": "{{data.propName}}"
+            },
+            "outputData": {
+                "steps": ""
+            },
+            "deps": "js/Ase1LogicalBlockStatusService"
+        }
+    },
+    "data": {
+        "propName": "seg0State"
+    },
+    "lifecycleHooks": {
+        "onMount": "init",
+        "onUpdate": [{
+            "action": "loadPropsAndLovVals",
+            "observers": [ "viewModel.sourceObjs" ]
+        }]
+    },
+    "onEvent": []
+}

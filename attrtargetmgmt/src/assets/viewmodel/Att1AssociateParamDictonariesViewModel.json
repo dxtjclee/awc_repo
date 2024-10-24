@@ -1,0 +1,132 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/aw-add.directive",
+        "js/visible-when.directive",
+        "js/aw-form.directive"
+    ],
+    "actions": {
+        "createRelationForPaletteOrSearch":
+        {
+            "actionType": "JSFunction",
+            "method": "updateCreateTrigger",
+            "inputData": {
+                "triggerCreate": "{{data.triggerCreate}}",
+                "value": true
+            },
+            "outputData": {
+                "triggerCreate": "triggerCreate"
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "closePanel":
+        {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData":
+            {
+                 "events":
+                 [
+                     {
+                        "name": "complete",
+                        "eventData":
+                        {
+                            "source": "toolAndInfoPanel"
+                        }
+                    },
+                    {
+                        "condition": "ctx.xrtSummaryContextObject.modelType.typeHierarchyArray.indexOf( 'Att1ParameterPrjElement' ) > -1",
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{ctx.xrtSummaryContextObject}}"
+                            ]
+                        }
+                    }
+
+                 ]
+            }
+        },
+        "setInputForRegisterPanelContext": {
+            "actionType": "JSFunction",
+            "method": "setTargetObject",
+            "inputData": {
+                "selectedObj" : "{{ctx.xrtSummaryContextObject}}"
+            },
+            "outputData":{
+                "addObjectData" :""
+            },
+            "events": {
+                "success": [ {
+                    "name": "att1AssociateParamDic.registerPanelContext"
+                } ]
+            },
+            "deps": "js/Att1AssociateParamDictonariesService"
+        },
+        "registerTargetInPanelContext": {
+            "actionType": "JSFunction",
+            "method": "registerCtx",
+            "deps": "js/appCtxService",
+            "inputData": {
+                "name": "panelContext",
+                "value": {
+                    "target": "{{data.addObjectData.target}}"
+                }
+            }
+        }
+    },
+    "data":{
+        "typeFilter":"Att0ParamDictionary",
+        "relationType":"Att0HasParamDictionary",
+        "triggerCreate": {
+            "dbValue": false,
+            "type": "BOOLEAN"
+        },
+        "addPanelState": {
+            "initialValues": {
+                "sourceObjects": "",
+                "selectedTab": ""
+            },
+            "meta": {}
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "awPanel.reveal",
+            "action": "setInputForRegisterPanelContext"
+        },
+        {
+            "eventId": "cdm.relatedModified",
+            "action": "closePanel"
+        },
+        {
+            "eventId": "gwt.SubLocationContentSelectionChangeEvent",
+            "action": "closePanel"
+        },
+        {
+            "eventId": "att1AssociateParamDic.registerPanelContext",
+            "action": "registerTargetInPanelContext"
+        }
+    ],
+    "conditions": {
+        "isAddButtonVisible":
+        {
+            "expression":" addPanelState.sourceObjects.length > 0 "
+        }
+    },
+    "i18n": {
+        "add": [ "Att1AttrMappingMessages" ]
+    },
+    "ctx": {
+        "xrtSummaryContextObject":{
+            "type": "object"
+        },
+        "panelContext":{
+            "type": "object"
+        }
+    }
+}

@@ -1,0 +1,14 @@
+<aw-command-panel caption="i18n.psi0ReplaceRevisionCommandTitle">
+    <aw-break></aw-break>
+    <aw-panel-body>
+            <aw-panel-section caption="i18n.psi0Revisions">
+            </aw-panel-section>
+            <aw-list dataprovider="data.dataProviders.getRevisionsProvider" >
+                <aw-default-cell vmo="item"></aw-default-cell>
+            </aw-list>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button action="replaceRevision" enable-when="conditions.isRevisionSelected"><aw-i18n>i18n.psi0Replace</aw-i18n></aw-button>
+    </aw-panel-footer>
+
+</aw-command-panel>

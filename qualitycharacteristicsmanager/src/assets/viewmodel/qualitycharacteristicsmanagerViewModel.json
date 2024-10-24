@@ -1,0 +1,45 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-native-sublocation.directive",
+        "js/aw.qualityCharacteristicsManager.sublocation.controller"
+
+    ],
+    "data": {
+        "_sublocation": {
+            "name": "qualitycharacteristicsmanager",
+            "label": {
+                "source": "/i18n/qualitycharacteristicsmanagerMessages",
+                "key": "Specifications"
+            },
+            "clientScopeURI": "Aqc0CharSpecUri",
+            "nameToken": "qualitycharacteristicsmanager",
+            "policy": "/policies/qualitycharacteristicsmanagerPropertyPolicy.json",
+            "viewBase": "Aqc0CharSpec",
+            "defaultDisplayMode":"SummaryView",
+            "selectionQueryParamKey": "s_uid",
+            "viewModes": {
+                "SummaryView": {
+                    "primaryWorkArea": "list",
+                    "secondaryWorkArea": true
+                },
+                "ListView":{
+                    "primaryWorkArea":"list",
+                    "secondaryWorkArea":false
+                },
+                "ImageView": {
+                    "primaryWorkArea": "image",
+                    "secondaryWorkArea": false
+                }
+            },
+            "provider": {
+                "crumbs": []
+            }
+        }
+    },
+    "onEvent": [],
+
+    "actions": {},
+
+    "conditions": {}
+}

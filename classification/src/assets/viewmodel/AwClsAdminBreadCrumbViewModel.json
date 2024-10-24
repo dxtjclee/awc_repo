@@ -1,0 +1,136 @@
+{
+    "schemaVersion": "1.0.0",
+    "lifecycleHooks": {
+        "onMount": "initialize",
+        "onUpdate": [{
+            "action": "buildTitle",
+            "observers": [
+                "props.subPanelContext.searchState.totalFound",
+                "props.subPanelContext.searchState.searchString"
+             ]
+        },{
+            "action": "updateClassificationSystem",
+            "observers": [ "viewModel.data.classSystem.dbValue"]
+        }]
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "ctx": {
+        "clsAdmin": {
+            "type": "object"
+        }
+    },
+    "data": {
+        "crumbTitle": null,
+        "selectedNode": null,
+        "classSystem":{
+            "displayName":"{{i18n.system}}",
+            "type":"STRING",
+            "isRequired":"true",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE",
+            "isEditable": "true",
+            "hasLov": true,
+            "dataProvider": "classificationTypes",
+            "emptyLOVEntry": false
+        },
+        "classSystemLbl": {
+            "displayName": "{{i18n.system}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "true"
+        }
+    },
+    "actions": {
+        "initialize": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "buildTitle"
+                },
+                {
+                    "action": "initializeSystemBox"
+                }
+            ]
+        },
+        "buildTitle": {
+            "actionType": "JSFunctionAsync",
+            "method": "buildTitle",
+            "inputData": {
+                "searchState": "{{props.subPanelContext.searchState}}",
+                "context": "{{ctx.locationContext['ActiveWorkspace:SubLocation']}}"
+            },
+            "outputData": {
+                "crumbTitle": ""
+            },
+            "deps": "js/AwClsAdminBreadCrumbService"
+        },
+        "updateClassificationSystem": {
+            "actionType": "JSFunction",
+            "method": "updateClassificationSystem",
+            "inputData": {
+                "classSystem": "{{data.classSystem}}",
+                "setupClassSystem": "{{ctx.clsAdmin}}"
+            },
+            "deps": "js/AwClsAdminBreadCrumbService"
+        },
+        "initializeSystemBox": {
+            "actionType": "JSFunction",
+            "method": "initializeSystemBox",
+            "inputData": {
+                "classSystem": "{{ctx.clsAdmin.classSystem}}",
+                "systemBoxData": "{{data.classSystem}}",
+                "contents": "{{i18n.advanced}}"
+            },
+            "outputData": {
+                "classSystem": ""
+            },
+            "deps": "js/AwClsAdminBreadCrumbService"
+        }
+    },
+    "dataProviders": {
+        "classificationTypes": {
+            "response": [ {
+                    "propDisplayValue": "{{i18n.advanced}}",
+                    "propInternalValue": "Advanced",
+                    "selected": true
+                },
+                {
+                    "propDisplayValue": "{{i18n.basic}}",
+                    "propInternalValue": "Basic",
+                    "selected": false
+                }
+            ],
+            "totalFound": 2
+        }
+    },
+    "conditions": {
+        "shouldShowSystem": {
+            "expression": "conditions.supported && ctx.locationContext['ActiveWorkspace:SubLocation'] !== 'clsNodes'"
+        },
+        "presetSystem": {
+            "expression": "ctx.clsAdmin.classSystem === 'Basic' && data.classSystem"
+        },
+        "boxNeedsUpdate": {
+            "expression": "data.classSystem.dbValue !== ctx.clsAdmin.classSystem"
+        },
+        "startingUpdateRequired": {
+            "expression": "!conditions.startingUrl && conditions.boxNeedsUpdate"
+        },
+        "updateRequired": {
+            "expression": "conditions.startingUrl && conditions.boxNeedsUpdate"
+        },
+        "supported": {
+            "expression": "(ctx.tcSessionData.tcMajorVersion > 14 || (ctx.tcSessionData.tcMajorVersion === 14 && ctx.tcSessionData.tcMinorVersion >= 3))"
+        }
+    },
+    "i18n":
+    {
+        "advanced": [ "ClassificationAdminMessages" ],
+        "basic": [ "ClassificationAdminMessages" ],
+        "system": [ "ClassificationAdminMessages" ]
+    },
+    "onEvent": []
+}

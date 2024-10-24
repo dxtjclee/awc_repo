@@ -1,0 +1,14 @@
+<aw-panel>
+<div class="sw-row">
+    <span class="sw-column w-5">
+        <aw-listbox prop="data.patternGroupCombo" list="data.patternGroupComboList.dbValue" action='patternGroupChanged'></aw-listbox>
+    </span>
+    <span class="sw-column w-1">
+    </span>
+    <span class="sw-column w-5">
+        <aw-listbox prop="data.patternCombo" list="data.patternComboList.dbValue" action='CalculateQuality'
+            exist-when="data.patternGroupCombo.dbValue !== '-1'"></aw-listbox>
+    </span>
+</div>
+<aw-splm-table gridid="PatternStructure"></aw-splm-table>
+</aw-panel>

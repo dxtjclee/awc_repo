@@ -1,0 +1,58 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-panel.directive",
+        "js/aw-widget.directive",
+        "js/aw-column.directive",
+        "js/aw-row.directive"
+    ],
+    "actions": {
+        "bindPropertiesForCharSpecEdit": {
+            "actionType": "JSFunction",
+            "method": "bindPropertiesForCharSpecEdit",
+            "inputData": {
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Aqc0CharSpecOperationsService"
+        },
+        "editEventAction": {
+            "actionType": "JSFunction",
+            "method": "processEditData",
+            "inputData": {
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Aqc0CharManagerUtils"
+        },
+        "clearMapOfCharGroupAndSpecificationAction": {
+            "actionType": "JSFunction",
+            "method": "clearMapOfCharGroupAndSpecification",
+            "deps": "js/Aqc0CharLibraryTreeTableService"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "bindPropertiesForCharSpecEdit"
+    },
+    "data": {
+        "objectName": {
+            "displayName": "{{props.subPanelContext.selected.props.object_name.propertyDisplayName}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "dbValue": "{{props.subPanelContext.selected.props.object_name.dbValues[0]}}",
+            "hasLov": "false",
+            "isEditable": "false",
+            "uiValue": "{{props.subPanelContext.selected.props.object_name.uiValues[0]}}"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "editHandlerStateChange",
+            "cacheEventData": true,
+            "action": "editEventAction"
+        },
+        {
+            "eventId": "aqc0NullMapEventForEditVarCharSpecs",
+            "action": "clearMapOfCharGroupAndSpecificationAction"
+        }
+
+    ]
+}

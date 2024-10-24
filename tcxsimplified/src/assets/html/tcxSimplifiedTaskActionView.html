@@ -1,0 +1,26 @@
+<div class="aw-layout-flexColumn" aw-class="{'aw-layout-include aw-workflow-performTaskPanel': subPanelContext.xrtType==='SUMMARY'}">
+    <aw-form>
+        <aw-panel-body>
+            <aw-xrt type="SAVEAS" vmo="data.formObject" exist-when="data.formObject" xrt-state="data.xrtState"></aw-xrt>
+            <aw-widget  visible-when="conditions.isTaskPerformableByUser" prop="data.comments"></aw-widget>
+            <aw-password prop="data.password" exist-when="conditions.isSecureTask"></aw-password>
+        </aw-panel-body>
+    </aw-form>
+    <aw-panel-footer visible-when="conditions.isTaskPerformableByUser">
+        <aw-button size="auto" button-type="base" action="isDirtyOnCancelEdits" visible-when="conditions.isEditInProgress">
+          <aw-i18n>i18n.cancelTaskEdit</aw-i18n>
+        </aw-button>
+        <aw-button size="auto" action="saveEdits" visible-when="conditions.isEditInProgress">
+          <aw-i18n>i18n.saveTaskEdit</aw-i18n>
+        </aw-button>
+        <aw-button size="auto" button-type="base" action="startEditSummary" visible-when="conditions.isStartEditAllowed">
+          <aw-i18n>i18n.editTask</aw-i18n>
+        </aw-button>
+        <aw-button size="auto" action="verifyCompleteAction"
+                   visible-when="!conditions.showUnableToComplete && conditions.isStartEditAllowed"
+                   enable-when="conditions.isStartEditAllowed"
+        >
+          <aw-i18n>i18n.complete</aw-i18n>
+      </aw-button>
+    </aw-panel-footer>
+  </div>

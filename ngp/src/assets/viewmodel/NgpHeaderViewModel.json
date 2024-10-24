@@ -1,0 +1,184 @@
+{
+    "schemaVersion": "1.0.0",
+    "ports": {
+        "scopeObject": {
+            "syncObject": {}
+        }
+    },
+    "data": {
+        "scope":{
+            "scopeObject": null
+        },
+        "headerTitle": ""
+    },
+    "actions": {
+        "initializeData": {
+            "actionType": "batchJob",
+            "steps":[
+                {
+                    "action": "initHeader"
+                },
+                {
+                    "action": "initializeNgp"
+                },
+                {
+                    "action": "loadModelBatchAction"
+                }
+            ]
+        },
+        "initializeNgp":{
+            "actionType": "JSFunction",
+            "method": "initNGP",
+            "deps": "js/services/ngpInitializationService"
+        },
+        "initHeader":{
+            "actionType": "JSFunction",
+            "method": "init",
+            "deps": "js/services/ngpHeaderService"
+        },
+        "loadModel": {
+            "actionType": "JSFunction",
+            "method": "loadModel",
+            "deps": "js/services/ngpInitializationService"
+        },
+        "destroy": {
+            "actionType": "batchJob",
+            "steps":[
+                {
+                    "action": "destroyHeader"
+                },
+                {
+                    "action": "destroyNgp"
+                }
+            ]
+        },
+        "destroyNgp":{
+            "actionType": "JSFunction",
+            "method": "onDestroy",
+            "deps": "js/services/ngpInitializationService"
+        },
+        "destroyHeader":{
+            "actionType": "JSFunction",
+            "method": "destroy",
+            "deps": "js/services/ngpHeaderService"
+        },
+        "updateScopeObjectPort": {
+            "actionType": "Sync",
+            "inputData": {
+                "port": "scopeObject",
+                "syncObject": "{{data.scope.scopeObject}}"
+            }
+        },
+        "saveNewScopeObject":{
+            "actionType":"JSFunction",
+            "method":"getValueInViewModel",
+            "inputData":{
+                "value":"{{data.eventData.scopeObject}}"
+            },
+            "outputData":{
+                "scope.scopeObject":""
+            },
+            "deps":"js/mfeViewModelUtils"
+        },
+        "updateScopeObjectStatus":{
+            "actionType":"JSFunctionAsync",
+            "method":"updateHeader",
+            "inputData":{
+                "modelObject":"{{data.scope.scopeObject}}"
+            },
+            "outputData":{
+                "scope.scopeObject.status":""
+            },
+            "deps":"js/services/ngpHeaderService"
+
+        },
+        "onScopeObjectChange":{
+            "actionType":"batchJob",
+            "steps":[
+                {
+                    "action":"saveNewScopeObject"
+                },
+                {
+                    "action": "updateTitle"
+                },
+                {
+                    "action":"updateScopeObjectStatus",
+                    "condition": "data.eventData.scopeObject.uid"
+                },
+                {
+                    "action":"updateScopeObjectPort"
+                }
+            ]
+        },
+        "savePanelSize":{
+            "actionType":"JSFunction",
+            "method":"savePanelSize",
+            "inputData":{
+                "splitterMoveEventData":"{{data.eventData}}"
+            },
+            "deps":"js/services/ngpUiPanelSizingService"
+        },
+        "loadModelBatchAction": {
+            "actionType": "batchJob",
+            "steps":[
+                {
+                    "action": "initializePage"
+                },
+                {
+                    "action": "loadModel"
+                }
+            ]
+        },
+        "initializePage": {
+            "actionType": "JSFunctionAsync",
+            "method": "initializePage",
+            "outputData": {
+                "stateContext": "stateContext",
+                "propertyPolicyId": "propertyPolicyId"
+            },
+            "deps": "js/AwBaseSublocationService"
+        },
+        "updateTitle": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": "{{data.scope.scopeObject.props.object_string.dbValues[0]}}"
+            },
+            "outputData": {
+                "headerTitle": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "initializeData",
+        "onUnmount": "destroy"
+    },
+    "onEvent": [ {
+            "eventId": "mfe.scopeObjectChanged",
+            "action": "onScopeObjectChange",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "ngp.scopeObjectCleared",
+            "action": "onScopeObjectChange",
+            "cacheEventData": true
+        },
+        {
+            "eventId":"aw-splitter-update",
+            "action":"savePanelSize",
+            "cacheEventData":true
+        },
+        {
+            "eventId": "locationChangeSuccess",
+            "action": "loadModelBatchAction"
+        },
+        {
+            "eventId": "mfe.updated",
+            "action": "updateTitle"
+        }
+    ],
+    "i18n": {
+        "loading": [ "NgpHeaderMessages" ]
+    }
+}

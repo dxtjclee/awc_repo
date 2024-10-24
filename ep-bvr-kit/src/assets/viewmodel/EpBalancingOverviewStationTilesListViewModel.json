@@ -1,0 +1,33 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "view-path": {
+            "type": "object"
+        },
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data": {
+        "messages": {
+            "noStationsInTheLine": [
+                {
+                    "text": "{{i18n.noStationsInTheLine}}"
+                }
+            ]
+        }
+    },
+    "i18n": {
+        "noStationsInTheLine": [
+            "BalancingMessages"
+        ]
+    },
+    "conditions": {
+        "loading": {
+            "expression": "props.subPanelContext.balancingData.loadedData.loading"
+        },
+        "hasStations": {
+            "expression": "props.subPanelContext.balancingData.loadedData.numberOfStations > 0"
+        }
+    }
+}

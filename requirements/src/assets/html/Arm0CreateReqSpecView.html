@@ -1,0 +1,28 @@
+<aw-command-panel caption="i18n.createReqSpecTitle">
+    <aw-form name="createInputs">
+
+        <aw-panel-body visible-when="conditions.noSpecTypeSelected">
+            <aw-panel-section caption="i18n.reqSpecType"></aw-panel-section>
+            <aw-list dataprovider="data.dataProviders.getReqSpecTypes">
+                <aw-type-cell vmo="item"></aw-type-cell>
+            </aw-list>
+        </aw-panel-body>
+
+        <aw-panel-body class="aw-requirements-createReqSpecTitle" exist-when="!conditions.noSpecTypeSelected">
+            <aw-title-link prop="data.displayedType" action="clearSelectedType"></aw-title-link>
+            <aw-xrt type="CREATE" object-type="{{data.selectedType.dbValue}}" xrt-state="data.xrtState"></aw-xrt>
+            <aw-panel-section caption="i18n.htmlSpecTemplateTitle">
+                <aw-listbox prop="data.htmlSpecTemplate" list="data.htmlSpecTemplateList"
+                    enable-when="!conditions.noSpecTypeSelected && formProp.attributes.valid"
+                    action="selectHtmlSpecTemplate"></aw-listbox>
+            </aw-panel-section>
+        </aw-panel-body>
+
+    </aw-form>
+    <aw-panel-footer>
+        <aw-button action="createReqSpec" size="auto"
+            visible-when="!conditions.noSpecTypeSelected && formProp.attributes.valid">
+            <aw-i18n>i18n.Add</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

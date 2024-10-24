@@ -1,0 +1,141 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/visible-when.directive",
+        "js/aw-image.directive",
+        "js/aw-click.directive",
+        "js/aw-icon.directive"
+    ],
+
+    "lifecycleHooks": {
+        "onMount": "initializeTheListeners"
+    },
+
+    "actions":{
+        "initializeTheListeners":{
+            "actionType" : "JSFunction",
+            "method": "initializeTracelinkClickListener",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps" : "js/Arm0CreateTraceLink"
+        },
+        "openTracelinkedObject":{
+            "actionType" : "Event",
+            "method": "Event",
+            "inputData":
+            {
+                "events":
+                [
+                    {
+                        "name": "Arm0TracelinkTooltip.openObjectInNewTab",
+                        "eventData":
+                        {
+                            "sourceObject": "{{data.subPanelContext}}"
+                        },
+                        "condition":"data.subPanelContext.isTracelinkedItem"
+                    }
+                ]
+            }
+        },
+        "removeTracelinkedObject":{
+            "actionType" : "Event",
+            "method": "Event",
+            "inputData":
+            {
+                "events":
+                [
+                    {
+                        "name": "requirementDocumentation.showDeleteTracelinkWarning",
+                        "eventData":
+                        {
+                            "sourceObject": "{{data.subPanelContext}}"
+                        },
+                        "condition":"data.subPanelContext.isTracelinkedItem"
+                    }
+                ]
+            }
+        },
+        "suspectTracelinkedObject":{
+            "actionType" : "Event",
+            "method": "Event",
+            "inputData":
+            {
+                "events":
+                [
+                    {
+                        "name": "Arm0TracelinkTooltip.openSuspectTaskInNewTab",
+                        "eventData":
+                        {
+                            "sourceObject": "{{data.subPanelContext}}"
+                        },
+                        "condition":"data.subPanelContext.suspectReviewTaskList && data.subPanelContext.suspectReviewTaskList.length > 0"
+                    }
+                ]
+            }
+        },
+        "openMasterRequirementObject":{
+            "actionType" : "Event",
+            "method": "Event",
+            "inputData":
+            {
+                "events":
+                [
+                    {
+                        "name": "Arm0TracelinkTooltip.openObjectInNewTab",
+                        "eventData":
+                        {
+                            "sourceObject": "{{data.subPanelContext}}"
+                        },
+                        "condition":"data.subPanelContext.isBasedOn"
+                    }
+                ]
+            }
+        }
+
+    },
+
+    "data": {
+        "buttonOpenCommand":
+        {
+            "action": "openTracelinkedObject",
+            "tooltip": "{{subPanelContext.openTracelinkedObjectTitle}}",
+            "iconName": "{{subPanelContext.openTracelinkedObjectIcon}}"
+        },
+        "buttonRemoveCommand":
+        {
+            "action": "removeTracelinkedObject",
+            "tooltip": "{{subPanelContext.removeTracelinkedObjectTitle}}",
+            "iconName": "{{subPanelContext.removeTracelinkedObjectIcon}}"
+        },
+        "buttonSuspectCommand":
+        {
+            "action": "suspectTracelinkedObject",
+            "tooltip": "{{subPanelContext.reviewSuspectTitle}}",
+            "iconName": "{{subPanelContext.isSuspectIcon}}"
+        },
+        "buttonMasterReqCommand":
+        {
+            "action": "openMasterRequirementObject",
+            "tooltip": "{{subPanelContext.openMasterReqTitle}}",
+            "iconName": "{{subPanelContext.openMasterReqIcon}}"
+        },
+        "buttonBasedOnMasterReqCommand":
+        {
+            "action": "openMasterRequirementObject",
+            "tooltip": "{{subPanelContext.openbasedOnMasterReqTitle}}",
+            "iconName": "{{subPanelContext.openbasedOnMasterReqIcon}}"
+        }
+    },
+    "onEvent":
+    [
+    ],
+
+    "dataProviders":
+    {
+    },
+
+    "i18n": {
+
+    }
+}

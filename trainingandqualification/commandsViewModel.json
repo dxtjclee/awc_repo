@@ -1,0 +1,1342 @@
+{
+  "commands": {
+    "tq0AddQUtoQualDefinition": {
+      "iconId": "cmdAdd",
+      "isGroup": false,
+      "title": "{{i18n.tq0Add}}",
+      "description": "{{i18n.tq0AddQUtoQualDefinitionDesc}}"
+    },
+    "tq0AddResponsibleUser": {
+      "iconId": "cmdAdd",
+      "isGroup": false,
+      "title": "{{i18n.tq0AddResponsibleUserTitle}}",
+      "description": "{{i18n.tq0AddResponsibleUserDesc}}"
+    },
+    "tq0RemoveQualProfileList": {
+      "iconId": "cmdRemove",
+      "isGroup": false,
+      "title": "{{i18n.tq0RemoveQualProfileListTitle}}",
+      "description": "{{i18n.tq0RemoveQualProfileListDesc}}"
+    },
+    "tq0AddTargetEntity": {
+      "iconId": "cmdAdd",
+      "isGroup": false,
+      "title": "{{i18n.add}}",
+      "description": "{{i18n.tq0AddTargetEntityDesc}}"
+    },
+    "tq0AddQualProfileList": {
+      "iconId": "cmdAdd",
+      "isGroup": false,
+      "title": "{{i18n.tq0AddQualProfileListTitle}}",
+      "description": "{{i18n.tq0AddQualProfileListDesc}}"
+    },
+    "tq0RemoveResponsibleUser": {
+      "iconId": "cmdRemove",
+      "isGroup": false,
+      "title": "{{i18n.tq0RemoveResponsibleUserTitle}}",
+      "description": "{{i18n.tq0RemoveResponsibleUserDesc}}"
+    },
+    "Tq0RemoveAttachmentFromQualificationProfile": {
+      "iconId": "cmdRemove",
+      "isGroup": false,
+      "title": "{{i18n.tq0RemoveText}}",
+      "description": "{{i18n.tq0RemoveAttachmentFromQualificationProfileDesc}}"
+    },
+    "openResponsibleUserObj": {
+      "iconId": "cmdOpen",
+      "isGroup": false,
+      "title": "{{i18n.tq0OpenResponsibleUserObjTitle}}",
+      "description": "{{i18n.tq0OpenResponsibleUserObjDesc}}"
+    },
+    "tq0AssignQualificationUnit": {
+      "iconId": "cmdAssign",
+      "title": "{{i18n.tq0AssignQualificationUnit}}",
+      "description": "{{i18n.tq0AssignQualificationUnitDesc}}"
+    },
+    "tq0AssignQualificationDefinition": {
+      "iconId": "cmdAssign",
+      "title": "{{i18n.tq0AssignQualificationDefinition}}",
+      "description": "{{i18n.tq0AssignQualificationDefinitionDesc}}"
+    },
+    "tq0VersionQualificationUnit": {
+      "iconId": "cmdVersioning",
+      "title": "{{i18n.tq0VersionQualificationUnit}}",
+      "description": "{{i18n.tq0VersionQualificationUnitDesc}}"
+    },
+    "tq0VersionQualDefinition": {
+      "iconId": "cmdVersioning",
+      "title": "{{i18n.tq0VersionQualDefinition}}",
+      "description": "{{i18n.tq0VersionQualDefinitionDesc}}"
+    },
+    "tq0ReplaceTargetEntity": {
+      "iconId": "cmdReplace",
+      "isGroup": false,
+      "title": "{{i18n.replace}}",
+      "description": "{{i18n.tq0ReplaceTargetEntityDesc}}"
+    },
+    "tq0RemoveQualificationRecords": {
+      "iconId": "cmdRemove",
+      "isGroup": false,
+      "title": "{{i18n.tq0RemoveText}}",
+      "description": "{{i18n.tq0RemoveQualificationDescription}}"
+    },
+    "Tq0RemoveAttachmentFromQualRecord": {
+      "iconId": "cmdRemove",
+      "isGroup": false,
+      "title": "{{i18n.tq0RemoveText}}",
+      "description": "{{i18n.tq0RemoveQualRecordDescription}}"
+    },
+    "tq0AddPrequisites": {
+      "iconId": "cmdAdd",
+      "title": "{{i18n.add}}",
+      "description": "{{i18n.tq0AddPrequisitesDesc}}"
+    },
+    "tq0RemovePrequisites": {
+      "iconId": "cmdRemove",
+      "title": "{{i18n.tq0RemoveText}}",
+      "description": "{{i18n.tq0RemovePrereqDesc}}"
+    },
+    "tq0AssignQUStateModel": {
+      "iconId": "cmdAssign",
+      "title": "{{i18n.tq0AssignQUStateModel}}",
+      "description": "{{i18n.tq0AssignQUStateModelDesc}}"
+    },
+    "tq0CreateQualUnit": {
+      "iconId": "cmdAdd",
+      "title": "{{i18n.add}}",
+      "description": "{{i18n.tq0CreateUnit}}"
+    },
+    "tq0CreateQualProfile": {
+      "iconId": "cmdAdd",
+      "title": "{{i18n.add}}",
+      "description": "{{i18n.tq0CreateProfile}}"
+    },
+    "Tq0PWASearchFilters": {
+      "iconId": "cmdfilter",
+      "isGroup": false,
+      "title": "{{i18n.tq0PWASearchFiltersTitle}}",
+      "description": "{{i18n.tq0PWASearchFiltersDesc}}"
+    },
+    "tq0CreateQualProfileGroup": {
+      "iconId": "cmdAdd",
+      "title": "{{i18n.add}}",
+      "description": "{{i18n.tq0CreateProfileGroup}}"
+    }
+  },
+  "commandHandlers": {
+    "tq0AddQUtoQualDefinitionCommandHandler": {
+      "id": "tq0AddQUtoQualDefinition",
+      "action": "tq0AssignQualificationUnitPanel",
+      "activeWhen": {
+        "condition": "conditions.tq0AddQUtoQualDefinitionCmd"
+      },
+      "visibleWhen": {
+        "condition": "conditions.tq0AddQUtoQualDefinitionCmd"
+      }
+    },
+    "tq0AssignQualificationDefinitionCommandHandler": {
+      "id": "tq0AssignQualificationDefinition",
+      "action": "tq0OpenAssignQualificationDefinitionPanel",
+      "activeWhen": {
+        "condition": "conditions.tq0IsQProfile"
+      },
+      "visibleWhen": {
+        "condition": "conditions.tq0IsQProfile"
+      }
+    },
+    "tq0AddQualityActionCmdDelegateCommandHandler": {
+      "id": "Qam0AddQualityActionCmd",
+      "action": "tq0setQualityActionTypeSubTypeRelationInfo",
+      "activeWhen": {
+        "condition": "conditions.tq0QualityActionCommandVisiblity"
+      },
+      "visibleWhen": {
+        "condition": "conditions.tq0QualityActionCommandVisiblity"
+      }
+    },
+    "tq0AddQualityActionFromTemplateCmdDelegateCommandHandler": {
+      "id": "Qam0AddQualityActionFromTemplateCmd",
+      "action": "tq0setQualityActionTypeSubTypeRelationInfoFromTemplate",
+      "activeWhen": {
+        "condition": "conditions.tq0QualityActionCommandVisiblity"
+      },
+      "visibleWhen": {
+        "condition": "conditions.tq0QualityActionCommandVisiblity"
+      }
+    },
+    "tq0AddQualityActionAsTemplateDelegateCommandHandler": {
+      "id": "Qam0AddQualityActionAsTemplateCmd",
+      "action": "tq0setQualityActionTypeSubTypeRelationInfoAsTemplate",
+      "activeWhen": {
+        "condition": "conditions.tq0QualityActionCommandVisiblity"
+      },
+      "visibleWhen": {
+        "condition": "conditions.tq0QualityActionCommandVisiblity"
+      }
+    },
+    "Tq0PWASearchFiltersCommandHandler": {
+      "id": "Tq0PWASearchFilters",
+      "action": "Tq0OpenPWAFiltersPanel",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.Tq0FilterCmdVisibilityCondition"
+      }
+    },
+    "tq0AddTargetEntityCommandHandler": {
+      "id": "tq0AddTargetEntity",
+      "action": "tq0AddTargetEntityPanel",
+      "activeWhen": {
+        "condition": "conditions.tq0ShowAddTargetEntityCmd"
+      },
+      "visibleWhen": {
+        "condition": "conditions.tq0ShowAddTargetEntityCmd"
+      }
+    },
+    "tq0AddQualProfileListCommandHandler": {
+      "id": "tq0AddQualProfileList",
+      "action": "tq0AddQualProfileListPanel",
+      "activeWhen": {
+        "condition": "conditions.tq0ShowAddQProfilesCmd"
+      },
+      "visibleWhen": {
+        "condition": "conditions.tq0ShowAddQProfilesCmd"
+      }
+    },
+    "tq0RemoveQualProfileListCommandHandler": {
+      "id": "tq0RemoveQualProfileList",
+      "action": "tq0RemoveQualProfileList",
+      "activeWhen": {
+        "condition": "conditions.tq0ShowRemoveQProfilesCmd"
+      },
+      "visibleWhen": {
+        "condition": "conditions.tq0ShowRemoveQProfilesCmd"
+      }
+    },
+    "tq0AddResponsibleUserCommandHandler": {
+      "id": "tq0AddResponsibleUser",
+      "action": "tq0AddResponsibleUserPanel",
+      "activeWhen": {
+        "condition": "conditions.tq0ShowAddRespUsrCmd"
+      },
+      "visibleWhen": {
+        "condition": "conditions.tq0ShowAddRespUsrCmd"
+      }
+    },
+    "tq0AssignQualificationUnitCommandHandler": {
+      "id": "tq0AssignQualificationUnit",
+      "action": "tq0AssignQualificationUnitPanel",
+      "activeWhen": {
+        "condition": "conditions.tq0IsQProfileAndQPG"
+      },
+      "visibleWhen": {
+        "condition": "conditions.tq0IsQProfileAndQPG"
+      }
+    },
+    "tq0VersionQualificationUnitCommandHandler": {
+      "id": "tq0VersionQualificationUnit",
+      "action": "tq0VersionQualification",
+      "activeWhen": {
+        "condition": "conditions.tq0IsQUnitVersionable"
+      },
+      "visibleWhen": {
+        "condition": "conditions.tq0IsQUnitVersionable"
+      }
+    },
+    "tq0VersionQualDefinitionCommandHandler": {
+      "id": "tq0VersionQualDefinition",
+      "action": "tq0VersionQualificationDefinition",
+      "activeWhen": {
+        "condition": "conditions.tq0IsQDefVersionable"
+      },
+      "visibleWhen": {
+        "condition": "conditions.tq0IsQDefVersionable"
+      }
+    },
+    "tq0RemoveResponsibleUserCommandHadler": {
+      "id": "tq0RemoveResponsibleUser",
+      "action": "removeResponsibleUser",
+      "activeWhen": {
+        "condition": "conditions.tq0ShowRemoveRespUsrCmd"
+      },
+      "visibleWhen": {
+        "condition": "conditions.tq0ShowRemoveRespUsrCmd"
+      }
+    },
+    "Tq0RemoveAttachmentFromQualificationProfileCommandHandler": {
+      "id": "Tq0RemoveAttachmentFromQualificationProfile",
+      "action": "Tq0RemoveAttachment",
+      "activeWhen": {
+        "condition": "conditions.Tq0RemoveAttachmentFromQP"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Tq0RemoveAttachmentFromQP"
+      }
+    },
+    "tq0RemoveQualificationRecordsCommandHandler": {
+      "id": "tq0RemoveQualificationRecords",
+      "action": "tq0DeleteQualificationRecord",
+      "activeWhen": {
+        "condition": "conditions.tq0ShowDeleteQualificationRecords"
+      },
+      "visibleWhen": {
+        "condition": "conditions.tq0ShowDeleteQualificationRecords"
+      }
+    },
+    "openResponsibleUserObjCommandHandler": {
+      "id": "openResponsibleUserObj",
+      "action": "performOpenResponsibleUsrObj",
+      "activeWhen": {
+        "condition": "conditions.tq0IsQProfile"
+      },
+      "visibleWhen": {
+        "condition": "conditions.tq0IsQProfile"
+      }
+    },
+    "tq0ReplaceTargetEntityCommandHandler": {
+      "id": "tq0ReplaceTargetEntity",
+      "action": "replaceTargetEntity",
+      "activeWhen": {
+        "condition": "conditions.tq0ShowReplaceTargetEntityCmd"
+      },
+      "visibleWhen": {
+        "condition": "conditions.tq0ShowReplaceTargetEntityCmd"
+      }
+    },
+    "Tq0RemoveAttachmentFromQualRecordCommandHandler": {
+      "id": "Tq0RemoveAttachmentFromQualRecord",
+      "action": "Tq0RemoveAttachmentQualRecord",
+      "activeWhen": {
+        "condition": "conditions.Tq0RemoveAttachmentFromQualRecord"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Tq0RemoveAttachmentFromQualRecord"
+      }
+    },
+    "tq0AssignQUStateModelCommandHandler": {
+      "id": "tq0AssignQUStateModel",
+      "action": "tq0AssignQUStateModelPanel",
+      "activeWhen": {
+        "condition": "conditions.tq0ShowAssignStateModelCmd"
+      },
+      "visibleWhen": {
+        "condition": "conditions.tq0ShowAssignStateModelCmd"
+      }
+    },
+    "tq0AddPrequisitesCommandHandler": {
+      "id": "tq0AddPrequisites",
+      "action": "tq0AssignQualificationUnitPanel",
+      "activeWhen": {
+        "condition": "conditions.tq0AddPrereqCond"
+      },
+      "visibleWhen": {
+        "condition": "conditions.tq0AddPrereqCond"
+      }
+    },
+    "tq0RemovePrequisitesCommandHandler": {
+      "id": "tq0RemovePrequisites",
+      "action": "tq0RemovePrequisites",
+      "activeWhen": {
+        "condition": "conditions.tq0RemovePrereqCond"
+      },
+      "visibleWhen": {
+        "condition": "conditions.tq0RemovePrereqCond"
+      }
+    },
+    "tq0CreateQualUnitHandler": {
+      "id": "tq0CreateQualUnit",
+      "action": "tq0CreateQualUnitActivate",
+      "activeWhen": {
+        "condition": "conditions.tq0AddQualUnitCond"
+      },
+      "visibleWhen": {
+        "condition": "conditions.tq0AddQualUnitCond"
+      }
+    },
+    "tq0CreateQualProfileHandler": {
+      "id": "tq0CreateQualProfile",
+      "action": "tq0CreateQualProfileActivate",
+      "activeWhen": {
+        "condition": "conditions.tq0AddQualProfileCond"
+      },
+      "visibleWhen": {
+        "condition": "conditions.tq0AddQualProfileCond"
+      }
+    },
+    "tq0CreateQualProfileGroupHandler": {
+      "id": "tq0CreateQualProfileGroup",
+      "action": "tq0CreateQualProfileGroupActivate",
+      "activeWhen": {
+        "condition": "conditions.tq0AddQualProfileGroupCond"
+      },
+      "visibleWhen": {
+        "condition": "conditions.tq0AddQualProfileGroupCond"
+      }
+    }
+  },
+  "commandPlacements": {
+    "Tq0PWASearchFiltersCommandPlacement": {
+      "id": "Tq0PWASearchFilters",
+      "uiAnchor": "aw_primaryWorkArea",
+      "priority": 1000
+    },
+    "openResponsibleUserObjCommandPlacement": {
+      "id": "openResponsibleUserObj",
+      "uiAnchor": "tq0OpenRespUsrObjAnchor",
+      "priority": 200,
+      "cellDisplay": {
+        "hover": true,
+        "position": "TOP_RIGHT"
+      }
+    },
+    "tq0AssignQualificationUnitCommandPlacement": {
+      "id": "tq0AssignQualificationUnit",
+      "uiAnchor": "aw_rightWall",
+      "priority": 701,
+      "parentGroupId": "Awp0ManageGroup"
+    },
+    "tq0AssignQualificationDefinitionCommandPlacement": {
+      "id": "tq0AssignQualificationDefinition",
+      "uiAnchor": "aw_rightWall",
+      "priority": 800,
+      "parentGroupId": "Awp0ManageGroup"
+    },
+    "tq0VersionQualificationUnitCommandPlacement": {
+      "id": "tq0VersionQualificationUnit",
+      "uiAnchor": "aw_rightWall",
+      "priority": 201,
+      "parentGroupId": "Awp0NewGroup"
+    },
+    "tq0VersionQualDefinitionCommandPlacement": {
+      "id": "tq0VersionQualDefinition",
+      "uiAnchor": "aw_rightWall",
+      "priority": 201,
+      "parentGroupId": "Awp0NewGroup"
+    },
+    "tq0RemoveQualificationRecordsCommandPlacement": {
+      "id": "tq0RemoveQualificationRecords",
+      "uiAnchor": "tq0_removeButtonPanel",
+      "priority": 6
+    },
+    "tq0AssignQUStateModelCommandPlacement": {
+      "id": "tq0AssignQUStateModel",
+      "uiAnchor": "aw_rightWall",
+      "priority": 702,
+      "parentGroupId": "Awp0ManageGroup"
+    },
+    "tq0AddPrequisitesCommandPlacement": {
+      "id": "tq0AddPrequisites",
+      "uiAnchor": "tq0_preReqTreeCmdBar",
+      "priority": 100
+    },
+    "tq0RemovePrequisitesCommandPlacement": {
+      "id": "tq0RemovePrequisites",
+      "uiAnchor": "tq0_preReqTreeCmdBar",
+      "priority": 200
+    },
+    "tq0CreateQualUnitPlacement": {
+      "id": "tq0CreateQualUnit",
+      "uiAnchor": "aw_rightWall",
+      "priority": 10,
+      "parentGroupId": "Awp0NewGroup"
+    },
+    "tq0CreateQualProfilePlacement": {
+      "id": "tq0CreateQualProfile",
+      "uiAnchor": "aw_rightWall",
+      "priority": 10,
+      "parentGroupId": "Awp0NewGroup"
+    },
+    "tq0CreateQualProfileGroupPlacement": {
+      "id": "tq0CreateQualProfileGroup",
+      "uiAnchor": "aw_rightWall",
+      "priority": 10,
+      "parentGroupId": "Awp0NewGroup"
+    }
+  },
+  "actions": {
+    "tq0setQualityActionTypeSubTypeRelationInfo": {
+      "actionType": "activateCommandPanel",
+      "inputData": {
+        "commandId": "Qam0AddGenericQualityAction",
+        "location": "aw_toolsAndInfo",
+        "context": {
+          "type": "Training and Qualification",
+          "subType": "Confirmation of Effectiveness",
+          "relationType": "Tq0EffectivenssCheck",
+          "primaryObj": "{{ctx.selected}}"
+        },
+        "config": {
+          "isPinUnpinEnabled": true
+        }
+      }
+    },
+    "tq0setQualityActionTypeSubTypeRelationInfoFromTemplate": {
+      "actionType": "activateCommandPanel",
+      "inputData": {
+        "commandId": "Qam0QAFromTemplate",
+        "location": "aw_toolsAndInfo",
+        "context": {
+          "type": "Training and Qualification",
+          "subType": "Confirmation of Effectiveness",
+          "relationType": "Tq0EffectivenssCheck",
+          "primaryObj": "{{ctx.selected}}"
+        },
+        "config": {
+          "isPinUnpinEnabled": true
+        }
+      }
+    },
+    "tq0setQualityActionTypeSubTypeRelationInfoAsTemplate": {
+      "actionType": "activateCommandPanel",
+      "inputData": {
+        "commandId": "Qam0AddQualityActionAsTemplate",
+        "location": "aw_toolsAndInfo",
+        "context": {
+          "type": "Training and Qualification",
+          "subType": "Confirmation of Effectiveness",
+          "relationType": "Tq0EffectivenssCheck",
+          "primaryObj": "{{ctx.selected}}"
+        },
+        "config": {
+          "isPinUnpinEnabled": true
+        }
+      }
+    },
+    "Tq0OpenPWAFiltersPanel": {
+      "actionType": "JSFunction",
+      "method": "activateCommandPanel",
+      "deps": "js/commandPanel.service",
+      "inputData": {
+        "commandId": "Awp0SearchFilter",
+        "location": "aw_navigation"
+      }
+    },
+    "performOpenResponsibleUsrObj": {
+      "actionType": "Navigate",
+      "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+      "navigationParams": {
+        "uid": {
+          "$adapt": "{{commandContext.vmo}}",
+          "path": "uid"
+        }
+      }
+    },
+    "tq0AddResponsibleUserPanel": {
+      "actionType": "JSFunction",
+      "method": "activateCommandPanel",
+      "deps": "js/commandPanel.service",
+      "inputData": {
+        "commandId": "tq0AddResponsibleUser",
+        "location": "aw_toolsAndInfo",
+        "objects": "{{data.objects}}"
+      }
+    },
+    "tq0AssignQualificationUnitPanel": {
+      "actionType": "JSFunction",
+      "method": "activateCommandPanel",
+      "deps": "js/commandPanel.service",
+      "inputData": {
+        "commandId": "tq0AssignQualificationUnit",
+        "location": "aw_toolsAndInfo",
+        "context": "{{commandContext}}"
+      }
+    },
+    "tq0OpenAssignQualificationDefinitionPanel": {
+      "actionType": "JSFunction",
+      "method": "activateCommandPanel",
+      "deps": "js/commandPanel.service",
+      "inputData": {
+        "commandId": "tq0AssignQualificationDefinition",
+        "location": "aw_toolsAndInfo",
+        "context": "{{commandContext}}"
+      }
+    },
+    "tq0AddTargetEntityPanel": {
+      "actionType": "JSFunction",
+      "method": "activateCommandPanel",
+      "deps": "js/commandPanel.service",
+      "inputData": {
+        "commandId": "tq0AssignTargetEntity",
+        "location": "aw_toolsAndInfo",
+        "objects": "{{data.objects}}"
+      }
+    },
+    "tq0AddQualProfileListPanel": {
+      "actionType": "JSFunction",
+      "method": "activateCommandPanel",
+      "deps": "js/commandPanel.service",
+      "inputData": {
+        "commandId": "tq0AddQualProfileList",
+        "location": "aw_toolsAndInfo",
+        "objects": "{{data.objects}}"
+      }
+    },
+    "tq0RemoveQualProfileList": {
+      "actionType": "TcSoaService",
+      "serviceName": "Core-2014-10-DataManagement",
+      "method": "removeChildren",
+      "inputData": {
+        "inputData": [
+          {
+            "clientId": "",
+            "parentObj": "{{ctx.pselected}}",
+            "childrenObj": "{{ctx.mselected}}",
+            "propertyName": "tq0QualProfileList"
+          }
+        ]
+      },
+      "events": {
+        "success": [
+          {
+            "name": "cdm.relatedModified",
+            "eventData": {
+              "relatedModified": [
+                "{{ctx.pselected}}"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "tq0DeleteQualificationRecord": {
+      "actionType": "Event",
+      "method": "Event",
+      "inputData": {
+        "events": [
+          {
+            "condition": "(ctx.selectionArr && ctx.selectionArr.length > 1)",
+            "name": "deleteMultipleQualificationRecordConfirmationEvent"
+          },
+          {
+            "condition": "(ctx.selectionArr && ctx.selectionArr.length === 1)",
+            "name": "deleteSingleQualificationRecordConfirmationEvent"
+          }
+        ]
+      }
+    },
+    "removeResponsibleUser": {
+      "actionType": "TcSoaService",
+      "serviceName": "Core-2014-10-DataManagement",
+      "method": "removeChildren",
+      "inputData": {
+        "inputData": [
+          {
+            "clientId": "",
+            "parentObj": "{{ctx.pselected}}",
+            "childrenObj": "{{ctx.mselected}}",
+            "propertyName": "tq0ResponsibleUsers"
+          }
+        ]
+      },
+      "events": {
+        "success": [
+          {
+            "name": "cdm.relatedModified",
+            "eventData": {
+              "relatedModified": [
+                "{{ctx.pselected}}"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "tq0DeleteSelectedObjects": {
+      "actionType": "TcSoaService",
+      "serviceName": "Core-2006-03-DataManagement",
+      "method": "deleteObjects",
+      "inputData": {
+        "objects": {
+          "$adapt": "{{ctx.selectionArr}}"
+        }
+      },
+      "outputData": {
+        "deleteObjectsPartialErrors": "partialErrors"
+      },
+      "events": {
+        "success": [
+          {
+            "name": "tq0.RecordsDeleted"
+          }
+        ],
+        "failure": [
+          {
+            "name": "tq0.singleFailureMessage",
+            "condition": "ctx.selectionArr && ctx.selectionArr.length === 1 && ctx.selected.type === 'Tq0QualRecord' && errorCode.code === 453007"
+          },
+          {
+            "name": "tq0.multiplePartialFailureMessage",
+            "condition": "ctx.selectionArr && ctx.selectionArr.length > 1 && ctx.selected.type === 'Tq0QualRecord' && errorCode.code === 453007"
+          },
+          {
+            "name": "qualificationRecordsTable.gridSelection",
+            "eventData": {
+              "selectedObjects": [],
+              "notResetSelectionArrForMessage": true
+            }
+          },
+          {
+            "name": "qualificationRecordsTable.plTable.reload"
+          }
+        ]
+      },
+      "actionMessages": {
+        "success": [
+          {
+            "condition": "(ctx.selectionArr && ctx.selectionArr.length === 1)",
+            "message": "tq0SingleQualificationRecordSuccessMessage"
+          }
+        ]
+      }
+    },
+    "replaceTargetEntity": {
+      "actionType": "JSFunction",
+      "method": "activateCommandPanel",
+      "deps": "js/commandPanel.service",
+      "inputData": {
+        "commandId": "tq0AssignTargetEntity",
+        "location": "aw_toolsAndInfo",
+        "context": "{{commandContext}}"
+      }
+    },
+    "Tq0RemoveAttachment": {
+      "actionType": "TcSoaService",
+      "serviceName": "Core-2014-10-DataManagement",
+      "method": "removeChildren",
+      "inputData": {
+        "inputData": [
+          {
+            "clientId": "",
+            "parentObj": "{{ctx.pselected}}",
+            "childrenObj": "{{ctx.mselected}}",
+            "propertyName": "Tq0QProfileAttachments"
+          }
+        ]
+      },
+      "events": {
+        "success": [
+          {
+            "name": "cdm.relatedModified",
+            "eventData": {
+              "relatedModified": [
+                "{{ctx.pselected}}"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "tq0VersionQualification": {
+      "actionType": "TcSoaService",
+      "serviceName": "Core-2008-06-DataManagement",
+      "method": "createObjects",
+      "inputData": {
+        "input": [
+          {
+            "clientId": "",
+            "data": {
+              "boName": "Tq0QualificationUnit",
+              "stringProps": {
+                "object_name": "{{ctx.selected.props.object_name.dbValue}}",
+                "object_desc": "{{ctx.selected.props.object_desc.dbValue}}",
+                "tq0Currency": "{{ctx.selected.props.tq0Currency.dbValue}}",
+                "tq0DurationUnit": "{{ctx.selected.props.tq0DurationUnit.dbValue}}",
+                "tq0RenewalPeriodType": "{{ctx.selected.props.tq0RenewalPeriodType.dbValue}}",
+                "tq0QRWorkflowTemplate": "{{ctx.selected.props.tq0QRWorkflowTemplate.dbValue}}",
+                "tq0IndustryStandard": "{{ctx.selected.props.tq0IndustryStandard.dbValue}}"
+              },
+              "tagProps": {
+                "tq0SourceQualification": {
+                  "uid": "{{ctx.selected.uid}}"
+                }
+              },
+              "tagArrayProps": {
+                "tq0QUnitContent": "{{function:getVersionQUsSoaInp}}",
+                "tq0Prerequisites": "{{function:getVersionQUsSoaInputForPrereq}}"
+              },
+              "doubleProps": {
+                "tq0Cost": "{{ctx.selected.props.tq0Cost.dbValue}}"
+              },
+              "intProps": {
+                "tq0ExpectedDuration": "{{ctx.selected.props.tq0ExpectedDuration.dbValue}}",
+                "tq0QualificationDeadline": "{{ctx.selected.props.tq0QualificationDeadline.dbValue}}",
+                "tq0RenewalPeriod": "{{ctx.selected.props.tq0RenewalPeriod.dbValue}}"
+              },
+              "boolProps": {
+                "tq0IsActive": "{{ctx.selected.props.tq0IsActive.dbValue}}",
+                "tq0ReviewRequired": "{{ctx.selected.props.tq0ReviewRequired.dbValue}}"
+              }
+            }
+          }
+        ]
+      },
+      "outputData": {
+        "createdMainObject": "output[0].objects[0]"
+      },
+      "events": {
+        "success": [
+          {
+            "name": "tq0.executePostVersionEventActionsForQU"
+          }
+        ]
+      },
+      "actionMessages": {
+        "failure": [
+          {
+            "message": "VersionQualificationUnitsFailed"
+          }
+        ]
+      },
+      "deps": "js/tq0Utils"
+    },
+    "tq0VersionQualificationDefinition": {
+      "actionType": "TcSoaService",
+      "serviceName": "Core-2008-06-DataManagement",
+      "method": "createObjects",
+      "inputData": {
+        "input": [
+          {
+            "clientId": "",
+            "data": {
+              "boName": "Tq0QualificationDefinition",
+              "stringProps": {
+                "object_name": "{{ctx.selected.props.object_name.dbValue}}",
+                "object_desc": "{{ctx.selected.props.object_desc.dbValue}}"
+              },
+              "tagProps": {
+                "tq0SourceQualDef": {
+                  "uid": "{{ctx.selected.uid}}"
+                }
+              },
+              "tagArrayProps": {
+                "tq0QualUnitList": "{{function:getVersionQDSoaInput}}"
+              }
+            }
+          }
+        ]
+      },
+      "outputData": {
+        "createdMainObject": "output[0].objects[0]"
+      },
+      "policy": {
+        "types": [
+          {
+            "name": "Tq0QualificationDefinition",
+            "properties": [
+              {
+                "name": "fnd0RevisionId"
+              }
+            ]
+          }
+        ]
+      },
+      "events": {
+        "success": [
+          {
+            "name": "tq0.executePostVersionEventActionsForQD"
+          }
+        ]
+      },
+      "actionMessages": {
+        "failure": [
+          {
+            "message": "VersionQualificationDefFailed"
+          }
+        ]
+      },
+      "deps": "js/tq0Utils"
+    },
+    "executePostVersionEventActionsForQD": {
+      "actionType": "JSFunction",
+      "method": "executePostVersionEventActionsForQD",
+      "inputData": {
+        "data": "{{data.createdMainObject}}",
+        "subPanelContext": "{{props.subPanelContext}}"
+      },
+      "deps": "js/tq0Utils"
+    },
+    "executePostVersionEventActionsForQU": {
+      "actionType": "JSFunction",
+      "method": "executePostVersionEventActionsForQU",
+      "inputData": {
+        "data": "{{data.createdMainObject}}",
+        "subPanelContext": "{{props.subPanelContext}}"
+      },
+      "deps": "js/tq0Utils"
+    },
+    "tq0deletionSuccess": {
+      "actionType": "JSFunction",
+      "method": "DeletionSuccess",
+      "deps": "js/tq0Utils"
+    },
+    "Tq0RemoveAttachmentQualRecord": {
+      "actionType": "TcSoaService",
+      "serviceName": "Core-2014-10-DataManagement",
+      "method": "removeChildren",
+      "inputData": {
+        "inputData": [
+          {
+            "clientId": "",
+            "parentObj": "{{ctx.pselected}}",
+            "childrenObj": "{{ctx.mselected}}",
+            "propertyName": "Tq0QRecordAttachments"
+          }
+        ]
+      },
+      "events": {
+        "success": [
+          {
+            "name": "cdm.relatedModified",
+            "eventData": {
+              "relatedModified": [
+                "{{ctx.pselected}}"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "tq0AssignQUStateModelPanel": {
+      "actionType": "JSFunction",
+      "method": "activateCommandPanel",
+      "deps": "js/commandPanel.service",
+      "inputData": {
+        "commandId": "tq0AssignQUStateModel",
+        "location": "aw_toolsAndInfo",
+        "objects": "{{data.objects}}"
+      }
+    },
+    "tq0RemovePrequisites": {
+      "actionType": "TcSoaService",
+      "serviceName": "Core-2010-09-DataManagement",
+      "method": "setProperties",
+      "inputData": {
+        "info": [
+          {
+            "object": "{{ctx.pselected}}",
+            "vecNameVal": [
+              {
+                "name": "tq0Prerequisites",
+                "values": "{{function:getPrerequisiteValues}}"
+              }
+            ]
+          }
+        ]
+      },
+      "events": {
+        "success": [
+          {
+            "name": "cdm.relatedModified",
+            "condition": "ctx.locationContext['ActiveWorkspace:SubLocation'] === 'showObject'",
+            "eventData": {
+              "refreshLocationFlag": true,
+              "relatedModified": [
+                "{{ctx.pselected}}"
+              ]
+            }
+          },
+          {
+            "name": "cdm.relatedModified",
+            "condition": "ctx.locationContext['ActiveWorkspace:SubLocation'] !== 'showObject'",
+            "eventData": {
+              "refreshLocationFlag": true,
+              "relatedModified": [
+                "{{ctx.selected}}"
+              ]
+            }
+          }
+        ]
+      },
+      "deps": "js/tq0Utils"
+    },
+    "tq0CreateQualUnitActivate": {
+      "actionType": "activateCommandPanel",
+      "inputData": {
+        "commandId": "Tq0CreateTQObjectsFromTile",
+        "location": "aw_toolsAndInfo",
+        "config": {
+          "isPinUnpinEnabled": true
+        },
+        "context": {
+          "context": "{{commandContext}}",
+          "includeTypes": "Tq0QualificationUnit",
+          "searchFilters": "Tq0QualificationUnit"
+        }
+      }
+    },
+    "tq0CreateQualProfileActivate": {
+      "actionType": "activateCommandPanel",
+      "inputData": {
+        "commandId": "Tq0CreateTQObjectsFromTile",
+        "location": "aw_toolsAndInfo",
+        "config": {
+          "isPinUnpinEnabled": true
+        },
+        "context": {
+          "context": "{{commandContext}}",
+          "includeTypes": "Tq0QualificationProfile",
+          "searchFilters": "Tq0QualificationProfile"
+        }
+      }
+    },
+    "tq0CreateQualProfileGroupActivate": {
+      "actionType": "activateCommandPanel",
+      "inputData": {
+        "commandId": "Tq0CreateTQObjectsFromTile",
+        "location": "aw_toolsAndInfo",
+        "config": {
+          "isPinUnpinEnabled": true
+        },
+        "context": {
+          "context": "{{commandContext}}",
+          "includeTypes": "Tq0QualProfileGroup",
+          "searchFilters": "Tq0QualProfileGroup"
+        }
+      }
+    }
+  },
+  "onEvent": [
+    {
+      "eventId": "deleteMultipleQualificationRecordConfirmationEvent",
+      "message": "deleteMultipleQualificationRecordConfirmationMessage"
+    },
+    {
+      "eventId": "deleteSingleQualificationRecordConfirmationEvent",
+      "message": "deleteSingleQualificationRecordConfirmationMessage"
+    },
+    {
+      "eventId": "tq0.RecordsDeleted",
+      "action": "tq0deletionSuccess"
+    },
+    {
+      "eventId": "tq0.singleFailureMessage",
+      "message": "tq0SingleQualificationRecordFailureMessage"
+    },
+    {
+      "eventId": "tq0.multiplePartialFailureMessage",
+      "message": "tq0MultipleQualificationRecordFailureMessage"
+    },
+    {
+      "eventId": "tq0.executePostVersionEventActionsForQU",
+      "action": "executePostVersionEventActionsForQU"
+    },
+    {
+      "eventId": "tq0.executePostVersionEventActionsForQD",
+      "action": "executePostVersionEventActionsForQD"
+    }
+  ],
+  "conditions": {
+    "tq0AddQUtoQualDefinitionCmd": {
+      "expression": "ctx.selected && ctx.selected.modelType.typeHierarchyArray.indexOf('Tq0QualificationDefinition') > -1 && ctx.selected.props.release_status_list.dbValues.length === 0"
+    },
+    "tq0QualityActionCommandVisiblity": {
+      "expression": " ctx.selected && ctx.selected.modelType.typeHierarchyArray.indexOf('Tq0QualificationUnit') > -1 && ctx.selected.props.release_status_list.dbValue.length === 0 && commandContext.objectSetSource === 'Tq0EffectivenssCheck.Qam0QualityAction' "
+    },
+    "Tq0FilterCmdVisibilityCondition": {
+      "expression": "commandContext.searchState.totalFound > 0 &&  conditions.isTqTileLocation  && (ctx.locationContext['ActiveWorkspace:SubLocation'] === 'showQUDashboard' || ctx.locationContext['ActiveWorkspace:SubLocation'] === 'showQPDashboard')"
+    },
+    "isTqTileLocation": {
+      "expression": "ctx.locationContext['ActiveWorkspace:Location'] === 'com.siemens.splm.client.qualityCenterManager.TQLocation'"
+    },
+    "tq0IsQProfile": {
+      "expression": "ctx.selected.modelType.typeHierarchyArray.indexOf('Tq0QualificationProfile') > -1"
+    },
+    "tq0IsQProfileAndQPG": {
+      "expression": "ctx.selected.modelType.typeHierarchyArray.indexOf('Tq0QualificationProfile') > -1 || ( ctx.selected.modelType.typeHierarchyArray.indexOf('Tq0QualProfileGroup') > -1 && ctx.selected.props.tq0QualProfileList.dbValue.length > 0 )"
+    },
+    "tq0IsQUnitVersionable": {
+      "expression": "ctx.visibleServerCommands.Tq0QualificationUnitVersionCmd && ctx.selected.type === 'Tq0QualificationUnit' && ctx.selected.props.release_status_list.dbValue.length > 0"
+    },
+    "tq0IsQDefVersionable": {
+      "expression": "ctx.selected.modelType.typeHierarchyArray.indexOf('Tq0QualificationDefinition') > -1 && ctx.selected.props.release_status_list.dbValue.length > 0"
+    },
+    "tq0ShowRemoveRespUsrCmd": {
+      "expression": "ctx.pselected.type === 'Tq0QualificationProfile' && ctx.mselected.length > 0 && ctx.relationContext.relationInfo[0].relationType === 'tq0ResponsibleUsers'"
+    },
+    "tq0ShowAddQProfilesCmd": {
+      "expression": "ctx.selected && ctx.selected.modelType.typeHierarchyArray.indexOf('Tq0QualProfileGroup') > -1"
+    },
+    "tq0ShowRemoveQProfilesCmd": {
+      "expression": "ctx.selected && ctx.pselected && ctx.mselected.length > 0 && ctx.pselected.type === 'Tq0QualProfileGroup' && ctx.selected.type === 'Tq0QualificationProfile'"
+    },
+    "tq0ShowAddRespUsrCmd": {
+      "expression": "ctx.selected.modelType.typeHierarchyArray.indexOf('Tq0QualificationProfile') > -1 && !conditions.tq0ShowRemoveRespUsrCmd"
+    },
+    "tq0ShowReplaceTargetEntityCmd": {
+      "expression": "ctx.pselected.type === 'Tq0QualificationProfile' && ctx.mselected.length === 1 && ctx.relationContext.relationInfo[0].relationType === 'tq0TargetEntity'"
+    },
+    "tq0ShowAddTargetEntityCmd": {
+      "expression": "ctx.selected.type === 'Tq0QualificationProfile' && !conditions.tq0ShowReplaceTargetEntityCmd && !ctx.selected.props.tq0TargetEntity.dbValue"
+    },
+    "Tq0RemoveAttachmentFromQP": {
+      "expression": "ctx.pselected.modelType.typeHierarchyArray.indexOf('Tq0QualificationProfile') > -1 && !(ctx.selected.modelType.typeHierarchyArray.indexOf('Tq0QualificationProfile') > -1) && ctx.mselected.length > 0"
+    },
+    "tq0ShowDeleteQualificationRecords": {
+      "expression": "ctx.selectionArr && ctx.selectionArr.length > 0"
+    },
+    "Tq0RemoveAttachmentFromQualRecord": {
+      "expression": "ctx.pselected.modelType.typeHierarchyArray.indexOf('Tq0QualRecord') > -1 && !(ctx.selected.modelType.typeHierarchyArray.indexOf('Tq0QualRecord') > -1) && ctx.mselected.length > 0"
+    },
+    "tq0ShowAssignStateModelCmd": {
+      "expression": "ctx.selected.type === 'Tq0QualificationUnit' && ctx.selected.props.release_status_list.dbValues.length === 0"
+    },
+    "tq0RemovePrereqCond": {
+      "expression": "ctx.pselected.type === 'Tq0QualificationUnit' && ctx.selected.type === 'Tq0QualificationUnit' && ctx.pselected.props.tq0Prerequisites.dbValues.indexOf(ctx.selected.uid) > -1 && ctx.pselected.props.release_status_list.dbValues.length === 0"
+    },
+    "tq0AddPrereqCond": {
+      "expression": "((ctx.locationContext['ActiveWorkspace:SubLocation'] === 'showObject' && ctx.selected.type === 'Tq0QualificationUnit' && ctx.pselected.type === ctx.selected.type && ctx.selected.props.release_status_list.dbValues.length === 0) || (ctx.locationContext['ActiveWorkspace:SubLocation'] !== 'showObject' && ctx.selected.type === 'Tq0QualificationUnit' && ctx.pselected.type !== ctx.selected.type && ctx.selected.props.release_status_list.dbValues.length === 0))"
+    },
+    "tq0AddQualUnitCond": {
+      "expression": "(ctx.sublocation.nameToken === 'com.siemens.splm.client.qualityCenterManager:showQUDashboard'|| ctx.locationContext['ActiveWorkspace:SubLocation'] === 'showQUDashboard') "
+    },
+    "tq0AddQualProfileCond": {
+      "expression": "(ctx.sublocation.nameToken === 'com.siemens.splm.client.qualityCenterManager:showQPDashboard'|| ctx.locationContext['ActiveWorkspace:SubLocation'] === 'showQPDashboard') "
+    },
+    "tq0AddQualProfileGroupCond": {
+      "expression": "(ctx.sublocation.nameToken === 'com.siemens.splm.client.qualityCenterManager:showQPGDashboard'|| ctx.locationContext['ActiveWorkspace:SubLocation'] === 'showQPGDashboard') "
+    }
+  },
+  "messages": {
+    "deleteMultipleQualificationRecordConfirmationMessage": {
+      "messageType": "WARNING",
+      "messageText": "{{i18n.tq0MultipleDeleteConfirmationMessage}}",
+      "messageTextParams": [
+        "{{ctx.selectionArr.length}}"
+      ],
+      "navigationOptions": [
+        {
+          "option": "Cancel",
+          "text": "{{i18n.tq0CancelText}}"
+        },
+        {
+          "option": "Remove",
+          "text": "{{i18n.tq0RemoveText}}",
+          "action": "tq0DeleteSelectedObjects"
+        }
+      ]
+    },
+    "deleteSingleQualificationRecordConfirmationMessage": {
+      "messageType": "WARNING",
+      "messageText": "{{i18n.tq0SingleDeleteConfirmationMessage}}",
+      "messageTextParams": [
+        "{{ctx.selectionArr[0].props.tq0QUnitReference.displayValues[0]}}"
+      ],
+      "navigationOptions": [
+        {
+          "option": "Cancel",
+          "text": "{{i18n.tq0CancelText}}"
+        },
+        {
+          "option": "Remove",
+          "text": "{{i18n.tq0RemoveText}}",
+          "action": "tq0DeleteSelectedObjects"
+        }
+      ]
+    },
+    "tq0SingleQualificationRecordFailureMessage": {
+      "messageType": "ERROR",
+      "messageText": "{{i18n.tq0PartialError}}",
+      "messageTextParams": [
+        "{{ctx.selectionArr[0].props.tq0QUnitReference.displayValues[0]}}",
+        "{{data.deleteObjectsPartialErrors[0].errorValues[0].message}}"
+      ]
+    },
+    "tq0MultipleQualificationRecordFailureMessage": {
+      "expression": {
+        "failureCount": "data.deleteObjectsPartialErrors.length"
+      },
+      "messageType": "ERROR",
+      "messageKey": "tq0DeleteRecordsObjectsNotyError",
+      "messageTextParams": [
+        "{{expression.failureCount}}",
+        "{{ctx.selectionArrForMessage.length}}"
+      ],
+      "messageData": {
+        "partialErrors": "{{data.deleteObjectsPartialErrors}}"
+      },
+      "message": {
+        "messageParam": {
+          "name": "tq0DeleteObjectsPartialSuccessMultiple"
+        },
+        "errorValues": {
+          "name": ""
+        }
+      }
+    },
+    "tq0SingleQualificationRecordSuccessMessage": {
+      "messageType": "INFO",
+      "messageText": "{{i18n.tq0SingleDeleteSuccessMessage}}",
+      "messageTextParams": [
+        "{{ctx.selectionArr[0].props.tq0QUnitReference.displayValues[0]}}"
+      ]
+    },
+    "VersionQualificationUnitsFailed": {
+      "messageType": "ERROR",
+      "messageText": "{{i18n.VersionQualificationUnitsFailed}}",
+      "messageTextParams": [
+        "{{data.serviceData.partialErrors[0].errorValues[0].message}}"
+      ]
+    },
+    "VersionQualificationDefFailed": {
+      "messageType": "ERROR",
+      "messageText": "{{i18n.VersionQualificationDefFailed}}",
+      "messageTextParams": [
+        "{{data.serviceData.partialErrors[0].errorValues[0].message}}"
+      ]
+    }
+  },
+  "functions": {
+    "getVersionQUsSoaInp": {
+      "functionName": "getVersionQUsSoaInp",
+      "parameters": [
+        "{{ctx.selected}}"
+      ]
+    },
+    "getVersionQUsSoaInputForPrereq": {
+      "functionName": "getVersionQUsSoaInputForPrereq",
+      "parameters": [
+        "{{ctx.selected}}"
+      ]
+    },
+    "getVersionQDSoaInput": {
+      "functionName": "getVersionQDSoaInput",
+      "parameters": [
+        "{{ctx.selected}}"
+      ]
+    },
+    "getPrerequisiteValues": {
+      "functionName": "getPrerequisiteValues",
+      "parameters": []
+    }
+  },
+  "i18n": {
+    "tq0AddQUtoQualDefinitionDesc": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0Add": [
+      "trainingandqualificationMessages"
+    ],
+    "add": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0AddResponsibleUserTitle": [
+      "responsibleUserMessages"
+    ],
+    "tq0AddResponsibleUserDesc": [
+      "responsibleUserMessages"
+    ],
+    "tq0AddTargetEntityDesc": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0AddQualProfileListTitle": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0AddQualProfileListDesc": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0AssignQUStateModel": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0AssignQUStateModelDesc": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0RemoveQualProfileListDesc": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0RemoveQualProfileListTitle": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0RemoveResponsibleUserTitle": [
+      "responsibleUserMessages"
+    ],
+    "tq0RemoveResponsibleUserDesc": [
+      "responsibleUserMessages"
+    ],
+    "tq0OpenResponsibleUserObjTitle": [
+      "responsibleUserMessages"
+    ],
+    "tq0OpenResponsibleUserObjDesc": [
+      "responsibleUserMessages"
+    ],
+    "tq0AssignQualificationUnitDesc": [
+      "assignQualificationUnitMessages"
+    ],
+    "tq0AssignQualificationUnit": [
+      "assignQualificationUnitMessages"
+    ],
+    "tq0AssignQualificationDefinitionDesc": [
+      "assignQualificationUnitMessages"
+    ],
+    "tq0AssignQualificationDefinition": [
+      "assignQualificationUnitMessages"
+    ],
+    "tq0ReplaceTargetEntityDesc": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0CancelText": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0RemoveText": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0RemovePrereqDesc": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0PartialError": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0SingleDeleteConfirmationMessage": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0SingleDeleteSuccessMessage": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0RemoveQualificationDescription": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0RemoveQualRecordDescription": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0MultipleDeleteConfirmationMessage": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0VersionQualificationUnit": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0VersionQualificationUnitDesc": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0VersionQualDefinition": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0VersionQualDefinitionDesc": [
+      "trainingandqualificationMessages"
+    ],
+    "VersionQualificationUnitsFailed": [
+      "trainingandqualificationMessages"
+    ],
+    "VersionQualificationDefFailed": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0DeleteObjectsPartialSuccessMultiple": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0AddPrequisitesDesc": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0RemoveAttachmentFromQualificationProfileDesc": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0CreateUnit": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0CreateProfile": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0PWASearchFiltersTitle": [
+      "trainingandqualificationMessages"
+    ],
+    "tq0PWASearchFiltersDesc": [
+      "trainingandqualificationMessages"
+    ]
+  }
+}

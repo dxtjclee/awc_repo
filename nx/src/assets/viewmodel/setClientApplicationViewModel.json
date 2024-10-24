@@ -1,0 +1,81 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports":
+    [
+        "js/aw-link-with-popup-menu.directive",
+        "js/aw-property-label.directive",
+        "js/aw-column.directive"
+    ],
+
+    "actions":
+    {
+        "CreateTCNXApplicationVMOsAction":
+        {
+            "actionType": "JSFunction",
+            "method": "CreateTCNXEnvOrAppVMOsAction",
+            "inputData":
+            {
+                "envOrAppPref": "{{ctx.preferences.TC_NX_Applications}}"
+            },
+            "outputData":
+            {
+                "TC_NX_ApplicationVMOs": "TC_NX_EnvOrAppVMOs"
+            },
+            "deps": "js/setApplicationAndEnvironment"
+        },
+        "TCNXsetApplicationAction":
+        {
+            "actionType": "JSFunction",
+            "method": "setApplication",
+            "inputData": {
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/setApplicationAndEnvironment"
+        }
+    },
+    "conditions":
+    {
+
+    },
+
+    "data":{
+        "applicationInfo":
+        {
+            "displayName": "{{ctx.preferences.TC_NX_Current_Application[0]}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "dbValue": "{{ctx.preferences.TC_NX_Current_Application[0]}}"
+        },
+        "clientApplication":
+        {
+            "isNull": false,
+            "propertyDisplayName": "{{i18n.clientApplication}}",
+            "uiValue": "{{i18n.clientApplication}}"
+        }
+    },
+
+    "onEvent":
+    [
+        {
+            "eventId": "awlinkPopup.selected",
+            "cacheEventData": true,
+            "action": "TCNXsetApplicationAction"
+        }
+    ],
+
+    "dataProviders":
+    {
+
+        "applicationLink":
+        {
+            "dataProviderType": "Action",
+            "action": "CreateTCNXApplicationVMOsAction",
+            "response": "{{data.TC_NX_ApplicationVMOs}}",
+            "totalFound": "{{ctx.preferences.TC_NX_Applications.length}}"
+        }
+    },
+    "i18n":
+    {
+        "clientApplication": [ "NXConstants" ]
+    }
+}

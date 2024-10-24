@@ -1,0 +1,262 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "messages": {
+            "SelectionIsNotWcOrActivity": [
+                {
+                    "text": "{{i18n.SelectionIsNotWcOrActivity}}"
+                }
+            ],
+            "noAssigned": [
+                {
+                    "text": "{{i18n.noAssignedNotices}}",
+                    "iconId": "cmdAdd"
+                }
+            ]
+        }
+    },
+    "actions": {
+        "loadNoticesTableColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadRequirementColumns",
+            "inputData": {
+                "data":"{{data}}"
+                 },
+            "outputData": {
+                "dataProviders.activityNoticesTreeDataProvider.columnConfig": "columnConfig"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "reloadActivityNoticesTree"
+                    }
+                ]
+            },
+            "deps": "js/ssp0ActivityNoticesService"
+        },
+        "reloadActivityNoticesTree": {
+            "actionType": "JSFunction",
+            "method": "reloadActivityNoticesTree",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.activityNoticesTreeDataProvider}}",
+                "selection": "{{ctx.selected}}"
+            },
+            "deps": "js/ssp0ActivityNoticesService"
+        },
+        "selectVMOinTree": {
+            "actionType": "JSFunction",
+            "method": "selectVMOinTree",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.activityNoticesTreeDataProvider}}"
+            },
+            "deps": "js/ssp0ActivityNoticesService"
+        },
+        "getDataForNoticesTable": {
+            "actionType": "JSFunctionAsync",
+            "method": "getCreateInput",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "treeLoadResult": "{{function:setNodeProperties}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "reloadActivityNoticesTree"
+                    }
+                ]
+            },
+            "deps": "js/ssp0ActivityNoticesService"
+        },
+        "saveColumnConfigLoadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "saveUIColumnConfigs2",
+            "inputData": {
+                "columnConfigurations": [
+                    {
+                        "clientScopeURI": "Ssp0NoticesTableManagement",
+                        "columnConfigId": "{{data.dataProviders.activityNoticesTreeDataProvider.columnConfig.columnConfigId}}",
+                        "columns": "{{data.dataProviders.activityNoticesTreeDataProvider.newColumns}}",
+                        "scope": "LoginUser",
+                        "scopeName": ""
+                    }
+                ]
+            },
+            "outputData": {},
+            "events": {
+                "success": [
+                    {
+                        "name": "slm.noticesTableColumnConfig.saved"
+                    }
+                ]
+            }
+        },
+        "loadDataForSavedColumnConfig":{
+            "actionType": "JSFunctionAsync",
+            "method": "getTableViewModelProperties",
+            "deps": "js/tcViewModelObjectService",
+            "inputData": {
+                "vmNodes": "{{data.dataProviders.activityNoticesTreeDataProvider.viewModelCollection.loadedVMObjects}}",
+                "context": {
+                    "clientScopeURI": "Ssp0NoticesTableManagement",
+                    "clientName": "AWClient",
+                    "columnConfigId": "Ssp0NoticesTableManagement",
+                    "columnsToExclude": "{{ctx.sbomProductContext.columnsToExclude}}",
+                    "operationType": "{{eventData.operationType}}"
+                }
+            },
+            "outputData": {
+                "newColumnConfig": "result.output.columnConfig"
+            }
+        },
+        "resetColumnConfig": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "getOrResetUIColumnConfigs4",
+            "inputData": {
+                "getOrResetUiConfigsIn": [
+                    {
+                        "scope": "LoginUser",
+                        "scopeName": "",
+                        "clientName": "AWClient",
+                        "resetColumnConfig": true,
+                        "columnConfigQueryInfos": [
+                            {
+                                "clientScopeURI": "Ssp0NoticesTableManagement",
+                                "operationType": "union",
+                                "columnsToExclude": []
+                            }
+                        ],
+                        "businessObjects": [
+                            {}
+                        ]
+                    }
+                ]
+            },
+            "outputData": {
+                "dataProviders.activityNoticesTreeDataProvider.columnConfig": "{{function:postResetFunction}}"
+            },
+            "deps": "js/tcarrange.service"
+        },
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/columnArrangeService"
+        }
+    },
+    "functions": {
+        "getCreateInput": {
+            "functionName": "getCreateInput",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "setNodeProperties": {
+            "functionName": "setNodeProperties",
+            "parameters": []
+        },
+        "getResponseAndTotalFound": {
+            "functionName": "getResponseAndTotalFound",
+            "parameters": [
+            ]
+        },
+        "postResetFunction": {
+            "functionName": "postResetFunction",
+            "parameters": [
+                "{{data.dataProviders.activityNoticesTreeDataProvider.columnConfig}}"
+            ]
+        }
+    },
+    "dataProviders": {
+        "activityNoticesTreeDataProvider": {
+            "response": "{{data.treeLoadResult.response}}",
+            "totalFound": "{{data.treeLoadResult.totalFound}}",
+            "selectionModelMode": "multiple"
+        }
+    },
+    "columnProviders": {
+        "activityNoticesTreeColumnProvider": {
+            "loadColumnAction": "loadNoticesTableColumns",
+            "saveColumnAndLoadAction": "saveColumnConfigLoadData",
+            "resetColumnAction": "resetColumnConfig",
+            "columns": "{{data.columns}}",
+            "frozenColumnIndex": -1
+        }
+    },
+    "grids": {
+        "activityNoticesTree": {
+            "dataProvider": "activityNoticesTreeDataProvider",
+            "columnProvider": "activityNoticesTreeColumnProvider",
+            "enableArrangeMenu": true,
+            "addIconColumn": true,
+            "gridOptions": {
+                "useStaticFirstCol": true,
+                "enableExpandAndPaginationInEdit": true
+            }
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "Ssp0ActivityNotices.triggerFunction",
+            "action": "getDataForNoticesTable",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "Ssp0ActivityNoticesTree.selectVMOinTree",
+            "action": "selectVMOinTree",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "Ssp0ActivityNoticesTree.triggerFunction",
+            "action": "reloadActivityNoticesTree"
+        },
+        {
+            "eventId": "reloadActivityNoticesTree",
+            "action": "reloadActivityNoticesTree"
+        },
+        {
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        },
+        {
+            "eventId": "slm.noticesTableColumnConfig.saved",
+            "cacheEventData": true,
+            "action": "loadDataForSavedColumnConfig"
+        }
+    ],
+    "lifecycleHooks": {
+        "onMount": "getDataForNoticesTable"
+    },
+    "conditions": {
+        "IsSelectionValid": {
+            "expression": "ctx.selectedActivity && ctx.selectedActivity.modelType.typeHierarchyArray.includes('CfgActivityLine')"
+        },
+        "areNoticesAssigned": {
+            "expression": "data.treeLoadResult.totalFound > 0"
+        }
+    },
+    "i18n": {
+        "SelectionIsNotWcOrActivity": [
+            "timeAnalysisMessages"
+        ],
+        "noAssignedNotices": [
+            "timeAnalysisMessages"
+        ],
+        "nameValueColumn": [
+            "timeAnalysisMessages"
+        ],
+        "noticesTypeValueColumn": [
+            "timeAnalysisMessages"
+        ],
+        "longDescriptionValueColumn": [
+            "timeAnalysisMessages"
+        ]
+      }
+}

@@ -1,0 +1,88 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "provider": {
+            "label": "{{i18n.lineLayoutPageTitle}}",
+            "priority": 3,
+            "name": "lineLayoutPage",
+            "clientScopeURI": "lineLayoutPage",
+            "nameToken": "lineLayoutPage"
+        },
+        "awSubLocationPref": {
+            "hideNavigationArea": true,
+            "hideRightWall": true,
+            "hideToolsAndInfoArea": true
+        },
+        "loading": true
+    },
+    "actions": {
+        "initializeEPPage": {
+            "actionType": "JSFunctionAsync",
+            "method": "initializePage",
+            "inputData": {
+                "provider": "{{data.provider}}"
+            },
+            "outputData": {
+                "subLocationPreference": "subLocationPreference",
+                "stateContext": "stateContext",
+                "propertyPolicyId": "propertyPolicyId"
+            },
+            "deps": "js/AwBaseSublocationService"
+        },
+        "setLoading": {
+            "actionType": "JSFunction",
+            "method": "setLoading",
+            "inputData": {},
+            "outputData": {
+                "loading": ""
+            },
+            "deps": "js/lineLayoutService"
+        },
+        "openPopup": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "openAttachPopup",
+                    "condition": "!conditions.isReadOnlyMode"
+                }
+
+            ]
+        },
+        "openAttachPopup": {
+            "actionType": "popup",
+            "method": "show",
+            "deps": "js/popupService",
+            "inputData": {
+                "options": {
+                    "view": "AttachLineLayoutPopup",
+                    "draggable": true,
+                    "width": "400",
+                    "caption": "{{i18n.attachFile}}",
+                    "preset": "modal",
+                    "subPanelContext": {
+                        "lineModelObject": "{{fields.headerExample}}"
+                    }
+                }
+            }
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "lineLayoutPage.setLoading",
+            "action": "setLoading"
+        }
+    ],
+    "i18n": {
+        "lineLayout": [
+            "LayoutMessages"
+        ],
+        "addLayout": [
+            "LayoutMessages"
+        ],
+        "attachFile": [
+            "LayoutMessages"
+        ]
+    },
+    "lifecycleHooks": {
+        "onMount": "initializeEPPage"
+    }
+}

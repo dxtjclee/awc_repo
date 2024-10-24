@@ -1,0 +1,43 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "loadCCStructuresForTaskNavigationPanel": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "clearTaskPageContext",
+                    "condition": "conditions.isCCUidAvailableAndIsNotManagePage"
+                },
+                {
+                    "action": "loadCCStructures",
+                    "condition": "conditions.isCCUidAvailableAndIsNotManagePage"
+                }
+            ]
+        },
+        "loadCCStructures": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadCCStructures",
+            "inputData": {
+                "ccObject": "{{ctx.selected}}"
+            },
+            "deps": "js/epInitializationService"
+        },
+        "clearTaskPageContext": {
+            "actionType": "JSFunction",
+            "method": "updateCtx",
+            "deps": "js/appCtxService",
+            "inputData": {
+                "name": "epTaskPageContext",
+                "value": {}
+            }
+        }
+    },
+    "conditions": {
+        "isCCUidAvailableAndIsNotManagePage": {
+            "expression": "ctx.locationContext['ActiveWorkspace:SubLocation'] !== 'manageWorkPackageNewSubLocation' && ctx.selected.uid && ctx.selected.modelType.typeHierarchyArray.includes('MECollaborationContext')"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "loadCCStructuresForTaskNavigationPanel"
+    }
+}

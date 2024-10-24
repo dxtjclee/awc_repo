@@ -1,0 +1,44 @@
+[
+  {
+    "conditions": {
+      "$and": [
+        {
+          "xrtSummaryContextObject.modelType.typeHierarchyArray": {
+            "$in": [
+              "Att0MeasurableAttribute",
+              "Att0AttributeDefRevision"
+            ]
+          }
+        },
+        {
+          "$or": [
+            {
+              "goalTable.tableName": {
+                "$eq": "att0GoalTable"
+              }
+            },
+            {
+              "maxTable.tableName": {
+                "$eq": "att0MaxTable"
+              }
+            },
+            {
+              "minTable.tableName": {
+                "$eq": "att0MinTable"
+              }
+            },
+            {
+              "valueTable.tableName": {
+                "$eq": "att0ValueTable"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "target": {
+      "method": "getSaveHandler",
+      "deps": "js/complexDataSaveHandler"
+    }
+  }
+]

@@ -1,0 +1,180 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+    ],
+
+    "actions": {
+        "changeRadioForDelayedRelease": {
+            "actionType": "JSFunction",
+            "method": "changeRadioForDelayedRelease",
+            "inputData":
+            {
+                "data": "{{data}}"
+            },
+            "deps": "js/tq0Utils"
+        },
+        "editStateChangeForRenewalSchedule":{
+            "actionType": "JSFunction",
+            "method": "editStateChangeForRenewalSchedule",
+            "inputData": {
+                "data" : "{{data}}"
+            },
+            "outputData": {},
+            "deps": "js/tq0Utils"
+        },
+        "displayReleaseSchedule": {
+            "actionType": "JSFunction",
+            "method": "displayReleaseSchedule",
+            "inputData": {
+                "i18n": "{{data.i18n}}"
+            },
+            "outputData": {
+                "releaseScheduleLabel.uiValue": "releaseScheduleLabelVal",
+                "delayByDaysTextBoxValue.uiValue": "delayByDaysTextVal",
+                "dateDetails.uiValue": "dateDetailVal",
+                "AllowEarlyRelease.uiValue": "AllowEarlyReleaseVal",
+                "updateQualRecords.uiValue": "RequalificationRequiredVal"
+            },
+            "deps": "js/tq0Utils"
+        },
+        "saveEditForReleaseSchedule": {
+            "actionType": "JSFunction",
+            "method": "saveEditForReleaseSchedule",
+            "inputData": {
+                "data" : "{{data}}"
+            },
+            "outputData": {},
+            "deps": "js/tq0Utils"
+        }
+    },
+
+    "onEvent": [
+        {
+            "eventId": "editHandlerStateChange",
+            "condition": "state === 'starting'",
+            "action": "editStateChangeForRenewalSchedule"
+        },
+        {
+            "eventId": "editHandlerStateChange",
+            "condition": "state === 'saved'",
+            "action": "saveEditForReleaseSchedule"
+        }
+    ],
+
+    "conditions": {
+        "isEditInProgress": {
+            "expression": "ctx.editInProgress"
+        },
+        "isDelayByDate": {
+            "expression": "data.whenApproved.dbValue === 'tq0DelayByDate'"
+        }
+    },
+
+    "data": {
+        "dateDetails": {
+            "displayName": "",
+            "type": "DATE",
+            "isRequired": "false",
+            "isEditable": true,
+            "dispValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        },
+        "delayByDaysTextBox": {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "",
+            "dispValue": ""
+        },
+        "delayByDaysTextBoxValue": {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "",
+            "dispValue": ""
+        },
+        "AllowEarlyRelease": {
+            "displayName": "{{i18n.tq0AllowEarlyRelease}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": true,
+            "dispValue": "",
+            "dbValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        },
+        "releaseScheduleLabel": {
+            "displayName": "{{i18n.tq0ReleaseSchedule}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dispValue": "",
+            "dbValue": ""
+        },
+        "updateQualRecords": {
+            "displayName": "{{i18n.tq0ReQualificationRequired}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dispValue": "",
+            "dbValue": "TRUE",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        },
+        "whenApproved": {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "tq0WhenApproved",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT",
+            "vertical": true
+        },
+        "whenApprovedOptions": {
+            "type": "STRING",
+            "dbValue": [
+                {
+                    "propDisplayValue": "{{i18n.tq0WhenApproved}}",
+                    "propInternalValue": "tq0WhenApproved"
+                },
+                {
+                    "propDisplayValue": "{{i18n.tq0DelaybyDays}}",
+                    "propInternalValue": "tq0DelayByDays"
+                },
+                {
+                    "propDisplayValue": "{{i18n.tq0DelaybyDate}}",
+                    "propInternalValue": "tq0DelayByDate"
+                }
+            ]
+        }
+    },
+
+    "functions": {
+
+    },
+
+    "i18n": {
+        "tq0AllowEarlyRelease": [
+            "trainingandqualificationMessages"
+        ],
+        "tq0WhenApproved": [
+            "trainingandqualificationMessages"
+        ],
+        "tq0DelaybyDays": [
+            "trainingandqualificationMessages"
+        ],
+        "tq0DelaybyDate": [
+            "trainingandqualificationMessages"
+        ],
+        "tq0ReQualificationRequired": [
+            "trainingandqualificationMessages"
+        ],
+        "tq0ReleaseSchedule": [
+            "trainingandqualificationMessages"
+        ]
+    },
+
+    "lifecycleHooks" : {
+        "onMount": "displayReleaseSchedule"
+    }
+}

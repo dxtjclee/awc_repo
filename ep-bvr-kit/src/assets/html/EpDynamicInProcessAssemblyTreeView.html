@@ -1,0 +1,5 @@
+<ep-tree-table exist-when="!conditions.isProcessStationNotSelected && data.sharedSelectionData.isTreeDataLoaded !== 'false'" view-id="EpDynamicInProcessAssemblyTree_EpTreeTable" sub-panel-context="{...data.DIPATreeContext,  ...props.subPanelContext, sharedSelectionData : data.sharedSelectionData}" selection-data="data.selectionData"></ep-tree-table>
+<mfe-message exist-when="conditions.isProcessStationNotSelected"
+    sub-panel-context="data.messages.selectProcessStationForDIPA"></mfe-message>
+<mfe-message exist-when="data.sharedSelectionData.isTreeDataLoaded === 'false'"
+    sub-panel-context="data.messages.createDIPA"></mfe-message>

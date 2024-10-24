@@ -1,0 +1,484 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-splm-table.directive",
+        "js/aw-command-bar.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-chart.directive",
+        "js/aw-row.directive",
+        "js/aw-column.directive",
+        "js/aw-i18n.directive",
+        "js/aw-am-table-panel.directive",
+        "js/exist-when.directive"
+    ],
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "lifecycleHooks": {
+        "onUnmount": "removePieChartData",
+        "onUpdate": [ {
+            "action": "createPieChartForDynamicTables",
+            "observers": [ "props.subPanelContext.context.vrSublocationState.pieChartData.vrTables.testProcedureTableProvider.chartData" ]
+        },
+        {
+
+            "action": "redrawtestProcedurePieChart",
+            "observers": [ "props.subPanelContext.context.vrSublocationState.pieChartData.vrTables.testProcedureTableProvider.redrawTestProcedurePieAsDoubleFilter" ]
+        },
+        {
+            "action": "handleSelectionChange",
+            "observers": [ "viewModel.atomicData.selectionData" ]
+        } ]
+
+    },
+    "actions": {
+        "handleSelectionChange": {
+            "actionType": "JSFunction",
+            "method": "handleSelectionChange",
+            "inputData": {
+                "data": "{{data.dataProviders.testProcedureTableProvider}}",
+                "subPanelContext": "{{subPanelContext}}"
+            },
+            "outputData": {},
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "redrawtestProcedurePieChart": {
+            "actionType": "JSFunction",
+            "method": "redrawSecondaryPieCharts",
+            "inputData": {
+                "input": "{{data}}"
+            },
+            "outputData": {
+                "pieChartForTestProcedureProvider_chartPoints": ""
+            },
+            "deps": "js/Crt1VROverviewTablesService",
+            "events": {
+                "success": [ {
+                    "name": "redrawPieChartForDynamicTables"
+                } ]
+            }
+        },
+        "removePieChartData": {
+            "actionType": "JSFunction",
+            "method": "removePieChartData",
+            "inputData": {
+                "vrSublocationState": "{{props.subPanelContext.context.vrSublocationState}}",
+                "table": "testProcedureTableProvider",
+                "pieClickedFlag": "testProcedurePieClicked",
+                "pieDedrawFlag": "redrawTestProcedurePieAsDoubleFilter",
+                "subPanelContext": "{{subPanelContext}}",
+                "dataProvider": "{{data.dataProviders.testProcedureTableProvider}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "getColumnDataForDynamicTables"
+                    }
+                ]
+            },
+            "deps": "js/dynamicTableUtils"
+        },
+        "saveColumnConfigLoadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "saveUIColumnConfigs2",
+            "inputData": {
+                "columnConfigurations": [ {
+                    "clientScopeURI": "{{subPanelContext.context.vrSublocationState.scopeURI.get('IAV0TestProcedur')}}",
+                    "columnConfigId": "{{subPanelContext.context.vrSublocationState.columnConfig.get('IAV0TestProcedur')}}",
+                    "columns": "{{data.dataProviders.testProcedureTableProvider.newColumns}}",
+                    "scope": "LoginUser",
+                    "scopeName": ""
+                } ]
+            },
+            "outputData": {},
+            "events": {
+                "success": [
+                    {
+                        "name": "testProcedureTable.plTable.reload"
+                    }
+                ]
+            }
+        },
+        "resetColumnConfig": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "getOrResetUIColumnConfigs4",
+            "inputData": {
+                "getOrResetUiConfigsIn": [ {
+                    "scope": "LoginUser",
+                    "scopeName": "",
+                    "clientName": "AWClient",
+                    "resetColumnConfig": true,
+                    "columnConfigQueryInfos": [ {
+                        "clientScopeURI": "{{subPanelContext.context.vrSublocationState.scopeURI.get('IAV0TestProcedur')}}",
+                        "operationType": "configured",
+                        "typeNames": [
+                            "WorkspaceObject"
+                        ],
+                        "columnsToExclude": []
+                    } ],
+                    "businessObjects": [
+                        {}
+                    ]
+                } ]
+            },
+            "outputData": {
+                "dataProviders.testProcedureTableProvider.columnConfig": "{{function:getColumnDataForDynamicTables}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "testProcedureTable.plTable.reload"
+                } ]
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "loadTestProcedureTreeData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTestProcedureTreeData",
+            "inputData": {
+                "treeLoadInput": "request.treeLoadInput",
+                "columnFilters": "{{data.columnProviders.testProcedureColumnProvider.columnFilters}}",
+                "parentUid": "{{function:getParentUid}}",
+                "testProcedureTreeTableColumnFilters": "{{props.subPanelContext.context.vrSublocationState.pieChartData.vrTables.testProcedureTableProvider.testProcedureTreeTableColumnFilters}}",
+                "testResultColumnFilters": "{{props.subPanelContext.context.vrSublocationState.pieChartData.vrTables.topPieChart.testResultColumnFilters}}",
+                "scopeURI":"{{props.subPanelContext}}"
+            },
+            "outputData": {
+                "totalFound": "result.treeLoadResult.totalChildCount",
+                "totalLoaded": "result.treeLoadResult.childNodes.length",
+                "searchResults": "result.treeLoadResult.childNodes"
+            },
+            "deps": "js/Crt1TestProcedureTreeTableService",
+            "events": {
+                "success": [ {
+                    "name": "updateSelectionForRemoveAndEditAction",
+                    "condition": "data.eventData.state === 'saved' && data.dataProviders.testProcedureTableProvider && data.eventMap['testProcedureTableProvider.selectionChangeEvent']"
+                } ]
+            }
+        },
+
+        "loadTreeTableProperties": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableProperties",
+            "inputData": {
+                "propertyLoadInput": "request.propertyLoadInput",
+                "data": "{{data}}",
+                "scopeURI":"{{props.subPanelContext}}"
+            },
+            "outputData": {
+                "dataProviders.testProcedureTableProvider.columnConfig": "propertyLoadResult.columnConfig"
+            },
+            "deps": "js/Crt1TestProcedureTreeTableService"
+        },
+        "loadTreeColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableColumns",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.testProcedureTableProvider}}",
+                "data": "{{data}}",
+                "scopeURI":"{{data.subPanelContext}}"
+            },
+            "deps": "js/Crt1TestProcedureTreeTableService"
+        },
+        "changeSelectionForDynamicTables": {
+            "actionType": "JSFunction",
+            "method": "changeSelectionForDynamicTables",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.testProcedureTableProvider}}"
+            },
+            "outputData": {
+                "selectedObjects": "selectedObjects"
+            },
+            "deps": "js/Crt1SelectionService"
+        },
+        "createPieChartForDynamicTables": {
+            "actionType": "JSFunction",
+            "method": "createPieChartForDynamicTables",
+            "inputData": {
+                "input": "{{data}}",
+                "tableColumnFilters": "testProcedureTreeTableColumnFilters",
+                "redrawFlag": "redrawTestProcedurePieAsDoubleFilter",
+                "chartData": "{{props.subPanelContext.context.vrSublocationState.pieChartData.vrTables.testProcedureTableProvider}}",
+                "seriesName": "{{data.i18n.TestProcedure}}",
+                "subPanelContext": "{{props.subPanelContext.context.vrSublocationState}}",
+                "table": "testProcedureTableProvider"
+            },
+            "outputData": {
+                "pieChartForTestProcedureProvider_chartPoints": ""
+            },
+            "deps": "js/Crt1PieChartsService"
+        },
+        "checkAndReloadTestProcedureChart": {
+            "actionType": "JSFunction",
+            "method": "checkAndReloadTestProcedureChart",
+            "inputData": {
+                "data": "{{data}}",
+                "subPanelContext": "{{props.subPanelContext.context.vrSublocationState}}"
+            },
+            "deps": "js/Crt1TestProcedureTreeTableService"
+        },
+        "filterTestProcedureTable": {
+            "actionType": "JSFunction",
+            "method": "filterTestProcedureTable",
+            "inputData": {
+                "data": "{{data}}",
+                "chartProp": "{{props.subPanelContext.context.vrSublocationState}}"
+            },
+            "deps": "js/Crt1TestProcedureTreeTableService"
+        },
+        "displayAllTestProcedure": {
+            "actionType": "JSFunction",
+            "method": "displayAllTestProcedure",
+            "inputData": {
+                "data": "{{data}}",
+                "chartProp": "{{props.subPanelContext.context.vrSublocationState}}"
+            },
+            "deps": "js/Crt1TestProcedureTreeTableService"
+        },
+        "setSelection": {
+            "actionType": "JSFunction",
+            "method": "setSelection",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Crt1TestProcedureTreeTableService"
+        },
+        "updateSelectionForRemoveAndEditAction": {
+            "actionType": "JSFunction",
+            "method": "updateSelectionForRemoveAndEditAction",
+            "deps": "js/Crt1SelectionService"
+        },
+        "setPanelPinnedState": {
+            "actionType": "JSFunction",
+            "method": "setPanelPinnedState",
+            "inputData": {
+                "eventData": "{{data.eventData}}"
+            },
+            "outputData": {
+                "panelPinned": "panelPinned"
+            },
+            "deps": "js/Crt1AddToVRService",
+            "events": {
+                "success": [ {
+                        "name": "testProcedureTable.plTable.reload"
+                    } ]
+            }
+        },
+        "modelObjectsLoaded": {
+            "actionType": "JSFunction",
+            "method": "modelObjectsLoaded",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.testProcedureTableProvider}}",
+                "eventMap": "{{data.eventMap}}",
+                "scopeSel": "{{props.subPanelContext.context.vrSublocationState.mselected[0]}}",
+                "subPanleCtx": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "modelObjectEdited": {
+            "actionType": "JSFunction",
+            "method": "modelObjectEdited",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.testProcedureTableProvider}}",
+                "scopeSel": "{{props.subPanelContext.context.vrSublocationState.mselected[0]}}",
+                "subPanleCtx": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "updateVRCtx": {
+            "actionType": "JSFunction",
+            "method": "updateCtxForTreeNodeExpand",
+            "inputData": {
+                "subPanleCtx": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "addExtraColumnAfterReset": {
+            "actionType": "JSFunction",
+            "method": "getColumnDataForDynamicTables",
+            "inputData": {
+                "data": "{{data.dataProviders.testProcedureTableProvider}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        }
+    },
+    "dataProviders": {
+        "testProcedureTableProvider": {
+            "initializeAction": "loadTestProcedureTreeData",
+            "nextAction": "loadTestProcedureTreeData",
+            "previousAction": "loadTestProcedureTreeData",
+            "editContext": "testProcedureTableProvider",
+            "treeLoadResult": "action.result.treeLoadResult",
+            "selectionModelMode": "multiple",
+            "inputData": {
+                "accessMode": "tree",
+                "selectionData": "{{fields.selectionData}}"
+            },
+            "commandsAnchor": "Open_Content_command",
+            "contextMenuCommandsAnchor": "aw_testProcedureTable_contextMenu"
+        },
+        "GridTreePropertyProvider": {
+            "action": "loadTreeTableProperties",
+            "propertyLoadResult": "action.result.propertyLoadResult"
+        }
+    },
+    "columnProviders": {
+        "testProcedureColumnProvider": {
+            "loadColumnAction": "loadTreeColumns",
+            "saveColumnAndLoadAction": "saveColumnConfigLoadData",
+            "resetColumnAction": "resetColumnConfig",
+            "columns": "{{data.columns}}",
+            "enableSorting": false,
+            "id": "Crt1TestProcedureTable"
+        }
+    },
+    "grids": {
+        "testProcedureTable": {
+            "dataProvider": "testProcedureTableProvider",
+            "columnProvider": "testProcedureColumnProvider",
+            "propertyProvider": "GridTreePropertyProvider",
+            "addIconColumn": false,
+            "enableArrangeMenu": true,
+            "gridOptions": {
+                "enableSorting": false,
+                "maxRowsToShow": 10,
+                "isFilteringEnabled": true
+            }
+        }
+    },
+    "functions": {
+        "getParentUid": {
+            "functionName": "getParentUid",
+            "parameters": [
+                "{{subPanelContext}}"
+            ]
+        }
+    },
+    "data": {
+        "chartProviders": {
+            "pieChartForTestProcedureProvider": {
+                "chartType": "pie",
+                "chartColorOverrideClass": "aw-verificationManagement-chartStatusColor",
+                "chartConfig": {
+                    "isChartZoomable": true,
+                    "isYAxisLinearOrLogarithmic": "logarithmic",
+                    "xAxisLabel": "",
+                    "yAxisLabel": "",
+                    "isDataLabelOnChartEnabled": true
+                }
+            }
+        },
+        "selectionData": {
+            "initialValues": {},
+            "meta": {}
+        }
+    },
+    "onEvent": [ {
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        },
+        {
+            "eventId": "testProcedureTableProvider.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "changeSelectionForDynamicTables"
+        },
+        {
+            "eventId": "undefined.selected",
+            "cacheEventData": true,
+            "action": "filterTestProcedureTable"
+        },
+        {
+            "eventId": "undefined.unselected",
+            "cacheEventData": true,
+            "action": "displayAllTestProcedure"
+        },
+        {
+            "eventId": "editHandlerStateChange",
+            "cacheEventData": true,
+            "action": "checkAndReloadTestProcedureChart"
+        },
+        {
+            "eventId": "TPTable.setSelection",
+            "action": "setSelection"
+        },
+        {
+            "eventId": "updateSelectionForRemoveAndEditAction",
+            "action": "updateSelectionForRemoveAndEditAction"
+        },
+        {
+            "eventId": "TPTable.modelObjectsLoaded",
+            "cacheEventData": true,
+            "action": "modelObjectsLoaded"
+        },
+        {
+            "eventId": "TPTable.modelObjectsEdited",
+            "cacheEventData": true,
+            "action": "modelObjectEdited"
+        },
+        {
+            "eventId": "redrawPieChartForDynamicTables",
+            "action": "createPieChartForDynamicTables"
+        },
+        {
+            "eventId": "testProcedureTable.plTable.toggleTreeNode",
+            "action": "updateVRCtx"
+        },
+        {
+            "eventId": "testProcedurePanelPinTPTableSelection",
+            "cacheEventData": true,
+            "action": "setPanelPinnedState"
+        },
+        {
+            "eventId": "resetPieChart",
+            "action": "redrawtestProcedurePieChart"
+        },
+        {
+            "eventId": "getColumnDataForDynamicTables",
+            "action": "addExtraColumnAfterReset"
+        }
+    ],
+    "conditions": {
+        "showTPMessageString": {
+            "expression": "data.pieChartForTestProcedureProvider_chartPoints[0].keyValueDataForChart[0].value === 0 && data.pieChartForTestProcedureProvider_chartPoints[0].keyValueDataForChart[1].value === 0 && data.pieChartForTestProcedureProvider_chartPoints[0].keyValueDataForChart[2].value === 0 && data.pieChartForTestProcedureProvider_chartPoints[0].keyValueDataForChart[3].value === 0 && data.pieChartForTestProcedureProvider_chartPoints[0].keyValueDataForChart[4].value === 0"
+        },
+        "showTPChart" : {
+            "expression": "data.pieChartForTestProcedureProvider_chartPoints && data.pieChartForTestProcedureProvider_chartPoints[0] && data.pieChartForTestProcedureProvider_chartPoints[0].keyValueDataForChart[0].value != -1"
+        }
+    },
+    "i18n": {
+        "NoResult": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Fail": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Pass": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "TestProcedure": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "noTestProcedureToDisplayChart": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Caution": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Blocked": [
+            "AnalysisRequestCommandPanelsMessages"
+        ]
+    }
+}

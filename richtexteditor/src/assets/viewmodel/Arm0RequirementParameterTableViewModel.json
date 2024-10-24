@@ -1,0 +1,67 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-include.directive"
+    ],
+
+    "actions": {
+        "updateSplitPanelContent": {
+            "actionType": "JSFunction",
+            "method": "updateSplitPanelContent",
+            "inputData": {
+                "data":"{{data}}"
+            },
+            "deps": "js/Arm0RequirementParameterTable"
+        },
+
+        "unregisterContext": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "deps": "js/appCtxService",
+            "inputData": {
+                "name": "requirementCtx"
+            }
+        },
+        "parameterTableContentloaded": {
+            "actionType": "JSFunction",
+            "method": "parameterTableContentloaded",
+            "deps": "js/paramToReq"
+        },
+        "parameterTableContentUnloaded": {
+            "actionType": "JSFunction",
+            "method": "parameterTableContentUnloaded",
+            "deps": "js/paramToReq"
+        }
+    },
+
+    "onEvent": [
+        {
+            "eventId": "primaryWorkArea.selectionChangeEvent",
+            "action": "updateSplitPanelContent"
+        },
+        {
+            "eventId": "Arm0RequirementParameterTable.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "updateSplitPanelContent"
+        },
+        {
+            "eventId": "appCtx.update",
+            "criteria": {
+                "name": "selected"
+            },
+            "action": "updateSplitPanelContent"
+        },
+        {
+            "eventId": "Arm0RequirementParameterTable.contentUnloaded",
+            "action": "unregisterContext"
+        },
+        {
+            "eventId": "Arm0RequirementParameterTable.contentUnloaded",
+            "action": "parameterTableContentUnloaded"
+        },
+        {
+            "eventId": "Arm0RequirementParameterTable.contentLoaded",
+            "action": "parameterTableContentloaded"
+        }
+    ]
+}

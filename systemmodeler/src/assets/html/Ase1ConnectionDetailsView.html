@@ -1,0 +1,15 @@
+<div class="sw-row" exist-when="conditions.isTcReleaseAtLeast142">
+    <div class="sw-column w-6">
+        <ase1-connection-table page-state="props.pageState" primary-selection="props.primarySelection"
+        primary-selection-data="fields.primarySelectionData" sub-panel-context="props.subPanelContext"></ase1-connection-table>
+    </div>
+    <aw-splitter direction="VERTICAL"></aw-splitter>
+    <div class="sw-column w-6">
+        <ase1-show-details-for-in-context-interfaces sub-panel-context="props.subPanelContext"
+        primary-selection="data.primarySelectionData" secondary-selection="fields.secondarySelectionData"></ase1-show-details-for-in-context-interfaces>
+    </div>
+</div>
+<div class="sw-row" exist-when="!conditions.isTcReleaseAtLeast142">
+        <ase1-connection-table page-state="props.pageState" primary-selection="props.primarySelection"
+        primary-selection-data="fields.primarySelectionData" sub-panel-context="props.subPanelContext"></ase1-connection-table>
+</div>

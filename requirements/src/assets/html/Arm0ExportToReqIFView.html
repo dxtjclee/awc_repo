@@ -1,0 +1,11 @@
+<aw-command-panel caption="i18n.exportToReqIFCmdTitle" context="subPanelContext" >
+    <aw-command-sub-panel panel-id="Arm0ExportToReqIFSub"  sub-panel-context="{...subPanelContext, sharedData:fields.sharedData}"
+    show-when="data.sharedData.activeView ==='Arm0ExportToReqIFSub'">
+</aw-command-sub-panel>
+<aw-navigate-panel title="i18n.addType" sub-panel-context="{sharedData:fields.sharedData}"
+    show-when="data.sharedData.activeView ==='Arm0AddTypeSub' && ctx.Arm0AddTypeSub.addTypes" exist-when = "data.sharedData.activeView !=='Arm0ExportToReqIFSub'" panel-id="Arm0AddTypeSub" action="backAction">
+</aw-navigate-panel>
+<aw-navigate-panel title="i18n.addTraceLink" sub-panel-context="{sharedData:fields.sharedData}"
+    show-when="data.sharedData.activeView ==='Arm0AddTypeSub' && ctx.Arm0AddTraceLinkSub.addTraceLinks" exist-when = "data.sharedData.activeView !=='Arm0ExportToReqIFSub'" panel-id="Arm0AddTypeSub" action="backAction">
+</aw-navigate-panel>
+</aw-command-panel>

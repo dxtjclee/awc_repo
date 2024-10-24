@@ -1,0 +1,89 @@
+{
+    "schemaVersion": "1.0.0",
+    "dataProviders": {
+        "endOfLifeGridDataProvider": {
+            "action": "getEOLObjectsOnSelectedPart",
+            "editContext": "TABLE_CONTEXT",
+            "response": "{{data.eolObjects}}",
+            "totalFound": "{{data.eolObjects.length}}",
+            "commandsAnchor": "CellCommands_EOLTable",
+            "selectionModelMode": "single"
+        }
+    },
+    "columnProviders": {
+        "endOfLifeColumnProvider": {
+            "loadColumnAction": "setEolColumns",
+            "columns": "{{data.columns}}",
+            "frozenColumnIndex": -1
+        }
+    },
+    "data": {},
+    "actions": {
+        "doGridTableDataProvider": {
+            "actionType": "dataProvider",
+            "method": "endOfLifeGridDataProvider"
+        },
+        "getEOLObjectsOnSelectedPart": {
+            "actionType": "JSFunction",
+            "method": "getEOLRevisionListByCreationDate",
+            "inputData": {
+                "inputEndOfLife": "{{ctx.eolOnSelectedPart[0]}}"
+            },
+            "outputData": {
+                "eolObjects": ""
+            },
+            "deps": "js/senEndOfLifeService"
+        },
+        "setEolColumns": {
+            "actionType": "JSFunction",
+            "method": "setEOLColumns",
+            "inputData": {
+                "inputEndOfLife": "{{ctx.eolOnSelectedPart[0]}}"
+            },
+            "outputData": {
+                "dataProviders.endOfLifeGridDataProvider.columnConfig": "columnConfig"
+            },
+            "deps": "js/senEndOfLifeService"
+        },
+        "updateCtxOnSelection": {
+            "actionType": "JSFunction",
+            "method": "registerCtx",
+            "inputData": {
+                "name": "eolRevisionSelected",
+                "value": "{{data.dataProviders.endOfLifeGridDataProvider.selectedObjects[0]}}"
+            },
+            "deps": "js/appCtxService"
+        }
+    },
+    "grids": {
+        "endOfLife": {
+            "dataProvider": "endOfLifeGridDataProvider",
+            "columnProvider": "endOfLifeColumnProvider",
+            "addIconColumn": true,
+            "enableArrangeMenu": true,
+            "gridOptions": {
+                "enableGridMenu": true,
+                "enablePinning": true,
+                "enableSorting": true
+            }
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "endOfLifeGridDataProvider.selectionChangeEvent",
+            "action": "updateCtxOnSelection"
+        },
+        {
+            "eventId": "endOfLifeSection.updated",
+            "action": "doGridTableDataProvider"
+        }
+    ],
+    "lifecycleHooks": {
+        "onUpdate": {
+            "action": "doGridTableDataProvider",
+            "observers": [
+                "viewModel.ctx.eolOnSelectedPart"
+            ]
+        }
+    }
+}

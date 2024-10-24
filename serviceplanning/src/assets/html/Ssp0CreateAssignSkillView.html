@@ -1,0 +1,36 @@
+<aw-popup2>
+    <aw-panel>
+        <aw-tab-set tabs="data.addPanelTabModels"></aw-tab-set>
+        <aw-panel-body>
+            <aw-panel-section visible-when="(!data.selectedTab.tabKey === 'search' || data.selectedTab.tabKey === 'newNotice')">
+                <aw-link-with-popup-menu prop="data.currentSkill" dataprovider="data.dataProviders.customSkill" visible-when="data.dataProviders.customSkill.viewModelCollection.loadedVMObjects.length > 1"></aw-link-with-popup-menu>
+                <div class="aw-serviceplanning-popupLabel">
+                    <aw-label prop="data.currentSkill" visible-when="data.dataProviders.customSkill.viewModelCollection.loadedVMObjects.length === 1"></aw-label>
+                </div>
+                <aw-xrt type="CREATE" object-type="{{data.selectedType.dbValue}}" xrt-state="data.xrtState" visible-when="data.dataProviders.customSkill.viewModelCollection.loadedVMObjects.length > 0"></aw-xrt>
+            </aw-panel-section>
+            <aw-panel-section visible-when="data.selectedTab.tabKey === 'search'">
+                <aw-search-box prop="data.searchBox" action="doSearch"></aw-search-box>
+            </aw-panel-section>
+            <aw-panel-section visible-when="data.selectedTab.tabKey === 'search'">
+                <aw-list dataprovider="data.dataProviders.skillsListProvider" visible-when="data.searchResponse != undefined && data.searchResponse">
+                    <aw-default-cell vmo="item"></aw-default-cell>
+                </aw-list>
+                <div exist-when="(data.searchResponse === undefined && data.totalFound === 0)">
+                    <aw-i18n>i18n.noResultsFound</aw-i18n>
+                </div>
+            </aw-panel-section>
+        </aw-panel-body>
+        <aw-panel-footer>
+            <aw-button button-type="base" action="ClosePopUpAction" size="auto">
+                <aw-i18n>i18n.Cancel</aw-i18n>
+            </aw-button>
+            <aw-button size="auto" action="AddSkillBatchJob" visible-when="(formProp.attributes.valid && data.totalFound > 0 && data.selectedTab.tabKey === 'newNotice')">
+                <aw-i18n>i18n.Add</aw-i18n>
+            </aw-button>
+            <aw-button size="auto" action="attachSkillsBatchJob" visible-when="data.dataProviders.skillsListProvider.selectedObjects.length && data.selectedTab.tabKey === 'search'">
+                <aw-i18n>i18n.Assign</aw-i18n>
+            </aw-button>
+        </aw-panel-footer>
+    </aw-panel>
+</aw-popup2>

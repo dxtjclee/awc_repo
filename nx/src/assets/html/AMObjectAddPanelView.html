@@ -1,0 +1,30 @@
+<aw-command-panel caption="i18n.addPanelTitle" context="subPanelContext">
+    <div class="aw-layout-flexColumn" show-when="data.activeState.value.activeView==='AddObjectPrimarySub'">
+        <aw-form name="commandPanelForm" visible-when="data.activeView!='AssignProjectSub'&&data.activeView!='addReferenceSub'">
+        <aw-add target-object='ctx.panelContext.targetObject'
+            relation-map="data._relationMap"
+            include-types='{{ctx.panelContext.includedTypes}}'
+            load-sub-types='ctx.panelContext.loadSubTypes'
+            auto-select-on-unique-type='ctx.panelContext.autoSelectOnUniqueType'
+            visible-tabs='{{ctx.panelContext.visibleTabs}}'
+            max-recent-count='{{ctx.panelContext.maxRecentCount}}'
+            type-filter='{{ctx.panelContext.typeFilterNames}}'
+            search-filter='{{ctx.panelContext.searchFilter}}'
+            add-panel-state="fields.addPanelState"
+            active-state="data.activeState"
+            project-state="data.projectState"
+            sub-panel-context="{...subPanelContext, triggerCreate: data.triggerCreate, policy: data._policy, extensionVMProps: {clr0AppearanceArea: data.clr0AppearanceArea, clr0PABRoot: data.clr0PABRoot}}"
+            xrt-state="data.xrtState"
+            edit-handler="editHandlers.addPanelEditHandler">
+        </aw-add>
+        </aw-form>
+        <!-- Panel footer-->
+        <aw-panel-footer visible-when="data.activeView!='AssignProjectSub'&&data.activeView!='addReferenceSub'">
+        <!-- panel-footer button for New tab -->
+        <aw-button default="true" action="createObject" enable-when="!ctx.addItemEventProgressing" visible-when="formProp.attributes.valid && conditions.isNewTabAddButtonVisible">
+            <aw-i18n>i18n.addButtonTitle</aw-i18n>
+        </aw-button>
+        </aw-panel-footer>
+    </div>
+    <aw-add-navigate active-state="data.activeState" project-state="data.projectState" action="actions.setActiveView"></aw-add-navigate>
+  </aw-command-panel>

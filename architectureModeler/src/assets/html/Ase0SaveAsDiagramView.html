@@ -1,0 +1,21 @@
+
+<aw-command-panel caption="i18n.saveasDiagramTitle" context="subPanelContext">
+  <aw-form name="createInputs">
+    <aw-add
+      type-override-id="Ase0Diagram"
+      include-types="Ase0Diagram"
+      auto-select-on-unique-type="true"
+      sub-panel-context="{ ...subPanelContext }"
+      save-panel-state="fields.savePanelState"
+      visible-tabs="new"
+      xrt-state="data.xrtState"
+      edit-handler="editHandlers.addPanelEditHandler">
+    </aw-add>
+  </aw-form>
+  <aw-panel-footer >
+   <aw-button action="saveAsDiagram" enable-when="formProp.attributes.valid">
+     <aw-i18n>i18n.saveas</aw-i18n>
+   </aw-button>
+ </aw-panel-footer>
+</aw-command-panel>
+<aw-add-navigate active-state="data.activeState" action="actions.setActiveView"></aw-add-navigate>

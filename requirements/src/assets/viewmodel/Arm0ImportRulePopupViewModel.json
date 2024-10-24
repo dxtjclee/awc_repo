@@ -1,0 +1,101 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-textbox.directive",
+        "js/aw-button.directive",
+        "js/aw-checkbox.directive",
+        "js/aw-flex-row.directive",
+        "js/aw-flex-column.directive"
+    ],
+    "actions": {
+        "saveRule": {
+            "actionType": "JSFunction",
+            "method": "saveImportRulePopupButtonClicked",
+            "inputData": {
+                "data": "{{data}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "saveExportReqIFConfiguration": {
+            "actionType": "JSFunction",
+            "method": "saveExportReqIFConfigPopupButtonClicked",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0ExportToReqIF"
+        },
+        "saveImportReqIFMapping": {
+            "actionType": "JSFunction",
+            "method": "saveImportReqIFMappingPopupButtonClicked",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0ImportFromReqIF"
+        },
+        "closeSaveRuleBallonPopupWindow": {
+            "actionType": "JSFunction",
+            "method": "close",
+            "inputData": {},
+            "deps": "js/declpopupService"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "importRule.closeSaveRuleBallonPopupWindow",
+            "action": "closeSaveRuleBallonPopupWindow"
+        },
+        {
+            "eventId": "Arm0ExportToReqIF.closeExportConfigBallonPopupWindow",
+            "action": "closeSaveRuleBallonPopupWindow"
+        },
+        {
+            "eventId": "importSpecificationReqIF.closeImportMappingBallonPopupWindow",
+            "action": "closeSaveRuleBallonPopupWindow"
+        }
+    ],
+    "data": {
+        "ruleName": {
+            "displayName": "{{i18n.name}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "isEditable": "true",
+            "dbValue": "",
+            "dispValue": ""
+        },
+        "globalScopeCheck": {
+            "displayName": "{{i18n.globalScope}}",
+            "type": "BOOLEAN",
+            "dbValue": true,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        }
+    },
+    "conditions": {
+        "isSaveButtonVisible": {
+            "expression": "data.ruleName.dbValue.length>0"
+        },
+        "isExportConfigSaveButtonVisible": {
+            "expression": "ctx.mappingType === 'ExportReqIF'"
+        },
+        "isImportReqIFSaveMappingButtonVisible": {
+            "expression": "ctx.mappingType === 'ImportReqIF'"
+        }
+    },
+    "i18n": {
+        "save": [
+            "TCUICommandPanelsMessages"
+        ],
+        "saveRule": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "CancelText": [
+            "TCUICommandPanelsMessages"
+        ],
+        "globalScope": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "name": [
+            "MatrixMessages"
+        ]
+    }
+}

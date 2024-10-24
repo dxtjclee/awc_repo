@@ -1,0 +1,444 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+
+        "Name": {
+            "type": "STRING",
+            "displayName": "{{i18n.ObjectName}}",
+            "isRequired": "true",
+            "dbValue": "{{props.subPanelContext.vmo[0].props.object_name.dbValues[0]}}",
+            "dispValue": "{{props.subPanelContext.vmo[0].props.object_name.dbValues[0]}}"
+        },
+        "fnd0RevisionId": {
+            "type": "STRING",
+            "displayName": "{{i18n.RevisionID}}",
+            "isRequired": "false",
+            "dbValue": "{{props.subPanelContext.vmo[0].props.fnd0RevisionId.dbValues[0]}}",
+            "dispValue": "{{props.subPanelContext.vmo[0].props.fnd0RevisionId.dbValues[0]}}"
+        },
+        "object_desc": {
+            "type": "STRING",
+            "displayName": "{{i18n.object_desc}}",
+            "isRequired": "false",
+            "dbValue": "{{props.subPanelContext.vmo[0].props.object_desc.dbValues[0]}}",
+            "dispValue": "{{props.subPanelContext.vmo[0].props.object_desc.dbValues[0]}}"
+        },
+        "smr0FromDate": {
+            "type": "STRING",
+            "displayName": "{{i18n.smr0FromDate}}",
+            "name": "smr0FromDate",
+            "isRequired": "true",
+            "dataProvider": "fromDateDataProvider",
+            "dbValue": "{{props.subPanelContext.vmo[0].props.smr0FromDate.dbValues[0]}}",
+            "dispValue": "{{props.subPanelContext.vmo[0].props.smr0FromDate.uiValues[0]}}"
+        },
+        "smr0Duration": {
+            "type": "INTEGER",
+            "displayName": "{{i18n.smr0Duration}}",
+            "isRequired": "true",
+            "dbValue": "{{props.subPanelContext.vmo[0].props.smr0Duration.uiValues[0]}}",
+            "dispValue": "{{props.subPanelContext.vmo[0].props.smr0Duration.uiValues[0]}}"
+        },
+        "smr0DurationUnit": {
+            "type": "STRING",
+            "displayName": "{{i18n.smr0DurationUnit}}",
+            "name": "smr0DurationUnit",
+            "isRequired": "true",
+            "dataProvider": "durationUnitDataProvider",
+            "dbValue": "{{props.subPanelContext.vmo[0].props.smr0DurationUnit.dbValues[0]}}",
+            "dispValue": "{{props.subPanelContext.vmo[0].props.smr0DurationUnit.uiValues[0]}}"
+        }
+    },
+    "dataProviders": {
+        "fromDateDataProvider": {
+            "response": [
+                {
+                    "propDisplayValue": "{{i18n.ManufacturingDate}}",
+                    "dispValue": "{{i18n.ManufacturingDate}}",
+                    "propInternalValue": "{{i18n.ManufacturingDate}}"
+                },
+                {
+                    "propDisplayValue": "{{i18n.InstallationDate}}",
+                    "dispValue": "{{i18n.InstallationDate}}",
+                    "propInternalValue": "{{i18n.InstallationDate}}"
+                }
+            ]
+        },
+        "durationUnitDataProvider": {
+            "response": [
+                {
+                    "propDisplayValue": "{{i18n.Years}}",
+                    "dispValue": "{{i18n.Years}}",
+                    "propInternalValue": "{{i18n.Years}}"
+                },
+                {
+                    "propDisplayValue": "{{i18n.Months}}",
+                    "dispValue": "{{i18n.Months}}",
+                    "propInternalValue": "{{i18n.Months}}"
+                },
+                {
+                    "propDisplayValue": "{{i18n.Weeks}}",
+                    "dispValue": "{{i18n.Weeks}}",
+                    "propInternalValue": "{{i18n.Weeks}}"
+                },
+                {
+                    "propDisplayValue": "{{i18n.Days}}",
+                    "dispValue": "{{i18n.Days}}",
+                    "propInternalValue": "{{i18n.Days}}"
+                },
+                {
+                    "propDisplayValue": "{{i18n.Hours}}",
+                    "dispValue": "{{i18n.Hours}}",
+                    "propInternalValue": "{{i18n.Hours}}"
+                }
+            ]
+        }
+    },
+    "actions": {
+
+        "ClosePopUpAction": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        },
+        "saveEOLEdits": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-09-DataManagement",
+            "method": "setProperties",
+            "inputData": {
+                "info": [
+
+                    {
+                        "object": "{{props.subPanelContext.vmo[0]}}",
+                        "vecNameVal": [
+
+                            {
+                                "name": "object_name",
+                                "values": [
+                                    "{{data.Name.dbValue}}"
+                                ]
+                            },
+                            {
+                                "name": "smr0FromDate",
+                                "values": [
+                                    "{{data.smr0FromDate.dbValue}}"
+                                ]
+                            },
+                            {
+                                "name": "object_desc",
+                                "values": [
+                                    "{{data.object_desc.dbValue}}"
+                                ]
+                            },
+                            {
+                                "name": "smr0Duration",
+                                "values": [
+                                    "{{data.smr0Duration.dbValue}}"
+                                ]
+                            },
+                            {
+                                "name": "smr0DurationUnit",
+                                "values": [
+                                    "{{data.smr0DurationUnit.dbValue}}"
+                                ]
+                            }
+                        ],
+                        "timestamp": ""
+                    }
+                ]
+            },
+            "events": {
+                "success": [
+
+                    {
+                        "name": "close"
+                    },
+                    {
+                        "name": "senCreateOrRemove.updateEOLOnSelectedPart"
+                    },
+                    {
+                        "name": "senSbomTreeTable.plTable.clientRefresh"
+                    }
+
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "EOLUpdated"
+                    }
+                ],
+                "failure": [
+                    {
+                        "message": "EOLErrorMsg"
+                    }
+                ]
+            }
+        },
+        "registerCreatedEOLObjectAction": {
+            "actionType": "JSFunction",
+            "method": "registerEOL",
+            "inputData": {
+                "createdObj": "{{data.createdObject}}",
+                "eventData": "{{data.eventData.actionType}}"
+            },
+            "deps": "js/senCreateEOLService"
+        },
+        "validateItemOrOccLevelEOLAction": {
+            "actionType": "JSFunction",
+            "method": "validateItemOrOccLevelEOL",
+            "outputData": {
+                "isUsagePLFOnSelectedObj": ""
+            },
+            "deps": "js/senCreateEOLService"
+        },
+        "getBackingObjects": {
+            "actionType": "JSFunctionAsync",
+            "method": "getBackingObjects",
+            "deps": "js/occmgmtBackingObjectProviderService",
+            "inputData": {
+                "viewModelObjects": "{{props.subPanelContext.vmo}}"
+            },
+            "outputData": {
+                "selectedNeutralBomLines": ""
+            }
+        },
+        "CreateEOLBatchAction": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "validateItemOrOccLevelEOLAction"
+                },
+                {
+                    "action": "getBackingObjects",
+                    "condition": "conditions.isUsageLevelEOL"
+                },
+                {
+                    "action": "CreateEOL"
+                }
+            ]
+        },
+        "CreateEOL": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-Core-2012-10-DataManagement",
+            "method": "createRelateAndSubmitObjects",
+            "inputData": {
+                "inputs": "{{function:getCreateInput}}"
+
+            },
+            "policy": {
+                "types": [
+                    {
+                        "name": "Smr0EndOfLife",
+                        "properties": [
+                            {
+                                "name": "smr0FromDate"
+                            },
+                            {
+                                "name": "smr0Duration"
+                            },
+                            {
+                                "name": "smr0DurationUnit"
+                            },
+                            {
+                                "name": "fnd0RevisionId"
+                            },
+                            {
+                                "name": "fnd0SiblingRevisions",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "release_statuses",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "smr0IsDate"
+                            },
+                            {
+                                "name": "object_desc"
+                            },
+                            {
+                                "name": "creation_date"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "registerCreatedEOLObject",
+                        "eventData": {
+                            "actionType": "set"
+                        }
+                    },
+                    {
+                        "name": "close"
+                    },
+                    {
+                        "name": "senCreateOrRemove.updateEOLOnSelectedPart"
+                    },
+                    {
+                        "name": "senSbomTreeTable.plTable.clientRefresh"
+                    }
+                ]
+            },
+            "outputData": {
+                "ServiceData": "ServiceData",
+                "createdObject": "output[0].objects[0]"
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "EOLCreated"
+                    }
+                ],
+                "failure": [
+                    {
+                        "message": "EOLSetErrorMsg"
+                    }
+                ]
+            },
+            "deps": "js/senCreateEOLService"
+        }
+    },
+    "functions": {
+        "getCreateInput": {
+            "functionName": "getCreateInput",
+            "parameters": [
+                "{{data}}",
+                "{{props.subPanelContext.vmo}}"
+            ]
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "close",
+            "action": "ClosePopUpAction"
+        },
+        {
+            "eventId": "registerCreatedEOLObject",
+            "action": "registerCreatedEOLObjectAction",
+            "cacheEventData": true
+        }
+    ],
+    "messages": {
+        "EOLUpdated": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.EOLObjectCreated}}",
+            "messageTextParams": [
+                "ctx.selected.props.object_string.dbValues[0]"
+            ]
+        },
+        "EOLErrorMsg": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.EOLObjectNotUpdated}}",
+            "messageTextParams": [
+                "ctx.selected.props.object_string.dbValues[0]"
+            ]
+        },
+        "EOLSetErrorMsg": {
+            "messageType": "ERROR",
+            "messageText": "{{ServiceData.partialErrors[0].errorValues[0].message}}"
+        },
+        "EOLCreated": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.EOLObjectCreated}}",
+            "messageTextParams": [
+                "ctx.selected.props.object_string.dbValues[0]"
+            ]
+        }
+    },
+
+    "conditions": {
+        "isEOLBtnEnabled": {
+            "expression": "data.Name.dbValue && data.smr0Duration.dbValue && data.smr0FromDate.dbValue && data.smr0DurationUnit.dbValue"
+        },
+        "isEditEOLCmdEnable": {
+            "expression": "props.subPanelContext.actionType==='edit'"
+        },
+        "isSetEOLCmdEnable": {
+            "expression": "props.subPanelContext.actionType==='set'"
+        },
+        "isUsageLevelEOL": {
+            "expression": "data.isUsagePLFOnSelectedObj"
+        }
+    },
+
+    "i18n": {
+        "CancelEOLText": [
+            "senMessages"
+        ],
+        "SetEOLText": [
+            "senMessages"
+        ],
+        "selectedPartName": [
+            "senMessages"
+        ],
+        "EOLObjectCreated": [
+            "senMessages"
+        ],
+        "EOLObjectNotUpdated": [
+            "senMessages"
+        ],
+        "AllFieldsRequired": [
+            "senMessages"
+        ],
+        "ManufacturingDate": [
+            "senMessages"
+        ],
+        "InstallationDate": [
+            "senMessages"
+        ],
+        "OriginDate": [
+            "senMessages"
+        ],
+        "Years": [
+            "senMessages"
+        ],
+        "Months": [
+            "senMessages"
+        ],
+        "Weeks": [
+            "senMessages"
+        ],
+        "Days": [
+            "senMessages"
+        ],
+        "Hours": [
+            "senMessages"
+        ],
+        "ObjectName": [
+            "senMessages"
+        ],
+        "RevisionID": [
+            "senMessages"
+        ],
+        "object_desc": [
+            "senMessages"
+        ],
+        "smr0FromDate": [
+            "senMessages"
+        ],
+        "smr0Duration": [
+            "senMessages"
+        ],
+        "smr0DurationUnit": [
+            "senMessages"
+        ]
+
+    }
+}

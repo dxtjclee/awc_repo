@@ -1,0 +1,7 @@
+<div class="sw-row aw-requirementsmanager-summaryTableContent" visible-when="conditions.hasExistingTracelinks">
+    <aw-label class="aw-requirementsmanager-tracelinkLabel" prop="data.tracelinkCountLabel" aw-click="actions.showTracelinks"></aw-label>
+    <aw-icon-button class="aw-requirementsmanager-summaryTableIcon" command="data.createTracelinksCmd"></aw-icon-button>
+</div>
+<div class="aw-requirementsmanager-summaryTableContent" visible-when="!conditions.hasExistingTracelinks">
+    <aw-icon-button class="aw-requirementsmanager-summaryTableIcon" command="data.createNewTracelinkCmd"></aw-icon-button>
+</div>

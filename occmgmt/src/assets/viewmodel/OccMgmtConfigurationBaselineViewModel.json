@@ -1,0 +1,173 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "_configurationBaselineLocation": {
+            "contextKey": "occmgmtContext",
+            "dataProviderName": "occDataProvider",
+            "gridid": "occTreeConfigurationPanel",
+            "name": "com.siemens.splm.client.configbaseline:ConfigbaselineSublocation",
+            "label": {
+                "source": "/i18n/OccMgmtConfigBaselineConstants",
+                "key": "occMgmtConfigurationBaselineTitle"
+            },
+            "requestPref": {
+                "savedSessionMode": "ignore",
+                "showMarkup": [ "false" ]
+            },
+            "clientScopeURI": "Awb0OccurrenceManagement",
+            "nameToken": "com.siemens.splm.client.configbaseline:ConfigbaselineSublocation",
+            "policy": "/policies/occMgmtPropertyPolicy.json",
+            "viewBase": "OccMgmtConfigurationBaseline",
+            "editContext": "occDataProvider",
+            "tabSetId": "occmgmtContext",
+            "selectionQueryParamKey": "c_uid",
+            "editSupportParamKeys": [ "c_uid", "o_uid", "spageId", "pci_uid" ],
+            "viewModes": {
+                "TreeSummaryView": {
+                    "primaryWorkArea": "tree",
+                    "secondaryWorkArea": true
+                },
+                "TreeView": {
+                    "primaryWorkArea": "tree",
+                    "secondaryWorkArea": false
+                }
+            },
+            "context": {
+                "commandContextParameters": [ "filter", "recipe", "uid" ],
+                "search": {
+                    "hideInContentSearchBox": true
+                }
+            },
+            "breadcrumbConfig": {
+                "type": "navigate",
+                "vm": "occMgmtBreadcrumb",
+                "chevronDataProvider": "breadCrumbDataProvider",
+                "crumbDataProvider": "aceBreadCrumbDataProvider",
+                "noUpdate": true,
+                "popuplist": "/html/occMgmtBreadcrumblist.html",
+                "id": "occmgmtContext",
+                "displayProperty": "object_string"
+            },
+            "urlParams": {
+                "selectionQueryParamKey": "c_uid",
+                "openStructureQueryParamKey": "o_uid",
+                "rootQueryParamKey": "uid",
+                "productContextQueryParamKey": "pci_uid",
+                "csidQueryParamKey": "c_csid",
+                "secondaryPageIdQueryParamKey": "spageId",
+                "topElementQueryParamKey": "t_uid",
+                "pageIdQueryParamKey": "pageId",
+                "recipeParamKey": "recipe",
+                "subsetFilterParamKey": "filter",
+                "topBomLineParamKey": "t_bl_uid"
+            },
+            "headerPreference": {
+                "hideGlobalSearch": true,
+                "hideLogo": true
+            },
+            "awSubLocationPref": {
+                "hideRightWall": true,
+                "hideToolsAndInfoArea": true,
+                "hideFooter": true
+            }
+        },
+        "hiddenCommands": {
+            "isSaveWorkingContextNotSupported": true,
+            "Awb0StructureFilter": true,
+            "Awp0ShowColor": true,
+            "Awb0ShowMarkup": true,
+            "Awb0AddSubstitutes": true,
+            "Awb0RemoveSubstitutes": true,
+            "Awb0UseSubstitute": true,
+            "ps0AddAlternate": true,
+            "ps0RemoveAlternate": true
+        },
+        "contextKey": "occmgmtContext",
+        "viewKey": "occmgmtContext",
+        "occContext": {
+            "initialValues": {
+                "configContext": {},
+                "displayToggleOptions": {},
+                "supportedFeatures": {},
+                "productContextInfo": {},
+                "readOnlyFeatures": {},
+                "currentState": {},
+                "previousState": {},
+                "transientRequestPref": {},
+                "persistentRequestPref":{"defaultClientScopeUri" : "Awb0OccurrenceManagement"},
+                "disabledFeatures": [],
+                "BackGroundSoaDebug": "true",
+                "LoadTreePropsTimerDebug" : "true",
+                "LoadTreePropsDebug": "false",
+                "ExpandBelowDebug": "true",
+                "ExpandOneDebug": "false",
+                "ReconfigureDebug": "false",
+                "viewKey": "occmgmtContext"
+            },
+            "meta": {}
+        }
+    },
+    "actions": {
+        "initializeConfigurationBaselineView": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "initializeOccContext"
+                },
+                {
+                    "action": "initializeOccMgmtConfigurationBaselineView"
+                }
+            ]
+        },
+        "initializeOccMgmtConfigurationBaselineView": {
+            "actionType": "JSFunction",
+            "method": "initializeOccMgmtConfigurationBaselineView",
+            "deps": "js/configurationBaselineService",
+            "inputData": {
+                "data": "{{data}}",
+                "subPanelContext": "{{data}}"
+            },
+            "outputData": {
+                "ctx.modelObjectsToOpen": "result",
+                "data.modelObjectsToOpen": "result"
+            }
+        },
+        "initializeOccContext": {
+            "actionType": "JSFunction",
+            "method": "initializeOccContext",
+            "deps": "js/configurationBaselineService",
+            "inputData": {
+                "subPanelContext": "{{data}}"
+            },
+            "outputData": {
+                "occContext": "result.occContext"
+            }
+        },
+        "destroyOccmgmtConfigurationBaselineView": {
+            "actionType": "JSFunction",
+            "method": "destroyOccmgmtConfigurationBaselineView",
+            "deps": "js/configurationBaselineService",
+            "inputData": {}
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "initializeConfigurationBaselineView",
+        "onUnmount": "destroyOccmgmtConfigurationBaselineView"
+    },
+    "ctx": {
+        "aceActiveContext": {
+            "key": "occmgmtContext"
+        }
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        },
+        "provider": {
+            "type": "object"
+        },
+        "occContext": {
+            "type": "string"
+        }
+    }
+}

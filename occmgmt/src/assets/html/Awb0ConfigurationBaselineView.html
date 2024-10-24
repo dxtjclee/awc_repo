@@ -1,0 +1,22 @@
+<aw-command-panel caption="i18n.createConfigurationBaseline">
+    <div class="sw-column">
+        <aw-add
+            type-override-id="Fnd0ConfigurationBaseline"
+            max-recent-count='0'
+            visible-tabs="new"
+            include-types="Fnd0ConfigurationBaseline"
+            preferred-type="Fnd0ConfigurationBaseline"
+            load-sub-types="true"
+            auto-select-on-unique-type="true"
+            add-panel-state="fields.addPanelState"
+            active-state="data.activeState"
+            xrt-state="data.xrtState"
+            edit-handler="editHandlers.addPanelEditHandler">
+        </aw-add>
+        <aw-panel-footer>
+            <aw-button size="auto" action="createConfigurationBaselineBactchJob" enable-when="formProp.attributes.valid" visible-when="conditions.isXRTTypeLoaded">
+                <aw-i18n>i18n.addElementBtn</aw-i18n>
+            </aw-button>
+        </aw-panel-footer>
+    </div>
+</aw-command-panel>

@@ -1,0 +1,9 @@
+<aw-advanced-bar type="TOOLBAR" negative="true" visible-when="conditions.IsVMOValid">
+    <aw-command-bar anchor="ssp0Toolbar" alignment="HORIZONTAL"></aw-command-bar>
+</aw-advanced-bar>
+<ssp0-tools-tree visible-when="conditions.IsVMOValid"></ssp0-tools-tree>
+<aw-flex-row height="12f" align-content="center" exist-when="!conditions.IsVMOValid">
+    <mfe-message sub-panel-context="data.messages.SelectionIsNotSrOrWc"></mfe-message>
+</aw-flex-row>
+
+

@@ -1,0 +1,13 @@
+<aw-command-panel caption="i18n.qa0Add" context="data">
+    <aw-panel-body scrollable="false">
+        <aw-search-box prop="data.searchBox" placeholder="data.searchBoxPlaceHolder.dbValue" action="doSearch"></aw-search-box>
+        <aw-list dataprovider="data.dataProviders.performUserSearch">
+            <aw-default-cell vmo="item"></aw-default-cell>
+        </aw-list>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button action="addTeamMember" visible-when="data.dataProviders.performUserSearch.selectedObjects.length > 0">
+            <aw-i18n>i18n.qa0Add</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

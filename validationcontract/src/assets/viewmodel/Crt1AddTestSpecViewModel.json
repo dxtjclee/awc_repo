@@ -1,0 +1,173 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-panel-section.directive",
+        "js/aw-panel-footer.directive",
+        "js/visible-when.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/aw-default-cell.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-list-filter.directive"
+    ],
+    "data":
+    {
+        "filterBox":
+        {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "false",
+            "dbValue": ""
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "crt1NewTest.addTestSpec",
+            "action": "navigateToMainPanel",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "Crt1AddTestSpec.loadData",
+            "action": "loadData"
+        },
+        {
+            "eventId": "Crt1.navigateToSpecPanel",
+            "action": "initialize"
+        }
+    ],
+    "actions": {
+        "navigateToMainPanel": {
+            "actionType": "JSFunction",
+            "method": "addTestSpec",
+            "inputData": {
+                "commandContext": "{{subPanelContext}}",
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "sharedData": ""
+            },
+            "deps": "js/Crt1TestCaseCoveragePageService"
+        },
+        "assignTestCase": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "crt1NewTest.addTestSpec",
+                        "eventData": {
+                            "selectedObjects": "{{data.dataProviders.performSearch.selectedObjects}}"
+                        }
+                    }
+                ]
+            }
+        },
+        "initialize": {
+            "actionType": "JSFunction",
+            "method": "clearFilter",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "filterBox": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "Crt1AddTestSpec.loadData"
+                } ]
+            },
+            "deps": "js/Crt1TestCaseCoveragePageService"
+        },
+        "loadData":{
+            "actionType": "dataProvider",
+            "method": "performSearch"
+        },
+        "performSearch": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2016-03-Finder",
+            "method": "performSearch",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "clientScopeURI": "Awp0SearchResults",
+                    "columnsToExclude": [],
+                    "hostingClientName": "",
+                    "operationType": "intersection"
+                },
+                "saveColumnConfigData": {
+                    "columnConfigId": "",
+                    "clientScopeURI": "",
+                    "columns": [],
+                    "scope": "",
+                    "scopeName": ""
+                },
+                "searchInput": {
+                    "attributesToInflate": [
+                        "object_name",
+                        "checked_out_user",
+                        "object_desc",
+                        "release_status_list",
+                        "fnd0InProcess"
+                    ],
+                    "internalPropertyName": "",
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Awp0FullTextSearchProvider",
+                    "searchCriteria": {
+                        "searchString": "{{function:getSearchCriteria}}"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "searchFilterMap": {
+                        "WorkspaceObject.object_type": "{{subPanelContext.sharedData.subBusinessObjects}}"
+
+                    },
+                    "searchSortCriteria": [],
+                    "startIndex": "{{data.dataProviders.performSearch.startIndex}}"
+                }
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "searchResults",
+                "totalLoaded": "totalLoaded"
+            },
+            "deps": "js/Crt1AddTestCaseService"
+        }
+    },
+    "functions":{
+        "getSearchCriteria": {
+            "functionName": "getSearchStringValue",
+            "parameters": ["{{data}}"]
+        }
+    },
+    "dataProviders": {
+        "performSearch": {
+            "action": "performSearch",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "commands": {
+                "Awp0ShowObjectCell": {
+                    "id": "cmdOpen",
+                    "areas": [
+                        "com.siemens.splm.clientfx.ui.modelObjectListActionCommands"
+                    ],
+                    "priorities": [
+                        300
+                    ],
+                    "dependencies": [
+                        "js/showObjectCommandHandler"
+                    ],
+                    "displayOption": "ON_HOVER_AND_SELECTION",
+                    "position": "TOP_RIGHT"
+                }
+            }
+        }
+    },
+    "i18n": {
+        "addSpecPanel": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "searchText": [
+            "AnalysisRequestCommandPanelsMessages"
+        ]
+    }
+}

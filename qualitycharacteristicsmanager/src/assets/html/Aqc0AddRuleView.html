@@ -1,0 +1,21 @@
+<aw-command-panel caption="i18n.addButtonTitle" context="subPanelContext">
+    <div class="aw-layout-flexColumn" show-when="data.activeState.value.activeView==='AddObjectPrimarySub'">
+        <aw-add
+            include-types="{{data.selectedType.dbValue}}"
+            load-sub-types=""
+            auto-select-on-unique-type="true"
+            visible-tabs="new"
+            type-filter="{{data.selectedType.dbValue}}"
+            add-panel-state="fields.addPanelState"
+            sub-panel-context="{ ...subPanelContext }"
+            active-state="data.activeState"
+            xrt-state="data.xrtState"
+            edit-handler="editHandlers.addPanelEditHandler">
+        </aw-add>
+        <aw-panel-footer>
+            <aw-button action="createRule" visible-when="formProp.attributes.valid"><aw-i18n>i18n.addButtonTitle</aw-i18n></aw-button>
+        </aw-panel-footer>
+    </div>
+    <aw-add-navigate active-state="data.activeState" action="actions.setActiveView"></aw-add-navigate>
+</aw-command-panel>
+

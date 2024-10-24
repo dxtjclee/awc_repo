@@ -1,0 +1,180 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "reveal": {
+            "actionType": "dataProvider",
+            "method": "getRevisionsProvider"
+        },
+        "getRevisionList": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData": {
+                "objects": [
+                    {
+                        "uid": "{{ctx.selected.uid}}"
+                    },
+                    {
+                        "uid": "{{ctx.pselected.uid}}"
+                    }
+                ],
+                "attributes": [
+                    "revision_list",
+                    "Psi0PlanPrgDel",
+                    "Psi0DelInstances",
+                    "Psi0EventPrgDel"
+                ]
+            },
+            "outputData": {
+                "searchResult": "{{function:loadRevisions}}"
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            },
+            "deps": "js/Psi0ReplaceRevisionService"
+        },
+        "replaceRevision": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-09-DataManagement",
+            "method": "setProperties",
+            "inputData": {
+                "info": "{{function:replaceRevision}}"
+
+            },
+            "events": {
+                "success": [
+                     {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{ctx.panelContext.parentSelection}}"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "complete",
+                        "eventData":
+                        {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ],
+                "failure":[
+                    {
+                        "name": "complete",
+                        "eventData":
+                        {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "actionMessages":
+            {
+                "failure": [ {
+                    "message": "replaceLatestRevisionErrorMsg"
+                } ]
+            },
+            "deps": "js/Psi0ReplaceRevisionService"
+        },
+        "setRevision": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-09-DataManagement",
+            "method": "setProperties",
+            "inputData": {
+                "info": "{{data.eventMap['ReplaceRevision.setRevisionEvent'].inputData}}"
+            },
+            "outputData":{
+                "response":""
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            },
+            "deps": "js/Psi0ReplaceRevisionService"
+        },
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "condition": "ctx.panelContext.targetObject.uid !== props.subPanelContext.selectionData.selected[0].uid",
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            }
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "ReplaceRevision.setRevisionEvent",
+            "cacheEventData": true,
+            "action": "setRevision"
+        }
+    ],
+    "functions": {
+        "replaceRevision": {
+            "functionName": "replaceRevision",
+            "parameters": [
+                "{{ctx.panelContext.targetObject}}",
+                "{{ctx.panelContext.parentSelection}}",
+                 "{{data.dataProviders.getRevisionsProvider.selectedObjects[0]}}"
+            ]
+        },
+        "loadRevisions": {
+            "functionName": "loadRevisions",
+            "parameters": [
+                "{{ctx.selected.uid}}"
+            ]
+        }
+    },
+    "conditions": {
+        "isRevisionSelected": {
+            "expression": "data.dataProviders.getRevisionsProvider.selectedObjects.length > 0"
+        }
+    },
+    "messages": {
+        "SOAFailureMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        },
+        "replaceLatestRevisionErrorMsg":{
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "dataProviders": {
+        "getRevisionsProvider": {
+            "action": "getRevisionList",
+            "response": "{{data.searchResult.revisions}}",
+            "totalFound": "{{data.searchResult.length}}",
+            "noResultsFound":  "{{i18n.zeroSearchResults}}",
+            "selectionModelMode": "single"
+        }
+    },
+    "lifecycleHooks": {
+        "onUpdate": {
+            "action": "closePanel",
+            "observers": ["props.subPanelContext.selectionData.selected[0].uid"]
+        }
+    },
+    "i18n": {
+        "psi0ReplaceRevisionCommandTitle": [
+            "PrgScheduleManagerMessages"
+        ],
+        "psi0Revisions": [
+            "PrgScheduleManagerMessages"
+        ],
+        "psi0Replace": [
+            "PrgScheduleManagerMessages"
+        ],
+        "zeroSearchResults": [
+            "PrgScheduleManagerMessages"
+        ]
+    }
+}

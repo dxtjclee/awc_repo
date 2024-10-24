@@ -1,0 +1,28 @@
+{
+    "schemaVersion" : "1.0.0",
+    "imports":
+    [
+    ],
+
+    "actions":
+    {
+        "renderContent": {
+            "actionType": "JSFunction",
+            "method": "renderCompareContent",
+            "inputData": {
+                "vmo": "{{subPanelContext}}"
+            },
+            "deps": "js/Arm0CompareHistoryService"
+        }
+    },
+
+    "data": {
+    },
+
+    "i18n": {
+    },
+
+    "lifecycleHooks": {
+        "onMount": "renderContent"
+    }
+}

@@ -1,0 +1,562 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "lifecycleHooks": {
+        "onMount": "reveal",
+        "onUnmount": "unRegisterContext",
+        "onUpdate": [ {
+            "action": "filterChipsDataProviderAction",
+            "observers": [ "viewModel.filterChips" ]
+        } ]
+    },
+    "dataProviders": {
+        "recentDataProvider": {
+            "action": "loadDashboardAdvancedSearchData",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "selectionModelMode": "single",
+            "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectCellListActionCommands"
+        },
+        "filtersDataProvider": {
+            "type": "Static",
+            "response": "{{data.filterChips}}",
+            "selectionModelMode": "none"
+        }
+    },
+    "data": {
+        "_awSublocationPref": {
+            "hideRightWall": true
+        },
+        "objectSubTypes": {
+            "type": "STRING",
+            "dbValue": []
+        },
+        "subTypes":
+        {
+            "displayName": "{{i18n.type}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "hasLov": true,
+            "labelPosition": "PROPERTY_LABEL_AT_TOP"
+        },
+        "filterBox":
+        {
+            "displayName": "{{i18n.filter}}",
+            "isEditable": "true",
+            "type": "STRING",
+            "isRequired": "false",
+            "requiredText": "{{i18n.filter}}",
+            "dbValue": ""
+        },
+        "recentCommands": "arm0_recentCommands",
+        "totalObjectsFound": "0",
+        "totalFound":"",
+        "lastEndIndex":"",
+        "filterChips": [],
+        "selectionTitle": "",
+        "selectionData": {
+            "initialValues": {
+            },
+            "meta": {}
+        }
+    },
+    "chartProviders" : {
+        "pieChartWorkflowProvider": {
+            "chartType": "pie",
+            "title": "{{i18n.workflowStatus}}",
+            "loadDataAction": "createWorkflowPieChart",
+            "chartConfig": {
+                "isChartZoomable": true,
+                "isYAxisLinearOrLogarithmic": "logarithmic",
+                "xAxisLabel": "",
+                "yAxisLabel": "",
+                "isDataLabelOnChartEnabled": true
+            }
+        },
+        "pieChartCommentsProvider": {
+            "chartType": "pie",
+            "title": "{{i18n.comments}}",
+            "loadDataAction": "createCommentsPieChart",
+            "chartConfig": {
+                "isChartZoomable": true,
+                "isYAxisLinearOrLogarithmic": "logarithmic",
+                "xAxisLabel": "",
+                "yAxisLabel": "",
+                "isDataLabelOnChartEnabled": true
+            }
+        },
+        "pieChartTestCasesProvider": {
+            "chartType": "pie",
+            "title": "{{i18n.testCoverage}}",
+            "loadDataAction": "createTestCasesPieChart",
+            "chartConfig": {
+                "isChartZoomable": true,
+                "isYAxisLinearOrLogarithmic": "logarithmic",
+                "xAxisLabel": "",
+                "yAxisLabel": "",
+                "isDataLabelOnChartEnabled": true
+            }
+        }
+    },
+    "actions": {
+        "unRegisterContext": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "inputData": {
+                "name": "reqDashboardTableColumnFilters"
+            },
+            "deps": "js/appCtxService"
+        },
+        "constructHeader": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "constructTitles"
+                },
+                {
+                    "action": "setTitlesInCtx"
+                }
+            ]
+        },
+        "constructTitles": {
+            "actionType": "JSFunctionAsync",
+            "method": "getTitles",
+            "deps": "js/awHeaderService",
+            "outputData": {
+                "browserTitle": "result.browserTitle",
+                "browserSubTitle": "result.browserSubTitle",
+                "headerTitle": "result.headerTitle"
+            }
+        },
+        "setTitlesInCtx": {
+            "actionType": "JSFunction",
+            "method": "updateCtx",
+            "deps": "js/appCtxService",
+            "inputData": {
+                "name": "location.titles",
+                "value": {
+                    "browserTitle": "{{data.browserTitle}}",
+                    "browserSubTitle": "{{data.browserSubTitle}}",
+                    "headerTitle": "{{data.headerTitle}}"
+                }
+            }
+        },
+        "reveal":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2022-12-DataManagement",
+            "method": "getCurrentUserGateway3",
+            "inputData":
+            {
+            },
+            "outputData":
+            {
+                "tileGroups": "{{function:filterTiles}}"
+            },
+            "actionMessages":
+            {
+                "failure":
+                [
+                    {
+                        "message": "accessingGatewayFailed"
+                    }
+                ]
+            },
+            "deps": "js/requirementsManager",
+            "events": {
+                "success": [ {
+                        "name": "requirementsManager.loadSavedQueries"
+                    },
+                    {
+                        "name": "requirementsManager.getObjectTypes"
+                    }
+                ]
+            }
+        },
+        "loadRecentRequirementsAction": {
+            "actionType": "dataProvider",
+            "method": "recentDataProvider"
+        },
+        "loadSavedQueries": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2013-05-LOV",
+            "method": "getInitialLOVValues",
+            "inputData": {
+                "initialData": {
+                    "propertyName": "awp0AdvancedQueryName",
+                    "lovInput": {
+                        "owningObject":  {
+                            "type": "Awp0AdvancedSearchInput",
+                            "uid": "AAAAAAAAAAAAAA"
+                        },
+                        "operationName": "Specialedit",
+                        "boName": "Awp0AdvancedSearchInput",
+                        "propertyValues" : {
+                        }
+                    },
+                    "filterData":
+                     {
+                        "filterString":"General...",
+                        "maxResults":0,
+                        "numberToReturn":2000,
+                        "sortPropertyName":"",
+                        "order":1
+                     }
+                }
+            },
+            "outputData": {
+                "lovValues": "lovValues",
+                "moreQueryValuesExist": "moreValuesExist"
+            },
+            "events": {
+                "success": [ {
+                    "condition": "data.lovValues && data.lovValues.length > 0",
+                    "name": "requirementsManager.loadRecentRequirementsAction"
+                }]
+            }
+        },
+        "loadDashboardAdvancedSearchData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {},
+                "saveColumnConfigData": {
+                    "columnConfigId": "",
+                    "clientScopeURI": "",
+                    "columns": [],
+                    "scope": "",
+                    "scopeName": ""
+                },
+                "searchInput": {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Awp0SavedQuerySearchProvider",
+                    "searchCriteria": "{{function:getSearchCriteria}}",
+                    "searchFilterFieldSortType": "Priority",
+                    "startIndex": "{{data.dataProviders.recentDataProvider.startIndex}}",
+                    "searchFilterMap6": "",
+                    "searchSortCriteria": []
+                },
+                "inflateProperties": false
+            },
+            "policy": {
+                "types": [
+                    {
+                        "name": "BusinessObject",
+                        "properties": [
+                            {
+                                "name": "awp0CellProperties"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}",
+                "lastEndIndex":"endIndex"
+            },
+            "deps": "js/requirementsManager"
+        },
+        "createWorkflowPieChart": {
+            "actionType": "JSFunction",
+            "method": "createWorkflowPieChart",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "chartProviders.pieChartWorkflowProvider.chartPoints": "arrayOfSeriesDataForChart",
+                "totalObjectsFound":"totalObjectsFound"
+            },
+            "deps": "js/requirementsManager"
+        },
+        "createCommentsPieChart": {
+            "actionType": "JSFunction",
+            "method": "createCommentsPieChart",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "chartProviders.pieChartCommentsProvider.chartPoints": ""
+            },
+            "deps": "js/requirementsManager"
+        },
+        "createTestCasesPieChart": {
+            "actionType": "JSFunction",
+            "method": "createTestCasesPieChart",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "chartProviders.pieChartTestCasesProvider.chartPoints": ""
+            },
+            "deps": "js/requirementsManager"
+        },
+        "reloadReqSummaryTable":
+        {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name":"requirementsManager.updateCtxSelection"
+                    }
+                ]
+            }
+        },
+
+        "updateCtxSelection": {
+            "actionType": "JSFunction",
+            "method": "updateCtxSelection",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "selectionTitle": ""
+            },
+            "deps": "js/requirementsManager"
+        },
+
+        "setSelection": {
+            "actionType": "JSFunction",
+            "method": "setSelection",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "selectionTitle": ""
+            },
+            "deps": "js/requirementsManager"
+        },
+        "filterTable": {
+            "actionType": "JSFunction",
+            "method": "filterTable",
+            "inputData": {
+                "filterChips": "{{data.filterChips}}",
+                "selectedChartEntity": "{{parameters.selectedChartEntity}}"
+            },
+            "outputData": {
+                "filterChips": ""
+            },
+            "deps": "js/requirementsManager"
+        },
+        "filterChipsDataProviderAction": {
+            "actionType": "dataProvider",
+            "method": "filtersDataProvider"
+        },
+        "setSubType": {
+            "actionType": "JSFunction",
+            "method": "setSubType",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "lastEndIndex": "lastEndIndex",
+                "totalFound": "totalFound",
+                "filterBox": "filterBox"
+            },
+            "events": {
+                "success": [ {
+                        "condition": "data.lovValues && data.lovValues.length > 0",
+                        "name": "requirementsManager.loadRecentRequirementsAction"
+                    }
+                ]
+            },
+            "deps": "js/requirementsManager"
+        },
+        "removeFilterAction": {
+            "actionType": "JSFunction",
+            "method": "removeTableFilter",
+            "inputData": {
+                "chipArray": "{{data.filterChips}}",
+                "chipToRemove": "{{parameters.chip}}"
+            },
+            "outputData": {
+                "filterChips": ""
+            },
+            "deps": "js/requirementsManager"
+        },
+        "filterRecentList": {
+            "actionType": "JSFunction",
+            "method": "filterRecentList",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/requirementsManager"
+        },
+        "getObjectTypes": {
+            "actionType": "JSFunction",
+            "method": "updateObjectTypeList",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData":
+            {
+                "objectSubTypes": ""
+            },
+            "deps": "js/requirementsManager"
+        }
+    },
+    "functions": {
+        "getSearchCriteria": {
+            "functionName": "getSearchCriteria",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "filterTiles": {
+            "functionName": "filterTiles",
+            "parameters": [
+                "{{response}}"
+            ]
+        }
+    },
+
+    "onEvent": [
+        {
+            "eventId": "requirementsManager.loadRecentRequirementsAction",
+            "action": "loadRecentRequirementsAction"
+        },
+        {
+            "eventId": "requirementsManager.getPreviousRecentObjectsEvent",
+            "action": "getPreviousRecentObjects"
+        },
+        {
+            "eventId": "requirementsManager.getNextRecentObjectsEvent",
+            "action": "getNextRecentObjects"
+        },
+        {
+            "eventId": "recentDataProvider.selectionChangeEvent",
+            "action": "reloadReqSummaryTable"
+        },
+        {
+            "eventId": "requirementsManager.updateCtxSelection",
+            "action": "updateCtxSelection"
+        },
+        {
+            "eventId": "requirementsManager.loadSavedQueries",
+            "action": "loadSavedQueries"
+        },
+        {
+            "eventId": "pieChartWorkflowProvider.selected",
+            "action": "filterTable",
+            "inputArgs": {
+                "selectedChartEntity": "{{eventData}}"
+            }
+        },
+        {
+            "eventId": "pieChartCommentsProvider.selected",
+            "action": "filterTable",
+            "inputArgs": {
+                "selectedChartEntity": "{{eventData}}"
+            }
+        },
+        {
+            "eventId": "pieChartTestCasesProvider.selected",
+            "action": "filterTable",
+            "inputArgs": {
+                "selectedChartEntity": "{{eventData}}"
+            }
+        },
+        {
+            "eventId": "recentDataProvider.modelObjectsUpdated",
+            "action": "setSelection"
+        },
+        {
+            "eventId": "condition.expressionValueChanged",
+            "action": "filterRecentList",
+            "criteria": {
+                "condition": "conditions.filterChangedCondition"
+            },
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementsManager.getObjectTypes",
+            "action": "getObjectTypes"
+        }
+
+
+    ],
+    "i18n": {
+        "subTypes":
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "requirementsManagerDisplayName": [
+            "RequirementsManagerMessages"
+        ],
+        "recents": [
+            "RequirementsManagerMessages"
+        ],
+        "getStarted": [
+            "RequirementsManagerMessages"
+        ],
+        "recentSectionTitle": [
+            "awAddDirectiveMessages"
+        ],
+        "noResultsFound": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "workflowStatus": [
+            "RequirementsManagerMessages"
+        ],
+        "testCoverage": [
+            "RequirementsManagerMessages"
+        ],
+        "comments": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "totalObjectsFound": [
+            "RequirementsManagerMessages"
+        ],
+        "open": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "replied": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "resolved": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "rejected": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "reopened": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "assigned": [
+            "RequirementsManagerMessages"
+        ],
+        "notAssigned": [
+            "RequirementsManagerMessages"
+        ],
+        "type": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "context": [
+            "RequirementsManagerMessages"
+        ],
+        "all": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "filter": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "noDataToDisplay":[
+            "RequirementsManagerMessages"
+        ]
+    },
+    "conditions": {
+        "shouldShowFilterChips":{
+            "expression": "data.filterChips.length > 0"
+        },
+        "filterChangedCondition": {
+            "expression": "data.filterBox.dbValue",
+            "trackValues": true
+        },
+        "setSelectionCondition":{
+            "expression": "data.searchResults.objects.length>0 && data.totalFound>0 && data.dataProviders.recentDataProvider.startIndex===0 && !conditions.shouldShowFilterChips"
+        }
+    },
+    "messages": {}
+}

@@ -1,0 +1,182 @@
+{
+    "schemaVersion" : "1.0.0",
+    "imports": [],
+    "actions":
+    {
+        "initialize": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "getExportTemplates",
+                    "condition": "subPanelContext.previousActivePage ==='Arm0ExportToRoundTripWordDocument'"
+                },
+                {
+                    "action": "fetchHtmlObjectTemplate",
+                    "condition": "subPanelContext.previousActivePage ==='Arm0ExportToRoundTripWordDocument'"
+
+                }
+            ]
+        },
+        "getExportTemplates": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2014-11-RequirementsManagement",
+            "method": "getExportTemplates",
+            "inputData": {
+                "filter": [ {
+                    "inputObjects": "{{ctx.mselected}}",
+                    "templateTypes": [
+                        "SpecElementRevisionSubTypes"
+                    ]
+                } ]
+            },
+            "outputData": {
+                "response": "{{function:processExportTemplate}}"
+            },
+
+            "actionMessages": {
+                "failure": [ {
+                    "condition": "errorCode.code==141080",
+                    "message": "notificationForExportFailureMsg"
+                } ]
+            },
+            "deps": "js/Arm0ExportToOfficeApp"
+        },
+        "fetchHtmlObjectTemplate": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "clientScopeURI": ""
+                },
+                "inflateProperties": true,
+                "searchInput": {
+                    "maxToLoad": 150,
+                    "maxToReturn": 150,
+                    "providerName": "Awp0SavedQuerySearchProvider",
+                    "searchCriteria": {
+                        "queryName": "Item Revision...",
+                        "searchID": "TRANSL_OFFICE_QUERY",
+                        "typeOfSearch": "ADVANCED_SEARCH",
+                        "utcOffset": "0",
+                        "lastEndIndex": "0",
+                        "object_name": "*",
+                        "Type": "Fnd0HTMLObjTmplRevision"
+                    },
+                    "attributesToInflate": [
+                        "object_name",
+                        "body_text",
+                        "arm0IsGlobal",
+                        "owning_user",
+                        "owning_group"
+                    ],
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "searchFilterMap6": {},
+                    "searchSortCriteria": [],
+                    "startIndex": 0
+                }
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}"
+
+            },
+
+            "events": {
+                "success": [
+                {
+                    "name": "Arm0ExportToRoundTripWordDocument.htmlTemplatesList"
+
+                } ]
+            },
+
+            "deps": "js/Arm0ExportToRoundTripWordDocument"
+        },
+        "htmlTemplatesList": {
+            "actionType": "JSFunction",
+            "method": "htmlTemplatesList",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}",
+                "subPanelContext":"{{subPanelContext}}"
+            },
+            "deps": "js/Arm0ExportToRoundTripWordDocument"
+        },
+        "addOverride":
+        {
+            "actionType": "JSFunction",
+            "method": "updateSharedDataState",
+            "inputData":
+            {
+                "state": "{{subPanelContext.sharedData}}",
+                "newValue": {
+                    "activeView": "{{subPanelContext.previousActivePage}}",
+                    "newOverrideType": {
+                        "cellHeader1":"{{data.objectType.uiValue}}",
+                        "cellHeader2":"{{data.objectTemplate.uiValue}}",
+                        "cellHeader3": "{{data.htmlTemplate.uiValue}}",
+                        "cellHeader1InVal":"{{data.objectType.dbValue}}",
+                        "cellHeader2InVal":"{{data.objectTemplate.dbValue}}",
+                        "cellHeader3InVal": "{{data.htmlTemplate.dbValue}}"
+                    }
+                }
+            },
+            "deps": "js/Arm0ExportToOfficeApp"
+        }
+    },
+    "onEvent": [ {
+
+        "eventId": "Arm0ExportToRoundTripWordDocument.htmlTemplatesList",
+        "action": "htmlTemplatesList"
+
+    }],
+    "functions": {
+        "processExportTemplate": {
+            "functionName": "processExportTemplate",
+            "parameters": [
+                "{{data}}",
+                "{{ctx}}",
+                "{{subPanelContext.sharedData}}",
+                "{{subPanelContext.previousActivePage}}"
+
+            ]
+        }
+
+    },
+    "data":
+    {
+
+        "objectType":
+        {
+            "displayName": "{{i18n.objectType}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "hasLov": true
+        },
+         "objectTemplate":
+        {
+            "displayName": "{{i18n.objectTemplate}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "hasLov": true
+        },
+        "htmlTemplate":
+        {
+            "displayName": "{{i18n.htmlTemplate}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "hasLov": true
+        }
+    },
+    "lifecycleHooks":
+    {
+        "onMount": "initialize"
+    },
+    "i18n":
+    {
+        "Add": [ "RequirementsCommandPanelsMessages"],
+        "objectType": [ "RequirementsCommandPanelsMessages"],
+        "objectTemplate": [ "RequirementsCommandPanelsMessages"],
+        "htmlTemplate":["RequirementsCommandPanelsMessages"]
+    }
+}

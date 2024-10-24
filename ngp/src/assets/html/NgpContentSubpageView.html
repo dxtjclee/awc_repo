@@ -1,0 +1,10 @@
+<mfe-loading-message exist-when="!data.reusableManufacturingItemsContentPanelData.tabs[0].input.uid"></mfe-loading-message>
+<aw-flex-row exist-when="data.reusableManufacturingItemsContentPanelData.tabs[0].input.uid">
+    <aw-flex-column width="{{data.reusableManufacturingItemsPanelWidth ? data.reusableManufacturingItemsPanelWidth : 6}}">
+        <mfe-content-panel sub-panel-context="data.reusableManufacturingItemsContentPanelData"></mfe-content-panel>
+    </aw-flex-column>
+    <aw-splitter splitter-id="ngpContentSubpageSplitter" min-size-1="200px" min-size-2="200px" class="aw-mfe-transparentSplitter"></aw-splitter>
+    <aw-flex-column width="fill">
+        <mfe-content-panel sub-panel-context="data.detailsContentPanelData"></mfe-content-panel>
+    </aw-flex-column>
+</aw-flex-row>

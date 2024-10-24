@@ -1,0 +1,407 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data": {
+        "selectionData": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "selectPVMessage": [
+            {
+                "text": "{{i18n.selectPVMessage}}",
+                "iconId": "cmdSettings"
+            }
+        ]
+
+    },
+    "actions": {
+        "createColumnsAndRegisterPolicy": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "loadColumns"
+                },
+                {
+                    "action": "registerPolicy"
+                },
+                {
+                    "action": "addIconColumn"
+                }
+            ]
+        },
+        "registerPolicy": {
+            "actionType": "JSFunction",
+            "method": "register",
+            "inputData": {
+                "name": "EpOperationsGridTable",
+                "policyObj": "{{data.dataProviders.operationsTableDataProvider.policy}}"
+            },
+            "deps": "js/mfePolicyService"
+        },
+        "loadColumns": {
+            "actionType": "JSFunction",
+            "method": "createColumns",
+            "inputData": {
+                "preferenceName": "EP_StationPageOperationsGridColumnConfiguration",
+                "dataProvider": "{{data.dataProviders.operationsTableDataProvider}}",
+                "columnProvider": "{{data.grids.EpOperationsGridTable.gridOptions}}"
+            },
+            "deps": "js/mfeTableService"
+        },
+        "doGridDataProvider": {
+            "actionType": "dataProvider",
+            "method": "operationsTableDataProvider"
+        },
+        "getOperations": {
+            "actionType": "JSFunctionAsync",
+            "method": "getOperations",
+            "inputData": {
+                "contextUids": [
+                    "{{ctx.epTaskPageContext.loadedObject.uid}}",
+                    "{{ctx.epTaskPageContext.productionProgramCollection.uid}}"
+                ]
+            },
+            "outputData": {
+                "operationsList": "listOfOperations",
+                "productVariantsList": "listOfPVObjects"
+            },
+            "deps": "js/epPlanningService"
+        },
+        "showNoPVsErrorMsg": {
+            "actionType":"JSFunction",
+            "method":"showError",
+            "inputData":{
+                "message":"{{data.i18n.noPVsError}}"
+            },
+            "deps":"js/messagingService"
+        },
+        "showNoProductionProgramErrorMsg": {
+            "actionType":"JSFunction",
+            "method":"showError",
+            "inputData":{
+                "message":"{{data.i18n.noProductionProgram}}"
+            },
+            "deps":"js/messagingService"
+        },
+        "updateCommandData": {
+            "actionType": "JSFunction",
+            "method": "setCommandContext",
+            "inputData": {
+                "tabModel": "{{subPanelContext}}",
+                "commandContext": {
+                    "selection": "{{data.selectionData.selected}}"
+                }
+            },
+            "deps": "js/mfeContentPanelUtil"
+        },
+        "addIconColumn": {
+            "actionType": "JSFunction",
+            "method": "addIconColumn",
+            "inputData": {
+                "columns": "{{data.dataProviders.operationsTableDataProvider.columnConfig.columns}}"
+            },
+            "outputData": {
+                "dataProviders.operationsTableDataProvider.columnConfig.columns": ""
+            },
+            "deps": "js/mfeTableService"
+        },
+        "loadPvRelatedObjects": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadPvRelatedObjects",
+            "inputData": {
+                "operationsList": "{{data.operationsList}}",
+                "productVariantsList": "{{data.productVariantsList}}"
+            },
+            "outputData": {
+                "operationPvsMapping": ""
+            },
+            "deps": "js/epPlanningService"
+        },
+        "updateWeightedTimeBatchAction": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "loadPvRelatedObjects"
+                },
+                {
+                    "action": "calculateTotalProductionRate"
+                },
+                {
+                    "action": "calculatePvsProbability"
+                },
+                {
+                    "action": "calculateWeightedAndTotalWeightedTime"
+                },
+                {
+                    "action": "resetPVColumnsTotal"
+                }
+            ]
+        },
+        "resetPVColumnsTotal": {
+            "actionType": "JSFunction",
+            "method": "resetPVColumnsTotal",
+            "inputData": {
+                "columns": "{{data.dataProviders.operationsTableDataProvider.columnConfig.columns}}"
+            },
+            "outputData": {
+                "dataProviders.operationsTableDataProvider.columnConfig.columns": ""
+            },
+            "deps": "js/epPlanningService"
+        },
+        "loadOperationsBatchAction": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "showNoProductionProgramErrorMsg",
+                    "condition": "!conditions.isProductionProgramAvailable"
+                },
+                {
+                    "action": "getOperations",
+                    "condition": "conditions.isProductionProgramAvailable"
+                },
+                {
+                    "action": "showNoPVsErrorMsg",
+                    "condition": "conditions.shouldShowNoPVsError"
+                },
+                {
+                    "action": "loadPvRelatedObjects"
+                },
+                {
+                    "action": "calculateTotalProductionRate"
+                },
+                {
+                    "action": "calculatePvsProbability"
+                },
+                {
+                    "action": "calculateWeightedAndTotalWeightedTime"
+                },
+                {
+                    "action": "updateCommandContext"
+                },
+                {
+                    "action": "cacheTableColumns"
+                },
+                {
+                    "action": "resetPVColumnsTotal"
+                },
+                {
+                    "action":"openSelectProductVariantsPopup"
+                }
+            ]
+        },
+        "calculateTotalProductionRate": {
+            "actionType": "JSFunction",
+            "method": "getTotalProductionRate",
+            "inputData": {
+                "productVariants": "{{data.productVariantsList}}"
+            },
+            "outputData": {
+                "totalProductionRate": ""
+            },
+            "deps": "js/epProductionProgramService"
+        },
+        "calculatePvsProbability": {
+            "actionType": "JSFunction",
+            "method": "calculatePvsProbability",
+            "inputData": {
+                "productVariants": "{{data.productVariantsList}}"
+            },
+            "outputData": {
+                "productVariantsList": ""
+            },
+            "deps": "js/epPlanningService"
+        },
+        "unregisterPolicy": {
+            "actionType": "JSFunction",
+            "method": "unregister",
+            "inputData": {
+                "name": "EpOperationsGridTable"
+            },
+            "deps": "js/mfePolicyService"
+        },
+        "calculateWeightedAndTotalWeightedTime": {
+            "actionType": "JSFunction",
+            "method": "calculateWeightedAndTotalWeightedTime",
+            "outputData": {
+                "totalWeightedTime": ""
+            },
+            "deps": "js/epPlanningService"
+        },
+        "updateCommandContext": {
+            "actionType": "JSFunction",
+            "method": "setCommandContext",
+            "inputData": {
+                "tabModel": "{{subPanelContext}}",
+                "commandContext": {
+                    "productVariantsList": "{{data.productVariantsList}}"
+                }
+            },
+            "deps": "js/mfeContentPanelUtil"
+        },
+        "cacheTableColumns": {
+            "actionType": "JSFunction",
+            "method": "cacheTableColumns",
+            "inputData": {
+                "columns": "{{data.dataProviders.operationsTableDataProvider.columnConfig.columns}}"
+            },
+            "deps": "js/epPlanningService"
+        },
+        "updateTablesWithPvsColumns": {
+            "actionType": "JSFunction",
+            "method": "updateTablesWithPvsColumns",
+            "deps": "js/epPlanningService",
+            "inputData": {
+                "pvsList": "{{subPanelContext.occContext.variantsListInfo.selectedList}}",
+                "existingColumns": "{{dataProviders.operationsTableDataProvider.columnConfig.columns}}"
+            },
+            "outputData": {
+                "dataProviders.operationsTableDataProvider.columnConfig.columns": ""
+            }
+        },
+        "openSelectProductVariantsPopup": {
+            "actionType": "JSFunction",
+            "method": "show",
+            "deps": "js/popupService",
+            "inputData": {
+                "options": {
+                    "view": "EpSelectProductVariantsPopup",
+                    "height": "628",
+                    "width": "1032",
+                    "draggable": true,
+                    "preset": "modal",
+                    "caption": "{{i18n.selectProductVariantsPopupTitle}}",
+                    "subPanelContext": {
+                        "productVariantsList": "{{data.productVariantsList}}",
+                        "availableListTitle": "{{i18n.availableProductVariantsTitle}}",
+                        "selectedListTitle": "{{i18n.selectedProductVariantsTitle}}",
+                        "occContext": "{{subPanelContext.occContext}}"
+                    }
+                }
+            }
+        },
+        "updateCellPropNonEditable": {
+            "actionType": "JSFunction",
+            "method": "updateCellPropNonEditable",
+            "inputData": {
+                "eventData": "{{parameters.eventData}}"
+            },
+            "deps": "js/epTableService"
+        }
+    },
+    "dataProviders": {
+        "operationsTableDataProvider": {
+            "action": "loadOperationsBatchAction",
+            "editContext": "ATTRIBUTE_TABLE_CONTEXT",
+            "response": "{{data.operationsList}}",
+            "totalFound": "{{data.operationsList.length}}",
+            "selectionModelMode": "multiple",
+            "inputData": {
+                "selectionData": "{{fields.selectionData}}"
+            }
+        }
+    },
+    "columnProviders": {
+        "operationColumnProvider": {
+            "frozenColumnIndex": -1,
+            "loadColumnAction": "createColumnsAndRegisterPolicy",
+            "columns": "{{data.columns}}"
+        }
+    },
+    "grids": {
+        "EpOperationsGridTable": {
+            "dataProvider": "operationsTableDataProvider",
+            "columnProvider": "operationColumnProvider",
+            "addIconColumn": true,
+            "gridOptions": {
+                "headerHeight": "LARGE",
+                "clientColumns": [
+                    {
+                        "clientColumn": true,
+                        "name": "releaseStatusFlag",
+                        "width": 50,
+                        "displayName": "{{i18n.releaseStatusFlagColumnName}}"
+                    },
+                    {
+                        "clientColumn": true,
+                        "name": "weightedTime",
+                        "width": 100,
+                        "displayName": "{{i18n.WeightedTimeColumnName}}",
+                        "shouldBeAddedAtEnd": true
+                    }
+                ]
+            }
+        }
+    },
+    "conditions": {
+        "shouldShowNoPVsError": {
+            "expression": "data.productVariantsList === undefined || data.productVariantsList.length === 0"
+        },
+        "isProductionProgramAvailable": {
+            "expression": "ctx.epTaskPageContext.productionProgramCollection.uid !== undefined"
+        },
+        "pvsNotSelected": {
+            "expression": "subPanelContext.occContext.variantsListInfo.selectedList.length === 0"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "variantFormulaPopup.close",
+            "action": "updateWeightedTimeBatchAction"
+        },
+        {
+            "eventId": "Pca0VariantConditionAuthoringGrid.postProcessSetVariantExpressionData",
+            "action": "updateWeightedTimeBatchAction"
+        },
+        {
+            "eventId": "EpOperationsGridTable.cellStartEdit",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            },
+            "action": "updateCellPropNonEditable"
+        }
+    ],
+    "i18n": {
+        "selectPVMessage":[
+            "PlanningMessages"
+        ],
+        "noPVsError": [
+            "PlanningMessages"
+        ],
+        "WeightedTimeColumnName": [
+            "PlanningMessages"
+        ],
+        "releaseStatusFlagColumnName": [
+            "AssemblyMessages"
+        ],
+        "selectProductVariantsPopupTitle":[
+            "PlanningMessages"
+        ],
+        "availableProductVariantsTitle": [
+            "PlanningMessages"
+        ],
+        "selectedProductVariantsTitle": [
+            "PlanningMessages"
+        ],
+        "noProductionProgram": [
+            "PlanningMessages"
+        ]
+    },
+    "lifecycleHooks": {
+        "onUnmount": "unregisterPolicy",
+        "onUpdate": [ {
+            "action": "updateCommandData",
+            "observers": [
+                "viewModel.atomicData.selectionData.selected"
+            ]
+        },
+        {
+            "action": "updateTablesWithPvsColumns",
+            "observers": [
+                "props.subPanelContext.occContext.variantsListInfo.selectedList"
+            ]
+        }]
+    }
+}

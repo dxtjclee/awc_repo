@@ -1,0 +1,122 @@
+{
+  "schemaVersion": "1.0.0",
+  "pasteHandlers": {
+    "pasteHandlerForAse0LogicalElementAse0LogicalElement": {
+      "action": "aceDefaultPasteAction",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForAse0LogicalElementAse0LogicalElement"
+      }
+    },
+    "pasteHandlerForAse0FunctionalElementFunctionalityRevision": {
+      "action": "aceDefaultPasteAction",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForAse0FunctionalElementAse0FunctionalElement"
+      }
+    }
+  },
+  "actions": {},
+  "conditions": {
+    "isPasteHandlerActiveForAse0LogicalElementAse0LogicalElement": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Ase0LogicalElement"
+            }
+          },
+          {
+            "$or": [
+              {
+                "$source": "pasteContext.sourceObject",
+                "$query": {
+                  "$typeOf": "Fnd0LogicalBlockRevision"
+                }
+              },
+              {
+                "$source": "pasteContext.sourceObject",
+                "$query": {
+                  "$typeOf": "Ase0LogicalElement"
+                }
+              },
+              {
+                "$source": "pasteContext.sourceObject",
+                "$query": {
+                  "$typeOf": "ItemRevision"
+                }
+              },
+              {
+                "$source": "pasteContext.sourceObject",
+                "$query": {
+                  "$typeOf": "Awb0ConditionalElement"
+                }
+              }
+            ]
+          },
+          {
+            "$source": "pasteContext.subPanelContext.occContext.topElement",
+            "$query": {
+              "$source": "modelType.typeHierarchyArray",
+              "$query": {
+                "$notin": [
+                  "Uml1ModelElement"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "isPasteHandlerActiveForAse0FunctionalElementAse0FunctionalElement": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Ase0FunctionalElement"
+            }
+          },
+          {
+            "$or": [
+              {
+                "$source": "pasteContext.sourceObject",
+                "$query": {
+                  "$typeOf": "Ase0FunctionalElement"
+                }
+              },
+              {
+                "$source": "pasteContext.sourceObject",
+                "$query": {
+                  "$typeOf": "FunctionalityRevision"
+                }
+              },
+              {
+                "$source": "pasteContext.sourceObject",
+                "$query": {
+                  "$typeOf": "Awb0ConditionalElement"
+                }
+              },
+              {
+                "$source": "pasteContext.sourceObject",
+                "$query": {
+                  "$typeOf": "ItemRevision"
+                }
+              }
+            ]
+          },
+          {
+            "$source": "pasteContext.subPanelContext.occContext.topElement",
+            "$query": {
+              "$source": "modelType.typeHierarchyArray",
+              "$query": {
+                "$notin": [
+                  "Uml1ModelElement"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

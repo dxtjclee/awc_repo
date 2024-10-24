@@ -1,0 +1,242 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+    ],
+    "actions": {
+        "reveal": {
+            "actionType": "dataProvider",
+            "method": "getParamComparisonTypes"
+        },
+        "callcompareDataProvider": {
+            "actionType": "dataProvider",
+            "method": "compareDataProvider"
+        },
+        "getCompareObjData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "clientScopeURI": "{{ctx.sublocation.clientScopeURI}}"
+                },
+                "searchInput": {
+                    "maxToLoad": 25,
+                    "maxToReturn": 25,
+                    "providerName": "Att1CompareParamProvider",
+                    "searchCriteria": {
+                        "openedObjectUid": "{{ctx.state.params.uid}}",
+                        "parentUids": "{{ctx.state.params.sel_uids}}",
+                        "searchString": "{{data.filterBox.dbValue}}",
+                        "separator":"{{function:getSeparator}}",
+                        "productContextUids":"{{ctx.state.params.productContextUids}}",
+                        "comparisionElementType": "{{function:getComparisonElementType}}",
+                        "excludedComparisonElements" : "{{function:getExcludedComparisonElements}}"
+                    },
+                    "searchSortCriteria": [
+                        {
+                            "fieldName": "object_name",
+                            "sortDirection": "ASC"
+                        }
+                    ],
+                    "startIndex": "{{data.dataProviders.compareDataProvider.startIndex}}"
+                }
+            },
+            "outputData": {
+                "searchResults": "{{json:searchResultsJSON}}",
+                "totalFound": "totalFound"
+            },
+            "deps": "js/prm1ProductAddComparisonService"
+        },
+        "addObjectsToCompareInProduct": {
+            "actionType": "JSFunction",
+            "method": "addObjectsToCompareInProduct",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "events":{
+                "success": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    },
+                    {
+                        "name": "closeDialog"
+                    }
+                ]
+            },
+            "deps": "js/prm1ParameterViewService"
+        },
+        "clearSelectedType": {
+            "actionType": "JSFunction",
+            "method": "clearSelectedType",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "selectedType": "selectedType"
+            },
+            "deps": "js/prm1ProductAddComparisonService"
+        },
+        "getSelectedType": {
+            "actionType": "JSFunction",
+            "method": "getSelectedType",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "selectedType":"selectedType"
+            },
+            "events":{
+                "success": [
+                    {
+                        "name": "addComparison.callcompareDataProviderEvent",
+                        "eventData": {
+                        }
+                    }
+                ]
+            },
+            "deps": "js/prm1ProductAddComparisonService"
+        },
+        "updateVRStudyDisaplyName": {
+            "actionType": "JSFunction",
+            "method": "updateVRStudyDisaplyName",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/prm1ProductAddComparisonService"
+        },
+        "ensureCompareTypesLoaded": {
+            "actionType": "JSFunctionAsync",
+            "method": "ensureCompareTypesLoadedJs",
+            "inputData": {
+                "paramCompareViewContext": "{{ctx.panelContext.paramCompareViewContext}}"
+            },
+            "outputData": {
+                "totalFoundType": "totalFoundType",
+                "searchResultsType": "searchResultsType"
+            },
+            "deps": "js/prm1ProductAddComparisonService"
+        },
+        "closeDialogPanel":
+        {
+            "actionType": "JSFunction",
+            "method": "closeDialog",
+            "inputData": {
+                "editContext": "INFO_PANEL_CONTEXT",
+                "popupId": "{{subPanelContext.popupOptions.popupId}}"
+            },
+            "deps": "js/dialogService"
+        }
+    },
+    "data": {
+        "filterBox": {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "false",
+            "requiredText": "Filter",
+            "dbValue": ""
+        },
+        "selectedType": {
+            "displayName": "",
+            "type": "STRING",
+            "dbValue": ""
+        }
+    },
+    "ctx":{
+        "panelContext":{
+            "type": "object"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "awPanel.reveal",
+            "action": "reveal"
+        },
+        {
+            "eventId": "getParamComparisonTypes.selectionChangeEvent",
+            "action": "getSelectedType"
+        },
+        {
+            "eventId": "addComparison.callcompareDataProviderEvent",
+            "action": "callcompareDataProvider"
+        },
+        {
+            "eventId": "getParamComparisonTypes.modelObjectsUpdated",
+            "action": "updateVRStudyDisaplyName"
+        },
+        {
+            "eventId": "closeDialog",
+            "action": "closeDialogPanel"
+        }
+    ],
+    "dataProviders": {
+        "getParamComparisonTypes": {
+            "action": "ensureCompareTypesLoaded",
+            "response": "{{data.searchResultsType}}",
+            "totalFound": "{{data.totalFoundType}}",
+            "selectionModelMode": "single"
+        },
+        "compareDataProvider": {
+            "action": "getCompareObjData",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "selectionModelMode": "multiple",
+            "commandsAnchor": "aw_AddComparisonElementList"
+        }
+    },
+    "conditions": {
+        "isAddButtonVisible": {
+            "expression": "data.dataProviders.compareDataProvider.selectedObjects.length > 0"
+        }
+    },
+    "functions": {
+        "getProviderName":
+        {
+            "functionName": "getProviderName",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getComparisonElementType":
+        {
+            "functionName": "getComparisonElementType",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getExcludedComparisonElements":
+        {
+            "functionName": "getExcludedComparisonElements",
+            "parameters": [
+
+            ]
+         },
+         "getSeparator" : {
+            "functionName"  :"getSeparator",
+            "parameters": [
+                "{{ctx.panelContext.paramCompareViewContext}}"
+            ]
+         }
+    },
+    "i18n": {
+        "ParamAdd": [
+            "prm1ParameterTableMessages"
+        ],
+        "compareType": [
+            "prm1ParameterTableMessages"
+        ],
+        "VRStudyTypeTitle": [
+            "prm1ParameterTableMessages"
+        ],
+        "noResultsFound": [
+            "prm1ParameterTableMessages"
+        ]
+    },
+    "lifecycleHooks": {
+        "onInit": "reveal"
+    }
+}

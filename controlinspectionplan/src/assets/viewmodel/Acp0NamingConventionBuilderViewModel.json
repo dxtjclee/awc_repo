@@ -1,0 +1,135 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "actions": {
+        "loadData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadProperties",
+            "inputData": {
+                "data": "{{data}}",
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "outputData": {
+                "selectedAttribute": "selectedAttribute",
+                "NCString": "NCString"
+            },
+            "deps": "js/Acp0NamingConventionBuilderService"
+        },
+        "addHtmlPanelData": {
+            "actionType": "JSFunction",
+            "method": "addHtmlPanelPropertiesInDataSource",
+            "inputData": {
+                "updatedProperties": [
+                    "{{data.selectedAttribute}}",
+                    "{{data.NCString}}"
+                ],
+                "type": "SUMMARY"
+            },
+            "deps": "js/xrtUtilities"
+        },
+        "editStateChanger": {
+            "actionType": "JSFunction",
+            "method": "NCBEditStateChanger",
+            "inputData": {
+                "selectedAttributeLOV": "{{data.selectedAttributeLOV}}",
+                "sourceClass": "{{props.subPanelContext.fields.selected.properties.acp0SourceClassType}}",
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "outputData": {
+                "selectedAttributeLOV": "selectedAttributeLOV",
+                "selectedAttribute": "selectedAttribute",
+                "NCString": "NCString"
+            },
+            "deps": "js/Acp0NamingConventionBuilderService"
+        },
+        "updateNamingConventionOnSelectionChange":{
+            "actionType": "JSFunction",
+            "method": "updateNamingConventionOnSelectionChange",
+            "inputData": {
+                "subPanelContext": "{{props.subPanelContext}}",
+                "fields": "{{fields}}"
+            },
+            "outputData": {
+                "NCString": "NCString"
+            },
+            "deps": "js/Acp0NamingConventionBuilderService"
+        },
+        "seletedAttributeUpdateAction":{
+            "actionType": "JSFunction",
+            "method": "updateSeletedAttribute",
+            "inputData": {
+                "acp0SourceClassType" : "{{props.subPanelContext.selected.props.acp0SourceClassType}}",
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "outputData": {
+                "sourceClass": "sourceClass",
+                "selectedAttributeLOV": "selectedAttributeLOV",
+                "selectedAttribute": "selectedAttribute"
+            },
+            "deps": "js/Acp0NamingConventionBuilderService"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "editHandlerStateChange",
+            "action": "editStateChanger"
+        }
+    ],
+    "conditions": {},
+    "ctx": {
+        "editInProgress": {
+            "type": "boolean"
+        }
+    },
+    "data": {
+        "selectedAttributeLOV": [],
+        "panelCaption": "{{i18n.Acp0namingConvention}}"
+    },
+    "dataProviders": {
+        "selectedAttributeLOVProvider": {
+            "response": "{{data.selectedAttributeLOV}}"
+        }
+    },
+    "lifecycleHooks": {
+        "onInit": "loadData",
+        "onUpdate": [
+            {
+                "action": "addHtmlPanelData",
+                "observers": [
+                    "viewModel.data.selectedAttribute",
+                    "viewModel.data.NCString"
+                ]
+            },
+            {
+                "action": "updateNamingConventionOnSelectionChange",
+                "observers": [
+                    "props.subPanelContext.xrtState.value.xrtVMO.props.acp0delimiter.uiValue",
+                    "viewModel.data.selectedAttribute.dbValue"
+                ]
+            },
+            {
+                "action": "seletedAttributeUpdateAction",
+                "observers": [
+                    "props.subPanelContext.selected.props.acp0SourceClassType.uiValue"
+                ]
+            }
+        ]
+    },
+    "i18n": {
+        "Acp0namingConvention": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Acp0namingConventionBuilder": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Preview": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Acp0invalidNCBErrorMsg": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Acp0nullNCBErrorMsg": [
+            "ControlInspectionPlanMessages"
+        ]
+    }
+}

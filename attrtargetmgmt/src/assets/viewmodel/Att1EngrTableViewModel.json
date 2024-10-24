@@ -1,0 +1,526 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports":[
+    ],
+    "actions": {
+        "init": {
+            "actionType": "JSFunction",
+            "method": "getParameterComplexData",
+            "inputData": {
+                "subPanelContext":"{{subPanelContext}}",
+                "data":"{{data}}"
+            },
+            "outputData": {
+                "selectedParameter":"selectedParameter"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "handleColumnCopyFill": {
+            "actionType": "JSFunction",
+            "method": "handleColumnCopyFill",
+            "inputData": {
+                "engrTable": "{{data.engrTable}}"
+            },
+            "outputData": {
+                "engrTable":"engrTable"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "showUpdateUomPopup": {
+            "actionType": "JSFunction",
+            "method": "showUpdateUomPopup",
+            "inputData": {
+                "engrTable":"{{data.engrTable}}"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "saveEdits":{
+            "actionType": "JSFunction",
+            "method": "saveEditEngrTable",
+            "inputData": {
+                "data":"{{data.engrTable}}"
+            },
+            "outputData": {
+                "engrTable":"engrTable"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "updateTabData": {
+            "actionType": "JSFunction",
+            "method": "updateTabData",
+            "inputData": {
+                "data":"{{data}}"
+            },
+            "outputData": {
+                "selectedParameter":"selectedParameter"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "showGMMEditPopup": {
+            "actionType": "JSFunction",
+            "method": "showPopup",
+            "inputData": {
+                "d": "{{data.eventData.d}}",
+                "engrTable":"{{data.engrTable}}"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "resizeColumn": {
+            "actionType": "JSFunction",
+            "method": "resizeColumn",
+            "inputData": {
+                "resizeStart": "{{data.eventData.resizeStart}}",
+                "resizeData": "{{data.eventData.resizeData}}",
+                "offset": "{{data.eventData.offset}}",
+                "range": "{{data.eventData.range}}",
+                "index": "{{data.eventData.index}}",
+                "tableData":"{{data.eventData.tableData}}",
+                "engrTable":"{{data.engrTable}}"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "dblresizeColumn": {
+            "actionType": "JSFunction",
+            "method": "dblresizeColumn",
+            "inputData": {
+                "tableData": "{{data.eventData.tableData}}",
+                "engrTable":"{{data.engrTable}}"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "updateSelection": {
+            "actionType": "JSFunction",
+            "method": "updateSelection",
+            "inputData": {
+                "engrTable":"{{data.engrTable}}",
+                "cells": "{{data.eventData.selection}}",
+                "dragType": "{{data.eventData.dragType}}",
+                "minCol": "{{data.eventData.minCol}}",
+                "maxCol": "{{data.eventData.maxCol}}"
+            },
+            "outputData": {
+                "engrTable":"engrTable"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "editCellCallBack": {
+            "actionType": "JSFunction",
+            "method": "editCellCallBack",
+            "inputData": {
+                "cell": "{{data.eventData.cell}}",
+                "multi": "{{data.eventData.multi}}",
+                "value": "{{data.eventData.value}}",
+                "engrTable":"{{data.engrTable}}"
+            },
+            "outputData": {
+                "engrTable":"engrTable"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "showContextMenuPopup":{
+            "actionType": "JSFunction",
+            "method": "showContextMenuPopup",
+            "inputData": {
+                "event": "{{data.eventData.event}}",
+                "selection": "{{data.eventData.selection}}",
+                "engrTable":"{{fields.engrTable}}"
+            },
+            "outputData": {
+                "engrTable":"engrTable"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "refreshTable": {
+            "actionType": "JSFunction",
+            "method": "refreshMatrix",
+            "inputData": {
+                "eventData": "{{data.eventData}}",
+                "data": "{{data}}"
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "loadEngrTableCtx"
+                    }
+                ]
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "redrawTable": {
+            "actionType": "JSFunction",
+            "method": "redrawTable",
+            "inputData": {
+                "data": "{{data.engrTable}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "loadEngrTableCtx": {
+            "actionType": "JSFunction",
+            "method": "loadEngrTableCtx",
+            "inputData": {
+                "engrTable": "{{data.engrTable}}"
+            },
+            "outputData": {
+                "engrTable":"engrTable"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "processGetAttributeComplexDataResponse":{
+            "actionType": "JSFunction",
+            "method": "processGetAttributeComplexDataResponse",
+            "inputData": {
+                "parameter": "parameter",
+                "measureValue": null,
+                "response":"{{data.complexDataResponse}}",
+                "engrTable": "{{data.engrTable}}",
+                "subPanelContext": "{{subPanelContext}}",
+                "GMMlocale": "{{data.i18n}}"
+            },
+            "outputData":{
+                "engrTable":"engrTable"
+            },
+            "deps": "js/Att1ComplexDataService"
+        },
+        "saveAttributeComplexDataSoaCall": {
+            "actionType": "TcSoaService",
+            "serviceName": "AttrTargetMgmt-2021-12-AttributeTargetManagement",
+            "method": "updateParameters2",
+            "inputData":
+            {
+               "inputs": [{
+                    "clientId": "AWClient",
+                    "parameters":[
+                    {
+                        "clientId": "String",
+                        "parameter": "{{function:getSelectedParameter}}",
+                        "goalTableInput":{
+                            "operation": "Create",
+                            "jsonString": "{{data.engrTable.goalTable.tableName}}"
+                        }
+                    }
+                    ]
+                }]
+            },
+            "outputData": {
+                "complexDataResponse" : ""
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "Att1ParametersWidePanel.refreshParameters"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "condition": "data.complexDataResponse.ServiceData.partialErrors",
+                    "message": "errorMessageOnAction"
+               } ]
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "getAttributeComplexDataSOACall": {
+            "actionType": "TcSoaService",
+            "serviceName": "AttrTargetMgmt-2018-11-AttributeTargetManagement",
+            "method": "getAttributeComplexData",
+            "inputData":{
+                "inputs":"{{function:getAttributeComplexDataInput}}"
+            },
+            "outputData": {
+                "complexDataResponse" : ""
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "Att1EngrTable.processGetAttributeComplexDataResponse"
+                    },
+                    {
+                        "name": "Att1EngrTable.attachLeavePlaceHandler"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "condition": "data.complexDataResponse.ServiceData.partialErrors",
+                    "message": "errorMessageOnAction"
+               } ]
+            },
+            "deps": "js/Att1ComplexDataService"
+        },
+        "saveCellUpdates": {
+            "actionType": "TcSoaService",
+            "serviceName": "AttrTargetMgmt-2021-12-AttributeTargetManagement",
+            "method": "updateParameters2",
+            "inputData":
+            {
+               "inputs": "{{data.eventMap['Att1EngrTable.saveCellUpdates'].SOAInput}}"
+            },
+            "outputData": {
+                "complexDataResponse" : ""
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "Att1ParametersWidePanel.refreshParameters"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "condition": "data.complexDataResponse.ServiceData.partialErrors",
+                        "message": "errorMessageOnAction"
+                    }
+                ]
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "updateEngrContextForWidePanel": {
+            "actionType": "JSFunction",
+            "method": "updateEngrContextForWidePanel",
+            "inputData": {
+                "eventData": "{{data.eventMap['Att1ParameterWidePanel.updateEngrContext']}}",
+                "engrTable":"{{data.engrTable}}"
+            },
+            "outputData": {
+                "engrTable":"engrTable"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "updateEngrContext": {
+            "actionType": "JSFunction",
+            "method": "updateEngrContext",
+            "inputData": {
+                "eventData": "{{data.eventMap['Att1EngrTable.updateEngrContext']}}",
+                "engrTable":"{{data.engrTable}}"
+            },
+            "outputData": {
+                "engrTable":"engrTable"
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "engrTable.refresh",
+                        "eventData":
+                        {
+                            "tableData":"{{data.engrTable.network_data}}"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "attachLeavePlaceHandler": {
+            "actionType": "JSFunction",
+            "method": "attachLeavePlaceHandler",
+            "inputData":
+            {
+               "inputs": "{{subPanelContext}}",
+               "engrTable" : "{{data}}"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "removeListeners": {
+            "actionType": "JSFunction",
+            "method": "removeListeners",
+            "deps": "js/Att1EngrTableService"
+        },
+        "updateUndo": {
+            "actionType": "JSFunction",
+            "method": "updateUndo",
+            "inputData":
+            {
+               "engrTable" : "{{data.engrTable}}",
+               "event": "{{data.eventData}}"
+            },
+            "outputData": {
+                "engrTable":"engrTable"
+            },
+            "deps": "js/Att1EngrTableService"
+        }
+    },
+    "data": {
+        "rangeButton": {
+            "displayName": "{{i18n.Att1Range}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": false,
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        },
+        "engrTable": {
+            "initialValues": {
+            },
+            "meta": {
+            }
+        }
+    },
+    "functions": {
+        "getAttributeComplexDataInput":{
+            "functionName": "getAttributeComplexDataInput",
+            "parameters": [
+                "{{data}}",
+                "parameter",
+                "{{subPanelContext}}"
+            ]
+        },
+        "getSelectedParameter": {
+            "functionName": "getSelectedParameter",
+            "parameters": []
+        },
+        "createJson": {
+            "functionName": "createJson",
+            "parameters": []
+        }
+    },
+    "dataProviders": {
+    },
+    "columnProviders": {
+    },
+    "lifecycleHooks": {
+        "onInit": "init",
+        "onUnmount": "removeListeners"
+    },
+    "grids": {
+    },
+    "onEvent": [
+        {
+            "eventId":"Att1EngrTable.getAttributeComplexDataSOACall",
+            "action":"getAttributeComplexDataSOACall"
+        },
+        {
+            "eventId":"Att1EngrTable.getDataFromServer",
+            "cacheEventData": true,
+            "action":"init"
+        },
+        {
+            "eventId":"Att1EngrTable.processGetAttributeComplexDataResponse",
+            "cacheEventData": true,
+            "action":"processGetAttributeComplexDataResponse"
+        },
+        {
+            "eventId": "engrTable.refresh",
+            "cacheEventData": true,
+            "action": "refreshTable"
+        },
+        {
+            "eventId": "setAttributeComplexDataSoaCallSave",
+            "action": "saveAttributeComplexDataSoaCall"
+        },
+        {
+            "eventId":"Att1EngrTable.saveCellUpdates",
+            "cacheEventData": true,
+            "action":"saveCellUpdates"
+        },
+        {
+            "eventId":"Att1EngrTable.updateEngrContext",
+            "cacheEventData": true,
+            "action":"updateEngrContext"
+        },
+        {
+            "eventId":"Att1ParameterWidePanel.updateEngrContext",
+            "cacheEventData": true,
+            "action":"updateEngrContextForWidePanel"
+        },
+        {
+            "eventId":"Att1EngrTable.attachLeavePlaceHandler",
+            "action":"attachLeavePlaceHandler"
+        },
+        {
+            "eventId":"loadEngrTableCtx",
+            "action":"loadEngrTableCtx"
+        },
+        {
+            "eventId":"engrTable.updateSelection",
+            "cacheEventData": true,
+            "action":"updateSelection"
+        },
+        {
+            "eventId":"engrTable.editCell",
+            "cacheEventData": true,
+            "action":"editCellCallBack"
+        },
+        {
+            "eventId":"engrTable.resizeColumn",
+            "cacheEventData": true,
+            "action":"resizeColumn"
+        },
+        {
+            "eventId":"engrTable.dblcolumnResize",
+            "cacheEventData": true,
+            "action":"dblresizeColumn"
+        },
+        {
+            "eventId":"engrTable.showContextMenuPopup",
+            "cacheEventData": true,
+            "action":"showContextMenuPopup"
+        },
+        {
+            "eventId":"engrTable.showUpdateUomPopup",
+            "cacheEventData": true,
+            "action":"showUpdateUomPopup"
+        },
+        {
+            "eventId":"engrTable.showGMMEditPopup",
+            "cacheEventData": true,
+            "action":"showGMMEditPopup"
+        },
+        {
+            "eventId":"Att1EngrTable.updateTabData",
+            "cacheEventData": true,
+            "action":"updateTabData"
+        },
+        {
+            "eventId":"Att1EngrTable.saveEdits",
+            "cacheEventData": true,
+            "action":"saveEdits"
+        },
+        {
+            "eventId":"engrTable.renderTable",
+            "cacheEventData": true,
+            "action":"redrawTable"
+        },
+        {
+            "eventId":"engrTable.updateUndo",
+            "cacheEventData": true,
+            "action":"updateUndo"
+        },
+        {
+            "eventId":"Att1ArrayParameter.handleColumnCopyFill",
+            "action":"handleColumnCopyFill"
+        }
+    ],
+    "messages": {
+        "errorMessageOnAction": {
+            "messageType": "ERROR",
+            "messageText": "{{data.complexDataResponse.ServiceData.partialErrors[0].errorValues[0].message}}"
+        }
+    },
+    "conditions": {},
+    "i18n": {
+        "goalTitle": ["Att1AttrMappingMessages"],
+        "Att1Range":["Att1Messages"],
+        "Goal": ["Att1Messages"],
+        "Min": ["Att1Messages"],
+        "Max": ["Att1Messages"]
+    }
+}

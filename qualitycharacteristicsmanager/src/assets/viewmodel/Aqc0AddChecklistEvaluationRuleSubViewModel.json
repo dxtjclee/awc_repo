@@ -1,0 +1,467 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "ctx": {
+        "selected": {
+            "type": "object"
+        },
+        "panelContext": {
+            "type": "object"
+        }
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "actions": {
+        "reveal": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "loadDataProvider"
+                },
+                {
+                    "action": "loadAnswerLOV"
+                },
+                {
+                    "action": "loadStateLOV"
+                }
+            ]
+        },
+        "loadDataProvider": {
+            "actionType": "dataProvider",
+            "methods": [
+                "getEvaluationRuleConditions"
+            ]
+        },       
+        "loadAnswerLOV":{
+            "actionType": "JSFunction",
+            "method": "loadAnswerOptionsInLOV",
+            "inputData": {
+                "data": "{{data}}",
+                "ratingObject": "{{ctx.panelContext.ratingObject}}"
+            },
+            "outputData": {
+                "answerValues": ""
+            },
+            "deps": "js/Aqc0ChecklistSpecAnswerOptionsConfigService"
+        },
+        "loadStateLOV":{
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2013-05-LOV",
+            "method": "getInitialLOVValues",
+            "inputData": {
+                "initialData": {
+                    "propertyName": "qc0State",
+                    "lovInput": {
+                        "operationName": "Create",
+                        "boName": "Qc0RatingRule"
+                    }
+                }
+            },
+            "outputData": {
+                "stateValues": "{{function:getLOVlist}}"
+            },
+            "deps": "js/Aqc0ChecklistSpecService"
+        },
+        "loadListOfUnitOfThreshold":{
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2013-05-LOV",
+            "method": "getInitialLOVValues",
+            "inputData": {
+                "initialData": {
+                    "propertyName": "qc0UnitOfThreshold",
+                    "lovInput": {
+                        "operationName": "Create",
+                        "boName": "Qc0RatingRule"
+                    }
+                }
+            },
+            "outputData": {
+                "listOfUnitOfThreshold": "{{function:getLOVlist}}"
+            },
+            "deps": "js/Aqc0ChecklistSpecService"
+        }, 
+        "loadListOfType":{
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2013-05-LOV",
+            "method": "getInitialLOVValues",
+            "inputData": {
+                "initialData": {
+                    "propertyName": "qc0ChecklistType",
+                    "lovInput": {
+                        "operationName": "Create",
+                        "boName": "Qc0ChecklistSpecification"
+                    }
+                }
+            },
+            "outputData": {
+                "listOfType": "{{function:getLOVlist}}"
+            },
+            "deps": "js/Aqc0ChecklistSpecService"
+        },        
+        "addConditions": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-09-DataManagement",
+            "method": "setProperties",
+            "inputData": {
+                "info":
+                [
+                    {
+                        "object": "{{ctx.panelContext.ratingObject}}",
+                        "timestamp": "",
+                        "vecNameVal":
+                        [
+                            {
+                                "name": "qc0AssessmentRule",
+                                "values": "{{function:getChecklistEvalRulesToAdd}}"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "outputData": {
+                "createdObject": "output[0].objects[0]",
+                "serviceData": "ServiceData",                                
+                "errorMessage": "{{function:populateErrorString}}"  
+            },
+            "events": {
+                "success": [  
+                    {
+                        "name": "checklistEvalRuleExprGrid.plTable.reload",
+                        "condition": "ctx.selected.type === 'Qc0ChecklistSpecification'"
+                    },                                  
+                    {
+                        "name": "complete",
+                        "condition": "!subPanelContext.panelPinned",                      
+                        "eventData":
+                        {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "actionMessages": {               
+                "failure": [
+                    {
+                        "condition": "data.serviceData.partialErrors.length > 0",
+                        "message": "displayError"
+                    }
+                ]
+            },         
+            "deps": "js/Aqc0ChecklistSpecRatingEvalRuleService"
+        },
+        "removeCondition": {
+            "actionType": "JSFunction",
+            "method": "removeCondition",
+            "inputData": {
+                "subPanelContext": "{{subPanelContext}}",
+                "data": "{{data}}",
+                "deletedVMO": "{{data.eventMap['Aqc0AddChecklistEvaluationRuleSub.removeCondition'].vmo.uid}}"
+            },
+            "deps": "js/Aqc0ChecklistSpecRatingEvalRuleService"
+        },      
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            }
+        },
+        "navigateToSubPanel": {
+            "actionType": "JSFunction",
+            "method": "updateAtomicDataValue",
+            "inputData": {
+                "AtomicObj": "{{subPanelContext.activeState}}",
+                "value" : {
+                    "activeView": "Aqc0AddChecklistEvaluationRuleSub"
+                }
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "updateConditionProvider": {
+            "actionType": "JSFunction",
+            "method": "updateConditionProvider",
+            "inputData": {
+               "data":"{{data}}",
+               "checklistRatingConditions": "{{subPanelContext.addPanelState.value.checklistRatingConditions}}"
+            },
+            "deps": "js/Aqc0ChecklistSpecRatingEvalRuleService"
+        },
+        "clearPanelState": {
+            "actionType": "JSFunction",
+            "method": "updateAtomicDataValue",
+            "inputData": {
+                "AtomicObj": "{{subPanelContext.addPanelState}}",
+                "value" : {
+                    "triggerConditionAdded": false
+                }
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "afterAddConditionJob": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "navigateToSubPanel",
+                    "condition": "conditions.isConditionAdded"
+                },
+                {
+                    "action": "updateConditionProvider",
+                    "condition": "conditions.isConditionAdded"
+                },
+                {
+                    "action": "clearPanelState",
+                    "condition": "conditions.isConditionAdded"
+                }
+            ]
+        }
+    },    
+    "data": {
+        "addChecklistEvaluationRuleConditionCommand": "aqc0_addChecklistEvaluationRuleConditionCommand",
+        "rating": {
+            "displayName": "{{i18n.Aqc0RatingPropertyText}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "hasLov": "true",
+            "dbValue": ""
+        },
+        "ratingValues": {
+            "type": "STRING",
+            "dbValue": [
+                {
+                    "propDisplayValue": "{{i18n.Aqc0RatingPropertyValueRed}}",
+                    "propInternalValue": "Red"
+                },
+                {
+                    "propDisplayValue": "{{i18n.Aqc0RatingPropertyValueYellow}}",
+                    "propInternalValue": "Yellow"
+                },
+                {
+                    "propDisplayValue": "{{i18n.Aqc0RatingPropertyValueGreen}}",
+                    "propInternalValue": "Green"
+                }
+            ]
+        },
+        "answer": {
+            "displayName": "{{i18n.Aqc0AnswerPropertyText}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "hasLov": "true",
+            "dbValue": ""
+        },
+        "state": {
+            "displayName": "{{i18n.Aqc0StatePropertyText}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "hasLov": "true",
+            "dbValue": ""
+        },  
+        "assessmentRequired": {
+            "displayName": "{{i18n.Aqc0AssessmentRequiredText}}",
+            "type": "BOOLEAN",
+            "isRequired": true,
+            "isEditable": "true",
+            "dbValue": true,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },  
+        "typeLov": {
+            "displayName": "{{i18n.Aqc0TypePropertyText}}",
+            "type": "CHECKBOX",
+            "isRequired": true,
+            "isArray": true,
+            "hasLov": "true",
+            "dataProvider": "getTypeDataProvider",
+            "renderingHint": "checkboxoptionlov"
+        },
+        "evaluatedTypeLov": {
+            "displayName": "{{i18n.Aqc0EvaluatedTypePropertyText}}",
+            "type": "STRING",
+            "isRequired": false,
+            "dataProvider": "getTypeDataProvider",
+            "dbValue": ""
+        },
+        "unitOfThreshold": {
+            "displayName": "{{i18n.Aqc0UnitOfThresholdText}}",
+            "type": "STRING",
+            "isRequired": true,
+            "isEditable": "true",
+            "dataProvider": "getUnitOfThresholdDataProvider",
+            "hasLov": true
+        },
+        "redYellowThreshold": {
+            "displayName": "{{i18n.Aqc0ThresholdOfRedYellowText}}",
+            "type": "INTEGER",
+            "isRequired": true,
+            "isEditable": "true",
+            "dbValue": "1",
+            "dispValue": ""
+        },
+        "yellowGreenThreshold": {
+            "displayName": "{{i18n.Aqc0ThresholdOfYellowGreenText}}",
+            "type": "INTEGER",
+            "isRequired": true,
+            "isEditable": "true",
+            "dbValue": "1",
+            "dispValue": ""
+        },
+        "greenNullThreshold": {
+            "displayName": "{{i18n.Aqc0ThresholdOfGreenNullText}}",
+            "type": "INTEGER",
+            "isRequired": true,
+            "isEditable": "true",
+            "dbValue": "1",
+            "dispValue": ""
+        }, 
+        "Aqc0PropertySection": {
+            "type": "STRING",
+            "dbValue": "Property",
+            "uiValue": "{{i18n.Aqc0PropertySection}}"
+        },
+        "Aqc0ConditionCellValueSection": {
+            "type": "STRING",
+            "dbValue": "Value",
+            "uiValue": "{{i18n.Aqc0ConditionCellValueSection}}"
+        }
+    },
+    "dataProviders": {
+        "getEvaluationRuleConditions": {
+            "commandsAnchor": "aw_EvaluationConditionViewCellCommand",
+            "selectionModelMode": "single",
+            "response": "{{data.dataProviders.getEvaluationRuleConditions.viewModelCollection.loadedVMObjects}}"
+        },
+        "getUnitOfThresholdDataProvider": {
+            "action": "loadListOfUnitOfThreshold",
+            "response": "{{data.listOfUnitOfThreshold}}"
+        },
+        "getTypeDataProvider": {
+            "action": "loadListOfType",
+            "response": "{{data.listOfType}}"
+        }
+    },
+    "lifecycleHooks": {
+        "onUpdate": [
+            {
+                "action": "afterAddConditionJob",
+                "observers": ["viewModel.subPanelContext.addPanelState.triggerConditionAdded"]
+            }
+        ],
+        "onMount": "reveal"
+    },
+    "conditions": {
+        "showAddButton": {
+            "expression": "(data.assessmentRequired.dbValue===true && data.rating.dbValue && data.answer.dbValue) || (data.assessmentRequired.dbValue===false && data.typeLov.dbValue && data.unitOfThreshold.dbValue && data.redYellowThreshold.dbValue && data.yellowGreenThreshold.dbValue && data.greenNullThreshold.dbValue)"
+        },
+        "isConditionAdded": {
+            "expression": "subPanelContext.addPanelState.value.triggerConditionAdded == true"
+        }
+    },
+    "functions": {          
+        "getChecklistEvalRulesToAdd":{
+            "functionName": "getChecklistEvalRulesToAdd",
+            "parameters":
+            [                
+                "{{data}}",
+                "{{subPanelContext}}",
+                "{{ctx.panelContext.ratingObject}}"
+            ]
+        },
+        "getLOVlist": {
+            "functionName": "getLOVlist",
+            "parameters": 
+            [
+                "true"
+            ]
+        }
+    },
+    "onEvent": [        
+        {
+            "eventId": "Aqc0AddChecklistEvaluationRuleSub.removeCondition",
+            "cacheEventData": true,
+            "action": "removeCondition"
+        },
+        {
+            "eventId": "loadAnswerLOVEvent",
+            "action": "loadAnswerLOV"
+        }
+    ],
+    "messages": {       
+        "displayError": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.Aqc0PartialError}}",
+            "messageTextParams": [
+                "{{data.errorMessage}}"
+            ]
+        }
+    },
+    "i18n": {       
+        "Aqc0ParameterSectionTitle":[
+            "qualitycentermanagerMessages"
+        ],
+        "Aqc0PropertySection":[
+            "qualitycentermanagerMessages"
+        ],
+        "Aqc0ConditionCellValueSection":[
+            "qualitycentermanagerMessages"
+        ],
+        "Aqc0ConditionCellNameSection":[
+            "qualitycentermanagerMessages"
+        ],
+        "Aqc0RatingPropertyText": [
+            "qualitycentermanagerMessages"
+        ],
+        "Aqc0Add": [
+            "qualitycentermanagerMessages"
+        ],
+        "Aqc0PartialError": [
+            "qualitycentermanagerMessages"
+        ],
+        "Aqc0RatingPropertyValueRed": [
+            "qualitycentermanagerMessages"
+        ],
+        "Aqc0RatingPropertyValueYellow": [
+            "qualitycentermanagerMessages"
+        ],
+        "Aqc0RatingPropertyValueGreen": [
+            "qualitycentermanagerMessages"
+        ],
+        "Aqc0AnswerPropertyText": [
+            "qualitycentermanagerMessages"
+        ],
+        "Aqc0StatePropertyText": [
+            "qualitycentermanagerMessages"
+        ],
+        "Aqc0ChecklistAnswerValueTableColumnName": [
+            "qualitycentermanagerMessages"
+        ],
+        "Aqc0ThresholdRulesTitle": [
+            "qualitycentermanagerMessages"
+        ],
+        "Aqc0AssessmentRequiredText": [
+            "qualitycentermanagerMessages"
+        ],    
+        "Aqc0TypePropertyText": [
+            "qualitycentermanagerMessages"
+        ],
+        "Aqc0EvaluatedTypePropertyText": [
+            "qualitycentermanagerMessages"
+        ],
+        "Aqc0UnitOfThresholdText": [
+            "qualitycentermanagerMessages"
+        ],
+        "Aqc0ThresholdOfRedYellowText": [
+            "qualitycentermanagerMessages"
+        ],
+        "Aqc0ThresholdOfYellowGreenText": [
+            "qualitycentermanagerMessages"
+        ],
+        "Aqc0ThresholdOfGreenNullText": [
+            "qualitycentermanagerMessages"
+        ]  
+    }
+}

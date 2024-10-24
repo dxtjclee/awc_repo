@@ -1,0 +1,111 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+    ],
+    "actions":{
+        "handleOkAction":{
+            "actionType": "JSFunction",
+            "method": "setHeaderAndUom",
+            "inputData": {
+                "data": "{{data}}",
+                "engrTable": "{{subPanelContext.engrTable}}"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "handleCancleAction":{
+            "actionType": "JSFunction",
+            "method": "closeUpdateUomPopup",
+            "deps": "js/Att1EngrTableService"
+        },
+        "hideUomPopup": {
+            "actionType": "JSFunction",
+            "method": "closeUpdateUomPopup",
+            "deps": "js/Att1EngrTableService"
+        },
+        "loadUomLOV":{
+            "actionType": "JSFunction",
+            "method": "getUomPopupInfo",
+            "inputData": {
+                "data": "{{data}}",
+                "cellInfo":"{{subPanelContext.cellUomInfo}}"
+            },
+            "outputData": {
+                "ColumnHeaderName": "ColumnHeaderName",
+                "lovUnitProp":"lovUnitProp",
+                "lovUnitPropOptions": "lovUnitPropOptions"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "reveal":{
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2013-05-LOV",
+            "method": "getInitialLOVValues",
+            "inputData": {
+                "initialData": {
+                    "propertyName": "uom_tag",
+                    "lovInput": {
+                        "operationName": "Search",
+                        "boName": "Att0AttributeDef"
+                    }
+                }
+            },
+            "outputData": {
+                "statusLOV": "{{function:processUomLOV}}"
+            },
+            "deps": "js/Att1EngrTableService"
+        }
+    },
+    "functions":
+    {
+        "processUomLOV": {
+            "functionName": "processUomLOV",
+            "parameters": [
+                "{{data}}",
+                "{{subPanelContext.engrTable}}"
+            ]
+        }
+    },
+    "data": {
+        "ColumnHeaderName": {
+            "displayName": "{{i18n.ColumnHeaderName}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": ""
+        },
+        "lovUnitProp":{
+            "displayName": "{{i18n.Units}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "hasLov":true,
+            "isEditable": "true",
+            "dbValue": ""
+        },
+        "lovUnitPropOptions":{
+            "type": "STRING",
+            "dbValue": ""
+        }
+    },
+    "lifecycleHooks": {
+        "onInit": "reveal"
+    },
+    "onEvent":
+    [
+        {
+            "eventId": "Att1UomPopup.ClosePopup",
+            "action": "hideUomPopup"
+        },
+        {
+            "eventId": "Att1UpdateUom.populateList",
+            "action": "loadUomLOV",
+            "cacheEventData": true
+        }
+    ],
+    "i18n": {
+        "ColumnHeaderName": [ "Att1Messages" ],
+        "Units": [ "Att1Messages" ],
+        "UomPopupTitle" : [ "Att1Messages" ],
+        "ok" : [ "Att1Messages" ],
+        "cancel" : [ "Att1Messages" ]
+    }
+}

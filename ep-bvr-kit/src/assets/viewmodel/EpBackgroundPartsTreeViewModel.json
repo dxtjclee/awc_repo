@@ -1,0 +1,123 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "getValueInViewModel": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "tabData": "{{subPanelContext}}"
+            },
+            "outputData": {
+                "backgroundPartsTreeContext.tabContext": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "registerBackroundPartsContext": {
+            "actionType": "JSFunction",
+            "method": "registerPartialCtx",
+            "deps": "js/appCtxService",
+            "inputData": {
+                "path": "isBackgroundPartsPanel",
+                "value": "true"
+            }
+        },
+        "UnRegisterBackroundPartsContext": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "deps": "js/appCtxService",
+            "inputData": {
+                "path": "isBackgroundPartsPanel"
+            }
+        },
+        "init": {
+            "actionType": "batchJob",
+            "steps": [{
+                    "action": "registerBackroundPartsContext"
+                },
+                {
+                    "action": "getValueInViewModel"
+                }
+            ]
+        }
+    },
+
+    "data": {
+        "selectionData": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "backgroundPartsTreeContext": {
+            "objectUid": "{{ctx.epPageContext.loadedObject.uid}}",
+            "isTableEditable": false,
+            "isTopNode": false,
+            "preferenceName": "EP_BackgroundPartsTableColumnConfiguration",
+            "loadTypes": "CommonExpand",
+            "relatedObjectMapKey": [ "childAssembly", "backgroundParts" ],
+            "isLeafProperty": "bl_has_children",
+            "relationName": [ "backgroundPart" ],
+            "additionalPolicyObjects": {
+                "name": "EpBackgroundPartsTree",
+                "types": [ {
+                    "name": "BOMLine",
+                    "properties": [ {
+                        "name": "bl_has_children"
+                    } ]
+                } ]
+            },
+            "initializeAction": "loadSortedNodes",
+            "additionalLoadParamsForRootLoadInputData": [ {
+                    "tagName": "expandType",
+                    "attributeName": "type",
+                    "attributeValue": "ExpandBGPartsDetailedPlanning"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "level",
+                    "attributeValue": "TOP_WITH_CHILDREN"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "rootsProperty",
+                    "attributeValue": "backgroundParts"
+                }
+            ],
+            "additionalLoadParamsForChildLoadInputData": [ {
+                    "tagName": "expandType",
+                    "attributeName": "type",
+                    "attributeValue": "ExpandBGPartsDetailedPlanning"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "level",
+                    "attributeValue": "CHILDREN"
+                }
+            ],
+            "messages": {
+                "noAssemblyStructure": [ {
+                    "text": "{{i18n.noBackgroundPartsAssigned}}"
+                } ]
+            },
+            "clientColumns": [ {
+                "clientColumn": true,
+                "name": "graphicVisibility",
+                "propertyDisplayName": "{{i18n.GraphicVisibilityColumnName}}"
+            } ],
+            "treeNavigationColumnIndex": 1,
+            "enableSorting": true,
+            "alwaysVisibleColumns":["object_string"],
+            "enableArrangeColumn": true
+        }
+    },
+
+    "lifecycleHooks": {
+        "onMount": "init",
+        "onUnmount":"UnRegisterBackroundPartsContext"
+    },
+
+    "i18n": {
+        "noBackgroundPartsAssigned": [
+            "BackgroundPartsMessages"
+        ],
+        "GraphicVisibilityColumnName": [ "BvrGraphicsMessages" ]
+    }
+}

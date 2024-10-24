@@ -1,0 +1,92 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-panel-body.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-widget.directive",
+        "js/aw-checkbox.directive",
+        "js/aw-init.directive",
+        "js/aw-column.directive",
+        "js/aw-button.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-i18n.directive"
+    ],
+    "actions": {
+        "reveal": {
+            "actionType": "JSFunction",
+            "method": "populatePanelData",
+            "inputData": {
+                "graphState": "{{props.graphState}}"
+            },
+            "outputData": {
+                "labelCategories": ""
+            },
+            "deps": "js/Ase0SettingsLabelService"
+        },
+        "applyLabelSetting": {
+            "actionType": "JSFunction",
+            "method": "applyLabelSetting",
+            "inputData": {
+                "data": "{{data}}",
+                "graphState": "{{props.graphState}}",
+                "graphModel": "{{props.data.graphModel}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "aw.closePopup",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Ase0SettingsLabelService"
+        },
+        "closePopupWindow": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "awPanel.reveal",
+            "action": "reveal"
+        },
+        {
+            "eventId": "aw.closePopup",
+            "action": "closePopupWindow"
+        }
+    ],
+    "data": {
+        "labelCategories": [],
+        "resetLabelPositions": {
+            "displayName": "{{i18n.resetLabelPositions}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dispValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT",
+            "dbValue": "false"
+        },
+        "activeView": "Ase0SettingsSub"
+    },
+    "functions": {},
+    "conditions": {},
+    "messages": {},
+    "i18n": {
+        "display": [
+            "ArchitectureModelerConstants"
+        ],
+        "apply": [
+            "ArchitectureModelerConstants"
+        ],
+        "resetLabelPositions": [
+            "ArchitectureModelerConstants"
+        ]
+    }
+}

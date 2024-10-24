@@ -1,0 +1,399 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "actions": {
+        "reveal": {
+            "actionType": "JSFunction",
+            "method": "initCkeditor",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "editorProps": "editorProps"
+            },
+            "deps": "js/Arm0HtmlHeaderFooter",
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0HtmlHeaderFooter.getHTMLTextContent"
+                    }
+                ]
+            }
+        },
+        "getHTMLTextContent": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2017-06-RequirementsManagement",
+            "method": "exportToApplication3",
+            "inputData": {
+                "input": [
+                    {
+                        "templateName": "",
+                        "applicationFormat": "HTML",
+                        "objectsToExport": [
+                            {
+                                "uid": "{{ctx.selected.uid}}",
+                                "type": "{{ctx.selected.type}}"
+                            }
+                        ],
+                        "targetObjectsToExport": [],
+                        "exportOptions": "{{function:getExportOptions}}",
+                        "recipeSourceObjects": [],
+                        "recipeTargetObjects": [],
+                        "attributesToExport": [],
+                        "objectTemplateInputs": [],
+                        "includeAttachments": false
+                    }
+                ]
+            },
+            "policy": {
+                "types": [
+                    {
+                        "name": "Dataset",
+                        "properties": [
+                            {
+                                "name": "object_name"
+                            },
+                            {
+                                "name": "ref_list",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "outputData": {
+                "htmlContent": "transientFileReadTickets[0]"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0HtmlHeaderFooter.initContent"
+                    }
+                ]
+            },
+            "deps": "js/Arm0HtmlHeaderFooter"
+        },
+        "initContent": {
+            "actionType": "JSFunction",
+            "method": "initContent",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "ckeditorReady" : "ckeditorReady",
+                "contentReady": "contentReady",
+                "showCKEditor" : "showCKEditor"
+            },
+            "deps": "js/Arm0HtmlHeaderFooter"
+        },
+        "insertObjInCKEditor": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-04-DataManagement",
+            "method": "createDatasets",
+            "inputData": {
+                "input": [
+                    {
+                        "clientId": "{{data.datasetInfo.clientId}}",
+                        "container": {
+                            "uid": "AAAAAAAAAAAAAA",
+                            "type": "unknownType"
+                        },
+                        "datasetFileInfos": [
+                            {
+                                "fileName": "{{data.datasetInfo.fileName}}",
+                                "namedReferenceName": "{{data.datasetInfo.namedReferenceName}}",
+                                "isText": false
+                            }
+                        ],
+                        "relationType": "",
+                        "description": "",
+                        "name": "{{data.datasetInfo.name}}",
+                        "type": "{{data.datasetInfo.type}}"
+                    }
+                ]
+            },
+            "outputData": {
+                "fmsTicket": "datasetOutput[0].commitInfo[0].datasetFileTicketInfos[0].ticket",
+                "commitInfos": "datasetOutput[0].commitInfo[0]",
+                "relatedModified": "datasetOutput[0].dataset",
+                "createdObject": "datasetOutput[0].dataset"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0HtmlHeaderFooter.updateFormData"
+                    }
+                ]
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "insertImage": {
+            "actionType": "JSFunction",
+            "method": "insertImage",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "form": "form",
+                "datasetInfo":"datasetInfo"
+            },
+            "deps": "js/Arm0HtmlHeaderFooter"
+        },
+        "updateFormData": {
+            "actionType": "JSFunction",
+            "method": "updateFormData",
+            "inputData": {
+                "fileData": {
+                    "key": "fmsTicket",
+                    "value": "{{data.fmsTicket}}"
+                },
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "formData": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0HtmlHeaderFooter.uploadFile"
+                    }
+                ]
+            },
+            "deps": "js/Arm0HtmlHeaderFooter"
+        },
+        "uploadFile": {
+            "actionType": "RESTService",
+            "serviceName": "",
+            "method": "POST",
+            "inputData": {
+                "request": {
+                    "method": "POST",
+                    "url": "{{Constants.fmsUrl}}",
+                    "headers": {
+                        "Content-type": "undefined"
+                    },
+                    "data": "{{data.formData}}"
+                }
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0HtmlHeaderFooter.commitDataset"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "Arm0ImportFromOffice.importDocumentFailed"
+                    }
+                ]
+            }
+        },
+        "commitDataset": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-FileManagement",
+            "method": "commitDatasetFiles",
+            "inputData": {
+                "commitInput": [
+                    {
+                        "dataset": "{{data.commitInfos.dataset}}",
+                        "createNewVersion": true,
+                        "datasetFileTicketInfos": [
+                            {
+                                "datasetFileInfo": {
+                                    "clientId": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.clientId}}",
+                                    "fileName": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.fileName}}",
+                                    "namedReferencedName": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.namedReferenceName}}",
+                                    "isText": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.isText}}",
+                                    "allowReplace": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.allowReplace}}"
+                                },
+                                "ticket": "{{data.fmsTicket}}"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0HtmlHeaderFooter.insertImage",
+                        "condition": "data.datasetInfo.type==='Image'"
+                    }
+                ]
+            }
+        },
+        "processEditHandlerStateChanged": {
+            "actionType": "JSFunction",
+            "method": "processEditHandlerStateChanged",
+            "inputData": {
+                "data": "{{data}}",
+                "source": "NONE"
+            },
+            "outputData": {
+                "editMode": "editMode"
+            },
+            "deps": "js/Arm0HtmlHeaderFooter"
+        },
+        "isCkeditorInstanceReady": {
+            "actionType": "JSFunction",
+            "method": "isCkeditorInstanceReady",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "contentReady": "contentReady",
+                "ckeditorReady": "ckeditorReady"
+            },
+            "events": {},
+            "deps": "js/Arm0HtmlHeaderFooter"
+        },
+        "prepareInputforImageInsert":{
+            "actionType": "JSFunction",
+            "method": "prepareInputforImageInsert",
+            "inputData": {
+                "eventData": "{{data}}"
+            },
+            "outputData": {
+                "form": "form",
+                "datasetInfo":"datasetInfo"
+            },
+            "events":{
+                "success": [ {
+                    "name": "Arm0HtmlHeaderFooter.InsertObjInCKEditor"
+                } ]
+            },
+            "deps": "js/Arm0HtmlHeaderFooter"
+        }
+
+    },
+    "data": {
+        "editorProps": {
+            "dbValue": {
+                "contentType": "",
+                "addNavigationCommands": true,
+                "pageSize": "preferences.AWC_req_viewer_page_size[0]",
+                "showEditorSidebar": true,
+                "excludeInsertOLECommand": true,
+                "a4SizeEditor": true,
+                "includePageBreakCommand": true
+            },
+            "type": "ADVANCED_NODROP",
+            "contentType": ""
+        },
+        "viewerProps": {
+            "dbValue": ""
+        },
+        "requirementCtx":{
+            "initialValues": {
+                "splitPanelLocation" : "undefined"
+            },
+            "meta": {
+            }
+        },
+        "showCKEditor":false
+    },
+    "functions": {
+        "getExportOptions": {
+            "functionName": "getExportOptions",
+            "parameters": []
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "Arm0HtmlHeaderFooter.getHTMLTextContent",
+            "action": "getHTMLTextContent"
+        },
+        {
+            "eventId": "Arm0HtmlHeaderFooter.initContent",
+            "cacheEventData": true,
+            "action": "initContent"
+        },
+        {
+            "eventId": "Arm0HtmlHeaderFooter.InsertObjInCKEditor",
+            "action": "insertObjInCKEditor"
+        },
+        {
+            "eventId": "Arm0HtmlHeaderFooter.commitDataset",
+            "action": "commitDataset"
+        },
+        {
+            "eventId": "Arm0HtmlHeaderFooter.insertImage",
+            "action": "insertImage"
+        },
+        {
+            "eventId": "Arm0HtmlHeaderFooter.updateFormData",
+            "action": "updateFormData"
+        },
+        {
+            "eventId": "Arm0HtmlHeaderFooter.uploadFile",
+            "action": "uploadFile"
+        },
+        {
+            "eventId": "editHandlerStateChange",
+            "cacheEventData": true,
+            "action": "processEditHandlerStateChanged"
+        },
+        {
+            "eventId": "requirementDocumentation.InsertImageInCKEditor",
+            "cacheEventData": true,
+            "action": "prepareInputforImageInsert"
+        },
+        {
+            "eventId": "appCtx.update",
+            "criteria": {
+                "name": "AWRequirementsEditor"
+            },
+            "action": "isCkeditorInstanceReady"
+        }
+    ],
+    "messages": {
+        "notificationForImageErrorWrongFile": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.imageErrorWrongFile}}",
+            "messageTextParams": []
+        },
+        "notificationMultiUserEditError": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.multiUserEditError}}",
+            "messageTextParams": [
+                "{{ctx.selected.cellHeader1}}"
+            ]
+        }
+    },
+    "i18n": {
+        "imageErrorWrongFile": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "multiUserEditError": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "coverPageLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "headerLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "footerLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "specContentLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "figuresLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "tablesLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "pageBreakLabel": [
+            "RequirementsCommandPanelsMessages"
+        ]
+    },
+    "lifecycleHooks": {
+        "onMount": "reveal"
+    }
+}

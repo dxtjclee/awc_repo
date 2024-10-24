@@ -1,0 +1,21 @@
+<aw-balloon-popup-panel>
+    <div class="aw-richtexteditor-hiddenObjectPopup">
+        <div class="sw-row">
+            <div class="sw-column">
+                <label>{{data.hiddenObjectCountLabel}}</label>
+                <aw-i18n>i18n.doubleClickToUnhide</aw-i18n>
+                <aw-search-box prop="data.textValueToFilter" placeholder="data.searchBoxPlaceHolder.dbValue" action="filterAction"></aw-search-box>
+                <div class="aw-richtexteditor-relationshipmatrixHiddenObjectFilterbox">
+                    <aw-label prop="data.noResultsFound" exist-when="data.noFacetResults"></aw-label>
+                    <aw-scrollpanel id='filter-facet-scroll'>
+                        <aw-checkbox prop="data.selectAllProp" title="{{data.selectAllProp.displayName}}" action="updateSelectAllProp" exist-when="!data.noFacetResults"></aw-checkbox>
+                        <aw-checkbox aw-repeat="columnValue : data.columnValues" prop="columnValue" action="updateColumnValuesProp" title="{{columnValue.propertyDisplayName}}"></aw-checkbox>
+                    </aw-scrollpanel>
+                </div>
+                <aw-button class="unhide-button" action="unhideAction">
+                    <aw-i18n>i18n.unhide</aw-i18n>
+                </aw-button>
+            </div>
+        </div>
+    </div>
+</aw-balloon-popup-panel>

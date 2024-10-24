@@ -1,0 +1,92 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "actions": {
+        "render": {
+            "method": "awRequirementContentRenderFn",
+            "deps": "js/AwRequirementContentService",
+            "options": {
+                "elementRefList": [
+                    "requirementContentElement"
+                ]
+            }
+        },
+        "onMount": {
+            "actionType": "JSFunction",
+            "method": "awRequirementContentOnMount",
+            "inputData": {
+                "data": "{{data}}",
+                "props": "{{props}}",
+                "elementRefList": "{{parameters.elementRefList}}"
+            },
+            "deps": "js/AwRequirementContentService"
+        },
+        "onUnMount": {
+            "actionType": "JSFunction",
+            "method": "awRequirementContentOnUnMount",
+            "inputData": {
+                "viewModel": "{{data}}"
+            },
+            "deps": "js/AwRequirementContentService"
+        },
+        "updateContentData": {
+            "actionType": "JSFunction",
+            "method": "updateContentData",
+            "inputData": {
+                "viewModel": "{{data}}",
+                "props": "{{props}}"
+            },
+            "deps": "js/AwRequirementContentService"
+        },
+        "resizeContentViewerCaller": {
+            "actionType": "JSFunction",
+            "method": "resizeContentViewerCaller",
+            "inputData": {
+                "viewModel": "{{data}}",
+                "props": "{{props}}"
+            },
+            "deps": "js/AwRequirementContentService"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "AwRequirementContent.updateViewerContent",
+            "action": "updateContentData"
+        },
+        {
+            "eventId": "requirement.resizeView",
+            "action": "resizeContentViewerCaller"
+        },
+        {
+            "eventId": "commandBarResized",
+            "action": "resizeContentViewerCaller"
+        }
+    ],
+    "functions":
+    {
+    },
+    "messages": {
+    },
+    "conditions": {
+    },
+    "lifecycleHooks": {
+        "render": "render",
+        "onMount": "onMount",
+        "onUnmount": "onUnMount"
+    },
+    "i18n": {},
+    "props": {
+        "applyBorder": {
+            "type": "string"
+        },
+        "defaultScroll": {
+            "type": "string"
+        },
+        "prop": {
+            "type": "object"
+        },
+        "subPanelContext": {
+            "type": "object"
+        }
+    }
+}

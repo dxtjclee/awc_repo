@@ -1,0 +1,17 @@
+<%
+    if(vmo.props && vmo.props[propName] && vmo.props[propName].uiValue) {
+        if(dependentServices[0].ctx.parametersTable && dependentServices[0].ctx.parametersTable.OverrideLabel)
+        {
+            tooltipLabel = dependentServices[0].ctx.parametersTable.OverrideLabel;
+        }
+        else
+        {
+            tooltipLabel = "Overrides for";
+        }
+        var toolTip = vmo.props[propName].uiValue;
+        var imagePath = basePath +'/image/';
+        imagePath += "indicatorOverridden16.svg" %>
+        <img src ="<%=imagePath%>" title="<%=tooltipLabel%> <%=toolTip%>"  class="aw-visual-indicator">
+        <%
+    }
+%>

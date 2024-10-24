@@ -1,0 +1,10 @@
+<aw-command-panel caption="i18n.AddTitle" context="subPanelContext">
+    <aw-add visible-tabs="search,palette" type-filter="Prg0AbsEvent" add-panel-state="fields.addPanelState">
+    </aw-add>
+    <aw-panel-footer>
+        <!-- panel-footer button for New tab -->
+        <aw-button action="createRelationForPaletteOrSearch" visible-when="conditions.isNewTabSelection && fields.addPanelState.sourceObjects.length>0">
+            <aw-i18n>i18n.AddTitle</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

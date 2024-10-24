@@ -1,0 +1,38 @@
+<aw-panel exist-when="data.allDataProvidersPopulated" class="aw-ngp-attachmentsPanel">
+    <aw-list class="aw-ngp-attachmentsPanelOverview" dataprovider="data.dataProviders.overviewDataProvider">
+        <aw-i18n class="aw-ngp-attachmentsPanelOverviewLabel">i18n.overview</aw-i18n>
+    </aw-list>
+     <aw-panel-section exist-when="data.dataProviders.attachmentsDataProvider" caption="{{i18n.attachments}} ({{data.dataProviders.attachmentsDataProvider.viewModelCollection.loadedVMObjects.length}})" name="attachments" collapsed="false">
+        <aw-list dataprovider="data.dataProviders.attachmentsDataProvider" class="aw-mfe-typeAndNameCellList">
+            <div class="sw-row" align-content="center">
+                <img src="{{item.thumbnailURL ? item.thumbnailURL : item.typeIconURL}}" class="aw-mfe-cellListItemTypeIcon">
+                <div class="aw-mfe-cellListItemName">
+                    <span title="{{item.props.object_string.dbValues[0]}}">{{item.props.object_string.dbValues[0]}}</span>
+                </div>
+            </div>
+        </aw-list>
+    </aw-panel-section>
+    <aw-panel-section  exist-when="data.dataProviders.attributeGroupsDataProvider" caption="{{i18n.attributeGroups}} ({{data.dataProviders.attributeGroupsDataProvider.viewModelCollection.loadedVMObjects.length}})" name="attributeGroups" collapsed="false">
+        <aw-list dataprovider="data.dataProviders.attributeGroupsDataProvider" class="aw-mfe-typeAndNameCellList">
+            <div class="sw-row" align-content="center">
+                <img src="{{item.thumbnailURL ? item.thumbnailURL : item.typeIconURL}}" class="aw-mfe-cellListItemTypeIcon">
+                <div class="aw-mfe-cellListItemName">
+                    <span title="{{item.props.object_string.dbValues[0]}}">{{item.props.object_string.dbValues[0]}}</span>
+                </div>
+            </div>
+        </aw-list>
+        <!-- <aw-include name="MfeTypeAndNameCellList" sub-panel-context="data.dataProviders.attributeGroupsDataProvider"></aw-include> -->
+    </aw-panel-section>
+    <aw-panel-section exist-when="conditions.shouldDisplayForms" caption="{{i18n.forms}} ({{data.dataProviders.formsDataProvider.viewModelCollection.loadedVMObjects.length}}" name="forms" collapsed="false">
+        <aw-list dataprovider="data.dataProviders.formsDataProvider" class="aw-mfe-typeAndNameCellList">
+            <div class="sw-row" align-content="center">
+                <img src="{{item.thumbnailURL ? item.thumbnailURL : item.typeIconURL}}" class="aw-mfe-cellListItemTypeIcon">
+                <div class="aw-mfe-cellListItemName">
+                    <span title="{{item.props.object_string.dbValues[0]}}">{{item.props.object_string.dbValues[0]}}</span>
+                </div>
+            </div>
+        </aw-list>
+        <!-- <aw-include exist-when="data.dataProviders.formsDataProvider" name="MfeTypeAndNameCellList" sub-panel-context="data.dataProviders.formsDataProvider"></aw-include> -->
+    </aw-panel-section>
+</aw-panel>
+<mfe-loading-message exist-when="!data.allDataProvidersPopulated"></mfe-loading-message>

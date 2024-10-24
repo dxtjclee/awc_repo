@@ -1,0 +1,654 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+    ],
+    "dataParseDefinitions": {
+        "convertNvObject": {
+            "outputFormatType": "ViewModelObject",
+            "dataInput": "ServiceData.plain[1]",
+            "operationType": "SUMMARY"
+        }
+    },
+    "actions": {
+        "loadRefPartsProvider": {
+            "actionType": "dataProvider",
+            "method": "refPartsProvider"
+        },
+        "loadPartListProvider": {
+            "actionType": "dataProvider",
+            "method": "partListProvider"
+        },
+        "loadPartRevisionsListProvider": {
+            "actionType": "dataProvider",
+            "method": "partRevisionListProvider"
+        },
+        "showHidePartsListPanel": {
+            "actionType": "JSFunction",
+            "method": "showHidePartsListPanel",
+            "inputData": {
+                "data": "{{data.dataProviders}}"
+            },
+            "deps": "js/Acp0BCTService"
+        },
+        "getPartCharacteristics": {
+            "actionType": "JSFunction",
+            "method": "getPartCharacteristics",
+            "inputData": {
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "outputData": {
+                "data": ""
+            },
+            "deps": "js/Acp0BCTService"
+        },
+        "highlightImportedBalloons": {
+            "actionType": "JSFunction",
+            "method": "highlightImportedBalloons",
+            "inputData": {
+                "data": "{{data}}",
+                "subPanelContext": "{{props.subPanelContext}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Acp0.setBctViewerHeight"
+                    }
+                ]
+            },
+            "deps": "js/Acp0BCTService"
+        },
+        "performSearchForPartList": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2016-03-Finder",
+            "method": "performSearch",
+            "inputData": {
+                "searchInput": {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Acp0IpxmlDatasetProvider",
+                    "searchCriteria": {
+                        "searchString": "{{data.filterBox.dbValue}}"
+                    },
+                    "searchSortCriteria": [
+                        {
+                            "fieldName": "creation_date",
+                            "sortDirection": "DESC"
+                        }
+                    ],
+                    "startIndex": "{{data.dataProviders.partListProvider.startIndex}}"
+                }
+            },
+            "outputData": {
+                "searchResultsForPartList": "searchResults",
+                "totalLoadedForPartList": "totalLoaded",
+                "totalFoundForPartList": "totalFound"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Acp0.setBctViewerHeight"
+                    }
+                ]
+            }
+        },
+        "getReferencedPart": {
+            "actionType": "TcSoaService",
+            "serviceName": "Query-2014-11-Finder",
+            "method": "performSearch",
+            "inputData": {
+                "searchInput": {
+                    "maxToLoad": 20,
+                    "maxToReturn": 20,
+                    "providerName": "Awp0ObjectSetRowProvider",
+                    "searchCriteria": {
+                        "parentUid": "{{function:getContextObjectUid}}",
+                        "objectSet": "Acp0PMIPartRefProvider.ItemRevision"
+                    }
+                }
+            },
+            "outputData": {
+                "searchResultsForRefParts": "searchResults",
+                "totalLoadedForRefParts": "totalLoaded",
+                "totalFoundForRefParts": "totalFound"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Acp0.getReferencedPartSuccess"
+                    },
+                    {
+                        "name": "Acp0.setBctViewerHeight"
+                    }
+                ]
+            },
+            "deps": "js/Acp0BCTService"
+        },
+        "loadColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadColumns",
+            "inputData": {
+                "data": "{{data}}",
+                "dataProvider": "{{data.dataProviders.refPartsProvider}}"
+            },
+            "deps": "js/Acp0BCTService"
+        },
+        "drawingSheetSelectionChange": {
+            "actionType": "JSFunction",
+            "method": "drawingSheetSelectionChange",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Acp0BCTInspCompRenderService"
+        },
+        "modelViewChange": {
+            "actionType": "JSFunction",
+            "method": "modelViewChange",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Acp0BCTInspCompRenderService"
+        },
+        "getDrawingSheetList": {
+            "actionType": "JSFunction",
+            "method": "getDrawingSheetList",
+            "inputData": {
+                "acp0DrawingSheetList": "{{data.acp0DrawingSheetList}}",
+                "pmisImportedSheet": "{{data.eventData.sheet}}"
+            },
+            "outputData": {
+                "drawingSheetList": "drawingSheetList",
+                "acp0DrawingSheetList": "acp0DrawingSheetList"
+            },
+            "deps": "js/Acp0BCTInspCompRenderService"
+        },
+        "getModelViews": {
+            "actionType": "JSFunction",
+            "method": "getModelViews",
+            "outputData": {
+                "modelViews": "modelViews"
+            },
+            "deps": "js/Acp0BCTInspCompRenderService"
+        },
+        "processDrawingRenderingOnSelectionOfObjectSetRow": {
+            "actionType": "JSFunction",
+            "method": "processDrawingRenderingDataBasedOnSelectionChange",
+            "inputData": {
+                "data": "{{data}}",
+                "subPanelContext": "{{props.subPanelContext}}",
+                "objectSetElementSelection": true,
+                "eventData": "{{props.subPanelContext.selectionData.value.selected}}"
+            },
+            "outputData": {
+                "data": ""
+            },
+            "deps": "js/Acp0BCTService"
+        },
+        "getPartForDirectRenderingInPMITab": {
+            "actionType": "TcSoaService",
+            "serviceName": "Query-2014-11-Finder",
+            "method": "performSearch",
+            "inputData": {
+                "searchInput": {
+                    "maxToLoad": 20,
+                    "maxToReturn": 20,
+                    "providerName": "Awp0ObjectSetRowProvider",
+                    "searchCriteria": {
+                        "parentUid": "{{function:getContextObjectUid}}",
+                        "objectSet": "{{ctx.viewMci0PMIObjectSet}}"
+                    },
+                    "searchSortCriteria": [
+                        {
+                            "fieldName": "creation_date",
+                            "sortDirection": "DESC"
+                        }
+                    ]
+                }
+            },
+            "outputData": {
+                "searchResultsForRefPartsOfInspDef": "searchResults",
+                "totalLoadedForRefPartsOfInspDef": "totalLoaded",
+                "totalFoundForRefPartsOfInspDef": "totalFound"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Acp0.getPartFromSearchResultsAndRenderDrawing"
+                    }
+                ]
+            },
+            "deps": "js/Acp0BCTService"
+        },
+        "getPartFromSearchResultsAndRenderDrawing": {
+            "actionType": "JSFunction",
+            "method": "getPartFromSearchResultsAndRenderDrawing",
+            "inputData": {
+                "searchResultsForPartList": "{{data.searchResultsForRefPartsOfInspDef}}",
+                "data": "{{data}}",
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Acp0BCTService"
+        },
+        "getRevisionsFromSelectedPart": {
+            "actionType": "TcSoaService",
+            "serviceName": "Query-2014-11-Finder",
+            "method": "performSearch",
+            "inputData": {
+                "searchInput": {
+                    "maxToLoad": 20,
+                    "maxToReturn": 20,
+                    "providerName": "Awp0ObjectSetRowProvider",
+                    "searchCriteria": {
+                        "parentUid": "{{function:getPartItemTagFromSelectedPartRev}}",
+                        "objectSet": "revision_list.ItemRevision"
+                    },
+                    "searchSortCriteria": [
+                        {
+                            "fieldName": "creation_date",
+                            "sortDirection": "DESC"
+                        }
+                    ]
+                }
+            },
+            "outputData": {
+                "searchResultsForPartRevisionList": "searchResults",
+                "totalLoadedForPartRevisionList": "totalLoaded",
+                "totalFoundForPartRevisionList": "totalFound"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Acp0.setBctViewerHeight"
+                    }
+                ]
+            },
+            "deps": "js/Acp0BCTService"
+        },
+        "setBctViewerHeight": {
+            "actionType": "JSFunction",
+            "method": "setBctViewerHeight",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Acp0BCTInspCompRenderService"
+        },
+        "updateBctViewerHeight": {
+            "actionType": "JSFunction",
+            "method": "updateBctViewerHeight",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Acp0BCTInspCompRenderService"
+        }
+    },
+    "functions": {
+        "getContextObjectUid": {
+            "functionName": "getContextObjectUid",
+            "parameters": [
+                "{{ctx}}"
+            ]
+        },
+        "getPartItemTagFromSelectedPartRev": {
+            "functionName": "getPartItemTagFromSelectedPartRev",
+            "parameters": []
+        }
+    },
+    "dataProviders": {
+        "partListProvider": {
+            "action": "performSearchForPartList",
+            "response": "{{data.searchResultsForPartList}}",
+            "totalFound": "{{data.totalFoundForPartList}}",
+            "selectionModelMode": "single",
+            "commands": {
+                "Awp0ShowObjectCell": {
+                    "id": "cmdOpen",
+                    "title": "Open",
+                    "areas": [
+                        "aw_oneStep"
+                    ],
+                    "priorities": [
+                        300
+                    ],
+                    "dependencies": [
+                        "js/showObjectCommandHandler"
+                    ],
+                    "displayOption": "ON_HOVER_AND_SELECTION",
+                    "position": "TOP_RIGHT"
+                }
+            }
+        },
+        "refPartsProvider": {
+            "response": "{{data.searchResultsForRefParts}}",
+            "totalFound": "{{data.totalFoundForRefParts}}",
+            "selectionModelMode": "single",
+            "commands": {
+                "Awp0ShowObjectCell": {
+                    "id": "cmdOpen",
+                    "title": "Open",
+                    "areas": [
+                        "aw_oneStep"
+                    ],
+                    "priorities": [
+                        300
+                    ],
+                    "dependencies": [
+                        "js/showObjectCommandHandler"
+                    ],
+                    "displayOption": "ON_HOVER_AND_SELECTION",
+                    "position": "TOP_RIGHT"
+                }
+            }
+        },
+        "acp0DrawingSheetListDataProvider": {
+            "response": "{{data.drawingSheetList}}"
+        },
+        "acp0ModelViewsProvider": {
+            "response": "{{data.modelViews}}"
+        },
+        "partRevisionListProvider": {
+            "action": "getRevisionsFromSelectedPart",
+            "response": "{{data.searchResultsForPartRevisionList}}",
+            "totalFound": "{{data.totalFoundForPartRevisionList}}",
+            "selectionModelMode": "single",
+            "commands": {
+                "Awp0ShowObjectCell": {
+                    "id": "cmdOpen",
+                    "title": "Open",
+                    "areas": [
+                        "aw_oneStep"
+                    ],
+                    "priorities": [
+                        300
+                    ],
+                    "dependencies": [
+                        "js/showObjectCommandHandler"
+                    ],
+                    "displayOption": "ON_HOVER_AND_SELECTION",
+                    "position": "TOP_RIGHT"
+                }
+            }
+        }
+    },
+    "columnProviders": {
+        "refPartsColumnProvider": {
+            "loadColumnAction": "loadColumns",
+            "columns": "{{data.columns}}",
+            "frozenColumnIndex": 1
+        }
+    },
+    "grids": {
+        "refPartsGrid": {
+            "dataProvider": "refPartsProvider",
+            "columnProvider": "refPartsColumnProvider",
+            "addIconColumn": true,
+            "gridOptions": {
+                "enableGridMenu": true,
+                "maxRowsToShow": 5,
+                "enablePinning": true
+            }
+        }
+    },
+    "conditions": {
+        "acp0AddButtonCond": {
+            "expression": "conditions.acp0VersionAndTabCheckCond && (ctx.selected &&(ctx.selected.modelType.typeHierarchyArray.indexOf( 'Acp0ControlPlanElement' ) > -1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'Acp0InspOpElement' ) > -1))"
+        },
+        "acp0IsBctInspViewForDrawing": {
+            "expression": "ctx.selectedPart && ( ctx.inspCombineViewMode || ctx.inspDrawingViewMode )"
+        },
+        "acp0IsBctInspViewForTable": {
+            "expression": "ctx.selectedPart && ( ctx.inspCombineViewMode || ctx.inspTableViewMode )"
+        },
+        "acp0DrawingSheetChangeCondition": {
+            "expression": "data.acp0DrawingSheetList.dbValue",
+            "trackValues": true
+        },
+        "acp0VersionAndTabCheckCond": {
+            "expression": "!(ctx.tcSessionData.tcMajorVersion < 12 || ctx.tcSessionData.tcMajorVersion === 12 && ctx.tcSessionData.tcMinorVersion <= 3) && subPanelContext.activeTab.pageId === 'tc_xrt_CAD_View'"
+        },
+        "acp0IsHideLinkedParts":{
+            "expression":"!ctx.isHideLinkedParts"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "Acp0.getReferencedPartSuccess",
+            "action": "loadRefPartsProvider"
+        },
+        {
+            "eventId": "Acp0.callPartListDataProvider",
+            "action": "loadPartListProvider"
+        },
+        {
+            "eventId": "Acp0.getDrawingSheetList",
+            "action": "getDrawingSheetList",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "Acp0.getModelViews",
+            "action": "getModelViews",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "condition.expressionValueChanged",
+            "action": "drawingSheetSelectionChange",
+            "criteria": {
+                "condition": "conditions.acp0DrawingSheetChangeCondition"
+            },
+            "cacheEventData": true
+        },
+        {
+            "eventId": "partListProvider.selectionChangeEvent",
+            "action": "highlightImportedBalloons",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "refPartsProvider.selectionChangeEvent",
+            "action": "highlightImportedBalloons",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "partRevisionListProvider.selectionChangeEvent",
+            "action": "highlightImportedBalloons",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "Acp0.getPartForDirectRenderingInPMITab",
+            "action": "getPartForDirectRenderingInPMITab"
+        },
+        {
+            "eventId": "Acp0.getPartFromSearchResultsAndRenderDrawing",
+            "action": "getPartFromSearchResultsAndRenderDrawing"
+        },
+        {
+            "eventId": "Acp0.getPartItemTagFromSelectedPartRev",
+            "action": "loadPartRevisionsListProvider"
+        },
+        {
+            "eventId": "Acp0.getReferencedPartAfterPMIsImported",
+            "action": "getReferencedPart"
+        },
+        {
+            "eventId": "Acp0.setBctViewerHeight",
+            "action": "setBctViewerHeight"
+        },
+        {
+            "eventId": "awPanelSection.collapse",
+            "action": "setBctViewerHeight",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "aw-splitter-update",
+            "action": "updateBctViewerHeight",
+            "cacheEventData": true
+        }
+    ],
+    "data": {
+        "filterBox": {
+            "displayName": "{{i18n.Filter}}",
+            "type": "STRING",
+            "dbValue": "*"
+        },
+        "acp0DrawingSheetList": {
+            "displayName": "{{i18n.sheetsTitle}}",
+            "type": "STRING",
+            "hasLov": true,
+            "dataProvider": "acp0DrawingSheetListDataProvider"
+        },
+        "selectedView": {
+            "displayName": "{{i18n.modelViewsTitle}}",
+            "type": "STRING",
+            "hasLov": true,
+            "dbValue": "Default",
+            "uiValue": "Default",
+            "dataProvider": "acp0ModelViewsProvider"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "getPartCharacteristics",
+        "onInit": "getReferencedPart",
+        "onUpdate": [
+            {
+                "action": "processDrawingRenderingOnSelectionOfObjectSetRow",
+                "observers": [
+                    "props.subPanelContext.selectionData.value.selected"
+                ]
+            },
+            {
+                "action": "highlightImportedBalloons",
+                "observers": [
+                    "viewModel.ctx.isImportedPMIS"
+                ]
+            },
+            {
+                "action": "setBctViewerHeight",
+                "observers": [
+                    "props.subPanelContext.fullScreenState"
+                ]
+            }
+        ]
+    },
+    "ctx": {
+        "showReferencePartList": {
+            "type": "boolean"
+        },
+        "isAW13X_OnwardsSupported": {
+            "type": "boolean"
+        },
+        "refPartListView": {
+            "type": "boolean"
+        },
+        "selectedPart": {
+            "type": "object"
+        },
+        "inspDrawingViewMode": {
+            "type": "boolean"
+        },
+        "inspTableViewMode": {
+            "type": "boolean"
+        },
+        "inspCombineViewMode": {
+            "type": "boolean"
+        },
+        "renderingErrorMessage": {
+            "type": "boolean"
+        },
+        "projectToRenderBctComponent": {
+            "type": "object"
+        },
+        "fileTypeOfProject": {
+            "type": "string"
+        },
+        "showComparePartRevisionsList": {
+            "type": "boolean"
+        },
+        "isImportedPMIS": {
+            "type": "boolean"
+        },
+        "isHideLinkedParts": {
+            "type": "boolean"
+        }
+    },
+    "i18n": {
+        "Acp0Add": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Acp0Cancel": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Acp0Close": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Acp0DrawingViewTitle": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Acp0ItemId": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Acp0ItemRevisionType": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Acp0LoadingAttachmentFailed": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Acp0NoAttachmentMatchingPref": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Acp0NotGetReqPreference": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Acp0ObjectDesc": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Acp0ObjectName": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Acp0PrefNotLoaded": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Acp0TableViewTitle": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Acp0Type": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Acp0Name": [
+            "ControlInspectionPlanMessages"
+        ],
+        "bctDrawingMessage": [
+            "ControlInspectionPlanMessages"
+        ],
+        "beforePartSelectMessage": [
+            "ControlInspectionPlanMessages"
+        ],
+        "CompareRevisions": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Filter": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "partsToInspect": [
+            "ControlInspectionPlanMessages"
+        ],
+        "sheetsTitle": [
+            "ControlInspectionPlanMessages"
+        ],
+        "modelViewsTitle": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Preview": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Z_3DRenderingErrorAttachJT": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Z_3DRenderingErrorAttachValidJT": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Z_3DRenderingErrorInvalidIpxml": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Z_3DRenderingErrorIpxmlWithMultiJTModel": [
+            "ControlInspectionPlanMessages"
+        ]
+    }
+}

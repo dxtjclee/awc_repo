@@ -1,0 +1,88 @@
+{
+    "schemaVersion" : "1.0.0",
+    "imports":
+    [
+        "js/aw-list.directive",
+        "js/aw-clickable-title.directive",
+        "js/aw-icon-button.directive",
+        "js/aw-image.directive"
+    ],
+    "props": {
+        "sub-panel-context":{
+            "type": "object"
+        }
+    },
+    "actions":
+    {
+        "initIcon": {
+            "actionType": "JSFunction",
+            "method": "setTracelinkIcon",
+            "inputData": {
+                "vmo": "{{subPanelContext.dataProviders.startItemList.viewModelCollection}}"
+            },
+            "outputData":
+            {
+                "vmos": "vmobj"
+            },
+            "deps": "js/Arm0CreateTraceLinkPopupService"
+        },
+        "removeFromStartItems": {
+            "actionType": "JSFunction",
+            "method": "removeFromStartItems",
+            "inputData":
+            {
+                "data": "{{subPanelContext}}",
+                "vmo": "{{data.eventMap['Arm0StartItemList.removeFromStartItems'].vmo}}"
+            },
+            "deps": "js/Arm0CreateTraceLink"
+        },
+        "refreshStartItemList":
+        {
+            "actionType": "dataProvider",
+            "method": "startItemList"
+        }
+    },
+
+    "onEvent": [
+        {
+            "eventId": "CreateTracelink.refreshStartItemList",
+            "action": "refreshStartItemList"
+        },
+        {
+            "eventId": "Arm0StartItemList.removeFromStartItems",
+            "action": "removeFromStartItems",
+            "cacheEventData": true
+        }
+    ],
+    "dataParseDefinitions": {
+        
+    },
+     "messages":
+    {
+
+    },
+    "data":
+    {
+        "startItemListcommands":"arm0_startItemListcommands",
+        "startItems": {
+            "isArray": "true",
+            "dbValue":
+            [
+            ]
+        }
+    },
+    "functions":
+    {
+        
+    },
+    "dataProviders":
+    {
+      "startItemList":
+        {
+            "action": "initIcon",
+            "response":"{{vmos}}",
+            "selectionModelMode": "single",
+            "commandsAnchor": "com.siemens.splm.clientfx.ui.modelObjectListActionCommands.start"
+         }
+    }
+}

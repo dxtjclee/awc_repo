@@ -1,0 +1,72 @@
+<div class="sw-column aw-requirement-importPreviewSWA">
+    <div class='aw-requirement-chipList'>
+        <div class="aw-requirement-chip">
+            <div class="sw-row justify-right aw-requirement-previewMarginRight" exist-when="subPanelContext.context.clientScopeURI === 'RequirementMergePreviewURI' || subPanelContext.context.clientScopeURI === 'RequirementRoundTripPreviewURI'">
+                <div class="aw-requirement-legendItem">
+                    <div class="aw-requirement-legendItemMarker added"></div>
+                    <div class="aw-requirement-legendItemLabel">
+                        <aw-i18n>i18n.added</aw-i18n>
+                    </div>
+                </div>
+
+                <div class="aw-requirement-legendItem">
+                    <div class="aw-requirement-legendItemMarker removed"></div>
+                    <div class="aw-requirement-legendItemLabel">
+                        <aw-i18n>i18n.removed</aw-i18n>
+                    </div>
+                </div>
+
+                <div class="aw-requirement-legendItem">
+                    <div class="aw-requirement-legendItemMarker modified"></div>
+                    <div class="aw-requirement-legendItemLabel">
+                        <aw-i18n>i18n.modified</aw-i18n>
+                    </div>
+                </div>
+
+                <div class="aw-requirement-legendItem" exist-when="subPanelContext.context.clientScopeURI !== 'RequirementRoundTripPreviewURI'">
+                    <div class="aw-requirement-legendItemMarker existing"></div>
+                    <div class="aw-requirement-legendItemLabel">
+                        <aw-i18n>i18n.existing</aw-i18n>
+                    </div>
+                </div>
+            </div>
+            <div class="sw-row" exist-when="subPanelContext.context.clientScopeURI === 'ImportPreviewURI'">
+                <div class="sw-column flex-auto" align-content="start">
+                    <aw-chip-list dataprovider="data.dataProviders.specificationSummaryDataProvider"
+                        exist-when="data.summaryChips.length > 0"></aw-chip-list>
+                </div>
+                <div class="sw-column justify-center" align-content="end">
+                    <div class="aw-requirements-matrixTypeHelpIcon aw-aria-border" tabindex="0"
+                        extended-tooltip="data.previewInfotooltipView">
+                        <aw-icon icon-id="cmdShowInfoPanel"></aw-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="sw-row">
+        <div class='aw-richtexteditor-importPreviewPanel'>
+            <aw-scrollpanel>
+                <div id="rmWordImportPreviewDiv"
+                    class='aw-richtexteditor-documentPaper aw-richtexteditor-document aw-richtexteditor-documentPanel '>
+                </div>
+            </aw-scrollpanel>
+        </div>
+    </div>
+    <aw-panel-footer class="aw-requirement-previewMarginRight" exist-when="subPanelContext.context.clientScopeURI === 'RequirementMergePreviewURI'">
+        <aw-action-section>
+            <aw-button size="auto" action="mergeAction">
+                <aw-i18n>i18n.mergeCommandTitle</aw-i18n>
+            </aw-button>
+            <aw-button size="auto" action="reviseAction">
+                <aw-i18n>i18n.revise</aw-i18n>
+            </aw-button>
+        </aw-action-section>
+    </aw-panel-footer>
+    <aw-panel-footer class="aw-requirement-previewMarginRight" exist-when="subPanelContext.context.clientScopeURI === 'RequirementRoundTripPreviewURI'">
+        <aw-action-section>
+            <aw-button size="auto" action="importRoundTripAction">
+                <aw-i18n>i18n.import</aw-i18n>
+            </aw-button>
+    </aw-panel-footer>
+</div>

@@ -1,0 +1,41 @@
+<aw-panel>
+    <aw-panel-body class="justify-space-between">
+        <div class="sw-row aw-epBalancingComparePanel-container">
+            <div class="sw-row aw-epBalancingComparePanel-heading align-center">
+                <aw-i18n>i18n.compareProperty</aw-i18n>
+            </div>
+            <div class="sw-row aw-epBalancingComparePanel-heading align-center">
+                <aw-i18n>i18n.compareSubTitleSource</aw-i18n>
+            </div>
+            <div class="sw-row aw-epBalancingComparePanel-heading align-center">
+                <aw-i18n>i18n.compareSubTitleTarget</aw-i18n>
+            </div>
+            <div class="aw-epBalancingComparePanel-propertyRow" aw-repeat="property : data.compareProperties">
+                <div class="aw-epBalancingComparePanel-propertyName">{{property.displayName}}</div>
+                <ep-compare-variant-formula class="aw-jswidgets-change" exist-when="property.isVariantFormula"
+                    variant-formula="{{property.sourceValue}}"></ep-compare-variant-formula>
+                <div class="aw-jswidgets-change" exist-when="!property.isVariantFormula">{{property.sourceValue}}</div>
+                <ep-compare-variant-formula class="aw-jswidgets-oldText" exist-when="property.isVariantFormula"
+                    variant-formula="{{property.targetValue}}"></ep-compare-variant-formula>
+                <div class="aw-jswidgets-oldText" exist-when="!property.isVariantFormula">{{property.targetValue}}</div>
+            </div>
+        </div>
+        <div class="aw-epBalancingComparePanel-multipleOverrideWarning" exist-when="data.numberOfTargets > 1">
+            <div class="aw-epBalancingComparePanel-multipleOverrideWarningIcon">
+                <aw-icon class="aw-epBalancingComparePanel-multipleOverrideWarningIcon" icon-id="miscInfoMessage">
+                </aw-icon>
+            </div>
+            <div class="aw-epBalancingComparePanel-multipleOverrideWarningText">
+                {{data.compareMultipleMismatchesText}}</aw-i18n>
+            </div>
+        </div>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button button-type="base" action="closePopupWindow" size="auto">
+            <aw-i18n>i18n.compareCancel</aw-i18n>
+        </aw-button>
+        <aw-button action="update" size="auto" enable-when="!data.isUpdating">
+            <aw-i18n>i18n.compareUpdate</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-panel>

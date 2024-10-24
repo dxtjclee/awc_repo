@@ -1,0 +1,12 @@
+<div class="sw-column w-12">
+    <aw-guidance-message class="aw-epBalancing-sharedProcessResourceTableMessage"
+        exist-when="conditions.isShared"
+        message="guidanceMessageOperationTree"
+        closable="false" banner-style="false" icon="cmdShare24" show-icon="true" show-type="false">
+    </aw-guidance-message>
+    <ep-details-table view-id="{{subPanelContext.tabKey+'_EpDetailsTable'}}"
+        sub-panel-context="{...data, ...props.subPanelContext}" context-info="data.contextInfo" selection-data="data.selectionData"
+        disable-tab-counter="{{data.disableTabCounter}}" to-sort-by-client="false">
+    </ep-details-table>
+</div>
+

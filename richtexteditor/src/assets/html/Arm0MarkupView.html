@@ -1,0 +1,21 @@
+<aw-panel-header>
+    <aw-tab-set tabs="data.tabsModel.dbValue"></aw-tab-set>
+</aw-panel-header>
+<aw-panel-body>
+    <div class="aw-markup-highlight" exist-when="ctx.reqMarkupCtx.flagForComments">
+        <aw-break> </aw-break>
+        <aw-i18n>i18n.noComments</aw-i18n>
+        <aw-break> </aw-break>
+        <aw-image class="aw-xrt-thumbnailImagePanel" source="data.highLightIcon.dbValue" is-icon="data.isIcon"></aw-image>
+        <aw-i18n>i18n.createCommentMessage</aw-i18n>
+    </div>
+    <aw-list-filter dataprovider="data.dataProviders.visibleMarkups" prop="data.filterBox"
+     exist-when="!ctx.reqMarkupCtx.flagForComments" >
+    <arm0-comment-group sub-panel-context="subPanelContext" vmo="item"></arm0-comment-group>
+    </aw-list-filter>
+</aw-panel-body>
+<aw-panel-footer>
+    <aw-button action="saveAllMarkupEdits" exist-when="conditions.isSummaryTableActive">
+        <aw-i18n>i18n.saveComments</aw-i18n>
+    </aw-button>
+</aw-panel-footer>

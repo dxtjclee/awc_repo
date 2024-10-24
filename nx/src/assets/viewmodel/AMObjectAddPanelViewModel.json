@@ -1,0 +1,260 @@
+{
+    "data": {
+        "triggerCreate": {
+            "dbValue": false,
+            "type": "BOOLEAN"
+        },
+        "addPanelState": {
+            "initialValues": {
+                "creationType": "",
+                "createdObject": "",
+                "sourceObjects": "",
+                "selectedTab": "",
+                "isDatasetCreate": ""
+            },
+            "meta": {}
+        },
+        "_relationMap":  {
+            "Clr0AppearanceArea" : [ "clr0ChildAppAreas" ],
+            "Clr0AppearanceAreaBreakdown" : [ "clr0ChildAppAreaBreakdown" ],
+            "Clr0AppearanceDesignator": [ "clr0ChildAppDesignators" ]
+        },
+        "_policy":
+        {
+            "types":
+            [
+                {
+                    "name": "Item",
+                    "properties":
+                    [
+                        {
+                            "name": "revision_list"
+                        }
+                    ]
+                },
+                {
+                    "name": "Clr0ProductAppBreakdown",
+                    "properties": [ {
+                            "name": "clr0ChildAppAreaBreakdown"
+                        },
+                        {
+                            "name": "clr0PABRoot"
+                        }
+                    ]
+                },
+                {
+                    "name": "Clr0AppearanceAreaBreakdown",
+                    "properties": [ {
+                            "name": "clr0ChildAppAreas"
+                        },
+                        {
+                            "name": "clr0ChildAppAreaBreakdown"
+                        },
+                        {
+                            "name": "clr0Children"
+                        },
+                        {
+                            "name": "clr0PABRoot"
+                        }
+                    ]
+                },
+                {
+                    "name": "Clr0AppearanceArea",
+                    "properties": [ {
+                            "name": "clr0ChildAppDesignators"
+                        },
+                        {
+                            "name": "clr0PABRoot"
+                        }
+                    ]
+                },
+                {
+                    "name": "WorkspaceObject",
+                    "properties": [
+                        {
+                            "name": "object_string"
+                        }
+                    ]
+                }
+            ]
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "AddObjectPrimarySub",
+                "context": {}
+            },
+            "meta": {}
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        },
+        "projectState": {
+            "initialValues": {
+                "selectedProjects": [],
+                "triggerAssign": false
+            },
+            "meta": {
+                "selectedProjects": {
+                    "field": "true",
+                    "type": "OBJECT"
+                },
+                "triggerAssign": {
+                    "field": "true",
+                    "type": "BOOLEAN"
+                }
+            }
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "actions": {
+        "createObject": {
+            "actionType": "JSFunction",
+            "method": "updateCreateTrigger",
+            "inputData": {
+                "triggerCreate": "{{data.triggerCreate}}",
+                "value": true
+            },
+            "outputData": {
+                "triggerCreate": "triggerCreate"
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "clearAddEventProgContext": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "inputData": {
+                "0": "addItemEventProgressing"
+            },
+            "deps": "js/appCtxService"
+        },
+        "closePanelOnSelectionChange":{
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "cacheInitialSelection",
+                    "condition": "!data.initialSelection"
+                },
+                {
+                    "action": "closePanel"
+                }
+            ]
+        },
+        "cacheInitialSelection":{
+            "actionType": "JSFunction",
+            "method": "cacheSelection",
+            "inputData": {
+                "selectedUid": "{{props.subPanelContext.selectionData}}"
+            },
+            "outputData": {
+                "initialSelection": ""
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "closePanel":{
+            "actionType": "JSFunction",
+            "method": "closePanel",
+            "inputData": {
+                "selectedUid": "{{props.subPanelContext.selectionData}}",
+                "initialSelection": "{{data.initialSelection}}"
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "initialize": {
+            "actionType": "JSFunction",
+            "method": "initExtensionProps",
+            "inputData": {
+                "targetObject": "{{ctx.panelContext.targetObject}}"
+            },
+            "outputData": {
+                "clr0AppearanceArea": "clr0AppearanceArea",
+                "clr0PABRoot": "clr0PABRoot"
+            },
+            "deps": "js/nxCommandHandlers"
+        },
+        "setActiveView":{
+            "actionType": "JSFunction",
+            "method": "resetActiveView",
+            "inputData": {
+                "stateName": "{{data.activeState}}",
+                "destPanelId": "AddObjectPrimarySub"
+            },
+            "outputData": {
+                "activeState": ""
+            },
+            "deps": "js/addObjectUtils"
+        }
+    },
+    "conditions": {
+        "isNewTabAddButtonVisible": {
+            "expression": "addPanelState.selectedTab.view==='NewTabPageSub' && addPanelState.creationType && !addPanelState.isDatasetCreate"
+        },
+        "isPaletteSearchTabAddButtonVisible": {
+            "expression": "addPanelState.selectedTab.view!='NewTabPageSub' && addPanelState.sourceObjects.length>0"
+        }
+    },
+    "functions":
+    {
+    },
+    "i18n": {
+        "addPanelTitle": [
+            "TCUICommandPanelsMessages"
+        ],
+        "addButtonTitle": [
+            "TCUICommandPanelsMessages"
+        ],
+        "submitButtonTitle": [
+            "TCUICommandPanelsMessages"
+        ],
+        "BACK_BUTTON_TITLE": [ "BaseMessages" ]
+    },
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-form.directive",
+        "js/visible-when.directive",
+        "js/aw-add.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive",
+        "js/enable-when.directive",
+        "js/aw-i18n.directive"
+    ],
+    "lifecycleHooks": {
+        "onMount": "initialize",
+        "onUpdate": [ {
+            "action": "closePanelOnSelectionChange",
+            "observers": [ "props.subPanelContext.selectionData.selected[0].uid" ]
+        }, {
+            "action": "closePanel",
+            "observers": [ "props.subPanelContext.selectionData.selected.length" ]
+        } ]
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "Awp0AddObject.contentUnloaded",
+            "action": "clearAddEventProgContext",
+            "condition": "!subPanelContext.panelPinned"
+        },
+        {
+            "eventId": "pasteItem.commitFailed",
+            "action": "clearAddEventProgContext"
+        }
+    ],
+    "schemaVersion": "1.0.0"
+}

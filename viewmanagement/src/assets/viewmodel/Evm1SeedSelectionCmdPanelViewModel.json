@@ -1,0 +1,75 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-form.directive",
+        "js/aw-add.directive",
+        "js/aw-i18n.directive",
+        "js/aw-button.directive",
+        "js/aw-panel-footer.directive"
+    ],
+
+    "data": {
+        "addPanelState": {
+            "initialValues": {
+                "sourceObjects": "",
+                "selectedTab": ""
+            },
+            "meta": {}
+        },
+        "seedsToAdd": []
+    },
+
+    "actions": {
+        "addSelectionsAction": {
+            "actionType": "JSFunction",
+            "method": "addSeedSelection",
+            "inputData": {
+                "sourceObjects": "{{data.addPanelState.sourceObjects}}"
+            },
+            "outputData": {
+                "seedsToAdd": ""
+            },
+            "events": {
+                "success": [ {
+                        "name": "evm1SeedSelectionAdded",
+                        "eventData": {
+                            "seedsToAdd": "{{data.seedsToAdd}}"
+                        }
+                    },
+                    {
+                        "name": "aw.closePopup",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ],
+                "failure": [ {
+                    "name": "aw.closePopup",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            },
+            "deps": "js/Evm1SeedSelectionCmdPanelService"
+        },
+        "closePopupWindow": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        }
+    },
+
+    "onEvent": [ {
+        "eventId": "aw.closePopup",
+        "action": "closePopupWindow"
+    } ],
+
+    "i18n": {
+        "add": [ "RecipeCommandPanelsMessages" ]
+    }
+
+}

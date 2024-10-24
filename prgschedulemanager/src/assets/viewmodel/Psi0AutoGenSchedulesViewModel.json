@@ -1,0 +1,236 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "generateSchedules": {
+            "actionType": "TcSoaService",
+            "serviceName": "PPSMInterfaceAw-2017-06-PPSMInterface",
+            "method": "autoGenerateSchedules",
+            "inputData": {
+                "autoGenScheduleInfo": {
+                    "eventObject": "{{ctx.xrtSummaryContextObject}}",
+                    "packages": [
+                        {
+                            "type": "{{ctx.mselected[0].type}}",
+                            "uid": "{{ctx.mselected[0].uid}}"
+                        }
+                    ],
+                    "sourceObjectType": "{{function:getSourceTypeValue}}",
+                    "selection": "{{data.selection.dbValue}}",
+                    "cardinality": "{{data.cardinality.dbValue}}",
+                    "scheduleMethod": "{{function:getScheduleMethod}}",
+                    "scheduleDate": "{{function:getDateString_refDate}}"
+                },
+                "runInBackground": true
+            },
+            "events": {
+                "success": [ {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{ctx.xrtSummaryContextObject}}"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "condition": "errorCode=='invalidRefDate'",
+                    "message": "invalidRefDate"
+                } ]
+            },
+            "deps": "js/psi0AutoGenSchedule"
+        },
+        "prePopulatePanel": {
+            "actionType": "JSFunction",
+            "method": "populateListModelObject",
+            "inputData": {
+                "data" : "{{data}}"
+            },
+            "outputData": {
+                "lovListArray": ""
+            },
+            "deps": "js/psi0AutoGenSchedule"
+        },
+        "handleDateOrTimeChange":{
+            "actionType": "JSFunction",
+            "method": "handleDateOrTimeChange",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "isDateTimeValidFlag": ""
+            },
+
+            "deps": "js/psi0AutoGenSchedule"
+        }
+    },
+    "data": {
+        "sourceTypeDeliverable": {
+            "displayName": "{{i18n.Source}}",
+            "type": "STRING",
+            "hasLov": true
+        },
+        "sourceTypeChange": {
+            "displayName": "{{i18n.Source}}",
+            "type": "STRING",
+            "uiValue": "{{i18n.ImpactedItems}}",
+            "dbValue": "Impacted Items"
+        },
+        "cardinality": {
+            "displayName": "{{i18n.Cardinality}}",
+            "type": "STRING",
+            "isEditable": "false",
+            "isRequired": "true",
+            "uiValue": "{{i18n.CardinalityValueText}}",
+            "dbValue": "One Schedule per Source object"
+        },
+        "selection": {
+            "displayName": "{{i18n.Selection}}",
+            "type": "STRING",
+            "isEditable": "false",
+            "isRequired": "true",
+            "uiValue": "{{i18n.SelectionValueText}}",
+            "dbValue" : "All"
+        },
+        "scheduleMethod": {
+            "displayName": "{{i18n.ScheduleMethod}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "labelPosition": "PROPERTY_LABEL_AT_TOP",
+            "propertyRadioTrueText": "{{i18n.SchStartMethodValueText}}",
+            "propertyRadioFalseText": "{{i18n.SchFinishMethodValueText}}",
+            "dbValue": true
+        },
+        "referenceDate": {
+            "displayName": "{{i18n.ReferenceDate}}",
+            "type": "DATETIME",
+            "numberOfLines": 14,
+            "isRequired": "true",
+            "labelPosition": "PROPERTY_LABEL_AT_TOP",
+            "dbValue": "{{ctx.xrtSummaryContextObject.props.prg0PlannedDate.dbValues[0]}}",
+            "uiValue": "{{ctx.xrtSummaryContextObject.props.prg0PlannedDate.dbValues[0]}}"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "condition.expressionValueChanged",
+            "action": "handleDateOrTimeChange",
+            "criteria": {
+                "condition": "conditions.isDateChanged"
+            },
+            "cacheEventData": true
+        },
+        {
+            "eventId": "condition.expressionValueChanged",
+            "action": "handleDateOrTimeChange",
+            "criteria": {
+                "condition": "conditions.isTimeChanged"
+            },
+            "cacheEventData": true
+        }
+    ],
+    "lifecycleHooks": {
+        "onMount": "prePopulatePanel"
+    },
+    "functions": {
+        "getDateString_refDate": {
+            "functionName": "getDateString_refDate",
+            "parameters": [
+                "{{data.referenceDate.dateApi}}"
+            ]
+        },
+        "getSourceTypeValue": {
+            "functionName": "getSourceTypeValue",
+            "parameters": [
+                "{{data.sourceTypeDeliverable.dbValue}}",
+                "{{data.sourceTypeChange.dbValue}}"
+            ]
+        },
+        "getScheduleMethod": {
+            "functionName": "getScheduleMethod",
+            "parameters": [
+                "{{data}}"
+            ]
+        }
+    },
+    "conditions": {
+        "isDeliverableSelected": {
+            "expression": "((subPanelContext.pageContext.primaryActiveTabId === 'tc_xrt_Timeline' && subPanelContext.pageContext.secondaryActiveTabId === 'tc_xrt_Deliverables') || subPanelContext.pageContext.primaryActiveTabId === 'tc_xrt_Deliverables' ) && ctx.selected.modelType.typeHierarchyArray.indexOf('Psi0PrgDelRevision') > -1"
+        },
+        "isChangeOrDeliverableInstancesSelected": {
+            "expression": "(ctx.state.params.pageId === 'tc_xrt_Changes' || ctx.xrtPageContext.primaryXrtPageID === 'tc_xrt_Timeline') && ctx.selected.modelType.typeHierarchyArray.indexOf('ChangeItemRevision') > -1 || ( ( ctx.state.params.pageId === 'tc_xrt_Deliverables'|| ctx.xrtPageContext.primaryXrtPageID === 'tc_xrt_Timeline') && ctx.selected.modelType.typeHierarchyArray.indexOf('Psi0PrgDelRevision') > -1 && data.sourceTypeDeliverable.dbValue === 'Deliverable Instances' )"
+        },
+        "isChangeSelected": {
+            "expression": "(ctx.state.params.pageId === 'tc_xrt_Changes' || ctx.xrtPageContext.primaryXrtPageID === 'tc_xrt_Timeline') && ctx.selected.modelType.typeHierarchyArray.indexOf('ChangeItemRevision') > -1"
+        },
+        "isDateChanged": {
+            "expression": "data.referenceDate.dateApi.dateValue",
+            "trackValues": true
+        },
+        "isTimeChanged": {
+            "expression": "data.referenceDate.dateApi.timeValue",
+            "trackValues": true
+        }
+    },
+    "messages": {
+        "invalidRefDate": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.invalidRefDate}}"
+        }
+    },
+    "i18n": {
+        "Source": [
+            "PrgScheduleManagerMessages"
+        ],
+        "Cardinality": [
+            "PrgScheduleManagerMessages"
+        ],
+        "Selection": [
+            "PrgScheduleManagerMessages"
+        ],
+        "ScheduleMethod": [
+            "PrgScheduleManagerMessages"
+        ],
+        "CardinalityValueText": [
+            "PrgScheduleManagerMessages"
+        ],
+        "SelectionValueText": [
+            "PrgScheduleManagerMessages"
+        ],
+        "SchStartMethodValueText": [
+            "PrgScheduleManagerMessages"
+        ],
+        "SchFinishMethodValueText": [
+            "PrgScheduleManagerMessages"
+        ],
+        "ReferenceDate": [
+            "PrgScheduleManagerMessages"
+        ],
+        "GenerateSchedule": [
+            "PrgScheduleManagerMessages"
+        ],
+        "SetParameters": [
+            "PrgScheduleManagerMessages"
+        ],
+        "ProgramDeliverable": [
+            "PrgScheduleManagerMessages"
+        ],
+        "DeliverableInstances": [
+            "PrgScheduleManagerMessages"
+        ],
+        "ImpactedItems": [
+            "PrgScheduleManagerMessages"
+        ],
+        "invalidRefDate": [
+            "PrgScheduleManagerMessages"
+        ]
+    }
+}

@@ -1,0 +1,169 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-widget.directive",
+        "js/aw-button.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-i18n.directive"
+    ],
+    "actions": {
+        "updateFailureToLatest":{
+            "actionType": "JSFunction",
+            "method": "getPropertiesforSelectedObject",
+            "inputData": {
+                "data": "{{data}}",
+                "selectedObjFProp": "{{ctx.pselected}}",
+                "onlyLoadProps": false,
+                "relationProp": "Qc0HasFailures",
+                "editOperFlag":"",
+                "deferred":"",
+                "reviseOperFlag":"",
+                "saveDiscardFlag":"",
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },        
+            "deps": "js/Aqc0UtilService"
+        } 
+    },
+    "onEvent": [    
+    ],
+    "data": {
+        "qc0FailureCode": {
+            "displayName": "{{ctx.selected.props.qc0FailureCode.propertyDisplayName}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "dbValue": "{{ctx.selected.props.qc0FailureCode.dbValue}}",
+            "isEditable": "false",
+            "uiValue":"{{ctx.selected.props.qc0FailureCode.dbValue}}"
+        },
+        "qc0BasedOnId": {
+            "displayName": "{{ctx.selected.props.qc0BasedOnId.propertyDisplayName}}",
+            "type": "INTEGER",
+            "isRequired": "true",
+            "dbValue": "{{ctx.selected.props.qc0BasedOnId.dbValue}}",
+            "isEditable": "false",
+            "uiValue":"{{ctx.selected.props.qc0BasedOnId.uiValue}}"
+        },
+        "object_name": {
+            "displayName": "{{ctx.selected.props.object_name.propertyDisplayName}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "dbValue": "{{ctx.selected.props.object_name.dbValue}}",
+            "isEditable": "false",
+            "uiValue":"{{ctx.selected.props.object_name.dbValue}}"
+        },
+        "object_desc": {
+            "displayName": "{{ctx.selected.props.object_desc.propertyDisplayName}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "dbValue": "{{ctx.selected.props.object_desc.dbValue}}",
+            "isEditable": "false",
+            "uiValue":"{{ctx.selected.props.object_desc.dbValue}}"
+        },
+        "qc0IsLatest": {
+            "displayName": "{{ctx.selected.props.qc0IsLatest.propertyDisplayName}}",
+            "type": "BOOLEAN",
+            "isRequired": "true",
+            "dbValue": "{{ctx.selected.props.qc0IsLatest.dbValue}}",
+            "isEditable": "false",
+           "uiValue":"{{ctx.selected.props.qc0IsLatest.uiValue}}"
+        },
+        "qc0Status": {
+            "displayName":"{{ctx.selected.props.qc0Status.propertyDisplayName}}",
+            "type": "BOOLEAN",
+            "isRequired": "true",
+            "dbValue": "{{ctx.selected.props.qc0Status.dbValue}}",
+            "isEditable": "false",
+            "uiValue":"{{ctx.selected.props.qc0Status.uiValue}}"
+        },
+        "qc0FailureCodeL": {
+            "displayName": "{{ctx.selected.props.qc0FailureCode.propertyDisplayName}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "dbValue": "{{ctx.latestFailureVers[0].props.qc0FailureCode.dbValues[0]}}",
+            "isEditable": "false",
+            "uiValue":"{{ctx.latestFailureVers[0].props.qc0FailureCode.dbValues[0]}}"
+        },
+        "qc0BasedOnIdL": {
+            "displayName": "{{ctx.selected.props.qc0BasedOnId.propertyDisplayName}}",
+            "type": "INTEGER",
+            "isRequired": "true",
+            "dbValue": "{{ctx.latestFailureVers[0].props.qc0BasedOnId.dbValues[0]}}",
+            "isEditable": "false",
+            "uiValue":"{{ctx.latestFailureVers[0].props.qc0BasedOnId.uiValues[0]}}"
+        },
+        "object_nameL": {
+            "displayName": "{{ctx.selected.props.object_name.propertyDisplayName}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "dbValue": "{{ctx.latestFailureVers[0].props.object_name.dbValues[0]}}",
+            "isEditable": "false",
+            "uiValue":"{{ctx.latestFailureVers[0].props.object_name.dbValues[0]}}"
+        },
+        "object_descL": {
+            "displayName": "{{ctx.selected.props.object_desc.propertyDisplayName}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "dbValue": "{{ctx.latestFailureVers[0].props.object_desc.dbValues[0]}}",
+            "isEditable": "false",
+            "uiValue":"{{ctx.latestFailureVers[0].props.object_desc.dbValues[0]}}"
+        },
+        "qc0IsLatestL": {
+            "displayName": "{{ctx.selected.props.qc0IsLatest.propertyDisplayName}}",
+            "type": "BOOLEAN",
+            "isRequired": "true",
+            "dbValue": "{{ctx.latestFailureVers[0].props.qc0IsLatest.dbValues[0]}}",
+            "isEditable": "false",
+           "uiValue":"{{ctx.latestFailureVers[0].props.qc0IsLatest.uiValues[0]}}"
+        },
+        "qc0StatusL": {
+            "displayName":"{{ctx.selected.props.qc0Status.propertyDisplayName}}",
+            "type": "BOOLEAN",
+            "isRequired": "true",
+            "dbValue": "{{ctx.latestFailureVers[0].props.qc0Status.dbValues[0]}}",
+            "isEditable": "false",
+            "uiValue":"{{ctx.latestFailureVers[0].props.qc0Status.uiValues[0]}}"
+        },
+        "updateToLatestFF": {
+            "dbValue": "Update"
+        }
+    },
+    "messages": {
+       
+    },
+    "i18n": {
+        "Aqc0CompareAndUpdateFailureFCharSpecTitle": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Current": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Latest": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "UpdateToLatest": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "VersionCreated": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Aqc0FailureRemovedMessage": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Aqc0FailuresRemovedMessage": [
+            "qualitycharacteristicsmanagerMessages"
+        ]
+    }
+}

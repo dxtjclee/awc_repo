@@ -1,0 +1,221 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "dataProviders": {
+        "performUserSearch": {
+            "action": "search",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "selectionModelMode": "multiple"
+        }
+    },
+    "actions": {
+        "getUsers": {
+            "actionType": "dataProvider",
+            "method": "performUserSearch"
+        },
+        "doSearch": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "searchInitiated"
+                    }
+                ]
+            }
+        },
+        "search": {
+            "actionType": "JSFunction",
+            "method": "performQPUserSearch",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "outputData": {
+                "searchResults": "searchResults",
+                "totalFound": "totalFound",
+                "totalLoaded": "totalLoaded"
+            },
+            "policy": {
+                "types": [
+                    {
+                        "name": "POM_user",
+                        "properties": [
+                            {
+                                "name": "user_id"
+                            },
+                            {
+                                "name": "user_name"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "User",
+                        "properties": [
+                            {
+                                "name": "user_id"
+                            },
+                            {
+                                "name": "user_name"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [
+                    {                        
+                        "message": "errorResponse"
+                    }
+                ]
+            },
+            "deps": "js/qa0AuditUserRoles"
+        },
+        "addTeamMember": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "createRelations",
+            "inputData": {
+                "input": "{{function:createAddUserRelationWithAuditInput}}"
+            },
+            "outputData": {
+                "serviceData": "",
+                "errorMessage": "{{function:populateErrorString}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "condition": "props.subPanelContext.selectionData.selected[0].modelType.typeHierarchyArray.indexOf( 'Qa0QualityAudit' )>-1",
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{props.subPanelContext.selectionData.selected[0]}}"
+                            ],
+                            "refreshLocationFlag": false
+                        }
+                    },
+                    {
+                        "condition": "props.subPanelContext.selectionData.pselected.modelType.typeHierarchyArray.indexOf( 'Qa0QualityAudit' )>-1",
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{props.subPanelContext.selectionData.pselected}}"
+                            ],
+                            "refreshLocationFlag": false
+                        }
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ],
+                "failure": [
+                    {
+                        "condition": "props.subPanelContext.selectionData.selected[0].modelType.typeHierarchyArray.indexOf( 'Qa0QualityAudit' )>-1",
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{props.subPanelContext.selectionData.selected[0]}}"
+                            ],
+                            "refreshLocationFlag": false
+                        }
+                    },
+                    {
+                        "condition": "props.subPanelContext.selectionData.pselected.modelType.typeHierarchyArray.indexOf( 'Qa0QualityAudit' )>-1",
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{props.subPanelContext.selectionData.pselected}}"
+                            ],
+                            "refreshLocationFlag": false
+                        }
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [
+                    {                        
+                        "message": "displayError"
+                    }
+                ]
+            },
+            "deps": "js/qa0AuditTeamService"
+        },
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "complete",
+                        "condition": "!data.isDestroyed()",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "searchInitiated",
+            "condition": "data.searchBox.dbValue && data.searchBox.dbValue.length>0",
+            "action": "getUsers"
+        },
+        {
+            "eventId": "primaryWorkArea.selectionChangeEvent",
+            "action": "closePanel"
+        }
+    ],
+    "functions": {
+        "createAddUserRelationWithAuditInput": {
+            "functionName": "createAddUserRelationWithAuditInput",
+            "parameters": [
+                "{{ctx.panelContext.relationName}}",
+                "{{data.dataProviders.performUserSearch.selectedObjects}}",
+                "{{props.subPanelContext.selectionData}}"
+            ]
+        }
+    },
+    "data": {
+        "searchBox": {
+            "displayName": "{{i18n.qa0AuditRoleSearchBoxPlaceholder}}",
+            "type": "STRING"
+        },
+        "searchBoxPlaceHolder": {
+            "dbValue": "{{i18n.qa0AuditRoleSearchBoxPlaceholder}}"
+        }
+    },
+    "messages": {
+        "displayError": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.qa0PartialError}}",
+            "messageTextParams": [
+                "{{data.errorMessage}}"
+            ]
+        },
+        "errorResponse": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+
+        }
+    },
+    "i18n": {
+        "qa0Add": [
+            "qualityauditMessages"
+        ],
+        "qa0AuditRoleSearchBoxPlaceholder": [
+            "qualityauditMessages"
+        ]
+    }
+}

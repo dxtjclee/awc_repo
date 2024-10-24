@@ -1,0 +1,448 @@
+{
+    "schemaVersion": "1.0.0",
+    "lifecycleHooks": {
+        "onMount": "getSaveAsDeepCopyInput",
+        "onUpdate": [{
+            "action": "getSelectedObjValues",
+            "observers" : ["props.subPanelContext.selectionData.value.selected[0].props"]
+        },
+        {"observers": [
+            "viewModel.ctx.isTC13_2OnwardsSupported"
+        ],
+        "action": "changeFieldRequired"
+    }]
+    },
+    "dataProviders": {
+        "TypeListProvider": {
+            "action": "loadContextValues",
+            "response": "{{data.listVals}}"
+        },
+        "ClassificationListProvider": {
+            "action": "loadClassificationValues",
+            "response": "{{data.qc0CriticalityList}}"
+        },
+        "groupListDataProvider": {
+            "action": "loadGroupValues",
+            "response": "{{data.groupListValue}}",
+            "totalFound": "{{data.totalGroupFound}}"
+        }
+    },
+    "actions": {
+        "changeFieldRequired":{
+            "actionType": "JSFunction",
+            "method": "changeFieldRequired",
+            "inputData": {
+                "data" : "{{data}}"
+            },
+            "outputData":{
+                "objectName": ""
+            },
+            "deps": "js/Aqc0CharManagerUtils2"
+        },
+        "getSelectedObjValues":{
+            "actionType": "JSFunctionAsync",
+            "method": "getSelectedObjValues",
+            "inputData": {
+                "data":"{{data}}",
+                "fields": "{{fields}}",
+                "subPanelContext": "{{subPanelContext.selectionData.value.selected[0].props}}"
+            },
+            "deps": "js/Aqc0CharManagerUtils2"
+        },
+        "loadGroupValues": {
+            "actionType": "JSFunctionAsync",
+            "method": "getGroupList",
+            "inputData": {
+                "groupListValue": "{{data.groupListValue}}",
+                "GroupList": "{{data.GroupList}}",
+                "groupListDataProvider":"{{data.dataProviders.groupListDataProvider}}"
+            },
+            "outputData": {
+                "groupListValue": "groupListValue",
+                "GroupList": "GroupList",
+                "totalGroupFound": "totalGroupFound"
+            },
+            "deps": "js/Aqc0UtilService"
+        },
+        "getSaveAsDeepCopyInput": {
+            "actionType": "JSFunctionAsync",
+            "method": "getSaveAsDeepCopyInput",
+            "inputData": {
+                "selectedObject": "{{ctx.selected}}"
+            },
+            "outputData": {
+                "deepCopyData": ""
+            },
+            "deps": "js/Aqc0CharManagerUtils"
+        },
+        "saveASAttCharSpec": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2008-06-DataManagement",
+            "method": "createObjects",
+            "inputData": {
+                "input": [
+                    {
+                        "clientId": "",
+                        "data": {
+                            "boName": "Qc0AttributiveCharSpec",
+                            "stringProps": {
+                                "qc0Criticality": "{{data.qc0Criticality.dbValue}}",
+                                "qc0Context": "{{data.qc0Context.dbValue}}",
+                                "object_name": "{{data.objectName.dbValue}}",
+                                "qc0OkDescription": "{{data.qc0OkDescription.dbValue}}",
+                                "qc0NokDescription": "{{data.qc0NokDescription.dbValue}}",
+                                "object_desc": "{{data.object_desc.dbValue}}"
+                            },
+                            "tagProps": {
+                                "qc0GroupReference": {
+                                    "type": "{{data.GroupList.dbValue.type}}",
+                                    "uid": "{{data.GroupList.dbValue.uid}}",
+                                    "name": "{{data.GroupList.dbValue.props.object_string.dbValues[0]}}"
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "outputData": {
+                "createdObject": "output[0].objects[0]",
+                "ctx.createdObjectForTreeFromAddAction": "output[0].objects[0]",
+                "ctx.AddSpecificationFlagForTree": true,
+                "failureMsg": "{{function:getFailureMessage}}"
+            },
+            "deps": "js/Aqc0CharManagerUtils",
+            "events": {
+                "success": [
+                    {
+                        "name": "aqc0.executePostVersionEventActionsForSpecifications"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "condition": "ctx.mselected[0].props.qc0GroupReference.uiValue != data.GroupList.uiValue",
+                        "message": "saveAsSuccessfull"
+                    }
+                ]
+            }
+        },
+        "loadClassificationValues": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2013-05-LOV",
+            "method": "getInitialLOVValues",
+            "inputData": {
+                "initialData": {
+                    "propertyName": "qc0Criticality",
+                    "lovInput": {
+                        "operationName": "Edit",
+                        "boName": "Qc0MasterCharSpec"
+                    }
+                }
+            },
+            "outputData": {
+                "qc0CriticalityList": "{{function:getClassificationLOVList}}"
+            },
+            "deps": "js/Aqc0CharManagerUtils2"
+        },
+        "executePostVersionEventActionsForSpecifications": {
+            "actionType": "JSFunction",
+            "method": "executePostVersionEventActionsForSpecifications",
+            "inputData": {
+                "data": "{{data.createdObject}}",
+                "subPanelContext": "{{props.subPanelContext}}",
+                "removeOrEditActionflag": false
+            },
+            "deps": "js/Aqc0CharLibraryUtilService"
+        },
+        "generateNextValuesAndSubmit": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2015-07-DataManagement",
+            "method": "generateNextValuesForProperties",
+            "inputData": {
+                "propertyNamingRuleInfo": [
+                    {
+                        "clientId": "",
+                        "operationType": 1,
+                        "businessObjectTypeName": "{{ctx.selected.type}}",
+                        "propertyNameAttachedPattern": {
+                            "object_name": "XX\"-\"XXX\"-\"nnnnnn"
+                        }
+                    }
+                ]
+            },
+            "outputData": {
+                "objectName.dbValue": "generatedValues[0].generatedValues.object_name.nextValue"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "saveASAttCharSpec"
+                    }
+                ]
+            }
+        },
+        "saveASAttCharSpec_tC13_2Onwards": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2012-09-DataManagement",
+            "method": "saveAsObjectAndRelate",
+            "inputData": {
+                "saveAsInput": [
+                    {
+                        "targetObject": "{{ctx.selected}}",
+                        "saveAsInput": {
+                            "boName": "Qc0AttributiveCharSpec",
+                            "stringProps": {
+                                "qc0Criticality": "{{data.qc0Criticality.dbValue}}",
+                                "qc0Context": "{{data.qc0Context.dbValue}}",
+                                "object_name": "{{data.objectName.dbValue}}",
+                                "qc0OkDescription": "{{data.qc0OkDescription.dbValue}}",
+                                "qc0NokDescription": "{{data.qc0NokDescription.dbValue}}",
+                                "object_desc": "{{data.object_desc.dbValue}}"
+                            },
+                            "boolProps": {
+                                "qc0IsLatest": true
+                            },
+                            "intProps": {
+                                "qc0BasedOnId": 1
+                            }
+                        },
+                        "deepCopyDatas": "{{data.deepCopyData}}"
+                    }
+                ],
+                "relateInfo": [
+                    {
+                        "relate": true
+                    }
+                ]
+            },
+            "outputData": {
+                "createdObject": "output[0].objects[0]",
+                "ctx.createdObjectForTreeFromAddAction": "output[0].objects[0]",
+                "ctx.AddSpecificationFlagForTree": true,
+                "failureMsg": "{{function:getFailureMessage}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "aqc0.setPropertiesWhileSaveAS",
+                        "condition": "data.createdObject"
+                    }
+                ]
+            },
+            "deps": "js/Aqc0CharManagerUtils"
+        },
+        "setPropertiesWhileSaveAS": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-09-DataManagement",
+            "method": "setProperties",
+            "inputData": {
+                "info": [
+                    {
+                        "object": "{{data.createdObject}}",
+                        "timestamp": "",
+                        "vecNameVal": [
+                            {
+                                "name": "qc0GroupReference",
+                                "values": [
+                                    "{{data.GroupList.dbValue.uid}}"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "aqc0.executePostVersionEventActionsForSpecifications"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "condition": "ctx.mselected[0].props.qc0GroupReference.uiValue != data.GroupList.uiValue",
+                        "message": "saveAsSuccessfull"
+                    }
+                ]
+            }
+        },
+        "subscribeContentLoadedForRefreshGroupList": {
+            "actionType": "JSFunction",
+            "method": "subscribeContentLoaded",
+            "deps": "js/Aqc0UtilService",
+            "inputData": {}
+        },
+        "loadContextValues": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2013-05-LOV",
+            "method": "getInitialLOVValues",
+            "inputData": {
+                "initialData": {
+                    "propertyName": "qc0Context",
+                    "lovInput": {
+                        "operationName": "Edit",
+                        "boName": "Qc0MasterCharSpec"
+                    }
+                }
+            },
+            "outputData": {
+                "listVals": "{{function:getLOVList}}"
+            },
+            "deps": "js/Aqc0CharManagerUtils"
+        },
+        "closeSaveAsPanel": {
+            "actionType": "JSFunction",
+            "method": "closeSaveAsPanel",
+            "inputData": {
+                "subPanelContext" :"{{subPanelContext}}"
+             },
+            "deps": "js/Aqc0CharLibraryTreeTableService"
+        }
+    },
+    "conditions": {
+        "isAttributiveSpecFS": {
+            "expression": "ctx.pselected.props.qc0CharacteristicsType.dbValues[0]==='Attributive'"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "aqc0.executePostVersionEventActionsForSpecifications",
+            "action": "executePostVersionEventActionsForSpecifications"
+        },
+        {
+            "eventId": "aqc0SelectionChangeForSaveAs.refreshGroupList",
+            "action": "loadGroupValues"
+        },
+        {
+            "eventId": "awPanel.reveal",
+            "condition": "ctx.ViewModeContext.ViewModeContext === 'TreeSummaryView'",
+            "action": "subscribeContentLoadedForRefreshGroupList"
+        },
+        {
+            "eventId": "aqc0.setPropertiesWhileSaveAS",
+            "action": "setPropertiesWhileSaveAS"
+        },
+        {
+            "eventId": "saveASAttCharSpec",
+            "action": "saveASAttCharSpec"
+        },
+        {
+            "eventId": "primaryWorkArea.selectionChangeEvent",
+            "action": "closeSaveAsPanel"
+        }
+    ],
+    "functions": {
+        "getLOVList": {
+            "functionName": "getLOVList",
+            "parameters": []
+        },
+        "getFailureMessage": {
+            "functionName": "getFailureMessage",
+            "parameters": [
+                "{{data}}"
+            ]
+        }
+    },
+    "ctx": {
+        "isTC13_2OnwardsSupported": {
+            "type": "boolean"
+        },
+        "isTC13_1OnwardsSupported": {
+            "type": "boolean"
+        },
+        "charSpecType": {
+            "type": "string"
+        },
+        "charGroupUid": {
+            "type": "string"
+        },
+        "charGroupObjName": {
+            "type": "string"
+        }
+    },
+    "data": {
+        "objectName": {
+            "displayName": "{{ctx.selected.props.object_name.propertyDescriptor.displayName}}",
+            "type": "String",
+            "isRequired": "false",
+            "isEditable": "true"
+        },
+        "GroupList": {
+            "displayName": "{{i18n.Aqc0Group}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "dataProvider": "groupListDataProvider",
+            "emptyLOVEntry": false
+        },
+        "checkSymmetric": {
+            "displayName": "{{i18n.Symmetric}}",
+            "type": "BOOLEAN",
+            "isEditable": "true",
+            "dbValue": true,
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        },
+        "qc0Criticality": {
+            "displayName": "{{ctx.selected.props.qc0Criticality.propertyDescriptor.displayName}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "dataProvider": "ClassificationListProvider",
+            "emptyLOVEntry": false
+        },
+        "qc0NokDescription": {
+            "displayName": "{{ctx.selected.props.qc0NokDescription.propertyDescriptor.displayName}}",
+            "type": "STRING",
+            "isRequired": "false"
+        },
+        "qc0OkDescription": {
+            "displayName": "{{ctx.selected.props.qc0OkDescription.propertyDescriptor.displayName}}",
+            "type": "STRING",
+            "isRequired": "false"
+        },
+        "qc0BasedOnId": {
+            "displayName": "{{ctx.selected.props.qc0BasedOnId.propertyDescriptor.displayName}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "false",
+            "dbValue": "{{ctx.selected.props.qc0BasedOnId.dbValues[0]}}",
+            "uiValue": "{{ctx.selected.props.qc0BasedOnId.dbValues[0]}}"
+        },
+        "object_desc": {
+            "displayName": "{{ctx.selected.props.object_desc.propertyDescriptor.displayName}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "true"
+        },
+        "qc0Context": {
+            "displayName": "{{ctx.selected.props.qc0Context.propertyDescriptor.displayName}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "dataProvider": "TypeListProvider",
+            "emptyLOVEntry": false
+        }
+    },
+    "messages": {
+        "saveAsSuccessfull": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.saveAsSuccess}}",
+            "messageTextParams": [
+                "{{data.createdObject.props.object_name.dbValues[0]}}"
+            ]
+        }
+    },
+    "i18n": {
+        "Aqc0Group": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "SaveAs": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "saveAsSuccess": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Save": [
+            "qualitycharacteristicsmanagerMessages"
+        ]
+    }
+}

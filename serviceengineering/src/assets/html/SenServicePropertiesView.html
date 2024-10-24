@@ -1,0 +1,10 @@
+<aw-panel>
+    <aw-panel-body>
+        <aw-panel-section caption="i18n.lotCaption">
+            <sen-lot-info sub-panel-context="{occContext:props.subPanelContext.context.occContext}" exist-when="ctx.sbomContext.selectedModelObjects && ctx.MROSRUidList"></sen-lot-info>
+        </aw-panel-section>
+        <aw-panel-section caption="i18n.eOLCaption" exist-when="conditions.isTCRelaseAtlease143">
+            <sen-endof-life sub-panel-context="{occContext:props.subPanelContext.context.occContext}"></sen-endof-life>
+        </aw-panel-section>
+    </aw-panel-body>
+</aw-panel>

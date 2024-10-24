@@ -1,0 +1,722 @@
+{
+    "schemaVersion": "1.0.0",
+    "lifecycleHooks": {
+        "onMount": "initialize",
+        "onUnmount": "initializeTab",
+        "onUpdate": [
+            {
+                "action": "setStandalone",
+                "observers": [ "props.subPanelContext.context.searchState.selectedNode"]
+            }
+        ]
+    },
+    "props": {
+        "sub-panel-context":{
+            "type":"object"
+        }
+    },
+    "actions": {
+        "initializeTab": {
+            "actionType": "JSFunction",
+            "method": "initializeTabForStandalone",
+            "inputData": {
+                "classifyState": "{{fields.classifyState}}",
+                "subPanelContext": "{{subPanelContext.context}}"
+            },
+            "deps": "js/Ics1ClassificationStandAloneService"
+        },
+        "cleanUpSelectionData": {
+            "actionType": "JSFunctionAsync",
+            "method": "cleanUpSelectionData",
+            "inputData": {
+                "parentSelectedData": "{{subPanelContext.selectionData}}"
+            },
+            "deps": "js/Ics1ClassificationTabService"
+        },
+        "setStandalone": {
+            "actionType": "JSFunctionAsync",
+            "method": "setStandalone",
+            "inputData": {
+                "parentSelectedData": "{{subPanelContext.context.searchState.selectedNode}}",
+                "classifyState": "{{fields.classifyState}}"
+            },
+            "deps": "js/Ics1ClassificationStandAloneService"
+        },
+        "initialize": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "addWorkspaceObjectUidtoData"
+                },
+                {
+                    "action": "setStandalone",
+                    "condition": "conditions.isStandAloneCmdSelected"
+                },
+                {
+                    "action": "detectNodeType"
+                }
+            ]
+        },
+        "addWorkspaceObjectUidtoData": {
+            "actionType": "JSFunction",
+            "method": "addWorkspaceObjectUidtoData",
+            "inputData": {
+                "subPanelContext": "{{subPanelContext}}",
+                "mselected": "{{ctx.mselected}}"
+            },
+            "outputData":
+            {
+                "workspaceObjectUID": "result.uid",
+                "selectedItem": "result.selectedItem"
+            },
+            "deps": "js/Ics1ClassificationTabService"
+        },
+        "detectNodeType": {
+            "actionType": "JSFunction",
+            "method": "detectNodeType",
+            "inputData": {
+                "selectedNode": "{{props.subPanelContext.context.searchState.selectedNode}}",
+                "classifyState": "{{fields.classifyState}}",
+                "responseState": "{{fields.responseState}}",
+                "data": "{{data}}",
+                "workspaceObjectUid": "{{data.workspaceObjectUid}}"
+            },
+            "deps": "js/classifyNodeService"
+        },
+        "cancelEdit": {
+            "actionType": "JSFunction",
+            "method": "updateContextNotToSaveEdits",
+            "inputData": {
+                "context": "{{data.classifyState}}"
+            },
+            "deps": "js/classificationPropsService"
+        },
+        "setNotifyMessage": {
+            "actionType": "JSFunction",
+            "method": "setNotifyMessage",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "deps": "js/classifyFullViewService",
+            "actionMessages": {
+                "success": [{
+                    "message": "pasteWithDeleteMessage"
+                }]
+            }
+        },
+        "saveEditsAndClose": {
+            "actionType": "JSFunctionAsync",
+            "method": "saveClassification",
+            "inputData": {
+                "data": "{{data}}",
+                "clsObject": "{{data.ico}}",
+                "workspaceObject": "{{data.workspaceObjectUID}}",
+                "classifyState":"{{data.classifyState}}"
+            },
+            "events": {
+                "success": [{
+                        "name": "classifyPanel.close",
+                        "condition": "!data.isNavigating"
+                    },
+                    {
+                        "name": "classify.loadCells"
+                    },
+                    {
+                        "name": "classifyPanel.resetAttributesVisibleAndFireRefreshSecWorkAreaEvent"
+                    }
+                ]
+            },
+            "deps": "js/Ics1ClassificationTabService"
+        },
+        "classifyAndClose": {
+            "actionType": "JSFunctionAsync",
+            "method": "saveClassification",
+            "inputData": {
+                "data": "{{data}}",
+                "clsObject": "",
+                "workspaceObject": "{{data.workspaceObjectUID}}",
+                "classifyState":"{{data.classifyState}}"
+            },
+            "events": {
+                "success": [{
+                        "name": "classifyPanel.close",
+                        "condition": "!data.isNavigating"
+                    },
+                    {
+                        "name": "classify.loadCells"
+                    },
+                    {
+                        "name": "classifyPanel.resetAttributesVisibleAndFireRefreshSecWorkAreaEvent"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [{
+                    "message": "classifySuccessMessage"
+                }]
+            },
+            "deps": "js/Ics1ClassificationTabService"
+        },
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [{
+                        "name": "classifyPanel.panelCloseSuccessful"
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            }
+        },
+        "postSave": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "resetState"
+                },
+                {
+                    "action": "checkPromptAndNavigate"
+                }
+            ]
+        },
+        "resetState":{
+            "actionType": "JSFunction",
+            "method": "resetCreateModeForStandAlone",
+            "inputData":
+            {
+                "classifyState": "{{fields.classifyState}}",
+                "subPanelContext":"{{props.subPanelContext.context}}"
+            },
+            "deps": "js/Ics1ClassificationStandAloneService"
+        },
+        "checkPromptAndNavigate": {
+            "actionType": "JSFunction",
+            "method": "setIsAlreadyPrompted",
+            "inputData": {
+                "data": "{{data}}",
+                "eventType": "nav"
+            },
+            "deps": "js/classifyService"
+        },
+        "promptForCreateAction": {
+            "actionType": "JSFunction",
+            "method": "setIsAlreadyPrompted",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "actionMessages": {
+                "success": [{
+                    "message": "unsavedChanges"
+                }]
+            },
+            "deps": "js/classifyService"
+        },
+        "promptForEditAction": {
+            "actionType": "JSFunction",
+            "method": "setIsAlreadyPrompted",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "actionMessages": {
+                "success": [{
+                    "message": "unsavedEdits"
+                }]
+            },
+            "deps": "js/classifyService"
+        },
+        "checkIfDirtyOnNavigate": {
+            "actionType": "JSFunction",
+            "method": "isDirty",
+            "inputData": {
+                "data": "{{data}}",
+                "eventType": "nav"
+            },
+            "events": {
+                "success": [{
+                        "name": "classifyPanel.promptToSaveEdit",
+                        "condition": "(data.isInputDirty || data.selectedClass.id !== data.ico.classID) && fields.classifyState.value.panelMode === 1"
+                    },
+                    {
+                        "name": "classifyPanel.promptToSaveCreate",
+                        "condition": "classifyState.panelMode === 0 && data.attributesVisible"
+                    }
+                ]
+            },
+            "deps": "js/classifyService"
+        },
+        "checkIfDirtyOnClose": {
+            "actionType": "JSFunction",
+            "method": "isDirty",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "events": {
+                "success": [{
+                        "name": "classifyPanel.promptToSaveEdit",
+                        "condition": "data.isInputDirty || data.selectedClass.id !== data.ico.classID"
+                    },
+                    {
+                        "name": "classifyPanel.close",
+                        "condition": "!data.isInputDirty"
+                    }
+                ]
+            },
+            "deps": "js/classifyService"
+        },
+        "checkNavigation": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [{
+                    "name": "classifyPanel.checkEditInputOnNavigate",
+                    "condition": "conditions.shouldPromptForEdit || conditions.shouldPromptForCreate"
+                }]
+            }
+        },
+        "checkForEdits": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [{
+                        "name": "classifyPanel.promptToSaveCreate",
+                        "condition": "conditions.shouldPromptForCreate"
+                    },
+                    {
+                        "name": "classifyPanel.checkEditInputOnClose",
+                        "condition": "conditions.shouldPromptForEdit"
+                    },
+                    {
+                        "name": "classifyPanel.close",
+                        "condition": "!conditions.shouldPrompt"
+                    }
+                ]
+            }
+        },
+        "resetAttributesVisibleAndFireRefreshSecWorkAreaAction": {
+            "actionType": "JSFunction",
+            "method": "setAttributesVisible",
+            "inputData": {
+                "data": "{{data}}",
+                "visible": "false"
+            },
+            "deps": "js/classifyService"
+        },
+        "resetEventMapForPropValidation": {
+            "actionType": "JSFunction",
+            "method": "resetEventMapForPropValidation",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/classifyFullViewService"
+        },
+        "openEditLocalizationSinglePanel": {
+            "actionType": "dialog",
+            "inputData": {
+                "options": {
+                    "global": true,
+                    "view": "EditLocalizationSingleProperty",
+                    "placement": "right",
+                    "parent": ".aw-layout-workarea",
+                    "width": "WIDE",
+                    "height": "FULL",
+                    "isCloseVisible": false,
+                    "subPanelContext": "{{data.eventData.commandContext}}"
+                }
+            }
+        },
+        "handleSelectionChange": {
+            "actionType": "JSFunction",
+            "method": "handleSelectionChange",
+            "inputData": {
+                "selectionData": "{{data.selectionData}}",
+                "parentSelectedData": "{{subPanelContext.selectionData}}"
+            },
+            "deps": "js/Ics1ClassificationTabService"
+        }
+    },
+    "conditions": {
+        "isStandAloneCmdSelected": {
+            "expression": "props.subPanelContext.context.searchState.standAlone === true"
+        },
+        "shouldPrompt": {
+            "expression": "classifyState.panelMode === 0 && data.attributesVisible || classifyState.panelMode === 1 && data.attributesVisible"
+        },
+        "shouldPromptForCreate": {
+            "expression": "classifyState.panelMode === 0 && data.attributesVisible && !data.isAlreadyPrompted"
+        },
+        "shouldPromptForEdit": {
+            "expression": "classifyState.panelMode === 1 && data.attributesVisible && !data.isAlreadyPrompted"
+        },
+        "showClassImagesSection": {
+            "expression": "classifyState.hasImages === true"
+        },
+        "standaloneUseExistingMode": {
+            "expression": "data.standaloneObjectExists && data.standaloneObjectExists === true"
+        },
+        "showClassBreadCrumb": {
+            "expression": "data.parents && data.provider.crumbs !== null"
+        },
+        "showImages": {
+            "expression": "classifyState.showImages === true"
+        },
+        "showPropGroup": {
+            "expression": "classifyState.hasBlocks === true"
+        },
+        "showPropTree": {
+            "expression": "classifyState.showPropTree"
+        },
+        "showTabTree": {
+            "expression": "classifyState.showTabTree === true"
+        },
+        "pasteHandler":{
+            "expression":"ctx.awClipBoardProvider && ctx.awClipBoardProvider[0] && ctx.awClipBoardProvider[0].props.CLASS_ID"
+        }
+    },
+    "messages": {
+        "pasteWithDeleteMessage": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.pasteWithDelete}}",
+            "messageTextParams": [
+                "{{ctx.deletedIco.vmo.cellHeader1}}"
+            ]
+        },
+        "unsavedChanges": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.unsavedChanges}}",
+            "messageTextParams": [
+                "{{ctx.pselected.cellHeader1}}"
+            ],
+            "navigationOptions": [{
+                    "option": "Discard",
+                    "text": "{{i18n.discard}}",
+                    "action": "closePanel"
+                },
+                {
+                    "option": "Save",
+                    "text": "{{i18n.save}}",
+                    "action": "classifyAndClose"
+                }
+            ]
+        },
+        "classifySuccessMessage": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.classifySuccess}}",
+            "messageTextParams": [
+                "{{ctx.pselected.props.object_name.dbValues[0]}}",
+                "{{data.classifyState.selectedNode.displayName}}"
+            ]
+        },
+        "classifySuccessMessageForPaste": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.classifySuccess}}",
+            "messageTextParams": [
+                "{{ctx.mselected[0].props.object_name.dbValues[0]}}",
+                "{{ctx.awClipBoardProvider[0].cellHeader1}}"
+            ]
+        },
+
+        "showInvalidKLErrorMsg": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.inValidKeyError}}",
+            "messageTextParams": [
+                "{{data.isValidKeyLovData.invalidAttr}}"
+            ]
+        },
+        "outOfRangeError": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.outOfRangeError}}",
+            "messageTextParams": [
+                "{{data.results.invalidRangeAttr}}"
+            ]
+        },
+        "invalidValueError": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.invalidValueError}}",
+            "messageTextParams": [
+                "{{data.results.invalidAttr}}"
+            ]
+        }
+    },
+    "data": {
+        "selectionData": {
+            "dbValue": "",
+            "type": "OBJECT"
+        },
+        "provider": {
+            "crumbs": [{
+                "clicked": false,
+                "displayName": "",
+                "selectedCrumb": false,
+                "showArrow": false
+            }]
+        },
+        "breadCrumbConfig": {
+            "classBreadcrumbConfig": {
+                "type": "navigate",
+                "id": "classPathBreadCrumb",
+                "noUpdate": false,
+                "popuplist": "/html/defaultbreadcrumblist.html"
+            }
+        },
+        "additionalProp": {
+            "displayName": "{{i18n.additionalProp}}",
+            "type": "STRING"
+        },
+        "propFilter": {
+            "dbValue": "",
+            "type": "STRING"
+        },
+        "classifyState": {
+            "initialValues": {
+                "classifyFullscreen": false,
+                "showTabTree": true,
+                "showImages": true,
+                "showPropTree": true,
+                "panelMode": 0,
+                "editClassUID": "AAAAAAAAAAAAAA"
+            },
+            "meta": {
+                "panelMode":{
+                    "type": "INTEGER",
+                    "field": "true"
+                    },
+                "attrs": [ {
+                    "attr": {
+                        "field": "true"
+                    }
+                } ],
+                "numOfAttrs": {
+                    "type": "INTEGER",
+                    "field": "true"
+                },
+                "currentUnitSystem": {
+                    "type": "object",
+                    "field": "true"
+                },
+                "classifyFullscreen": {
+                    "field": "true",
+                    "type": "BOOLEAN"
+                },
+                "showTabTree": {
+                    "field": "true",
+                    "type": "BOOLEAN"
+                },
+                "showPropTree": {
+                    "field": "true",
+                    "type": "BOOLEAN"
+                },
+                "pasteClicked": {
+                    "type": "BOOLEAN",
+                    "field": "true"
+                },
+                "pasteInProgress": {
+                    "type": "BOOLEAN",
+                    "field": "true"
+                },
+                "standAlone": {
+                    "type": "BOOLEAN",
+                    "field": "false"
+                },
+                "showImages": {
+                    "type": "BOOLEAN",
+                    "field": "false"
+                },
+                "editClassUID":{
+                    "type":"STRING",
+                    "field":"true"
+                }
+            }
+        },
+        "responseState": {
+            "initialValues": {
+            },
+            "meta": {
+                "blockDefinitionMap": {
+                    "type": "object",
+                    "field": "true"
+                }
+            }
+        },
+        "showAllProp": {
+            "type": "BOOLEAN",
+            "dbValue": false
+        },
+        "attr_anno": {
+            "type": "ARRAY"
+        },
+        "editClass":  false,
+        "editClassInProgress":false,
+        "cancelEditAction":true,
+        "targetObjectForSelection": {
+            "type": "array"
+        },
+        "classificationCommands": "classify_clsCommands",
+        "tableSummaryDataProviderName": "tabGetClassTableSummary",
+        "classifyImageCommands": "classify_imgCommands",
+        "sortOption": {
+            "type": "object"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "classifyPanel.deletePasteMessage",
+            "action": "setNotifyMessage"
+        },
+        {
+            "eventId": "awPanel.selectionChange",
+            "action": "checkForEdits"
+        },
+        {
+            "eventId": "awPanel.panelClose",
+            "action": "checkForEdits"
+        },
+        {
+            "eventId": "awPanel.navigate",
+            "action": "checkNavigation"
+        },
+        {
+            "eventId": "classifyPanel.checkEditInputOnNavigate",
+            "action": "checkIfDirtyOnNavigate"
+        },
+        {
+            "eventId": "classifyPanel.checkEditInputOnClose",
+            "action": "checkIfDirtyOnClose"
+        },
+        {
+            "eventId": "classifyPanel.promptToSaveCreate",
+            "action": "promptForCreateAction"
+        },
+        {
+            "eventId": "classifyPanel.promptToSaveEdit",
+            "action": "promptForEditAction"
+        },
+        {
+            "eventId": "classifyPanel.close",
+            "action": "closePanel"
+        },
+        {
+            "eventId": "classifyPanel.resetAttributesVisibleAndFireRefreshSecWorkAreaEvent",
+            "action": "resetAttributesVisibleAndFireRefreshSecWorkAreaAction"
+        },
+        {
+            "eventId": "classify.postSave",
+            "action": "postSave"
+        },
+       {
+            "eventId": "resetEventMapForPropValidation",
+            "action": "resetEventMapForPropValidation"
+        },
+        {
+            "eventId": "classify.openEditLocalizationSinglePanel",
+            "cacheEventData": true,
+            "action": "openEditLocalizationSinglePanel"
+        }
+    ],
+    "functions": {
+        "parseSearchString": {
+            "functionName": "parseSearchString",
+            "parameters": [
+                "{{data.searchBox.dbValue}}"
+            ]
+        },
+        "getChildren": {
+            "functionName": "getChildren",
+            "parameters": []
+        },
+        "getClsObject": {
+            "functionName": "getClsObject",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getUnitSystem": {
+            "functionName": "getUnitSystem",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getConvertValuesRequest": {
+            "functionName": "getConvertValuesRequest",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getRequest": {
+            "functionName": "getRequest",
+            "parameters": [
+                "{{ctx}}"
+            ]
+        },
+        "stopSaving": {
+            "functionName": "tellContextNotToSaveEdits",
+            "parameters": [
+                "{{data.classifyState}}"
+            ]
+        }
+    },
+    "i18n": {
+        "additionalProp": [
+            "ClassificationPanelMessages"
+        ],
+        "cancel": [
+            "ClassificationPanelMessages"
+        ],
+        "Classify": [
+            "ClassificationPanelMessages"
+        ],
+        "create": [
+            "ClassificationPanelMessages"
+        ],
+        "discard": [
+            "ClassificationPanelMessages"
+        ],
+        "edit": [
+            "ClassificationPanelMessages"
+        ],
+        "unsavedChanges": [
+            "ClassificationPanelMessages"
+        ],
+        "images": [
+            "ClassificationPanelMessages"
+        ],
+        "createNew": [
+            "ClassificationPanelMessages"
+        ],
+        "useExisting": [
+            "ClassificationPanelMessages"
+        ],
+        "paste": [
+            "ClassificationPanelMessages"
+        ],
+        "Add": [
+            "ClassificationPanelMessages"
+        ],
+        "pasteWithDelete": [
+            "ClassificationPanelMessages"
+        ],
+        "pasteFailedError": [
+            "ClassificationPanelMessages"
+        ],
+        "Class": [
+            "ClassificationPanelMessages"
+        ],
+        "classifySuccess": [
+            "ClassificationPanelMessages"
+        ],
+        "select": [
+            "ClassificationPanelMessages"
+        ],
+        "type": [
+            "ClassificationPanelMessages"
+        ],
+        "properties": [
+            "ClassificationPanelMessages"
+        ]
+    }
+}

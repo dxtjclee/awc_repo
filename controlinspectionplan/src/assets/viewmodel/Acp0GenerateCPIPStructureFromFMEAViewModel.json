@@ -1,0 +1,223 @@
+{
+    "schemaVersion": "1.0.0",
+    "lifecycleHooks": {
+        "onUpdate": {
+            "action": "performPostProcessingAfterXRTLoaded",
+            "observers": ["viewModel.atomicData.xrtState.xrtTypeLoaded"]
+        },
+        "onUnmount": "clearAddEventProgContext"
+    },
+    "conditions": {
+        "isXRTTypeLoaded": {
+            "expression": "xrtState.xrtTypeLoaded"
+        },
+        "isActiveStateAddPanel": {
+            "expression": "data.activeState.activeView ==='AddObjectPrimarySub'"
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "actions": {
+        "setActiveView": {
+            "actionType": "JSFunction",
+            "method": "resetActiveView",
+            "inputData": {
+                "stateName": "{{data.activeState}}",
+                "destPanelId": "AddObjectPrimarySub"
+            },
+            "outputData": {
+                "activeState": ""
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "performPostProcessingAfterXRTLoaded": {
+            "actionType": "batchJob",
+            "steps": [{
+                "action": "updateXRTProps",
+                "condition": "conditions.isXRTTypeLoaded"
+            }]
+        },
+        "updateXRTProps": {
+            "actionType": "JSFunction",
+            "method": "updateXRTProps",
+            "inputData": {
+                "objectType": "{{data.selectedType.dbValue}}",
+                "editHandler": "{{editHandlers.addPanelEditHandler}}"
+            },
+            "deps": "js/Aqc0CharManagerUtils2"
+        },
+        "clearAddEventProgContext": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "inputData": {
+                "0": "addItemEventProgressing"
+            },
+            "deps": "js/appCtxService"
+        },
+        "closPanelHeader": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [{
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                }]
+            }
+        },
+        "generateCPIPStructureFromFMEA": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ControlPlan-2022-06-ControlPlanManagement",
+            "method": "generateCPIPStructureFromFMEA",
+            "inputData": {
+                "generateCPIPStructureInput": "{{function:getCreateControlPlanInfo}}",
+                "runInBackground": "{{function:setRunInBackgroundValue}}"
+            },
+            "outputData": {
+                "partialErrors": "partialErrors"
+            },
+            "deps": "js/Acp0ControlPlanUtils",
+            "events": {
+                "failure": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ],
+                "success": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "condition": "data.partialErrors === undefined",
+                        "message": "GenerateCpipFromFmeaSuccessMessage"
+                    }
+                ],
+                "failure": [
+                    {
+                        "condition": "data.partialErrors.length > 0",
+                        "message": "GenerateCpipFromFmeaFailureMessage"
+                    }
+                ]
+            }
+        }
+    },
+    "data": {
+        "isIncludeSubTypes": "true",
+        "addPanelState": {
+            "initialValues": {
+                "xrtTypeLoaded": ""
+            },
+            "meta": {}
+        },
+        "selectedType": {
+            "type": "STRING",
+            "dbValue": "Cip0ControlPlan"
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "AddObjectPrimarySub",
+                "context": {}
+            },
+            "meta": {}
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        },
+        "projectState": {
+            "initialValues": {
+                "selectedProjects": [],
+                "triggerAssign": false
+            },
+            "meta": {
+                "selectedProjects": {
+                    "field": "true",
+                    "type": "OBJECT"
+                },
+                "triggerAssign": {
+                    "field": "true",
+                    "type": "BOOLEAN"
+                }
+            }
+        }
+    },
+    "messages": {
+        "GenerateCpipFromFmeaSuccessMessage": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.Acp0GenerateCpipFromFmeaSuccess}}",
+            "messageTextParams": [
+                "{{ctx.selected.props.object_string.dbValue}}"
+            ]
+        },
+        "GenerateCpipFromFmeaFailureMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.PartialError}}",
+            "messageTextParams": [
+                "{{data.partialErrors[0].errorValues[0].message}}"
+            ]
+        }
+    },
+    "onEvent": [{
+            "eventId": "appCtx.register",
+            "condition": "name === 'mselected'",
+            "action": "closePanel"
+        },
+        {
+            "eventId": "addCharSpecPanel.Aqc0SetPin",
+            "cacheEventData": true,
+            "action": "Aqc0SetPin"
+        },
+        {
+            "eventId": "addCharSpecPanel.Aqc0SetUnPin",
+            "cacheEventData": true,
+            "action": "Aqc0SetUnPin"
+        },
+        {
+            "eventId": "primaryWorkArea.selectionChangeEvent",
+            "action": "closPanelHeader",
+            "condition": "subPanelContext.panelPinned"
+        }
+    ],
+    "functions": {
+        "getCreateControlPlanInfo": {
+            "functionName": "getCreateControlPlanInfo",
+            "parameters": [ "{{ctx}}", "{{editHandlers.addPanelEditHandler}}" ]
+        },
+        "setRunInBackgroundValue": {
+            "functionName": "setRunInBackgroundValue"
+        }
+    },
+    "i18n": {
+        "Acp0GenerateBtn": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Acp0GenerateControlPlanTitle": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Acp0GenerateCpipFromFmeaSuccess": [
+            "ControlInspectionPlanMessages"
+        ]
+    }
+}

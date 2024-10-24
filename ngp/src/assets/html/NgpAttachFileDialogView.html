@@ -1,0 +1,21 @@
+<aw-popup2>
+    <aw-panel>
+        <aw-progress-indicator></aw-progress-indicator>
+        <div aw-class="{'disabled': data.createDatasetInProgress}">
+            <aw-panel-body>
+                    <aw-file-upload type-filter="{{data.allowedTypes}}" file-change-action="defineDataForAttachmentAction"></aw-file-upload>
+                    <aw-separator></aw-separator>
+                    <div enable-when="conditions.validFile">
+                        <aw-textbox prop="data.datasetName"></aw-textbox>
+                        <aw-textarea prop="data.datasetDesc" hint="textarea"></aw-textarea>
+                        <aw-listbox prop="data.datasetType" list="data.listOfDatasetTypes" action="onDatasetSelectionChange"></aw-listbox>
+                        <aw-listbox prop="data.creationRelation" list="data.relationList"></aw-listbox>
+                    </div>
+            </aw-panel-body>
+            <aw-panel-footer>
+                <aw-button button-type="base" action="closePopupWindow" size="auto">{{i18n.cancel}}</aw-button>
+                <aw-button enable-when="awPanelBody.$valid" action="createDatasetWithFileAndAttach" size="auto">{{i18n.done}}</aw-button>
+            </aw-panel-footer>
+        </div>
+    </aw-panel>
+</aw-popup2>

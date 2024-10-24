@@ -1,0 +1,125 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "getValueInViewModel": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "tabData": "{{subPanelContext}}"
+            },
+            "outputData": {
+                "DIPATreeContext.tabContext": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "updateCommandContext": {
+            "actionType": "JSFunction",
+            "method": "setCommandContext",
+            "inputData": {
+                "tabModel": "{{data.DIPATreeContext.tabContext}}",
+                "commandContext": {
+                    "sharedSelectionData": "{{fields.sharedSelectionData}}"
+                }
+            },
+            "deps": "js/mfeContentPanelUtil"
+        }
+    },
+
+    "data": {
+        "selectionData": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "DIPATreeContext": {
+            "objectUid": "{{ctx.epPageContext.loadedObject.uid}}",
+            "preferenceName": "EP_BackgroundPartsTableColumnConfiguration",
+            "isTableEditable": false,
+            "loadTypes": "CommonExpand",
+            "relatedObjectMapKey": [ "DIPANodes", "childAssembly" ],
+            "isLeafProperty": "hasChildren",
+            "isTopNode": false,
+            "initializeAction": "loadSortedNodes",
+            "relationName": [ "Mfg0AddedOrRemovedDIPANodes" ],
+            "additionalPolicyObjects": {
+                "name": "EpDIPATree",
+                "types": [ {
+                    "name": "Mfg0BvrDynamicIPA",
+                    "properties": [ {
+                        "name": "bl_parent"
+                    } ]
+                } ]
+            },
+            "additionalLoadParamsForRootLoadInputData": [ {
+                    "tagName": "expandType",
+                    "attributeName": "type",
+                    "attributeValue": "ExpandDIPADetailedPlanning"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "level",
+                    "attributeValue": "TOP_WITH_CHILDREN"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "rootsProperty",
+                    "attributeValue": "DIPANodes"
+                }
+            ],
+            "additionalLoadParamsForChildLoadInputData": [ {
+                    "tagName": "expandType",
+                    "attributeName": "type",
+                    "attributeValue": "ExpandDIPADetailedPlanning"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "level",
+                    "attributeValue": "CHILDREN"
+                }
+            ],
+            "clientColumns": [ {
+                "clientColumn": true,
+                "name": "graphicVisibility",
+                "propertyDisplayName": "{{i18n.GraphicVisibilityColumnName}}"
+            } ],
+            "treeNavigationColumnIndex": 1,
+            "alwaysVisibleColumns":["object_string"],
+            "enableArrangeColumn": true,
+            "enableSorting": true
+        },
+        "sharedSelectionData": {
+            "initialValues": {
+                "isTreeDataLoaded": true
+            },
+            "meta": {}
+        },
+        "messages": {
+            "selectProcessStationForDIPA": [ {
+                "text": "{{i18n.selectProcessStationForDIPA}}"
+            } ],
+            "createDIPA": [ {
+                "text": "{{i18n.createDIPA}}",
+                "iconId": "cmdCreateDIPA"
+            } ]
+        }
+    },
+    "conditions": {
+        "isProcessStationNotSelected": {
+            "expression": "!ctx.ep.scopeObject.modelType.typeHierarchyArray.includes('Mfg0BvrProcessStation')"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "getValueInViewModel",
+        "onUpdate": [ {
+            "action": "updateCommandContext",
+            "observers": [
+                "viewModel.atomicData.sharedSelectionData.isTreeDataLoaded"
+            ]
+        } ]
+    },
+
+    "i18n": {
+        "createDIPA": [ "DipaMessages" ],
+        "selectProcessStationForDIPA": [ "DipaMessages" ],
+        "GraphicVisibilityColumnName": [ "BvrGraphicsMessages" ]
+    }
+}

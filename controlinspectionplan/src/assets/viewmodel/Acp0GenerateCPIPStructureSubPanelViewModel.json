@@ -1,0 +1,89 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "runInBackground": {
+            "displayName": "{{i18n.runInBackgroundCheckBoxTitle}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "false",
+            "isDisabled": true,
+            "dbValue": true,
+            "dispValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "createOperation": {
+            "displayName": "{{i18n.createOperationCheckBoxTitle}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": false,
+            "dispValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "copyInspectionDefinition": {
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": true,
+            "vertical": false,
+            "labelPosition": "PROPERTY_LABEL_AT_LEFT"
+        },
+        "inspectionDefinitionOptions": {
+            "type": "STRING",
+            "dbValue": [{
+                    "propDisplayValue": "{{i18n.copyRadioBtnTitle}}",
+                    "propInternalValue": true
+                },
+                {
+                    "propDisplayValue": "{{i18n.referenceRadioBtnTitle}}",
+                    "propInternalValue": false
+                }
+            ]
+        }
+    },
+    "conditions": {
+        "acp0CreateControlPlanCmdCond": {
+            "expression": "ctx.selected.modelType.typeHierarchyArray.indexOf('Qfm0FMEANode')>-1 || ctx.selected.modelType.typeHierarchyArray.indexOf('Qfm0SystemElement')>-1"
+        }
+    },
+    "actions": {
+        "addHtmlPanelData": {
+            "actionType": "JSFunction",
+            "method": "addHtmlPanelPropertiesInDataSource",
+            "inputData": {
+                "updatedProperties": [
+                    "{{data.createOperation}}",
+                    "{{data.copyInspectionDefinition}}"
+                ],
+                "type": "CREATE_PANEL_CONTEXT"
+            },
+            "deps": "js/xrtUtilities"
+        }
+    },
+    "lifecycleHooks": {
+        "onUpdate": {
+            "action": "addHtmlPanelData",
+            "observers": [
+                "viewModel.data.createOperation",
+                "viewModel.data.copyInspectionDefinition"
+            ]
+        }
+    },
+    "i18n": {
+        "Acp0addInspectionDefSectionTitle": [
+            "ControlInspectionPlanMessages"
+        ],
+        "copyRadioBtnTitle": [
+            "ControlInspectionPlanMessages"
+        ],
+        "createOperationCheckBoxTitle": [
+            "ControlInspectionPlanMessages"
+        ],
+        "referenceRadioBtnTitle": [
+            "ControlInspectionPlanMessages"
+        ],
+        "runInBackgroundCheckBoxTitle": [
+            "ControlInspectionPlanMessages"
+        ]
+    }
+}

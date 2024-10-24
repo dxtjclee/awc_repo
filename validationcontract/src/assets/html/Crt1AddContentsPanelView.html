@@ -1,0 +1,20 @@
+<aw-command-panel caption="i18n.AddTitle" context="subPanelContext">
+    <div class="aw-layout-flexColumn" show-when="conditions.isActiveStateAddPanel">
+        <aw-add include-types="{{data.createObj}}" visible-tabs="{{data.tabsToShow}}" preferred-type="{{data.preferredType}}" type-filter="{{data.typeFilter}}"
+            load-sub-types="true" is-include-sub-types="data.isIncludeSubTypes" max-recent-count="5"
+            xrt-state="data.xrtState" edit-handler="editHandlers.addPanelEditHandler" add-panel-state="fields.addPanelState"
+            active-state="data.activeState" project-state="data.projectState" sub-panel-context="{ triggerCreate: data.triggerCreate, ...subPanelContext }">
+        </aw-add>
+        <aw-checkbox prop="data.addAsOccurrence" visible-when="conditions.isNewTabAddButtonVisible"></aw-checkbox>
+        <aw-checkbox prop="data.addAsOccurrence" visible-when="conditions.isPalatteTabSelection && conditions.isDatasetSelected"></aw-checkbox>
+        <aw-panel-footer>
+            <aw-button action="createObject" visible-when="formProp.attributes.valid && conditions.isNewTabAddButtonVisible">
+                <aw-i18n>i18n.AddTitle</aw-i18n>
+            </aw-button>
+        <aw-button action="createRelationForPaletteOrSearch" visible-when="conditions.isPalatteTabSelection">
+                <aw-i18n>i18n.AddTitle</aw-i18n>
+            </aw-button>
+        </aw-panel-footer>
+    </div>
+    <aw-add-navigate active-state="data.activeState" project-state="data.projectState" action="actions.setActiveView"></aw-add-navigate>
+</aw-command-panel>

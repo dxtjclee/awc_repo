@@ -1,0 +1,9 @@
+<mfe-message sub-panel-context="data.productBopMbomTreeContext.noMBOMStructureAssociated" exist-when="!conditions.isMBOMExist"></mfe-message>
+<div class="sw-column w-12" exist-when="data.productBopMbomTreeContext.objectUid && conditions.isMBOMExist">
+    <div class="sw-row aw-ep-searchBoxStyle">
+        <ep-structure-search view-id="EpProductBopMbomTree_EpStructureSearch" sub-panel-context="fields.epMbomTreeSearchContext"></ep-structure-search>
+    </div>
+    <div class="sw-row h-12">
+        <ep-tree-table view-id="EpProductBopMbomTree_EpTreeTable" sub-panel-context="{...data.productBopMbomTreeContext, ...props.subPanelContext}" structure-search-context="fields.epMbomTreeSearchContext" selection-data="data.selectionData"></ep-tree-table>
+    </div>
+</div>

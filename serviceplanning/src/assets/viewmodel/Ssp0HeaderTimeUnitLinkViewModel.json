@@ -1,0 +1,79 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "timeUnitLink": {
+            "displayName": "",
+            "type": "STRING"
+        }
+    },
+    "dataProviders": {
+        "timeUnitsListDataProvider": {
+            "dataProviderType": "Static",
+            "action": "getTimeUnitsFromResponse",
+            "response": "{{data.timeUnitsResponseData}}",
+            "totalFound": "{{data.timeUnitsResponseData.length}}",
+            "selectionModelMode": "single"
+        }
+    },
+    "actions": {
+        "getTimeUnitsFromResponse": {
+            "actionType": "JSFunctionAsync",
+            "method": "getTimeUnitsFromResponse",
+            "inputData": {
+                "data": "{{data.dataProviders.timeUnitsListDataProvider}}"
+            },
+            "outputData": {
+                "timeUnitsResponseData": ""
+            },
+            "deps": "js/ssp0HeaderTimeLinkService"
+        },
+        "timeUnitChangesSuccessEvent": {
+            "actionType": "JSFunction",
+            "method": "changeTimeUnit",
+            "inputData": {
+                "data": {
+                    "staticDisplayValue": "{{parameters.eventData.property.dbValue.staticDisplayValue}}"
+                }
+            },
+            "deps": "js/ssp0HeaderTimeLinkService"
+        },
+        "getCurrentTimeUnitPreferenceValue": {
+            "actionType": "TcSoaService",
+            "serviceName": "Administration-2012-09-PreferenceManagement",
+            "method": "getPreferences",
+            "inputData": {
+                "preferenceNames": [
+                    "SPCurrentTimeUnit"
+                ],
+                "includePreferenceDescriptions": false
+            },
+            "outputData": {
+                "timeUnitLink.propertyDisplayName": "{{function:getCurrentTimeUnitPreferenceValue}}"
+            },
+            "deps": "js/ssp0HeaderTimeLinkService"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "awlinkPopup.selected",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            },
+            "action": "timeUnitChangesSuccessEvent"
+        }
+    ],
+    "functions": {
+        "getCurrentTimeUnitPreferenceValue": {
+            "functionName": "getCurrentTimeUnitPreferenceValue",
+            "parameters": []
+        }
+    },
+    "i18n": {
+        "spTimeUnitLinkLabel": [
+            "ssp0Messages"
+        ]
+    },
+    "lifecycleHooks": {
+        "onMount": "getCurrentTimeUnitPreferenceValue"
+    }
+}

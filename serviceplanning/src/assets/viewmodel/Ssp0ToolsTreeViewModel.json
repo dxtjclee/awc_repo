@@ -1,0 +1,400 @@
+{
+    "schemaVersion": "1.0.0",
+    "ports": {
+        "askForVisID": {
+            "syncObject": {}
+        },
+        "getToolsTreeData": {
+            "onChangeAction": "reloadToolsTree",
+            "syncObject": {}
+        },
+        "partsVisibilityChangePort": {
+            "syncObject": {
+                "id": "unknown",
+                "show": false
+            }
+        },
+        "onPartsVisViewerVisibilityChanged": {
+            "syncObject": {},
+            "onChangeAction": "onPartsVisViewerVisibilityChanged"
+        }
+    },
+    "actions": {
+        "unAssignParts": {
+            "actionType": "JSFunction",
+            "method": "unAssignPart",
+            "inputData": {
+                "sourceObjects": "{{data.dataProviders.toolsTreeDataProvider.selectedObjects}}",
+                "targetObject": "{{ctx.selectedVMO}}"
+            },
+            "deps": "js/ssp0ToolService"
+        },
+        "loadToolsTreeTableColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadToolsTreeTableColumns",
+            "inputData": {
+                "data": "{{data}}",
+                "resetFlag": false
+            },
+            "outputData": {
+                "dataProviders.toolsTreeDataProvider.columnConfig": "columnConfig"
+            },
+            "deps": "js/ssp0ToolService"
+        },
+        "resetToolsTreeTableColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadToolsTreeTableColumns",
+            "inputData": {
+                "data": "{{data}}",
+                "resetFlag": true
+            },
+            "outputData": {
+                "dataProviders.toolsTreeDataProvider.columnConfig": "columnConfig"
+            },
+            "deps": "js/ssp0ToolService"
+        },
+        "setPropertiesInput": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-09-DataManagement",
+            "method": "setProperties",
+            "inputData": {
+                "info": [
+                    {
+                        "object": "{{data.dataProviders.toolsTreeDataProvider.selectedObjects[0]}}",
+                        "vecNameVal": [
+                            {
+                                "name": "bl_occ_type",
+                                "values": [
+                                    "{{data.dataProviders.toolsTreeDataProvider.selectedObjects[0].props.bl_occ_type.dbValue}}"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "message": "soaOperationFailure"
+                    }
+                ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "reloadToolsTree"
+                    }
+                ]
+            }
+        },
+        "onPartsVisViewerVisibilityChanged": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "toolsTree.plTable.clientRefresh",
+                        "condition": "ctx.is3DTabPresent"
+                    }
+                ]
+            }
+        },
+        "onPartsVisViewerVisibilityChanged1": {
+            "actionType": "JSFunction",
+            "method": "refreshToolsTree",
+            "deps": "js/ssp0ToolService"
+        },
+        "reloadToolsTree": {
+            "actionType": "JSFunction",
+            "method": "reloadToolsTree",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.toolsTreeDataProvider}}",
+                "selection": "{{ports.getToolsTreeData.syncObject.selection}}"
+            },
+            "deps": "js/ssp0ToolService"
+        },
+        "setOccurrenceType": {
+            "actionType": "JSFunction",
+            "method": "createObjectOfSetOccType",
+            "inputData": {
+                "selectedVMO": "{{data.dataProviders.toolsTreeDataProvider.selectedObjects[0]}}",
+                "occType": "{{data.dataProviders.toolsTreeDataProvider.selectedObjects[0].props.bl_occ_type.dbValue}}"
+            },
+            "deps": "js/ssp0CreateObjectService"
+        },
+        "editToolsTreeTable": {
+            "actionType": "JSFunction",
+            "method": "startEdit",
+            "inputData": {},
+            "deps": "js/ssp0ToolService"
+        },
+        "toolsTableSelectionChangedBatchJob": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "registerSelectedToolInCtx"
+                }
+            ]
+        },
+        "toolsTableSelectionChangedToggleAction": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "Ssp0SbomTree.syncPart",
+                        "eventData": {
+                            "selectedPart": "{{data.dataProviders.toolsTreeDataProvider.selectedObjects}}"
+                        }
+                    }
+                ]
+            }
+        },
+        "registerSelectedToolInCtx": {
+            "actionType": "JSFunction",
+            "method": "registerCtx",
+            "inputData": {
+                "name": "ssp0SelectedTool",
+                "value": "{{data.dataProviders.toolsTreeDataProvider.selectedObjects}}"
+            },
+            "deps": "js/appCtxService"
+        },
+        "loadGraphics": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "callPropertyProviderFunction"
+                },
+                {
+                    "action": "getCurrentVisibilityState"
+                },
+                {
+                    "action": "loadParts"
+                }
+            ]
+        },
+        "callPropertyProviderFunction": {
+            "actionType": "JSFunction",
+            "method": "rendererLoadingGraphicVisibilityIndicationBasedOnViewer",
+            "inputData": {
+                "vmo": "{{data.eventMap['partsVisGraphicsVisibilityChanged'].vmo}}",
+                "containerElement": "{{data.eventMap['partsVisGraphicsVisibilityChanged'].vmo.graphicsVisibilityContainerElement}}"
+            },
+            "deps": "js/ssp0GraphicVisibilityTablePropertyRenderer"
+        },
+        "loadParts": {
+            "actionType": "Sync",
+            "inputData": {
+                "port": "partsVisibilityChangePort",
+                "syncObject": {
+                    "id": "{{data.eventMap['partsVisGraphicsVisibilityChanged'].modelId}}",
+                    "show": "{{data.currentVisibilityState}}"
+                }
+            }
+        },
+        "getCurrentVisibilityState": {
+            "actionType": "JSFunction",
+            "method": "getCurrentVisibilityState",
+            "inputData": {
+                "vmo": "{{data.eventMap['partsVisGraphicsVisibilityChanged'].vmo}}",
+                "viewerId": "PartsViewer"
+            },
+            "outputData": {
+                "currentVisibilityState": "currentVisibilityState"
+            },
+            "deps": "js/ssp0VisViewerUtilityService"
+        },
+        "selectVMOinTree": {
+            "actionType": "JSFunction",
+            "method": "selectVMOinTree",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.toolsTreeDataProvider}}"
+            },
+            "deps": "js/ssp0ToolService"
+        },
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/columnArrangeService"
+        },
+        "saveColumnConfigLoadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "saveUIColumnConfigs2",
+            "inputData": {
+                "columnConfigurations": [
+                    {
+                        "clientScopeURI": "Ssp0ToolsTableManagement",
+                        "columnConfigId": "{{data.dataProviders.toolsTreeDataProvider.columnConfig.columnConfigId}}",
+                        "columns": "{{data.dataProviders.toolsTreeDataProvider.newColumns}}",
+                        "scope": "LoginUser",
+                        "scopeName": ""
+                    }
+                ]
+            },
+            "outputData": {},
+            "events": {
+                "success": [
+                    {
+                        "name": "slm.toolsTableColumnConfig.saved"
+                    }
+                ]
+            }
+        },
+        "loadDataForSavedColumnConfig":{
+            "actionType": "JSFunctionAsync",
+            "method": "getTableViewModelProperties",
+            "deps": "js/tcViewModelObjectService",
+            "inputData": {
+                "vmNodes": "{{data.dataProviders.toolsTreeDataProvider.viewModelCollection.loadedVMObjects}}",
+                "context": {
+                    "clientScopeURI": "Ssp0ToolsTableManagement",
+                    "clientName": "AWClient",
+                    "columnConfigId": "Ssp0ToolsTableManagement",
+                    "columnsToExclude": "{{ctx.sbomProductContext.columnsToExclude}}",
+                    "operationType": "{{eventData.operationType}}"
+                }
+            },
+            "outputData": {
+                "newColumnConfig": "result.output.columnConfig"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "ssp0ToolsTableManagementConfigAndLoaded.saved"
+                    }
+                ]
+            }
+        }
+    },
+    "data": {
+        "messages": {
+            "noAssigned": [
+                {
+                    "text": "{{i18n.noAssignedTools}}"
+                },
+                {
+                    "text": "{{i18n.assignToolsFromClassification}}",
+                    "iconId": "cmdClassificationSearch"
+                }
+            ]
+        }
+    },
+    "dataProviders": {
+        "toolsTreeDataProvider": {
+            "response": "{{ports.getToolsTreeData.syncObject.treeLoadResult.response}}",
+            "totalFound": "{{ports.getToolsTreeData.syncObject.treeLoadResult.totalFound}}",
+            "editConfig": {
+                "startEditAction": "editToolsTreeTable",
+                "saveEditAction": "setOccurrenceType",
+                "identifier": "uid"
+            },
+            "selectionModelMode": "multiple"
+        }
+    },
+    "columnProviders": {
+        "toolsTreeColumnProvider": {
+            "loadColumnAction": "loadToolsTreeTableColumns",
+            "saveColumnAndLoadAction": "saveColumnConfigLoadData",
+            "resetColumnAction": "resetToolsTreeTableColumns",
+            "columns": "{{data.columns}}",
+            "frozenColumnIndex": -1
+        }
+    },
+    "grids": {
+        "toolsTree": {
+            "dataProvider": "toolsTreeDataProvider",
+            "columnProvider": "toolsTreeColumnProvider",
+            "enableArrangeMenu": true,
+            "addIconColumn": false,
+            "gridOptions": {
+
+                "useStaticFirstCol": true,
+                "enableExpandAndPaginationInEdit": true
+            }
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "Ssp0ToolsTree.selectVMOinTree",
+            "action": "selectVMOinTree",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "partsVisGraphicsVisibilityChanged",
+            "action": "loadGraphics",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "reloadToolsTree",
+            "action": "reloadToolsTree"
+        },
+        {
+            "eventId": "ssp0ToolsTree.unAssignParts",
+            "action": "unAssignParts",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "toolsTreeDataProvider.selectionChangeEvent",
+            "action": "toolsTableSelectionChangedBatchJob",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        },
+        {
+            "eventId": "slm.toolsTableColumnConfig.saved",
+            "cacheEventData": true,
+            "action": "loadDataForSavedColumnConfig"
+        },
+        {
+            "eventId": "ssp0ToolsTableManagementConfigAndLoaded.saved",
+            "action": "loadToolsTreeTableColumns"
+        }
+    ],
+    "i18n": {
+        "noAssignedTools": [
+            "ssp0Messages"
+        ],
+        "assignToolsFromClassification": [
+            "ssp0Messages"
+        ],
+        "nameValueColumn": [
+            "ssp0Messages"
+        ],
+        "occTypeValueColumn": [
+            "ssp0Messages"
+        ],
+        "descriptionValueColumn": [
+            "ssp0Messages"
+        ]
+    },
+    "conditions": {
+        "isToolsSelected": {
+            "expression": "data.dataProviders.toolsTreeDataProvider.selectedObjects.length > 0 && ctx.selectionSyncToggleState"
+        },
+        "areToolsConsumed": {
+            "expression": "ports.getToolsTreeData.syncObject.treeLoadResult.totalFound > 0"
+        }
+    },
+    "messages": {
+        "soaOperationFailure": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "functions": {
+        "postResetFunction": {
+            "functionName": "postResetFunction",
+            "parameters": [
+                "{{data.dataProviders.toolsTreeDataProvider.columnConfig}}"
+            ]
+        }
+    }
+}

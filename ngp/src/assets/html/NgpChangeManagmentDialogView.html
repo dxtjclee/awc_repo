@@ -1,0 +1,27 @@
+<aw-popup2>
+    <aw-panel>
+        <div class="ngp-mcnHostingView-container">
+            <div class="ngp-mcnHostingView-header">
+                <div class="ngp-mcnHostingView-headerIcon">
+                    <aw-icon class="aw-type-icon" icon-id="miscPageImpactOfChange"></aw-icon>
+                </div>
+                <div class="ngp-mcnHostingView-headerText">
+                    <div class="ngp-mcnHostingView-title">{{i18n.ngpMcnTitle}} | {{data.ecnName}}</div>
+                    <div class="ngp-mcnHostingView-subtitletitle">{{i18n.ngpMcnSubTitle}}</div>
+                </div>
+                <div class="ngp-mcnHostingView-headerCloseIcon">
+                    <aw-flex-row height="2" offset="1f">
+                        <aw-flex-column width="4f">
+                            <aw-icon-button size="large" command="data.buttonCommand"></aw-icon-button>
+                        </aw-flex-column>
+                    </aw-flex-row>
+                </div>
+            </div>
+
+            <div class="ngp-mcnHostingView-body">
+                <iframe id="{{data.iframeId}}" src="{{data.src}}"> </iframe>
+            </div>
+        </div>
+    </aw-panel>
+
+</aw-popup2>

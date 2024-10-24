@@ -1,0 +1,283 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "lifecycleHooks": {
+        "onMount": "initializeKeylovSWA",
+        "onUpdate": [{
+            "action": "reloadKeylovSWA",
+            "observers": [
+                "props.subPanelContext.context.searchState.propertiesSWA"
+            ]
+        },
+            {
+                "action": "clearPrevTreeInput",
+                "observers": [
+                    "props.subPanelContext.selection"
+                ]
+        }]
+    },
+    "props":{
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data":{
+        "headerProperties": [
+            {
+                "propertyName": "ID"
+            },
+            {
+                "propertyName": "IRDI"
+            },
+            {
+                "propertyName": "owning_user"
+            },
+            {
+                "propertyName": "dateModified"
+            },
+            {
+                "propertyName": "Status"
+            },
+            {
+                "propertyName": "object_type"
+            }
+        ],
+        "clsadminPropCommands": "clsadmin_propCommands"
+    },
+    "actions":{
+        "reloadKeylovSWA": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "initializeKeylovSWA"
+                },
+                {
+                    "action": "keylovLoad",
+                    "condition": "!conditions.supported"
+                },
+                {
+                    "action": "keylovLoad2",
+                    "condition": "conditions.ready && conditions.supported"
+                }
+            ]
+        },
+        "initializeKeylovSWA": {
+            "actionType": "JSFunction",
+            "method": "initializeSWA",
+            "inputData": {
+                "subPanelContext": "{{subPanelContext.context.searchState}}",
+                "subLocationName": "KeyLOV"
+            },
+            "outputData": {
+                "currentSecData": "currentSecData",
+                "lovTypeItems": "lovTypeItems",
+                "dataType": "dataType",
+                "multiSiteData": "multiSiteData",
+                "treeLoadResult": {}
+            },
+            "deps":"js/classifyAdminService"
+        },
+        "keylovLoad": {
+            "actionType": "dataProvider",
+            "method": "entryDataProvider"
+        },
+        "keylovLoad2":
+        {
+            "actionType": "dataProvider",
+            "method": "keyLovItemsProvider"
+        },
+        "loadData": {
+            "actionType": "JSFunction",
+            "method": "loadDataForTreeKeyLOV",
+            "inputData": {
+                "treeLoadInput": "request.treeLoadInput",
+                "data": "{{data}}",
+                "dataProvider": "{{data.dataProviders.entryDataProvider}}"
+            },
+            "outputData":{
+                "treeLoadResult":""
+            },
+            "deps": "js/classifyAdminTreeTableService"
+        },
+        "loadColumnsForKeyLOV": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadColumnsForKeyLOV",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.entryDataProvider}}",
+                "type": "{{data.dataType}}"
+            },
+            "deps": "js/classifyAdminTreeTableService"
+        },
+        "loadColumnsForKeyLOVTable": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadColumnsForKeyLOV",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.keyLovItemsProvider}}",
+                "type": "{{data.dataType}}",
+                "columnProvider": "{{columnProviders.keysColumnProvider}}"
+            },
+            "deps": "js/classifyAdminTreeTableService"
+        },
+        "loadTableKeys": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "loadTableAttributes"
+                },
+                {
+                    "action" :"loadDataForTreeKeyLOV"
+                }
+            ]
+        },
+        "loadTableKeysInitial": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "loadTableAttributes"
+                },
+                {
+                    "action": "loadColumnsForKeyLOVTable"
+                },
+                {
+                    "action" :"loadDataForTreeKeyLOVInitial"
+                }
+            ]
+        },
+        "loadTableAttributes": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTableAttributes",
+            "inputData": {
+                "data": "{{data}}",
+                "type":"Attributes",
+                "classSystem": "{{ctx.clsAdmin.classSystem}}",
+                "columnProvider": "{{columnProviders.keysColumnProvider}}",
+                "descriptorColumns": "{{props.subPanelContext.context.searchState.propertiesSWA.attrColumns}}",
+                "objects": "{{data.lovTypeItems}}"
+            },
+            "outputData": {
+                "processedKeys":"objects",
+                "pTotalFound":"totalFound",
+                "columnProviders.keysColumnProvider":"columnProvider"
+            },
+            "deps": "js/classifyAdminService"
+        },
+        "loadDataForTreeKeyLOV": {
+            "actionType": "JSFunction",
+            "method": "loadDataForTreeKeyLOV",
+            "inputData": {
+                "treeLoadInput": "request.treeLoadInput",
+                "data": "{{data}}",
+                "dataProvider": "{{data.dataProviders.keyLovItemsProvider}}",
+                "columnConfigsSet": "true",
+                "columnProvider": "{{columnProviders.keysColumnProvider}}"
+            },
+            "outputData":{
+                "treeLoadResult":""
+            },
+            "deps": "js/classifyAdminTreeTableService"
+        },
+        "loadDataForTreeKeyLOVInitial": {
+            "actionType": "JSFunction",
+            "method": "loadDataForTreeKeyLOV",
+            "inputData": {
+                "treeLoadInput": null,
+                "data": "{{data}}",
+                "dataProvider": "{{data.dataProviders.keyLovItemsProvider}}",
+                "columnConfigsSet": "true",
+                "columnProvider": "{{columnProviders.keysColumnProvider}}"
+            },
+            "outputData":{
+                "treeLoadResult":""
+            },
+            "deps": "js/classifyAdminTreeTableService"
+        },
+        "clearPrevTreeInput": {
+            "actionType": "JSFunction",
+            "method": "destroyKeylovTreeInfo",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.keyLovItemsProvider}}"
+            },
+            "deps": "js/classifyAdminUtil"
+        }
+    },
+    "dataProviders": {
+        "entryDataProvider": {
+            "action": "loadData",
+            "initializeAction": "loadData",
+            "treeLoadResult": "{{data.treeLoadResult}}",
+            "inputData": {
+                "accessMode": "tree",
+                "topNodeUid": "top",
+                "selectionData": "{{subPanelContext.selectionData}}"
+            }
+        },
+        "keyLovItemsProvider":
+        {
+            "action": "loadTableKeys",
+            "initializeAction": "loadTableKeysInitial",
+            "treeLoadResult": "{{data.treeLoadResult}}",
+            "inputData": {
+                "accessMode": "tree",
+                "topNodeUid": "top",
+                "selectionData": "{{subPanelContext.selectionData}}"
+            }
+        }
+    },
+    "columnProviders": {
+        "structureColumnProvider": {
+            "loadColumnAction": "loadColumnsForKeyLOV",
+            "columns": "{{data.columns}}",
+            "frozenColumnIndex" : -1,
+            "sortCriteria": []
+        },
+        "keysColumnProvider": {
+            "columns": [],
+            "frozenColumnIndex" : -1
+        }
+    },
+    "grids": {
+        "entryGridForKeyLOV": {
+            "dataProvider": "entryDataProvider",
+            "columnProvider": "structureColumnProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "enableGridMenu": false,
+                "enablePinning": false,
+                "enableSorting": false,
+                "useStaticFirstCol": true
+            }
+        },
+        "keyLovGrid": {
+            "dataProvider": "keyLovItemsProvider",
+            "columnProvider": "keysColumnProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "enableColumnMoving": true,
+                "enableGridMenu": true,
+                "enablePinning": true,
+                "enableSorting": false,
+                "useStaticFirstCol": true
+            }
+        }
+    },
+    "i18n": {
+        "dataType":         [ "ClassificationAdminMessages" ],
+        "entries":          [ "ClassificationAdminMessages" ],
+        "metric":           [ "ClassificationAdminMessages" ],
+        "multiSite":        [ "ClassificationAdminMessages" ],
+        "nonMetric":        [ "ClassificationAdminMessages" ],
+        "propertiesTitle":  [ "ClassificationAdminMessages" ]
+    },
+    "conditions": {
+
+        "ready": {
+            "expression": "data.treeLoadResult && props.subPanelContext.context.searchState.propertiesSWA.currentSecData && props.subPanelContext.context.searchState.propertiesSWA.currentSecData[0] === data.currentSecData[0]"
+        },
+        "supported": {
+            "expression": "(ctx.tcSessionData.tcMajorVersion > 14 || (ctx.tcSessionData.tcMajorVersion === 14 && ctx.tcSessionData.tcMinorVersion >= 3))"
+        },
+        "isSummaryHeaderHidden": {
+            "expression": "!(ctx.state && ctx.state.urlAttributes && ctx.state.urlAttributes.flexibleLayouts !== undefined)"
+        }
+    }
+}

@@ -1,0 +1,227 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "defaultIdsOrIdNamingRuleCheckBox": {
+            "type": "BOOLEAN",
+            "isRequired": "true",
+            "propertyRadioFalseText": "{{i18n.idNamingRule}}",
+            "propertyRadioTrueText": "{{i18n.defaultIds}}",
+            "dbValue": true,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "prefixTextBox": {
+            "displayName": "{{i18n.prefix}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": ""
+        },
+        "suffixTextBox": {
+            "displayName": "{{i18n.suffix}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": ""
+        },
+        "replaceTextBox": {
+            "displayName": "{{i18n.replaceElementBtn}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": ""
+        },
+        "withTextBox": {
+            "displayName": "{{i18n.with}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "true",
+            "isEnabled":"false",
+            "dbValue": ""
+        },
+        "runInBackgroundCheckBox": {
+            "displayName": "{{i18n.runinBG}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT",
+            "dbValue": false
+        }
+    },
+    "actions": {
+        "pasteObjectAsCopy": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AwReqMgmtSe-2022-12-SpecNavigation",
+            "method": "reuseRequirements",
+            "inputData": {
+                "input": "{{function:getReuseRequirementsInput}}"
+            },
+            "outputData": {
+                "pasteCopySoaResponse": "",
+                "partialErrors": "ServiceData.partialErrors"
+            },
+            "actionMessages": {
+                "success": [ {
+                    "message": "notificationForPasteAsCopy",
+                    "condition": "data.runInBackgroundCheckBox.dbValue"
+                } ],
+                "failure": [ {
+                    "condition": "partialErrors",
+                    "message": "errorMessageOnAction"
+                } ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    },
+                    {
+                        "name" : "closeDialog"
+                    },
+                    {
+                        "condition": "!data.runInBackgroundCheckBox.dbValue",
+                        "name": "PasteAsCopyRequirement.addCreatedObjectInTreeAfterPaste"
+                    }
+                ],
+                "failure": [
+                    {
+                        "condition": "!data.runInBackgroundCheckBox.dbValue",
+                        "name": "PasteAsCopyRequirement.addCreatedObjectInTreeAfterPaste"
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Arm1PasteOperationService"
+        },
+        "closePanelDialog" : {
+            "actionType" : "JSFunction",
+            "method" : "closeDialog",
+            "inputData" : {
+                "editContext" : "INFO_PANEL_CONTEXT",
+                "popupId" : "{{subPanelContext.popupOptions.popupId}}",
+                "commandContext": "{{commandContext}}"
+            },
+            "deps" : "js/dialogService"
+        },
+        "addCreatedObjectInTreeAfterPaste": {
+            "actionType": "JSFunction",
+            "method": "addCreatedObjectInTreeAfterPaste",
+            "inputData": {
+                "pasteCopySoaResponse": "{{data.pasteCopySoaResponse}}"
+            },
+            "deps": "js/Arm1PasteOperationService"
+        },
+        "initializeValues": {
+            "actionType": "JSFunction",
+            "method": "initializeValues",
+            "inputData": {
+                "data":"{{data}}"
+            },
+            "outputData": {
+                "withTextBox.isEnabled":""
+            },
+            "deps": "js/Arm1PasteOperationService"
+        }
+    },
+    "functions": {
+        "getReuseRequirementsInput": {
+            "functionName": "getReuseRequirementsInput",
+            "parameters": [
+                "{{data}}"
+            ]
+        }
+    },
+    "messages": {
+        "notificationForPasteAsCopy": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.notificationForPasteAsCopy}}"
+        },
+        "errorMessageOnAction": {
+            "messageType": "ERROR",
+              "messageText": "{{data.partialErrors[0].errorValues[0].message}}"
+        }
+    },
+    "onEvent": [ {
+        "eventId": "PasteAsCopyRequirement.addCreatedObjectInTreeAfterPaste",
+        "action": "addCreatedObjectInTreeAfterPaste"
+    },
+    {
+            "eventId": "closeDialog",
+            "action": "closePanelDialog"
+    }
+ ],
+    "conditions": {
+        "idNamingRuleSectionVisible": {
+            "expression": "!data.defaultIdsOrIdNamingRuleCheckBox.dbValue"
+        },
+        "isPrefixPresent": {
+            "expression": "data.prefixTextBox.dbValue !== ''"
+        },
+        "isSuffixPresent": {
+            "expression": "data.suffixTextBox.dbValue !== ''"
+        },
+        "isValidReplaceStringPresent": {
+            "expression": "data.replaceTextBox.dbValue !== ''"
+        },
+        "isNamingRuleValid": {
+            "expression": "conditions.isPrefixPresent || conditions.isSuffixPresent || conditions.isValidReplaceStringPresent"
+        },
+        "isDuplicateSaveButtonVisible": {
+            "expression": "data.defaultIdsOrIdNamingRuleCheckBox.dbValue"
+        },
+        "isDuplicatePasteButtonEnable":{
+            "expression":"conditions.isDuplicateSaveButtonVisible||(conditions.isPrefixReplacesaveButtonVisible || conditions.isSuffixReplacesaveButtonVisible) || ((conditions.isPrefixPresent ||conditions.isSuffixPresent)&& data.replaceTextBox.dbValue === '') || (conditions.isValidReplaceStringPresent && data.withTextBox.dbValue !=='') "
+        },
+        "isPrefixReplacesaveButtonVisible":{
+            "expression":" conditions.isSuffixPresent && conditions.isValidReplaceStringPresent && data.withTextBox.dbValue !== ''"
+        },
+        "isSuffixReplacesaveButtonVisible":{
+            "expression":"conditions.isPrefixPresent && conditions.isValidReplaceStringPresent && data.withTextBox.dbValue !== ''"
+        }
+
+    },
+    "i18n": {
+        "defaultIds": [
+            "AWReqMgmtSECommandPanelsMessages"
+        ],
+        "idNamingRule": [
+            "AWReqMgmtSECommandPanelsMessages"
+        ],
+        "prefix": [
+            "AWReqMgmtSECommandPanelsMessages"
+        ],
+        "suffix": [
+            "AWReqMgmtSECommandPanelsMessages"
+        ],
+        "replaceElementBtn": [
+            "AWReqMgmtSECommandPanelsMessages"
+        ],
+        "with": [
+            "AWReqMgmtSECommandPanelsMessages"
+        ],
+        "runinBG": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "notificationForPasteAsCopy": [
+            "AWReqMgmtSECommandPanelsMessages"
+        ],
+        "Paste": [
+            "RichTextEditorCommandPanelsMessages"
+        ]
+    },
+    "lifecycleHooks": {
+        "onUpdate": [
+            {
+                "action": "initializeValues",
+                "observers": [ "viewModel.data.replaceTextBox.dbValue" ]
+            }
+        ]
+    }
+}

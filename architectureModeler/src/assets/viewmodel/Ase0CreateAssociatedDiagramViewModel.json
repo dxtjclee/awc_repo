@@ -1,0 +1,46 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-command-sub-panel.directive",
+        "js/visible-when.directive",
+        "js/aw-init.directive"
+    ],
+    "actions": {
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "complete.subPanel",
+            "criteria": {
+                "source": "createDiagramSub"
+            },
+            "action": "closePanel"
+        },
+        {
+            "eventId": "Ase0ShowDiagram.contentUnloaded",
+            "action": "closePanel"
+        }
+    ],
+    "i18n": {
+        "diagramsPanelTitle": [
+            "ArchitectureModelerConstants"
+        ]
+    },
+    "data": {
+        "activeView": "createDiagramSub"
+    }
+}

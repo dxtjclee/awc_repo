@@ -1,0 +1,8 @@
+<aw-requirement-content apply-border="true" default-scroll="true" prop="data.viewerProps"
+    visible-when="!data.showCKEditor" subPanelContext="{{subPanelContext}}">
+</aw-requirement-content>
+<div class="aw-requirementsCkeditor-panel">
+    <aw-include name="Arm0RequirementCkeditor5" visible-when="data.showCKEditor" oncontextmenu="return false;"
+        sub-panel-context="{editorProps : data.editorProps,'requirementCtx':{...fields.requirementCtx},...subPanelContext}">
+    </aw-include>
+</div>

@@ -1,0 +1,12 @@
+<aw-panel-body>
+    <aw-panel-section caption="i18n.searchText">
+        <aw-list-filter prop="data.filterBox" dataprovider="data.dataProviders.performSearch">
+            <aw-default-cell vmo="item"></aw-default-cell>
+        </aw-list-filter>
+    </aw-panel-section>
+</aw-panel-body>
+<aw-panel-footer>
+    <aw-button action="assignTestCase" visible-when="data.dataProviders.performSearch.selectedObjects.length == 1">
+        <aw-i18n>i18n.addSpecPanel</aw-i18n>
+    </aw-button>
+</aw-panel-footer>

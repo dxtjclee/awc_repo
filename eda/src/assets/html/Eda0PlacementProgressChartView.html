@@ -1,0 +1,12 @@
+<aw-panel>
+    <aw-panel-body>
+        <aw-column width="23%" align-content="center">
+            <div exist-when="conditions.showPlacementInfoErrorMessage">
+                <aw-i18n>i18n.placementInfoErrorMessage</aw-i18n>
+            </div>
+        <aw-row height="28f">
+            <aw-chart exist-when="!conditions.showPlacementInfoErrorMessage" chart-provider="data.chartProviders.placementChartProvider"></aw-chart>
+        </aw-row>
+       </aw-column>
+    </aw-panel-body>
+</aw-panel>

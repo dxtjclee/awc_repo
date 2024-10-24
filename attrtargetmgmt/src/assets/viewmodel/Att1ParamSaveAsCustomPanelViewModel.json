@@ -1,0 +1,35 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports":
+    [
+    ],
+    "actions": {
+        "updateDataSource": {
+            "actionType": "JSFunction",
+            "method": "addHtmlPanelInDataSource",
+            "inputData": {
+                "data": "{{data}}",
+                "type": "{{data.subPanelContext.xrtType}}",
+                "panelID": "Att1ParamSaveAsCustomPanel"
+            },
+            "deps": "js/addObjectUtils"
+        }
+    },
+    "data": {
+        "att1DeepCopyStableId": {
+            "dbValue": false,
+            "type": "BOOLEAN"
+        },
+        "att0DeepCopyStableId": {
+            "dbValue": false,
+            "type": "BOOLEAN"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "updateDataSource",
+        "onUpdate": {
+            "action": "updateDataSource",
+            "observers": [ "viewModel.data" ]
+        }
+    }
+}

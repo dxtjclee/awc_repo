@@ -1,0 +1,14 @@
+<aw-flex-row exist-when="data.contentPanelData.tabs[0].input.uid">
+    <aw-flex-column exist-when="conditions.isProductScopeLayoutMode" width="{{data.leftPanelWidth ? data.leftPanelWidth : 3}}">
+        <mfe-content-panel sub-panel-context="data.leftContentPanelData"></mfe-content-panel>
+    </aw-flex-column>
+    <aw-splitter exist-when="conditions.isProductScopeLayoutMode" splitter-id="ngpLeftLayoutPanelSplitter" min-size-1="200px" min-size-2="300px" class="aw-mfe-transparentSplitter"></aw-splitter>
+    <aw-flex-column width="fill">
+        <mfe-content-panel sub-panel-context="data.contentPanelData"></mfe-content-panel>
+    </aw-flex-column>
+    <aw-splitter exist-when="conditions.isAssignmentsLayoutMode" splitter-id="ngpRightLayoutPanelSplitter" min-size-1="300px" min-size-2="200px" class="aw-mfe-transparentSplitter"></aw-splitter>
+    <aw-flex-column exist-when="conditions.isAssignmentsLayoutMode" width="{{data.rightPanelWidth ? data.rightPanelWidth : 3}}">
+        <mfe-content-panel sub-panel-context="data.rightContentPanelData"></mfe-content-panel>
+    </aw-flex-column>
+</aw-flex-row>
+<mfe-loading-message exist-when="!data.contentPanelData.tabs[0].input.uid"></mfe-loading-message>

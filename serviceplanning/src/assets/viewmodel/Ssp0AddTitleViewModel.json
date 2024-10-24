@@ -1,0 +1,89 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "workCardTitle": {
+            "displayName": "{{i18n.label}}",
+            "type": "STRING",
+            "dbValue": "Test_Value",
+            "labelPosition": "NO_PROPERTY_LABEL",
+            "dispValue": ""
+        },
+        "totalTimeData": {
+            "displayName": "{{i18n.totalTimeData}}",
+            "isEditable": "false"
+        },
+        "durationData": {
+            "displayName": "{{i18n.durationData}}",
+            "isEditable": "false"
+        }
+    },
+    "actions": {
+        "setWorkCardLabelData": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": "{{ctx.selectedWorkCard.props.object_string.dbValues[0]}}"
+            },
+            "outputData": {
+                "workCardTitle.uiValue": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "setDataBatchJob": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "setTotalTimeData"
+                },
+                {
+                    "action": "setDurationTimeData"
+                }
+            ]
+        },
+        "setTotalTimeData": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": "{{ctx.selectedActivity.props.al_activity_work_time.uiValue}}"
+            },
+            "outputData": {
+                "totalTimeData.uiValue": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "setDurationTimeData": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": "{{ctx.selectedActivity.props.al_activity_duration_time.uiValue}}"
+            },
+            "outputData": {
+                "durationData.uiValue": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "Ssp0AddTitle.setData",
+            "action": "setWorkCardLabelData",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "Ssp0AddTitle.setTotalTimeData",
+            "action": "setDataBatchJob",
+            "cacheEventData": true
+        }
+    ],
+    "i18n": {
+        "label": [
+            "timeAnalysisMessages"
+        ],
+        "durationData": [
+            "timeAnalysisMessages"
+        ],
+        "totalTimeData": [
+            "timeAnalysisMessages"
+        ]
+    }
+}

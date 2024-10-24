@@ -1,0 +1,154 @@
+// Copyright 2021 Siemens Product Lifecycle Management Software Inc.
+.aw-tcxsimplified-firstColumn {
+    height: fit-content;
+    width: 78%;
+    padding-left: $padding_large;
+    padding-right: $padding_large;
+}
+
+.aw-tcxsimplified-myTaskColumn {
+    width: 22%;
+    margin-top: $padding_large;
+    margin-left: $padding_small;
+}
+
+.aw-tcxsimplified-recentFavColumn {
+    width: 76%;
+    margin-top: $padding_large;
+    margin-left: $padding_xlarge;
+    padding-left: $padding_xlarge;
+    padding-right: $padding_xlarge;
+}
+
+.aw-tcxsimplified-discussionColumn {
+    width: 18%;
+    margin-top: rem-calc(40);
+    height: rem-calc(690);
+}
+
+@media (min-width:20px) and (max-width:992px) {
+    .aw-tcxsimplified-firstColumn {
+        width: 100%;
+        height: fit-content;
+        padding-left: $padding_large;
+        padding-right: $padding_large;
+    }
+
+    .aw-tcxsimplified-narrowMode {
+        flex-wrap: wrap;
+    }
+
+    .aw-tcxsimplified-myTaskColumn {
+        width: 100%;
+        margin-right: $padding_large;
+    }
+
+    #tcxSimplifiedMyTasksCardId {
+        height: rem-calc(240);
+    }
+
+    #tcxSimplifiedRecentCardId {
+        height: rem-calc(240);
+    }
+
+    #tcxSimplifiedFavoritesCardId {
+        height: rem-calc(240);
+    }
+
+    .aw-tcxsimplified-recentFavColumn {
+        width: 100%;
+        margin-top: $padding_xlarge;
+        margin-left: 0;
+        padding-left: $padding_small;
+        padding-right: $padding_large;
+    }
+
+    .aw-tcxsimplified-discussionColumn {
+        display: flex;
+        width: 100%;
+        margin-left: $padding_xlarge;
+        margin-top: $padding_xlarge;
+        margin-right: $margin_x_large;
+        height: fit-content;
+        max-height: rem-calc(750);
+        .aw-activecollab-shadow .aw-widgets-cellListItem {
+            margin-left: $padding_large;
+        }
+    }
+}
+
+@media (min-width:992px) and (max-width:1496px) {
+    .aw-tcxsimplified-myTaskColumn {
+        width: 100%;
+    }
+
+    .aw-tcxsimplified-recentFavColumn {
+        width: 100%;
+        padding-right: $padding_small;
+        padding-left: 0;
+    }
+
+    .aw-tcxsimplified-discussionColumn {
+        width: 28%;
+        margin-right: $padding_large;
+        margin-top: rem-calc(42);
+    }
+}
+
+.aw-tcxsimplified-border {
+    border: 1px solid;
+    border-radius: 3px;
+}
+
+.aw-tcxsimplified-title {
+    font-weight: $bold_font_weight;
+    font-size: $fontsize_large;
+    width: 100%;
+    padding-left: $padding_small;
+    padding-bottom: $padding_large;
+    text-transform: uppercase;
+}
+
+.aw-tcxsimplified-card {
+    margin: rem-calc(10);
+    flex-direction: column;
+    display: flex;
+
+    .aw-widgets-cellListWidget {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+}
+
+.aw-tcxsimplified-cardHeight {
+    height: rem-calc(230);
+}
+
+.aw-tcxsimplified-myTasksCardHeight {
+    height: rem-calc(495);
+}
+
+.aw-tcxsimplified-data {
+    flex-direction: column;
+    height: rem-calc(155);
+    width: 100%;
+    padding-bottom: $padding_normal;
+}
+
+.aw-tcxsimplified-cellborder {
+    .sw-aria-border.aw-widgets-cellListItem.aw-widgets-cellTop {
+        border-color: transparent;
+        border-bottom-color: transparent;
+    }
+}
+
+.aw-tcxsimplified-margin {
+    margin-top: $padding_xlarge;
+
+}
+
+.aw-tcxsimplified-targetSectionRow {
+    max-height: rem-calc(200);
+    min-height: rem-calc(90);
+    height: rem-calc(160);
+}

@@ -1,0 +1,143 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data": {},
+    "messages": {
+        "processResourceGuidanceMessage": {
+            "messageType": "INFO",
+            "messageText": "{{data.shareMessage}}"
+        }
+    },
+    "actions": {
+        "initData": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "saveOriginalStation"
+                },
+                {
+                    "action": "formatShareMessage"
+                }
+            ]
+        },
+        "saveOriginalStation": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": "{{props.subPanelContext.balancingData.selectionData.station}}"
+            },
+            "outputData": {
+                "originalStation": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "formatShareMessage": {
+            "actionType": "JSFunction",
+            "method": "formatShareMessage",
+            "inputData": {
+                "originalStation": "{{data.originalStation}}",
+                "targetStation": "{{props.subPanelContext.balancingData.selectionData.station}}",
+                "processResource": "{{props.subPanelContext.balancingData.selectionData.processResource}}",
+                "operations": "{{subPanelContext.balancingData.selectionData.sharePr.selectedOperations}}",
+                "selectedOperationsAllocatedTime": "{{subPanelContext.balancingData.selectionData.sharePr.totalAllocatedTime}}"
+            },
+            "outputData": {
+                "shareMessage": ""
+            },
+            "deps": "js/epBalancingShareProcessResourceService"
+        },
+        "assignToAnotherProcessResource": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "assignOperationsToAnotherProcessResource"
+                },
+                {
+                    "action": "cancel"
+                }
+            ]
+        },
+        "assignOperationsToAnotherProcessResource": {
+            "actionType": "JSFunction",
+            "method": "assignOperationsToAnotherProcessResource",
+            "inputData": {
+                "processResource": "{{props.subPanelContext.balancingData.selectionData.processResource}}",
+                "operations": "{{props.subPanelContext.balancingData.selectionData.sharePr.selectedOperations}}"
+            },
+            "deps": "js/epProcessResourceListForAssignPopupService"
+        },
+        "cancel": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInAtomicData",
+            "deps": "js/mfeViewModelUtils",
+            "inputData": {
+                "targetAtomicData": "{{props.subPanelContext.balancingData}}",
+                "updatedValues": {
+                    "selectionData.sharePr": {}
+                }
+            }
+        }
+    },
+    "i18n": {
+        "assign": [
+            "BalancingMessages"
+        ],
+        "cancel": [
+            "BalancingMessages"
+        ]
+    },
+    "conditions": {
+        "isAssignToProcessResourceEnabled": {
+            "expression": {
+                "$and": [
+                    {
+                        "$source": "props.subPanelContext.balancingData.selectionData.processResource",
+                        "$query": {
+                            "$notNull": true
+                        }
+                    },
+                    {
+                        "$source": "props.subPanelContext.balancingData.selectionData.processResource.props.elb0allocatedOpsByPV.dbValue.length",
+                        "$query": {
+                            "$gt": 0
+                        }
+                    },
+                    {
+                        "$source": "props.subPanelContext.balancingData.selectionData.processResource.props.mbc0processResourceType.dbValue",
+                        "$query": {
+                            "$neq": "Machine"
+                        }
+                    },
+                    {
+                        "$source": "props.subPanelContext.balancingData.selectionData.processResource.props.capacity.dbValue",
+                        "$query": {
+                            "$eq": 100
+                        }
+                    },
+                    {
+                        "$source": "props.subPanelContext.balancingData.selectionData.station.uid",
+                        "$query": {
+                            "$neq": "{{data.originalStation.uid}}"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "initData",
+        "onUpdate": [
+            {
+                "action": "formatShareMessage",
+                "observers": [
+                    "props.subPanelContext.balancingData.selectionData.station",
+                    "props.subPanelContext.balancingData.selectionData.processResource"
+                ]
+            }
+        ]
+    }
+}

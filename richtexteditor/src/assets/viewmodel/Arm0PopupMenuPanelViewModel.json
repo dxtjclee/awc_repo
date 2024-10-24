@@ -1,0 +1,144 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "lifecycleHooks": {
+        "onMount": "mountAction"
+    },
+
+    "actions": {
+
+        "mountAction": {
+            "actionType": "JSFunction",
+            "method": "updateOptions",
+            "inputData": {
+
+            },
+            "outputData": {
+                "actionItems": "actionItems"
+            },
+            "events": {
+                "success": [ {
+                    "name": "requirementDocumentation.refreshOptions"
+                } ]
+            },
+            "deps": "js/Arm0PopupMenuPanel"
+        },
+
+        "updateOptions": {
+            "actionType": "dataProvider",
+            "method": "actionsList"
+        },
+        "handleCommandSelection": {
+            "actionType": "JSFunction",
+            "method": "handleCommandSelection",
+            "inputData": {
+                "data": "{{data.eventData}}"
+            },
+            "deps": "js/Arm0PopupMenuPanel"
+        },
+        "updateActionList": {
+            "actionType": "JSFunction",
+            "method": "updateActionList",
+            "inputData": {
+               "data": "{{data.eventData}}"
+            },
+            "deps": "js/Arm0PopupMenuPanel"
+        },
+        "selectAction":{
+            "actionType" : "JSFunction",
+            "method": "changeTypeIconClickListener",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps" : "js/ImportPreview"
+        }
+    },
+    "data": {
+
+        "actionItems": {
+            "isArray": "true",
+            "dbValue": [ ]
+        }
+    },
+    "messages": {
+        "copySingleSuccessful": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.copySingleSuccessful}}",
+            "messageTextParams": [
+                "{{data.copiedObjectName}}"
+            ]
+        }
+    },
+    "functions": {
+        "getInputContext": {
+            "functionName": "getInputContext",
+            "parameters": [
+                "{{ctx}}"
+            ]
+        }
+    },
+    "onEvent": [ {
+            "eventId": "requirementDocumentation.refreshOptions",
+            "action": "updateOptions"
+        },
+        {
+            "eventId": "requirements.handleCommandSelection",
+            "cacheEventData": true,
+            "action": "handleCommandSelection"
+        },
+        {
+            "eventId":"Arm0AddRulesSubViewModel.updateActionList",
+            "cacheEventData": true,
+            "action": "updateActionList"
+        },
+        {
+            "eventId": "actionsList.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "selectAction"
+        }
+    ],
+    "dataProviders": {
+        "actionsList": {
+            "response": "{{data.actionItems.dbValue}}",
+            "selectionModelMode": "single"
+        }
+    },
+    "i18n": {
+        "removeCommand": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "copyCommand": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "pasteAsChildCommand": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "pasteAsSiblingCommand": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "moveUpCommandTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "moveDownCommandTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "promoteCommandTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "demoteCommandTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "copySingleSuccessful": [
+            "ZeroCompileCommandMessages"
+        ],
+        "overWrite": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "unfreeze": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "freeze": [
+            "RequirementsCommandPanelsMessages"
+        ]
+    }
+}

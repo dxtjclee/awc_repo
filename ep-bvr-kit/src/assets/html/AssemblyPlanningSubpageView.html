@@ -1,0 +1,39 @@
+<ep-configuration-chip-area exist-when="!data.hidePage && ctx.epTaskPageContext.loadedObject.uid && ctx.ep.scopeObject.uid" configuration-chips-data="data.configurationChipsData"></ep-configuration-chip-area>
+<aw-sublocation sub-location-preference="data.awSubLocationPref" sub-panel-context="{provider:subPanelContext.provider, occContext:props.occContext}">
+    <mfe-loading-message exist-when="!ctx.epPageContext.loadedObject.uid || !ctx.ep.scopeObject.uid"></mfe-loading-message>
+    <mfe-content-container container-direction="HORIZONTAL" container-name="AssemblyPlanningPage" class="h-12" exist-when="!data.hidePage && ctx.epPageContext.loadedObject.uid && ctx.ep.scopeObject.uid">
+        <mfe-content-container container-direction="VERTICAL" container-name="AssemblyPlanningPageLeftArea" class="w-3">
+            <ep-navigation-area sub-panel-context="{sharedSelectionData:data.sharedSelectionData}" assembly-tabs-config="props.assemblyTabsConfig" missing-in-source-tabs-config="data.missingInSourceTabsConfig"></ep-navigation-area>
+        </mfe-content-container>
+        <mfe-content-container container-direction="VERTICAL" container-name="AssemblyPlanningPageMiddleArea" class="w-4">
+            <mfe-content-container container-direction="HORIZONTAL" container-name="AssemblyPlanningPageMiddleTopArea" class="h-7">
+                <mfe-content-panel occ-context="props.occContext" sub-panel-context="{...data.contentPanelData, sharedSelectionData:data.sharedSelectionData}"></mfe-content-panel>
+            </mfe-content-container>
+            <mfe-content-container container-direction="HORIZONTAL" container-name="AssemblyPlanningPageMiddleButtomArea" class="h-5">
+                <ep-details-area sub-panel-context="{sharedSelectionData:data.sharedSelectionData}" occ-context="props.occContext" details-tabs-config="props.detailsTabsConfig"></ep-details-area>
+            </mfe-content-container>
+        </mfe-content-container>
+        <mfe-content-container container-direction="VERTICAL" container-name="AssemblyPlanningPageRightArea" class="flex-auto">
+            <mfe-content-container container-direction="HORIZONTAL" container-name="AssemblyPlanningPageActivitiesArea" class="h-12" exist-when="conditions.isActivitiesMode">
+                <ep-activities-area></ep-activities-area>
+            </mfe-content-container>
+            <mfe-content-container container-direction="HORIZONTAL" container-name="AssemblyPlanningPagePartActivitiesArea" class="h-12" exist-when="conditions.isPartPlanningActivitiesMode">
+                <ep-part-planning-activities-area></ep-part-planning-activities-area>
+            </mfe-content-container>
+            <mfe-content-container container-direction="HORIZONTAL" container-name="AssemblyPlanningPageValidationArea" class="h-12" exist-when="conditions.isValidationMode">
+                <ep-validation></ep-validation>
+            </mfe-content-container>
+            <mfe-content-container container-direction="HORIZONTAL" container-name="AssemblyPlanningPageGraphicsArea" class="aw-epBvrGraphics-minHeight flex-auto" show-when="!conditions.isPanelActive">
+                <ep-graphics-area></ep-graphics-area>
+            </mfe-content-container>
+            <mfe-content-container container-direction="HORIZONTAL" container-name="AssemblyPlanningPageVisualsArea" class="aw-epImageViewer-minHeight" exist-when="!conditions.isPanelActive">
+                <ep-visuals-area sub-panel-context="{sharedSelectionData:data.sharedSelectionData}" occ-context="props.occContext"></ep-visuals-area>
+            </mfe-content-container>
+        </mfe-content-container>
+    </mfe-content-container>
+
+    <mfe-sync-manager view-id="EpSelectedProcessInAssemblyPlanningPageSyncMgr"></mfe-sync-manager>
+    <mfe-sync-manager view-id="EpSelectedAssemblyInAssemblyPlanningPageSyncMgr"></mfe-sync-manager>
+    <aw-layout-slot  exist-when="data.pageIntializeComplete" context="{sharedSelectionData:data.sharedSelectionData}" name="ep_singleVisGraphicsViewer"></aw-layout-slot>
+</aw-sublocation>
+

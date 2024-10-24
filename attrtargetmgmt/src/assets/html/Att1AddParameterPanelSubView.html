@@ -1,0 +1,20 @@
+<aw-panel-body class="aw-attrtargetmgmt-addPanel">
+    <aw-tab-set tabs="subPanelContext.addParameterTabsModel" sub-panel-context="{...subPanelContext,typeFilter:data.filterType, addPanelState:fields.addPanelState,formObject:formProp,userSelectedTab:data}"></aw-tab-set>
+</aw-panel-body>
+<!-- Panel footer-->
+<aw-panel-footer>
+
+
+    <!-- panel-footer button for Palette and Search tab -->
+    <aw-button default="true" action="createParamForPaletteOrSearch"
+        visible-when="conditions.isPaletteSearchTabAddButtonVisible">
+        <aw-i18n>i18n.add</aw-i18n>
+    </aw-button>
+    <aw-button default="true" action="createParamForPaletteOrSearchCopy"
+        visible-when="conditions.isPaletteSearchTabAddButtonVisible">
+        <aw-i18n>i18n.addAsCopy</aw-i18n>
+    </aw-button>
+    <aw-button default="true" action="createParameterNew" visible-when="data.selectedTab.panelId==='Att1AddParameterNewTab'" enable-when="conditions.isNewTabAddButtonVisible">
+        <aw-i18n>i18n.add</aw-i18n>
+    </aw-button>
+</aw-panel-footer>

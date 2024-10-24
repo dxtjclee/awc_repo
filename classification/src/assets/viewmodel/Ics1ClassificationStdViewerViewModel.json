@@ -1,0 +1,179 @@
+{
+    "schemaVersion": "1.0.0",
+
+    "lifecycleHooks": {
+        "onUpdate": [
+            {
+                "action": "handleSelectionChange",
+                "observers": [ "viewModel.data.selectionData" ]
+            }
+        ]
+    },
+    "ctx": {
+        "clsLocation": {
+            "type": "object"
+        },
+        "clsTab": {
+            "type": "object"
+        },
+        "mselected": {
+            "type": "object"
+        }
+    },
+    "actions": {
+        "cleanUpSelectionData": {
+            "actionType": "JSFunctionAsync",
+            "method": "cleanUpSelectionData",
+            "inputData": {
+                "parentSelectedData": "{{subPanelContext.selectionData}}"
+            },
+            "deps": "js/Ics1ClassificationTabService"
+        },
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [{
+                        "name": "classifyPanel.panelCloseSuccessful"
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            }
+        },
+        "resetAttributesVisibleAndFireRefreshSecWorkAreaAction": {
+            "actionType": "JSFunction",
+            "method": "setAttributesVisible",
+            "inputData": {
+                "data": "{{data}}",
+                "visible": "false"
+            },
+            "deps": "js/classifyService"
+        },
+        "openEditLocalizationSinglePanel": {
+            "actionType": "dialog",
+            "inputData": {
+                "options": {
+                    "global": true,
+                    "view": "EditLocalizationSingleProperty",
+                    "placement": "right",
+                    "parent": ".aw-layout-workarea",
+                    "width": "WIDE",
+                    "height": "FULL",
+                    "isCloseVisible": false,
+                    "subPanelContext": "{{data.eventData.commandContext}}"
+                }
+            }
+        },
+        "handleSelectionChange": {
+            "actionType": "JSFunction",
+            "method": "handleSelectionChange",
+            "inputData": {
+                "selectionData": "{{data.selectionData}}",
+                "parentSelectedData": "{{subPanelContext.selectionData}}"
+            },
+            "deps": "js/Ics1ClassificationTabService"
+        }
+    },
+    "conditions": {
+        "shouldPrompt": {
+            "expression": "classifyState.panelMode === 0 && data.attributesVisible || classifyState.panelMode === 1 && data.attributesVisible"
+        },
+        "shouldPromptForCreate": {
+            "expression": "classifyState.panelMode === 0 && data.attributesVisible && !data.isAlreadyPrompted"
+        },
+        "shouldPromptForEdit": {
+            "expression": "classifyState.panelMode === 1 && data.attributesVisible && !data.isAlreadyPrompted"
+        },
+        "showClassImagesSection": {
+            "expression": "data.clsImgAvailable === true"
+        },
+        "standaloneUseExistingMode": {
+            "expression": "data.standaloneObjectExists && data.standaloneObjectExists === true"
+        },
+        "showClassBreadCrumb": {
+            "expression": "data.parents && data.provider.crumbs !== null"
+        },
+        "pasteMode": {
+            "expression": "ctx.pasteIsClicked && ctx.IcoReplica"
+        },
+        "showPropTree": {
+            "expression": "classifyState.showPropTree"
+        },
+        "showTabTree": {
+            "expression": "classifyState.showTabTree"
+        },
+        "pasteHandler":{
+            "expression": "ctx.awClipBoardProvider && ctx.awClipBoardProvider[0] && ctx.awClipBoardProvider[0].props.CLASS_ID"
+        },
+        "isStandAloneActive":{
+            "expression": "classifyState.standAlone === true"
+        }
+
+    },
+    "messages": {
+    },
+    "data": {
+        "selectionData": {
+            "dbValue": "",
+            "type": "OBJECT"
+        },
+        "provider": {
+            "crumbs": [{
+                "clicked": false,
+                "displayName": "",
+                "selectedCrumb": false,
+                "showArrow": false
+            }]
+        },
+        "breadCrumbConfig": {
+            "classBreadcrumbConfig": {
+                "type": "navigate",
+                "id": "classPathBreadCrumb",
+                "noUpdate": false,
+                "popuplist": "/html/defaultbreadcrumblist.html"
+            }
+        },
+        "additionalProp": {
+            "displayName": "{{i18n.additionalProp}}",
+            "type": "STRING"
+        },
+        "targetObjectForSelection": {
+            "type": "array"
+        },
+        "classificationCommands": "classify_clsCommands",
+        "classifyImageCommands": "classify_imgCommands",
+        "sortOption": {
+            "type": "object"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "classifyPanel.close",
+            "action": "closePanel"
+        },
+        {
+            "eventId": "classify.openEditLocalizationSinglePanel",
+            "cacheEventData": true,
+            "action": "openEditLocalizationSinglePanel"
+        },
+        {
+            "eventId": "classifyTab.cancelEdit",
+            "action": "cancelEditOperation"
+        }
+    ],
+    "functions": {
+    },
+    "i18n": {
+        "Classes": [
+            "ClassificationPanelMessages"
+        ],
+        "Classifications": [
+            "ClassificationPanelMessages"
+        ]
+    }
+}

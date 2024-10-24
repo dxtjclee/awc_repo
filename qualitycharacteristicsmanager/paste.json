@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.0.0",
+  "pasteHandlers": {
+    "pasteHandlerForQc0Failure": {
+      "action": "actionForQc0Failure",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForQc0Failure"
+      }
+    },
+    "pasteHandlerForQc0ChecklistSpecification": {
+      "action": "actionForQc0ChecklistSpecification",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForChecklistSpecification"
+      }
+    },
+    "pasteHandlerForAqc0CharElementRevision": {
+      "action": "aceDefaultPasteAction",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForAqc0CharElementRevision"
+      }
+    }
+  },
+  "actions": {
+    "actionForQc0Failure": {
+      "actionType": "JSFunction",
+      "method": "setPropertiesForPaste",
+      "deps": "js/Aqc0FailureManagerUtils",
+      "inputData": {
+        "targetObject": "{{pasteContext.targetObject}}",
+        "sourceObject": "{{pasteContext.sourceObject}}"
+      },
+      "events": {
+        "success": [
+          {
+            "name": "dragDrop.success",
+            "condition": "pasteContext.isDragDropIntent",
+            "eventData": {
+              "sourceObjects": "{{pasteContext.sourceObject}}",
+              "targetObject": "{{pasteContext.targetObject}}"
+            }
+          }
+        ]
+      }
+    },
+    "actionForQc0ChecklistSpecification": {
+      "actionType": "JSFunction",
+      "method": "setPropertiesForPaste",
+      "deps": "js/Aqc0ChecklistSpecService",
+      "inputData": {
+        "targetObject": "{{pasteContext.targetObject}}",
+        "sourceObject": "{{pasteContext.sourceObject}}"
+      },
+      "events": {
+        "success": [
+          {
+            "name": "dragDrop.success",
+            "condition": "pasteContext.isDragDropIntent",
+            "eventData": {
+              "sourceObjects": "{{pasteContext.sourceObject}}",
+              "targetObject": "{{pasteContext.targetObject}}"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "conditions": {
+    "isPasteHandlerActiveForQc0Failure": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Qc0Failure"
+            }
+          },
+          {
+            "$source": "pasteContext.sourceObject",
+            "$query": {
+              "$typeOf": "Qc0Failure"
+            }
+          }
+        ]
+      }
+    },
+    "isPasteHandlerActiveForChecklistSpecification": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Qc0ChecklistSpecification"
+            }
+          },
+          {
+            "$source": "pasteContext.sourceObject",
+            "$query": {
+              "$typeOf": "Qc0ChecklistSpecification"
+            }
+          }
+        ]
+      }
+    },
+    "isPasteHandlerActiveForAqc0CharElementRevision": {
+      "expression": {
+        "$or": [
+          {
+            "$and": [
+              {
+                "$source": "pasteContext.targetObject",
+                "$query": {
+                  "$typeOf": "Acp0InspOpElement"
+                }
+              },
+              {
+                "$source": "pasteContext.sourceObject",
+                "$query": {
+                  "$typeOf": "Aqc0QcElement"
+                }
+              }
+            ]
+          },
+          {
+            "$and": [
+              {
+                "$source": "pasteContext.targetObject",
+                "$query": {
+                  "$typeOf": "Awb0PositionedElement"
+                }
+              },
+              {
+                "$source": "pasteContext.sourceObject",
+                "$query": {
+                  "$typeOf": "Aqc0QcElement"
+                }
+              }
+            ]
+          },
+          {
+            "$and": [
+              {
+                "$source": "pasteContext.targetObject",
+                "$query": {
+                  "$typeOf": "Aqc0QcElement"
+                }
+              },
+              {
+                "$source": "pasteContext.sourceObject",
+                "$query": {
+                  "$typeOf": "Aqc0QcElement"
+                }
+              }
+            ]
+          },
+          {
+            "$and": [
+              {
+                "$source": "pasteContext.targetObject",
+                "$query": {
+                  "$typeOf": "Acp0ControlPlanElement"
+                }
+              },
+              {
+                "$source": "pasteContext.sourceObject",
+                "$query": {
+                  "$typeOf": "Aqc0QcElement"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

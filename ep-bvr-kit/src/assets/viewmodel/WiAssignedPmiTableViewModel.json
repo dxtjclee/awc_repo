@@ -1,0 +1,670 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "view-path": {
+            "type": "object"
+        },
+        "view-id": {
+            "type": "string"
+        },
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "ports": {
+        "WiAssignedPmiTable_inputObject": {
+            "syncObject": {},
+            "onChangeAction": "setInputObjectAndFetchAssignedPmis"
+        },
+        "WiAssignedPmiTable_selectedPmis":{
+            "syncObject": {}
+        },
+        "WiAssignedPmiTable_setPmiSelection": {
+            "syncObject": {},
+            "onChangeAction":"setSelection"
+        },
+        "WiAssignedPmiTable_syncPmiSelectionForOperation": {
+            "onChangeAction": "syncToAssemblyPmiTable",
+            "syncObject": {}
+        },
+        "WiAssignedPmiTable_updateTabContentCountPort": {
+            "syncObject": {}
+        },
+        "WiAssignedPmiTable_missingInSourceToggle":{
+            "onChangeAction":"postToggleAction",
+            "syncObject": {}
+        }
+    },
+    "data": {
+        "messages": {
+            "noValidContext": [
+                {
+                    "text": "{{i18n.selectProcessOrOperationForPMIs}}"
+                }
+            ],
+            "noAssignedPMIs": [
+                {
+                    "text": "{{i18n.noAssignedPMIs}}"
+                }
+            ]
+        },
+        "columnConfigPreference": "EP_AssignedPMIsColumnConfiguration",
+        "assignedPmis": [],
+        "markAsDeletedPolicy": {
+            "types": [ {
+                "name": "Mci0InspectionRevision",
+                "properties": [ {
+                    "name": "mci0MarkedAsDeleted"
+                } ]
+            } ]
+        },
+        "selectionData": {
+            "initialValues": {},
+            "meta": {}
+        }
+    },
+    "actions": {
+        "postLoadPropUpdateToVmos": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "addDefindInPropToVmos"
+                },
+                {
+                    "action": "updateChxAndMetaPropsToVmos"
+                },
+                {
+                    "action": "addIsUnconfiguredPropToVmos"
+                },
+                {
+                    "action":"refreshTable"
+                },
+                {
+                    "action": "hasKeyOnLocalStorage",
+                    "outputArg": [ "hasKeyOnLocalStorage" ]
+                },
+                {
+                    "action":"hasLocalStorageEvent",
+                    "condition": "response.actionData.hasKeyOnLocalStorage && data.assignedPmis.length > 0"
+                }
+            ]
+        },
+        "addDefindInPropToVmos":{
+            "actionType": "JSFunction",
+            "method": "addDefindInPropToVmos",
+            "inputData": {
+                "pmiVmos": "{{data.dataProviders.assignedPmisDataProvider.viewModelCollection.loadedVMObjects}}",
+                "pmiColumnConfiguration": "{{ctx.preferences.EP_AssignedPMIsColumnConfiguration}}"
+            },
+            "deps": "js/wiPmiService"
+        },
+        "updateChxAndMetaPropsToVmos":{
+            "actionType": "JSFunction",
+            "method": "updateChxAndMetaPropsToVmos",
+            "inputData": {
+                "pmiVmos": "{{data.dataProviders.assignedPmisDataProvider.viewModelCollection.loadedVMObjects}}"
+            },
+            "deps": "js/wiPmiService"
+        },
+        "postSaveAddDefindInPropToVmos":{
+            "actionType": "JSFunction",
+            "method": "postSaveAddDefindInPropToVmos",
+            "inputData": {
+               "eventData" : "{{data.eventMap['ep.saveEvents'].saveEvents}}"
+            },
+            "deps": "js/wiPmiService"
+        },
+        "setSelection": {
+            "actionType": "JSFunction",
+            "method": "setSelection",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.assignedPmisDataProvider}}",
+                "objectsToSelect": "{{ports.WiAssignedPmiTable_setPmiSelection.syncObject}}"
+            },
+            "deps": "js/mfeSyncUtils"
+        },
+        "setInputObjectAndFetchAssignedPmis": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "saveInputToData"
+                },
+                {
+                    "action": "resetCurrentPmis"
+                },
+                {
+                    "action": "loadAssignedPmisDataProviderAction"
+                }
+            ]
+        },
+        "saveInputToData": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": "{{ports.WiAssignedPmiTable_inputObject.syncObject}}"
+            },
+            "outputData": {
+                "inputObject": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "resetCurrentPmis": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": null
+            },
+            "outputData":{
+                "assignedPmis":""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "loadAssignedPmisDataProviderAction": {
+            "actionType": "dataProvider",
+            "method": "assignedPmisDataProvider"
+        },
+        "addIsUnconfiguredPropToVmos":{
+            "actionType": "JSFunction",
+            "method": "addIsUnconfiguredPropToVmos",
+            "inputData": {
+                "contextUid": "{{data.contexObjUid}}",
+                "pmiVmos": "{{data.dataProviders.assignedPmisDataProvider.viewModelCollection.loadedVMObjects}}"
+            },
+            "deps": "js/wiPmiService"
+        },
+        "hasKeyOnLocalStorage": {
+            "actionType": "JSFunction",
+            "method": "hasKeyOnLocalStorage",
+            "inputData": {
+                "key": "activeTabSelectedContext"
+            },
+            "outputData":{
+                "hasKeyOnLocalStorage":""
+            },
+            "deps": "js/mfeLocalStorageService"
+        },
+        "hasLocalStorageEvent": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name":"WiAssignedPmiTable.hasLocalStorageEvent",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            }
+        },
+        "setSelectionToPmiTableFromLocalStorage": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "getSelectedObjectFromLocalStorage",
+                    "outputArg": ["objectToSelect"]
+                },
+                {
+                    "action": "setSelectionToPmiTable",
+                    "inputArg": {
+                        "objectToSelect" : "{{actionData.objectToSelect}}"
+                    },
+                    "condition": "response.actionData.objectToSelect"
+                },
+                {
+                    "action": "removeFromLocalStorage"
+                }
+            ]
+        },
+        "setSelectionToPmiTable":{
+            "actionType": "JSFunction",
+            "method": "syncToPmiTable",
+            "parameters": {
+                "objectToSelect" : "{{actionData.objectToSelect}}"
+            },
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.assignedPmisDataProvider}}",
+                "objectsToSelect": "{{parameters.objectToSelect}}"
+            },
+            "deps": "js/wiPmiAssignmentStatusService"
+        },
+        "getSelectedObjectFromLocalStorage": {
+            "actionType": "JSFunction",
+            "method": "getObjectFromLocalStorage",
+            "inputData": {
+                "key": "activeTabSelectedContext"
+            },
+            "outputData":{
+                "objectToSelect":""
+            },
+            "deps": "js/mfeLocalStorageService"
+        },
+        "removeFromLocalStorage": {
+            "actionType": "JSFunction",
+            "method": "removeFromLocalStorage",
+            "inputData": {
+                "key": "activeTabSelectedContext"
+            },
+            "deps": "js/mfeLocalStorageService"
+        },
+        "loadAssignedPmis": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadAssignedPmis",
+            "inputData": {
+                "currentScopeUid": "{{ctx.ep.loadedProductObject.uid}}",
+                "contextUid": "{{ports.WiAssignedPmiTable_inputObject.syncObject.uid}}",
+                "columnPolicyObj": "{{data.dataProviders.assignedPmisDataProvider.policy}}",
+                "additionalPolicyObj":"{{data.markAsDeletedPolicy}}"
+            },
+            "outputData": {
+                "assignedPmis": "assignedPmis",
+                "contexObjUid": "contexObjUid"
+            },
+            "deps": "js/wiPmiService"
+        },
+        "createColumns": {
+            "actionType": "JSFunction",
+            "method": "createColumns",
+            "inputData": {
+                "preferenceValues": "{{data.columnConfigPreference}}",
+                "dataProvider": "{{data.dataProviders.assignedPmisDataProvider}}",
+                "columnProvider": {
+                    "clientColumns": [
+                        {
+                            "clientColumn": true,
+                            "name": "graphicVisibility",
+                            "propertyDisplayName": "{{i18n.GraphicVisibilityColumnName}}",
+                            "enableColumnMoving": false
+                        },
+                        {
+                            "clientColumn": true,
+                            "name": "missingInSource",
+                            "propertyDisplayName": "{{i18n.missingInSourceColumnName}}"
+                        }
+                    ]
+                },
+                "additionalPolicyObjects": {},
+                "tableCmdColumnPropName": "mci0PmiDescription"
+            },
+            "outputData": {
+                "dataProviders.assignedPmisDataProvider.columnConfig": "columnConfig",
+                "dataProviders.assignedPmisDataProvider.policy": "policy"
+            },
+            "deps": "js/mfeTableService"
+        },
+        "savedAfterModifyOfTableColumns": {
+            "actionType": "JSFunction",
+            "method": "saveResizedColumnsWidth",
+            "inputData": {
+                "preferenceName": "{{data.columnConfigPreference}}",
+                "columns": "{{parameters.eventData.columnArrange.columns}}"
+            },
+            "deps": "js/mfeTableService"
+        },
+        "initCommandContext": {
+            "actionType": "JSFunction",
+            "method": "setCommandContext",
+            "inputData": {
+                "tabModel": "{{subPanelContext}}",
+                "commandContext": {
+                    "inputObject": "{{data.inputObject}}",
+                    "selection": []
+                }
+            },
+            "deps": "js/mfeContentPanelUtil"
+        },
+        "postSelectionChangeAction": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "updateCommandContext"
+                },
+                {
+                    "action": "updateSelectedPmisSyncObjectsPort"
+                }
+            ]
+        },
+        "updateCommandContext": {
+            "actionType": "JSFunction",
+            "method": "setCommandContext",
+            "inputData": {
+                "tabModel": "{{subPanelContext}}",
+                "commandContext": {
+                    "inputObject": "{{data.inputObject}}",
+                    "selection": "{{data.selectionData.selected}}"
+                }
+            },
+            "deps": "js/mfeContentPanelUtil"
+        },
+        "handleAddRemoveInspections": {
+            "actionType": "JSFunction",
+            "method": "handleAddRemoveInspections",
+            "inputData": {
+                "eventObjectUid": "{{data.eventMap['ep.addRemoveEvents'].AssignedPMIs.eventObjectUid}}",
+                "inspectionsAdded": "{{data.eventMap['ep.addRemoveEvents'].AssignedPMIs.relatedEvents.addedToRelation}}",
+                "inspectionsRemoved": "{{data.eventMap['ep.addRemoveEvents'].AssignedPMIs.relatedEvents.removedFromRelation}}",
+                "dataProvider": "{{data.dataProviders.assignedPmisDataProvider}}",
+                "pmiColumnConfiguration": "{{ctx.preferences.EP_AssignedPMIsColumnConfiguration}}",
+                "contextUid": "{{data.contexObjUid}}"
+            },
+            "outputData": {
+                "assignedPmis": ""
+            },
+            "deps": "js/wiPmiService"
+        },
+        "handleAddRemoveEvents": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "handleAddRemoveInspections"
+                },
+                {
+                    "action":"updateTabCount"
+                },
+                {
+                    "action": "updateTabDisplayNameQuantity"
+                },
+                {
+                    "action":"updateTabContentCount"
+                },
+                {
+                    "action":"refreshTable",
+                    "condition":"conditions.updatedPmis"
+                },
+                {
+                    "action": "initCommandContext",
+                    "condition":"conditions.unassignedPmi"
+                }
+            ]
+        },
+        "updateTabCount":{
+            "actionType":"JSFunction",
+            "method":"mergeValueInAtomicData",
+            "inputData":{
+                "targetObj":"{{subPanelContext}}",
+                "sourceObj":{
+                    "contentCount":"{{data.dataProviders.assignedPmisDataProvider.viewModelCollection.loadedVMObjects.length}}"
+                }
+            },
+            "deps":"js/mfeViewModelUtils"
+        },
+        "updateTabDisplayNameQuantity": {
+            "actionType": "JSFunction",
+            "method": "setTabDisplayNameWithQuantity",
+            "inputData": {
+                "tabData": "{{subPanelContext}}"
+            },
+            "outputData":{
+                "tabData":""
+            },
+            "deps": "js/epTabsService"
+        },
+        "updateTabContentCount": {
+            "actionType": "Sync",
+            "inputData": {
+                "port": "WiAssignedPmiTable_updateTabContentCountPort",
+                "syncObject": {
+                    "tabName":"{{data.tabData.name}}",
+                    "tabKey":"{{data.tabData.tabKey}}",
+                    "namePrefix":"{{data.tabData.namePrefix}}"
+                }
+            }
+        },
+        "refreshTable": {
+            "actionType": "JSFunction",
+            "method": "refreshTable",
+            "inputData": {
+                "tableId": "assignedPmisTable"
+            },
+            "deps": "js/mfeTableService"
+        },
+        "setPmiSelection": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "assignedPmisDataProvider.selectAction",
+                        "eventData": {
+                            "setSelection": "{{parameters.eventData.pmiVmo}}"
+                        }
+                    }
+                ]
+            }
+        },
+        "updateSelectedPmisSyncObjectsPort": {
+            "actionType": "Sync",
+            "inputData":{
+                "port": "WiAssignedPmiTable_selectedPmis",
+                "syncObject": "{{data.selectionData.selected}}"
+            }
+        },
+        "postToggleAction": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "updateIndicationToggleOnCommandContext"
+                },
+                {
+                    "action": "refreshTable"
+                }
+            ]
+        },
+        "updateIndicationToggleOnCommandContext": {
+            "actionType": "JSFunction",
+            "method": "setCommandContext",
+            "inputData": {
+                "tabModel": "{{subPanelContext}}",
+                "commandContext": {
+                    "assignmentIndicationToggleStatus": "{{props.subPanelContext.sharedSelectionData.isIndicationToggleOn}}"
+                }
+            },
+            "deps": "js/mfeContentPanelUtil"
+        },
+        "postPmiUpdateAction":{
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "postSaveAddDefindInPropToVmos"
+                },
+                {
+                    "action": "postPmiUpdateSyncPropsToVmos"
+                },
+                {
+                    "action": "publishPmiUpdate"
+                },
+                {
+                    "action": "refreshTable"
+                }
+            ]
+        },
+        "postPmiUpdateSyncPropsToVmos":{
+            "actionType": "JSFunction",
+            "method": "postPmiUpdateSyncPropsToVmos",
+            "inputData": {
+               "loadedVmos" : "{{data.dataProviders.assignedPmisDataProvider.viewModelCollection.loadedVMObjects}}",
+               "saveEventData" : "{{data.eventMap['ep.saveEvents'].saveEvents}}",
+               "pmiColumnConfiguration": "{{ctx.preferences.EP_AssignedPMIsColumnConfiguration}}"
+            },
+            "deps": "js/wiPmiService"
+        },
+        "publishPmiUpdate":{
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "wiAssignedPmi.pmiUpdate",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            }
+        },
+        "syncToAssemblyPmiTable":{
+            "actionType": "JSFunction",
+            "method": "syncToPmiTable",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.assignedPmisDataProvider}}",
+                "objectsToSelect": "{{ports.WiAssignedPmiTable_syncPmiSelectionForOperation.syncObject}}"
+            },
+            "deps": "js/wiPmiAssignmentStatusService"
+        }
+    },
+    "grids": {
+        "assignedPmisTable": {
+            "dataProvider": "assignedPmisDataProvider",
+            "columnProvider": "assignedPmisColumnProvider",
+            "addIconColumn": false
+        }
+    },
+    "dataProviders": {
+        "assignedPmisDataProvider": {
+            "action": "loadAssignedPmis",
+            "response": "{{data.assignedPmis}}",
+            "totalFound": "{{data.assignedPmis.length}}",
+            "commandsAnchor": "pmiTable_tableRow_uiAnchor",
+            "selectionModelMode": "multiple",
+            "inputData": {
+                "selectionData": "{{fields.selectionData}}"
+            }
+        }
+    },
+    "columnProviders": {
+        "assignedPmisColumnProvider": {
+            "loadColumnAction": "createColumns",
+            "resetColumnAction": "savedAfterModifyOfTableColumns",
+            "saveColumnAndLoadAction": "savedAfterModifyOfTableColumns",
+            "frozenColumnIndex": -1
+        }
+    },
+    "conditions": {
+        "hasValidInput": {
+            "expression": "ports.WiAssignedPmiTable_inputObject.syncObject.uid"
+        },
+        "noAssignedPmis": {
+            "expression": {
+                "$and": [
+                    {
+                        "$source": "conditions.hasValidInput",
+                        "$query": {
+                            "$eq": true
+                        }
+                    },
+                    {
+                        "$source": "data.assignedPmis.length",
+                        "$query": {
+                            "$eq": 0
+                        }
+                    }
+                ]
+            }
+        },
+        "isLoading": {
+            "expression": {
+                "$and": [
+                    {
+                        "$source": "conditions.hasValidInput",
+                        "$query": {
+                            "$eq": true
+                        }
+                    },
+                    {
+                        "$source": "data.assignedPmis",
+                        "$query": {
+                            "$isNull": true
+                        }
+                    }
+                ]
+            }
+        },
+        "showTable": {
+            "expression": {
+                "$and": [
+                    {
+                        "$source": "conditions.hasValidInput",
+                        "$query": {
+                            "$eq": true
+                        }
+                    },
+                    {
+                        "$source": "data.assignedPmis.length",
+                        "$query": {
+                            "$gt": 0
+                        }
+                    }
+                ]
+            }
+        },
+        "updatedPmis":{
+            "expression":"data.eventMap['ep.addRemoveEvents'].AssignedPMIs.relatedEvents.updatedToRelation"
+        },
+        "unassignedPmi":{
+            "expression":"data.eventMap['ep.addRemoveEvents'].AssignedPMIs.relatedEvents.removedFromRelation"
+        }
+    },
+    "onEvent": [{
+            "eventId": "columnArrange",
+            "action": "savedAfterModifyOfTableColumns",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            },
+            "condition": "name === 'assignedPmisTable'"
+        },
+        {
+            "eventId": "ep.addRemoveEvents",
+            "cacheEventData": true,
+            "action": "handleAddRemoveEvents",
+            "condition": "AssignedPMIs !== undefined"
+        },
+        {
+            "eventId": "pmiDetailedCommandclicked",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            },
+            "action": "setPmiSelection",
+            "condition": "pmiVmo.modelType.typeHierarchyArray.indexOf('Mci0InspectionRevision') >-1"
+        },
+        {
+            "eventId": "assignedPmisDataProvider.modelObjectsUpdated",
+            "action": "postLoadPropUpdateToVmos"
+        },
+        {
+            "eventId": "ep.saveEvents",
+            "action": "postPmiUpdateAction",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "ep.graphicsCacheUpdated",
+            "action": "refreshTable"
+        },
+        {
+            "eventId": "WiAssignedPmiTable.hasLocalStorageEvent",
+            "action": "setSelectionToPmiTableFromLocalStorage"
+        },
+        {
+            "eventId": "epObjectPropertyCache.accountabilityResponseUpdated",
+            "action": "loadAssignedPmisDataProviderAction"
+        }
+    ],
+
+    "lifecycleHooks": {
+        "onMount": "setSelection",
+        "onUpdate": [ {
+
+                "action": "postToggleAction",
+                "observers": [
+                    "props.subPanelContext.sharedSelectionData.isIndicationToggleOn"
+                ]
+            },
+            {
+                "action": "postSelectionChangeAction",
+                "observers": [
+                    "viewModel.selectionData.selected"
+                ]
+            }
+        ]
+    },
+
+    "i18n": {
+        "selectProcessOrOperationForPMIs": [ "wiPmiMessages"],
+        "noAssignedPMIs": [ "wiPmiMessages" ],
+        "GraphicVisibilityColumnName": [ "InstructionsMessages" ],
+        "missingInSourceColumnName": [ "TablesMessages" ]
+    }
+}

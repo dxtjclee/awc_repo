@@ -1,0 +1,327 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-panel-body.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/aw-listbox.directive",
+        "js/visible-when.directive",
+        "js/aw-checkbox.directive",
+        "js/aw-list-filter.directive"
+    ],
+
+    "dataProviders": {
+        "dataProviderForTypeProperties": {
+            "action": "actionFilterListForType",
+            "response": "{{data.typePropertiesToSelect}}",
+            "totalFound": "{{data.typePropertiesToSelect.length}}",
+            "deps": "js/Arm0ExportToReqIF"
+        },
+        "dataProviderForTraceLinkProperties": {
+            "action": "actionFilterListForTraceLink",
+            "response": "{{data.tracelinkPropertiesToSelect}}",
+            "totalFound": "{{data.tracelinkPropertiesToSelect.length}}",
+            "deps": "js/Arm0ExportToReqIF"
+        }
+    },
+    "data": {
+        "objectType": {
+            "displayName": "{{i18n.specType}}",
+            "type": "STRING",
+            "hasLov": "true",
+            "labelPosition": "PROPERTY_LABEL_AT_TOP"
+        },
+
+        "filterBoxForType": {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "false",
+            "requiredText": "{{i18n.filter}}",
+            "dbValue": ""
+        },
+
+        "traceLinkType": {
+            "displayName": "{{i18n.createTraceLinkTitle}}",
+            "type": "STRING",
+            "hasLov": "true",
+            "labelPosition": "PROPERTY_LABEL_AT_TOP"
+        },
+        "filterBoxForTraceLink": {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "false",
+            "requiredText": "Filter",
+            "dbValue": ""
+        }
+    },
+
+    "actions": {
+
+        "reveal": {
+            "actionType": "JSFunction",
+            "method": "updateObjectTypeList",
+            "inputData": {
+                "data": "{{data}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "outputData": {
+                "objectTypeList": "objectTypeList",
+                "tracelinkTypeList": "tracelinkTypeList",
+                "objectPropInfos": "objectPropInfos",
+                "traceLinkPropInfos": "traceLinkPropInfos",
+                "addTypes": "addTypes",
+                "addTraceLinks": "addTraceLinks",
+                "objectPropInfosMap": "objectPropInfosMap",
+                "traceLinkPropInfosMap": "traceLinkPropInfosMap"
+            },
+            "deps": "js/Arm0ExportToReqIF"
+        },
+
+        "actionFilterListForType": {
+            "actionType": "JSFunction",
+            "method": "actionFilterListForType",
+            "inputData": {
+                "data": "{{data}}",
+                "subType": "{{data.objectType.dbValue}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "outputData": {
+                "propInfosSelectedType": "propInfosSelectedType",
+                "typePropertiesToSelect": "typePropertiesToSelect"
+            },
+            "deps": "js/Arm0ExportToReqIF"
+        },
+
+        "actionFilterListForTraceLink": {
+            "actionType": "JSFunction",
+            "method": "actionFilterListForTraceLink",
+            "inputData": {
+                "data": "{{data}}",
+                "traceLinkType": "FND_TraceLink",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "outputData": {
+                "propInfosSelectedTraceLink": "propInfosSelectedTraceLink",
+                "tracelinkPropertiesToSelect": "tracelinkPropertiesToSelect"
+            },
+            "deps": "js/Arm0ExportToReqIF"
+        },
+
+        "getPropertiesFromReqType": {
+            "actionType": "JSFunction",
+            "method": "resetTypePropertiesFilter",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "filterBoxForType.displayName": "filterBoxForType.displayName",
+                "filterBoxForType.dbValue": "filterBoxForType.dbValue"
+            },
+            "events": {
+                "success": [ {
+                    "name": "Arm0ExportToReqIF.refreshDataProviderForTypeProperties"
+                } ]
+            },
+            "deps": "js/Arm0ExportToReqIF"
+        },
+
+        "getPropertiesFromTraceLink": {
+            "actionType": "JSFunction",
+            "method": "resetTraceLinkPropertiesFilter",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "Arm0ExportToReqIF.refreshDataProviderForTraceLinkProperties"
+                } ]
+            },
+            "deps": "js/Arm0ExportToReqIF"
+        },
+
+        "checkOrUncheckForTypeProperties":{
+            "actionType": "JSFunction",
+            "method": "checkOrUncheckForTypeProperties",
+            "inputData": {
+                "data": "{{data}}",
+                "subType":"{{data.objectType.dbValue}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "outputData": {
+                "propertiesSelected":"propertiesSelected"
+            },
+            "deps": "js/Arm0ExportToReqIF"
+        },
+        "checkOrUncheckForTraceLinkProperties":{
+            "actionType": "JSFunction",
+            "method": "checkOrUncheckForTraceLinkProperties",
+            "inputData": {
+                "data": "{{data}}",
+                "traceLinkType":"FND_TraceLink",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "outputData": {
+                "propertiesSelected":"propertiesSelected"
+            },
+            "deps": "js/Arm0ExportToReqIF"
+        },
+
+        "refreshDataProviderForTypeProperties": {
+            "actionType": "dataProvider",
+            "method": "dataProviderForTypeProperties"
+        },
+
+        "refreshDataProviderForTraceLinkProperties": {
+            "actionType": "dataProvider",
+            "method": "dataProviderForTraceLinkProperties"
+        },
+
+        "addTypes": {
+            "actionType": "JSFunction",
+            "method": "addTypes",
+            "inputData": {
+                "data": "{{data}}",
+                "selectedTypeProperties": "{{function:getObjectsPropsToBeSelected}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "outputData": {
+                "addTypes": "addTypes"
+            },
+            "events": {
+                "success": [ {
+                        "name": "Arm0ExportToReqIF.updateCmdVisibilityForSub",
+                        "condition":"data.addTypes.dbValue.length > 0"
+                    },
+                    {
+                        "name": "Arm0ExportToReqIF.navigateToMainPanel",
+                        "condition":"data.addTypes.dbValue.length > 0"
+                    }
+                ]
+            },
+            "deps": "js/Arm0ExportToReqIF"
+        },
+        "addTraceLinks": {
+            "actionType": "JSFunction",
+            "method": "addTraceLinks",
+            "inputData": {
+                "data": "{{data}}",
+                "selectedTypeProperties": "{{function:getObjectsPropsToBeSelected}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "outputData": {
+                "addTraceLinks": "addTraceLinks"
+            },
+            "events": {
+                "success": [ {
+                        "name": "Arm0ExportToReqIF.updateCmdVisibilityForSub",
+                        "condition":"data.addTraceLinks.dbValue.length > 0"
+                    },
+                    {
+                        "name": "Arm0ExportToReqIF.navigateToMainPanel",
+                        "condition":"data.addTraceLinks.dbValue.length > 0"
+                    }
+                ]
+            },
+            "deps": "js/Arm0ExportToReqIF"
+        },
+        "updateCmdVisibilityForSub": {
+            "actionType": "JSFunction",
+            "method": "updateCmdVisibility",
+            "inputData": {
+                "data": "{{subPanelContext.sharedData}}"
+            },
+            "deps": "js/Arm0ExportToReqIF"
+        },
+        "navigateToMainPanel": {
+            "actionType": "JSFunction",
+            "method": "navigateToMainPanel",
+            "inputData": {
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "deps": "js/Arm0ExportToReqIF"
+        }
+
+    },
+
+    "functions": {
+        "getObjectsPropsToBeSelected": {
+            "functionName": "getObjectsPropsToBeSelected",
+            "parameters": [
+                "{{data}}"
+            ]
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "reveal",
+        "onUpdate": [ {
+                "action": "actionFilterListForType",
+                "observers": [ "viewModel.data.filterBoxForType.dbValue" ]
+            },
+            {
+                "action": "actionFilterListForTraceLink",
+                "observers": [ "viewModel.data.filterBoxForTraceLink.dbValue" ]
+            }
+        ]
+    },
+
+    "onEvent": [ {
+            "eventId": "awPanel.navigate",
+            "criteria": {
+                "destPanelId": "Arm0AddTypeSub"
+            },
+            "action": "reveal"
+        },
+        {
+            "eventId": "Arm0ExportToReqIF.refreshDataProviderForTypeProperties",
+            "action": "refreshDataProviderForTypeProperties"
+        },
+        {
+            "eventId": "Arm0ExportToReqIF.refreshDataProviderForTraceLinkProperties",
+            "action": "refreshDataProviderForTraceLinkProperties"
+        },
+        {
+            "eventId": "Arm0ExportToReqIF.updateCmdVisibilityForSub",
+            "action": "updateCmdVisibilityForSub"
+        },
+        {
+            "eventId": "Arm0ExportToReqIF.navigateToMainPanel",
+            "action": "navigateToMainPanel"
+        }
+    ],
+
+    "conditions": {
+        "isTypeToAdd": {
+            "expression": "ctx.Arm0AddTypeSub.addTypes"
+        },
+        "isTraceLinkToAdd": {
+            "expression": "ctx.Arm0AddTraceLinkSub.addTraceLinks"
+        },
+        "isTypeToUpdate": {
+            "expression": "ctx.Arm0AddTypeSub.selectedTypes !== null"
+        },
+        "isTraceLinkToUpdate": {
+            "expression": "ctx.Arm0AddTraceLinkSub.selectedTraceLinks !== null"
+        }
+    },
+
+    "i18n": {
+        "Add": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "update": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "filter": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "specType": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "createTraceLinkTitle": [
+            "RequirementsCommandPanelsMessages"
+        ]
+    }
+
+}

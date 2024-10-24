@@ -1,0 +1,13 @@
+<aw-panel-body>
+    <aw-flex-row height="3f">
+        <label title="{{subPanelContext.selectedCell.cellHeader1}}">{{subPanelContext.selectedCell.cellHeader1}}</label><br>
+    </aw-flex-row>
+    <aw-list dataprovider="data.dataProviders.tracelinkObjects" show-check-box=true>
+        <aw-default-cell vmo="item"></aw-default-cell>
+    </aw-list>
+</aw-panel-body>
+<aw-panel-footer>
+    <aw-button action="updateDownstreamLinkSelection">
+        <aw-i18n>i18n.UpdateSelection</aw-i18n>
+    </aw-button>
+</aw-panel-footer>

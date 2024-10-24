@@ -1,0 +1,332 @@
+// Copyright 2018 Siemens Product Lifecycle Management Software Inc.
+/*
+ * JQuery Resizable CSS
+ */
+
+ .aw-float-graph-popup .ui-resizable {
+    position: relative;
+}
+
+.aw-float-graph-popup .ui-resizable-handle {
+    position: absolute;
+    font-size: $fontsize_micro;
+    display: block;
+}
+
+.aw-float-graph-popup .ui-resizable-disabled .ui-resizable-handle,
+.ui-resizable-autohide .ui-resizable-handle {
+    display: none;
+}
+
+.aw-float-graph-popup .ui-resizable-n {
+    cursor: n-resize;
+    height: 7px;
+    width: 100%;
+    top: -5px;
+    left: 0;
+}
+
+.aw-float-graph-popup .ui-resizable-s {
+    cursor: s-resize;
+    height: 7px;
+    width: 100%;
+    bottom: -5px;
+    left: 0;
+}
+
+.aw-float-graph-popup .ui-resizable-e {
+    cursor: e-resize;
+    width: 7px;
+    right: -5px;
+    top: 0;
+    height: 100%;
+}
+
+.aw-float-graph-popup .ui-resizable-w {
+    cursor: w-resize;
+    width: 7px;
+    left: -5px;
+    top: 0;
+    height: 100%;
+}
+
+.aw-float-graph-popup .ui-resizable-se {
+    cursor: se-resize;
+    width: 12px;
+    height: 12px;
+    right: -5px;
+    bottom: -5px;
+}
+
+.aw-float-graph-popup .ui-resizable-sw {
+    cursor: sw-resize;
+    width: 9px;
+    height: 9px;
+    left: -5px;
+    bottom: -5px;
+}
+
+.aw-float-graph-popup .ui-resizable-nw {
+    cursor: nw-resize;
+    width: 9px;
+    height: 9px;
+    left: -5px;
+    top: -5px;
+}
+
+.aw-float-graph-popup .ui-resizable-ne {
+    cursor: ne-resize;
+    width: 9px;
+    height: 9px;
+    right: -5px;
+    top: -5px;
+}
+
+/*
+ * JQuery Draggable CSS
+ */
+
+.aw-float-graph-popup .ui-draggable .ui-dialog-titlebar {
+    cursor: move;
+}
+
+.aw-float-graph-popup .ui-draggable-handle {
+    -ms-touch-action: none;
+    touch-action: none;
+    cursor: move;
+}
+
+/*
+ * Window popup animation settings.
+ */
+
+.aw-float-graph-popup .aw-popup-animate {
+    opacity: 1;
+    transition: opacity 0.5s;
+}
+
+/*
+ * Window popup modal background.
+ */
+
+.aw-float-graph-popup .aw-architecturemodelerfg-screenMask {
+    opacity: .4;
+    z-index: 1000
+}
+
+/*
+ * The main popup window container.
+ */
+
+.aw-float-graph-popup .aw-popup-contentContainer {
+    border-width: 1px;
+    position: relative;
+    height: inherit;
+    min-height: 500px;
+    min-width: 300px;
+}
+
+/*
+ * Need to specify flex as well as flex direction (column) otherwise it won't
+ * "fit" within the popup container.
+ * Display 'flex' and webkit variants are needed to ensure that the graph SVG
+ * containers (internal divs) never take up more than the allotted space.
+ */
+
+.aw-float-graph-popup form.aw-layout-panelBody {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 1 auto;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    flex-direction: column;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+
+/*
+ * These need to specify 100% height and width otherwise graph SVG container
+ * wont resize with the popup.
+ */
+
+
+
+/*
+ * Vertically centers the children of the top bar (breadcrumb, current diagram label, commands).
+ * The justify content: flex-start is needed by IE to keep commands on dialog, but the
+ * 'space-evenly' looks better on other browsers.
+ */
+
+.aw-float-graph-popup .aw-layout-workareaCommandbar {
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+/* Overrides the last chevron's click cursor in the breadcrumb to be a move cursor. */
+
+.aw-float-graph-popup .move-cursor {
+    cursor: move;
+}
+
+
+/*
+ * Specifies the style for the preview and set as default buttons in the footer.
+ */
+
+.aw-float-graph-popup .aw-layout-panelFooter button:not(.hidden) {
+    min-width: 100px;
+    height: 30px;
+    margin-top: 0;
+    margin-left: 20px;
+    margin-right: 0;
+    cursor: pointer;
+    text-align: center;
+    font-family: $font-family;
+    line-height: 28px;
+    font-size: $fontsize_normal;
+    float: right;
+}
+
+.aw-float-graph-popup .aw-panel-footer {
+    padding-right: rem-calc(10);
+    padding-top: rem-calc(10);
+}
+/*
+ * Visually aligns the default checkmark with the rest of the cell content.
+ */
+.aw-architecturemodelerfg-cellContainer {
+    height: rem-calc(440);
+}
+
+
+div.aw-architecturemodelerfg-defaultDiagramcheckmark {
+    width: 2em;
+    height: 2em;
+    padding-top: 8px;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
+/*
+ * Allow cell text to expand to panel width.
+ */
+
+div.aw-widgets-cellListCellContent.aw-architecturemodelerfg-diagramCellListContent {
+    width: 100%;
+    overflow: hidden;
+}
+
+/*
+ * Add a margin between cell image and properties.
+ */
+
+div.aw-widgets-cellListCellImage.aw-architecturemodelerfg-diagramCellListImage {
+    margin: 0 8px 0 0;
+}
+
+/*
+ * Allow for space after breadcrumb to contain title and commands.
+ */
+
+.aw-architecturemodelerfg-breadcrumb {
+    max-width: 100% ;
+    padding-left: rem-calc(10)
+}
+
+/*
+ * Allow diagram title to shrink but never completely disappear and
+ * have it show '...' when its truncated.
+ */
+
+.aw-architecturemodelerfg-diagramTitleContainer {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+    max-width: 75%;
+    min-width: 20%;
+    padding-left: 10px;
+    padding-bottom: 3px;
+}
+
+.aw-architecturemodelerfg-diagramTitle {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+}
+
+.aw-architecturemodelerfg-diagramTitle .aw-jswidgets-text {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: inline-block;
+    white-space: nowrap;
+    width: 100%;
+}
+
+.aw-architecturemodelerfg-diagramTitle .aw-base-normal {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 100%;
+}
+
+/*
+ * Prevent popup commands from word wrapping
+ */
+
+.aw-architecturemodelerfg-openCommandBar {
+    white-space: nowrap;
+}
+
+.aw-architecturemodelerfg-commandbar {
+    min-width: 88px;
+    justify-content: flex-end;
+}
+
+.sw-popup-contentContainer .aw-architectureModeler-floatDialogSmall {
+    border-radius: 5px;
+    z-index: 1001;
+    opacity: 1;
+    padding-bottom: rem-calc(20);
+}
+
+.aw-architectureModeler-floatDialogSmall .aw-layout-workareaCommandbar {
+    border-radius: 5px;
+}
+
+.aw-float-graph-popup-breadcrumb .aw-layout-flexRow {
+    align-items: left;
+    margin-bottom: 3px;
+}
+
+.aw-architecturemodelerfg-diagramTitleContainer .aw-widgets-propertyLabelTop {
+    align-self: center;
+}
+
+.aw-architecturemodelerfg-page {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1001;
+}
+
+div.sw-popup-contentContainer .sw-listAfterFilter {
+    width: auto;
+}
+
+div.aw-architecturemodelerfg-graphContainer {
+    .aw-graph-container {
+        width: 100%;
+        height: rem-calc(430);
+    }
+}
+div.aw-widgets-cellListItemContainer .aw-widgets-cellListCellCommands{
+    flex:none;
+    margin-left: auto;
+}
+
+

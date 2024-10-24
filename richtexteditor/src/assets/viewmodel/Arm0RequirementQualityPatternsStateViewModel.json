@@ -1,0 +1,100 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports":
+    [
+        "js/aw-splm-table.directive"
+    ],
+
+    "actions": {
+        "loadPatternStateData": {
+            "actionType": "JSFunction",
+            "method": "filterPatternStateResult",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "patternStateResult": ""
+            },
+            "deps": "js/Arm0RequirementQualityService"
+        },
+         "refreshPatternStateData":
+        {
+            "actionType": "dataProvider",
+            "method": "patternStateDataProvider"
+        }
+    },
+
+    "data": {
+        
+    },
+
+    "columnProviders": {
+        "patternStateColumnProvider": {
+            "frozenColumnIndex": -1,
+            "columns": [
+                {
+                    "name": "status",
+                    "displayName": "{{i18n.statusLabel}}",
+                    "minWidth": 100,
+                    "width": 100,
+                    "enableSorting": false
+                },
+                {
+                    "name": "weight",
+                    "displayName": "{{i18n.weightLabel}}",
+                    "minWidth": 100,
+                    "width": 100,
+                    "enableSorting": false
+                },
+                {
+                    "name": "patternName",
+                    "displayName": "{{i18n.patternNameLabel}}",
+                    "minWidth": 60,
+                    "width": 400,
+                    "enableSorting": false
+                }
+            ]
+        }
+    },
+    "dataProviders": {
+        "patternStateDataProvider": {
+            "action": "loadPatternStateData",
+            "response": "{{data.patternStateResult}}",
+            "totalFound": "{{data.patternStateResult.length}}",
+            "commandsAnchor": "aw_splmTableCellMenu",
+            "selectionModelMode": "none"
+        }
+    },
+
+    "grids": {
+        "PatternState": {
+            "dataProvider": "patternStateDataProvider",
+            "columnProvider": "patternStateColumnProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "enablePinning": false,
+                "enableSorting": true,
+                "enableRowSelection": false
+            }
+        }
+    },
+
+    "onEvent": [ 
+        {
+            "eventId": "requirementDocumentation.refreshPatternStateData",
+            "action": "refreshPatternStateData"
+        }
+    ],
+    "i18n":
+    {
+        "statusLabel": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "weightLabel": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "patternNameLabel": [
+            "RichTextEditorCommandPanelsMessages"
+        ]
+    }
+}

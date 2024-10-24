@@ -1,0 +1,101 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-link.directive",
+        "js/aw-property-label.directive"
+    ],
+    "actions": {
+        "navigationAction": {
+            "actionType": "JSFunction",
+            "method": "navigate",
+            "deps": "js/navigationService",
+            "inputData": {
+                "action": {
+                    "actionType": "Navigate",
+                    "navigateTo": "{{data.navigateToURL}}",
+                    "navigateIn": "newTab"
+                },
+                "navigationParams": {
+                    "navigationContext": {}
+                }
+            }
+        },
+        "getWebLinkDetails": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2007-09-DataManagement",
+            "method": "expandGRMRelationsForPrimary",
+            "inputData":
+            {
+                "primaryObjects": {
+                    "$adapt": ["{{subPanelContext.selected}}"]
+                },
+                "pref":
+                {
+                    "expItemRev": false,
+                    "returnRelations": false,
+                    "info":
+                    [
+                        {
+                            "relationTypeName": "IMAN_reference",
+                            "otherSideObjectTypes": [
+                                "Web Link"
+                            ]
+                        }
+                    ]
+                }
+            },
+            "policy":
+            {
+                "types":
+                [
+                    {
+                        "name": "Web Link",
+                        "properties":
+                        [
+                            {
+                                "name": "object_name"
+                            },
+                            {
+                                "name": "url"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "outputData":
+            {
+                "workItemId.propertyDisplayName": "output[0].relationshipData[0].relationshipObjects[0].otherSideObject.props.object_name.uiValues[0]",
+                "navigateToURL": "output[0].relationshipData[0].relationshipObjects[0].otherSideObject.props.url.dbValues[0]"
+            }
+        }
+    },
+    "data": {
+        "workItemId": {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "false"
+        },
+        "polarionIdLabel":
+        {
+            "displayName": "{{i18n.Arm0PolarionId}}",
+            "type": "STRING",
+            "hasLov": true,
+            "dbValue": ""
+        },
+        "navigateToURL": ""
+    },
+
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+
+    "i18n": {
+        "Arm0PolarionId": [ "RequirementsCommandPanelsMessages" ]
+    },
+
+    "lifecycleHooks": {
+        "onMount": "getWebLinkDetails"
+    }
+}

@@ -1,0 +1,347 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {},
+
+    "actions": {
+        "loadClusterGroupsForPWASelection": {
+            "actionType": "JSFunction",
+            "method": "loadClusterGroups",
+            "inputData": {
+                "routineVMO": "{{props.subPanelContext.selected}}"
+            },
+            "outputData": {
+                "totalFoundForPWASelection": "totalFound",
+                "searchResultsForPWASelection": "clusterGroupList"
+            },
+            "deps": "js/Dpv1ClusterGroupService"
+        },
+        "loadClusterGroupsForSWASelection": {
+            "actionType": "JSFunction",
+            "method": "loadClusterGroups",
+            "inputData": {
+                "routineVMO": "{{dataProviders.routineRevDataProvider.selectedObjects[0]}}"
+            },
+            "outputData": {
+                "totalFoundForSWASelection": "totalFound",
+                "searchResultsForSWASelection": "clusterGroupList"
+            },
+            "deps": "js/Dpv1ClusterGroupService"
+        },
+        "loadClusterGroupsForCurrRoutineRev": {
+            "actionType": "JSFunctionAsync",
+            "method": "prepareClusterGroupRevTableData",
+            "inputData": {
+                "clsGrpRevsToReturn": "{{data.searchResultsForPWASelection}}",
+                "clsGrpRevsToCompare": "{{data.searchResultsForSWASelection}}",
+                "exclusiveRelPropRequired": false
+            },
+            "outputData": {
+                "totalFoundCurrRoutineRevClsGrp": "totalFound",
+                "searchResultsCurrRoutineRevClsGrp": "clusterGroupList"
+            },
+            "deps": "js/Dpv1ClusterGroupService"
+        },
+        "loadClusterGroupsForSelRoutineRev": {
+            "actionType": "JSFunctionAsync",
+            "method": "prepareClusterGroupRevTableData",
+            "inputData": {
+                "clsGrpRevsToReturn": "{{data.searchResultsForSWASelection}}",
+                "clsGrpRevsToCompare": "{{data.searchResultsForPWASelection}}",
+                "exclusiveRelPropRequired": true
+            },
+            "outputData": {
+                "totalFoundSelRoutineRevClsGrp": "totalFound",
+                "searchResultsSelRoutineRevClsGrp": "clusterGroupList"
+            },
+            "deps": "js/Dpv1ClusterGroupService"
+        },
+        "doCurrRoutineRevClsGrpDataProvider": {
+            "actionType": "dataProvider",
+            "method": "currRoutineRevClsGrpDataProvider"
+        },
+        "doSelRoutineRevClsGrpDataProvider": {
+            "actionType": "dataProvider",
+            "method": "selRoutineRevClsGrpDataProvider"
+        },
+        "loadClusterGroupDataAction": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "setTitlesForClusterGrpTables"
+                },
+                {
+                    "action": "loadClusterGroupsForSWASelection"
+                },
+                {
+                    "action": "doCurrRoutineRevClsGrpDataProvider"
+                },
+                {
+                    "action": "doSelRoutineRevClsGrpDataProvider"
+                }
+            ]
+        },
+        "loadClusterGroupColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadClusterGroupColumns",
+            "inputData": {},
+            "outputData": {
+                "dataProviders.clusterGroupsDataProvider.columnConfig": "columnConfig"
+            },
+            "deps": "js/Dpv1ClusterGroupService"
+        },
+        "loadRoutineRevisions": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData": {
+                "objects": [
+                    {
+                        "uid": "{{function:getRoutineItemUid}}"
+                    }
+                ],
+                "attributes": [
+                    "revision_list"
+                ]
+            },
+            "policy": {
+                "types": [ {
+                    "name": "MEInspection Revision",
+                    "properties": [
+                        {
+                            "name": "item_id"
+                        },
+                        {
+                            "name": "item_revision_id"
+                        },
+                        {
+                            "name": "object_type"
+                        },
+                        {
+                            "name": "release_status_list"
+                        },
+                        {
+                            "name": "owning_user"
+                        },
+                        {
+                            "name": "creation_date"
+                        }
+                    ]
+                } ]
+            },
+            "outputData": {
+                "searchResultsForRoutineRev": "{{function:processRoutineRevResponse}}"
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            },
+            "deps": "js/Dpv1ClusterGroupService"
+        },
+        "loadRoutineRevColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadRoutineRevColumns",
+            "inputData": {},
+            "outputData": {
+                "dataProviders.routineRevDataProvider.columnConfig": "columnConfig"
+            },
+            "deps": "js/Dpv1ClusterGroupService"
+        },
+        "loadCurrRoutineRevClsGrpColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadClusterGroupColumns",
+            "inputData": {},
+            "outputData": {
+                "dataProviders.currRoutineRevClsGrpDataProvider.columnConfig": "columnConfig"
+            },
+            "deps": "js/Dpv1ClusterGroupService"
+        },
+        "loadSelRoutineRevClsGrpColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadClusterGroupColumns",
+            "inputData": {},
+            "outputData": {
+                "dataProviders.selRoutineRevClsGrpDataProvider.columnConfig": "columnConfig"
+            },
+            "deps": "js/Dpv1ClusterGroupService"
+        },
+        "setTitlesForClusterGrpTables": {
+            "actionType": "JSFunction",
+            "method": "setTitlesForClusterGrpTables",
+            "inputData": {
+                "currRoutineVMO": "{{props.subPanelContext.selected}}",
+                "selRoutineVMO": "{{dataProviders.routineRevDataProvider.selectedObjects[0]}}"
+            },
+            "outputData": {
+                "currRoutineRevTitle": "currRoutineRevTitle",
+                "selRoutineRevTitle": "selRoutineRevTitle"
+            },
+            "deps": "js/Dpv1ClusterGroupService"
+        },
+        "selectFirstRevision": {
+            "actionType": "JSFunction",
+            "method": "selectFirstRevision",
+            "inputData": {
+                "routineRevDataProvider": "{{dataProviders.routineRevDataProvider}}"
+            },
+            "outputData": {},
+            "deps": "js/Dpv1ClusterGroupService"
+        }
+    },
+
+    "columnProviders": {
+        "clusterGroupsColumnProvider": {
+            "loadColumnAction": "loadClusterGroupColumns",
+            "columns": "{{data.columns}}",
+            "frozenColumnIndex": -1
+        },
+        "routineRevColumnProvider": {
+            "loadColumnAction": "loadRoutineRevColumns",
+            "columns": "{{data.columns}}",
+            "frozenColumnIndex": -1
+        },
+        "currRoutineRevClsGrpColumnProvider": {
+            "loadColumnAction": "loadCurrRoutineRevClsGrpColumns",
+            "columns": "{{data.columns}}",
+            "frozenColumnIndex": -1
+        },
+        "selRoutineRevClsGrpColumnProvider": {
+            "loadColumnAction": "loadSelRoutineRevClsGrpColumns",
+            "columns": "{{data.columns}}",
+            "frozenColumnIndex": -1
+        }
+    },
+
+    "dataProviders":{
+        "clusterGroupsDataProvider":
+        {
+            "action": "loadClusterGroupsForPWASelection",
+            "response": "{{data.searchResultsForPWASelection}}",
+            "totalFound": "{{data.totalFoundForPWASelection}}",
+            "selectionModelMode": "multiple",
+            "inputData": {
+                "selectionData": "{{props.subPanelContext.selectionData}}"
+            }
+        },
+        "routineRevDataProvider": {
+            "action": "loadRoutineRevisions",
+            "response": "{{data.searchResultsForRoutineRev.revisions}}",
+            "totalFound": "{{data.searchResultsForRoutineRev.length}}",
+            "selectionModelMode": "single",
+            "inputData": {
+                "selectionData": "{{props.subPanelContext.selectionData}}"
+            }
+        },
+        "currRoutineRevClsGrpDataProvider": {
+            "action": "loadClusterGroupsForCurrRoutineRev",
+            "response": "{{data.searchResultsCurrRoutineRevClsGrp}}",
+            "totalFound": "{{data.totalFoundCurrRoutineRevClsGrp}}",
+            "selectionModelMode": "single"
+        },
+        "selRoutineRevClsGrpDataProvider": {
+            "action": "loadClusterGroupsForSelRoutineRev",
+            "response": "{{data.searchResultsSelRoutineRevClsGrp}}",
+            "totalFound": "{{data.totalFoundSelRoutineRevClsGrp}}",
+            "selectionModelMode": "single"
+        }
+    },
+
+    "grids": {
+        "clusterGroupsTable": {
+            "dataProvider": "clusterGroupsDataProvider",
+            "columnProvider": "clusterGroupsColumnProvider",
+            "addIconColumn": true,
+            "enableArrangeMenu": false,
+            "gridOptions": {
+                "enableGridMenu": false,
+                "enableSorting": false,
+                "isFilteringEnabled": false
+            }
+        },
+        "routineRevisionsTable": {
+            "dataProvider": "routineRevDataProvider",
+            "columnProvider": "routineRevColumnProvider",
+            "enableArrangeMenu": false,
+            "gridOptions": {
+                "enableGridMenu": false,
+                "enableSorting": false,
+                "isFilteringEnabled": false
+            }
+        },
+        "currRoutineRevClsGrpTable": {
+            "dataProvider": "currRoutineRevClsGrpDataProvider",
+            "columnProvider": "currRoutineRevClsGrpColumnProvider",
+            "enableArrangeMenu": false,
+            "gridOptions": {
+                "enableGridMenu": false,
+                "enableSorting": false,
+                "isFilteringEnabled": false
+            }
+        },
+        "selRoutineRevClsGrpTable": {
+            "dataProvider": "selRoutineRevClsGrpDataProvider",
+            "columnProvider": "selRoutineRevClsGrpColumnProvider",
+            "enableArrangeMenu": false,
+            "gridOptions": {
+                "enableGridMenu": false,
+                "enableSorting": false,
+                "isFilteringEnabled": false
+            }
+        }
+    },
+    "functions": {
+        "getRoutineItemUid": {
+            "functionName": "getItemUid",
+            "parameters": [
+                "{{props.subPanelContext.selected}}"
+            ]
+        },
+        "processRoutineRevResponse": {
+            "functionName": "processRoutineRevObjects",
+            "parameters": [
+                "{{props.subPanelContext.selected}}"
+            ]
+        }
+    },
+
+    "onEvent": [
+        {
+            "eventId": "routineRevDataProvider.selectionChangeEvent",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            },
+            "action": "loadClusterGroupDataAction"
+        },
+        {
+            "eventId": "routineRevDataProvider.modelObjectsUpdated",
+            "action": "selectFirstRevision"
+        }
+    ],
+
+    "conditions": {},
+    "lifecycleHooks": {},
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+
+    "messages": {
+        "SOAFailureMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+
+    "i18n": {
+        "dpvClusterGroups": [
+            "DpvMessages"
+        ],
+        "dpvRoutineRevisionComparison": [
+            "DpvMessages"
+        ],
+        "dpvRoutineRevisions": [
+            "DpvMessages"
+        ]
+    }
+}

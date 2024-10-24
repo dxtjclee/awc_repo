@@ -1,0 +1,13 @@
+<aw-panel-body>
+    <aw-column width="fill">
+        <aw-toolbar first-anchor="sen_create_lot_left" second-anchor="sen_create_lot_right" context="props.subPanelContext.occContext" visible-when="ctx.showLotTable === true"></aw-toolbar>
+        <aw-splm-table gridid="senLotInfoTable" exist-when="ctx.showLotTable">
+        </aw-splm-table>
+        <div class="sw-row demo-h-6f" align-content="center" exist-when="!ctx.showLotTable">
+            <mfe-message sub-panel-context="data.messages.lotIsFalse"></mfe-message>
+        </div>
+        <div class="sw-row demo-h-6f" align-content="center" exist-when="ctx.showLotTable && data.lotsOnSelectedNeutralObject.length === 0 ">
+            <mfe-message sub-panel-context="data.messages.lotTrueNoLot"></mfe-message>
+        </div>
+    </aw-column>
+</aw-panel-body>

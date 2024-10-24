@@ -1,0 +1,339 @@
+{
+    "schemaVersion" : "1.0.0",
+    "imports":
+        [
+        ],
+    "actions":
+    {
+        "getRequirementContent":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2017-06-RequirementsManagement",
+            "method": "exportToApplication3",
+            "inputData":
+            {
+                "input":
+                [
+                    {
+                        "templateName": "",
+                        "applicationFormat": "HTML",
+                        "objectsToExport": ["{{function:getRevisionObject}}"],
+                        "targetObjectsToExport": [],
+                        "exportOptions": "{{function:getExportOptions}}",
+                        "recipeSourceObjects": [],
+                        "recipeTargetObjects": [],
+                        "attributesToExport":[],
+                        "objectTemplateInputs": [],
+                        "includeAttachments": false
+
+                    }
+                ]
+            },
+            "policy":
+            {
+                "types":
+                [
+                    {
+                        "name": "Dataset",
+                        "properties":
+                        [
+                            {
+                                "name": "object_name"
+                            },
+
+                            {
+                                "name": "ref_list",
+                                "modifiers":
+                                [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "outputData":
+            {
+                "content":""
+            },
+             "events":
+            {
+                 "success":
+                [
+                    {
+                        "name": "documentViewer.initContent"
+                    }
+                ]
+            },
+             "deps": "js/Arm0RequirementPreview"
+        },
+
+       "updateImages":
+        {
+            "actionType": "JSFunction",
+            "method": "updateImages",
+            "inputData":
+            {
+                "data": "{{data}}"
+            },
+
+            "deps": "js/Arm0RequirementPreview"
+        },
+
+       "initContent":
+        {
+            "actionType": "JSFunction",
+            "method": "initContent",
+            "inputData":
+            {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "events":
+            {
+                 "success":
+                [
+                    {
+                        "name": "documentViewer.refreshImages",
+                        "condition": "data.missingImages.length > 0"
+                    },
+                    {
+                        "name": "documentViewer.refreshRefImages",
+                        "condition": "data.missingRefImages.length > 0"
+                    }
+                ]
+            },
+
+            "deps": "js/Arm0RequirementPreview"
+        },
+
+        "setOLEObjectToDownload":
+        {
+            "actionType": "JSFunction",
+            "method": "setOLEObjectToDownload",
+            "inputData":
+            {
+                "data": "{{data}}"
+            },
+            "events":
+            {
+                 "success":
+                [
+                    {
+                        "name": "documentViewer.downloadOLEObject",
+                        "condition": "data.oleObjsToDownload.length > 0"
+                    }
+                ]
+            },
+
+            "deps": "js/Arm0RequirementPreview"
+        },
+
+        "refreshImages":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData":
+            {
+                "objects": "{{data.missingImages}}",
+                "attributes":
+                [
+                    "awp0ThumbnailImageTicket"
+                ]
+            },
+
+            "outputData":
+            {
+                "imageTickets": ""
+            },
+
+            "events":
+            {
+                 "success":
+                [
+                    {
+                        "name": "documentViewer.updateImages"
+                    }
+                ]
+            }
+        },
+        "refreshRefImages":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-FileManagement",
+            "method": "getFileReadTickets",
+            "inputData":
+            {
+                "files": "{{data.missingRefImages}}"
+            },
+
+            "outputData":
+            {
+                "imageRefTickets": ""
+            },
+
+            "events":
+            {
+                 "success":
+                [
+                    {
+                        "name": "documentViewer.updateImages"
+                    }
+                ]
+            }
+        },
+        "downloadOLEObjectFromDataSet":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData":
+            {
+                "objects":"{{data.oleObjectDS}}",
+                "attributes":
+                [
+                    "IMAN_specification"
+                ]
+            },
+
+            "outputData":
+            {
+                "response": ""
+            },
+
+            "events":
+            {
+                 "success":
+                [
+                    {
+                        "name": "documentViewer.setOLEObjectToDownload"
+                    }
+                ]
+            },
+             "deps": "js/Arm0RequirementPreview"
+        },
+         "downloadOLEObject":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-FileManagement",
+            "method": "getFileReadTickets",
+            "inputData":
+            {
+                "files": "{{data.oleObjsToDownload}}"
+            },
+
+            "outputData":
+            {
+                "oleFileTickets": "tickets[1]"
+            },
+
+            "events":
+            {
+                 "success":
+                [
+                    {
+                        "name": "documentViewer.doExportDocumentEvent"
+                    }
+                ]
+            }
+        },
+         "doExportDocument":
+        {
+            "actionType": "JSFunction",
+            "method": "openFile",
+            "inputData":
+            {
+                "data": "{{data.oleFileTickets[0]}}"
+            },
+
+            "deps": "js/fmsUtils"
+        }
+
+    },
+
+    "data":
+    {
+
+    },
+    "functions":
+    {
+        "getRevisionObject":
+        {
+            "functionName": "getRevisionObject",
+            "parameters":
+            [
+                 "{{ctx}}"
+            ]
+        },
+        "getExportOptions": {
+            "functionName": "getExportOptions",
+            "parameters": []
+        }
+     },
+     "onEvent":
+    [
+        {
+            "eventId": "documentViewer.getRequirementContent",
+            "action": "getRequirementContent"
+        },
+
+        {
+            "eventId": "documentViewer.initContent",
+            "action": "initContent"
+        },
+
+        {
+         "eventId": "documentViewer.refreshRefImages",
+         "action": "refreshRefImages"
+        },
+
+         {
+         "eventId": "documentViewer.refreshImages",
+         "action": "refreshImages"
+        },
+
+        {
+         "eventId": "documentViewer.updateImages",
+         "action": "updateImages"
+        },
+
+        {
+         "eventId": "documentViewer.downloadOLEObjectFromDataSet",
+         "action": "downloadOLEObjectFromDataSet"
+        },
+        {
+         "eventId": "documentViewer.downloadOLEObject",
+         "action": "downloadOLEObject"
+        },
+        {
+            "eventId": "documentViewer.doExportDocumentEvent",
+            "action": "doExportDocument"
+        },
+        {
+            "eventId": "documentViewer.setOLEObjectToDownload",
+            "action": "setOLEObjectToDownload"
+        }
+
+    ],
+     "conditions":
+    {
+
+
+
+    },
+     "messages":
+    {
+
+
+
+    },
+
+    "i18n":
+    {
+
+    }
+}

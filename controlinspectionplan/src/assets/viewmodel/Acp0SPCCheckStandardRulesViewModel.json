@@ -1,0 +1,98 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "getStandardRuleObjects": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "clientScopeURI": ""
+                },
+                "inflateProperties": false,
+                "noServiceData": false,
+                "saveColumnConfigData": {},
+                "searchInput": {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Awp0SavedQuerySearchProvider",
+                    "searchCriteria": {
+                        "queryName": "General...",
+                        "searchID": "SPCRULEOBJECT",
+                        "Name": "{{function:getIndustryRuleName}}",
+                        "Type": "Acp0IndustrySuperRule",
+                        "lastEndIndex": "",
+                        "totalObjectsFoundReportedToClient": "",
+                        "typeOfSearch": "ADVANCED_SEARCH",
+                        "utcOffset": "0"
+                    },
+                    "searchFilterFieldSortType": "Priority"
+                }
+            },
+
+            "outputData": {
+                "ruleProperties": "{{function:processStandardIndustryRules}}"
+            },
+            "policy": {
+                "types": [ {
+                    "name": "Acp0IndustrySuperRule",
+                    "properties": [ {
+                            "name": "object_string"
+                        },
+                        {
+                            "name": "acp0IndustryRuleDefinition"
+                        }
+                    ]
+                } ]
+            },
+            "deps": "js/Acp0IndustryRuleService"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "condition.expressionValueChanged",
+            "action": "getStandardRuleObjects",
+            "criteria": {
+                "condition": "conditions.industryRuleChangeCondition"
+            },
+            "cacheEventData": true
+        }
+    ],
+    "lifecycleHooks": {
+        "onMount": "getStandardRuleObjects"
+    },
+    "conditions": {
+        "industryRuleChangeCondition": {
+            "expression": "props.subPanelContext.xrtState.xrtVMO.props.acp0IndustryRule.fielddata.uiValue",
+            "trackValues": true
+        }
+    },
+
+    "data": {
+        "ruleProperties": {}
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "functions": {
+        "processStandardIndustryRules": {
+            "functionName": "processStandardIndustryRules",
+            "parameters": []
+        },
+        "getIndustryRuleName": {
+            "functionName": "getIndustryRuleName",
+            "parameters": [
+                "{{props.subPanelContext.xrtState.xrtVMO}}"
+            ]
+        }
+    },
+
+    "i18n": {
+        "acp0OutOfRules": [
+            "ControlInspectionPlanMessages"
+        ]
+    }
+}

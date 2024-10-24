@@ -1,0 +1,165 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-panel-body.directive",
+        "js/aw-command-panel.directive",
+        "js/aw-checkbox.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-break.directive",
+        "js/aw-button.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-i18n.directive",
+        "js/aw-repeat.directive"
+    ],
+    "data": {
+        "showObjectName": {
+            "displayName": "{{i18n.name}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue":  "{{ctx.showObjectName}}",
+            "dispValue": "{{i18n.name}}",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "showObjectId": {
+            "displayName": "{{i18n.id}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "{{ctx.showObjectId}}",
+            "dispValue": "{{i18n.id}}",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "showObjectOwner": {
+            "displayName": "{{i18n.owner}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "{{ctx.showObjectOwner}}",
+            "dispValue": "{{i18n.owner}}",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "showTracelinkDirection": {
+            "displayName": "{{i18n.showTracelinkLabel}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "{{ctx.showTracelinkCount}}",
+            "dbValue": "{{ctx.showTracelinkDirection}}",
+            "propertyRadioTrueText": "{{i18n.show}}",
+            "propertyRadioFalseText": "{{i18n.hide}}",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "showemptyradio1": {
+            "displayName": "{{i18n.showall}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "true",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        }
+    },
+    "actions": {
+        "applyMatrixSettings": {
+            "actionType": "JSFunction",
+            "method": "applyMatrixSettings",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}",
+                "commandContext" :"{{commandContext}}"
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    },
+                    {
+                        "name" : "closeDialog"
+                    }
+                 ]
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "closePanelDialog" : {
+            "actionType" : "JSFunction",
+            "method" : "closeDialog",
+            "inputData" : {
+                "editContext" : "INFO_PANEL_CONTEXT",
+                "popupId" : "{{subPanelContext.popupOptions.popupId}}",
+                "commandContext": "{{commandContext}}"
+            },
+            "deps" : "js/dialogService"
+        },
+        "getSettingProperties": {
+            "actionType": "JSFunction",
+            "method": "getSettingProperties",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "matrixSettingProperties": ""
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        }
+    },
+    "functions": {
+
+    },
+    "onEvent": [
+        {
+            "eventId": "closeDialog",
+            "action": "closePanelDialog"
+        }
+    ],
+    "conditions": {
+        "visibleTraceLinkDirection": {
+            "expression": "ctx.matrixType !== 'Full-Rollup Matrix' && (ctx.matrixType === 'Dynamic Matrix'|| ctx.matrixType === 'Quick Matrix')"
+        }
+    },
+    "preferences":
+    [
+        "REQ_Matrix_Settings_Properties"
+    ],
+    "i18n": {
+        "name" : [
+            "MatrixMessages"
+        ],
+        "id" : [
+            "MatrixMessages"
+        ],
+        "owner" : [
+            "MatrixMessages"
+        ],
+        "labeldisplay" : [
+            "MatrixMessages"
+        ],
+        "showTracelinkLabel" : [
+            "MatrixMessages"
+        ],
+        "showTracelinkDirection" : [
+            "MatrixMessages"
+        ],
+        "selected_labels" : [
+            "MatrixMessages"
+        ],
+        "matrixSetting" : [
+            "MatrixMessages"
+        ],
+        "matrixApply" : [
+            "MatrixMessages"
+        ],
+        "show" : [
+            "MatrixMessages"
+        ],
+        "hide" : [
+            "MatrixMessages"
+        ]
+    },
+    "lifecycleHooks": {
+        "onMount": "getSettingProperties"
+    }
+}

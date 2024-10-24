@@ -1,0 +1,17 @@
+<div class="sw-row aw-sen-eolListContainer justify-top align-center w-12" visible-when="conditions.isDataAvailable">
+    <aw-model-icon class="sw-cell-image" vmo="props.vmo" hideoverlay="hideoverlay"></aw-model-icon>
+    <div class="sw-column my-normal">
+        <div class="sw-row align-center justify-left">
+            <label class="aw-sen-eolListContent" title="{{props.vmo.props.object_name.dbValues[0]}}">{{props.vmo.props.object_name.dbValues[0]}}</label>
+            <aw-separator is-vertical="true" class="aw-mfe-tileSeparator"></aw-separator>
+            <label class="aw-sen-title" title="{{data.unitDurationString}}">{{data.unitDurationString}}</label>
+            <aw-separator is-vertical="true" class="aw-mfe-tileSeparator"></aw-separator>
+            <label class="aw-sen-eolListContent">{{i18n.revisionPropName}}</label>
+            <label class="aw-sen-title">{{props.vmo.props.fnd0RevisionId.dbValues[0]}}</label>
+        </div>
+        <div class="sw-row align-center justify-left">
+            <label class="aw-sen-eolListContent">{{i18n.releaseStatusPropName}}</label>
+            <label class="aw-sen-title">{{props.vmo.props.release_status_list.uiValues[0]}}</label>
+        </div>
+    </div>
+</div>

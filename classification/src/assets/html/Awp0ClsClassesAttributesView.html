@@ -1,0 +1,7 @@
+<div class="aw-clsadmin-classAttributesTab w-12 h-12" >
+    <aw-panel-section exist-when="data.hasClassAttributes && conditions.ready && conditions.supported" collapsed="false">
+        <aw-splm-table class="h-12" gridid="attrGrid" show-decorators="true"></aw-splm-table>
+    </aw-panel-section>
+    <aw-i18n class="aw-clsadmin-noClassAttrMsg" exist-when="data.isGroup === true">i18n.GrpClass</aw-i18n>
+    <aw-i18n class="aw-clsadmin-noClassAttrMsg" exist-when="data.isGroup === false && data.hasClassAttributes === false">i18n.noClassAttrs</aw-i18n>
+</div>

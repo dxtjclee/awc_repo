@@ -1,0 +1,80 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "actions": {
+        "checklistEvalRuleExprLoadData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadChecklistEvalRuleExprTreeTableData", 
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx.selected}}"
+            },        
+            "outputData": {
+                "totalFound": "result.rules.length",
+                "totalLoaded": "result.rules.length",
+                "searchResults": "result.rules"
+            },
+            "deps": "js/Aqc0ChecklistSpecRatingEvalRuleService"
+        },
+        "loadColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTableColumns",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.checklistEvalRuleExprDataProvider}}",
+                "data" : "{{data}}"
+            },
+            "deps": "js/Aqc0ChecklistSpecRatingEvalRuleService"
+        },
+        "loadRatingRuleObjectWithProps":  {
+            "actionType": "JSFunctionAsync",
+            "method": "loadRatingRuleObjectWithProps",
+            "inputData": {
+                "ctx": "{{ctx}}"
+            },
+            "outputData":{
+                "ratingObject": "result.ratingObject"
+            },
+            "deps": "js/Aqc0ChecklistSpecService"
+        }
+    },
+    "dataProviders": {
+        "checklistEvalRuleExprDataProvider": {
+            "action": "checklistEvalRuleExprLoadData",
+            "selectionModelMode": "multiple",           
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}"
+        }
+    },
+    "columnProviders": {
+        "checklistEvalRuleExprColumnProvider": {
+            "loadColumnAction": "loadColumns",
+            "columns": "{{data.columns}}",
+            "soaEnabled": false          
+        }
+    },
+    "grids": {
+        "checklistEvalRuleExprGrid": {
+            "dataProvider": "checklistEvalRuleExprDataProvider",
+            "columnProvider": "checklistEvalRuleExprColumnProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "enableGridMenu": false,
+                "enablePinning": false,
+                "enableSorting": false
+            }
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "loadRatingRuleObjectWithProps"
+    },
+    "data": {      
+        "Aqc0TableColumnName": {
+            "displayName": "{{i18n.Aqc0TableColumnName}}",
+            "type": "STRING"
+        }
+    },
+    "i18n": {
+        "Aqc0ChecklistEvalRuleExprSectionTitle": ["qualitycentermanagerMessages"],
+        "Aqc0TableColumnName": ["qualitycentermanagerMessages"]
+    }
+}

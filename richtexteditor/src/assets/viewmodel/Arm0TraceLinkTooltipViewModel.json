@@ -1,0 +1,207 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/visible-when.directive",
+        "js/aw-include.directive"
+    ],
+
+    "actions":{
+        "lifecycleHooks": {
+            "onMount": "reveal"
+        },
+
+        "reveal":{
+            "actionType": "JSFunction",
+            "method": "getTooltipContentData",
+            "inputData":
+            {},
+            "outputData":
+            {
+                "showMoreTracelinkOption":"showMoreTracelinkOption",
+                "selectedTooltipObject":"selectedTooltipObject",
+                "tracelinkedItems.dbValue": "tracelinkedItems"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name" : "Arm0TracelinkTooltip.refreshTracelinkedItemList"
+                    }
+                ]
+            },
+
+            "deps": "js/requirementsTooltipService"
+        },
+
+        "refreshTracelinkedItemList":
+        {
+            "actionType": "dataProvider",
+            "method": "tracelinkedItemList"
+        },
+        "openObjectInNewTab":
+        {
+            "actionType": "Navigate",
+            "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+            "navigationParams":
+            {
+                "locale" : "{{ctx.userSession.props.fnd0locale.dbValues[0]}}",
+                "pageId": "tc_xrt_Content",
+                "uid":
+                {
+                    "$adapt" : "{{data.eventMap['Arm0TracelinkTooltip.openObjectInNewTab'].sourceObject}}",
+                    "path"  : "id"
+                },
+                "spageId": "{{i18n.documentationTitle}}"
+            },
+            "navigateIn": "newTab"
+        },
+        "showMoreTracelinks":
+        {
+            "actionType": "Navigate",
+            "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+            "navigationParams":
+            {
+                "locale" : "{{ctx.userSession.props.fnd0locale.dbValues[0]}}",
+                "pageId": "tc_xrt_Content",
+                "uid":
+                {
+                    "$adapt" : "{{data.eventMap['Arm0TracelinkTooltip.showMoreTracelinks'].sourceObject}}",
+                    "path"  : "uid"
+                },
+                "spageId": "FND_TraceLink"
+            },
+            "navigateIn": "newTab"
+        },
+        "openSuspectTaskInNewTab": {
+            "actionType": "Navigate",
+            "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+            "navigationParams":
+            {
+                "uid": "{{data.eventMap['Arm0TracelinkTooltip.openSuspectTaskInNewTab'].sourceObjects[0]}}"
+            },
+            "navigateIn": "newTab"
+        },
+        "moreTracelinkClicked":{
+            "actionType" : "JSFunction",
+            "method": "moreTracelinkClicked",
+            "inputData": {
+                "data": "{{selectedTooltipObject}}"
+            },
+            "deps" : "js/requirementsTooltipService"
+        },
+        "activateExistingTraceLinkPopup": {
+            "actionType": "JSFunction",
+            "method": "activateExistingTraceLinkPanel",
+            "inputData": {
+                "data": {
+                    "declView": "Arm0ExistingTraceLinkTreePopup",
+                    "locals": {
+                        "anchor": "arm0_existing_tl_popup"
+                    },
+                    "options": {
+                        "reference": ".aw-layout-infoCommandbar",
+                        "isModal": false,
+                        "placement": "left-end",
+                        "width": 600,
+                        "height": 400,
+                        "draggable": true,
+                        "detachMode": true,
+                        "disableClose": false
+                    }
+                },
+                "calcHeight" : true
+            },
+            "deps": "js/Arm0ExistingTraceLink"
+        }
+
+    },
+
+    "data": {
+        "clearTextTooltipCommands": "arm0_clearTextTooltipCommands",
+        "link": {
+            "displayName": "{{i18n.textName}}",
+            "type": "STRING",
+            "isRequired": "true"
+        },
+        "box1": {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "Test_Value"
+        },
+        "taskResults": {
+            "type": "STRING",
+            "dbValue": [
+                {
+                    "displayName": "1",
+                    "isNull": "false"
+                },
+                {
+                    "displayName": "2",
+                    "isNull": "false"
+                },
+                {
+                    "displayName": "3",
+                    "isNull": "false"
+                }
+            ]
+        },
+        "tracelinkedItems": {
+            "isArray": "true",
+            "dbValue":
+            [
+            ]
+        },
+        "more": {
+            "displayName": "{{i18n.more}}",
+            "type": "STRING",
+            "dbValue": "",
+            "dispValue": ""
+        }
+    },
+    "onEvent":
+    [
+        {
+            "eventId": "Arm0TracelinkTooltip.refreshTracelinkedItemList",
+            "action": "refreshTracelinkedItemList"
+        },
+        {
+           "eventId": "Arm0TracelinkTooltip.showMoreTracelinks",
+           "cacheEventData": true,
+           "action": "showMoreTracelinks"
+        },
+        {
+           "eventId": "Arm0TracelinkTooltip.openObjectInNewTab",
+           "cacheEventData": true,
+           "action": "openObjectInNewTab"
+        },
+        {
+           "eventId": "Arm0TracelinkTooltip.openSuspectTaskInNewTab",
+           "cacheEventData": true,
+           "action": "openSuspectTaskInNewTab"
+        },
+        {
+            "eventId": "Arm0ExistingTraceLinkTree.activateExistingTraceLinkPanel",
+            "action": "activateExistingTraceLinkPopup"
+        }
+    ],
+
+    "dataProviders":
+    {
+        "tracelinkedItemList":
+        {
+            "response":"{{data.tracelinkedItems.dbValue}}",
+            "selectionModelMode": "single"
+         }
+    },
+
+    "i18n": {
+        "more":
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "documentationTitle": [
+            "RequirementsCommandPanelsMessages"
+        ]
+    }
+}

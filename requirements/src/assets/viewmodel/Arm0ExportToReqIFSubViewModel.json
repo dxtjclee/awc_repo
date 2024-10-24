@@ -1,0 +1,762 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-panel-body.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/aw-property-val.directive",
+        "js/visible-when.directive",
+        "js/aw-command-panel-section.directive",
+        "js/aw-list.directive",
+        "js/aw-checkbox.directive",
+        "js/aw-listbox.directive",
+        "js/aw-textbox.directive",
+        "js/aw-flex-row.directive",
+        "js/aw-include.directive",
+        "js/aw-flex-column.directive"
+    ],
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "revealMainPanel",
+        "onUpdate": [ {
+            "action": "setDataOnViewChanged",
+            "observers": [ "props.subPanelContext.sharedData.activeView" ]
+        } ]
+    },
+    "dataProviders": {
+        "addTypesList": {
+            "commandsAnchor": "arm0_export_reqifType_cellCommands",
+            "response": "{{data.addTypes.dbValue}}",
+            "selectionModelMode": "single"
+        },
+        "addTraceLinksList": {
+            "commandsAnchor": "arm0_export_reqifTracelink_cellCommands",
+            "response": "{{data.addTraceLinks.dbValue}}",
+            "selectionModelMode": "single"
+        }
+    },
+    "data": {
+        "exportToReqIFMappingSubCommands": "arm0_exportToReqIFMappingSubCommands",
+        "addTypeSubCommands": "arm0_addTypeSubCommands",
+        "addTraceLinkSubCommands": "arm0_addTraceLinkSubCommands",
+        "runInBackgroundReqIF": {
+            "displayName": "{{i18n.runinBG}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "dbValue": true,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "exportLinkedItems": {
+            "displayName": "{{i18n.exportLinkedItems}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "dbValue": false,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "addTypes": {
+            "isArray": "true",
+            "dbValue": []
+        },
+        "addTraceLinks": {
+            "isArray": "true",
+            "dbValue": []
+        },
+        "savedConfigurations": {
+            "displayName": "{{i18n.savedMappings}}",
+            "type": "STRING",
+            "hasLov": true
+        },
+        "mapListValues": {
+            "type": "STRING",
+            "dbValue": [ {
+                    "propDisplayValue": "",
+                    "propDisplayDescription": "",
+                    "dispValue": "",
+                    "propInternalValue": ""
+                },
+                {
+                    "propDisplayValue": "map1",
+                    "propDisplayDescription": "",
+                    "dispValue": "map1",
+                    "propInternalValue": ""
+                },
+                {
+                    "propDisplayValue": "map2",
+                    "propDisplayDescription": "",
+                    "dispValue": "",
+                    "propInternalValue": ""
+                },
+                {
+                    "propDisplayValue": "map3",
+                    "propDisplayDescription": "",
+                    "dispValue": "",
+                    "propInternalValue": ""
+                }
+            ]
+        },
+        "name": {
+            "displayName": "{{i18n.name}}",
+            "type": "STRING",
+            "maxLength": 90,
+            "isRequired": "true",
+            "isEditable": "true",
+            "dbValue": ""
+        },
+        "activeView": "Arm0ExportToReqIFSub"
+    },
+    "actions": {
+        "setDataOnViewChanged": {
+            "actionType": "JSFunction",
+            "method": "setDataOnViewChanged",
+            "inputData": {
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "outputData": {
+                "addTypes": "addTypes",
+                "addTraceLinks": "addTraceLinks"
+            },
+            "events": {
+                "success": [ {
+                        "name": "Arm0ExportToReqIF.refreshAddTypeList",
+                        "condition": "data.addTypes.dbValue.length > 0"
+                    },
+                    {
+                        "name": "Arm0ExportToReqIF.refreshAddTraceLinkList",
+                        "condition": "data.addTraceLinks.dbValue.length > 0"
+                    },
+                    {
+                        "name": "Arm0ExportToReqIF.updateCmdVisibility",
+                        "condition": "subPanelContext.sharedData.activeView === 'Arm0AddTypeSub' "
+                    }
+                ]
+            },
+            "deps": "js/Arm0ExportToReqIF"
+        },
+        "closePanelDialog": {
+            "actionType": "JSFunction",
+            "method": "closeDialog",
+            "inputData": {
+                "editContext": "INFO_PANEL_CONTEXT",
+                "popupId": "{{subPanelContext.popupOptions.popupId}}"
+             },
+          "deps": "js/dialogService"
+        },
+        "unRegisterArm0AddTypesSubCtx": {
+            "actionType": "JSFunction",
+            "method": "unRegisterArm0AddTypesSubCtx",
+            "deps": "js/Arm0ExportToReqIF"
+        },
+        "unRegisterArm0AddTraceLinksSubCtx": {
+            "actionType": "JSFunction",
+            "method": "unRegisterArm0AddTraceLinksSubCtx",
+            "deps": "js/Arm0ExportToReqIF"
+        },
+        "revealMainPanel": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AwReqMgmtSe-2019-12-SpecNavigation",
+            "method": "getSpecificationMetadata",
+            "inputData": {
+                "input": {
+                    "inputCtxt": "{{function:getInputContext}}",
+                    "selectedObjects": "{{function:getSelectedObjects}}",
+                    "typePropMap": {},
+                    "options": "{{function:getOptionsArrayForMetadata}}"
+                }
+            },
+            "outputData": {
+                "getSpecificationMetadataResponse": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "Arm0ExportToReqIF.setSpecificationMetadata"
+                } ]
+            },
+            "deps": "js/Arm0ExportToReqIF"
+        },
+        "setSpecificationMetadata": {
+            "actionType": "JSFunction",
+            "method": "setSpecificationMetadata",
+            "inputData": {
+                "data": "{{data}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "outputData": {
+                "typePropInfosToAddProperties": "typePropInfosToAddProperties",
+                "typePropInfos": "typePropInfos",
+                "objectPropInfos": "objectPropInfos",
+                "traceLinkPropInfos": "traceLinkPropInfos",
+                "objectPropInfosMap": "objectPropInfosMap",
+                "traceLinkPropInfosMap": "traceLinkPropInfosMap",
+                "savedConfigurations.dbValue": "savedConfigurations.dbValue",
+                "savedConfigurations.uiValue": "savedConfigurations.uiValue"
+            },
+            "events": {
+                "success": [ {
+                        "name": "Arm0ExportToReqIF.initExportReqIFConfigurationsData"
+                    },
+                    {
+                        "name": "Arm0ExportToReqIF.updateCmdVisibility"
+                    }
+                ]
+            },
+            "deps": "js/Arm0ExportToReqIF"
+        },
+        "loadTypeCells": {
+            "actionType": "dataProvider",
+            "method": "addTypesList"
+        },
+        "loadTraceLinkCells": {
+            "actionType": "dataProvider",
+            "method": "addTraceLinksList"
+        },
+        "removeTraceLink": {
+            "actionType": "JSFunction",
+            "method": "removeTraceLink",
+            "inputData": {
+                "data": "{{data}}",
+                "selectedRule": "{{data.selectedCell}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "Arm0ExportToReqIF.refreshAddTraceLinkList"
+                } ]
+            },
+            "deps": "js/Arm0ExportToReqIF"
+        },
+        "updateTraceLinkFn": {
+            "actionType": "JSFunction",
+            "method": "updateTraceLinkFn",
+            "inputData": {
+                "data": "{{data}}",
+                "selectedRule": "{{data.selectedCell}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "awPanel.navigate",
+                    "eventData": {
+                        "destPanelId": "Arm0AddTypeSub",
+                        "title": "{{i18n.updateTraceLink}}",
+                        "supportGoBack": true,
+                        "recreatePanel": true
+                    }
+                } ]
+            },
+            "deps": "js/Arm0ExportToReqIF"
+        },
+        "resetArm0AddTypesTraceLinksSubCtx": {
+            "actionType": "JSFunction",
+            "method": "resetArm0AddTypesTraceLinksSubCtx",
+            "deps": "js/Arm0ExportToReqIF"
+        },
+        "exportToReqIF": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AwReqMgmtSe-2019-12-SpecNavigation",
+            "method": "exportSpecifications",
+            "inputData": {
+                "input": {
+                    "selectedObjects": "{{function:getSelectedObjects}}",
+                    "typePropsData": "{{function:getTypePropsData}}",
+                    "inputCtxt": "{{function:getInputContext}}",
+                    "mode": "REQIF",
+                    "isRunInBackground": "{{data.runInBackgroundReqIF.dbValue}}",
+                    "options": "{{function:getOptionsArrayForExport}}"
+                }
+            },
+            "outputData": {
+                "reqIFfileTicket": "fileTickets[0]"
+            },
+            "events": {
+                "success": [ {
+                        "name": "layout.showToolInfo",
+                        "eventData": {
+                            "visible": false
+                        }
+                    },
+                    {
+                        "name": "Arm0ExportToReqIF.doExportReqIFDocumentEvent"
+                    },
+                    {
+                        "name": "closeDialog"
+                    }
+                ],
+                "failure": [ {
+                        "condition": "errorCode.code==223201",
+                        "name": "layout.showToolInfo",
+                        "eventData": {
+                            "visible": false
+                        }
+                    },
+                    {
+                        "name": "Arm0ExportToReqIF.doExportReqIFDocumentEvent"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                        "condition": "errorCode.code==223201",
+                        "message": "notificationForFlatListExportMsg"
+                    },
+                    {
+                        "message": "dispatcherNotInstalledExportFailure",
+                        "condition": "errorCode.code===3104"
+                    }
+                ],
+                "success": [ {
+                    "message": "notificationForExportRInB",
+                    "condition": "data.runInBackgroundReqIF.dbValue"
+                } ]
+            },
+            "deps": "js/Arm0ExportToReqIF"
+        },
+        "doExportReqIFDocumentEvent": {
+            "actionType": "JSFunction",
+            "method": "openFile",
+            "inputData": {
+                "data": "{{data.reqIFfileTicket}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "Arm0ExportToReqIF.closePanel"
+                } ]
+            },
+            "deps": "js/fmsUtils"
+        },
+        "clickOnSavedConfigurationCommand": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "Arm0ExportToReqIF.setCmdDimensionForBallonPopup",
+                    "condition": "!data.savedConfigurations.dbValue"
+                } ]
+            },
+            "actionMessages": {
+                "success": [ {
+                    "condition": "data.savedConfigurations.dbValue",
+                    "message": "updateExportReqIFConfigWarningMessage"
+                } ]
+            }
+        },
+        "setCmdDimensionForBallonPopup": {
+            "actionType": "JSFunction",
+            "method": "setCmdDimensionForBallonPopup",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "saveRuleCmdDimension": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "Arm0ExportToReqIF.displayExportReqIFConfigPopup"
+                } ]
+            },
+            "deps": "js/Arm0ExportToReqIF"
+        },
+        "displayExportReqIFConfigPopup": {
+            "actionType": "popup",
+            "inputData": {
+                "options": {
+                    "view": "Arm0ImportRulePopup",
+                    "clickOutsideToClose": true,
+                    "placement": "bottom-start",
+                    "width": 310,
+                    "height": 160,
+                    "hasArrow": true,
+                    "hasCloseButton": false
+                }
+            }
+        },
+        "createSaveExportConfigInput": {
+            "actionType": "JSFunction",
+            "method": "createSaveExportConfigInput",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "exportReqIFRuleInput": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "Arm0ExportToReqIF.saveExportReqIFConfiguration"
+                } ]
+            },
+            "deps": "js/Arm0ExportToReqIF"
+        },
+        "updateConfigExportReqIF": {
+            "actionType": "JSFunction",
+            "method": "updateConfigExportReqIF",
+            "deps": "js/Arm0ExportToReqIF"
+        },
+        "populateAllExportReqIFConfigrations": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceReqMgmt-2019-12-ImportExport",
+            "method": "getRulesInfo",
+            "inputData": {
+                "input": {
+                    "ruleNames": [],
+                    "ruleObjects": [],
+                    "mappingType": "ExportReqIF"
+                }
+            },
+            "outputData": {
+                "getRulesInfoResponse": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "Arm0ExportToReqIF.initConfigsLovApi"
+                } ]
+            }
+        },
+        "initConfigsLovApi": {
+            "actionType": "JSFunction",
+            "method": "initConfigsLovApi",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "ruleList": "ruleList",
+                "exportReqIFSavedConfigListBoxValues": "exportReqIFSavedConfigListBoxValues"
+            },
+            "deps": "js/Arm0ExportToReqIF"
+        },
+        "saveExportReqIFConfiguration": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceReqMgmt-2019-12-ImportExport",
+            "method": "saveRulesInfo",
+            "inputData": {
+                "input": "{{data.exportReqIFRuleInput}}"
+            },
+            "events": {
+                "success": [ {
+                        "name": "Arm0ExportToReqIF.closeExportConfigBallonPopupWindow"
+                    },
+                    {
+                        "name": "Arm0ExportToReqIF.populateAllExportReqIFConfigrations"
+                    }
+                ]
+            },
+            "outputData": {
+                "response": ""
+            }
+        },
+        "populateInfoForConfiguration": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceReqMgmt-2019-12-ImportExport",
+            "method": "getRulesInfo",
+            "inputData": {
+                "input": {
+                    "ruleNames": [
+                        "{{data.savedConfigurations.dbValue}}"
+                    ],
+                    "ruleObjects": [
+                        "{{data.selectedRule.ruleObject}}"
+                    ],
+                    "mappingType": "ExportReqIF"
+                }
+            },
+            "outputData": {
+                "response": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "Arm0ExportToReqIF.populateRulesFromSavedConfigName"
+                } ]
+            }
+        },
+        "populateRulesFromSavedConfigName": {
+            "actionType": "JSFunction",
+            "method": "populateRulesFromSavedConfigName",
+            "inputData": {
+                "data": "{{data}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "outputData": {
+                "addTypes": "objectType",
+                "addTraceLinks": "tracelinkType"
+            },
+            "events": {
+                "success": [ {
+                        "name": "Arm0ExportToReqIF.refreshAddTypeList",
+                        "condition": "data.addTypes.dbValue.length > 0"
+                    },
+                    {
+                        "name": "Arm0ExportToReqIF.refreshAddTraceLinkList",
+                        "condition": "data.addTraceLinks.dbValue.length > 0"
+                    },
+                    {
+                        "name": "Arm0ExportToReqIF.updateCmdVisibility"
+                    }
+                ]
+            },
+            "deps": "js/Arm0ExportToReqIF"
+        },
+        "exportReqIFcontentUnloaded": {
+            "actionType": "JSFunction",
+            "method": "exportReqIFcontentUnloaded",
+            "deps": "js/Arm0ExportToReqIF"
+        },
+        "initExportReqIFConfigurationsData": {
+            "actionType": "JSFunction",
+            "method": "initExportReqIFConfigurationsData",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0ExportToReqIF"
+        },
+        "updateCmdVisibility": {
+            "actionType": "JSFunction",
+            "method": "updateCmdVisibility",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0ExportToReqIF"
+        },
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            }
+        },
+        "exportReqIFRuleSelectionChange": {
+            "actionType": "JSFunction",
+            "method": "exportReqIFRuleSelectionChangeInListBox",
+            "deps": "js/Arm0ExportToReqIF",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "selectedRule": "selectedRule",
+                "addTypes.dbValue": "addTypes.dbValue",
+                "addTypes.dbValues": "addTypes.dbValues",
+                "addTraceLinks.dbValue": "addTraceLinks.dbValue",
+                "addTraceLinks.dbValues": "addTraceLinks.dbValues"
+            },
+            "events": {
+                "success": [ {
+                    "name": "Arm0ExportToReqIF.populateInfoForConfiguration",
+                    "condition": "data.selectedRule"
+                } ]
+            }
+        }
+    },
+    "functions": {
+        "getOptionsArrayForMetadata": {
+            "functionName": "getOptionsArrayForMetadata",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getOptionsArrayForExport": {
+            "functionName": "getOptionsArrayForExport",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getInputContext": {
+            "functionName": "getInputContext"
+        },
+        "getSelectedObjects": {
+            "functionName": "getSelectedObjects",
+            "parameters": [
+                "{{ctx}}"
+            ]
+        },
+        "getTypePropsData": {
+            "functionName": "getTypePropsData",
+            "parameters": [
+                "{{data}}"
+            ]
+        }
+    },
+    "onEvent": [
+
+        {
+            "eventId": "Arm0ExportToReqIF.updateCmdVisibility",
+            "action": "updateCmdVisibility"
+        },
+        {
+            "eventId":"closeDialog",
+            "action": "closePanelDialog"
+        },
+        {
+            "eventId": "Arm0ExportToReqIF.initExportReqIFConfigurationsData",
+            "action": "initExportReqIFConfigurationsData"
+        },
+        {
+            "eventId": "awPanel.navigate",
+            "criteria": {
+                "destPanelId": "Arm0ExportToReqIFSub"
+            },
+            "action": "resetArm0AddTypesTraceLinksSubCtx"
+        },
+        {
+            "eventId": "Arm0ExportToReqIF.setSpecificationMetadata",
+            "action": "setSpecificationMetadata"
+        },
+        {
+            "eventId": "Arm0ExportToReqIF.refreshAddTypeList",
+            "action": "loadTypeCells"
+        },
+        {
+            "eventId": "Arm0ExportToReqIF.refreshAddTraceLinkList",
+            "action": "loadTraceLinkCells"
+        },
+        {
+            "eventId": "Arm0ExportToReqIF.unRegisterArm0AddTypesSubCtx",
+            "action": "unRegisterArm0AddTypesSubCtx"
+        },
+        {
+            "eventId": "Arm0ExportToReqIF.unRegisterArm0AddTraceLinksSubCtx",
+            "action": "unRegisterArm0AddTraceLinksSubCtx"
+        },
+        {
+            "eventId": "Arm0ExportToReqIF.doExportReqIFDocumentEvent",
+            "action": "doExportReqIFDocumentEvent"
+        },
+        {
+            "eventId": "Arm0ExportToReqIF.clickOnSavedConfigurationCommand",
+            "action": "clickOnSavedConfigurationCommand"
+        },
+        {
+            "eventId": "Arm0ExportToReqIF.setCmdDimensionForBallonPopup",
+            "action": "setCmdDimensionForBallonPopup"
+        },
+        {
+            "eventId": "Arm0ExportToReqIF.displayExportReqIFConfigPopup",
+            "action": "displayExportReqIFConfigPopup"
+        },
+        {
+            "eventId": "Arm0ExportToReqIF.createSaveExportConfigInput",
+            "action": "createSaveExportConfigInput"
+        },
+        {
+            "eventId": "Arm0ExportToReqIF.populateAllExportReqIFConfigrations",
+            "action": "populateAllExportReqIFConfigrations"
+        },
+        {
+            "eventId": "Arm0ExportToReqIF.initConfigsLovApi",
+            "action": "initConfigsLovApi"
+        },
+        {
+            "eventId": "Arm0ExportToReqIF.saveExportReqIFConfiguration",
+            "action": "saveExportReqIFConfiguration"
+        },
+        {
+            "eventId": "Arm0ExportToReqIF.populateInfoForConfiguration",
+            "action": "populateInfoForConfiguration"
+        },
+        {
+            "eventId": "Arm0ExportToReqIF.populateRulesFromSavedConfigName",
+            "action": "populateRulesFromSavedConfigName"
+        },
+        {
+            "eventId": "Arm0ExportToReqIF.contentUnloaded",
+            "action": "exportReqIFcontentUnloaded"
+        },
+        {
+            "eventId": "Arm0ExportToReqIF.closePanel",
+            "action": "closePanel"
+        }
+    ],
+    "conditions": {
+        "isReqIFExportAllowed": {
+            "expression": "ctx.saveExportReqIFConfigCmdVisiblity === true"
+        },
+        "isTraceLinkToAdd": {
+            "expression": "ctx.Arm0AddTraceLinkSub.addTraceLinks"
+        },
+        "isExportReqIFSaveRuleAllowed": {
+            "expression": "ctx.saveExportReqIFConfigCmdVisiblity === true && (data.savedConfigurations.dbValue.length===0 || (data.selectedRule && data.selectedRule.accessRight === 'WRITE' && data.savedConfigurations.dbValue===data.selectedRule.ruleName))"
+        }
+    },
+    "messages": {
+        "notificationForExportRInB": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.notificationForExportRInB}}"
+        },
+        "updateExportReqIFConfigWarningMessage": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.notificationForUpdateMsg}}",
+            "messageTextParams": [
+                "{{ctx.exportReqIFSavedMapping}}"
+            ],
+            "navigationOptions": [ {
+                    "option": "Cancel",
+                    "text": "{{i18n.cancel}}",
+                    "action": ""
+                },
+                {
+                    "option": "update",
+                    "text": "{{i18n.update}}",
+                    "action": "updateConfigExportReqIF"
+                }
+            ]
+        },
+        "dispatcherNotInstalledExportFailure": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "i18n": {
+        "exportTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "specType": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "createTraceLinkTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "notificationForExportRInB": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "runinBG": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "cancel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "update": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "delete": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "updateType": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "updateTraceLink": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "mapProperties": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "savedMappings": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "notificationForUpdateMsg": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "name": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "exportLinkedItems": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "requiredLabel": [
+            "RequirementsCommandPanelsMessages"
+        ]
+    }
+}

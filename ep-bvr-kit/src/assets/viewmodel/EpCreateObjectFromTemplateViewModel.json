@@ -1,0 +1,123 @@
+{
+    "schemaVersion": "1.0.0",
+    "ports": {
+        "EpCreateObjectFromTemplate_selectedObject": {
+            "onChangeAction": "updateSelectionToField",
+            "syncObject": {}
+        },
+        "EpCreateObjectFromTemplate_selectedRevRule":{
+            "syncObject": {}
+        }
+    },
+    "messages":{
+        "guidanceMessage": {
+            "messageType": "INFO",
+            "messageText": "{{subPanelContext.guidanceMessage}}"
+        }
+    },
+    "data": {
+        "inputPropName": {
+            "displayName": "{{i18n.Name}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "isEditable": "true",
+            "dbValue": "",
+            "dispValue": ""
+        },
+        "description": {
+            "displayName": "{{i18n.Description}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "",
+            "dispValue": ""
+        },
+        "epSearchConfig":{
+            "boTypeName": "{{subPanelContext.boTypeName}}",
+            "exclusionBOTypeNames": "{{subPanelContext.exclusionBOTypeNames}}",
+            "objectTypesToSearch": "{{subPanelContext.objectTypesToSearch}}",
+            "buttonName": "{{subPanelContext.buttonName}}",
+            "placeHolderForSearch": "{{subPanelContext.placeHolderForSearch}}",
+            "SourceTileContext": "{{subPanelContext.tileInfo}}",
+            "additionalCellWidget": "EpRevisionRuleListWidget",
+            "preferenceSuffixForTypesToSearch": "{{subPanelContext.preferenceSuffixForTypesToSearch}}"
+        },
+        "addObjectButtonEnabled": true
+    },
+    "actions": {
+        "updateSelectionToField": {
+            "actionType": "JSFunction",
+            "method": "updateSelectionToField",
+            "inputData": {
+                "inputPropName": "{{fields.inputPropName}}",
+                "selectedObject": "{{ports.EpCreateObjectFromTemplate_selectedObject.syncObject}}"
+            },
+            "deps": "js/epAddObjectService"
+        },
+        "disableAddPlantBOPButton": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": false
+            },
+            "outputData": {
+                "addObjectButtonEnabled": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "closePopupWindow": {
+            "actionType": "JSFunction",
+            "method": "close",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        },
+        "createPlantFromTemplate": {
+            "actionType": "JSFunctionAsync",
+            "method": "createPlantFromTemplate",
+            "inputData": {
+                "popupId": "{{data.popupId}}",
+                "objectToAdd":"{{function:getObjectToClone}}",
+                "revisionRule":"{{ports.EpCreateObjectFromTemplate_selectedRevRule.syncObject}}"
+            },
+            "deps": "js/epAddObjectService"
+        },
+        "createPlantFromTemplateBatchAction": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "disableAddPlantBOPButton"
+                },
+                {
+                    "action": "createPlantFromTemplate"
+                }
+            ]
+        }
+    },
+    "functions":{
+        "getObjectToClone":{
+            "functionName": "getObjectToClone",
+            "parameters":
+            [
+                "{{data.inputPropName}}",
+                "{{data.description}}",
+                "{{ports.EpCreateObjectFromTemplate_selectedObject.syncObject}}"
+            ],
+            "deps": "js/epAddObjectService"
+        }
+    },
+    "conditions": {
+        "isObjectSelectedToAdd": {
+            "expression": "ports.EpCreateObjectFromTemplate_selectedObject.syncObject && ports.EpCreateObjectFromTemplate_selectedObject.syncObject.uid"
+        },
+        "isAddObjectButtonEnabled":{
+            "expression": "conditions.isObjectSelectedToAdd && data.addObjectButtonEnabled"
+        }
+    },
+    "i18n": {
+        "Name" : [ "AdminMessages" ],
+        "Description" : [ "AdminMessages" ],
+        "cancel": [ "EPMessages" ]
+    }
+}

@@ -1,0 +1,2563 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-panel.directive",
+        "js/aw-column.directive",
+        "js/aw-toolbar.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-row.directive",
+        "js/aw-splitter.directive",
+        "js/exist-when.directive",
+        "js/aw-include.directive",
+        "js/visible-when.directive"
+    ],
+    "ports": {
+        "inputSelectionForSync": {
+            "syncObject": {}
+        }
+    },
+    "actions": {
+        "processSyncAction": {
+            "actionType": "Sync",
+            "inputData": {
+                "port": "inputSelectionForSync",
+                "syncObject": "{{data.eventMap['uniformParamTable.applySync']}}"
+            }
+        },
+        "reveal": {
+            "actionType": "JSFunction",
+            "method": "initCkeditor",
+            "inputData": {
+                "editorProps": "{{data._editorPropsInit}}"
+            },
+            "outputData": {
+                "_editorProps": ""
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor",
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.loadContentFromServer"
+                    }
+                ]
+            }
+        },
+        "updateACESelection":{
+            "actionType": "JSFunction",
+            "method": "updateACESelection",
+            "inputData": {
+                "data":"{{data}}"
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "updateLocallyOrRefreshDocTab": {
+            "actionType": "JSFunction",
+            "method": "updateLocallyOrRefreshDocTab",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "InsertImageInCKEditor":{
+            "actionType": "JSFunction",
+            "method": "InsertImageInCKEditor",
+            "inputData": {
+                "data":"{{data}}"
+            },
+            "outputData": {
+                "form": "form",
+                "datasetInfo":"datasetInfo"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.InsertObjInCKEditor"
+                    }
+                ]
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "InsertOLEInCKEditor":{
+            "actionType": "JSFunction",
+            "method": "InsertOLEInCKEditor",
+            "inputData": {
+                "data":"{{data}}"
+            },
+            "outputData": {
+                "eventMap": "eventMap",
+                "form": "form",
+                "fileExtensions" : "fileExtensions"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.getDatasetTypesWithDefaultRelation"
+                    }
+                ]
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "updatehtmlDivs": {
+            "actionType": "JSFunction",
+            "method": "updateHtmlDivs",
+            "inputData": {
+                "id": "{{data._editorProps.id}}",
+                "updatedObjs": "{{data.updateInput}}",
+                "htmlContents": "{{data.updatedObjsHTMLContent}}",
+                "ctx": "{{ctx}}"
+            },
+            "deps": "js/ckeditorOperations"
+        },
+        "getUpdatedObjectsHTMLTextContent": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2017-06-RequirementsManagement",
+            "method": "exportToApplication3",
+            "inputData": {
+                "input": [
+                    {
+                        "templateName": "",
+                        "applicationFormat": "HTML",
+                        "objectsToExport": "{{function:getObjectsToUpdate}}",
+                        "targetObjectsToExport": [],
+                        "exportOptions": "{{function:getExportOptions}}",
+                        "recipeSourceObjects": [],
+                        "recipeTargetObjects": [],
+                        "attributesToExport": [],
+                        "objectTemplateInputs": [],
+                        "includeAttachments": false
+                    }
+                ]
+            },
+            "outputData": {
+                "updatedObjsHTMLContent": "transientFileReadTickets"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.updatehtmlDivs"
+                    }
+                ]
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "openCrossRefLinkInNewTab": {
+            "actionType": "JSFunction",
+            "method": "navigateToObject",
+            "inputData": {
+                "crossRefLinkElement": "{{data.eventMap['requirementDocumentation.openCrossRefLinkInNewTab'].crossRefLinkElement}}",
+                "id": "{{data.eventMap['requirementDocumentation.openCrossRefLinkInNewTab'].id}}",
+                "ctx": "{{ctx}}"
+            },
+            "deps": "js/ckeditorOperations"
+        },
+        "canShowPasteCrossRefLinkPopup": {
+            "actionType": "JSFunction",
+            "method": "canShowPasteCrossRefLinkPopup",
+            "inputData": {},
+            "deps": "js/Arm0PasteCrossReferenceLinkPopup"
+        },
+        "afterPasteCrossRefLinkReveal": {
+            "actionType": "JSFunction",
+            "method": "callInitPasteCrossRefLinkPopup",
+            "deps": "js/Arm0PasteCrossReferenceLinkPopup"
+        },
+        "showTracelinkTooltip": {
+            "actionType": "popup",
+            "inputData": {
+                "options": {
+                    "view": "Arm0TraceLinkTooltip",
+                    "draggable": false,
+                    "clickOutsideToClose": true,
+                    "whenParentScrolls": "close",
+                    "hasArrow": true,
+                    "placement": "right"
+                }
+            },
+            "outputData": {
+                "popupId": "id"
+            }
+        },
+        "updateReference": {
+            "actionType": "JSFunction",
+            "method": "updateReference",
+            "inputData": {
+                "reference": "{{data.eventMap['requirementDocumentation.setTooltipContentData'].targetElement}}",
+                "popupAction": "{{actions.showTracelinkTooltip}}"
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor",
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.showTracelinkTooltipPopup"
+                    }
+                ]
+            }
+        },
+        "updateReferenceForActionPanel": {
+            "actionType": "JSFunction",
+            "method": "updateReference",
+            "inputData": {
+                "reference": "{{data.eventData.targetElement}}",
+                "popupAction": "{{actions.showActionsPanel}}"
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor",
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.showActionsPanelPopup"
+                    }
+                ]
+            }
+        },
+        "setEditorSelection": {
+            "actionType": "JSFunction",
+            "method": "setEditorSelection",
+            "inputData": {
+            },
+            "deps": "js/paramToReq"
+        },
+        "removeEditorSelection": {
+            "actionType": "JSFunction",
+            "method": "removeEditorSelection",
+            "inputData": {
+            },
+            "deps": "js/paramToReq"
+        },
+        "updateReferenceForAddPanelEditor":{
+            "actionType": "JSFunction",
+            "method": "updateReferenceForAddPanel",
+            "inputData": {
+                "popupAction": "{{actions.showBalloonPopupForEditor}}"
+            },
+            "deps": "js/paramToReq",
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.showBalloonPopupForEditor"
+                    }
+                ]
+            }
+        },
+        "updateReferenceForChildSibling":{
+            "actionType": "JSFunction",
+            "method": "updateReferenceForChildSibling",
+            "inputData": {
+                "data":"{{data}}",
+                "popupAction": "{{actions.showBalloonPopupForAddChildSibling}}",
+                "eventData":"{{data.eventMap['requirementDocumentationEditor.PopupForAddChildSibling']}}"
+            },
+            "outputData": {
+
+            },
+            "deps": "js/Arm0ShowBalloonPopupPanelView"
+
+        },
+        "addchildforSpecForRequirement":{
+            "actionType": "JSFunction",
+            "method": "addchildforSpec",
+            "inputData": {
+
+                "eventData":"{{data.eventMap['requirementDocumentation.registerChildForRequirementSpec']}}"
+            },
+            "outputData": {
+
+            },
+            "deps": "js/Arm0ShowBalloonPopupPanelView"
+
+        },
+        "updateReferenceForAddPanel":{
+            "actionType": "JSFunction",
+            "method": "updateReference",
+            "inputData": {
+                "reference": "{{data.eventData.targetElement}}",
+                "popupAction": "{{actions.showBalloonPopupActionsPanel}}"
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor",
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.showBalloonPopup"
+                    }
+                ]
+            }
+        },
+        "setEditorSelectionForAddParam": {
+            "actionType": "JSFunction",
+            "method": "setEditorSelection",
+            "inputData": {
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.openAddParameterPanel"
+                    }
+                ]
+            },
+            "deps": "js/paramToReq"
+        },
+        "showPasteCroessReferenceLinkPopup": {
+            "actionType": "popup",
+            "inputData": {
+                "options": {
+                    "view": "Arm0PasteCrossReferenceLinkPopup",
+                    "draggable": true,
+                    "isModal": false,
+                    "clickOutsideToClose": false,
+                    "caption": "{{i18n.ShowCrossReferenceAs}}",
+                    "anchor": "closePopupAnchor"
+                }
+            }
+        },
+        "configurationChanged": {
+            "actionType": "JSFunction",
+            "method": "configurationChanged",
+            "inputData": {
+                "eventdata": "{{data.eventData.value}}"
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "unregisterEnableExportCmdContext": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "deps": "js/appCtxService",
+            "inputData": {
+                "name": "isExportToPDFIsInProgress"
+            }
+        },
+        "unregisterLastSelectedUIDContext": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "deps": "js/appCtxService",
+            "inputData": {
+                "name": "lastSelectedElement"
+            }
+        },
+        "unregisterDerivedSpecOpenedContext": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "deps": "js/appCtxService",
+            "inputData": {
+                "name": "isDerivedSpecOpened"
+            }
+        },
+        "exportToWord": {
+            "actionType": "RESTService",
+            "serviceName": "",
+            "method": "POST",
+            "inputData": {
+                "request": {
+                    "method": "POST",
+                    "url": "{{function:getMicroserviceURL}}",
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "data": {
+                        "htmlContents": "{{data.eventMap['Arm0RequirementDocumentationACE.exportToWord'].htmlContent}}",
+                        "exportAsPDF": "true"
+                    }
+                }
+            },
+            "outputData": {
+                "searchTCObjects": "{{function:processResponse}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "progress.end"
+                    },
+                    {
+                        "name": "Arm0ExportToRoundTripWordDocument.unregisterEnableExportCmdContext"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "progress.end"
+                    },
+                    {
+                        "name": "Arm0ExportToRoundTripWordDocument.unregisterEnableExportCmdContext"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "message": "ExportFailedError"
+                    }
+                ]
+            },
+            "deps": "js/Arm0RequirementDocumentationACE"
+        },
+        "updateSOAInput": {
+            "actionType": "JSFunction",
+            "method": "updateSOAInput",
+            "inputData": {
+                "ctx": "{{ctx}}",
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0RequirementDocumentationACE"
+        },
+        "getSpecificationSegmentInputForMicriservice": {
+            "actionType": "JSFunction",
+            "method": "getSpecificationSegmentInput",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0RequirementDocumentationACE.updateSOAInputForMicroservice"
+                    },
+                    {
+                        "name": "Arm0RequirementDocumentationACE.exportToWord"
+                    }
+                ]
+            },
+            "deps": "js/Arm0RequirementDocumentationACE"
+        },
+        "registerContext": {
+            "actionType": "JSFunction",
+            "method": "registerCtx",
+            "inputData": {
+                "name": "isACEDocumentationTabActive",
+                "value": true
+            },
+            "deps": "js/appCtxService"
+        },
+        "cleanupOnContentUnloaded": {
+            "actionType": "JSFunction",
+            "method": "cleanupOnContentUnloaded",
+            "deps": "js/Arm0RequirementDocumentationACEEditor",
+            "inputData": {}
+        },
+        "cleanupAceDocumentationPage": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "cleanupOnContentUnloaded"
+                },
+                {
+                    "action": "unregisterDerivedSpecOpenedContext"
+                }
+            ]
+        },
+        "updateOccurrenceObjects": {
+            "actionType": "JSFunction",
+            "method": "updateOccurrenceObjects",
+            "inputData": {
+                "updatedHeaderOccUids": "{{ctx.arm0ReqDocACEUpdatedHeaderOccUids}}",
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "refreshOccurenceObjects": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2007-01-DataManagement",
+            "method": "refreshObjects",
+            "inputData": {
+                "objects": "{{data.eventMap['Arm0RequirementDocumentationACE.refreshOccurenceObjects'].occurrenceObjectToUpdate}}"
+            },
+            "deps": "js/alternatesService"
+        },
+        "loadContentFromServer": {
+            "actionType": "JSFunctionAsync",
+            "method": "getSpecificationSegment",
+            "inputData": {
+                "soaInput": {
+                    "inputData": "{{function:getSpecificationSegmentInput}}"
+                },
+                "propertyPolicyOverride": "{{data.loadSpecPolicy}}"
+            },
+            "outputData": {
+                "content": "output",
+                "partialErrors": "ServiceData.partialErrors"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.initContent"
+                    }
+                ],
+                "failure": [
+                    {
+                        "condition": "errorCode.code==26042  || errorCode.code==26025 || errorCode.code==39014",
+                        "name": "requirementDocumentation.initContent"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "condition": "partialErrors",
+                    "message": "errorMessageOnAction"
+               } ]
+            },
+            "deps": "js/Arm0LoadSpecService"
+        },
+        "handleLoadSelectedObjectContentFromServer": {
+            "actionType": "JSFunction",
+            "method": "handleLoadDataForPagination",
+            "inputData": {
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "loadSelectedObjectContentFromServer": {
+            "actionType": "JSFunctionAsync",
+            "method": "getSpecificationSegment",
+            "inputData": {
+                "soaInput": {
+                    "inputData": "{{function:getSpecificationSegmentInputForSelected}}"
+                },
+                "propertyPolicyOverride": "{{data.loadSpecPolicy}}"
+            },
+            "outputData": {
+                "content": "output"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.initContent"
+                    }
+                ]
+            },
+            "deps": "js/Arm0LoadSpecService"
+        },
+        "loadContentDataForCreatedObject": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AwReqMgmtSe-2019-06-SpecNavigation",
+            "method": "getSpecificationSegment",
+            "inputData": {
+                "inputData": "{{function:getSpecificationSegmentInputForCreatedObject}}"
+            },
+            "outputData": {
+                "createdContent": "output"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.addCreatedContentToEditor"
+                    }
+                ]
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "loadContentDataForSavedContent": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AwReqMgmtSe-2019-06-SpecNavigation",
+            "method": "getSpecificationSegment",
+            "inputData": {
+                "inputData": "{{function:getSpecificationSegmentInputForSavedContent}}"
+            },
+            "outputData": {
+                "createdContent": "output",
+                "ServiceData": "ServiceData"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.addSavedContentToEditor"
+                    }
+                ]
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "loadUpdatedContentDataForRoundtrip": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AwReqMgmtSe-2019-06-SpecNavigation",
+            "method": "getSpecificationSegment",
+            "inputData": {
+                "inputData": "{{function:getSpecSegmentInputForRoundtripContent}}"
+            },
+            "outputData": {
+                "roundTripUpdatedContent": "output",
+                "ServiceData": "ServiceData"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.addUpdatedRoundtripContentToEditor"
+                    }
+                ]
+            },
+            "deps": "js/Arm0DocumentationUpdateOnRoundtripService"
+        },
+        "initContent": {
+            "actionType": "JSFunction",
+            "method": "initContent",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}",
+                "reqCtx":"{{fields.requirementCtx}}"
+            },
+            "outputData": {
+                "requirementCtx": "requirementCtx",
+                "contentReady" : "contentReady"
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "verifyCkeAndInitContent": {
+            "actionType": "JSFunction",
+            "method": "verifyCkeAndInitContent",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}",
+                "reqCtx":"{{fields.requirementCtx}}"
+            },
+            "outputData": {
+                "requirementCtx": "requirementCtx",
+                "contentReady" : "contentReady"
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "prepareInputforOLEInsert": {
+            "actionType": "JSFunction",
+            "method": "prepareInputforOLEInsert",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.InsertObjInCKEditor"
+                    }
+                ]
+            },
+            "outputData": {
+                "datasetInfo": "datasetInfo"
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "doExportDocument": {
+            "actionType": "JSFunction",
+            "method": "openFile",
+            "inputData": {
+                "data": "{{data.fileTickets[0]}}"
+            },
+            "deps": "js/fmsUtils"
+        },
+        "insertImage": {
+            "actionType": "JSFunction",
+            "method": "insertImage",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "insertOLE": {
+            "actionType": "JSFunction",
+            "method": "insertOLE",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "updateFormData": {
+            "actionType": "JSFunction",
+            "method": "updateFormData",
+            "inputData": {
+                "fileData": {
+                    "key": "fmsTicket",
+                    "value": "{{data.fmsTicket}}"
+                },
+                "data": "{{data}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.uploadFile"
+                    }
+                ]
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "insertObjInCKEditor": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-04-DataManagement",
+            "method": "createDatasets",
+            "inputData": {
+                "input": [
+                    {
+                        "clientId": "{{data.datasetInfo.clientId}}",
+                        "container": {
+                            "uid": "AAAAAAAAAAAAAA",
+                            "type": "unknownType"
+                        },
+                        "datasetFileInfos": [
+                            {
+                                "fileName": "{{data.datasetInfo.fileName}}",
+                                "namedReferenceName": "{{data.datasetInfo.namedReferenceName}}",
+                                "isText": "{{function:isTextDataset}}"
+                            }
+                        ],
+                        "relationType": "",
+                        "description": "",
+                        "name": "{{data.datasetInfo.name}}",
+                        "type": "{{data.datasetInfo.type}}"
+                    }
+                ]
+            },
+            "outputData": {
+                "fmsTicket": "datasetOutput[0].commitInfo[0].datasetFileTicketInfos[0].ticket",
+                "commitInfos": "datasetOutput[0].commitInfo[0]",
+                "relatedModified": "datasetOutput[0].dataset",
+                "createdObject": "datasetOutput[0].dataset"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.updateFormData"
+                    }
+                ]
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "uploadFile": {
+            "actionType": "RESTService",
+            "serviceName": "",
+            "method": "POST",
+            "inputData": {
+                "request": {
+                    "method": "POST",
+                    "url": "{{Constants.fmsUrl}}",
+                    "headers": {
+                        "Content-type": "undefined"
+                    },
+                    "data": "{{data.formData}}"
+                }
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.commitDataset"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "Arm0ImportFromOffice.importDocumentFailed"
+                    }
+                ]
+            }
+        },
+        "commitDataset": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-FileManagement",
+            "method": "commitDatasetFiles",
+            "inputData": {
+                "commitInput": [
+                    {
+                        "dataset": "{{data.commitInfos.dataset}}",
+                        "createNewVersion": true,
+                        "datasetFileTicketInfos": [
+                            {
+                                "datasetFileInfo": {
+                                    "clientId": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.clientId}}",
+                                    "fileName": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.fileName}}",
+                                    "namedReferencedName": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.namedReferenceName}}",
+                                    "isText": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.isText}}",
+                                    "allowReplace": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.allowReplace}}"
+                                },
+                                "ticket": "{{data.fmsTicket}}"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.insertImage",
+                        "condition": "data.datasetInfo.type==='Image'"
+                    },
+                    {
+                        "name": "requirementDocumentation.insertOLE",
+                        "condition": "data.datasetInfo.type!='Image'"
+                    }
+                ]
+            }
+        },
+        "getDatasetTypesWithDefaultRelation": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2015-10-DataManagement",
+            "method": "getDatasetTypesWithDefaultRelation",
+            "inputData": {
+                "fileExtensions": [
+                    "{{data.fileExtensions}}"
+                ],
+                "parent": {
+                    "type": "{{ctx.selected.type}}",
+                    "uid": "{{ctx.selected.uid}}"
+                }
+            },
+            "outputData": {
+                "datasetTypesWithDefaultRelInfo": "output[0].datasetTypesWithDefaultRelInfo",
+                "fileFormat": "output[0].datasetTypesWithDefaultRelInfo[0].refInfos[0].fileFormat"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.prepareInputforOLEInsert"
+                    }
+                ]
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "addObjectToTracelinkPanel": {
+            "actionType": "JSFunction",
+            "method": "addObjectToTracelinkPanel",
+            "inputData": {
+                "panelContext": "{{data.eventMap['requirementDocumentation.addObjectToTracelinkPanel']}}"
+            },
+            "deps": "js/Arm0CreateTraceLink"
+        },
+        "refreshMarkersOnObjectModified": {
+            "actionType": "JSFunction",
+            "method": "refreshMarkersOnObjectModified",
+            "inputData": {
+                "modifiedObjects": "{{data.eventData.modifiedObjects}}"
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "setTooltipContentData": {
+            "actionType": "JSFunction",
+            "method": "setTooltipContentData",
+            "inputData": {
+                "data": "{{data}}",
+                "selectedOccurrenceUid": "{{data.eventMap['requirementDocumentation.setTooltipContentData'].sourceObject}}"
+            },
+            "outputData": {
+                "popupheight": "popupheight"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0TracelinkTooltip.closeExistingTracelinkTooltip",
+                        "condition": "ctx.Arm0TraceLinkTooltipBalloonPopupVisible && data.popupheight"
+                    },
+                    {
+                        "name": "requirementDocumentation.showTracelinkTooltip",
+                        "condition": "!ctx.Arm0TraceLinkTooltipBalloonPopupVisible && data.popupheight"
+                    }
+                ]
+            },
+            "deps": "js/requirementsTooltipService"
+        },
+        "closeExistingTracelinkTooltip": {
+            "actionType": "JSFunction",
+            "method": "closeExistingTracelinkTooltip",
+            "inputData": {
+                "ctx": "{{ctx}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.showTracelinkTooltip",
+                        "condition": "data.popupheight"
+                    }
+                ]
+            },
+            "deps": "js/requirementsTooltipService"
+        },
+        "closeExistingTracelinkTooltipWithoutHoverCheck": {
+            "actionType": "JSFunction",
+            "method": "closeExistingTracelinkTooltip",
+            "inputData": {
+                "ctx": "{{ctx}}",
+                "noHoverCheck": true
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "showActionPopup.close"
+                    }
+                ]
+            },
+            "deps": "js/requirementsTooltipService"
+        },
+        "closePopupWindow": {
+            "actionType": "JSFunction",
+            "method": "close",
+            "inputData": {},
+            "deps": "js/declpopupService"
+        },
+        "closeTracelinkTooltip": {
+            "actionType": "JSFunction",
+            "method": "closeExistingTracelinkTooltip",
+            "inputData": {
+                "ctx": "{{ctx}}"
+            },
+            "deps": "js/requirementsTooltipService"
+        },
+        "removeTracelink": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "deleteObjects",
+            "deps": "js/requirementsTooltipService",
+            "inputData": {
+                "objects": "{{function:getCutTracelinkInput}}"
+            },
+            "outputData": {
+                "deletedTracelinkedObject": "deleted",
+                "deletedChildObject": "{{function:getSelectedTracelinkedObject}}",
+                "delectedParentObject": "{{function:getSelectedTooltipObject}}",
+                "deleteObjectsPartialErrors": "partialErrors"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "refreshLocationFlag": true,
+                            "relatedModified": "{{function:getTracelinkedObjects}}"
+                        }
+                    },
+                    {
+                        "name": "requirementDocumentation.deleteTracelinkFromTooltip",
+                        "condition": "deletedTracelinkedObject && deletedTracelinkedObject.length > 0"
+                    },
+                    {
+                        "name": "Arm0TracelinkTooltip.closeExistingTracelinkTooltipWithoutHoverCheck",
+                        "condition": "ctx.Arm0TraceLinkTooltipBalloonPopupVisible"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "condition": "data.deleteObjectsPartialErrors.length>0",
+                    "message": "getMessageFromTLDeleteFailure"
+                } ],
+                "success": [
+                    {
+                        "condition": "deletedTracelinkedObject && deletedTracelinkedObject.length > 0",
+                        "message": "notificationTracelinkDeletedSuccess"
+                    }
+                ]
+            }
+        },
+        "addToAwClipboard": {
+            "actionType": "JSFunction",
+            "method": "setContents",
+            "deps": "js/tcClipboardService",
+            "inputData": {
+                "uid": [
+                    "{{data.deletedChildObject.uid}}"
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "cutSingleSuccessful"
+                    }
+                ]
+            }
+        },
+        "deleteTracelinkFromTooltip": {
+            "actionType": "JSFunction",
+            "method": "deleteTracelinkFromTooltip",
+            "deps": "js/requirementsTooltipService"
+        },
+        "deleteTracelinkFromTooltipInAce": {
+            "actionType": "JSFunction",
+            "method": "deleteTracelinkFromTooltipInAce",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "showActionsPanel": {
+            "actionType": "popup",
+            "inputData": {
+                "options": {
+                    "view": "Arm0ShowActionsPanel",
+                    "width": 200,
+                    "placement": "right",
+                    "hasArrow": true,
+                    "whenParentScrolls": "close"
+                }
+            },
+            "outputData": {
+                "popupId": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "arm0showactionpanel.setPopupId"
+                    }
+                ]
+            },
+            "deps": "js/Arm0ShowBalloonPopupPanelView"
+        },
+        "registerCtxForDerivedCommands":{
+            "actionType": "JSFunction",
+            "method": "registerCtxForDerivedCommands",
+            "inputData": {},
+            "deps": "js/requirementsACEUtils"
+        },
+        "handleParameterSelectionChange":
+        {
+            "actionType": "JSFunction",
+            "method": "handleParameterSelectionChange",
+            "deps": "js/paramToReq",
+            "inputData": {
+                "eventData": "{{data.eventMap['uniformParamTable.selectionChanged']}}"
+            }
+        },
+        "showBalloonPopupForEditor": {
+            "actionType": "popup",
+            "inputData": {
+                "options": {
+                    "view": "Arm0ShowBalloonPopupForEditor",
+                    "width": 175,
+                    "placement": "right",
+                    "hasArrow": false,
+                    "whenParentScrolls": "close"
+                }
+            },
+            "outputData": {
+                "popupId": "id"
+            }
+        },
+        "showBalloonPopupForAddChildSibling": {
+            "actionType": "popup",
+            "inputData": {
+                "options": {
+                    "view": "Arm0ShowBalloonPopupForAddChildSibling",
+                    "width": 175,
+                    "placement": "right",
+                    "hasArrow": true,
+                    "whenParentScrolls": "close",
+                    "subPanelContext": {
+                        "eventData":"{{data.eventData}}",
+                        "visibleServerCommandsForRM":"{{data.visibleServerCommandsForRM}}"
+                    }
+                }
+            },
+            "outputData": {
+                "popupId": "id"
+            }
+        },
+        "showBalloonPopupActionsPanel": {
+            "actionType": "popup",
+            "inputData": {
+                "options": {
+                    "view": "Arm0ShowBalloonPopupPanel",
+                    "height": 150,
+                    "width": 200,
+                    "placement": "right",
+                    "hasArrow": true,
+                    "draggable":false,
+                    "whenParentScrolls": "close"
+                }
+            },
+            "outputData": {
+                "popupId": "id"
+            }
+        },
+
+        "selectionChanged": {
+            "actionType": "JSFunction",
+            "method": "selectionChanged",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "outputData": {
+                "selectedObjectUid" : "selectedObjectUid"
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "addCreatedContentToEditor": {
+            "actionType": "JSFunction",
+            "method": "addCreatedContentToEditor",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "events": {},
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "addSavedContentToEditor": {
+            "actionType": "JSFunction",
+            "method": "addSavedContentToEditor",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "events": {},
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "addUpdatedRoundtripContentToEditor": {
+            "actionType": "JSFunction",
+            "method": "addUpdatedRoundtripContentToEditor",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "events": {},
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "registerCxtForActionsPanel": {
+            "actionType": "JSFunction",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "method": "registerCxtForActionsPanel",
+            "deps": "js/Arm0ShowActionsPanelView"
+        },
+        "registerCxtForBalloonPopup": {
+            "actionType": "JSFunction",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "method": "registerCxtForBalloonPopup",
+            "deps": "js/Arm0ShowBalloonPopupPanelView"
+        },
+        "registerCxtForPopupInsideEditor": {
+            "actionType": "JSFunction",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "method": "registerCxtForPopupInsideEditor",
+            "deps": "js/Arm0ShowBalloonPopupPanelView"
+        },
+        "registerCxtForPopupChildSibling": {
+            "actionType": "JSFunction",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "method": "registerCxtForPopupChildSibling",
+            "deps": "js/Arm0ShowBalloonPopupPanelView"
+        },
+        "handleRefreshDocTab": {
+            "actionType": "JSFunction",
+            "method": "handleRefreshDocTab",
+            "inputData": {},
+            "events": {},
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "documentationTabRefresh": {
+            "actionType": "JSFunction",
+            "method": "documentationTabRefresh",
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "documentationTabRefreshOnRoundTripImport": {
+            "actionType": "JSFunction",
+            "method": "documentationTabRefreshOnRoundTripImport",
+            "inputData": {
+                "eventData":"{{data.eventMap['requirementDocumentation.documentationTabRefreshOnRoundTripImport']}}",
+                "occContext": "{{props.subPanelContext.context.occContext}}"
+
+            },
+            "deps": "js/Arm0DocumentationUpdateOnRoundtripService"
+        },
+        "isCkeditorInstanceReady": {
+            "actionType": "JSFunction",
+            "method": "isCkeditorInstanceReady",
+            "inputData": {
+                "data": "{{data}}",
+                "eventData": "{{parameters.eventData}}",
+                "reqCtx":"{{fields.requirementCtx}}"
+            },
+            "outputData": {
+                "requirementCtx": "requirementCtx",
+                "_editorProps": "editorProps",
+                "contentReady": "contentReady"
+            },
+            "events": {},
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "downloadOLEObjectFromDataSet": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData": {
+                "objects": "{{data.oleObjectDS}}",
+                "attributes": [
+                    "IMAN_specification"
+                ]
+            },
+            "outputData": {
+                "response": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.setOLEObjectToDownload"
+                    }
+                ]
+            }
+        },
+        "downloadOLEObject": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "downloadOLEObjectGetFileTicket"
+                },
+                {
+                    "action": "downloadFileFromIman"
+                }
+            ]
+        },
+        "downloadOLEObjectGetFileTicket": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-FileManagement",
+            "method": "getFileReadTickets",
+            "inputData": {
+                "files": "{{data.oleObjsToDownload}}"
+            },
+            "outputData": {
+                "fileTickets": "tickets[1]"
+            }
+        },
+        "downloadFileFromIman": {
+            "actionType": "JSFunction",
+            "method": "downloadOLEFile",
+            "inputData": {
+                "fileTickets": "{{data.fileTickets}}",
+                "oleObjsToDownload": "{{data.oleObjsToDownload}}"
+            },
+            "deps": "js/Arm0RequirementOLEDownloadService"
+        },
+        "setOLEObjectToDownload": {
+            "actionType": "JSFunction",
+            "method": "setOLEObjectToDownload",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.downloadOLEObject",
+                        "condition": "data.oleObjsToDownload.length > 0"
+                    }
+                ]
+            },
+            "deps": "js/Arm0RequirementOLEDownloadService"
+        },
+        "handleOLEClick": {
+            "actionType": "JSFunction",
+            "method": "handleOLEClick",
+            "inputData": {
+                "targetElement": "{{data.eventMap['requirementDocumentation.handleOLEClick'].targetElement}}",
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0RequirementOLEDownloadService"
+        },
+        "redirectToHome": {
+            "actionType": "Navigate",
+            "navigateTo": "showHome",
+            "navigationParams": {}
+        },
+        "splitReqCmdEnabler": {
+            "actionType": "JSFunction",
+            "method": "registerCtx",
+            "inputData": {
+                "name": "enableSplitCmd",
+                "value": "{{data.eventMap['requirementDocumentation.enableSplitReqCmd'].enable}}"
+            },
+            "deps": "js/appCtxService"
+        },
+        "newCommentCmdEnabler": {
+            "actionType": "JSFunction",
+            "method": "registerCtx",
+            "inputData": {
+                "name": "enableNewCommentCmd",
+                "value": "{{data.eventMap['requirementDocumentation.selectionChangedinCkEditor'].isSelected}}"
+            },
+            "deps": "js/appCtxService"
+        },
+        "contentTableCmdEnabler": {
+            "actionType": "JSFunction",
+            "method": "updatePartialCtx",
+            "inputData": {
+                "name": "AWRequirementsEditor.enableTOC",
+                "value": "{{data.eventMap['requirementDocumentation.enableTableContentCmd'].enableTOC}}"
+            },
+            "deps": "js/appCtxService"
+        },
+        "openInNewTab": {
+            "actionType": "Navigate",
+            "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+            "navigationParams": {
+                "locale": "{{ctx.userSession.props.fnd0locale.dbValues[0]}}",
+                "uid": "{{data.eventMap['requirementDocumentation.openReqInNewTab'].uid}}",
+                "page": "{{i18n.occMgmtTitle}}",
+                "pageId": "tc_xrt_Content"
+            },
+            "navigateIn": "newTab"
+        },
+        "unregisterShowReqQualityDataFlag": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "deps": "js/appCtxService",
+            "inputData": {
+                "name": "showRequirementQualityData"
+            }
+        },
+        "getProductAndTopElementInfo": {
+            "actionType": "JSFunction",
+            "method": "getProductAndTopElementInfo",
+            "deps": "js/Arm0RequirementQualityService",
+            "inputData": {
+                "eventData": "{{data.eventMap['requirementDocumentation.getProductAndTopElementInfo']}}"
+            }
+        },
+        "errorWhileConnectingToReuseAPI": {
+            "actionType": "Event",
+            "method": "Event",
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "reuseAPICallFailedError"
+                    }
+                ]
+            }
+        },
+        "loadParameterCtxDetails": {
+            "actionType": "JSFunction",
+            "method": "loadParameterCtxDetails",
+            "inputData": {
+                "ctx": "{{ctx}}",
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0RequirementParameterTable"
+        },
+        "openAddParameterPanel": {
+            "actionType": "JSFunction",
+            "method": "activateCommandPanel",
+            "deps": "js/commandPanel.service",
+            "inputData": {
+                "commandId": "Att1AddParameterPanel",
+                "location": "aw_toolsAndInfo",
+                "context": {
+                    "parametersTable":{
+                        "parentObjects": "{{subPanelContext.context.occContext.selectedModelObjects}}"
+                    }
+                }
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "showActionPopup.close"
+                    }
+                ]
+            }
+        },
+        "openSearchParameterPanel": {
+            "actionType": "JSFunction",
+            "method": "activateAddParameterCommandPanel",
+            "inputData": {
+                "context": {
+                    "parametersTable":{
+                        "parentObjects": "{{subPanelContext.context.occContext.selectedModelObjects}}"
+                    }
+                }
+            },
+            "deps": "js/paramToReq"
+        },
+        "checkParametersTable": {
+            "actionType": "JSFunction",
+            "method": "checkParamTable",
+            "inputData": {
+                "data": "{{data.eventMap['requirementDocumentation.showParametersTable']}}",
+                "subpanelContext" : "{{subPanelContext}}",
+                "reqCtx":"{{fields.requirementCtx}}"
+            },
+            "deps": "js/paramToReq"
+        },
+        "closeSplitPanel":{
+            "actionType": "JSFunction",
+            "method": "changePanelLocation",
+            "inputData": {
+                "panelLocation": "off",
+                "reqCtx":"{{fields.requirementCtx}}"
+            },
+            "deps": "js/paramToReq"
+        },
+        "showParamTable": {
+            "actionType": "JSFunction",
+            "method": "changePanelLocation",
+            "inputData": {
+                "location": "bottom",
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0SplitPanelService"
+        },
+        "changeRowSelection": {
+            "actionType": "JSFunction",
+            "method": "changeRowSelectionWhenTableExist",
+            "inputData": {
+                "eventData": {
+                    "data": "{{data.eventData}}"
+                }
+            },
+            "deps": "js/paramToReq"
+        },
+        "isParamCreated": {
+            "actionType": "JSFunction",
+            "method": "isParamCreated",
+            "inputData": {
+                "data": "{{data.eventMap['cdm.created']}}"
+            },
+            "deps": "js/paramToReq"
+        },
+        "subscribeParameterCreatedevent":{
+            "actionType": "JSFunction",
+            "method": "subscribeParameterCreatedevent",
+            "inputData": {},
+            "deps": "js/paramToReq"
+        },
+        "closeAddParameterPanel":{
+            "actionType": "JSFunction",
+            "method": "unsubscribeCreatedAndUpdatedEvent",
+            "inputData": {},
+            "deps": "js/paramToReq"
+        },
+        "setSelectionAfterPropertiesLoaded": {
+            "actionType": "JSFunction",
+            "method": "setRowSelectionAfterPropertiesLoaded",
+            "inputData": {
+                "eventData": {
+                    "data": "{{data}}"
+                }
+            },
+            "deps": "js/paramToReq"
+        },
+        "attrTableRowSelected": {
+            "actionType": "JSFunction",
+            "method": "rowSelectionComplete",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/paramToReq"
+        },
+        "modelOnObjectsChanged": {
+            "actionType": "JSFunction",
+            "method": "modelOnObjectsChanged",
+            "inputData": {
+                "modelObjects": "{{data.eventMap['cdm.updated'].updatedObjects}}",
+                "data": "{{data}}",
+                "ckeditorOperations": "{{data.ckeditorOperations}}"
+            },
+            "deps": "js/Arm0RequirementDocumentationUpdateDataService"
+        },
+        "pageUp": {
+            "actionType": "JSFunction",
+            "method": "setScrollingDirection",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}",
+                "source": "CKEDITOR",
+                "goForward": false
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "pageDown": {
+            "actionType": "JSFunction",
+            "method": "setScrollingDirection",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}",
+                "source": "CKEDITOR",
+                "goForward": true
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "cashMarkupsOnPanelClose": {
+            "actionType": "JSFunction",
+            "method": "updateMarkupContext",
+            "inputData": {},
+            "deps": "js/Arm0MarkupUtil"
+        },
+        "clearMarkupSelection": {
+            "actionType": "JSFunction",
+            "method": "clearMarkupSelection",
+            "inputData": {},
+            "deps": "js/Arm0MarkupUtil"
+        },
+        "confirmSaveEdits": {
+            "actionType": "JSFunction",
+            "method": "confirmSaveEdits",
+            "inputData": {},
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "handleMarkupUpdate": {
+            "actionType": "JSFunction",
+            "method": "handleMarkupUpdate",
+            "inputData": {
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "navigateToMergePreview": {
+            "actionType": "Navigate",
+            "navigateTo": "#/RequirementMergePreview",
+            "navigationParams": {
+                "fileName": "Merge"
+            }
+        },
+        "enableNewCommentCommand": {
+            "actionType": "JSFunction",
+            "method": "registerCtx",
+            "inputData": {
+                "name": "enableCommentCommandCmd",
+                "value": "{{data.eventMap['ckeditor.enableNewCommentCommand']}}"
+            },
+            "deps": "js/appCtxService"
+        },
+        "showDeleteTracelinkWarning":
+        {
+            "actionType": "JSFunction",
+            "method": "showDeleteTracelinkWarning",
+            "inputData":
+             {
+                "data":"{{data}}",
+                "vmo" : "{{data.eventMap['requirementDocumentation.showDeleteTracelinkWarning'].sourceObject}}"
+             },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "loadObjects": {
+            "actionType": "JSFunctionAsync",
+            "method": "getSpecificationSegment",
+            "inputData": {
+                "soaInput": {
+                    "inputData": "{{function:getSpecificationSegmentInputForObjectsToLoad}}"
+                },
+                "propertyPolicyOverride": "{{data.loadSpecPolicy}}"
+            },
+            "outputData": {
+                "loadedObjectsOutput": "output"
+            },
+            "deps": "js/Arm0LoadSpecService"
+        },
+        "populateLoadedObjects": {
+            "actionType": "JSFunction",
+            "method": "populateLoadedObjects",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "events": {
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "loadObjectsJob": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "loadObjects"
+                },
+                {
+                    "action": "populateLoadedObjects"
+                }
+            ]
+        },
+        "checkForLoadingOnViewPort": {
+            "actionType": "JSFunction",
+            "method": "checkForLoadingOnViewPort",
+            "inputData": {
+            },
+            "events": {
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "showSaveConflictErrorPopup": {
+            "actionType": "JSFunction",
+            "method": "show",
+            "inputData": {
+                "data": {
+                    "declView": "Arm0SaveConflictErrorPopup",
+                    "subPanelContext": "{{parameters.eventData}}",
+                    "options": {
+                        "width": "440",
+                        "clickOutsideToClose": false,
+                        "draggable": false
+                    }
+                }
+            },
+            "deps": "js/popupService"
+        },
+        "updateContentMap": {
+            "actionType": "JSFunction",
+            "method": "updateContentMap",
+            "inputData": {
+                "idAttribute" : "{{parameters.eventData.idAttribute}}"
+            },
+            "deps": "js/ckeditorOperations"
+        },
+        "addUnloadListenerForRefresh":{
+            "actionType": "JSFunction",
+            "method": "addUnloadListenerForRefresh",
+            "inputData": {
+                "data":"{{data}}"
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "showUpdateMessage":{
+            "actionType": "JSFunction",
+            "method": "showUpdateMessage",
+            "inputData": {
+                "mapData" : "{{parameters.eventData}}",
+                "savedByLabel": "{{i18n.savedBy}}"
+            },
+            "deps": "js/ckeditorOperations"
+        },
+        "saveContentAndLaunchNonCollabMode": {
+            "actionType": "JSFunction",
+            "method": "createUpdateContents",
+            "inputData": {
+                "commandContext": "",
+                "doOverWriteContent": "",
+                "skipProcessingResponse": "true"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.reopenDocTabWithNonCollabMode"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "requirementDocumentation.reopenDocTabWithNonCollabMode"
+                    }
+                ]
+            },
+            "deps": "js/Arm0RequirementDocumentationACEEditor"
+        },
+        "reopenDocTabWithNonCollabMode": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "requirementDocumentation.refreshDocumentationTab",
+                    "eventData": {
+                        "withNonCollabMode": true
+                    }
+                } ]
+            }
+        },
+        "setPopupId":{
+            "actionType": "JSFunction",
+            "method": "setPopupId",
+            "inputData": {
+                "data":"{{data.popupId}}"
+            },
+            "deps": "js/Arm0ShowActionsPanelView"
+        }
+    },
+    "data": {
+        "requirementCtx":{
+            "initialValues": {
+                "splitPanelLocation" : "undefined",
+                "enableCKCollaborationMode": false
+            },
+            "meta": {
+            }
+        },
+        "_editorPropsInit": {
+            "dbValue": {
+                "contentType": "",
+                "addNavigationCommands": true,
+                "pageSize": "preferences.AWC_req_viewer_page_size_deleted[0]",
+                "showEditorSidebar": true
+            },
+            "type": "ADVANCED_NODROP"
+        },
+        "loadSpecPolicy": {
+            "types": [
+                {
+                    "name": "Awb0Element",
+                    "properties": [
+                        {
+                            "name": "awb0CopyStableId",
+                            "modifiers": [ {
+                                "name": "excludeUiValues",
+                                "Value": "true"
+                            } ]
+                        },
+                        {
+                            "name": "awb0UnderlyingObject"
+                        },
+                        {
+                            "name": "awb0BreadcrumbAncestor",
+                            "modifiers": [
+                                {
+                                    "name": "withProperties",
+                                    "Value": "true"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "awb0Parent",
+                            "modifiers": [
+                                {
+                                    "name": "withProperties",
+                                    "Value": "true"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "awb0TraceLinkFlag",
+                            "modifiers": [ {
+                                "name": "excludeUiValues",
+                                "Value": "true"
+                            } ]
+                        },
+                        {
+                            "name": "awb0IsSuspect"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "preferences": [
+        "AWC_ReqEditor",
+        "REQ_enable_implicit_reserve",
+        "AWC_req_viewer_page_size_deleted",
+        "AWC_req_viewer_page_size"
+    ],
+    "functions": {
+        "getSpecificationSegmentInputForObjectsToLoad": {
+            "functionName": "getSpecificationSegmentInputForObjectsToLoad",
+            "parameters": [
+                "{{data.eventMap['requirementDocumentation.loadObjects']}}"
+            ]
+        },
+        "getSpecificationSegmentInputForLoadObjects": {
+            "functionName": "getSpecificationSegmentInputForLoadObjects",
+            "parameters": [
+                "{{data}}",
+                "{{ctx}}"
+            ]
+        },
+        "getObjectsToUpdate": {
+            "functionName": "getObjectsToUpdate",
+            "parameters": [
+                "{{data}}",
+                "{{ctx}}"
+            ]
+        },
+        "getExportOptions": {
+            "functionName": "getExportOptions"
+        },
+        "getSpecificationSegmentInput": {
+            "functionName": "getSpecificationSegmentInput",
+            "parameters": [
+                "{{data}}",
+                "{{ctx}}",
+                "InitialContentLoad"
+            ]
+        },
+        "getSpecificationSegmentInputForSelected": {
+            "functionName": "getSpecificationSegmentInputForSelected",
+            "parameters": [
+                "{{data}}",
+                "{{ctx}}",
+                "InitialContentLoad"
+            ]
+        },
+        "getSpecificationSegmentInputForCreatedObject": {
+            "functionName": "getSpecificationSegmentInputForCreatedObject",
+            "parameters": [
+                "{{data}}",
+                "{{ctx}}",
+                "{{data.eventMap['requirementDocumentation.loadContentDataForCreatedObject'].CreatedObject}}"
+            ]
+        },
+        "getSpecificationSegmentInputForSavedContent": {
+            "functionName": "getSpecificationSegmentInputForSavedContent",
+            "parameters": [
+                "{{data}}",
+                "{{ctx}}",
+                "{{data.eventMap['requirementDocumentation.loadContentDataForSavedContent'].CreatedObject}}"
+            ]
+        },
+        "getSpecSegmentInputForRoundtripContent": {
+            "functionName": "getSpecSegmentInputForRoundtripContent",
+            "parameters": [
+                "{{data}}",
+                "{{ctx}}",
+                "{{data.eventMap['requirementDocumentation.loadUpdatedContentDataForRoundtrip'].CreatedObject}}"
+            ]
+        },
+        "getCreateUpdateInput": {
+            "functionName": "getCreateUpdateInput",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getCutTracelinkInput": {
+            "functionName": "getCutTracelinkInput",
+            "parameters": [
+                "{{data.eventMap['requirementDocumentation.showDeleteTracelinkWarning'].sourceObject}}"
+            ]
+        },
+        "getTracelinkedObjects": {
+            "functionName": "getTracelinkedObjects",
+            "parameters": []
+        },
+        "getSelectedTracelinkedObject": {
+            "functionName": "getTracelinkedObjects",
+            "parameters": []
+        },
+        "getSelectedTooltipObject": {
+            "functionName": "getTracelinkedObjects",
+            "parameters": []
+        },
+        "processResponse": {
+            "functionName": "processResponse"
+        },
+        "getMicroserviceURL": {
+            "functionName": "getMicroserviceURL"
+        },
+        "isTextDataset": {
+            "functionName": "isTextDataset",
+            "parameters": [
+                "{{data.fileFormat}}"
+            ]
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "uniformParamTable.applySync",
+            "cacheEventData": true,
+            "action": "processSyncAction"
+        },
+        {
+            "eventId": "appCtx.update",
+            "criteria": {
+                "name": "selected"
+            },
+            "action": "processSyncAction"
+        },
+        {
+            "eventId": "requirementDocumentation.attrTableRowSelected",
+            "action": "attrTableRowSelected"
+        },
+        {
+            "eventId": "cdm.created",
+            "cacheEventData": true,
+            "action": "isParamCreated"
+        },
+        {
+            "eventId": "createParamForPaletteOrSearchAfterTc143",
+            "action": "subscribeParameterCreatedevent"
+        },
+        {
+            "eventId": "createParamForPaletteOrSearchBeforeTc143",
+            "action": "subscribeParameterCreatedevent"
+        },
+        {
+            "eventId": "closeAddParameterPanel",
+            "action": "closeAddParameterPanel"
+        },
+        {
+            "eventId": "requirementDocumentation.showParametersTable",
+            "cacheEventData": true,
+            "action": "checkParametersTable"
+        },
+        {
+            "eventId": "requirementDocumentation.closeSplitPanel",
+            "cacheEventData": true,
+            "action": "closeSplitPanel"
+        },
+        {
+            "eventId": "requirementDocumentation.showNewParametersTable",
+            "cacheEventData": true,
+            "action": "showParamTable"
+        },
+        {
+            "eventId": "requirementDocumentation.changeSelection",
+            "cacheEventData": true,
+            "action": "changeRowSelection"
+        },
+        {
+            "eventId": "requirementDocumentation.openAddParameterPanel",
+            "action": "openAddParameterPanel"
+        },
+        {
+            "eventId": "Att1CreateParameter.createParameterNew",
+            "action": "removeEditorSelection"
+        },
+        {
+            "eventId": "requirementDocumentation.openAddParameterPanel",
+            "action": "setEditorSelection"
+        },
+        {
+            "eventId": "appCtx.update",
+            "criteria": {
+                "name": "aceActiveContext",
+                "target": "context.configContext"
+            },
+            "action": "configurationChanged",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementDocumentation.initContent",
+            "cacheEventData": true,
+            "action": "verifyCkeAndInitContent"
+        },
+        {
+            "eventId": "requirementDocumentation.loadContentFromServer",
+            "action": "loadContentFromServer"
+        },
+        {
+            "eventId": "requirementDocumentation.loadSelectedObjectContentFromServer",
+            "action": "loadSelectedObjectContentFromServer"
+        },
+        {
+            "eventId": "requirementDocumentation.handleLoadSelectedObjectContentFromServer",
+            "action": "handleLoadSelectedObjectContentFromServer"
+        },
+        {
+            "eventId": "requirementDocumentation.loadContentDataForCreatedObject",
+            "action": "loadContentDataForCreatedObject",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementDocumentation.loadContentDataForSavedContent",
+            "action": "loadContentDataForSavedContent",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementDocumentation.loadUpdatedContentDataForRoundtrip",
+            "action": "loadUpdatedContentDataForRoundtrip",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementDocumentation.doExportDocumentEvent",
+            "action": "doExportDocument"
+        },
+        {
+            "eventId": "requirementDocumentation.InsertObjInCKEditor",
+            "action": "insertObjInCKEditor"
+        },
+        {
+            "eventId": "requirementDocumentation.commitDataset",
+            "action": "commitDataset"
+        },
+        {
+            "eventId": "requirementDocumentation.insertImage",
+            "action": "insertImage"
+        },
+        {
+            "eventId": "requirementDocumentation.insertOLE",
+            "action": "insertOLE"
+        },
+        {
+            "eventId": "requirementDocumentation.getDatasetTypesWithDefaultRelation",
+            "action": "getDatasetTypesWithDefaultRelation"
+        },
+        {
+            "eventId": "requirementDocumentation.updateFormData",
+            "action": "updateFormData"
+        },
+        {
+            "eventId": "requirementDocumentation.uploadFile",
+            "action": "uploadFile"
+        },
+        {
+            "eventId": "requirementDocumentation.prepareInputforOLEInsert",
+            "action": "prepareInputforOLEInsert"
+        },
+        {
+            "eventId": "requirementDocumentation.addObjectToTracelinkPanel",
+            "cacheEventData": true,
+            "action": "addObjectToTracelinkPanel"
+        },
+        {
+            "eventId": "requirementDocumentation.setTooltipContentData",
+            "action": "setTooltipContentData",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementDocumentation.showTracelinkTooltip",
+            "action": "updateReference",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementDocumentation.showTracelinkTooltipPopup",
+            "action": "showTracelinkTooltip"
+        },
+        {
+            "eventId": "Arm0TracelinkTooltip.closeExistingTracelinkTooltipWithoutHoverCheck",
+            "action": "closeExistingTracelinkTooltipWithoutHoverCheck"
+        },
+        {
+            "eventId": "Arm0TracelinkTooltip.closeExistingTracelinkTooltip",
+            "action": "closeExistingTracelinkTooltip"
+        },
+        {
+            "eventId": "Arm0TracelinkTooltip.closeTracelinkTooltip",
+            "action": "closeTracelinkTooltip"
+        },
+        {
+            "eventId": "requirementDocumentation.removeTracelink",
+            "cacheEventData": true,
+            "action": "removeTracelink"
+        },
+        {
+            "eventId": "requirementDocumentation.showDeleteTracelinkWarning",
+            "cacheEventData": true,
+            "action": "showDeleteTracelinkWarning"
+        },
+        {
+            "eventId": "requirementDocumentation.deleteTracelinkFromTooltip",
+            "action": "deleteTracelinkFromTooltip"
+        },
+        {
+            "eventId": "requirementDocumentation.deleteTracelinkFromTooltipInAce",
+            "action": "deleteTracelinkFromTooltipInAce"
+        },
+        {
+            "eventId": "requirementDocumentation.addToAwClipboard",
+            "action": "addToAwClipboard"
+        },
+        {
+            "eventId": "Att1CreateParameter.createParameterNew",
+            "action": "removeEditorSelection"
+        },
+        {
+            "eventId": "att1AddParameter.setItemEventProgressing",
+            "action": "removeEditorSelection"
+        },
+        {
+            "eventId": "reqDocSetEditorSelection.ForAddPanel",
+            "action": "setEditorSelectionForAddParam"
+        },
+        {
+            "eventId": "requirementDocumentation.showActionsPanel",
+            "action": "updateReferenceForActionPanel",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementDocumentation.showActionsPanelPopup",
+            "action": "showActionsPanel"
+        },
+
+        {
+            "eventId": "requirementDocumentation.refreshDocumentationTab",
+            "action": "loadContentFromServer",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "primaryWorkArea.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "selectionChanged"
+        },
+        {
+            "eventId": "requirementDocumentation.refreshTracelinkMarkers",
+            "action": "refreshMarkersOnObjectModified",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementDocumentation.addCreatedContentToEditor",
+            "action": "addCreatedContentToEditor"
+        },
+        {
+            "eventId": "requirementDocumentation.addSavedContentToEditor",
+            "action": "addSavedContentToEditor"
+        },
+        {
+            "eventId": "requirementDocumentation.addUpdatedRoundtripContentToEditor",
+            "action": "addUpdatedRoundtripContentToEditor"
+        },
+        {
+            "eventId": "requirementDocumentation.registerCxtForActionsPanel",
+            "cacheEventData": true,
+            "action": "registerCxtForActionsPanel"
+        },
+        {
+            "eventId": "requirementDocumentation.registerCxtForBalloonPopup",
+            "cacheEventData": true,
+            "action": "registerCxtForBalloonPopup"
+        },
+        {
+            "eventId": "requirementDocEditor.registerCxtForPopup",
+            "cacheEventData": true,
+            "action": "registerCxtForPopupInsideEditor"
+        },
+        {
+            "eventId": "requirementDocumentation.DocTabLoaded",
+            "action": "registerContext"
+        },
+        {
+            "eventId": "requirementDocumentation.DocTabUnloaded",
+            "action": "cleanupOnContentUnloaded"
+        },
+        {
+            "eventId": "arm0Markup.save",
+            "cacheEventData": true,
+            "action": "handleMarkupUpdate"
+        },
+        {
+            "eventId": "Arm0RequirementDocumentationACE.updateSOAInputForMicroservice",
+            "action": "updateSOAInput"
+        },
+        {
+            "eventId": "Arm0RequirementDocumentationACE.getSpecificationSegmentInputForMicriservice",
+            "action": "getSpecificationSegmentInputForMicriservice"
+        },
+        {
+            "eventId": "Arm0RequirementDocumentationACE.exportToWord",
+            "cacheEventData": true,
+            "action": "exportToWord"
+        },
+        {
+            "eventId": "requirementDocumentation.documentationTabRefresh",
+            "cacheEventData": true,
+            "action": "documentationTabRefresh"
+        },
+        {
+            "eventId": "requirementDocumentation.documentationTabRefreshOnRoundTripImport",
+            "cacheEventData": true,
+            "action": "documentationTabRefreshOnRoundTripImport"
+        },
+        {
+            "eventId": "appCtx.update",
+            "criteria": {
+                "name": "AWRequirementsEditor"
+            },
+            "action": "isCkeditorInstanceReady"
+        },
+        {
+            "eventId": "requirementDocumentation.isCkeditorInstanceReady",
+            "action": "isCkeditorInstanceReady",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            }
+        },
+        {
+            "eventId": "requirementDocumentation.downloadOLEObjectFromDataSet",
+            "action": "downloadOLEObjectFromDataSet"
+        },
+        {
+            "eventId": "requirementDocumentation.downloadOLEObject",
+            "action": "downloadOLEObject"
+        },
+        {
+            "eventId": "requirementDocumentation.setOLEObjectToDownload",
+            "action": "setOLEObjectToDownload"
+        },
+        {
+            "eventId": "requirementDocumentation.handleOLEClick",
+            "cacheEventData": true,
+            "action": "handleOLEClick"
+        },
+        {
+            "eventId": "importPreview.redirectToHome",
+            "action": "redirectToHome"
+        },
+        {
+            "eventId": "requirementDocumentation.enableSplitReqCmd",
+            "action": "splitReqCmdEnabler",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementDocumentation.selectionChangedinCkEditor",
+            "action": "newCommentCmdEnabler",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementDocumentation.enableTableContentCmd",
+            "action": "contentTableCmdEnabler",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementDocumentation.openReqInNewTab",
+            "action": "openInNewTab",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementDocumentation.unregisterShowReqQualityDataFlag",
+            "action": "unregisterShowReqQualityDataFlag"
+        },
+        {
+            "eventId": "requirementDocumentation.DocTabUnloaded",
+            "action": "unregisterShowReqQualityDataFlag"
+        },
+        {
+            "eventId": "requirementDocumentation.getProductAndTopElementInfo",
+            "action": "getProductAndTopElementInfo",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementDocumentation.errorWhileConnectingToReuseAPI",
+            "action": "errorWhileConnectingToReuseAPI"
+        },
+        {
+            "eventId": "requirementDocumentation.showBalloonPopupActionsPanel",
+            "action": "updateReferenceForAddPanel",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementDocumentationEditor.showPopupPanel",
+            "action": "updateReferenceForAddPanelEditor",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementDocumentation.showBalloonPopup",
+            "action": "showBalloonPopupActionsPanel"
+        },
+        {
+            "eventId": "requirementDocumentation.showBalloonPopupForEditor",
+            "action": "showBalloonPopupForEditor"
+        },
+        {
+            "eventId": "requirementDocumentation.showBalloonPopupForAddChildSibling",
+            "action": "showBalloonPopupForAddChildSibling"
+        },
+        {
+            "eventId": "requirementDocumentationEditor.PopupForAddChildSibling",
+            "action": "updateReferenceForChildSibling",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementDocumentation.registerChildForRequirementSpec",
+            "cacheEventData": true,
+            "action": "addchildforSpecForRequirement"
+
+        },
+        {
+            "eventId": "requirementDocumentation.registerCxtForChildSiblingPopup",
+            "cacheEventData": true,
+            "action": "registerCxtForPopupChildSibling"
+        },
+        {
+            "eventId": "requirementDocumentation.loadParameterCtxDetails",
+            "cacheEventData": true,
+            "action": "loadParameterCtxDetails"
+        },
+        {
+            "eventId": "Arm0AttrTable.propertiesLoaded",
+            "action": "setSelectionAfterPropertiesLoaded"
+        },
+        {
+            "eventId": "requirementDocumentation.showPasteCrossReferenceLinkPopup",
+            "action": "showPasteCroessReferenceLinkPopup"
+        },
+        {
+            "eventId": "requirementDocumentation.afterPasteCrossRefLinkReveal",
+            "action": "afterPasteCrossRefLinkReveal"
+        },
+        {
+            "eventId": "requirementDocumentation.canShowPasteCrossRefLinkPopup",
+            "action": "canShowPasteCrossRefLinkPopup"
+        },
+        {
+            "eventId": "requirementDocumentation.openCrossRefLinkInNewTab",
+            "action": "openCrossRefLinkInNewTab",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "uniformParamTable.selectionChanged",
+            "cacheEventData": true,
+            "action": "handleParameterSelectionChange"
+        },
+        {
+            "eventId": "Arm0RequirementDocumentationACE.updateOccurrenceObjects",
+            "action": "updateOccurrenceObjects"
+        },
+        {
+            "eventId": "Arm0RequirementDocumentationACE.refreshOccurenceObjects",
+            "action": "refreshOccurenceObjects",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "cdm.updated",
+            "action": "modelOnObjectsChanged",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "Arm0ExportToRoundTripWordDocument.unregisterEnableExportCmdContext",
+            "action": "unregisterEnableExportCmdContext"
+        },
+        {
+            "eventId": "Arm0MarkupMain.contentUnloaded",
+            "action": "cashMarkupsOnPanelClose"
+        },
+        {
+            "eventId": "Arm0MarkupMain.contentUnloaded",
+            "action": "clearMarkupSelection"
+        },
+        {
+            "eventId": "occurrenceManagement.contentUnloaded",
+            "action": "unregisterLastSelectedUIDContext"
+        },
+        {
+            "eventId": "showActionPopup.close",
+            "action": "closePopupWindow"
+        },
+        {
+            "eventId": "Arm0ExportToRoundTripWordDocument.confirmSaveEdits",
+            "action": "confirmSaveEdits"
+        },
+        {
+            "eventId": "requirementDocumentation.getUpdatedObjectsHTMLTextContent",
+            "action": "getUpdatedObjectsHTMLTextContent"
+        },
+        {
+            "eventId": "requirementDocumentation.updatehtmlDivs",
+            "action": "updatehtmlDivs"
+        },
+        {
+            "eventId": "requirementDocumentation.updateLocallyOrRefreshDocTab",
+            "action": "updateLocallyOrRefreshDocTab"
+        },
+        {
+            "eventId": "requirementDocumentation.pageUp",
+            "action": "pageUp"
+        },
+        {
+            "eventId": "requirementDocumentation.pageDown",
+            "action": "pageDown"
+        },
+        {
+            "eventId": "Arm0Requirement.navigateToMergePreview",
+            "action": "navigateToMergePreview"
+        },
+        {
+            "eventId": "ckeditor.enableNewCommentCommand",
+            "action": "enableNewCommentCommand",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirements.registerCtxForDerivedCommands",
+            "action": "registerCtxForDerivedCommands"
+        },
+        {
+            "eventId": "requirementDocumentation.InsertImageInCKEditor",
+            "action": "InsertImageInCKEditor",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementDocumentation.InsertOLEInCKEditor",
+            "action": "InsertOLEInCKEditor",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementDocumentation.updateACESelection",
+            "action": "updateACESelection",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementDocumentation.loadObjects",
+            "cacheEventData": true,
+            "action": "loadObjectsJob"
+        },
+        {
+            "eventId": "requirementDocumentation.populateLoadedObjects",
+            "action": "populateLoadedObjects"
+        },
+        {
+            "eventId": "requirementDocumentation.checkForLoadingOnViewPort",
+            "action": "checkForLoadingOnViewPort"
+        },
+        {
+            "eventId": "requirementDocumentation.showSaveConflictErrorPopup",
+            "action": "showSaveConflictErrorPopup",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            }
+        },
+         {
+            "eventId": "requirementDocumentation.updateContentMap",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            },
+            "action": "updateContentMap"
+        },
+        {
+            "eventId": "requirementDocumentation.addUnloadListenerForRefresh",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            },
+            "action": "addUnloadListenerForRefresh"
+        },
+        {
+            "eventId": "requirementDocumentation.showUpdateMessage",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            },
+            "action": "showUpdateMessage"
+        },
+        {
+            "eventId": "requirementDocumentation.saveContentAndLaunchNonCollabMode",
+            "action": "saveContentAndLaunchNonCollabMode"
+        },
+        {
+            "eventId": "requirementDocumentation.reopenDocTabWithNonCollabMode",
+            "action": "reopenDocTabWithNonCollabMode"
+        },
+        {
+            "eventId": "arm0showactionpanel.setPopupId",
+            "action": "setPopupId"
+        }
+    ],
+    "conditions": {
+        "isParameterTableExist": {
+            "expression": "!ctx.requirementCtx"
+        }
+    },
+    "messages": {
+        "notificationForImageErrorWrongFile": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.imageErrorWrongFile}}",
+            "messageTextParams": []
+        },
+        "notificationMultiUserEditError": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.multiUserEditError}}",
+            "messageTextParams": [
+                "{{ctx.selected.cellHeader1}}"
+            ]
+        },
+        "cutSingleSuccessful": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.cutSingleSuccessful}}",
+            "messageTextParams": [
+                "{{data.deletedChildObject.props.object_string.uiValues[0]}}",
+                "{{data.delectedParentObject}}"
+            ]
+        },
+        "ExportFailedError": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.MicroserviceInstallationError}}",
+            "messageTextParams": [
+                "{{data.i18n.exportToOfficeTitle}}"
+            ]
+        },
+        "reuseAPICallFailedError": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.reuseAPICallFailedError}}"
+        },
+        "errorMessageOnAction": {
+          "messageType": "ERROR",
+            "messageText": "{{data.partialErrors[0].errorValues[0].message}}"
+        },
+        "notificationTracelinkDeletedSuccess":{
+            "messageType": "INFO",
+            "messageText": "{{i18n.tracelinkDeletedMessage}}"
+        },
+        "getMessageFromTLDeleteFailure": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.PartialError}}",
+            "messageTextParams": [
+                "{{data.deleteObjectsPartialErrors[0].errorValues[0].message}}"
+            ]
+        }
+    },
+    "ctx": {
+        "preferences": {
+            "type": "object"
+        }
+    },
+    "i18n": {
+        "imageErrorWrongFile": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "multiUserEditError": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "navigationConfirmationMultiple": [
+            "XRTMessages"
+        ],
+        "wordReqCanNotBeEdited": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "requirementUpdated": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "readOnlyReqCanNotBeEdited": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "invalidObjectName": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "SERVER_ERROR": [
+            "BaseMessages"
+        ],
+        "createTraceLinkTitle": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "discard": [
+            "TCUICommandPanelsMessages"
+        ],
+        "continue":[
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "save": [
+            "TCUICommandPanelsMessages"
+        ],
+        "cutSingleSuccessful": [
+            "ZeroCompileCommandMessages"
+        ],
+        "exportToOfficeTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "reuseAPICallFailedError": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "ShowCrossReferenceAs": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "documentationTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "reviewSuspectTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "openMasterReqTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "openRequirementsTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "Remove": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "overwrittenTooltip": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "FrozenToNonLatestTooltip": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "FrozenToLatestTooltip": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "UnfrozenTooltip": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "delete": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "tracelinkDeletedMessage" :
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "cancel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "deleteTracelinkConfirmation": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "deleteMultipleTracelinkConfirmation" :
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "PartialError": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "savedBy": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "WarningForUnsavedChangesAndExitSession":[
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "WarningForExitSession":[
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "saveAndExit":[
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "exit":[
+            "RichTextEditorCommandPanelsMessages"
+        ]
+    },
+    "lifecycleHooks": {
+        "onUnmount": "cleanupAceDocumentationPage"
+    }
+}

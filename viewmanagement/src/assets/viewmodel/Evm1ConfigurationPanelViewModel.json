@@ -1,0 +1,198 @@
+{
+    "schemaVersion": "1.0.0",
+
+    "actions": {
+        "initializeRecipeState": {
+            "actionType": "JSFunction",
+            "method": "initializeRecipeState",
+            "inputData": {
+                "recipeState": "{{ctx.panelContext}}",
+                "recipeConfigState": "{{data.recipeConfigState}}"
+            },
+            "outputData": {
+                "recipeConfigState": "recipeConfigState",
+                "occContext": "occContext",
+                "activeView": "panelId"
+            },
+            "deps": "js/Evm1ConfigurationPanelService"
+        },
+        "revisionRuleChanged": {
+            "actionType": "JSFunction",
+            "method": "revisionRuleChanged",
+            "inputData": {
+                "recipeConfigState": "{{data.recipeConfigState}}",
+                "eventData": "{{data.eventData}}",
+                "occContext": "{{data.occContext}}"
+            },
+            "outputData": {
+                "recipeConfigState": "recipeConfigState"
+            },
+            "deps": "js/Evm1ConfigurationPanelService"
+        },
+        "dateChanged": {
+            "actionType": "JSFunction",
+            "method": "selectChangedEffectivityDate",
+            "inputData": {
+                "data":"{{data}}",
+                "recipeConfigState": "{{data.recipeConfigState}}",
+                "eventData": "{{data.eventData}}",
+                "occContext": "{{data.occContext}}"
+            },
+            "outputData": {
+                "recipeConfigState": "recipeConfigState"
+            },
+            "deps": "js/Evm1ConfigurationPanelService"
+        },
+        "unitEffectivityChanged": {
+            "actionType": "JSFunction",
+            "method": "selectChangedUnitEffectivity",
+            "inputData": {
+                "eventData": "{{data.eventData}}",
+                "recipeConfigState": "{{data.recipeConfigState}}",
+                "occContext": "{{data.occContext}}",
+                "data":"{{data}}"
+            },
+            "outputData": {
+                "recipeConfigState": "recipeConfigState",
+                "occContext": "occContext"
+            },
+            "deps": "js/Evm1ConfigurationPanelService"
+        },
+        "endItemChanged": {
+            "actionType": "JSFunction",
+            "method": "selectChangedEndItem",
+            "inputData": {
+                "eventData": "{{data.eventData}}",
+                "recipeConfigState": "{{data.recipeConfigState}}",
+                "occContext": "{{data.occContext}}"
+            },
+            "outputData": {
+                "recipeConfigState": "recipeConfigState",
+                "occContext": "occContext"
+            },
+            "deps": "js/Evm1ConfigurationPanelService"
+        },
+        "svrOwningItemVariantInfoChanged": {
+            "actionType": "JSFunction",
+            "method": "selectChangedVariantInfoOrSvrOwningItem",
+            "inputData": {
+                "eventData": "{{data.eventData}}",
+                "recipeConfigState": "{{data.recipeConfigState}}",
+                "occContext": "{{data.occContext}}"
+            },
+            "outputData": {
+                "recipeConfigState": "recipeConfigState",
+                "occContext": "occContext"
+            },
+            "deps": "js/Evm1ConfigurationPanelService"
+        },
+        "addConfigOnRecipeBuilderAction": {
+            "actionType": "JSFunction",
+            "method": "addConfigOnRecipeBuilder",
+            "inputData": {
+                "recipeConfigState": "{{data.recipeConfigState}}",
+                "data":"{{data}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ],
+                "failure": [ {
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            },
+            "deps": "js/Evm1ConfigurationPanelService"
+        }
+    },
+    "functions": {},
+    "data": {
+        "occContext": {
+            "initialValues": {
+                "productContextInfo": {
+                    "props": {}
+                },
+                "supportedFeatures": {},
+                "readOnlyFeatures": {}
+            },
+            "meta": {}
+        },
+        "recipeConfigState": {
+            "initialValues": {
+                "recipeState": ""
+            },
+            "meta": {}
+        },
+        "configSvrEndItem": {
+            "initialValues": {
+                "svrOwningItemToRender": ""
+            },
+            "meta": {}
+        },
+        "configUnitEndItem": {
+            "initialValues": {
+                "unitEndItemToRender": ""
+            },
+            "meta": {}
+        },
+        "activeView": ""
+
+    },
+
+    "onEvent": [ {
+            "eventId": "awConfigPanel.revisionRuleChanged",
+            "cacheEventData": true,
+            "action": "revisionRuleChanged"
+        },
+        {
+            "eventId": "awConfigPanel.effectivityDateChanged",
+            "cacheEventData": true,
+            "action": "dateChanged"
+        },
+        {
+            "eventId": "awConfigPanel.unitEffectivityChanged",
+            "cacheEventData": true,
+            "action": "unitEffectivityChanged"
+        },
+        {
+            "eventId": "awConfigPanel.variantInfoChanged",
+            "condition":
+            "( svrOwningItem && data.occContext.productContextInfo.props.awb0VariantRuleOwningRev.dbValues[ 0 ] !== svrOwningItem.uid ) || ( selectedObject && data.occContext.productContextInfo.props.awb0VariantRules.dbValues[ 0 ] !== selectedObject.props.object_string.dbValue )",
+            "cacheEventData": true,
+            "action": "svrOwningItemVariantInfoChanged"
+        },
+        {
+            "eventId": "awConfigPanel.endItemUnitEffectivityChanged",
+            "cacheEventData": true,
+            "action": "endItemChanged"
+        }
+    ],
+
+    "messages": {},
+    "conditions": {
+        "isActiveStateAddPanel": {
+            "expression": "data.activeView ==='ConfigurationPanelFilters' || data.activeView ==='Evm1ConfigPanelFilters'"
+        }
+    },
+    "i18n": {
+        "Configuration": [
+            "RecipeCommandPanelsMessages"
+        ],
+        "evm1UpdateBtn": [ "RecipeCommandPanelsMessages" ],
+        "occurrenceManagementTodayTitle": [ "OccurrenceManagementConstants" ],
+        "effectivityUnitSectionAllUnitsValue": [ "OccurrenceManagementConstants" ]
+    },
+    "ctx": {
+        "panelContext": {
+            "type": "object"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "initializeRecipeState"
+    }
+}

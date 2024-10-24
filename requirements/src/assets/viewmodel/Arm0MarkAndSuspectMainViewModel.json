@@ -1,0 +1,89 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "actions": {
+        "backAction": {
+            "actionType": "JSFunction",
+            "method": "updateSharedDataState",
+            "inputData": {
+                "state": "{{fields.sharedData}}",
+                "newValue": {
+                    "activeView": "Arm0MarkAndSuspect"
+                }
+            },
+            "deps": "js/Arm0MarkAndSuspect"
+        },
+        "showTracelinks": {
+            "actionType": "JSFunction",
+            "method": "showTracelinks",
+            "deps": "js/Arm0MarkAndSuspect",
+            "inputData": {
+                "data": "{{data}}",
+                "selectedCell":"{{commandContext.vmo}}",
+                "subPanelContext": "{{subPanelContext}}"
+            },
+            "outputData": {
+                "arrTracelinkedItems": "arrTracelinkedItems",
+                "selectedCell":"selectedCell"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0MarkAndSuspect.switchToSuspectSubViewView"
+                    },
+                    {
+                        "name":"Arm0MarkAndSuspectSub.updateSelection"
+                    }
+                ]
+            }
+        },
+        "setArm0MarkAndSuspectMainData": {
+            "actionType": "JSFunction",
+            "method": "setArm0MarkAndSuspectMainData",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "selectedUidsToTracelinkedObjectsMap": "selectedUidsToTracelinkedObjectsMap",
+                "selectedObj":"selectedObj"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0MarkAndSuspect.refreshDataProvider"
+                    }
+                ]
+            },
+            "deps": "js/Arm0MarkAndSuspect"
+        }
+    },
+    "data": {
+        "sharedData": {
+            "initialValues": {
+                "isAllTracelinksUnselected": false,
+                "activeView": "Arm0MarkAndSuspect"
+            },
+            "meta": {}
+        }
+    },
+
+    "functions": {
+
+    },
+    "conditions": {},
+    "messages": {},
+    "onEvent": [
+        {
+            "eventId": "Arm0MarkAndSuspect.showTracelinks",
+            "action": "showTracelinks"
+        }
+    ],
+    "i18n": {
+        "MarkSuspect": [
+            "RequirementsCommandPanelsMessages"
+        ]
+    },
+    "lifecycleHooks": {
+        "onMount": "setArm0MarkAndSuspectMainData"
+    }
+}

@@ -1,0 +1,79 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-include.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-panel.directive",
+        "js/aw-i18n.directive"
+    ],
+
+    "actions": {
+        "initializeConsumerAppsData": {
+            "actionType": "JSFunction",
+            "method": "initializeConsumerAppsData",
+            "inputData": {
+                "openedObject": "{{subPanelContext.context.baseSelection}}",
+                "parameterState": "{{subPanelContext.context.parameterState}}"
+            },
+            "deps": "js/Att1ConfigureVariantService"
+        },
+        "loadParameterVariants": {
+            "actionType": "JSFunction",
+            "method": "loadParameterVariants",
+            "inputData": {
+                "hasVariantConfigContext": "{{subPanelContext.context.parameterState.hasVariantConfigContext}}",
+                "context":"{{subPanelContext}}"
+            },
+            "deps": "js/Att1ConfigureVariantService"
+        },
+        "loadParameterVariantsFroSelectionChange": {
+            "actionType": "JSFunction",
+            "method": "loadParameterVariants",
+            "inputData": {
+                "hasVariantConfigContext": "{{subPanelContext.context.parameterState.hasVariantConfigContext}}",
+                "isSelectionChange": true
+            },
+            "deps": "js/Att1ConfigureVariantService"
+        },
+        "resetConsumerAppsData": {
+            "actionType": "JSFunction",
+            "method": "resetConsumerAppsData",
+            "deps": "js/Att1ConfigureVariantService"
+        }
+    },
+    "lifecycleHooks": {
+        "onInit": "initializeConsumerAppsData",
+        "onMount": "loadParameterVariants"
+    },
+    "onEvent": [ {
+            "eventId": "Att1VariantsTab.loadParameterVariants",
+            "action": "loadParameterVariants"
+        },
+        {
+            "eventId": "configuratorVcaTable.gridLoaded",
+            "action": "loadParameterVariants",
+            "condition": "subPanelContext.context.parameterState.hasVariantConfigContext"
+        },
+        {
+            "eventId": "primaryWorkArea.selectionChangeEvent",
+            "action": "loadParameterVariantsFroSelectionChange",
+            "condition": "subPanelContext.context.parameterState.hasVariantConfigContext"
+        },
+        {
+            "eventId": "configuratorVcaTable.gridUnloaded",
+            "action": "resetConsumerAppsData",
+            "condition": "subPanelContext.context.parameterState.hasVariantConfigContext"
+        }
+    ],
+    "ctx":{
+        "tcSessionData":{
+            "type":"object"
+        },
+        "variantConditionContext":{
+            "type":"object"
+        }
+    },
+    "i18n": {
+        "noConfigContextFound": [ "Att1AttrMappingMessages" ]
+    }
+}

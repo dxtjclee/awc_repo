@@ -1,0 +1,62 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "showTable": {
+            "actionType": "JSFunction",
+            "method": "showTable",
+            "inputData": {
+                "viewMode": "{{data.currentDisplay}}"
+            },
+            "outputData": {
+                "showTable": true
+            },
+            "deps": "js/Evm1RecipeTableService"
+        },
+        "getDisplayView": {
+            "actionType": "JSFunction",
+            "method": "getDisplayView",
+            "inputData": {
+                "eventData": "{{data.eventData}}",
+                "currentView": "{{data.currentDisplay}}",
+                "subPanelContext": "{{subPanelContext}}"
+            },
+            "outputData": {
+                "currentDisplay": ""
+            },
+            "deps": "js/Evm1RecipeTableService"
+        }
+    },
+    "props": {
+        "recipe-state": {
+            "type": "object"
+        },
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data": {
+        "showTable": false,
+        "currentDisplay": "tableView"
+    },
+    "dataProviders": {},
+    "columnProviders": {},
+    "grids": {},
+    "onEvent": [ {
+            "eventId": "view.ReciepContextUpdated",
+            "action": "showTable"
+        },
+        {
+            "eventId": "view.changeRecipeResultsMode",
+            "action": "getDisplayView",
+            "cacheEventData": true
+        }
+    ],
+    "conditions": {
+        "showTableView": {
+            "expression": "data.currentDisplay === 'tableView'"
+        },
+        "showTreeView": {
+            "expression": "data.currentDisplay === 'treeView'"
+        }
+    }
+}

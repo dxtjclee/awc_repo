@@ -1,0 +1,53 @@
+{
+    "schemaVersion": "1.0.0",
+    "conditions": {
+        "isTaskbarFullScreen": {
+            "expression": "ctx.taskbarfullscreen && ctx.taskbarfullscreen === 'true'"
+        }
+    },
+    "data": {
+        "occMgmtConfigurationBaselineChips": [ {
+            "chipType": "BUTTON",
+            "labelDisplayName": ""
+        } ]
+    },
+    "actions": {
+        "updateChipsOnPropsLoaded": {
+            "actionType": "JSFunction",
+            "method": "updateChipsOnPropsLoaded",
+            "inputData": {
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "outputData": {
+                "occMgmtConfigurationBaselineChips": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "occMgmtConfigurationBaselineChipDataProvider.reset"
+                } ]
+            },
+            "deps": "js/configurationBaselineService"
+        }
+    },
+    "dataProviders": {
+        "occMgmtConfigurationBaselineChipDataProvider": {
+            "type": "STATIC",
+            "response": "{{data.occMgmtConfigurationBaselineChips}}",
+            "selectionModelMode": "none"
+        }
+    },
+    "onEvent": [ {
+        "eventId": "occDataLoadedEvent",
+        "action": "updateChipsOnPropsLoaded"
+    } ],
+    "i18n": {},
+    "lifecycleHooks": {
+        "onMount": "updateChipsOnPropsLoaded",
+        "onUpdate": [
+            {
+                "action": "updateChipsOnPropsLoaded",
+                "observers": [ "props.subPanelContext.occContext.openedElement.props.fnd0State.dbValues[0]" ]
+            }
+        ]
+    }
+}

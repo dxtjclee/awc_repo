@@ -1,0 +1,275 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "view-path": {
+            "type": "object"
+        },
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "ports": {
+        "apProcessTree_workAreaAssignment": {
+            "onChangeAction": "handleWorkAreaSelection",
+            "syncObject": {}
+        }
+    },
+    "data": {
+        "selectionData": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "apProcessSearchContext": {
+            "initialValues": {
+                "searchObjectType": ["Mfg0BvrOperation","Mfg0BvrProcess","Mfg0BvrProcessArea"],
+                "searchPlaceholderString": "{{i18n.searchProcessorOperation}}",
+                "searchScopeUid": ""
+            },
+            "meta": {}
+        },
+        "processTreeContext": {
+            "editContext": "{{ctx.mfgReadOnlyMode.readOnlyMode === true ? '': 'EP_PROCESS_TREE_TABLE_EDIT_CONTEXT'}}",
+            "objectUid": "{{ctx.epPageContext.loadedObject.uid}}",
+            "isTopNode": true,
+            "preferenceName": "EP_ProcessTreeAssemblyPlanningColumnConfiguration",
+            "enableSorting": true,
+            "propertyToSort": "bl_sequence_no",
+            "isLeafProperty": "hasChildren",
+            "reloadType": {
+                "epTreeTable": "CommonExpand"
+            },
+            "relatedObjectMapKey": "childAssembly",
+            "loadTypes": [
+                "CommonExpand"
+            ],
+            "additionalPolicyObjects": {
+                "name": "ApProcessTree",
+                "types": [ {
+                        "name": "BOMLine",
+                        "properties": [
+                            {
+                                "name": "mbc0hasSubElements"
+                            },
+                            {
+                            "name": "bl_sequence_no"
+                        } ]
+                    },
+                    {
+                        "name": "Mfg0BvrOperation",
+                        "properties": [ {
+                                "name": "bl_parent"
+                            },
+                            {
+                                "name": "fnd0bl_line_object_type"
+                            },
+                            {
+                                "name": "Mfg0processResource"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Mfg0BvrProcess",
+                        "properties": [ {
+                            "name": "bl_parent"
+                        },
+                        {
+                            "name": "Mfg0processResource"
+                        } ]
+                    },
+                    {
+                        "name": "ImanItemBOPLine",
+                        "properties": [ {
+                                "name": "bl_rev_last_release_status"
+                            },
+                            {
+                                "name": "bl_rev_fnd0InProcess"
+                            },
+                            {
+                                "name": "bl_rev_fnd0AllWorkflows"
+                            },
+                            {
+                                "name": "bl_rev_checked_out_user"
+                            },
+                            {
+                                "name": "awb0RevisionRelStatusList"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Mfg0BvrProcessArea",
+                        "properties": [ {
+                            "name": "Mfg0LinkedBOELine"
+                        } ]
+                    },
+                    {
+                        "name": "Mfg0BvrProcessStation",
+                        "properties": [ {
+                            "name": "Mfg0processResources"
+                        } ]
+                    }
+                ]
+            },
+            "additionalLoadParamsForRootLoadInputData": [ {
+                    "tagName": "expandType",
+                    "attributeName": "type",
+                    "attributeValue": "ExpandProcessDetailedPlanning"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "level",
+                    "attributeValue": "TOP_WITH_CHILDREN"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "rootsProperty",
+                    "attributeValue": "RootObject"
+                }
+            ],
+            "additionalLoadParamsForChildLoadInputData": [ {
+                    "tagName": "expandType",
+                    "attributeName": "type",
+                    "attributeValue": "ExpandProcessDetailedPlanning"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "level",
+                    "attributeValue": "CHILDREN"
+                }
+            ],
+            "additionalLoadParamsForGetHierarchyInputData": [ {
+
+                "tagName": "hierarchyType",
+                "attributeName": "type",
+                "attributeValue": "GetHierarchyProcessDetailedPlanning"
+
+            } ],
+            "epTreeTableCommandAnchor": "apProcessTree_OnHoverCommand",
+            "reloadTree": true,
+            "clientColumns": [ {
+                    "clientColumn": true,
+                    "name": "graphicVisibility",
+                    "propertyDisplayName": "{{i18n.GraphicVisibilityColumnName}}"
+                },
+                {
+                    "clientColumn": true,
+                    "name": "releaseStatusFlag",
+                    "propertyDisplayName": "{{i18n.releaseStatusFlagColumnName}}"
+                },
+                {
+                    "clientColumn": true,
+                    "name": "changeIndication",
+                    "propertyDisplayName": "{{i18n.ChangeIndicationColumnName}}"
+                }
+            ],
+            "treeNavigationColumnIndex": 3,
+            "initializeAction": "initializeLoadDataForTree",
+            "relationName": [ "Mbc0CutPaste", "elb0allocatedOpsByPV" ],
+            "alwaysVisibleColumns":["object_string"],
+            "enableArrangeColumn": true
+        }
+    },
+    "actions": {
+        "initProcessStructureContent": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "getValueInViewModel"
+                },
+                {
+                    "action": "updateSearchContextTitle"
+                }
+            ]
+        },
+        "handleWorkAreaSelection": {
+            "actionType": "JSFunction",
+            "method": "setCommandContext",
+            "inputData": {
+                "tabModel": "{{subPanelContext}}",
+                "commandContext": {
+                    "workAreaSelection": "{{ports.apProcessTree_workAreaAssignment.syncObject}}"
+                }
+            },
+            "deps": "js/mfeContentPanelUtil"
+        },
+        "getValueInViewModel": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "tabData": "{{subPanelContext}}"
+            },
+            "outputData": {
+                "processTreeContext.tabContext": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "handleOccurrenceUpdatedAction": {
+            "actionType": "JSFunction",
+            "method": "getToggledBoolean",
+            "inputData": {
+                "reloadTree": "{{data.processTreeContext.reloadTree}}"
+            },
+            "outputData": {
+                "processTreeContext.reloadTree": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "updateSearchContextTitle": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInAtomicData",
+            "inputData": {
+                "targetAtomicData": "{{fields.apProcessSearchContext}}",
+                "updatedValues": {
+                    "searchPlaceholderString": "{{i18n.searchProcessorOperation}}"
+                }
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "setSelectedModelObjectAsDesignElementInOccContext": {
+            "actionType": "JSFunctionAsync",
+            "method": "initOccContext",
+            "inputData": {
+                "occContext": "{{subPanelContext.occContext}}",
+                "value": "{{fields.selectionData.selected[0].uid}}"
+            },
+            "deps": "js/epSetEffectivityService"
+        },
+        "setSelectedModelObjectAsDesignElementInOccContextBatchAction": {
+
+            "actionType": "batchJob",
+            "steps": [ {
+                "action": "setSelectedModelObjectAsDesignElementInOccContext",
+                "condition": "ctx.activeToolsAndInfoCommand.commandId === 'Awb0OccurrenceEffectivity'"
+            } ]
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "occurrenceUpdatedByEffectivityEvent",
+            "action": "handleOccurrenceUpdatedAction"
+        }
+    ],
+    "lifecycleHooks": {
+        "onMount": "initProcessStructureContent",
+        "onUpdate": [ {
+
+            "action": "setSelectedModelObjectAsDesignElementInOccContextBatchAction",
+            "observers": [ "viewModel.atomicData.selectionData.selected" ]
+        } ]
+    },
+    "i18n": {
+        "searchProcessorOperation": [ "FunctionalPlanMessages" ],
+        "GraphicVisibilityColumnName": [ "BvrGraphicsMessages" ],
+        "ChangeIndicationColumnName": [ "changeIndicationMessages" ],
+        "releaseStatusFlagColumnName": [ "AssemblyMessages" ]
+    },
+    "conditions": {
+        "isProcessObjectUidAvailable": {
+            "expression": {
+                "$source": "data.processTreeContext.objectUid",
+                "$query": {
+                    "$notNull": true
+                }
+            }
+        }
+    }
+}

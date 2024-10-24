@@ -1,0 +1,130 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "description": "This is the schema for Easy Plan specific custom action used for delete in EasyPlan pages",
+    "definitions": {
+        "actionDef": {
+            "oneOf": [
+                {
+                    "if": {
+                        "properties": {
+                            "actionType": {
+                                "const": "epDeleteAction"
+                            }
+                        }
+                    },
+                    "then": {
+                        "$ref": "#/definitions/epDeleteActionDef"
+                    },
+                    "else": false
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "actionType": {
+                                "const": "epCopyAction"
+                            }
+                        }
+                    },
+                    "then": {
+                        "$ref": "#/definitions/epCopyActionDef"
+                    },
+                    "else": false
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "actionType": {
+                                "const": "epCutAction"
+                            }
+                        }
+                    },
+                    "then": {
+                        "$ref": "#/definitions/epCutActionDef"
+                    },
+                    "else": false
+                }
+            ]
+        },
+        "epDeleteActionDef": {
+            "type": "object",
+            "description": "This action is used for delete in EasyPlan pages. It only requires the objects to delete as input. It should  have additional properties.",
+            "additionalProperties": true,
+            "required": [
+                "actionType"
+            ],
+            "properties": {
+                "actionType": {
+                    "type": "string",
+                    "const": "epDeleteAction"
+                },
+                "inputData": {
+                    "additionalProperties": true,
+                    "type": "object",
+                    "description": "JSON data for the action input.",
+                    "properties": {
+                        "objectsToDelete": {
+                            "type": "string"
+                        },
+                        "isRemovedFromStructure": {
+                            "type": "boolean"
+                        },
+                        "connectToObject": {
+                            "type": "string"
+                        },
+                        "relatedDataset": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "epCopyActionDef": {
+            "type": "object",
+            "description": "This action is used for copy in EasyPlan pages. It only requires the objects to copy as input.",
+            "additionalProperties": true,
+            "required": [
+                "actionType"
+            ],
+            "properties": {
+                "actionType": {
+                    "type": "string",
+                    "const": "epCopyAction"
+                },
+                "inputData": {
+                    "additionalProperties": true,
+                    "type": "object",
+                    "description": "JSON data for the action input.",
+                    "properties": {
+                        "objectToCopy": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "epCutActionDef": {
+            "type": "object",
+            "description": "This action is used for cut in EasyPlan pages. It only requires the objects to cut as input.",
+            "additionalProperties": true,
+            "required": [
+                "actionType"
+            ],
+            "properties": {
+                "actionType": {
+                    "type": "string",
+                    "const": "epCutAction"
+                },
+                "inputData": {
+                    "additionalProperties": true,
+                    "type": "object",
+                    "description": "JSON data for the action input.",
+                    "properties": {
+                        "objectToCut": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

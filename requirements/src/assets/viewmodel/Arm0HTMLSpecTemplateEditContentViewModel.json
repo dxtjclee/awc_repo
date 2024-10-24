@@ -1,0 +1,657 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-panel.directive",
+        "js/aw-column.directive",
+        "js/aw-toolbar.directive",
+        "js/aw-include.directive",
+        "js/exist-when.directive"
+    ],
+    "actions": {
+        "initializeView": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "loadHtmlSpecTemplate"
+                },
+                {
+                    "action": "initContent"
+                }
+            ]
+        },
+        "loadHtmlSpecTemplate": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadHtmlSpecTemplate",
+            "inputData": {
+                "selectedUid": "{{data.uidHtmlSpecTemplate}}"
+            },
+            "outputData": {
+                "htmlSpecTmplResponse": ""
+            },
+            "deps": "js/Arm0HTMLSpecTemplateEdit"
+        },
+        "initContent": {
+            "actionType": "JSFunction",
+            "method": "initContent",
+            "inputData": {
+                "data": "{{data}}",
+                "requirementCtx": "{{fields.requirementCtx}}",
+                "ckeditorReady": "{{data.ckeditorReady}}",
+                "rmHtmlSpecLocnState": "{{subPanelContext.context.rmHtmlSpecLocnState}}"
+            },
+            "outputData": {
+                "selectedObjectUid": "selectedObjectUid",
+                "contentReady": "contentReady"
+            },
+            "deps": "js/Arm0HTMLSpecTemplateEdit"
+        },
+        "selectionChanged": {
+            "actionType": "JSFunction",
+            "method": "selectionChanged",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0HTMLSpecTemplateEdit"
+        },
+        "insertImage": {
+            "actionType": "JSFunction",
+            "method": "insertImage",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0HTMLSpecTemplateEdit"
+        },
+        "updateFormData": {
+            "actionType": "JSFunction",
+            "method": "updateFormData",
+            "inputData": {
+                "fileData": {
+                    "key": "fmsTicket",
+                    "value": "{{data.fmsTicket}}"
+                },
+                "form": "{{data.form}}"
+            },
+            "outputData": {
+                "formData": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "Arm0HTMLSpecTemplateEdit.uploadFile"
+                } ]
+            },
+            "deps": "js/Arm0HTMLSpecTemplateEdit"
+        },
+        "insertObjInCKEditor": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-04-DataManagement",
+            "method": "createDatasets",
+            "inputData": {
+                "input": [ {
+                    "clientId": "{{data.datasetInfo.clientId}}",
+                    "container": {
+                        "uid": "AAAAAAAAAAAAAA",
+                        "type": "unknownType"
+                    },
+                    "datasetFileInfos": [ {
+                        "fileName": "{{data.datasetInfo.fileName}}",
+                        "namedReferenceName": "{{data.datasetInfo.namedReferenceName}}",
+                        "isText": false
+                    } ],
+                    "relationType": "",
+                    "description": "",
+                    "name": "{{data.datasetInfo.name}}",
+                    "type": "{{data.datasetInfo.type}}"
+                } ]
+            },
+            "outputData": {
+                "fmsTicket": "datasetOutput[0].commitInfo[0].datasetFileTicketInfos[0].ticket",
+                "commitInfos": "datasetOutput[0].commitInfo[0]",
+                "relatedModified": "datasetOutput[0].dataset",
+                "createdObject": "datasetOutput[0].dataset"
+            },
+            "events": {
+                "success": [ {
+                    "name": "Arm0HTMLSpecTemplateEdit.updateFormData"
+                } ]
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "uploadFile": {
+            "actionType": "RESTService",
+            "serviceName": "",
+            "method": "POST",
+            "inputData": {
+                "request": {
+                    "method": "POST",
+                    "url": "{{Constants.fmsUrl}}",
+                    "headers": {
+                        "Content-type": "undefined"
+                    },
+                    "data": "{{data.formData}}"
+                }
+            },
+            "events": {
+                "success": [ {
+                    "name": "Arm0HTMLSpecTemplateEdit.commitDataset"
+                } ],
+                "failure": [ {
+                    "name": "Arm0ImportFromOffice.importDocumentFailed"
+                } ]
+            }
+        },
+        "commitDataset": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-FileManagement",
+            "method": "commitDatasetFiles",
+            "inputData": {
+                "commitInput": [ {
+                    "dataset": "{{data.commitInfos.dataset}}",
+                    "createNewVersion": true,
+                    "datasetFileTicketInfos": [ {
+                        "datasetFileInfo": {
+                            "clientId": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.clientId}}",
+                            "fileName": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.fileName}}",
+                            "namedReferencedName": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.namedReferenceName}}",
+                            "isText": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.isText}}",
+                            "allowReplace": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.allowReplace}}"
+                        },
+                        "ticket": "{{data.fmsTicket}}"
+                    } ]
+                } ]
+            },
+            "events": {
+                "success": [ {
+                        "name": "Arm0HTMLSpecTemplateEdit.insertImage",
+                        "condition": "data.commitInfos.dataset.type==='Image'"
+                    }
+                ]
+            }
+        },
+        "isCkeditorInstanceReady": {
+            "actionType": "JSFunction",
+            "method": "isCkeditorInstanceReady",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "ckeditorReady": "ckeditorReady",
+                "contentReady": "contentReady"
+            },
+            "deps": "js/Arm0HTMLSpecTemplateEdit"
+        },
+        "refreshRefImages":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-FileManagement",
+            "method": "getFileReadTickets",
+            "inputData":
+            {
+                "files": "{{data.missingRefImages}}"
+            },
+
+            "outputData":
+            {
+                "imageRefTickets": ""
+            },
+
+            "events":
+            {
+                 "success":
+                [
+                    {
+                        "name": "Arm0HTMLSpecTemplateEdit.updateImages"
+                    }
+                ]
+            }
+        },
+        "updateImages":
+        {
+            "actionType": "JSFunction",
+            "method": "updateImages",
+            "inputData":
+            {
+                "data": "{{data}}"
+            },
+
+            "deps": "js/Arm0HTMLSpecTemplateEdit"
+        },
+        "registerCxtForActionsPanel": {
+            "actionType": "JSFunction",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "method": "registerCxtForActionsPanel",
+            "deps": "js/Arm0PopupMenuPanel"
+        },
+        "showActionsPanel": {
+            "actionType": "JSFunction",
+            "method": "openBalloonPopup",
+            "inputData": {
+                "view": "Arm0PopupMenuPanel",
+                "commandDimension": "{{data.eventData.commandDimension}}",
+                "popuporientation": "RIGHT_CENTER",
+                "popupheight": "{{data.eventData.popupHeight}}",
+                "popupwidth": "160px",
+                "popupclosebutton": "false"
+            },
+            "deps": "js/balloonPopupService"
+        },
+        "MoveUp":
+        {
+            "actionType": "JSFunction",
+            "method": "moveUp",
+            "inputData":
+            {
+                "data": "{{data}}",
+                "moveAction": "{{data.i18n.moveUpCommandTitle}}",
+                "rmHtmlSpecLocnState": "{{subPanelContext.context.rmHtmlSpecLocnState}}"
+            },
+            "actionMessages": {
+                "success": [ {
+                    "condition": "!data.movedSuccessfully",
+                    "message": "notificationMoveUpOperationFailed"
+                } ]
+            },
+
+            "deps": "js/Arm0HTMLSpecTemplateEdit"
+        },
+
+        "MoveDown":
+        {
+            "actionType": "JSFunction",
+            "method": "moveDown",
+            "inputData":
+            {
+                "data": "{{data}}",
+                "moveAction": "{{data.i18n.moveDownCommandTitle}}",
+                "rmHtmlSpecLocnState": "{{subPanelContext.context.rmHtmlSpecLocnState}}"
+            },
+            "actionMessages": {
+                "success": [ {
+                    "condition": "!data.movedSuccessfully",
+                    "message": "notificationMoveDownOperationFailed"
+                } ]
+            },
+            "deps": "js/Arm0HTMLSpecTemplateEdit"
+        },
+        "Promote":
+        {
+            "actionType": "JSFunction",
+            "method": "promote",
+            "inputData":
+            {
+                "data": "{{data}}",
+                "moveAction": "{{data.i18n.promoteCommandTitle}}",
+                "rmHtmlSpecLocnState": "{{subPanelContext.context.rmHtmlSpecLocnState}}"
+            },
+            "actionMessages": {
+                "success": [ {
+                    "condition": "!data.movedSuccessfully",
+                    "message": "notificationPromoteOperationFailed"
+                } ]
+            },
+            "deps": "js/Arm0HTMLSpecTemplateEdit"
+        },
+        "Demote":
+        {
+            "actionType": "JSFunction",
+            "method": "demote",
+            "inputData":
+            {
+                "data": "{{data}}",
+                "moveAction": "{{data.i18n.demoteCommandTitle}}",
+                "rmHtmlSpecLocnState": "{{subPanelContext.context.rmHtmlSpecLocnState}}"
+            },
+            "actionMessages": {
+                "success": [ {
+                    "condition": "!data.movedSuccessfully",
+                    "message": "notificationDemoteOperationFailed"
+                } ]
+            },
+            "deps": "js/Arm0HTMLSpecTemplateEdit"
+        },
+        "registerCxtForBalloonPopup": {
+            "actionType": "JSFunction",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "method": "registerCxtForBalloonPopup",
+            "deps": "js/Arm0ShowBalloonPopupPanelView"
+        },
+        "showBalloonPopupActionsPanel": {
+            "actionType": "JSFunction",
+            "method": "show",
+            "inputData": {
+                "options": {
+                    "view": "Arm0ShowBalloonPopupPanel",
+                    "height": 180,
+                    "width": 200,
+                    "reference": "{{data.eventData.targetElement}}",
+                    "placement": "right",
+                    "draggable":false,
+                    "hasArrow": true
+                },
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "popupId": "id",
+                "popupElement": "panelEl"
+            },
+            "deps": "js/popupService"
+        },
+        "closePopupWindow": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+            },
+            "deps": "js/popupService"
+        },
+        "unloadContent": {
+            "actionType": "JSFunction",
+            "method": "unloadContent",
+            "inputData": {},
+            "deps": "js/Arm0HTMLSpecTemplateEdit",
+            "events": {
+                "success": [ {
+                    "name": "Arm0HTMLSpecTemplateEdit.initContent",
+                    "excludeLocalDataCtx": true
+                } ]
+            }
+        },
+        "prepareDatasetInfo": {
+            "actionType": "JSFunction",
+            "method": "prepareDatasetInfo",
+            "inputData": {
+                "eventData": "{{parameters.eventData}}"
+            },
+            "outputData": {
+                "form": "form",
+                "datasetInfo": "datasetInfo"
+            },
+            "deps": "js/Arm0HTMLSpecTemplateEdit",
+            "events": {
+                "success": [ {
+                    "name": "Arm0HTMLSpecTemplateEdit.InsertObjInCKEditor",
+                    "excludeLocalDataCtx": true
+                } ]
+            }
+        },
+        "updateReferenceForChildSibling":{
+            "actionType": "JSFunction",
+            "method": "updateReferenceForChildSibling",
+            "inputData": {
+                "data":"{{data}}",
+                "popupAction": "{{actions.showBalloonPopupForAddChildSibling}}",
+                "eventData":"{{data.eventMap['requirementDocumentationEditor.PopupForAddChildSibling']}}"
+            },
+            "outputData": {
+
+            },
+            "deps": "js/Arm0ShowBalloonPopupPanelView"
+
+        },
+        "addchildforSpecForRequirement":{
+            "actionType": "JSFunction",
+            "method": "addchildforSpec",
+            "inputData": {
+             
+                "eventData":"{{data.eventMap['requirementDocumentation.registerChildForRequirementSpec']}}"
+            },
+            "outputData": {
+
+            },
+            "deps": "js/Arm0ShowBalloonPopupPanelView"
+
+        },
+        "showBalloonPopupForAddChildSibling": {
+            "actionType": "popup",
+            "inputData": {
+                "options": {
+                    "view": "Arm0ShowBalloonPopupForAddChildSibling",
+                    "width": 175,
+                    "placement": "right",
+                    "hasArrow": true,
+                    "whenParentScrolls": "close",
+                    "subPanelContext": {
+                        "eventData":"{{data.eventData}}",
+                        "visibleServerCommandsForRM":"{{data.visibleServerCommandsForRM}}"
+                    }
+                }
+            },
+            "outputData": {
+                "popupId": "id"
+            }
+        },
+        "registerCxtForPopupChildSibling": {
+            "actionType": "JSFunction",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "method": "registerCxtForPopupChildSibling",
+            "deps": "js/Arm0ShowBalloonPopupPanelView"
+        }
+    },
+    "data": {
+        "_editorProps": {
+            "dbValue" : {
+                "contentType": "",
+                "addNavigationCommands": true,
+                "excludeInsertOLECommand": true
+            },
+            "type": "ADVANCED_NODROP",
+            "isHtmlSpecTemplate": true,
+            "showCKEditor": true
+        },
+        "actionItems": {
+            "isArray": "true",
+            "dbValue": [
+                {
+                    "displayName": "{{i18n.moveUpCommandTitle}}",
+                    "internalName": "Move Up",
+                    "eventName" : "Arm0HTMLSpecTemplateEditAndPreview.MoveUp",
+                    "iconId" : "cmdMoveUp"
+                },
+                {
+                    "displayName": "{{i18n.moveDownCommandTitle}}",
+                    "internalName": "Move Down",
+                    "eventName" : "Arm0HTMLSpecTemplateEditAndPreview.MoveDown",
+                    "iconId" : "cmdMoveDown"
+                },
+                {
+                    "displayName": "{{i18n.promoteCommandTitle}}",
+                    "internalName": "Promote",
+                    "eventName" : "Arm0HTMLSpecTemplateEditAndPreview.Promote",
+                    "iconId" : "cmdPromote"
+                },
+                {
+                    "displayName": "{{i18n.demoteCommandTitle}}",
+                    "internalName": "Demote",
+                    "eventName" : "Arm0HTMLSpecTemplateEditAndPreview.Demote",
+                    "iconId" : "cmdDemote"
+                }
+            ]
+        },
+        "uidHtmlSpecTemplate": "{{subPanelContext.context.baseSelection.uid}}",
+        "requirementCtx": {
+            "initialValues": {},
+            "meta": {}
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "initializeView"
+    },
+    "preferences": [
+        "AWC_ReqEditor"
+    ],
+    "functions": {
+
+    },
+    "onEvent": [ {
+            "eventId": "Arm0HTMLSpecTemplateEdit.initContent",
+            "action": "initializeView"
+        },
+        {
+            "eventId": "Arm0HTMLSpecTemplateTree.selectionChangeEvent",
+            "action": "selectionChanged",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "Arm0HTMLSpecTemplateEdit.InsertObjInCKEditor",
+            "action": "insertObjInCKEditor"
+        },
+        {
+            "eventId": "Arm0HTMLSpecTemplateEdit.commitDataset",
+            "action": "commitDataset"
+        },
+        {
+            "eventId": "Arm0HTMLSpecTemplateEdit.insertImage",
+            "action": "insertImage"
+        },
+        {
+            "eventId": "Arm0HTMLSpecTemplateEdit.updateFormData",
+            "action": "updateFormData"
+        },
+        {
+            "eventId": "Arm0HTMLSpecTemplateEdit.uploadFile",
+            "action": "uploadFile"
+        },
+        {
+            "eventId": "requirementDocumentation.isCkeditorInstanceReady",
+            "action": "isCkeditorInstanceReady"
+        },
+        {
+
+            "eventId": "Arm0HTMLSpecTemplateEdit.refreshRefImages",
+            "action": "refreshRefImages"
+        },
+        {
+            "eventId": "Arm0HTMLSpecTemplateEdit.updateImages",
+            "action": "updateImages"
+        },
+        {
+            "eventId": "requirementDocumentation.registerCxtForActionsPanel",
+            "cacheEventData": true,
+            "action": "registerCxtForActionsPanel"
+        },
+        {
+            "eventId": "requirementDocumentation.showActionsPanel",
+            "action": "showActionsPanel",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "Arm0HTMLSpecTemplateEditAndPreview.MoveUp",
+            "action": "MoveUp"
+
+        },
+        {
+            "eventId": "Arm0HTMLSpecTemplateEditAndPreview.MoveDown",
+            "action": "MoveDown"
+
+        },
+        {
+            "eventId": "Arm0HTMLSpecTemplateEditAndPreview.Promote",
+            "action": "Promote"
+
+        },
+        {
+            "eventId": "Arm0HTMLSpecTemplateEditAndPreview.Demote",
+            "action": "Demote"
+
+        },
+        {
+            "eventId": "requirementDocumentation.registerCxtForBalloonPopup",
+            "cacheEventData": true,
+            "action": "registerCxtForBalloonPopup"
+        },
+        {
+            "eventId": "requirementDocumentation.showBalloonPopupActionsPanel",
+            "action": "showBalloonPopupActionsPanel",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "showActionPopup.close",
+            "action": "closePopupWindow"
+        },
+        {
+            "eventId": "arm0htmlspectemplateEdit.loadContentAfterSave",
+            "action": "unloadContent"
+        },
+        {
+            "eventId": "requirementDocumentation.InsertImageInCKEditor",
+            "action": "prepareDatasetInfo",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            }
+        },
+        {
+            "eventId": "requirementDocumentation.showBalloonPopupForAddChildSibling",
+            "action": "showBalloonPopupForAddChildSibling"
+        },
+        {
+            "eventId": "requirementDocumentationEditor.PopupForAddChildSibling",
+            "action": "updateReferenceForChildSibling",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "requirementDocumentation.registerChildForRequirementSpec",
+            "cacheEventData": true,
+            "action": "addchildforSpecForRequirement"
+           
+        },
+        {
+            "eventId":  "requirementDocumentation.registerCxtForChildSiblingPopup",
+            "cacheEventData": true,
+            "action": "registerCxtForPopupChildSibling"
+        }
+    ],
+    "conditions": {
+   },
+    "messages": {
+        "notificationMoveUpOperationFailed": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.notificationMoveUpOperationFailed}}"
+        },
+        "notificationMoveDownOperationFailed": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.notificationMoveDownOperationFailed}}"
+        },
+        "notificationPromoteOperationFailed": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.notificationPromoteOperationFailed}}"
+        },
+        "notificationDemoteOperationFailed": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.notificationDemoteOperationFailed}}"
+        }
+    },
+    "i18n": {
+        "moveUpCommandTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "moveDownCommandTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "promoteCommandTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "demoteCommandTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "notificationMoveUpOperationFailed": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "notificationMoveDownOperationFailed": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "notificationPromoteOperationFailed": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "notificationDemoteOperationFailed": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "invalidObjectName": [
+            "RichTextEditorCommandPanelsMessages"
+        ]
+
+    }
+}

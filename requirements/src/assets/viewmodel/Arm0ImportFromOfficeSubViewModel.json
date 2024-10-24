@@ -1,0 +1,170 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports":[],
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "actions":
+    {
+        "fileChangeAction": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "setFileParameters"
+                },
+                {
+                    "action": "registerCtxforImport"
+                },
+                {
+                    "action": "registerSharedData"
+                }
+            ]
+        },
+        "setFileParameters": {
+            "actionType": "JSFunction",
+            "method": "setFileParameters",
+            "inputData": {
+                "fileName": "{{parameters.fileName}}",
+                "validFile": "{{parameters.validFile}}",
+                "fileNameNoExt": "{{parameters.fileNameNoExt}}",
+                "fileExt": "{{parameters.fileExt}}",
+                "formData": "{{parameters.formData}}"
+            },
+            "outputData": {
+                "fileName": "fileName",
+                "validFile": "validFile",
+                "fileNameNoExt": "fileNameNoExt",
+                "fileExt": "fileExt",
+                "formData": "formData"
+            },
+            "deps": "js/fileUploadUtils"
+        },
+        "registerCtxforImport":{
+            "actionType": "JSFunction",
+            "method": "registerCtxforImport",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "fileName": "fileName",
+                "validFile": "validFile",
+                "fileNameNoExt": "fileNameNoExt",
+                "fileExt": "fileExt",
+                "formData": "formData"
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "registerSharedData":{
+            "actionType": "JSFunction",
+            "method": "registerSharedData",
+            "inputData": {
+                "data": "{{data}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "prepareSelectedSepcData":{
+            "actionType": "JSFunction",
+            "method": "prepareSelectedSepcData",
+            "inputData": {
+                "subPanelContext":"{{subPanelContext.selectionData}}",
+                "selectionData":"{{data.eventData.selectedObjects[0]}}"
+            },
+            "outputData": {
+                "selectedSpecObj": ""
+            },
+            "deps": "js/Arm0ImportFromWord"
+        }
+    },
+
+    "onEvent":
+    [
+        {
+            "eventId": "primaryWorkArea.selectionChangeEvent",
+            "action": "prepareSelectedSepcData",
+            "cacheEventData": true
+        }
+    ],
+    "lifecycleHooks": {
+        "onMount": "prepareSelectedSepcData"
+    },
+    "data": {
+
+        "selectFile": {
+            "displayName": "{{i18n.selectFile}}",
+            "type": "STRING"
+        },
+        "importHelptooltipView": {
+            "view": "Arm0ImportHelpTooltip"
+        },
+        "importType":{
+            "dbValue":""
+        },
+        "viewModel": ""
+    },
+
+    "functions":
+    {
+    },
+
+    "conditions":
+    {
+    },
+
+    "messages":
+    {
+        "notificationForImportSpecificationMsg": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.notificationForImportSpecification}}"
+        },
+        "successImportSpecification": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.successImportSpecification}}"
+        }
+    },
+
+    "i18n":
+    {
+
+        "importTitle":
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "selectFile": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "locationLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "notificationForImportSpecification":
+        [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "retainNumbering": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "reqSpecType": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "defaultElementType": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "ImportType": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "savedRules": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "createEmptyPlaceholder": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "requiredLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "addNewLabel": [
+            "RequirementsCommandPanelsMessages"
+        ]
+    }
+}

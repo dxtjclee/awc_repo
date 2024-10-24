@@ -1,0 +1,81 @@
+{
+  "RequirementCompareReportLocation": {
+    "data": {
+      "browserTitle": {},
+      "browserSubTitle": {},
+      "headerTitle": {}
+    },
+    "type": "location"
+  },
+  "RequirementCompareReportSubLocation": {
+    "data": {
+      "isXrtApplicable": false,
+      "breadcrumbConfig": {
+        "type": null
+      },
+      "priority": 0,
+      "label": {
+        "source": "/i18n/RequirementsCommandPanelsMessages",
+        "key": "previewSubLocationTitle"
+      },
+      "clientScopeURI": "RequirementCompareReportURI",
+      "nameToken": "RequirementCompareReport",
+      "viewModes": {
+        "SummaryView": {
+          "primaryWorkArea": "list",
+          "secondaryWorkArea": false
+        }
+      },
+      "defaultDisplayMode": "SummaryView",
+      "viewBase": "Arm0RequirementCompareReport",
+      "context": {
+        "isHomePage": true,
+        "hideRightWall": true,
+        "search": {
+          "totalFound": 1
+        }
+      }
+    },
+    "params": {
+      "filter": null
+    },
+    "parent": "RequirementCompareReportLocation",
+    "type": "subLocation",
+    "url": "/RequirementCompareReport"
+  },
+  "requirementsLocation": {
+    "data": {
+      "browserSubTitle": {
+        "source": "/i18n/RequirementsManagerMessages",
+        "key": "requirementsManagerDisplayName"
+      },
+      "headerTitle": {
+        "source": "/i18n/RequirementsManagerMessages",
+        "key": "requirementsManagerDisplayName"
+      }
+    },
+    "nameToken": "requirementsLocation",
+    "parent": "root",
+    "type": "location"
+  },
+  "requirementsManager": {
+    "data": {
+      "priority": 0,
+      "label": {
+        "source": "/i18n/RequirementsManagerMessages",
+        "key": "requirementsManagerDisplayName"
+      },
+      "headerTitle": {
+        "source": "/i18n/RequirementsManagerMessages",
+        "key": "requirementsManagerDisplayName"
+      },
+      "clientScopeURI": "ReqDashboardTable",
+      "nameToken": "requirementsManagerSubLocation",
+      "viewBase": "requirementsManager"
+    },
+    "parent": "requirementsLocation",
+    "type": "subLocation",
+    "url": "/requirementsManager",
+    "view": "requirementsManager"
+  }
+}

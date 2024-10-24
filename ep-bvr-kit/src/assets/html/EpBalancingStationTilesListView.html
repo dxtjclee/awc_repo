@@ -1,0 +1,11 @@
+<mfe-loading-message exist-when="conditions.loading"></mfe-loading-message>
+<mfe-message-panel exist-when="!conditions.loading && !conditions.hasStations"
+    messages-data="{messageLines: data.messages.noStationsInTheLine}"></mfe-message-panel>
+<div class="sw-column w-12 aw-epBalancing-stationTileList" exist-when="!conditions.loading && conditions.hasStations">
+    <aw-scrollpanel class="sw-column">
+        <div aw-repeat="station : props.subPanelContext.balancingData.loadedData.balancingStations">
+            <ep-balancing-station-tile vmo="station" balancing-data="props.subPanelContext.balancingData">
+            </ep-balancing-station-tile>
+        </div>
+    </aw-scrollpanel>
+</div>

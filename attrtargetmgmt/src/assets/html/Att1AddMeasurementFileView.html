@@ -1,0 +1,28 @@
+<aw-command-panel caption="i18n.Measurement_File_Title" context="subPanelContext">
+    <div class="aw-layout-flexColumn" show-when="data.activeState.value.activeView==='AddObjectPrimarySub'">
+        <aw-form name="commandPanelForm" visible-when="data.activeView!='AssignProjectSub'&&data.activeView!='addReferenceSub'">
+            <aw-add
+                target-object="ctx.panelContext.target"
+                relations="Att0HasMeasurementFile"
+                include-types="Dataset"
+                type-filter="Dataset"
+                visible-tabs="new,palette,search"
+                add-panel-state="fields.addPanelState"
+                sub-panel-context="{ triggerCreate: data.triggerCreate, ...subPanelContext ,showDataSetUploadPanel:true}"
+                active-state="data.activeState"
+                xrt-state="data.xrtState"
+                edit-handler="editHandlers.addPanelEditHandler"></aw-add>
+        </aw-form>
+        <aw-panel-footer visible-when="data.activeView!='AssignProjectSub'&&data.activeView!='addReferenceSub'">
+            <!-- panel-footer button for New tab -->
+            <aw-button default="true" action="createObject" enable-when="!ctx.addItemEventProgressing" visible-when="formProp.attributes.valid && conditions.isNewTabAddButtonVisible">
+                <aw-i18n>i18n.add</aw-i18n>
+            </aw-button>
+            <!-- panel-footer button for Palette and Search tab -->
+            <aw-button default="true" action="createRelationForPaletteOrSearch" visible-when="conditions.isPaletteSearchTabAddButtonVisible" >
+                <aw-i18n>i18n.add</aw-i18n>
+            </aw-button>
+        </aw-panel-footer>
+    </div>
+    <aw-add-navigate active-state="data.activeState" action="actions.setActiveView"></aw-add-navigate>
+</aw-command-panel>

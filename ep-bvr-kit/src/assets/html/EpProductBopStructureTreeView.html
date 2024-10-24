@@ -1,0 +1,8 @@
+<div class="sw-column w-12" exist-when="conditions.isProductBopExist">
+    <div class="sw-row aw-ep-searchBoxStyle">
+        <ep-structure-search  view-id="EpProductBopStructureTree_EpStructureSearch" sub-panel-context="fields.epProductBopSearchContext"></ep-structure-search>
+    </div>
+    <div class="sw-row h-11">
+        <ep-tree-table view-id="EpProductBopStructureTree_EpTreeTable" sub-panel-context="{...data.productBopStructureData, ...props.subPanelContext}" structure-search-context="fields.epProductBopSearchContext" selection-data="data.selectionData"></ep-tree-table>
+    </div>
+</div>

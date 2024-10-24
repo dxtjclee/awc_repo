@@ -1,0 +1,196 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-splm-table.directive",
+        "js/aw-row.directive",
+        "js/aw-datetime.directive",
+        "js/aw-column.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/aw-toolbar.directive"
+    ],
+    "actions": {
+        "getCurrentDateForDateFilter": {
+            "actionType": "JSFunction",
+            "method": "getCurrentDate",
+            "deps": "js/tq0SplmUtils",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "date": ""
+            }
+        },
+        "callAssignedQUDataProviderAction": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "tq0QualificationsTabQuAssigned"
+                    }
+                ]
+            }
+        },
+        "updateCtxForEnablingRefreshQrsButton": {
+            "actionType": "JSFunction",
+            "method": "updateCtx",
+            "deps": "js/appCtxService",
+            "inputData": {
+                "name": "tq0DisableRefreshQrsButton",
+                "value": false
+            }
+        },
+        "searchQualificationUnitGrid": {
+            "actionType": "JSFunction",
+            "method": "loadObjects",
+            "inputData": {
+                "date": "{{data.date}}",
+                "selected": "{{ctx.selected}}",
+                "pSelected": "{{ctx.pselected}}"
+            },
+            "deps": "js/tq0SplmUtils",
+            "outputData": {
+                "searchResults": "searchResults",
+                "totalFound": "totalFound",
+                "totalLoaded": "totalLoaded"
+            }
+        },
+        "loadColumns": {
+            "actionType": "JSFunction",
+            "method": "loadTreeTableColumns",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.qsDataProvider}}"
+            },
+            "deps": "js/tq0SplmUtils"
+        }
+    },
+    "data": {
+        "date": {
+            "displayName": "{{i18n.qualificationDateFilterLabel}}",
+            "type": "DATETIME",
+            "isRequired": "false",
+            "dbValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_TOP"
+        },
+        "pageSize": 40
+    },
+    "grids": {
+        "qualificationRecordsTable": {
+            "dataProvider": "qsDataProvider",
+            "columnProvider": "Tq0AssignedQUColumnProvider",
+            "addIconColumn": true,
+            "gridOptions": {
+                "enableGridMenu": true,
+                "enablePinning": true,
+                "enableSorting": true
+            }
+        }
+    },
+    "columnProviders": {
+        "Tq0AssignedQUColumnProvider": {
+            "loadColumnAction": "loadColumns",
+            "columns": "{{data.columns}}",
+            "soaEnabled": false,
+            "sortCriteria": []
+        }
+    },
+    "dataProviders": {
+        "qsDataProvider": {
+            "action": "searchQualificationUnitGrid",
+            "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectCellListActionCommands",
+            "response": "{{data.searchResults}}",
+            "selectionModelMode": "multiple",
+            "totalLoaded": "{{data.totalLoaded}}",
+            "totalFound": "{{data.totalFound}}",
+            "cols": "{{data.columns}}",
+            "inputData": {
+                "selectionData": "{{subPanelContext.selectionData}}"
+            }
+
+        }
+    },
+    "lifecycleHooks": {
+        "onInit":"qsDataProvider",
+        "onMount": "getCurrentDateForDateFilter"
+    },
+    "onEvent": [
+        {
+            "eventId": "condition.expressionValueChanged",
+            "action": "updateCtxForEnablingRefreshQrsButton",
+            "criteria": {
+                "condition": "conditions.dateValueChanged"
+            },
+            "cacheEventData": true
+        },
+        {
+            "eventId": "condition.expressionValueChanged",
+            "action": "updateCtxForEnablingRefreshQrsButton",
+            "criteria": {
+                "condition": "conditions.timeValueChanged"
+            },
+            "cacheEventData": true
+        },
+        {
+            "eventId": "tq0QualificationsTabQuAssigned",
+            "action": "qsDataProvider"
+        }
+    ],
+    "conditions": {
+        "dateValueChanged": {
+            "expression": "data.date.dateApi.dateValue",
+            "trackValues": true
+        },
+        "timeValueChanged": {
+            "expression": "data.date.dateApi.timeValue",
+            "trackValues": true
+        }
+    },
+    "i18n": {
+        "qualificationDateFilterLabel": [
+            "trainingandqualificationMessages"
+        ],
+        "tq0QualificationUnit": [
+            "trainingandqualificationMessages"
+        ],
+        "tq0QualRecordActualCost": [
+            "trainingandqualificationMessages"
+        ],
+        "tq0QualRecordActualDuration": [
+            "trainingandqualificationMessages"
+        ],
+        "tq0QualRecordActualDurationUnit": [
+            "trainingandqualificationMessages"
+        ],
+        "tq0QualRecordAssignmentDate": [
+            "trainingandqualificationMessages"
+        ],
+        "tq0QualRecordDateReleased": [
+            "trainingandqualificationMessages"
+        ],
+        "tq0QualRecordCurrency": [
+            "trainingandqualificationMessages"
+        ],
+        "tq0QualRecordDueDate": [
+            "trainingandqualificationMessages"
+        ],
+        "tq0QualRecordExpirationDate": [
+            "trainingandqualificationMessages"
+        ],
+        "tq0QualRecordName": [
+            "trainingandqualificationMessages"
+        ],
+        "tq0QualRecordReleaseStatus": [
+            "trainingandqualificationMessages"
+        ],
+        "tq0RefereshQRsButton": [
+            "trainingandqualificationMessages"
+        ],
+        "tq0IndustryStandard": [
+            "trainingandqualificationMessages"
+        ],
+        "Tq0QualityAction": [
+            "trainingandqualificationMessages"
+        ]
+    }
+}

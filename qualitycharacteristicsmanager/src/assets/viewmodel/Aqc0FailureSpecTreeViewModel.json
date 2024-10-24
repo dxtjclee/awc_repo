@@ -1,0 +1,251 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "actions": {
+        "qfm0UpdateFailureSpecTreeAfterEdit": {
+            "actionType": "JSFunction",
+            "method": "updateSpecTreeAfterEdit",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.failureSpecDataProvider}}",
+                "subPanelContext": "{{props.subPanelContext}}",
+                "selectedObject": "{{ctx.selected}}",
+                "selectionModel": "{{props.subPanelContext.selectionModel}}"
+            },
+            "deps": "js/Aqc0FailureSpecEditStructureServices"
+        },
+        "loadData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableData",
+            "inputData": {
+                "treeLoadInput": "request.treeLoadInput",
+                "dataProvider": "{{data.dataProviders.failureSpecDataProvider}}",
+                "delayTimeTree": "{{data.delayTimeTree}}",
+                "maxTreeLevel": "{{data.maxTreeLevel}}",
+                "sortCriteria": "{{data.columnProviders.failureSpecColumnProvider.sortCriteria}}",
+                "searchState": "{{props.subPanelContext.searchState}}",
+                "sublocationState": "{{props.subPanelContext.pageContext.sublocationState}}",
+                "status":"{{data.i18n}}"
+            },
+            "outputData": {
+                "totalFound": "result.treeLoadResult.totalChildCount",
+                "totalLoaded": "result.treeLoadResult.childNodes.length",
+                "searchResults": "result.treeLoadResult.childNodes",
+                "dataProviders.failureSpecDataProvider.columnConfig": "result.colDefs",
+                "tableLoaded": true
+            },
+            "events": {
+                "success": [ {
+                    "name": "processPWASelection"
+                } ]
+            },
+            "deps": "js/Aqc0FailureSpecTreeTableService"
+        },
+        "loadProperties": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableProperties",
+            "inputData": {
+                "propertyLoadInput": "request.propertyLoadInput",
+                "delayTimeProperty": "{{data.delayTimeProperty}}"
+            },
+            "deps": "js/Aqc0FailureSpecTreeTableService"
+        },
+        "updateSelectionInPWA": {
+            "actionType": "JSFunction",
+            "method": "processPWASelection",
+            "inputData": {
+                "data": "{{data}}",
+                "selectionModel": "{{props.subPanelContext.selectionModel}}",
+                "subPanelContext" :"{{props.subPanelContext}}"
+            },
+            "deps": "js/Aqc0FailureSpecTreeTableService"
+        },
+        "failureSpecExpandTreeNodeAction": {
+            "actionType": "JSFunction",
+            "method": "failureSpecExpandTreeNode",
+            "deps": "js/Aqc0FailureSpecTreeTableService"
+        },
+        "updateDisplayNames": {
+            "actionType": "JSFunction",
+            "method": "updateDisplayNames",
+            "inputData": {
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/Aqc0FailureSpecTreeTableService"
+        },
+        "addNewlyAddedElement": {
+            "actionType": "JSFunction",
+            "method": "addNewElement",
+            "inputData": {
+                "subPanelContext" :"{{props.subPanelContext}}",
+                "dataProvider": "{{data.dataProviders.failureSpecDataProvider}}"
+            },
+            "outputData": {},
+            "deps": "js/Aqc0FailureSpecEditStructureServices"
+        },
+        "updateFailureSpecTreeViewPWA": {
+            "actionType": "dataProvider",
+            "method": "failureSpecDataProvider"
+        },
+        "initSearch": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "aqc0.updateFailureSpecTreeViewPWA",
+                    "condition": "data.tableLoaded && data.tableLoaded === true"
+                } ]
+            }
+        },
+        "replaceVersionNode": {
+            "actionType": "JSFunction",
+            "method": "replaceVersionNode",
+            "inputData": {
+                "subPanelContext": "{{props.subPanelContext}}",
+                "dataProviders": "{{data.dataProviders}}",
+                "selectionModel": "{{props.subPanelContext.selectionModel}}"
+            },
+            "outputData": {},
+            "deps": "js/Aqc0FailureSpecTreeTableService"
+        }
+    },
+    "data": {
+        "delayTimeTree": {
+            "displayName": "",
+            "type": "INTEGER",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "20",
+            "dispValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        },
+        "maxTreeLevel": {
+            "displayName": "",
+            "type": "INTEGER",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "100",
+            "dispValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        },
+        "tableLoaded": false
+    },
+    "dataProviders": {
+        "failureSpecDataProvider": {
+            "action": "loadData",
+            "initializeAction": "loadData",
+            "nextAction": "loadData",
+            "previousAction": "loadData",
+            "treeLoadResult": "action.result.treeLoadResult",
+            "selectionModelMode": "multiple",
+            "treePageSize": 100,
+            "inputData": {
+                "accessMode": "tree",
+                "selectionModel": "{{subPanelContext.selectionModel}}"
+            },
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}"
+        },
+        "failureSpecPropertyProvider": {
+            "action": "loadProperties",
+            "propertyLoadResult": "action.result.propertyLoadResult"
+        }
+    },
+    "lifecycleHooks": {
+        "onUpdate": [
+            {
+                "action": "updateFailureSpecTreeViewPWA",
+                "observers": [
+                    "props.subPanelContext.pageContext.sublocationState.showInactive",
+                    "props.subPanelContext.searchState.showInactive"
+                ]
+            },
+            {
+                "action": "addNewlyAddedElement",
+                "observers": [
+                    "props.subPanelContext.pageContext.sublocationState.newlyCreatedElement",
+                    "props.subPanelContext.searchState.newlyCreatedElement"
+                ]
+            },
+            {
+                "action": "initSearch",
+                "observers": [
+                    "props.subPanelContext.searchState.criteria.searchString"
+                ]
+            },
+            {
+                "action": "replaceVersionNode",
+                "observers": [
+                    "props.subPanelContext.searchState.versionedNode"
+                ]
+            }
+        ]
+    },
+    "columnProviders": {
+        "failureSpecColumnProvider": {
+            "soaEnabled": false,
+            "sortCriteria": [ {
+                "fieldName": "object_name",
+                "sortDirection": "ASC"
+            } ]
+        }
+    },
+    "grids": {
+        "failureSpecTree": {
+            "dataProvider": "failureSpecDataProvider",
+            "propertyProvider": "failureSpecPropertyProvider",
+            "columnProvider": "failureSpecColumnProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "enableGridMenu": true,
+                "enablePinning": true
+            }
+        }
+    },
+    "i18n": {
+        "Aqc0ElementName": [
+            "qualityfailuremanagerMessages"
+        ],
+        "ReleaseStatus": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "Status": [
+            "qualityfailuremanagerMessages"
+        ],
+        "qc0Active": [
+            "qualityfailuremanagerMessages"
+        ]
+    },
+    "onEvent": [ {
+            "eventId": "processPWASelection",
+            "cacheEventData": true,
+            "action": "updateSelectionInPWA"
+        },
+        {
+            "eventId": "failureSpecExpandTreeNodeEvent",
+            "action": "failureSpecExpandTreeNodeAction"
+        },
+        {
+            "eventId": "aqc0FailureSpecSelectionUpdateEvent",
+            "action": "updateSelectionInPWA"
+        },
+        {
+            "eventId": "failureSpecDataProvider.modelObjectsUpdated",
+            "cacheEventData": true,
+            "action": "updateDisplayNames"
+        },
+        {
+            "eventId": "vmc.modified.failureSpecDataProvider",
+            "cacheEventData": true,
+            "action": "updateDisplayNames"
+        },
+        {
+            "eventId":"aqc0.updateFailureSpecTreeViewPWA",
+            "action": "updateFailureSpecTreeViewPWA"
+        },
+        {
+            "eventId": "editHandlerStateChange",
+            "action": "qfm0UpdateFailureSpecTreeAfterEdit",
+            "condition": "state === 'saved' && state !== 'canceling' && (ctx.locationContext['ActiveWorkspace:SubLocation'] === 'FailureSpecificationSubLocation' || ctx.locationContext['ActiveWorkspace:SubLocation'] === 'qualityfailuremanager')"
+        }
+    ]
+}

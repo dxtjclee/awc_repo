@@ -1,0 +1,21 @@
+<div class="sw-column awHeader">
+    <div class="sw-row aw-layout-locationTitle aw-cba-locationTitle" exist-when="subPanelContext.subLocationTabCond.currentTab === 'VRExecute'">
+        <span class="aw-vrcontent-title">
+        {{i18n.ExecuteTest}}
+        <span class="aw-taskbasedpage-headerTitleSeparator">|</span>
+        <span class="aw-vrcontent-subTitle"> {{data.vrHeaderViewContext.objectNameTitle}} </span>
+        </span>
+        <span class="aw-taskbasedpage-headerTitleSeparator">|</span>
+        <span class="aw-vrcontent-title">
+        {{i18n.SoftwareRelease}}
+        <span class="aw-vrcontent-subTitle">{{data.vrHeaderViewContext.softwareName}}</span>
+        </span>
+    </div>
+    <div class="sw-row aw-layout-locationTitle aw-cba-locationTitle" exist-when="subPanelContext.subLocationTabCond.currentTab !== 'VRExecute'">
+        <span class="aw-vrcontent-title">
+        {{i18n.ManageContextTitle}}
+        <span class="aw-taskbasedpage-headerTitleSeparator">|</span>
+        <span class="aw-vrcontent-subTitle"> {{data.vrHeaderViewContext.objectNameTitle}} </span>
+        </span>
+    </div>
+</div>

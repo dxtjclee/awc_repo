@@ -1,0 +1,38 @@
+{
+    "schemaVersion" : "1.0.0",
+    "imports": [],
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "actions": {
+        "showAttachments": {
+            "actionType": "Navigate",
+            "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+            "navigationParams": {
+                "uid": "{{subPanelContext.vmo.props.arm0UnderlyingObject.dbValues[0]}}",
+                "pageId": "tc_xrt_Content",
+                "spageId": "attachments"
+            },
+            "navigateIn": "newTab"
+        }
+    },
+    "conditions": {
+        "canShowAttachmentsIcon": {
+            "expression": "subPanelContext.vmo.props.arm0AttachmentCount.dbValues[0]>0"
+        }
+    },
+    "data": {
+        "showAttachmentsCmd": {
+            "iconName": "indicatorAttachment",
+            "tooltip": "{{i18n.attachmentsText}}",
+            "action": "showAttachments"
+        }
+    },
+    "i18n": {
+        "attachmentsText": [
+            "RequirementsManagerMessages"
+        ]
+    }
+}

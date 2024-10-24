@@ -1,0 +1,43 @@
+<aw-popup2 id="Ase0FloatingWindowPopup">
+    <div class="afx-content-background aw-float-graph-popup">
+        <div class="sw-popup-contentContainer aw-architectureModeler-floatDialogSmall">
+            <div class="aw-layout-workareaCommandbar">
+                <div class="aw-flex-row aw-architecturemodelerfg-breadcrumb">
+                    <aw-navigate-breadcrumb crumbs="data.crumbs" compact='true' visible-when="data.activeView === 'Graph'">
+                    </aw-navigate-breadcrumb>
+                </div>
+                <div class="sw-row aw-architecturemodelerfg-diagramTitleContainer" visible-when="data.activeView === 'Graph' && data.currentDiagram !== null">
+                    <label class="aw-widgets-propertyLabelTop aw-base-small">{{i18n.Diagram}}:</label>
+                    <aw-link class="aw-architecturemodelerfg-diagramTitle" prop="data.currentDiagram.props.object_string" sub-panel-context="{...subPanelContext}" aw-click="actions.sendViewChangeEvent"></aw-link>
+                </div>
+                <div class="sw-row aw-architecturemodelerfg-commandbar">
+                    <aw-command-bar anchor="fg_commandbar_open" context="{ currentDiagram:data.currentDiagram}" alignment="HORIZONTAL" visible-when="data.activeView === 'Graph'" aw-class="
+                            aw-commands-commandBarContainer
+                            aw-commands-commandBarHorizontal
+                            aw-architecturemodelerfg-openCommandBar">
+                    </aw-command-bar>
+                </div>
+            </div>
+            <aw-panel-body>
+                <div visible-when="data.activeView === 'Graph'" class="aw-architecturemodelerfg-graphContainer">
+                    <aw-graphing-component graph-model="data.graphModel" legend-data="data.legend" is-main="false"></aw-graphing-component>
+                </div>
+                <div class="aw-architecturemodelerfg-cellContainer" visible-when="data.activeView === 'DiagramSelect'">
+                    <aw-list-filter prop="data.filterBox" dataprovider="data.dataProviders.associatedDiagramsList">
+                        <aw-include name="Ase0FloatGraphPopupDiagramCell" sub-panel-context="item" id="{{item.uid}}" viewId="{{item.uid}}" cell-state="{{fields.cellState}}"></aw-include>
+                    </aw-list-filter>
+                </div>
+            </aw-panel-body>
+            <aw-panel-footer>
+                <aw-button class="medium aw-aria-border" size="auto" visible-when="data.activeView === 'DiagramSelect'" enable-when="data.dataProviders.associatedDiagramsList.getSelectedObjects().length > 0" action="previewDiagram">
+                    <aw-i18n>i18n.PreviewDiagram</aw-i18n>
+                </aw-button>
+                <aw-button class="medium aw-aria-border" size="auto" visible-when="data.activeView === 'DiagramSelect'" enable-when="data.currentObject.props.is_modifiable.dbValues['0'] === '1'
+                && data.dataProviders.associatedDiagramsList.getSelectedObjects().length === 1
+                && !data.dataProviders.associatedDiagramsList.selectedObjects[0].ase0IsDefaultDiagram" action="setAsDefaultDiagram">
+                    <aw-i18n>i18n.SetAsDefaultDiagram</aw-i18n>
+                </aw-button>
+            </aw-panel-footer>
+        </div>
+    </div>
+</aw-popup2>

@@ -1,0 +1,603 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "lifecycleHooks": {
+        "onUnmount": "unloadView",
+        "onUpdate": [ {
+            "action": "setSelectionFromSummaryTable",
+            "observers": [ "viewModel.atomicData.summaryTableSelectionData" ]
+        },
+        {
+            "action": "setParameterTableSelection",
+            "observers": [ "viewModel.atomicData.paramTableSelectionData" ]
+        },
+        {
+            "action":"setSummaryTableHeight",
+            "observers":["props.subPanelContext.fullScreenState"]
+        }
+     ]
+    },
+    "ports": {
+        "inputSelectionInSummaryTableForSync": {
+            "syncObject": {}
+        }
+    },
+    "actions": {
+        "processSyncAction": {
+            "actionType": "Sync",
+            "inputData": {
+                "port": "inputSelectionInSummaryTableForSync",
+                "syncObject": "{{data.eventMap['uniformParamTable.applySync']}}"
+            }
+        },
+        "unloadView": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "unRegisterContext"
+                },
+                {
+                    "action": "unregisterParameterContext"
+                }
+            ]
+        },
+        "unRegisterContext": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "inputData": {
+                "name": "reqSummaryTable"
+            },
+            "deps": "js/appCtxService",
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0Markup.closeMarkupPanel"
+                    }
+                ]
+            }
+        },
+        "unregisterParameterContext": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "deps": "js/appCtxService",
+            "inputData": {
+                "name": "requirementCtx"
+            }
+        },
+
+        "editEventAction": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "plTable.editStateChange",
+                        "eventData": {
+                            "state": "{{data.eventData.state}}",
+                            "dataSource": {
+                                "dataProviders": "{{data.dataProviders}}"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "addEventDataToNativeData": {
+            "actionType": "JSFunction",
+            "method": "handleHtmlPanelVMCollection",
+            "deps": "js/xrtUtilities",
+            "inputData": {
+                "callback": "{{subPanelContext.callback.updateVMCollectionCallback}}",
+                "response": {
+                    "dataProvider": "{{data.dataProviders.showReqSummaryTableProvider}}"
+                }
+            }
+        },
+
+        "refreshReqSummaryTable": {
+            "actionType": "dataProvider",
+            "method": "showReqSummaryTableProvider"
+        },
+
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/columnArrangeService"
+        },
+        "saveColumnConfigLoadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "operationType": "as_arranged",
+                    "clientScopeURI": "ReqSummaryTable"
+                },
+                "saveColumnConfigData": {
+                    "clientScopeURI": "ReqSummaryTable",
+                    "columnConfigId": "{{data.dataProviders.showReqSummaryTableProvider.columnConfig.columnConfigId}}",
+                    "columns": "{{data.dataProviders.showReqSummaryTableProvider.newColumns}}",
+                    "scope": "LoginUser",
+                    "scopeName": ""
+                },
+                "searchInput": {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Arm0SummaryTabProvider",
+                    "searchCriteria": {
+                        "selectedElementUid": "{{subPanelContext.selected.uid}}",
+                        "productContextUid":"{{subPanelContext.context.occContext.productContextInfo.uid}}",
+                        "enableSortAndPaging": "true"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "searchSortCriteria": "{{data.columnProviders.reqSummaryTableColumnProvider.sortCriteria}}",
+                    "startIndex": "{{data.dataProviders.showReqSummaryTableProvider.startIndex}}",
+                    "columnFilters": "{{data.columnProviders.reqSummaryTableColumnProvider.columnFilters}}"
+                },
+                "inflateProperties": true
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}",
+                "dataProviders.showReqSummaryTableProvider.columnConfig": "columnConfig",
+                "ctx.reqSummaryTable.columnConfig": "columnConfig"
+            },
+            "deps": "js/Arm0RequirementSummaryTable"
+        },
+        "resetColumnConfig": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "getOrResetUIColumnConfigs4",
+            "inputData": {
+                "getOrResetUiConfigsIn": [
+                    {
+                        "scope": "LoginUser",
+                        "scopeName": "",
+                        "clientName": "AWClient",
+                        "resetColumnConfig": true,
+                        "columnConfigQueryInfos": [
+                            {
+                                "clientScopeURI": "ReqSummaryTable",
+                                "operationType": "configured",
+                                "typeNames": [
+                                    "WorkspaceObject"
+                                ],
+                                "columnsToExclude": []
+                            }
+                        ],
+                        "businessObjects": [
+                            {}
+                        ]
+                    }
+                ]
+            },
+            "outputData": {
+                "dataProviders.showReqSummaryTableProvider.columnConfig": "columnConfigurations[0].columnConfigurations[0]"
+            },
+            "deps": "js/Arm0RequirementSummaryTable"
+        },
+        "loadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "clientScopeURI": "ReqSummaryTable",
+                    "operationType": "as_configured"
+                },
+                "searchInput": {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Arm0SummaryTabProvider",
+                    "searchCriteria": {
+                        "selectedElementUid": "{{subPanelContext.selected.uid}}",
+                        "productContextUid":"{{subPanelContext.context.occContext.productContextInfo.uid}}",
+                        "bookmarkUid": "{{function:getWorkingContextUid}}",
+                        "enableSortAndPaging": "true"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "searchSortCriteria": "{{data.columnProviders.reqSummaryTableColumnProvider.sortCriteria}}",
+                    "startIndex": "{{data.dataProviders.showReqSummaryTableProvider.startIndex}}",
+                    "columnFilters": "{{function:getColumnFilters}}"
+                },
+                "inflateProperties": true
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}",
+                "dataProviders.showReqSummaryTableProvider.columnConfig": "columnConfig",
+                "ctx.reqSummaryTable.columnConfig": "columnConfig"
+            },
+            "events": {
+                "success": [
+                 {
+                     "name": "showReqSummaryTable.clearProviderSelection"
+                 }
+             ]
+            },
+            "deps": "js/Arm0RequirementSummaryTable"
+        },
+        "clearProviderSelection":{
+            "actionType": "JSFunction",
+            "method": "clearProviderSelection",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0RequirementSummaryTable"
+        },
+        "postTracelinkCreated": {
+            "actionType": "JSFunction",
+            "method": "postTracelinkCreated",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{subPanelContext}}"
+            },
+            "deps": "js/Arm0RequirementSummaryTable"
+        },
+        "showWidePanelEditorPopupPanel": {
+            "actionType": "JSFunction",
+            "method": "showWidePanelEditorPopup",
+            "deps": "js/Arm0SingleRequirementWidePanelEditor",
+            "inputData": {
+                "calcHeight" : true,
+                "options": {
+                    "view": "Arm0SingleRequirementWidePanelEditor",
+                    "anchor": "arm0_single_req_popup",
+                    "reference": ".aw-layout-infoCommandbar",
+                    "isModal": false,
+                    "placement": "left-end",
+                    "width": 800,
+                    "height": 680,
+                    "draggable": false,
+                    "detachMode": true,
+                    "disableClose": true,
+                    "clickOutsideToClose":false,
+                    "caption": "{{i18n.documentationTitle}}",
+                    "subPanelContext": "{{subPanelContext}}"
+                }
+            }
+        },
+        "plTableClientRefresh": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "showReqSummaryTable.plTable.clientRefresh"
+                    }
+                ]
+            }
+        },
+        "setSelectionFromSummaryTable": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "ensureSourceElementIsLoaded",
+                    "condition": "data.summaryTableSelectionData.selected.length > 0"
+                },
+                {
+                    "action": "setSourceObjectAsSelected"
+                }
+            ]
+        },
+        "ensureSourceElementIsLoaded": {
+            "actionType": "JSFunctionAsync",
+            "method": "getProperties",
+            "inputData": {
+                "uids": ["{{data.summaryTableSelectionData.selected[0].props.arm0SourceElement.dbValues[0]}}"],
+                "propNames": ["awb0UnderlyingObject"]
+            },
+            "deps": "soa/dataManagementService"
+        },
+        "setSourceObjectAsSelected": {
+            "actionType": "JSFunction",
+            "method": "setSourceObjectAsSelected",
+            "inputData": {
+                "summaryTableSelectionData": "{{data.summaryTableSelectionData}}",
+                "paramTableSelectionData": "{{data.paramTableSelectionData}}",
+                "subPanelContext": "{{subPanelContext}}",
+                "pageState": "{{fields.pageState}}",
+                "isSelectionSourceParamTable": false
+            },
+            "deps": "js/Arm0RequirementSummaryTable"
+        },
+        "setParameterTableSelection": {
+            "actionType": "JSFunction",
+            "method": "setSourceObjectAsSelected",
+            "inputData": {
+                "summaryTableSelectionData": "{{data.summaryTableSelectionData}}",
+                "paramTableSelectionData": "{{data.paramTableSelectionData}}",
+                "subPanelContext": "{{subPanelContext}}",
+                "pageState": "{{fields.pageState}}",
+                "isSelectionSourceParamTable": true
+            },
+            "deps": "js/Arm0RequirementSummaryTable"
+        },
+        "getRequirementContent": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "requirementDocumentation.getSpecificationSegmentForComments"
+                    },
+                    {
+                        "name": "requirementDocumentation.getSelectedRefObj"
+                    }
+                ]
+            }
+        },
+        "getSpecificationSegmentForComments": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AwReqMgmtSe-2019-06-SpecNavigation",
+            "method": "getSpecificationSegment",
+            "inputData": {
+                "inputData": "{{function:getSpecificationSegmentInput}}"
+            },
+            "outputData": {
+                "content": "output"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.getCommentsAfterDataLoad"
+                    }
+                ]
+            },
+            "deps": "js/Arm0RequirementSummaryTable"
+        },
+        "getCommentsAfterDataLoad": {
+            "actionType": "JSFunction",
+            "method": "getCommentsAfterDataLoad",
+            "inputData": {
+                "data": "{{data}}"
+            },
+
+            "deps": "js/Arm0RequirementSummaryTable"
+        },
+        "saveMarkupContent": {
+            "actionType": "JSFunction",
+            "method": "saveMarkupContent",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0RequirementSummaryTable"
+        },
+        "updateTableContent": {
+            "actionType": "JSFunction",
+            "method": "updateTableContent",
+            "deps": "js/Arm0RequirementSummaryTable"
+        },
+        "refreshTableData": {
+            "actionType": "JSFunction",
+            "method": "refreshTableData",
+            "inputData": {
+                "data": "{{data}}",
+                "subPanelContext": "{{subPanelContext}}"
+            },
+            "deps": "js/Arm0RequirementSummaryTable"
+        },
+        "setSummaryTableHeight": {
+            "actionType": "JSFunction",
+            "method": "setSummaryTableHeight",
+            "inputData": {
+                "subPanelContext": "{{subPanelContext}}",
+                "state": "{{fields.pageState}}"
+            },
+            "deps": "js/Arm0RequirementSummaryTable"
+        },
+        "showParametersPanel": {
+            "actionType": "JSFunction",
+            "method": "updatePartialState",
+            "inputData": {
+                "state": "{{fields.pageState}}",
+                "path": "showSplitPanel",
+                "value": "{{fields.pageState.value.showSplitPanel}}",
+                "toggleValue": true
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.resizeSummaryTable"
+                    }
+                ]
+            },
+            "deps": "js/Arm0RequirementSummaryTable"
+        },
+        "resizeSummaryTable":{
+            "actionType": "JSFunction",
+            "method": "resizeSummaryTable",
+            "inputData": {
+                "state": "{{fields.pageState}}",
+                "subPanelContext": "{{subPanelContext}}"
+            },
+            "deps": "js/Arm0RequirementSummaryTable"
+        }
+    },
+    "preferences": [
+    ],
+    "conditions": {
+
+    },
+    "functions": {
+        "getColumnFilters": {
+            "functionName": "getColumnFilters",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getSpecificationSegmentInput": {
+            "functionName": "getSpecificationSegmentInput",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getInputValues": {
+            "functionName": "getInputValues",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getWorkingContextUid": {
+            "functionName": "getWorkingContextUid",
+            "parameters": []
+        }
+    },
+    "columnProviders": {
+        "reqSummaryTableColumnProvider": {
+            "saveColumnAndLoadAction": "saveColumnConfigLoadData",
+            "resetColumnAction": "resetColumnConfig"
+        }
+    },
+    "dataProviders": {
+        "showReqSummaryTableProvider": {
+            "action": "loadData",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "selectionModelMode": "multiple",
+            "editContext": "NONE",
+            "inputData": {
+                "enablePropEdit": "conditions.isNoneContextNotActive",
+                "selectionData": "{{fields.summaryTableSelectionData}}"
+            }
+        }
+    },
+    "grids": {
+        "showReqSummaryTable": {
+            "columnProvider": "reqSummaryTableColumnProvider",
+            "dataProvider": "showReqSummaryTableProvider",
+            "enableArrangeMenu": true,
+            "addIconColumn": false,
+            "gridOptions": {
+                "isFilteringEnabled": true,
+                "enableExpandAndPaginationInEdit": true
+            }
+        }
+    },
+    "data": {
+        "summaryTableSelectionData": {
+            "initialValues": {
+                "selected": []
+            },
+            "meta": {}
+        },
+        "paramTableSelectionData": {
+            "initialValues": {
+                "selected": []
+            },
+            "meta": {}
+        },
+        "pageState": {
+            "initialValues": {
+            },
+            "meta": {}
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "uniformParamTable.applySync",
+            "cacheEventData": true,
+            "action": "processSyncAction"
+        },
+        {
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        },
+        {
+            "eventId": "showReqSummaryTable.refreshTable",
+            "cacheEventData": true,
+            "action": "refreshReqSummaryTable"
+        },
+        {
+            "eventId": "showReqSummaryTableProvider.modelObjectsUpdated",
+            "cacheEventData": true,
+            "action": "addEventDataToNativeData"
+        },
+        {
+            "eventId": "editHandlerStateChange",
+            "cacheEventData": true,
+            "action": "editEventAction"
+        },
+        {
+            "eventId": "showReqSummaryTable.clearProviderSelection",
+            "cacheEventData": true,
+            "action":"clearProviderSelection"
+        },
+        {
+            "eventId": "Arm0SingleRequirementWidePanelEditor.showWidePanelEditorPopupPanel",
+            "action": "showWidePanelEditorPopupPanel"
+        },
+        {
+            "eventId": "RM.PostTraceLinkCreated",
+            "cacheEventData": true,
+            "action": "postTracelinkCreated"
+        },
+        {
+            "eventId": "Arm0SummaryTable.refreshTable",
+            "action": "plTableClientRefresh"
+        },
+        {
+            "eventId":"requirementDocumentation.getRequirementContent",
+            "action": "getRequirementContent"
+        },
+        {
+            "eventId": "requirementDocumentation.getSpecificationSegmentForComments",
+            "action": "getSpecificationSegmentForComments"
+        },
+        {
+            "eventId": "requirementDocumentation.getCommentsAfterDataLoad",
+            "action": "getCommentsAfterDataLoad"
+        },
+        {
+            "eventId": "Arm0SummaryTable.saveAllMarkupEdits",
+            "action": "saveMarkupContent"
+        },
+        {
+            "eventId": "Arm0RequirementSummaryTable.refreshDataInTable",
+            "action": "refreshTableData"
+        },
+        {
+            "eventId": "Arm0RequirementSummaryTable.updateTableContent",
+            "action": "updateTableContent"
+        },
+        {
+            "eventId": "aw.windowResize",
+            "action": "setSummaryTableHeight"
+        },
+        {
+            "eventId": "showReqSummaryTable.showParameters",
+            "action": "showParametersPanel"
+        },
+        {
+            "eventId":"att1AddParameter.setItemEventProgressing",
+            "action": "updateTableContent"
+        },
+        {
+            "eventId":"executeDeleteParameterFor12x",
+            "action": "updateTableContent"
+
+        },
+        {
+            "eventId":"requirementDocumentation.resizeSummaryTable",
+            "action":"resizeSummaryTable"
+        }
+    ],
+    "i18n": {
+        "summaryTable": [
+            "RequirementsManagerMessages"
+        ],
+        "documentationTitle": [ "RequirementsCommandPanelsMessages" ]
+    }
+}

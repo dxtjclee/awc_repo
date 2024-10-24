@@ -1,0 +1,19 @@
+<div class="sw-column w-12 h-12">
+    <aw-guidance-message class="sw-row aw-ep-toggleSyncMessage h-3f" exist-when="!conditions.isSyncedWithViewer" message="syncedToEditorMessage" closable="false" banner-style="false" show-icon="false" show-type="false">
+    </aw-guidance-message>
+    <aw-guidance-message class="sw-row aw-ep-toggleSyncMessage h-3f" exist-when="conditions.isSyncedWithViewer" message="syncedToViewerMessage" closable="false" banner-style="false" show-icon="false" show-type="false">
+    </aw-guidance-message>
+    <div class="sw-row aw-ep-searchBox">
+        <ep-structure-search view-id="WiProcessTree_EpStructureSearch" sub-panel-context="fields.wiProcessSearchContext"></ep-structure-search>
+    </div>
+
+    <div class="sw-row h-12" exist-when="ctx.epPageContext.loadedObject.uid">
+        <ep-tree-table view-id="WiProcessTree_EpTreeTable" sub-panel-context="{...data.processTreeContext, ...props.subPanelContext}" structure-search-context="fields.wiProcessSearchContext" selection-data="data.selectionData"></ep-tree-table>
+    </div>
+    <aw-splitter direction="HORIZONTAL" class="aw-mfe-transparentSplitter" visible-when="subPanelContext.missingInSourceTabsConfig.tabs.length > 0">
+    </aw-splitter>
+    <div class="sw-row aw-ep-missingInSourcePanel h-12 flex-auto" exist-when="props.subPanelContext.sharedSelectionData.isIndicationToggleOn === true && subPanelContext.missingInSourceTabsConfig.tabs.length > 0">
+        <mfe-content-panel view-path="viewPath" sub-panel-context="data.contentPanelData"></mfe-content-panel>
+    </div>
+
+</div>

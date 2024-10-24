@@ -1,0 +1,13 @@
+<aw-command-panel caption="i18n.matrixSetting" context="subPanelContext">
+    <aw-panel-body>
+        <aw-panel-section caption="i18n.labeldisplay">
+            <aw-checkbox aw-repeat="p : data.matrixSettingProperties" prop="p"></aw-checkbox>
+        </aw-panel-section>
+        <aw-panel-section caption="i18n.showTracelinkDirection" exist-when="conditions.visibleTraceLinkDirection">
+            <aw-checkbox prop="data.showTracelinkDirection" ></aw-checkbox>
+        </aw-panel-section>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button action="applyMatrixSettings"><aw-i18n>i18n.matrixApply</aw-i18n></aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

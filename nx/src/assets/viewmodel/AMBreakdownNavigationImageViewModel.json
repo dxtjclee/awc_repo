@@ -1,0 +1,94 @@
+{
+    "schemaVersion" : "1.0.0",
+    "imports":
+    [
+        "js/aw-list.directive",
+        "js/aw-image-cell.directive",
+        "js/aw-scrollpanel.directive"
+    ],
+    "actions":
+    {
+        "reveal":
+        {
+            "actionType": "dataProvider",
+            "method": "listDataProvider"
+        },
+        "loadData":
+        {
+            "actionType": "JSFunctionAsync",
+            "method": "loadData",
+            "inputData":
+            {
+                "0":
+                {
+                    "maxToLoad": "{{function:getDefaultPageSize}}",
+                    "maxToReturn": "{{function:getDefaultPageSize}}",
+                    "startIndex": "{{data.dataProviders.listDataProvider.startIndex}}",
+                    "providerName": "{{subPanelContext.context.search.provider}}",
+                    "searchCriteria": {
+                        "objectSet": "clr0ChildAppDesignators.Clr0AppearanceDesignator",
+                        "parentUid": "{{ctx.pselected && ctx.pselected.uid ? ctx.pselected.uid : ctx.selected.uid}}",
+                        "returnTargetObjs": "true",
+                        "showConfiguredRev": "true"
+                    },
+                    "searchFilterFieldSortType": "{{subPanelContext.searchContext.sortType}}",
+                    "searchFilterMap6": "{{subPanelContext.searchContext.activeFilterMap}}",
+                    "searchSortCriteria": "{{data.columnProviders.clientScopeUI.sortCriteria}}"
+                },
+                "1": {
+                    "clientName": "AWClient",
+                    "clientScopeURI": "{{ctx.sublocation.clientScopeURI}}"
+                },
+                "2": null
+            },
+            "outputData":
+            {
+                "totalFound": "totalFound",
+                "searchResults": "searchResults",
+                "ctx.search.totalFound": "totalFound",
+                "ctx.search.totalLoaded": "totalLoaded",
+                "ctx.search.filterMap": "searchFilterMap",
+                "ctx.search.filterCategories": "searchFilterCategories",
+                "ctx.search.objectsGroupedByProperty": "objectsGroupedByProperty",
+                "ctx.searchResponseInfo.searchFilterCategories": "searchFilterCategories",
+                "ctx.searchResponseInfo.searchFilterMap": "searchFilterMap",
+                "ctx.searchResponseInfo.objectsGroupedByProperty": "objectsGroupedByProperty",
+                "ctx.searchResponseInfo.columnConfig": "columnConfig",
+                "ctx.searchResponseInfo.propDescriptors": "propDescriptors"
+            },
+            "deps": "js/AMBreakdownNavigationService"
+        }
+    },
+    "dataProviders":
+    {
+        "listDataProvider":
+        {
+            "action": "loadData",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "selectionModelMode": "multiple",
+            "inputData": {
+                "selectionModel": "{{subPanelContext.selectionModel}}"
+            },
+            "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectObjectNavigationCellListActionCommands"
+        }
+    },
+    "data": {
+        "uid":"{{ctx.search.criteria.parentUid}}"
+    },
+
+    "functions": {
+        "getDefaultPageSize":
+        {
+            "functionName": "getDefaultPageSize",
+            "parameters":
+            [
+                 "{{ctx.preferences.AWC_DefaultPageSize}}"
+            ]
+        }
+    },
+    "onEvent": [{
+        "eventId": "AMBreakdownNavigationImage.contentLoaded",
+        "action": "reveal"
+    }]
+}

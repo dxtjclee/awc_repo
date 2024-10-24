@@ -1,0 +1,36 @@
+<aw-panel-body>
+    <div class="aw-requirements-exportReqIFPanel">
+        <aw-flex-row height="fill" class="aw-requiremnts-reqIFfileNameRow">
+            <aw-flex-column class="aw-requiremnts-reqIFfileNameColumn" align-content="start">
+                <aw-textbox prop="data.name" class="aw-requiremnts-reqIFfileNameWidget"></aw-textbox>
+            </aw-flex-column>
+            <aw-flex-column class="aw-requiremnts-reqIFfileExtensionColumn" align-content="end">
+                <div class="aw-requirement-reqIFfileExtensionLabel">{{'.reqifz'}}</div>
+            </aw-flex-column>
+        </aw-flex-row>
+        <aw-flex-row offset-bottom="1f" offset="1f">
+            <aw-checkbox prop="data.exportLinkedItems" action="revealMainPanel"></aw-checkbox>
+        </aw-flex-row>
+        <aw-command-panel-section anchor="data.exportToReqIFMappingSubCommands" caption="i18n.mapProperties" context="conditions">
+            <aw-listbox prop="data.savedConfigurations" list="data.exportReqIFSavedConfigListBoxValues" action="exportReqIFRuleSelectionChange"></aw-listbox>
+            <aw-command-panel-section caption="i18n.specType" anchor="data.addTypeSubCommands" context="subPanelContext" collapsed="false" visible-when="data.objectPropInfos.length >0">
+                <aw-list dataprovider="data.dataProviders.addTypesList" has-floating-cell-commands=false item-options="subPanelContext.sharedData" visible-when="data.addTypes.dbValue.length >0">
+                    <aw-include name="Arm0RequirementsTypePropCell" sub-panel-context="item"></aw-include>
+                </aw-list>
+            </aw-command-panel-section>
+            <aw-command-panel-section caption="i18n.createTraceLinkTitle" anchor="data.addTraceLinkSubCommands" context="subPanelContext" collapsed="false" visible-when="data.traceLinkPropInfos.length >0">
+                <aw-list dataprovider="data.dataProviders.addTraceLinksList" has-floating-cell-commands=false item-options="subPanelContext.sharedData" visible-when="data.addTraceLinks.dbValue.length >0">
+                    <aw-include name="Arm0RequirementsTypePropCell" sub-panel-context="item"></aw-include>
+                </aw-list>
+            </aw-command-panel-section>
+        </aw-command-panel-section>
+    </div>
+</aw-panel-body>
+<aw-panel-footer>
+    <aw-flex-row>
+        <aw-checkbox prop="data.runInBackgroundReqIF" visible-when="conditions.isReqIFExportAllowed && awPanelBody.$valid"></aw-checkbox>
+    </aw-flex-row>
+    <aw-button action="exportToReqIF" visible-when="conditions.isReqIFExportAllowed && awPanelBody.$valid">
+        <aw-i18n>i18n.exportTitle</aw-i18n>
+    </aw-button>
+</aw-panel-footer>

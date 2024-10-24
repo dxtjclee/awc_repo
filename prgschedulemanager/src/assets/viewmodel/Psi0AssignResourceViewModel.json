@@ -1,0 +1,333 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "initPanel": {
+            "actionType": "batchJob",
+            "steps": [  
+                {
+                    "action": "initPanelForPsi0PrgDelRevision",
+                    "condition": "ctx.mselected[0].modelType.typeHierarchyArray.indexOf( 'Psi0PrgDelRevision' ) > -1"
+                },
+                {
+                    "action": "initPanelForNonPsi0PrgDelRevision",
+                    "condition": "ctx.mselected[0].modelType.typeHierarchyArray.indexOf( 'Psi0PrgDelRevision' ) === -1"
+                }                              
+            ]
+        },
+        "initPanelForPsi0PrgDelRevision": {
+            "actionType": "JSFunction",
+            "method": "updateUserPanelSearchStateCriteria",
+            "inputData": {
+                "AtomicObj": "{{addUserPanelState}}",
+                "value" : {
+                    "selectedObject": "{{ctx.user.uid}}",
+                    "providerContentType": "GroupMember,ResourcePool"
+                }
+            },
+            "outputData": {
+                "addUserPanelState": "userPanelState",
+                "isDataInit": "isDataInit"
+            },
+            "deps": "js/Psi0AddResponsibleUserService"
+        },
+        "initPanelForNonPsi0PrgDelRevision": {
+            "actionType": "JSFunction",
+            "method": "updateUserPanelSearchStateCriteria",
+            "inputData": {
+                "AtomicObj": "{{addUserPanelState}}",
+                "value" : {
+                    "selectedObject": "{{ctx.user.uid}}",
+                    "providerContentType": "GroupMember"
+                }
+            },
+            "outputData": {
+                "addUserPanelState": "userPanelState",
+                "isDataInit": "isDataInit"
+            },
+            "deps": "js/Psi0AddResponsibleUserService"
+        },
+        "assignResource": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "condition": "addUserPanelState.selectedUsers[0].modelType.typeHierarchyArray.indexOf( 'GroupMember' ) > -1",
+                    "name": "Psi0AddResponsibleUser.assign"
+                    },
+                    {
+                        "condition": "addUserPanelState.selectedUsers[0].modelType.typeHierarchyArray.indexOf( 'ResourcePool' ) > -1",
+                        "name": "Saw1AddResourcePoolToSchedule.assign"
+                    }
+                ]
+            }
+        },
+        "assignResponsibleUser": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-09-DataManagement",
+            "method": "setProperties",
+            "inputData": {
+                "info": "{{function:addResponsibleUser}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData":
+                        {
+
+                            "relatedModified": [ "{{ctx.selected}}" ]
+                        },
+                        "condition":"ctx.xrtSummaryContextObject === undefined"
+                    },
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData":
+                        {
+
+                            "relatedModified": [ "{{ctx.xrtSummaryContextObject}}" ]
+                        },
+                        "condition":"ctx.xrtSummaryContextObject !== undefined"
+                    },
+                    {
+                      "name": "complete",
+                      "eventData": {
+                         "source": "toolAndInfoPanel"
+                      }
+                   }
+
+                ]
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "condition": "errorCode.code===2010 || errorCode.code===515001 || errorCode.code===27026",
+                        "message": "noWriteAccessPermissionErrorMessage"
+                    },
+                    {
+                        "condition": "errorCode.code!==2010 && errorCode.code!==515001 && errorCode.code!==27026",
+                        "message": "SOAFailureMessage"
+                    }
+                ]
+            },
+            "deps": "js/Psi0AddResponsibleUserService"
+        },
+        "checkForExistingResourcePoolAndDeleteAction": {
+            "actionType": "JSFunction",
+            "method": "checkForExistingResourcePoolAndDelete",
+            "inputData": {
+                "ctx": "{{ctx}}",
+                "data": "{{data}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "assignResourcePoolToPDREvent"
+                } ]
+            },
+            "deps": "js/Psi0AssignResourceService"
+        },
+        "assignResourcePoolToPDRAction": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "createRelations",
+            "inputData": {
+                "input": "{{function:getObjectsWithRelation}}"
+            },
+            "events": {
+                "success": [ {
+                        "name": "getResourceAssignment",
+                        "condition": "ctx.activeSplit === true"
+                    },
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{ctx.xrtSummaryContextObject}}"
+                            ]
+                        },
+                        "condition": "!ctx.activeSplit"
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            },
+            "deps": "js/Psi0AssignResourceService"
+        },
+        "getResourceAssignment": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData": {
+                "objects": "{{ctx.mselected}}",
+                "attributes": [
+                    "psi0ResourceAssignment"
+                ]
+            },
+            "policy": {
+                "types": [ {
+                    "name": "Psi0PrgDelRevision",
+                    "properties": [ {
+                        "name": "psi0ResourceAssignment"
+                    } ]
+                } ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            }
+        },
+        "closePanelOnSelectionChange": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "cacheInitialSelection",
+                    "condition": "!data.initialSelection"
+                },
+                {
+                    "action": "closePanel",
+                    "condition": "data.initialSelection !== props.subPanelContext.selectionData.selected[0].uid"
+                }
+            ]
+        },
+        "cacheInitialSelection": {
+            "actionType": "JSFunction",
+            "method": "cacheSelection",
+            "inputData": {
+                "selectedUid": "{{props.subPanelContext.selectionData.selected[0].uid}}"
+            },
+            "outputData": {
+                "initialSelection": ""
+            },
+            "deps": "js/Psi0AddResponsibleUserService"
+        },
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "complete",
+                    "condition": "!data.isDestroyed()",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            }
+        }
+    },
+    "data": {
+        "addUserPanelState": {
+            "initialValues": {
+                "provider": "Awp0PeoplePickerProvider",
+                "selectionModelMode": "single",
+                "criteria": {
+                    "providerContentType": "GroupMember,ResourcePool",
+                    "searchString": "*",
+                    "selectedObject": "",
+                    "searchSubGroup": "true"
+                },
+                "presetFilters":{
+                    "GroupMember.group" : [],
+                    "GroupMember.role" : [],
+                    "GroupMember.project_list" : []
+                },
+                "preferenceCriteria": [
+                    "WRKFLW_user_panel_content_display",
+                    "WRKFLW_allow_resourcepool_assignments",
+                    "WRKFLW_show_user_assignment_options"
+                ],
+                "selectedUsers": "",
+                "isAddButtonNeeded": false
+            },
+            "meta": {
+                "selectedUsers": {
+                    "field": "true",
+                    "type": "OBJECTARRAY"
+                }
+            }
+        }
+    },
+    "functions": {
+        "getObjectsWithRelation": {
+            "functionName": "getObjectsWithRelation",
+            "parameters": [
+                "{{ctx}}",
+                "{{addUserPanelState.selectedUsers}}"
+            ]
+        },
+        "addResponsibleUser": {
+            "functionName": "addResponsibleUser",
+            "parameters": [
+                "{{addUserPanelState.selectedUsers}}",
+                "{{ctx}}"
+               ]
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "initPanel",
+        "onUpdate": {
+            "action": "closePanelOnSelectionChange",
+            "observers": [ "props.subPanelContext.selectionData.selected" ]
+        }
+    },
+    "conditions": {
+        "isValidToAssign": {
+            "expression": "addUserPanelState.selectedUsers && addUserPanelState.selectedUsers.length > 0"
+        }
+    },
+    "onEvent": [ 
+        {
+            "eventId": "Saw1AddResourcePoolToSchedule.assign",
+            "action": "checkForExistingResourcePoolAndDeleteAction"
+        },
+        {
+            "eventId": "assignResourcePoolToPDREvent",
+            "action": "assignResourcePoolToPDRAction"
+        },
+        {
+            "eventId": "getResourceAssignment",
+            "action": "getResourceAssignment"
+        },
+        {
+            "eventId": "Psi0AddResponsibleUser.assign",
+            "action": "assignResponsibleUser"
+        }        
+    ],
+    "messages": {
+        "SOAFailureMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        },
+        "noWriteAccessPermissionErrorMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.noWriteAccessPermissionError}}",
+            "messageTextParams": [
+                "{{addUserPanelState.selectedUsers[0].props.user.uiValues[0]}}"
+            ]
+        }
+    },
+    "i18n": {
+        "resourcePool": [
+            "ScheduleManagerMessages"
+        ],
+        "psi0Users": [
+            "PrgScheduleManagerMessages"
+        ],
+        "psi0AssignResource": [
+            "PrgScheduleManagerMessages"
+        ],
+        "assign": [
+            "PrgScheduleManagerMessages"
+        ],
+        "noWriteAccessPermissionError": [
+            "PrgScheduleManagerMessages"
+        ]
+    }
+}

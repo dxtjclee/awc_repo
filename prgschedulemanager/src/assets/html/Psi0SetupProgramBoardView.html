@@ -1,0 +1,21 @@
+<aw-command-panel caption="i18n.createProgramBoard">
+    <aw-panel-body>
+        <aw-listbox prop="data.listContext" list="data.listContextValues.dbValue" action="selectionChangeOfContextList"></aw-listbox>
+        <div class="propertyLabelTopContainer aw-widgets-justifySpaceBetween sw-row justify-left">
+            <div class="aw-prgschedulemanager-hint w-8">{{i18n.selectHint}}</div>
+            <div class="aw-prgSchedulemanager-setupProgramBoardClearAll sw-row w-4 justify-right">
+                <aw-link prop="data.setupProgramBoardClearAll" visible-when="conditions.showClearAll" action="clearSetupProgramBoard"></aw-link>
+            </div>
+        </div>
+        <aw-break></aw-break>
+        <aw-list dataprovider="data.dataProviders.psi0ProgramObjectsProvider">
+            <aw-default-cell vmo="item" data="data"></aw-default-cell>
+        </aw-list>
+    </aw-panel-body>
+
+    <aw-panel-footer>
+        <aw-button action="setContextAndObjState" visible-when="conditions.showWidget">
+            <aw-i18n>i18n.view</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

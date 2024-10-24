@@ -1,0 +1,89 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-splm-table.directive"
+    ],
+    "actions": {
+        "activeIDXGridDataProvider": {
+            "actionType": "dataProvider",
+            "method": "activeGridDataProvider"
+        },
+        "search": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "clientScopeURI": "Eda0IDXProposalsTable",
+                    "operationType": "as_configured"
+                },
+                "searchInput": {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Eda1CollabDataProvider",
+                    "searchCriteria": {
+                        "sessionUid": "{{ctx.selected.uid}}",
+                        "incrementStatus": "Active"
+                    },
+                    "searchSortCriteria": "{{data.columnProviders.activeIDXColumnProvider.sortCriteria}}"
+                },
+                "inflateProperties": true
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "ctx.search.totalFound": "totalFound",
+                "ctx.search.totalLoaded": "totalLoaded",
+                "searchResults": "{{json:searchResultsJSON}}",
+                "dataProviders.activeGridDataProvider.columnConfig": "columnConfig"
+            }
+        },
+
+        "loadColumns": {
+            "actionType": "JSFunction",
+            "method": "loadTreeTableColumns",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.activeGridDataProvider}}"
+            },
+            "outputData" : {
+                "dataProviders.activeGridDataProvider.columnConfig": "columnConfig"
+            },
+            "deps": "js/Eda0ActiveIDXChangesService"
+        }
+    },
+    "columnProviders": {
+            "activeIDXColumnProvider": {
+            "loadColumnAction": "loadColumns",
+            "columns": "{{data.columns}}",
+            "sortCriteria": []
+        }
+    },
+    "dataProviders": {
+        "activeGridDataProvider": {
+            "action": "search",
+            "editContext": "TABLE_CONTEXT",
+            "selectionModelMode": "single",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "commandsAnchor": "eda_open_increment",
+            "inputData": {
+                "selectionData": "{{subPanelContext.selectionData}}"
+            }
+        }
+    },
+    "grids": {
+        "activeIDX": {
+            "dataProvider": "activeGridDataProvider",
+            "columnProvider": "activeIDXColumnProvider",
+            "enableArrangeMenu": true,
+            "gridOptions": {
+                "enablePinning": true,
+                "maxRowsToShow": 10
+            }
+        }
+    },
+    "onEvent": [ {
+        "eventId": "activeIDX.initialized",
+        "action": "activeIDXGridDataProvider"
+    }]
+}

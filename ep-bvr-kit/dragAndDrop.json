@@ -1,0 +1,317 @@
+{
+  "actions": {
+    "epHandleDragStartAction": {
+      "actionType": "syncFunction",
+      "method": "handleDragStart",
+      "inputData": {},
+      "deps": "js/epDragAndDropService"
+    },
+    "epHandleDragEndAction": {
+      "actionType": "syncFunction",
+      "method": "handleDragEnd",
+      "deps": "js/epDragAndDropService"
+    },
+    "wiDragOverPartsAction": {
+      "actionType": "syncFunction",
+      "method": "handleDragOver",
+      "inputData": {
+        "allowedTypesFromViews": [
+          {
+            "views": [
+              "EpAssemblyTree_EpTreeTable",
+              "EpProductBopMbomTree_EpTreeTable",
+              "EpDynamicInProcessAssemblyTree_EpTreeTable"
+            ],
+            "types": [
+              "BOMLine",
+              "Mfg0BvrDynamicIPA"
+            ]
+          }
+        ],
+        "readOnlyMode": false,
+        "supportedTypesInView": {
+          "EpDynamicInProcessAssemblyTree_EpTreeTable": [
+            "Mfg0BvrOperation"
+          ]
+        },
+        "unSupportedTargetTypes": [],
+        "withSequence": false
+      },
+      "deps": "js/epDragAndDropService"
+    },
+    "wiDropPartsAction": {
+      "actionType": "syncFunction",
+      "method": "dropParts",
+      "inputData": {
+        "partsAssignmentMode": {
+          "sourceViewId": "EpDynamicInProcessAssemblyTree_EpTreeTable",
+          "assignmentMode": "DIPA"
+        }
+      },
+      "deps": "js/epDragAndDropService"
+    },
+    "dragOverWorkareaAction": {
+      "actionType": "syncFunction",
+      "method": "dragOverWorkareas",
+      "deps": "js/epDragAndDropService"
+    },
+    "dropWorkareaAction": {
+      "actionType": "syncFunction",
+      "method": "dropWorkareas",
+      "deps": "js/epDragAndDropService"
+    },
+    "dragOverResourcesAction": {
+      "actionType": "syncFunction",
+      "method": "dragOverResources",
+      "deps": "js/epDragAndDropService"
+    },
+    "dropResourcesAction": {
+      "actionType": "syncFunction",
+      "method": "dropResources",
+      "deps": "js/epDragAndDropService"
+    },
+    "dragOverTargetAssembliesAction": {
+      "actionType": "syncFunction",
+      "method": "handleDragOver",
+      "deps": "js/epDragAndDropService",
+      "inputData": {
+        "allowedTypesFromViews": [
+          {
+            "views": [
+              "EpAssemblyTree_EpTreeTable",
+              "EpHighLevelPlanningMbomTree_EpTreeTable",
+              "AssemblyPlanningBoeTree_EpBoeTreeTable"
+            ],
+            "types": [
+              "BOMLine"
+            ]
+          }
+        ],
+        "readOnlyMode": false,
+        "supportedTargetTypes": {},
+        "unSupportedTargetTypes": [],
+        "withSequence": false
+      }
+    },
+    "dropTargetAssembliesAction": {
+      "actionType": "syncFunction",
+      "method": "dropTargetAssemblies",
+      "deps": "js/epDragAndDropService"
+    },
+    "epDragOverOperationsAction": {
+      "actionType": "syncFunction",
+      "method": "handleDragOver",
+      "inputData": {
+        "allowedTypesFromViews": [
+          {
+            "views": [
+              "EpBalancingProductBOP_EpTreeTable"
+            ],
+            "types": [
+              "Mfg0BvrOperation",
+              "Mfg0BvrProcess"
+            ]
+          },
+          {
+            "views": [
+              "EpBalancingOperationsTable_EpDetailsTable"
+            ],
+            "types": [
+              "Mfg0BvrOperation",
+              "Mfg0BvrProcess"
+            ]
+          }
+        ],
+        "readOnlyMode": "{{ctx.mfgReadOnlyMode.readOnlyMode}}",
+        "supportedTargetTypes": {},
+        "unSupportedTargetTypes": [
+          {
+            "key": "mbc0BopQualifier",
+            "values": [
+              "FunctionalGroup"
+            ]
+          }
+        ],
+        "withSequence": true
+      },
+      "deps": "js/epDragAndDropService"
+    },
+    "epDropOperationsAction": {
+      "actionType": "syncFunction",
+      "method": "dropOperations",
+      "deps": "js/epDragAndDropService"
+    },
+    "wiPmiDragStartAction": {
+      "actionType": "syncFunction",
+      "method": "cacheDraggedData",
+      "inputData": {},
+      "deps": "js/wiPmiDragAndDropService"
+    },
+    "wiPmiDragEndAction": {
+      "actionType": "syncFunction",
+      "method": "clearCachedData",
+      "deps": "js/wiPmiDragAndDropService"
+    },
+    "dragOverAssignedPmisContent": {
+      "actionType": "syncFunction",
+      "method": "onDragOverAssignedPmisContent",
+      "deps": "js/wiPmiDragAndDropService"
+    },
+    "dropInAssignedPmisContent": {
+      "actionType": "syncFunction",
+      "method": "onDropInAssignedPmisContent",
+      "deps": "js/wiPmiDragAndDropService"
+    },
+    "onDropInReadOnlyMode": {
+      "actionType": "syncFunction",
+      "method": "displayNoEditingInReadOnlyModeError",
+      "deps": "js/mfgNotificationUtils"
+    },
+    "editorDragStartAction": {
+      "actionType": "syncFunction",
+      "method": "handleDragStart",
+      "inputData": {},
+      "deps": "js/epDragAndDropService"
+    },
+    "editorDragEndAction": {
+      "actionType": "syncFunction",
+      "method": "handleDragEnd",
+      "deps": "js/epDragAndDropService"
+    }
+  },
+  "dragHandlers": {
+    "epDragHandlerForTreeStructure": {
+      "activeWhen": true,
+      "views": [
+        "EpAssemblyTree_EpTreeTable",
+        "EpHighLevelPlanningMbomTree_EpTreeTable",
+        "AssemblyPlanningBoeTree_EpBoeTreeTable",
+        "EpProductBopMbomTree_EpTreeTable",
+        "EpBalancingProductBOP_EpTreeTable",
+        "EpDynamicInProcessAssemblyTree_EpTreeTable",
+        "EpBalancingOperationsTable_EpDetailsTable"
+      ],
+      "dragActions": {
+        "dragStart": "epHandleDragStartAction",
+        "dragEnd": "epHandleDragEndAction"
+      }
+    },
+    "wiAssemblyPmisDragHandler": {
+      "activeWhen": true,
+      "views": [
+        "WiAssemblyPmiTable"
+      ],
+      "dragActions": {
+        "dragStart": "wiPmiDragStartAction",
+        "dragEnd": "wiPmiDragEndAction"
+      }
+    },
+    "wiEditorDragHandler": {
+      "activeWhen": true,
+      "views": [
+        "WiEditor",
+        "WiStepEditor"
+      ],
+      "dragActions": {
+        "dragStart": "editorDragStartAction",
+        "dragEnd": "editorDragEndAction"
+      }
+    }
+  },
+  "dropHandlers": {
+    "wiAssignPartDropHandler": {
+      "activeWhen": true,
+      "views": [
+        "WiPartsTable_EpDetailsTable"
+      ],
+      "dropActions": {
+        "dragOver": "wiDragOverPartsAction",
+        "drop": "wiDropPartsAction"
+      }
+    },
+    "assignWorkareaDropHandler": {
+      "activeWhen": true,
+      "views": [
+        "EpWorkareaTable_EpDetailsTable"
+      ],
+      "dropActions": {
+        "dragOver": "dragOverWorkareaAction",
+        "drop": "dropWorkareaAction"
+      }
+    },
+    "assignResourceDropHandler": {
+      "activeWhen": true,
+      "views": [
+        "WiResourcesTable_EpDetailsTable"
+      ],
+      "dropActions": {
+        "dragOver": "dragOverResourcesAction",
+        "drop": "dropResourcesAction"
+      }
+    },
+    "addTargetAssembliesDropHandler": {
+      "activeWhen": true,
+      "views": [
+        "EpScoping_EpDetailsTable"
+      ],
+      "dropActions": {
+        "dragOver": "dragOverTargetAssembliesAction",
+        "drop": "dropTargetAssembliesAction"
+      }
+    },
+    "epAllocateOperationsDropHandler": {
+      "activeWhen": true,
+      "views": [
+        "EpBalancingStationTile",
+        "EpBalancingOperationsTable_EpDetailsTable",
+        "EpBalancingProcessResourceTile"
+      ],
+      "dropActions": {
+        "dragOver": "epDragOverOperationsAction",
+        "drop": "epDropOperationsAction"
+      }
+    },
+    "wiAssignedPmisTableDropHandler": {
+      "views": [
+        "WiAssignedPmiTable"
+      ],
+      "dropActions": {
+        "dragOver": "dragOverAssignedPmisContent",
+        "drop": "dropInAssignedPmisContent"
+      },
+      "activeWhen": {
+        "condition": "conditions.isNotReadOnlyMode"
+      }
+    },
+    "wiAssignedPmisTableDropHandlerInReadOnlyMode": {
+      "views": [
+        "WiAssignedPmiTable"
+      ],
+      "dropActions": {
+        "dragOver": "dragOverAssignedPmisContent",
+        "drop": "onDropInReadOnlyMode"
+      },
+      "activeWhen": {
+        "condition": "conditions.isReadOnlyMode"
+      }
+    }
+  },
+  "conditions": {
+    "isReadOnlyMode": {
+      "expression": {
+        "$source": "ctx.mfgReadOnlyMode.readOnlyMode",
+        "$query": {
+          "$eq": true
+        }
+      }
+    },
+    "isNotReadOnlyMode": {
+      "expression": {
+        "$source": "ctx.mfgReadOnlyMode.readOnlyMode",
+        "$query": {
+          "$eq": false
+        }
+      }
+    }
+  }
+}

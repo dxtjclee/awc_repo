@@ -1,0 +1,89 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-panel.directive",
+        "js/aw-list.directive",
+        "js/aw-include.directive"
+    ],
+    "actions": {
+        "reveal": {
+            "actionType": "JSFunction",
+            "method": "updateOptions",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "actionItems": "actionItemsList"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.refreshOptions"
+                    }
+                ]
+            },
+            "deps": "js/Arm0ShowBalloonPopupPanelView"
+        },
+        "updateOptions": {
+            "actionType": "dataProvider",
+            "method": "actionsList"
+        },
+        "handleCommandSelection": {
+            "actionType": "JSFunction",
+            "method": "handleCommandSelection",
+            "inputData": {
+                "data": "{{data.eventData}}"
+            },
+            "deps": "js/Arm0ShowBalloonPopupPanelView"
+        },
+        "closePopupWindow": {
+            "actionType": "JSFunction",
+            "method": "close",
+            "inputData": {},
+            "deps": "js/declpopupService"
+        }
+    },
+    "data": {
+        "actionItems": {
+            "isArray": "true",
+            "dbValue": []
+        }
+    },
+    "functions": {
+        "getInputContext": {
+            "functionName": "getInputContext",
+            "parameters": [
+                "{{ctx}}"
+            ]
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "reveal"
+    },
+    "onEvent": [
+        {
+            "eventId": "requirementDocumentation.refreshOptions",
+            "action": "updateOptions"
+        },
+        {
+            "eventId": "requirementDocumentation.closeExistingBalloonPopup",
+            "cacheEventData": true,
+            "action": "closeExistingBalloonPopup"
+        },
+        {
+            "eventId": "requirements.handleCommandSelection",
+            "cacheEventData": true,
+            "action": "handleCommandSelection"
+        },
+        {
+            "eventId": "showActionPopup.close",
+            "action": "closePopupWindow"
+        }
+    ],
+    "dataProviders": {
+        "actionsList": {
+            "response": "{{data.actionItems.dbValue}}",
+            "selectionModelMode": "single"
+        }
+    }
+}

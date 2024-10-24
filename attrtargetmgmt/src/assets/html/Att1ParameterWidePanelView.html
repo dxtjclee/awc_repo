@@ -1,0 +1,15 @@
+<aw-popup2>
+    <div class="aw-attrtargetmgmt-importInProgressMsg" exist-when="data.isComplexDataImportInProgress===true">
+        {{data.importInProgressMessage.uiValue}}
+        <br>
+    </div>
+    <aw-scrollpanel>
+        <div exist-when="conditions.showWidePanelForParameterWithComplexData">
+            <att1-parameter-wide-panel-sub sub-panel-context="{...subPanelContext}"></att1-parameter-wide-panel-sub>
+        </div>
+        <aw-panel-body class="aw-attrtargetmgmt-widePanel" exist-when="conditions.showWidePanelForParameterWithoutComplexData">
+            <att1-measurements sub-panel-context="{...subPanelContext}"></att1-measurements>
+        </aw-panel-body>
+    </aw-scrollpanel>
+</aw-popup2>
+<aw-popup-wrapper popup="openDimensionsPopup"></aw-popup-wrapper>

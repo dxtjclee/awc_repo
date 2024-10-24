@@ -1,0 +1,20 @@
+<aw-sublocation
+sub-location-preference=""
+sub-panel-context="{provider :data._entFilteredSbomSublocation,
+    occContext: data.senEntSbomData.selectedContextKey === 'entSbomContext' ? data.occContext : data.occContext2,
+    inactiveContext : data.senEntSbomData.selectedContextKey === 'entSbomContext' ? data.occContext2 : data.occContext}">
+
+    <div class="aw-layout-flexRow aw-base-scrollPanel">
+        <aw-panel-body class="aw-layout-flexColumnContainer aw-taskbasedpage-leftPanel" aw-click="actions.activateLeftView">
+            <sen-bom-panel exist-when="data._entFilteredSbomSublocation.baseSelection" sub-panel-context="{...subPanelContext,provider:data._entSbomSublocation,occContext : data.occContext,contextKey: data._entSbomSublocation.contextKey}"></sen-bom-panel>
+            <aw-splitter min-size-1="0" min-size-2="0" direction="HORIZONTAL"></aw-splitter>
+        </aw-panel-body>
+        <aw-splitter min-size-1="0" min-size-2="200" direction="vertical">
+        </aw-splitter>
+        <aw-panel-body class="aw-layout-flexColumnContainer aw-taskbasedpage-rightPanel" aw-click="actions.activateRightView">
+
+            <aw-splitter min-size-1="0" min-size-2="0" direction="HORIZONTAL"></aw-splitter>
+        </aw-panel-body>
+    </div>
+</aw-sublocation>
+

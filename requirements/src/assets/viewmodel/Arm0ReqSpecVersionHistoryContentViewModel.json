@@ -1,0 +1,401 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+    ],
+    "actions": {
+        "loadAllMetricData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2019-06-RequirementsManagement",
+            "method": "getFullTextVersionInfo",
+            "inputData": {
+                "inputs": [
+                    {
+                        "operationType": "",
+                        "selectedObjects": [
+                            "{{ctx.selected}}"
+                        ]
+                    }
+                ]
+            },
+            "outputData": {
+                "reqSpecHistoryResult": "{{function:processReqSpecHistory}}"
+            },
+            "deps": "js/Arm0CompareHistoryService"
+        },
+        "compareReqSpecRevisions": {
+            "actionType": "JSFunction",
+            "method": "compareReqSpecRevisions",
+            "inputData": {
+                "fullTextCompareDataListDataProvider": "{{data.dataProviders.ReqSpecHistoryDataProvider}}",
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0CompareHistoryService"
+        },
+        "registerContext": {
+            "actionType": "JSFunction",
+            "method": "registerCtx",
+            "inputData": {
+                "name": "Arm0ReqSpecVersionHistoryContext",
+                "value": "{{data.dataProviders}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0ReqSpecVersionHistory.subscribeEvents"
+                    }
+                ]
+            },
+            "deps": "js/appCtxService"
+        },
+        "unregisterContext": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "deps": "js/appCtxService",
+            "inputData": {
+                "name": "Arm0ReqSpecVersionHistoryContext"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0ReqSpecVersionHistory.unsubscribeEvents"
+                    }
+                ]
+            }
+        },
+        "subscribeEvents": {
+            "actionType": "JSFunction",
+            "method": "subscribeEvents",
+            "inputData": {},
+            "deps": "js/Arm0CompareHistoryService"
+        },
+        "unsubscribeEvents": {
+            "actionType": "JSFunction",
+            "method": "unsubscribeEvents",
+            "inputData": {},
+            "deps": "js/Arm0CompareHistoryService"
+        },
+        "showCompareVersionHistory": {
+            "actionType": "JSFunction",
+            "method": "showCompareVersionHistory",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "compareHtmlData": "compareHtmlData",
+                "selectedFullText": "selectedFullText"
+            },
+            "deps": "js/Arm0CompareHistoryService"
+        },
+        "getSpecContentData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AwReqMgmtSe-2019-06-SpecNavigation",
+            "method": "getSpecificationSegment",
+            "inputData": {
+                "inputData": {
+                    "inputCtxt": "{{function:getDefaultInputContext}}",
+                    "inputObjects": "{{data.eventMap['Arm0RequirementHistory.getSpecContentData']}}",
+                    "nextOccData": {},
+                    "options": [
+                        "SpecHistoryCompareMode"
+                    ]
+                }
+            },
+            "outputData": {
+                "htmlContents": "output.htmlContents"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0RequirementHistory.preProcessSpecContents"
+                    }
+                ]
+            },
+            "deps": "js/Arm0CompareHistoryService"
+        },
+        "preProcessSpecContents": {
+            "actionType": "JSFunction",
+            "method": "preProcessSpecContents",
+            "inputData": {
+                "htmlContents": "{{data}}",
+                "isReqSpecVersionHistory": true
+            },
+            "outputData": {
+                "htmlContents": "processedHtmlContents",
+                "mapOfVerAndRev": "mapOfVerAndRev"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "progress.start"
+                    },
+                    {
+                        "name": "Arm0RequirementHistory.compareSpecContents"
+                    }
+                ]
+            },
+            "deps": "js/Arm0CompareHistoryService"
+        },
+        "setHtmlContents": {
+            "actionType": "JSFunction",
+            "method": "setHtmlContents",
+            "inputData": {
+                "htmlContents": "{{data.eventData.htmlContents}}",
+                "mapOfVerAndRev": "{{data.eventData.mapOfVerAndRev}}"
+            },
+            "outputData": {
+                "htmlContents": "htmlContents",
+                "mapOfVerAndRev": "mapOfVerAndRev"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0RequirementHistory.compareSpecContents"
+                    }
+                ]
+            },
+            "deps": "js/Arm0CompareHistoryService"
+        },
+        "compareSpecContents": {
+            "actionType": "RESTService",
+            "serviceName": "",
+            "method": "POST",
+            "inputData": {
+                "request": {
+                    "method": "POST",
+                    "withCredentials": false,
+                    "url": "{{function:getCompareHtmlServiceURL}}",
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "data": "{{data.htmlContents}}"
+                }
+            },
+            "outputData": {
+                "compareHtmlData": "data.output"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0RequirementHistory.showHtmlCompareReport"
+                    },
+                    {
+                        "name": "progress.end"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "progress.end"
+                    }
+                ]
+            },
+            "deps": "js/Arm0CompareHistoryService"
+        },
+        "showHtmlCompareReport": {
+            "actionType": "JSFunction",
+            "method": "showHtmlCompareReport",
+            "inputData": {
+                "htmlContents": "{{data.compareHtmlData}}",
+                "data" : "{{data}}"
+            },
+            "deps": "js/Arm0CompareHistoryService"
+        },
+        "setPrimaryObjectInMSelected": {
+            "actionType": "JSFunction",
+            "method": "registerCtx",
+            "inputData": {
+                "name": "mselected",
+                "value": ["{{ctx.pselected}}"]
+            },
+            "deps": "js/appCtxService"
+        },
+        "setPrimaryObjectAsSelected": {
+            "actionType": "JSFunction",
+            "method": "registerCtx",
+            "inputData": {
+                "name": "selected",
+                "value": "{{ctx.pselected}}"
+            },
+            "deps": "js/appCtxService"
+        }
+    },
+    "data": {},
+    "columnProviders": {
+        "ReqSpecHistoryColumnProvider": {
+            "frozenColumnIndex": 1,
+            "sortCriteria": [
+                {
+                    "fieldName": "dateModified",
+                    "sortDirection": "DESC"
+                }
+            ],
+            "columns": [
+                {
+                    "name": "object_string",
+                    "displayName": "{{i18n.objectName}}",
+                    "enableSorting": false
+                },
+                {
+                    "name": "revision",
+                    "displayName": "{{i18n.revision}}",
+                    "minWidth": 100,
+                    "width": 100
+                },
+                {
+                    "name": "versionNumber",
+                    "displayName": "{{i18n.versionNumber}}",
+                    "minWidth": 100,
+                    "width": 100
+                },
+                {
+                    "name": "modifyingUser",
+                    "displayName": "{{i18n.modifyingUser}}"
+                },
+                {
+                    "name": "dateModified",
+                    "displayName": "{{i18n.dateModified}}",
+                    "dataType": "DATE"
+                }
+            ]
+        }
+    },
+    "dataProviders": {
+        "ReqSpecHistoryDataProvider": {
+            "action": "loadAllMetricData",
+            "response": "{{data.reqSpecHistoryResult}}",
+            "totalFound": "{{data.reqSpecHistoryResult.length}}",
+            "commandsAnchor": "aw_specHistoryTableCellMenu",
+            "selectionModelMode": "multiple"
+        }
+    },
+    "grids": {
+        "ReqSpecRev": {
+            "dataProvider": "ReqSpecHistoryDataProvider",
+            "columnProvider": "ReqSpecHistoryColumnProvider",
+            "addIconColumn": true,
+            "gridOptions": {
+                "enablePinning": false,
+                "enableSorting": true,
+                "enableRowSelection": false
+            }
+        }
+    },
+    "functions": {
+        "getCompareHtmlServiceURL": {
+            "functionName": "getCompareHtmlServiceURL",
+            "parameters": []
+        },
+        "getDefaultInputContext": {
+            "functionName": "getDefaultInputContext",
+            "parameters": []
+        },
+        "processReqSpecHistory": {
+            "functionName": "processReqSpecHistory",
+            "parameters": [
+                "{{data}}"
+            ]
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "registerContext",
+        "onUnmount": "unregisterContext"
+    },
+    "ctx":{
+        "Arm0RequirementHistoryContextCompareToMsg":{
+            "type":"string"
+        },
+        "mselected":{
+            "type":"object"
+        },
+        "pselected":{
+            "type":"object"
+        },
+        "selected":{
+            "type":"object"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "Arm0RequirementHistory.compareReqSpecRevisions",
+            "action": "compareReqSpecRevisions"
+        },
+        {
+            "eventId": "Arm0ReqSpecVersionHistory.subscribeEvents",
+            "action": "subscribeEvents"
+        },
+        {
+            "eventId": "Arm0ReqSpecVersionHistory.unsubscribeEvents",
+            "action": "unsubscribeEvents"
+        },
+        {
+            "eventId": "Arm0RequirementHistory.showCompareVersionHistory",
+            "action": "showCompareVersionHistory"
+        },
+        {
+            "eventId": "Arm0RequirementHistory.getSpecContentData",
+            "cacheEventData": true,
+            "action": "getSpecContentData"
+        },
+        {
+            "eventId": "Arm0RequirementHistory.preProcessSpecContents",
+            "action": "preProcessSpecContents"
+        },
+        {
+            "eventId": "Arm0RequirementHistory.compareSpecContents",
+            "action": "compareSpecContents"
+        },
+        {
+            "eventId": "Arm0RequirementHistory.setHtmlContents",
+            "cacheEventData": true,
+            "action": "setHtmlContents"
+        },
+        {
+            "eventId": "Arm0RequirementHistory.showHtmlCompareReport",
+            "action": "showHtmlCompareReport"
+        },
+        {
+            "eventId": "ReqSpecHistoryDataProvider.selectionChangeEvent",
+            "action": "setPrimaryObjectInMSelected",
+            "condition": "data.dataProviders.ReqSpecHistoryDataProvider.selectedObjects.length > 0"
+        },
+        {
+            "eventId": "ReqSpecHistoryDataProvider.selectionChangeEvent",
+            "action": "setPrimaryObjectAsSelected",
+            "condition": "data.dataProviders.ReqSpecHistoryDataProvider.selectedObjects.length > 0"
+        }
+    ],
+    "i18n": {
+        "versionNumber": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "modifyingUser": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "dateModified": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "type": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "objectName": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "revision": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "added": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "removed": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "modified": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "comparingTo": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "withLabel": [
+            "RequirementsCommandPanelsMessages"
+        ]
+    }
+}

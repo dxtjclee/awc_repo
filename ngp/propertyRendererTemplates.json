@@ -1,0 +1,164 @@
+{
+  "ngpMissingInSource_columnHeader_template": {
+    "grids": [
+      "ngpBuildStrategyAssignedPartsTable"
+    ],
+    "columns": [
+      "mismatchOrMissing"
+    ],
+    "headerComponent": "NgpTableColumnHeader"
+  },
+  "ngpMissingInSource_template": {
+    "grids": [
+      "ngpBuildStrategyAssignedPartsTable"
+    ],
+    "columns": [
+      "mismatchOrMissing"
+    ],
+    "renderFunction": "renderMissingInSourceOrMismatchStatusCellImage",
+    "deps": "js/services/ngpBuildStrategyService"
+  },
+  "cloneStatus_columnHeader_template": {
+    "grids": [
+      "ngpBuildStrategyTable",
+      "ngpContentElementsTable"
+    ],
+    "columns": [
+      "CloneStatus",
+      "MasterStatus"
+    ],
+    "headerComponent": "NgpTableColumnHeader"
+  },
+  "ngpCloneStatusColumn_template": {
+    "grids": [
+      "ngpBuildStrategyTable",
+      "ngpContentElementsTable"
+    ],
+    "columns": [
+      "CloneStatus"
+    ],
+    "renderFunction": "renderCloneStatusCellImage",
+    "deps": "js/services/ngpCloneStatusTableCellService"
+  },
+  "ngpMasterStatusColumn_template": {
+    "grids": [
+      "ngpBuildStrategyTable",
+      "ngpContentElementsTable"
+    ],
+    "columns": [
+      "MasterStatus"
+    ],
+    "renderFunction": "renderMasterStatusCellImage",
+    "deps": "js/services/ngpCloneStatusTableCellService"
+  },
+  "ngp_dependency_columnHeader_template": {
+    "grids": [
+      "ngpProcessDependenciesTable",
+      "ngpContentElementsTable"
+    ],
+    "columns": [
+      "hasDependency",
+      "successorDependency"
+    ],
+    "headerComponent": "NgpTableColumnHeader"
+  },
+  "ngp_typeOfDependency_cellRender_template": {
+    "grids": [
+      "ngpProcessDependenciesTable"
+    ],
+    "columns": [
+      "hasDependency"
+    ],
+    "renderFunction": "renderDependencyTypeCellImage",
+    "deps": "js/services/ngpDependencyService"
+  },
+  "ngp_predecessorDependency_cellRender_template": {
+    "grids": [
+      "ngpContentElementsTable"
+    ],
+    "columns": [
+      "hasDependency"
+    ],
+    "renderFunction": "renderPredecessorDependencyCellImage",
+    "deps": "js/services/ngpDependencyService"
+  },
+  "ngp_successorDependency_cellRender_template": {
+    "grids": [
+      "ngpContentElementsTable"
+    ],
+    "columns": [
+      "successorDependency"
+    ],
+    "renderFunction": "renderSuccessorDependencyCellImage",
+    "deps": "js/services/ngpDependencyService"
+  },
+  "assignmentIndication_columnHeader_template": {
+    "grids": [
+      "ngpProductScopeTable"
+    ],
+    "columns": [
+      "assignmentIndication"
+    ],
+    "headerComponent": "NgpTableColumnHeader"
+  },
+  "ngpAssignmentIndicationColumn_template": {
+    "grids": [
+      "ngpProductScopeTable"
+    ],
+    "columns": [
+      "assignmentIndication"
+    ],
+    "renderFunction": "renderAssignmentStatusesCellImage",
+    "deps": "js/services/ngpAssignmentStatusesTableCellService"
+  },
+  "mismatchStatus_columnHeader_template": {
+    "grids": [
+      "ngpProductScopeTable"
+    ],
+    "columns": [
+      "MismatchStatus"
+    ],
+    "headerComponent": "NgpTableColumnHeader"
+  },
+  "mismatchStatusColumn_template": {
+    "grids": [
+      "ngpProductScopeTable"
+    ],
+    "columns": [
+      "MismatchStatus"
+    ],
+    "renderFunction": "renderMismatchStatusCellImage",
+    "deps": "js/services/ngpProductScopeService"
+  },
+  "ngp_processOrOperation_mismatchStatus_columnHeader_template": {
+    "grids": [
+      "ngpContentElementsTable",
+      "NgpAssignedObjectsTable"
+    ],
+    "columns": [
+      "mismatchOrMissing",
+      "AssignmentInContextAttributeGroups"
+    ],
+    "headerComponent": "NgpTableColumnHeader"
+  },
+  "ngp_processOrOperation_mismatchStatus_cellRender_template": {
+    "grids": [
+      "ngpContentElementsTable"
+    ],
+    "columns": [
+      "mismatchOrMissing"
+    ],
+    "renderFunction": "renderProcessOrOperationMismatchCellImage",
+    "deps": "js/services/ngpAssignmentMismatchOrMissingService"
+  },
+  "ngp_designElementOrFeature_mismatchStatus_cellRender_template": {
+    "grids": [
+      "NgpAssignedObjectsTable"
+    ],
+    "columns": [
+      "mismatchOrMissing"
+    ],
+    "renderFunction": "renderDesignElementOrFeatureMismatchCellImage",
+    "deps": "js/services/ngpAssignmentMismatchOrMissingService"
+  }
+}

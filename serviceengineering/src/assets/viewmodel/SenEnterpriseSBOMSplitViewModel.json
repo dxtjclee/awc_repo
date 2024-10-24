@@ -1,0 +1,205 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "awSubLocationPref": {
+            "hideRightWall": true
+        },
+        "senEntSbomData": {
+            "selectedContextKey": ""
+        },
+        "_entSbomSublocation":
+        {
+            "viewKey": "entSbomContext",
+            "tabSetId": "entSbomContext",
+            "name": "ServiceEngineeringSublocation",
+            "clientScopeURI": "Sen1ShowEnterpriseSBOM",
+            "nameToken": "ServiceEngineeringSublocation",
+            "policy": "/policies/senPropertyPolicy.json",
+            "viewBase": "SenEntSbom",
+            "selectionQueryParamKey": "c_uid",
+            "openMode":"ebom_only",
+            "occWindowCtx":"BOM",
+            "contextKey":"entSbomContext",
+            "showTopNode":true,
+            "showXrt":false,
+            "viewModes": {
+                "TreeView": {
+                    "primaryWorkArea": "tree",
+                    "secondaryWorkArea": false
+                }
+            },
+            "urlParams":{
+                "productContextQueryParamKey":"pci_uid",
+                "topElementQueryParamKey": "t_uid",
+                "selectionQueryParamKey": "c_uid",
+                "openStructureQueryParamKey": "o_uid",
+                "pageIdQueryParamKey": "pageId",
+                "rootQueryParamKey": "obj_uid"
+            },
+            "dataProviderName": "entSbomDataProvider",
+            "gridId": "senEntSbomTree",
+            "editContext": "entSbomDataProvider",
+            "editSupportParamKeys": [ "c_uid", "o_uid", "pci_uid", "c_uid2", "o_uid2",  "pci_uid2" ],
+            "baseSelection":"",
+            "defaultDisplayMode": "TreeView",
+            "awSubLocationPref": {
+                "hideNavigationArea": true,
+                "hideRightWall": true,
+                "hideToolsAndInfoArea": true,
+                "hideFooter": true,
+                "orientation": "HORIZONTAL"
+            },
+            "context": {
+                "search":{
+                    "hideInContentSearchBox":true
+                }
+            }
+        },
+        "_entFilteredSbomSublocation":
+        {
+
+            "viewKey": "entFilteredSbomContext",
+            "tabSetId": "entFilteredSbomContext",
+            "name": "SenEnterpriseSBOMSublocation",
+            "clientScopeURI": "Sen1ShowEnterpriseSBOM",
+            "nameToken": "SenEnterpriseSBOMSublocation",
+            "policy": "/policies/senPropertyPolicy.json",
+            "viewBase": "",
+            "selectionQueryParamKey": "c_uid",
+            "openMode":"",
+            "occWindowCtx":"BOM",
+            "contextKey":"entSbomFilteredContext",
+            "showTopNode":true,
+            "showXrt":false,
+            "viewModes": {
+                "TreeView": {
+                    "primaryWorkArea": "tree",
+                    "secondaryWorkArea": false
+                }
+            },
+            "urlParams":{
+            },
+            "dataProviderName": "entFilteredSbomDataProvider",
+            "gridId": "",
+            "editContext": "entFilteredSbomDataProvider",
+            "editSupportParamKeys": [ "c_uid", "o_uid", "pci_uid", "c_uid2", "o_uid2",  "pci_uid2" ],
+            "baseSelection":"",
+            "defaultDisplayMode": "TreeView",
+            "awSubLocationPref": {
+                "hideNavigationArea": true,
+                "hideRightWall": true,
+                "hideToolsAndInfoArea": true,
+                "hideFooter": true,
+                "orientation": "HORIZONTAL"
+            },
+            "context": {
+                "search":{
+                    "hideInContentSearchBox":true
+                }
+            }
+        },
+        "occContext": {
+            "initialValues": {
+                "configContext": {},
+                "displayToggleOptions":{},
+                "supportedFeatures": {},
+                "productContextInfo":{},
+                "readOnlyFeatures":{},
+                "currentState": {},
+                "previousState": {},
+                "transientRequestPref":{},
+                "persistentRequestPref": { "defaultClientScopeUri": "Awb0OccurrenceManagement", "splitMode":"true" },
+                "viewKey": "entSbomContext",
+                "disabledFeatures":[],
+                "isRowSelected": false
+            },
+            "meta": {}
+        },
+        "occContext2": {
+            "initialValues": {
+                "configContext": {},
+                "displayToggleOptions":{},
+                "supportedFeatures": {},
+                "productContextInfo":{},
+                "readOnlyFeatures":{},
+                "currentState": {},
+                "previousState": {},
+                "transientRequestPref":{},
+                "persistentRequestPref": { "defaultClientScopeUri": "Awb0OccurrenceManagement", "splitMode":"true" },
+                "viewKey": "entFilteredSbomContext",
+                "disabledFeatures":[],
+                "isRowSelected": false
+            },
+            "meta": {}
+        }
+    },
+    "ctx":{
+        "sentaskPageContext":null,
+        "requestPref":null,
+        "requestPref.savedSessionMode":null,
+        "skipAutoBookmark":null,
+        "hideRightWall":null,
+        "splitView.mode":null,
+        "splitView.viewKeys":null
+    },
+    "actions":{
+
+        "getEntSbomData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadEntSbomData",
+            "deps": "js/senEntSbomSplitViewer",
+            "outputData": {
+                "_entFilteredSbomSublocation.baseSelection":"result.data[0].entFilteredSbomContextInfo",
+                "_entSbomSublocation.baseSelection":"result.data[0].entSbomContextInfo"
+            }
+        },
+        "activateLeftView": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "senEnt.activateWindow",
+                    "eventData": {
+                        "key": "{{data._entSbomSublocation.contextKey}}"
+                    }
+                } ]
+            }
+        },
+        "activateRightView": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "senEnt.activateWindow",
+                    "eventData": {
+                        "key": "{{data._entFilteredSbomSublocation.contextKey}}"
+                    }
+                } ]
+            }
+        },
+        "activateEntSbomWindow": {
+            "actionType": "JSFunction",
+            "method": "activateEntSbomWindow",
+            "inputData": {
+                "eventData": "{{data.eventData}}"
+            },
+            "outputData": {
+                "senEntSbomData": ""
+            },
+            "deps": "js/senEntSbomSplitViewer"
+        }
+    },
+
+    "onEvent": [
+        {
+            "eventId": "senEnt.activateWindow",
+            "action": "activateEntSbomWindow",
+            "cacheEventData": true
+        }
+    ],
+
+    "lifecycleHooks": {
+        "onInit": "getEntSbomData"
+    }
+
+}

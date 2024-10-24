@@ -1,0 +1,11 @@
+<aw-panel>
+    <aw-panel-body>
+        <mfe-list-selection-container exist-when="data.productVariantsList.length > 0" available-list="subPanelContext.occContext.variantsListInfo.availableList || data.productVariantsList" available-list-title="{{subPanelContext.availableListTitle}}" available-list-has-filter={{true}} selected-list="subPanelContext.occContext.variantsListInfo.selectedList" selected-list-title="{{subPanelContext.selectedListTitle}}" selected-list-has-filter={{false}} update-list-infos="data.updateListInfos">
+
+        </mfe-list-selection-container>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button action="closePopupWindow" size="auto" button-type='base'>{{i18n.cancel}}</aw-button>
+        <aw-button action="done" size="auto" enable-when="data.isEnableDoneButton">{{i18n.done}}</aw-button>
+    </aw-panel-footer>
+</aw-panel>

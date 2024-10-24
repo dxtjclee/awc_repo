@@ -1,0 +1,20 @@
+<aw-command-panel caption="i18n.Dpv1UploadFilesTitle" context="subPanelContext">
+
+    <aw-panel-body>
+        <aw-progress-indicator></aw-progress-indicator>
+        <aw-panel-section>
+            <aw-label prop="data.plantInfo"></aw-label>
+            <aw-label prop="data.deviceInfo"></aw-label>
+        </aw-panel-section>
+
+      <aw-panel-section caption="i18n.selectETLFilesToUpload" >
+              <aw-file-upload  file-change-action="updateETLFormData" type-filter="{{data.typeFilter}}" is-required="true" multiple="true"></aw-file-upload>
+       </aw-panel-section>
+
+    </aw-panel-body>
+
+   <aw-panel-footer>
+        <aw-button enable-when="conditions.isFileSelectedForUpload" action="uploadBatchAction" > <aw-i18n>i18n.upload</aw-i18n> </aw-button>
+   </aw-panel-footer>
+
+</aw-command-panel>

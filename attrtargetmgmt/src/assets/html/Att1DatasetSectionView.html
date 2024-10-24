@@ -1,0 +1,15 @@
+<aw-panel>
+<aw-panel-section caption="i18n.goalFile">
+    <aw-list command-context="{selected: subPanelContext.selected}" dataprovider="data.dataProviders.getAttachedGoalFile">
+        <aw-default-cell vmo="item"></aw-default-cell>
+    </aw-list>
+</aw-panel-section>
+<aw-panel-section caption="i18n.measurementFile">
+    <aw-list command-context="{selected: subPanelContext.selected}" dataprovider="data.dataProviders.getAttachedMeasurementFile">
+        <aw-default-cell vmo="item"></aw-default-cell>
+    </aw-list>
+</aw-panel-section>
+<div show-when="false">
+    <aw-file-upload file-change-action="setFileParameters" type-filter="{{ctx.datasetFileExt}}" is-required="true"></aw-file-upload>
+</div>
+</aw-panel>

@@ -1,0 +1,71 @@
+<aw-row exist-when="ctx.isAW52_13XOnwardsSupported">
+    <aw-column width="100%">
+        <aw-widget prop="data.criticality" visible-when="subPanelContext.showCharSpecInInspectionDefinition && subPanelContext.showCharSpecInInspectionDefinition.value"></aw-widget>
+        <aw-widget prop="selected.properties.qc0Criticality" visible-when="!(subPanelContext.showCharSpecInInspectionDefinition && subPanelContext.showCharSpecInInspectionDefinition.value)"></aw-widget>
+    </aw-column>
+</aw-row>
+<aw-row exist-when="subPanelContext.selected.type ==='Qc0VariableCharSpec' || ctx.pselected.type ==='Qc0VariableCharSpec'">
+    <aw-row exist-when="ctx.isTC12_4OnwardsSupported">
+        <aw-column width="100%">
+            <aw-widget prop="data.limitation" visible-when="subPanelContext.showCharSpecInInspectionDefinition && subPanelContext.showCharSpecInInspectionDefinition.value"></aw-widget>
+            <aw-widget prop="selected.properties.qc0limitation" visible-when="!(subPanelContext.showCharSpecInInspectionDefinition && subPanelContext.showCharSpecInInspectionDefinition.value)"></aw-widget>
+        </aw-column>
+    </aw-row>
+    <aw-row>
+        <aw-column width="100%">
+            <aw-widget prop="data.unitOfMeasure" visible-when="subPanelContext.showCharSpecInInspectionDefinition && subPanelContext.showCharSpecInInspectionDefinition.value"></aw-widget>
+            <aw-widget prop="selected.properties.qc0UnitOfMeasure" visible-when="!(subPanelContext.showCharSpecInInspectionDefinition && subPanelContext.showCharSpecInInspectionDefinition.value)"></aw-widget>
+            </aw-widget>
+        </aw-column>
+    </aw-row>
+    <aw-row>
+        <aw-column width="100%">
+            <aw-widget exist-when="subPanelContext.selected.props.qc0limitation.dbValue === 'Both Sides' || subPanelContext.selected.props.qc0limitation.dbValue === 'Zero' ||  subPanelContext.selected.props.qc0limitation.dbValue === 'Down' || subPanelContext.selected.props.qc0limitation.dbValue === 'Up'" prop="data.nominalValue" visible-when="subPanelContext.showCharSpecInInspectionDefinition && subPanelContext.showCharSpecInInspectionDefinition.value"></aw-widget>
+            
+            <aw-widget
+                exist-when="subPanelContext.selected.props.qc0limitation.dbValue === 'Both Sides' || subPanelContext.selected.props.qc0limitation.dbValue === 'Zero' ||  subPanelContext.selected.props.qc0limitation.dbValue === 'Down' || subPanelContext.selected.props.qc0limitation.dbValue === 'Up'"
+                prop="selected.properties.qc0NominalValue" visible-when="!(subPanelContext.showCharSpecInInspectionDefinition && subPanelContext.showCharSpecInInspectionDefinition.value)"></aw-widget>
+        </aw-column>
+    </aw-row>
+    <aw-row exist-when="ctx.isTC13_1OnwardsSupported">
+
+        <aw-column width="100%">
+            <aw-widget prop="data.toleranceType" visible-when="subPanelContext.showCharSpecInInspectionDefinition && subPanelContext.showCharSpecInInspectionDefinition.value"></aw-widget>
+            <aw-widget prop="selected.properties.qc0ToleranceType" visible-when="!(subPanelContext.showCharSpecInInspectionDefinition && subPanelContext.showCharSpecInInspectionDefinition.value)"></aw-widget>
+        </aw-column>
+    </aw-row>
+    <aw-row>
+        <aw-column width="100%">
+            <aw-widget  prop="data.upperTolerance" visible-when="conditions.showHideUpperTolerance && subPanelContext.showCharSpecInInspectionDefinition && subPanelContext.showCharSpecInInspectionDefinition.value"></aw-widget>
+            <aw-widget exist-when="!(subPanelContext.showCharSpecInInspectionDefinition && subPanelContext.showCharSpecInInspectionDefinition.value) && (subPanelContext.fields.selected.properties.qc0limitation.value === 'Both Sides' || subPanelContext.fields.selected.properties.qc0limitation.value === 'Down' || subPanelContext.fields.selected.properties.qc0limitation.value === 'Zero')" prop="selected.properties.qc0UpperTolerance" visible-when="!(subPanelContext.showCharSpecInInspectionDefinition && subPanelContext.showCharSpecInInspectionDefinition.value) && (subPanelContext.fields.selected.properties.qc0limitation.value === 'Both Sides' || subPanelContext.fields.selected.properties.qc0limitation.value === 'Down' || subPanelContext.fields.selected.properties.qc0limitation.value === 'Zero')">
+            </aw-widget>
+        </aw-column>
+    </aw-row>
+    <aw-row>
+        <aw-column width="100%">
+            <aw-widget  prop="data.lowerTolerance" visible-when="conditions.showHideLowerTolerance && subPanelContext.showCharSpecInInspectionDefinition && subPanelContext.showCharSpecInInspectionDefinition.value"></aw-widget>
+            <aw-widget exist-when="!(subPanelContext.showCharSpecInInspectionDefinition && subPanelContext.showCharSpecInInspectionDefinition.value) && (subPanelContext.fields.selected.properties.qc0limitation.value === 'Both Sides' || subPanelContext.fields.selected.properties.qc0limitation.value === 'Up')" prop="selected.properties.qc0LowerTolerance" visible-when="!(subPanelContext.showCharSpecInInspectionDefinition && subPanelContext.showCharSpecInInspectionDefinition.value) && (subPanelContext.fields.selected.properties.qc0limitation.value === 'Both Sides' || subPanelContext.fields.selected.properties.qc0limitation.value === 'Up')">
+            </aw-widget>
+        </aw-column>
+    </aw-row>
+</aw-row>
+<aw-row exist-when="subPanelContext.selected.type ==='Qc0VariableCharSpec' && !ctx.isTC12_4OnwardsSupported">
+    <aw-row>
+        <aw-column width="100%">
+            <aw-widget prop="data.nominalValue" visible-when="subPanelContext.showCharSpecInInspectionDefinition && subPanelContext.showCharSpecInInspectionDefinition.value"></aw-widget>
+            <aw-widget prop="selected.properties.qc0NominalValue" visible-when="!(subPanelContext.showCharSpecInInspectionDefinition && subPanelContext.showCharSpecInInspectionDefinition.value)"></aw-widget>
+        </aw-column>
+    </aw-row>
+    <aw-row>
+        <aw-column width="100%">
+            <aw-widget  prop="data.upperTolerance" visible-when="conditions.showHideUpperTolerance && subPanelContext.showCharSpecInInspectionDefinition && subPanelContext.showCharSpecInInspectionDefinition.value"></aw-widget>
+            <aw-widget prop="selected.properties.qc0UpperTolerance" visible-when="!(subPanelContext.showCharSpecInInspectionDefinition && subPanelContext.showCharSpecInInspectionDefinition.value)"></aw-widget>
+        </aw-column>
+    </aw-row>
+    <aw-row>
+        <aw-column width="100%">
+            <aw-widget prop="data.lowerTolerance" visible-when="conditions.showHideLowerTolerance && subPanelContext.showCharSpecInInspectionDefinition && subPanelContext.showCharSpecInInspectionDefinition.value"></aw-widget>
+            <aw-widget prop="selected.properties.qc0LowerTolerance" visible-when="!(subPanelContext.showCharSpecInInspectionDefinition && subPanelContext.showCharSpecInInspectionDefinition.value)"></aw-widget>
+        </aw-column>
+    </aw-row>
+</aw-row>

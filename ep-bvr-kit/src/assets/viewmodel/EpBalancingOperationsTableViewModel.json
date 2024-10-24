@@ -1,0 +1,340 @@
+{
+    "schemaVersion": "1.0.0",
+    "ports": {
+        "EpBalancingOperationsTable_inputObject": {
+            "syncObject": {}
+        }
+    },
+    "props": {
+        "view-id": {
+            "type": "string"
+        },
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data": {
+        "selectionData": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "editContext": "{{ctx.mfgReadOnlyMode.readOnlyMode === true ? '': 'EP_DETAILS_TABLE_EDIT_CONTEXT'}}",
+        "preferenceName": "EP_LineBalancingOperationColumnConfiguration",
+        "relationName": [
+            "elb0allocatedOpsByPV"
+        ],
+        "loadInputObject": {
+            "loadTypes": [
+                "getProperties"
+            ],
+            "propertiesToLoad": [
+                "elb0allocatedOpsByPV"
+            ]
+        },
+        "messages": {
+            "noElementSelected": [
+                {
+                    "text": "{{i18n.selectStationOrProcessResource}}"
+                }
+            ],
+            "noAssigned": [
+                {
+                    "text": "{{i18n.noOperations}}"
+                }
+            ]
+        },
+        "customColumns": [
+            {
+                "clientColumn": true,
+                "name": "ExternalUsage",
+                "propertyDisplayName": "{{i18n.externalOperationColumnName}}"
+            },
+            {
+                "clientColumn": true,
+                "name": "allocationIndication",
+                "propertyDisplayName": "{{i18n.allocationIndicationColumnName}}"
+            },
+            {
+                "clientColumn": true,
+                "name": "releaseStatusFlag",
+                "propertyDisplayName": "{{i18n.releaseStatusFlagColumnName}}"
+            }
+        ],
+        "alwaysVisibleColumns":["bl_rev_object_name"],
+        "enableArrangeColumn": true,
+        "tableCommandColumnName": "bl_rev_object_name",
+        "epDetailsTableCommandAnchor": "balancingOperations_onHoverUiAnchor",
+        "contextInfo": {
+            "initialValues": {
+                "loadedObjects": [],
+                "selectedObjects": []
+            },
+            "meta": {}
+        },
+        "disableTabCounter": true,
+        "operation": "",
+        "station": [],
+        "rowRenderByPropertyValue": {
+            "conditions": [
+                {
+                    "name": "isAllocatedTimeEqToZero",
+                    "property": "elb0allocatedTimeByPV",
+                    "value": "0"
+                }
+            ],
+            "classes": [
+                "aw-epBalancing-problematicOperation"
+            ]
+        }
+    },
+    "messages": {
+        "guidanceMessageOperationTree": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.resourseSharedMsg}}",
+            "messageTextParams": [
+                "{{data.processResourceName}}",
+                "{{data.stationNames}}"
+            ]
+        }
+    },
+    "actions": {
+        "operationTableAction": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "getOperationsTableParameters"
+                },
+                {
+                    "action": "updateTableInput"
+                },
+                {
+                    "action": "clearExternalUsageCache"
+                },
+                {
+                    "action": "setCommandContext"
+                },
+                {
+                    "action": "updateSharedProcessResourceMessage",
+                    "condition": "conditions.isShared"
+                }
+            ]
+        },
+        "updateSharedProcessResourceMessage": {
+            "actionType": "JSFunctionAsync",
+            "method": "getSharedProcessResourceMessage",
+            "inputData": {
+                "selection": "{{props.subPanelContext.balancingData.selectionData}}"
+            },
+            "outputData": {
+                "processResourceName": "processResourceName",
+                "stationNames": "stationNames"
+            },
+            "deps": "js/epBalancingService"
+        },
+        "getOperationsTableParameters": {
+            "actionType": "JSFunction",
+            "method": "getOperationsTableInput",
+            "inputData": {
+                "selection": "{{props.subPanelContext.balancingData.selectionData}}"
+            },
+            "outputData": {
+                "input": ""
+            },
+            "deps": "js/epBalancingService"
+        },
+        "updateTableInput": {
+            "actionType": "Sync",
+            "inputData": {
+                "port": "EpBalancingOperationsTable_inputObject",
+                "syncObject": "{{data.input}}"
+            }
+        },
+        "getValueInViewModel": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "tabData": "{{subPanelContext}}"
+            },
+            "outputData": {
+                "tabContext": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "updateExternalUsageToVmo": {
+            "actionType": "JSFunction",
+            "method": "updateExternalUsageToVmo",
+            "inputData": {
+                "inputObject": "{{props.subPanelContext.balancingData.selectionData}}",
+                "vmos": "{{fields.contextInfo.loadedObjects}}",
+                "columnsToUpdate": [
+                    "ExternalUsage"
+                ]
+            },
+            "deps": "js/epBalancingService"
+        },
+        "updateMultipleSelectedExternalUsageFlag": {
+            "actionType": "JSFunction",
+            "method": "updateMultipleSelectedExternalUsageFlag",
+            "inputData": {
+                "selectedObjects": "{{fields.selectionData.selected}}",
+                "occContext": "{{subPanelContext.occContext}}"
+            },
+            "deps": "js/epBalancingService"
+        },
+        "clearExternalUsageCache": {
+            "actionType": "JSFunction",
+            "method": "cleanUpExternalUsageDataFromCache",
+            "deps": "js/epBalancingService"
+        },
+        "updateTableSelectionFromPRI": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInAtomicData",
+            "inputData": {
+                "targetAtomicData": "{{props.subPanelContext}}",
+                "updatedValues": {
+                    "findIn.selectedFindIn": "{{props.subPanelContext.balancingData.selectionData.operation}}"
+                }
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "updateTableSelectionFromProductBOP": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInAtomicData",
+            "inputData": {
+                "targetAtomicData": "{{props.subPanelContext}}",
+                "updatedValues": {
+                    "findIn.selectedFindInPending": "{{props.subPanelContext.balancingData.selectionData.pendingOperation}}"
+                }
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "updateSelectionInBalancingData": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInAtomicData",
+            "inputData": {
+                "targetAtomicData": "{{props.subPanelContext.balancingData}}",
+                "updatedValues": {
+                    "selectionData.operation": "{{fields.selectionData.selected}}"
+                }
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "updatePropertyToLoad": {
+            "actionType": "JSFunction",
+            "method": "getOperationsTableProperty",
+            "inputData": {
+                "selection": "{{props.subPanelContext.balancingData.selectionData}}"
+            },
+            "outputData": {
+                "loadInputObject": "loadInputObject",
+                "relationName": "relationName"
+            },
+            "deps": "js/epBalancingService"
+        },
+        "setCommandContext": {
+            "actionType": "JSFunction",
+            "method": "setCommandContext",
+            "inputData": {
+                "tabModel": "{{data.tabContext}}",
+                "commandContext": {
+                    "inputObject": "{{data.input}}",
+                    "selection": []
+                }
+            },
+            "deps": "js/mfeContentPanelUtil"
+        },
+        "clientTableRefresh": {
+            "actionType": "JSFunction",
+            "method": "refreshTable",
+            "inputData": {
+                "tableId": "EpDetailsTable"
+            },
+            "deps": "js/mfeTableService"
+        }
+    },
+    "conditions": {
+        "isShared": {
+            "expression": "props.subPanelContext.balancingData.selectionData.processResource && props.subPanelContext.balancingData.selectionData.processResource.props.bl_rev_object_name.dbValues[0] && props.subPanelContext.balancingData.selectionData.processResource.props.elb0sharedWithStations.uiValues.length > 1"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "getValueInViewModel",
+        "onUnmount": "clearExternalUsageCache",
+        "onUpdate": [
+            {
+                "action": "updateExternalUsageToVmo",
+                "observers": [
+                    "viewModel.atomicData.contextInfo.loadedObjects"
+                ]
+            },
+            {
+                "action": "updateMultipleSelectedExternalUsageFlag",
+                "observers": [
+                    "viewModel.atomicData.selectionData.selected"
+                ]
+            },
+            {
+                "action": "operationTableAction",
+                "observers": [
+                    "props.subPanelContext.balancingData.selectionData.station",
+                    "props.subPanelContext.balancingData.selectionData.processResource",
+                    "props.subPanelContext.balancingData.selectionData.unassigned"
+                ]
+            },
+            {
+                "action": "updatePropertyToLoad",
+                "observers": [
+                    "props.subPanelContext.balancingData.selectionData.unassigned"
+                ]
+            },
+            {
+                "action": "updateTableSelectionFromPRI",
+                "observers": [
+                    "props.subPanelContext.balancingData.selectionData.operation"
+                ]
+            },
+            {
+                "action": "updateSelectionInBalancingData",
+                "observers": [
+                    "viewModel.atomicData.selectionData.selected"
+                ]
+            },
+            {
+                "action": "updateTableSelectionFromProductBOP",
+                "observers": [
+                    "props.subPanelContext.balancingData.selectionData.pendingOperation"
+                ]
+            }
+        ]
+    },
+    "onEvent": [
+        {
+            "eventId": "ep.assignOperationsToAnotherProcessResource",
+            "action": "updateSharedProcessResourceMessage"
+        },
+        {
+            "eventId": "ep.saveEvents",
+            "action": "clientTableRefresh"
+        }
+    ],
+    "i18n": {
+        "resourseSharedMsg": [
+            "BalancingMessages"
+        ],
+        "noOperations": [
+            "BalancingMessages"
+        ],
+        "selectStationOrProcessResource": [
+            "BalancingMessages"
+        ],
+        "externalOperationColumnName": [
+            "BalancingMessages"
+        ],
+        "releaseStatusFlagColumnName": [
+            "AssemblyMessages"
+        ],
+        "allocationIndicationColumnName": [
+            "allocationIndicationMessages"
+        ]
+    }
+}

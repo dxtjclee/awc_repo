@@ -1,0 +1,8 @@
+<aw-panel>
+    <aw-panel-body exist-when="props.subPanelContext.context.parameterState && props.subPanelContext.context.parameterState.hasVariantConfigContext">
+        <pca0-variant-condition-authoring-grid sub-panel-context="{...subPanelContext}" exist-when="(ctx.tcSessionData.tcMajorVersion > 13) || (ctx.tcSessionData.tcMajorVersion === 13 && ctx.tcSessionData.tcMinorVersion >= 2 )"></pca0-variant-condition-authoring-grid>
+    </aw-panel-body>
+    <aw-panel-body exist-when="props.subPanelContext.context.parameterState && !props.subPanelContext.context.parameterState.hasVariantConfigContext">
+        <aw-i18n>i18n.noConfigContextFound</aw-i18n>
+    </aw-panel-body>
+</aw-panel>

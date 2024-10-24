@@ -1,0 +1,10 @@
+<div class="sw-column flex-auto">
+    <div class="sw-row h-12">
+        <mfe-content-panel sub-panel-context="{...data.assemblyTreeContext,manageConsumptionMode: data.manageConsumptionMode,missingInSourceTabsConfig:props.missingInSourceTabsConfig, ...props.subPanelContext}" occ-context="props.occContext"></mfe-content-panel>
+    </div>
+    <aw-splitter direction="HORIZONTAL" class="aw-mfe-transparentSplitter" exist-when="conditions.showMissingInSourceTabs">
+    </aw-splitter>
+    <div class="sw-row h-12" exist-when="conditions.showMissingInSourceTabs">
+        <mfe-content-panel class="aw-ep-missingInSourcePanel" sub-panel-context="{...props.missingInSourceTabsConfig, ...props.subPanelContext}"></mfe-content-panel>
+    </div>
+</div>

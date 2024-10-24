@@ -1,0 +1,390 @@
+{
+  "commands": {
+    "Eda1OpenInEdm": {
+      "iconId": "cmdOpen",
+      "isGroup": false,
+      "title": "{{i18n.openInEdmViewCommandTitle}}"
+    },
+    "Eda1AddDesignToCollab": {
+      "iconId": "cmdAdd",
+      "isGroup": false,
+      "title": "{{i18n.submitToDesignExchange}}"
+    },
+    "Eda1NewCollaboration": {
+      "iconId": "cmdAdd",
+      "isGroup": false,
+      "title": "{{i18n.newCollaborationCommand}}"
+    },
+    "Eda1RemoveDesignFromCollab": {
+      "iconId": "cmdRemove",
+      "isGroup": false,
+      "title": "{{i18n.removeDesign}}"
+    },
+    "Eda1OpenIncrementCommand": {
+      "iconId": "cmdOpen",
+      "title": "{{i18n.openIncrement}}"
+    },
+    "Eda1OpenObjectCommand": {
+      "iconId": "cmdOpen",
+      "title": "{{i18n.openObject}}"
+    }
+  },
+  "commandHandlers": {
+    "Eda1OpenInViewCommandHandler": {
+      "id": "Eda1OpenInEdm",
+      "action": "executeEda1OpenInEdmCommand",
+      "activeWhen": {
+        "condition": "conditions.Eda1OpenInEdm"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Eda1OpenInEdm"
+      }
+    },
+    "Eda1AddDesignToCollabCommandHandler": {
+      "id": "Eda1AddDesignToCollab",
+      "action": "openSubmitToDesignExchangePanel",
+      "activeWhen": {
+        "condition": "conditions.Eda1AddDesignToCollab"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Eda1AddDesignToCollab"
+      }
+    },
+    "Eda1RemoveDesignFromCollabCommandHandler": {
+      "id": "Eda1RemoveDesignFromCollab",
+      "action": "getConfirmationForRemoveDesign",
+      "activeWhen": {
+        "condition": "conditions.Eda1RemoveDesignFromCollab"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Eda1RemoveDesignFromCollab"
+      }
+    },
+    "Eda1NewCollaborationCommandHandler": {
+      "id": "Eda1NewCollaboration",
+      "action": "newCollaborationAction",
+      "activeWhen": {
+        "condition": "conditions.Eda1NewCollaboration"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Eda1NewCollaboration"
+      }
+    },
+    "Eda1OpenIncrementCommandHandler": {
+      "id": "Eda1OpenIncrementCommand",
+      "action": "eda0OpenIncrement",
+      "activeWhen": true,
+      "visibleWhen": true
+    },
+    "Eda1OpenObjectCommandHandler": {
+      "id": "Eda1OpenObjectCommand",
+      "action": "eda0OpenIncrement",
+      "activeWhen": true,
+      "visibleWhen": true
+    }
+  },
+  "commandPlacements": {
+    "Eda1OpenInEdmOneStep": {
+      "id": "Eda1OpenInEdm",
+      "uiAnchor": "aw_oneStep",
+      "priority": 4,
+      "parentGroupId": "Awp0OpenGroup"
+    },
+    "Eda1AddDesignToCollabCommandOneStep": {
+      "id": "Eda1AddDesignToCollab",
+      "priority": 201,
+      "uiAnchor": "aw_rightWall",
+      "parentGroupId": "Awp0NewGroup"
+    },
+    "Eda1RemoveDesignFromCollabCommandPlacement": {
+      "id": "Eda1RemoveDesignFromCollab",
+      "uiAnchor": "aw_rightWall",
+      "priority": 210,
+      "parentGroupId": "Awp0EditGroup"
+    },
+    "Eda1NewCollaborationPlacement": {
+      "id": "Eda1NewCollaboration",
+      "uiAnchor": "aw_oneStep",
+      "priority": 900,
+      "parentGroupId": "Awp0NewGroup"
+    },
+    "Eda1OpenIncrementCommandPlacement": {
+      "id": "Eda1OpenIncrementCommand",
+      "uiAnchor": "eda_open_increment",
+      "priority": 1,
+      "cellDisplay": {
+        "hover": true,
+        "position": "TOP_RIGHT",
+        "selected": true
+      }
+    },
+    "Eda1OpenObjectCommandPlacement": {
+      "id": "Eda1OpenObjectCommand",
+      "uiAnchor": "eda_open_object",
+      "priority": 1,
+      "cellDisplay": {
+        "hover": true,
+        "position": "TOP_RIGHT",
+        "selected": true
+      }
+    }
+  },
+  "actions": {
+    "executeEda1OpenInEdmCommand": {
+      "actionType": "JSFunction",
+      "method": "redirectToUrl",
+      "deps": "js/Eda0OpenInViewerService"
+    },
+    "getConfirmationForRemoveDesign": {
+      "actionType": "Event",
+      "method": "Event",
+      "inputData": {
+        "events": [
+          {
+            "name": "eda1GetRemoveDesignConfirmationEvent"
+          }
+        ]
+      }
+    },
+    "removeDesignFromList": {
+      "actionType": "TcSoaService",
+      "serviceName": "EDMDCollab-2020-04-EDMDCollaboration",
+      "method": "createOrUpdateCollaboration",
+      "inputData": {
+        "createOrUpdateInput": {
+          "collaborationToCreateOrUpdate": {
+            "collabObjectUID": "{{commandContext.selectionData.value.pselected.uid}}"
+          },
+          "detachObjectsFromCollaboration": [
+            "{{commandContext.selectionData.value.selected[0].uid}}"
+          ]
+        }
+      },
+      "events": {
+        "success": [
+          {
+            "name": "primaryWorkarea.reset"
+          }
+        ]
+      },
+      "actionMessages": {
+        "failure": [
+          {
+            "message": "removeDesignFailureMessage"
+          }
+        ]
+      }
+    },
+    "openSubmitToDesignExchangePanel": {
+      "actionType": "JSFunction",
+      "method": "activateCommandPanel",
+      "deps": "js/commandPanel.service",
+      "inputData": {
+        "commandId": "Eda0DesignCollabPanel",
+        "location": "aw_toolsAndInfo",
+        "context": "{{ctx.selected}}"
+      }
+    },
+    "newCollaborationAction": {
+      "actionType": "TcSoaService",
+      "serviceName": "EDMDCollab-2020-04-EDMDCollaboration",
+      "method": "createOrUpdateCollaboration",
+      "inputData": {
+        "createOrUpdateInput": {
+          "collaborationToCreateOrUpdate": {
+            "collabObjectUID": "",
+            "objectProps": {
+              "object_name": [
+                "{{function:constructCCObjectName}}"
+              ]
+            }
+          },
+          "attachObjectsToCollaboration": [
+            {
+              "objectUID": "{{function:getUnderlyingObjectUid}}",
+              "relationName": ""
+            }
+          ]
+        }
+      },
+      "outputData": {
+        "collaborationUID": "collaborationObject.uid"
+      },
+      "events": {
+        "success": [
+          {
+            "name": "eda1ShowCollaborationEvent"
+          }
+        ]
+      },
+      "actionMessages": {
+        "failure": [
+          {
+            "message": "newCollaborationFailureMessage"
+          }
+        ]
+      },
+      "deps": "js/Eda0UtilService"
+    },
+    "eda1ShowCollaborationAction": {
+      "actionType": "Navigate",
+      "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+      "navigationParams": {
+        "uid": "{{data.collaborationUID}}"
+      }
+    },
+    "eda0OpenIncrement": {
+      "actionType": "Navigate",
+      "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+      "navigationParams": {
+        "uid": {
+          "$adapt": "{{commandContext.vmo}}",
+          "path": "uid"
+        }
+      }
+    }
+  },
+  "messages": {
+    "removeDesignFromCollaboration": {
+      "messageType": "WARNING",
+      "messageText": "{{i18n.removeDesignFromCollaboration}}",
+      "messageTextParams": [
+        "{{ctx.mselected[0].props.object_string.dbValues[0]}}"
+      ],
+      "navigationOptions": [
+        {
+          "option": "Cancel",
+          "text": "{{i18n.CancelText}}",
+          "action": ""
+        },
+        {
+          "option": "Remove",
+          "text": "{{i18n.RemoveText}}",
+          "action": "removeDesignFromList"
+        }
+      ]
+    },
+    "newCollaborationFailureMessage": {
+      "messageType": "ERROR",
+      "messageText": "{{errorCode}}"
+    },
+    "removeDesignFailureMessage": {
+      "messageType": "ERROR",
+      "messageText": "{{errorCode}}"
+    }
+  },
+  "i18n": {
+    "CancelText": [
+      "EdaMessages"
+    ],
+    "RemoveText": [
+      "EdaMessages"
+    ],
+    "openInEdmViewCommandTitle": [
+      "EdaMessages"
+    ],
+    "submitToDesignExchange": [
+      "EdaMessages"
+    ],
+    "removeDesign": [
+      "EdaMessages"
+    ],
+    "removeDesignFromCollaboration": [
+      "EdaMessages"
+    ],
+    "newCollaborationCommand": [
+      "EdaMessages"
+    ],
+    "openIncrement": [
+      "EdaMessages"
+    ],
+    "openObject": [
+      "EdaMessages"
+    ]
+  },
+  "conditions": {
+    "Eda1OpenInEdm": {
+      "expression": "ctx.selected.props.eda1IsDesignDataExist.uiValues[0] === 'True'"
+    },
+    "Eda1AtCollabSubLocation": {
+      "expression": "commandContext.provider.viewBase === 'Eda0EDMDCollaboration'"
+    },
+    "Eda1RevisionSelectedInTypeHierarchy": {
+      "expression": "ctx.selected.modelType.typeHierarchyArray.indexOf( 'ItemRevision' ) > -1"
+    },
+    "Eda1SingleDesignSelected": {
+      "expression": "ctx.mselected.length == 1"
+    },
+    "Eda1ParticipatesInCollab": {
+      "expression": "ctx.selected.props.eda0Collaboration.dbValues[0] != NULL"
+    },
+    "Eda1RemoveDesignFromCollab": {
+      "expression": "conditions.Eda1AtCollabSubLocation && conditions.Eda1RevisionSelectedInTypeHierarchy && conditions.Eda1SingleDesignSelected && conditions.Eda1ParticipatesInCollab"
+    },
+    "Eda1AddDesignToCollab": {
+      "expression": "conditions.Eda1AtCollabSubLocation && ctx.selected.modelType.typeHierarchyArray.indexOf( 'ItemRevision' ) < 0"
+    },
+    "Eda1NewCollaboration": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "ctx.selected.props.eda0Collaboration.dbValues[0]",
+            "$query": {
+              "$isNull": true
+            }
+          },
+          {
+            "$or": [
+              {
+                "$source": "ctx.selected",
+                "$query": {
+                  "$source": "modelType.typeHierarchyArray",
+                  "$query": {
+                    "$in": [
+                      "Awb0Element"
+                    ]
+                  }
+                }
+              },
+              {
+                "$source": "ctx.selected",
+                "$query": {
+                  "$source": "modelType.typeHierarchyArray",
+                  "$query": {
+                    "$in": [
+                      "ItemRevision"
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "onEvent": [
+    {
+      "eventId": "eda1ShowCollaborationEvent",
+      "action": "eda1ShowCollaborationAction"
+    },
+    {
+      "eventId": "eda1GetRemoveDesignConfirmationEvent",
+      "message": "removeDesignFromCollaboration"
+    }
+  ],
+  "functions": {
+    "constructCCObjectName": {
+      "functionName": "constructCCObjectName",
+      "parameters": [
+        "{{ctx}}"
+      ]
+    },
+    "getUnderlyingObjectUid": {
+      "functionName": "getUnderlyingObjectUid",
+      "parameters": [
+        "{{ctx}}"
+      ]
+    }
+  }
+}

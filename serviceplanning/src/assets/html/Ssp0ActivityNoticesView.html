@@ -1,0 +1,12 @@
+<aw-advanced-bar type="TOOLBAR" negative="true" visible-when="conditions.IsSelectionValid">
+    <aw-command-bar anchor="ssp0NoticeBarActivity" alignment="HORIZONTAL"></aw-command-bar>
+</aw-advanced-bar>
+<div class="sw-column h-12 w-11 justify-center">
+    <aw-splm-table class="aw-serviceplanning-table" gridid="activityNoticesTree" visible-when="conditions.areNoticesAssigned"></aw-splm-table>
+    <div class="sw-row" height="12f" align-content="center" visible-when="!conditions.areNoticesAssigned">
+        <mfe-message sub-panel-context="data.messages.noAssigned"></mfe-message>
+    </div>
+</div>
+<div class="sw-row" height="12f" align-content="center" exist-when="!conditions.IsSelectionValid">
+    <mfe-message sub-panel-context="data.messages.SelectionIsNotWcOrActivity"></mfe-message>
+</div>

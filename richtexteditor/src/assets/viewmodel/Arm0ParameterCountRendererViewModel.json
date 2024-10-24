@@ -1,0 +1,38 @@
+{
+    "schemaVersion" : "1.0.0",
+    "imports": [],
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "actions": {
+        "showParameters": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "showReqSummaryTable.showParameters",
+                    "excludeLocalDataCtx": true
+                } ]
+            }
+        }
+    },
+    "conditions": {
+        "canShowParametersIcon": {
+            "expression": "subPanelContext.vmo.props.arm0ParameterCount.dbValues[0]>0"
+        }
+    },
+    "data": {
+        "showParametersCmd": {
+            "iconName": "typeMeasurableAttribute",
+            "tooltip": "{{i18n.showParameters}}",
+            "action": "showParameters"
+        }
+    },
+    "i18n": {
+        "showParameters": [
+            "RichTextEditorCommandPanelsMessages"
+        ]
+    }
+}

@@ -1,0 +1,144 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "available-list": { "type": "object" },
+        "available-list-title": { "type": "string" },
+        "available-list-has-filter": { "type": "boolean" },
+        "selected-list": { "type": "object" },
+        "selected-list-title": { "type": "string" },
+        "selected-list-has-filter": { "type": "boolean" },
+        "update-list-infos": { "type": "object" }
+    },
+    "data": {
+        "availableListSelectionData": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "selectedListSelectionData": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "remove": {
+            "action": "removeFromSelectedListAndAddToAvailableListActions",
+            "iconName": "cmdMoveToLeftList",
+            "tooltip": "{{i18n.remove}}"
+        },
+        "add": {
+            "action": "addToSelectedListAndRemoveFromSelectedListActions",
+            "iconName": "cmdMoveToRightList",
+            "tooltip": "{{i18n.add}}"
+        },
+        "availableListInfo": {
+            "title": "",
+            "isListFilterVisible": true,
+            "list": []
+        },
+        "selectedListInfo": {
+            "title": "",
+            "isListFilterVisible": false,
+            "list": []
+        }
+    },
+    "actions": {
+        "removeFromSelectedListAndAddToAvailableListActions": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "removeFromSelectedListAndAddToAvailableList"
+                },
+                {
+                    "action": "updateOnRemoveFromSelectedListAndAddToAvailableList"
+                }
+            ]
+        },
+        "addToSelectedListAndRemoveFromSelectedListActions": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "addToSelectedListAndRemoveFromSelectedList"
+                },
+                {
+                    "action": "updateOnAddToSelectedListAndRemoveFromSelectedList"
+                }
+            ]
+        },
+        "removeFromSelectedListAndAddToAvailableList": {
+            "actionType": "JSFunction",
+            "method": "removeFromSrcAndAddToTarget",
+            "inputData": {
+                "srcInfo": "{{data.selectedListInfo}}",
+                "targetInfo": "{{data.availableListInfo}}",
+                "selectionData": "{{fields.selectedListSelectionData.selected}}"
+            },
+            "outputData": {
+                "availableListInfo": "selectedListInfo",
+                "selectedListInfo": "availableListInfo"
+            },
+            "deps": "js/mfeListSelectionService"
+        },
+        "updateOnRemoveFromSelectedListAndAddToAvailableList": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInAtomicData",
+            "inputData": {
+                "targetAtomicData": "{{props.updateListInfos}}",
+                "updatedValues": {
+                    "availableList": "{{data.availableListInfo.list}}",
+                    "selectedList": "{{data.selectedListInfo.list}}"
+                }
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "addToSelectedListAndRemoveFromSelectedList": {
+            "actionType": "JSFunction",
+            "method": "removeFromSrcAndAddToTarget",
+            "inputData": {
+                "srcInfo": "{{data.availableListInfo}}",
+                "targetInfo": "{{data.selectedListInfo}}",
+                "selectionData": "{{fields.availableListSelectionData.selected}}"
+            },
+            "outputData": {
+                "availableListInfo": "availableListInfo",
+                "selectedListInfo": "selectedListInfo"
+            },
+            "deps": "js/mfeListSelectionService"
+        },
+        "updateOnAddToSelectedListAndRemoveFromSelectedList": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInAtomicData",
+            "inputData": {
+                "targetAtomicData": "{{props.updateListInfos}}",
+                "updatedValues": {
+                    "availableList": "{{data.availableListInfo.list}}",
+                    "selectedList": "{{data.selectedListInfo.list}}"
+                }
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "initializeSelectionPanelData": {
+            "actionType": "JSFunction",
+            "method": "initializeSelectionPanelData",
+            "inputData": {
+                "props": "{{props}}"
+            },
+            "outputData": {
+                "availableListInfo": "availableListInfo",
+                "selectedListInfo": "selectedListInfo"
+            },
+            "deps": "js/mfeListSelectionService"
+        }
+    },
+    "lifecycleHooks": {
+        "onUpdate": [ {
+            "action": "initializeSelectionPanelData",
+            "observers": [
+                "props.availableList"
+            ]
+        } ]
+    },
+    "i18n": {
+        "remove": [
+            "mfeUiMessages"
+        ],
+        "add": [
+            "mfeUiMessages"
+        ]
+    }
+}

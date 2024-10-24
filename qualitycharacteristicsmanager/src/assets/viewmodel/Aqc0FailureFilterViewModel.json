@@ -1,0 +1,65 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-panel-body.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-checkbox.directive"
+    ],
+    "actions": {
+        "toggleShowInactive": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "awConfigPanel.applyShowInactiveToggled",
+                        "eventData": {
+                            "toggleValue": "{{data.showInactive.dbValue}}"
+                        }
+                    }
+                ]
+            }
+        },
+        "performToggleShowInactive": {
+            "actionType": "JSFunction",
+            "method": "setToggleInputToFailure",
+            "inputData": {
+                "data":"{{data}}",
+                "subPanelcontext": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Aqc0FailureManagerUtils"            
+        }
+    },
+    "dataProviders": {},
+    "messages": {},
+    "data": {
+        "showInactive": {
+            "displayName": "{{i18n.ShowInactive}}",
+            "dbValue": "{{subPanelContext.searchState.showInactive ? subPanelContext.searchState.showInactive :(subPanelContext.pageContext.sublocationState.showInactive ? subPanelContext.pageContext.sublocationState.showInactive : false)}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        }
+    },
+    "onEvent": [
+
+        {
+            "eventId": "awConfigPanel.applyShowInactiveToggled",
+            "action": "performToggleShowInactive"
+        }
+
+    ],
+    "conditions": {},
+    "i18n": {
+        "ShowInactive": [
+            "qualityfailuremanagerMessages"
+        ],
+        "Status":[
+            "qualityfailuremanagerMessages"
+        ],
+        "Aqc0FailureFilterTitle":[
+            "qualityfailuremanagerMessages"
+        ]
+    }
+}

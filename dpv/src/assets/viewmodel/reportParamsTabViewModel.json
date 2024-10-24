@@ -1,0 +1,26 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {},
+    "dataProviders": {},
+    "data": {},
+    "onEvent": [],
+    "functions": {
+    },
+    "conditions":{
+        "showLastNJobsData":{
+            "expression": "data.queryType.dbValue === '1'"
+        },
+        "showLastJobsTimeData":{
+            "expression": "data.queryType.dbValue === '2'"
+        },
+        "showDateTimeData":{
+            "expression": "data.queryType.dbValue >= '3'"
+        }
+    },
+    "i18n": {},
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    }
+}

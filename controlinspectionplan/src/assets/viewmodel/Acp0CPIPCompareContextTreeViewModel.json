@@ -1,0 +1,118 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "loadData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableData",
+            "inputData": {
+                "treeLoadInput": "request.treeLoadInput",
+                "dataprovider": "{{data.dataProviders.cpipFmeaCompareDataProvider}}",
+                "i18n": "{{data.i18n}}",
+                "sortCriteria": "{{data.columnProviders.cpipFmeaCompareColumnProvider.sortCriteria}}"
+            },
+            "outputData": {
+                "treeLoadResult": "result.treeLoadResult"
+            },
+            "deps": "js/Acp0CPIPCompareContextTreeService"
+        },
+        "loadProperties": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableProperties",
+            "inputData": {
+                "propertyLoadInput": "request.propertyLoadInput",
+                "delayTimeProperty": "{{data.delayTimeProperty}}"
+            },
+            "deps": "js/Acp0CPIPCompareContextTreeService"
+        },
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/columnArrangeService"
+        }
+    },
+    "data": {
+        "delayTimeTree": {
+            "type": "INTEGER",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "20",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        },
+        "maxTreeLevel": {
+            "type": "INTEGER",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "100",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        }
+    },
+    "dataProviders": {
+        "cpipFmeaCompareDataProvider": {
+            "action": "loadData",
+            "initializeAction": "loadData",
+            "nextAction": "loadData",
+            "previousAction": "loadData",
+            "focusAction": "loadData",
+            "treeLoadResult": "action.result.treeLoadResult",
+            "selectionModelMode": "multiple",
+            "treePageSize": 100,
+            "inputData": {
+                "accessMode": "tree",
+                "selectionModel": "{{subPanelContext.selectionModel}}",
+                "topNodeUid": "{{ctx.state.params.uid}}"
+            },
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectObjectNavigationCellListActionCommands"
+        },
+        "cpipFmeaComparePropertyProvider": {
+            "action": "loadProperties",
+            "propertyLoadResult": "action.result.propertyLoadResult"
+        }
+    },
+    "columnProviders": {
+        "cpipFmeaCompareColumnProvider": {
+            "soaEnabled": false,
+            "sortCriteria": []
+        }
+    },
+    "grids": {
+        "cpipCompareContextTree": {
+            "dataProvider": "cpipFmeaCompareDataProvider",
+            "propertyProvider": "cpipFmeaComparePropertyProvider",
+            "columnProvider": "cpipFmeaCompareColumnProvider",
+            "addIconColumn": false,
+            "enableArrangeMenu": true,
+            "gridOptions": {
+                "enableGridMenu": true,
+                "enablePinning": true,
+                "useStaticFirstCol": true
+            }
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        }
+    ],
+    "i18n": {
+        "Acp0DifferenceType": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Acp0ItemId": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Acp0ObjectName": [
+            "ControlInspectionPlanMessages"
+        ],
+        "Acp0ObjectDesc": [
+            "ControlInspectionPlanMessages"
+        ]
+    }
+}

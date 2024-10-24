@@ -1,0 +1,18 @@
+<aw-panel>
+    <aw-panel-body>
+        <aw-label prop="data.updateForLabel"></aw-label>
+        <aw-numeric prop="data.startNumber" extended-tooltip="data.startNumberTooltip"></aw-numeric>
+        <aw-numeric prop="data.increment" extended-tooltip="data.incrementTooltip"></aw-numeric>
+        <aw-checkbox prop="data.considerFlowsCheckBox"></aw-checkbox>
+        <aw-checkbox prop="data.includeDescendentCheckBox"></aw-checkbox>
+
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button size="auto" button-type="base" action="closePopupWindow">
+            <aw-i18n>i18n.cancel</aw-i18n>
+        </aw-button>
+        <aw-button size="auto" action="regenerateFindNumberAndClosePopup" enable-when="awPanelBody.$valid && conditions.isValidInputsForRegenerate">
+            <aw-i18n>i18n.submit</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-panel>

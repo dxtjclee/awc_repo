@@ -1,0 +1,86 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "productVariantsList": [],
+        "isEnableDoneButton": "false",
+        "updateListInfos": {
+            "initialValues": {
+                "selectedList": [],
+                "availableList": []
+            },
+            "meta": {}
+        }
+    },
+    "actions": {
+        "closePopupWindow": {
+            "actionType": "JSFunction",
+            "method": "close",
+            "deps": "js/declpopupService"
+        },
+        "done": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "updatePvsListToAtomicData",
+                    "condition": "data.updateListInfos.selectedList.length > 0 || data.updateListInfos.availableList.length > 0"
+                },
+                {
+                    "action": "closePopupWindow"
+                }
+            ]
+        },
+        "updatePvsListToAtomicData": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInAtomicData",
+            "inputData": {
+                "targetAtomicData": "{{subPanelContext.occContext}}",
+                "updatedValues": {
+                    "variantsListInfo": {
+                        "availableList": "{{data.updateListInfos.availableList}}",
+                        "selectedList": "{{data.updateListInfos.selectedList}}"
+                    }
+                }
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "updateProductVariantsInfoList": {
+            "actionType": "JSFunction",
+            "method": "updateProductVariantsInfoList",
+            "inputData": {
+                "productVariantsList": "{{subPanelContext.productVariantsList}}"
+            },
+            "outputData": {
+                "productVariantsList": ""
+            },
+            "deps": "js/epPlanningService"
+        },
+        "enableDoneButton": {
+            "actionType": "JSFunction",
+            "method": "enableDoneButton",
+            "inputData": {
+                "productVariantsList": "{{data.updateListInfos}}",
+                "variantsListInfo": "{{subPanelContext.occContext.variantsListInfo}}"
+            },
+            "outputData": {
+                "isEnableDoneButton": ""
+            },
+            "deps": "js/epPlanningService"
+        }
+    },
+    "lifecycleHooks": {
+        "onUpdate": [ {
+            "action": "enableDoneButton",
+            "observers": [
+                "viewModel.atomicData.updateListInfos.selectedList"
+            ]
+        } ],
+        "onMount": "updateProductVariantsInfoList"
+    },
+    "i18n": {
+        "cancel": [
+            "PlanningMessages"
+        ],
+        "done": [
+            "PlanningMessages"
+        ]
+    }
+}

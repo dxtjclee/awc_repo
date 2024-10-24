@@ -1,0 +1,279 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "messages": {
+            "noSkillsAssigned": [
+                {
+                    "text": "{{i18n.noSkillsAssigned}}"
+                }
+            ]
+        }
+    },
+    "ports": {
+        "onSRorWCTarget": {
+            "syncObject": {},
+            "onChangeAction": "tableReload"
+        }
+    },
+    "actions": {
+        "unAssignSkills": {
+            "actionType": "JSFunction",
+            "method": "unAssignSkill",
+            "inputData": {
+                "sourceObjects": "{{data.dataProviders.skillsTableDataProvider.selectedObjects}}",
+                "targetObject": "{{ctx.selectedVMO}}"
+            },
+            "deps": "js/ssp0SkillsListService"
+        },
+        "registerSelectedSkillInCtx": {
+            "actionType": "JSFunction",
+            "method": "registerSkillInCtx",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.skillsTableDataProvider.selectedObjects}}"
+            },
+            "deps": "js/ssp0SkillsListService"
+        },
+        "loadSkillsTableColumnConfig": {
+            "actionType": "JSFunction",
+            "method": "loadSkillsTableColumnConfig",
+            "inputData": {
+                "resetFlag": false
+            },
+            "outputData": {
+                "dataProviders.skillsTableDataProvider.columnConfig": "columnConfig"
+            },
+            "deps": "js/ssp0SkillsListService"
+        },
+        "resetSkillsTableColumnConfig": {
+            "actionType": "JSFunction",
+            "method": "loadSkillsTableColumnConfig",
+            "inputData": {
+                "resetFlag": true
+            },
+            "outputData": {
+                "dataProviders.skillsTableDataProvider.columnConfig": "columnConfig"
+            },
+            "deps": "js/ssp0SkillsListService"
+        },
+        "getDataForTable": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData": {
+                "attributes": "{{function:getNodeAttributes}}",
+                "objects": ["{{ctx.selectedVMO}}"]
+            },
+            "outputData": {
+                "loadResult": "{{function:getResponseAndTotalFound}}"
+            },
+            "policy": {
+                "types": [
+                    {
+                        "name": "SSP0BvrSkill",
+                        "properties": [
+                            {
+                                "name": "bl_occ_type",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "bl_item_object_desc",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "bl_rev_item_revision_id",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "deps": "js/ssp0SkillsListService"
+        },
+        "tableReload":{
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "skillsTable.plTable.reload"
+                    }
+                ]
+            }
+        },
+        "saveColumnConfigLoadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "saveUIColumnConfigs2",
+            "inputData": {
+                "columnConfigurations": [
+                    {
+                        "clientScopeURI": "Ssp0SkillsTableManagement",
+                        "columnConfigId": "{{data.dataProviders.skillsTableDataProvider.columnConfig.columnConfigId}}",
+                        "columns": "{{data.dataProviders.skillsTableDataProvider.newColumns}}",
+                        "scope": "LoginUser",
+                        "scopeName": ""
+                    }
+                ]
+            },
+            "outputData": {},
+            "events": {
+                "success": [
+                    {
+                        "name": "slm.skillsTableColumnConfig.saved"
+                    }
+                ]
+            }
+        },
+        "loadDataForSavedColumnConfig":{
+            "actionType": "JSFunctionAsync",
+            "method": "getTableViewModelProperties",
+            "deps": "js/tcViewModelObjectService",
+            "inputData": {
+                "vmNodes": "{{data.dataProviders.skillsTableDataProvider.viewModelCollection.loadedVMObjects}}",
+                "context": {
+                    "clientScopeURI": "Ssp0SkillsTableManagement",
+                    "clientName": "AWClient",
+                    "columnConfigId": "Ssp0SkillsTableManagement",
+                    "columnsToExclude": "{{ctx.sbomProductContext.columnsToExclude}}",
+                    "operationType": "{{eventData.operationType}}"
+                }
+            },
+            "outputData": {
+                "newColumnConfig": "result.output.columnConfig"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "ssp0SkillsTableManagementConfigAndLoaded.saved"
+                    }
+                ]
+            }
+        },
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/columnArrangeService"
+        }
+    },
+    "dataProviders": {
+        "skillsTableDataProvider": {
+            "action": "getDataForTable",
+            "response": "{{data.loadResult.onlySkills}}",
+            "totalFound": "{{data.loadResult.actualTotalFound}}",
+            "selectionModelMode": "single"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "ssp0SkillsList.unAssignSkills",
+            "action": "unAssignSkills",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "ssp0SkillsList.dataProvider",
+            "action": "getDataForTable"
+        },
+        {
+            "eventId":"skillsTableDataProvider.selectionChangeEvent",
+            "action":"registerSelectedSkillInCtx",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        },
+        {
+            "eventId": "slm.skillsTableColumnConfig.saved",
+            "cacheEventData": true,
+            "action": "loadDataForSavedColumnConfig"
+        },
+        {
+            "eventId": "ssp0SkillsTableManagementConfigAndLoaded.saved",
+            "action": "loadSkillsTableColumnConfig"
+        }
+    ],
+    "columnProviders": {
+        "skillsTableColumnProvider": {
+            "loadColumnAction": "loadSkillsTableColumnConfig",
+            "saveColumnAndLoadAction": "saveColumnConfigLoadData",
+            "resetColumnAction": "resetSkillsTableColumnConfig",
+            "columns": "{{data.columns}}",
+            "frozenColumnIndex": -1
+        }
+    },
+    "conditions": {
+        "areSkillsPresent":{
+            "expression": "ctx.actualTotalFound === 0"
+        }
+    },
+    "ctx": {
+        "selectedVMO": {
+            "type": "object"
+        }
+    },
+    "functions": {
+        "getResponseAndTotalFound": {
+            "functionName": "getResponseAndTotalFound",
+            "parameters": [
+            ]
+        },
+        "postResetFunction": {
+            "functionName": "postResetFunction",
+            "parameters": [
+                "{{data.dataProviders.skillsTableDataProvider.columnConfig}}"
+            ]
+        },
+        "getNodeAttributes": {
+            "functionName": "getChildNodeAttributes",
+            "parameters": []
+        }
+    },
+    "grids": {
+        "skillsTable": {
+            "dataProvider": "skillsTableDataProvider",
+            "columnProvider": "skillsTableColumnProvider",
+            "enableArrangeMenu": true,
+            "addIconColumn": false,
+            "gridOptions": {
+
+                "useStaticFirstCol": true,
+                "enableExpandAndPaginationInEdit": true
+            }
+        }
+    },
+    "lifecycleHooks": {
+        "onUpdate": [
+            {
+                "action": "getDataForTable",
+                "observers": [
+                    "viewModel.ctx.selectedVMO"
+                ]
+            }
+        ]
+    },
+    "i18n": {
+        "noSkillsAssigned": [
+            "ssp0Messages"
+        ]
+    }
+}

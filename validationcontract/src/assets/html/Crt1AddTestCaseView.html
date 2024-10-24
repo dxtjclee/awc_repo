@@ -1,0 +1,31 @@
+<aw-command-panel caption="i18n.AddTestCase" context="subPanelContext">
+    <div class="aw-layout-flexColumn" show-when="conditions.isActiveStateAddPanel">
+        <aw-panel-body>
+            <aw-command-panel-section>
+                <aw-add show-when="data.sharedData.activeView !== 'Crt1AddTestSpec'" include-types="IAV0TestCase" visible-tabs="new,palette,search" preferred-type="IAV0TestCase" type-filter="IAV0TestCaseRevision" load-sub-types="true" is-include-sub-types="data.isIncludeSubTypes" max-recent-count="5" add-panel-state="fields.addPanelState" xrt-state="data.xrtState" edit-handler="editHandlers.addPanelEditHandler" sub-panel-context="{...subPanelContext}" active-state="data.activeState" project-state="data.projectState">
+                </aw-add>
+            </aw-command-panel-section>
+            <aw-command-panel-section caption="i18n.addTestSpec" anchor="data.specSectionCommands" panel-id='Crt1AddTestCase' context='{sharedData:data.sharedData}' show-when="data.sharedData.activeView === 'Crt1AddTestCase' && conditions.crt1MajorMinorVersion === true && conditions.isNewTabAddButtonVisible && !conditions.isProjectViewActive && !conditions.isAddSpecViewActive">
+                <aw-list dataprovider="data.dataProviders.getAddedTestCaseProvider" item-options="{dataProvider:data.dataProviders.getAddedTestCaseProvider}">
+                    <aw-default-cell vmo="item"></aw-default-cell>
+                </aw-list>
+            </aw-command-panel-section>
+            <aw-navigate-panel title="i18n.addTestSpec" show-when="data.sharedData.activeView === 'Crt1AddTestSpec'" panel-id='Crt1AddTestSpec' sub-panel-context='{sharedData:data.sharedData}' action='backAction'>
+            </aw-navigate-panel>
+        </aw-panel-body>
+        <aw-checkbox prop="data.openonCreate" visible-when="data.sharedData.activeView === 'Crt1AddTestCase' && conditions.isNewTabAddButtonVisible && !conditions.isProjectViewActive && !conditions.isAddSpecViewActive" enable-when="!subPanelContext.panelPinned"></aw-checkbox>
+        <aw-panel-footer>
+            <aw-button action="createObject" visible-when="data.sharedData.activeView === 'Crt1AddTestCase' && conditions.isNewTabAddButtonVisible && formProp.attributes.valid && !conditions.isProjectViewActive && !conditions.isAddSpecViewActive">
+                <aw-i18n>i18n.AddTitle</aw-i18n>
+            </aw-button>
+            <aw-button action="createRelationForPaletteOrSearch" visible-when="conditions.isPalatteTabSelection && fields.addPanelState.sourceObjects.length>0">
+                <aw-i18n>i18n.AddTitle</aw-i18n>
+            </aw-button>
+            <aw-button action="createRelationForPaletteOrSearch" visible-when="conditions.isSearchTabSelection && fields.addPanelState.sourceObjects.length>0">
+                <aw-i18n>i18n.AddTitle</aw-i18n>
+            </aw-button>
+        </aw-panel-footer>
+    </div>
+
+    <aw-add-navigate active-state="data.activeState" project-state="data.projectState" action="actions.setActiveView"></aw-add-navigate>
+</aw-command-panel>

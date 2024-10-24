@@ -1,0 +1,64 @@
+{
+    "schemaVersion": "1.0.0",
+    "ports":{
+        "input_commandContext":{
+            "syncObject": {},
+            "onChangeAction": "onScopeObjectChange"
+        }
+    },
+    "data": {
+        "commandContext": {
+            "initialValues": {
+                "cmdObjects": []
+            },
+            "meta": {}
+        }
+    },
+    "actions": {
+        "onScopeObjectChange": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInViewModel",
+            "inputData": {
+                "targetObj": "{{data.commandContext}}",
+                "sourceObj": {
+                    "cmdObjects": ["{{ports.input_commandContext.syncObject}}"]
+                }
+            },
+            "outputData":{
+                "commandContext":""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "updateDiscontinuedElementsIndication": {
+            "actionType": "JSFunction",
+            "method": "updateDiscontinuedElementsIndication",
+            "inputData": {
+                "updatedObjects": "{{data.eventMap['cdm.updated'].updatedObjects}}"
+            },
+            "deps": "js/services/ngpHeaderService"
+        },
+        "updateContextObjectProps":{
+            "actionType":"JSFunction",
+            "method":"updatePropertiesOfVmos",
+            "inputData":{
+                "cmdCtx":{
+                    "value":"{{data.commandContext}}",
+                    "update":"{{data.updateAtomicData.commandContext}}"
+                },
+                "pathToVmos":"cmdObjects"
+            },
+            "deps":"js/services/ngpCommandContextService"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "cdm.updated",
+            "action": "updateDiscontinuedElementsIndication",
+            "cacheEventData": true
+        },
+        {
+            "eventId":"ngp.submitToWorkflow",
+            "action":"updateContextObjectProps"
+        }
+    ]
+}

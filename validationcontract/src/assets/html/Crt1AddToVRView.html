@@ -1,0 +1,18 @@
+<aw-popup2 id="Crt1AddToVR" caption="{{i18n.addFromContent}}">
+    <aw-break></aw-break>
+    <aw-panel-body class="aw-validationcontract-stickyPanelBody">
+        <div class="aw-validationcontract-hint">
+            <aw-i18n visible-when="data.endItems1.dbValue.length === 0">i18n.dragAndDropObjectsHere</aw-i18n>
+        </div>
+        <aw-break></aw-break>
+        <div class="aw-validationcontract-stickyPanel">
+            <aw-break></aw-break>
+            <aw-include name="Crt1ObjectListToAddInVR" sub-panel-context="data" item="item"></aw-include>
+        </div>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button action="addToVR" visible-when="data.endItems1.dbValue.length !== 0">
+            <aw-i18n>i18n.AddTitle</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-popup2>

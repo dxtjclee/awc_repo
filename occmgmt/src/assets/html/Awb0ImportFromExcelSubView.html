@@ -1,0 +1,9 @@
+<aw-panel-header>
+    <aw-widget prop="data.selectExcelFile" hint="label"></aw-widget>
+    <aw-file-upload file-change-action="updateFormDataAndReset" type-filter=".xlsx, .xlsm" is-required="true"
+        exist-when="conditions.showFileUploadWidget" upload-model="data.uploadFileProvider"
+        selection-data="data.uploadFileSelectionData"></aw-file-upload>
+    <br>
+</aw-panel-header>
+<aw-include name="Awb0ImportFromExcelData"
+    sub-panel-context="{...subPanelContext,uploadFileSelectionData:data.uploadFileSelectionData,sharedData:subPanelContext.sharedData}"></aw-include>

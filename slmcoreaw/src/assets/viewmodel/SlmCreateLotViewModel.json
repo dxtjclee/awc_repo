@@ -1,0 +1,263 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+
+    "actions": {
+        "ClosePopUpAction": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        },
+        "getBackingObjects": {
+            "actionType": "JSFunctionAsync",
+            "method": "getBackingObjects",
+            "deps": "js/occmgmtBackingObjectProviderService",
+            "inputData": {
+                "viewModelObjects": "{{ctx.mselected}}"
+            },
+            "outputData": {
+                "selectedNeutralBomLines": ""
+            }
+        },
+
+        "getManufacturingIdLOVOperation": {
+            "actionType": "JSFunction",
+            "method": "loadMfgOrgIdList",
+            "inputData": {
+                "data": "{{data}}"
+            },
+
+            "outputData": {
+                "manufacturerOrgId": "manufacturerOrgId",
+                "manufacturerOrgIdLOV": "manufacturerOrgIdLOV",
+                "isMfgOrgIdLov": "isMfgOrgIdLov",
+                "manufacturerOrgIdList": "manufacturerOrgIdList",
+                "selectedNeutralPartRev": "selectedNeutralPartRev"
+            },
+
+            "deps": "js/SlmcoreawService"
+        },
+
+        "loadData": {
+            "actionType": "batchJob",
+            "steps": [ {
+                "action": "getManufacturingIdLOVOperation"
+            } ]
+        },
+
+        "createLotPanel": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "getBackingObjects"
+                },
+                {
+                    "action": "createLot"
+                }
+            ]
+        },
+
+        "createLot": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2008-06-DataManagement",
+            "method": "createObjects",
+            "inputData": {
+                "input": "{{function:getInputsForCreateLot}}"
+            },
+
+            "outputData": {
+                "outputResponsse": "{{function:licenseCheck}}",
+                "partialErrors": "partialErrors"
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "createLotErrorMessage"
+                } ],
+                "success": [ {
+                    "message": "lotCreated"
+                } ]
+            },
+
+            "events": {
+                "success": [ {
+                        "name": "createLotCommand.operationCompleted",
+                        "eventData": {
+                            "outputResponse": "{{data.outputResponsse}}"
+                        }
+                    },
+                    {
+                        "name": "lot.added"
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+
+            },
+            "deps": "js/SlmcoreawService"
+        },
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            }
+        }
+    },
+
+    "onEvent": [ {
+            "eventId": "primaryWorkArea.selectionChangeEvent",
+            "action": "closePanel"
+        },
+        {
+            "eventId": "lot.added",
+            "action": "ClosePopUpAction"
+        }
+    ],
+
+    "data": {
+        "lotNumber": {
+            "displayName": "{{i18n.LotNumber}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "maxLength": 128,
+            "labelPosition": "PROPERTY_LABEL_AT_TOP"
+        },
+        "lotSize": {
+            "displayName": "{{i18n.LotSize}}",
+            "type": "INTEGER",
+            "labelPosition": "PROPERTY_LABEL_AT_TOP",
+            "validationCriteria": [ {
+                "condition": "conditions.integerLotSize",
+                "value": "{{i18n.integerValidationError}}"
+            } ]
+        },
+        "expirationDate": {
+            "displayName": "{{i18n.ExpirationDate}}",
+            "type": "DATETIME",
+            "isRequired": "false",
+            "maxLength": 10,
+            "numberOfLines": 14,
+            "dbValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_TOP"
+        },
+        "createLotQuantity": {
+            "displayName": "{{i18n.CreateLotQuantity}}",
+            "type": "INTEGER",
+            "isRequired": "false",
+            "dbValue": "{{ctx.PhysicalPart.QuantityToInstall}}",
+            "labelPosition": "PROPERTY_LABEL_AT_TOP",
+            "validationCriteria": [ {
+                "condition": "conditions.integerCreateLotQuantity",
+                "value": "{{i18n.integerValidationError}}"
+            } ]
+        },
+        "manufacturerOrgId": {
+            "displayName": "{{i18n.ManufacturerOrgId}}",
+            "type": "STRING",
+            "dbValue": "",
+            "maxLength": 128,
+            "isRequired": "true"
+        },
+        "manufacturerOrgIdLOV": {
+            "displayName": "{{i18n.ManufacturerOrgId}}",
+            "type": "STRING",
+            "hasLov": true,
+            "dbValue": "",
+            "isRequired": "true"
+        }
+    },
+    "conditions": {
+        "enableCreateLotButton": {
+            "expression": "(data.lotNumber.dbValue && data.lotNumber.dbValue!='') && ( !data.lotSize.dbValue || data.lotSize.dbValue=='' || data.lotSize.dbValue>0 ) && ( data.lotSize.uiValue!='0')"
+        },
+        "integerCreateLotQuantity": {
+            "expression": "(data.createLotQuantity.dbValue!='' && data.createLotQuantity.dbValue<=0)"
+        },
+        "integerLotSize": {
+            "expression": "(data.lotSize.dbValue!='' && data.lotSize.dbValue<=0)"
+        },
+        "isMfgIdLov": {
+            "expression": "(data.isMfgOrgIdLov)"
+        },
+        "isNotMfgIdLov": {
+            "expression": "!(conditions.isMfgIdLov)"
+        }
+
+    },
+
+    "dataProviders": {
+        "getManufacturingId": {
+            "action": "getManufacturingIdLOVOperation",
+            "selectionModelMode": "single"
+        }
+    },
+    "functions": {
+        "getInputsForCreateLot": {
+            "functionName": "getInputsForCreateLot",
+            "parameters": [
+                "{{data}}",
+                "{{props.subPanelContext.vmo}}"
+            ]
+        }
+    },
+
+    "i18n": {
+        "Cancel": [
+            "SlmConstants"
+        ],
+        "CreateLot": [
+            "SlmConstants"
+        ],
+        "CreateLotButton": [
+            "SlmConstants"
+        ],
+        "CreateLotQuantity": [
+            "SlmConstants"
+        ],
+        "ExpirationDate": [
+            "SlmConstants"
+        ],
+        "LotSize": [
+            "SlmConstants"
+        ],
+        "LotNumber": [
+            "SlmConstants"
+        ],
+        "ManufacturerOrgId": [
+            "SlmConstants"
+        ],
+        "integerValidationError": [
+            "SlmMessages"
+        ],
+        "ObjectCreated": [
+            "SlmMessages"
+        ]
+    },
+    "messages": {
+        "lotCreated": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.ObjectCreated}}",
+            "messageTextParams": [
+                "data.lotNumber.dbValue"
+            ]
+        },
+        "createLotErrorMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{partialErrors[0].errorValues[0].message}}"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "loadData"
+    }
+}

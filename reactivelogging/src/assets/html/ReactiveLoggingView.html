@@ -1,0 +1,29 @@
+<span class="aw-layout-locationTitle">{{data.logging.uiValue}}</span>
+<aw-break></aw-break>
+<aw-break></aw-break>
+<aw-widget prop="data.listBoxLogTypes"></aw-widget>
+<aw-panel-body exist-when="conditions.isGetPerformanceLog">
+    <aw-textbox prop="data.comments"></aw-textbox>
+    <aw-break></aw-break>
+    <aw-panel-section caption="i18n.options" collapsed="true">
+        <aw-break></aw-break>
+        <aw-widget prop="data.listBoxJournalTypes" enable-when="conditions.isValidForFields"></aw-widget>
+        <aw-break></aw-break>
+        <aw-widget prop="data.listBoxJournalPerformanceTypes" enable-when="conditions.isValidForFields"></aw-widget>
+        <aw-break></aw-break>
+        <div enable-when="conditions.hideAppearModulesFields">
+            <aw-widget prop="data.listBoxJournalModules"></aw-widget>
+        </div>
+        <aw-break></aw-break>
+    </aw-panel-section>
+</aw-panel-body>
+
+<aw-panel-footer visible-when="conditions.isGetPerformanceLog">
+    <aw-button action="startLogging" visible-when="conditions.isValidForStartButton">
+        <aw-i18n>i18n.start</aw-i18n>
+    </aw-button>
+    <aw-button action="stopLogging" visible-when="conditions.isValidForStopButton">
+        <aw-i18n>i18n.stop</aw-i18n>
+    </aw-button>
+</aw-panel-footer>
+<aw-layout-slot name="otherModuleLoggingViewSlot" context="data.listBoxLogTypes.dbValue" visible-when="!conditions.isGetPerformanceLog"></aw-layout-slot>

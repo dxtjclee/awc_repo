@@ -1,0 +1,35 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "visConfiguration": {
+            "sceneType": "HIERARCHICAL",
+            "id": "sbomVisViewer",
+            "instanceCacheable": true,
+            "contextId": "sbomVisViewer"
+        },
+        "visContext": {}
+    },
+    "actions": {
+        "registerSbomParameter": {
+            "actionType": "JSFunction",
+            "method": "registerCtx",
+            "inputData": {
+                "name": "ssp0SbomTabSelected",
+                "value": true
+            },
+            "deps": "js/appCtxService"
+        },
+        "removeSbomParameter": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "inputData": {
+                "name": "ssp0SbomTabSelected"
+            },
+            "deps": "js/appCtxService"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "registerSbomParameter",
+        "onUnmount": "removeSbomParameter"
+    }
+}

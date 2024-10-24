@@ -1,0 +1,143 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "updateButtonEnabled": true
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "grids": {
+        "availableRevisionTable": {
+            "dataProvider": "availableRevisionTableDataProvider",
+            "columnProvider": "availableRevisionTableColumnProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "enablePinning": false,
+                "enableSorting": false
+            }
+        }
+    },
+    "dataProviders": {
+        "availableRevisionTableDataProvider": {
+            "response": "{{props.subPanelContext.ebomRevisions}}",
+            "totalFound": "{{props.subPanelContext.ebomRevisions.length}}",
+            "selectionModelMode": "single",
+            "inputData": {}
+        }
+    },
+    "columnProviders": {
+        "availableRevisionTableColumnProvider": {
+            "frozenColumnIndex": -1,
+            "loadColumnAction": "createColumns",
+            "columns": "{{data.columns}}"
+        }
+    },
+    "actions": {
+        "closePopupWindow": {
+            "actionType": "JSFunction",
+            "method": "close",
+            "deps": "js/declpopupService"
+        },
+        "createColumns": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "createColumnsFromPreference"
+                },
+                {
+                    "action": "updateColumnCommandVisibility",
+                    "condition":"data.dataProviders.availableRevisionTableDataProvider.columnConfig.columns.length>0"
+                }
+            ]
+        },
+        "createColumnsFromPreference": {
+            "actionType": "JSFunctionAsync",
+            "method": "createColumns",
+            "inputData": {
+                "preferenceName": "{{subPanelContext.columnConfigPreferenceName}}",
+                "dataProvider": "{{data.dataProviders.availableRevisionTableDataProvider}}",
+                "columnProvider": "{{data.grids.availableRevisionTableColumnProvider}}"
+            },
+            "outputData": {
+                "dataProviders.availableRevisionTableDataProvider.columnConfig": "columnConfig",
+                "dataProviders.availableRevisionTableDataProvider.policy": "policy"
+            },
+            "deps": "js/mfeTableService"
+        },
+        "updateColumnCommandVisibility": {
+            "actionType": "JSFunctionAsync",
+            "method": "updateColumnCommandVisibility",
+            "inputData": {
+                "data": "{{subPanelContext}}",
+                "columnProvider": "{{data.dataProviders.availableRevisionTableDataProvider}}"
+            },
+            "outputData": {
+                "dataProviders.availableRevisionTableDataProvider.columnConfig": "columnConfig"
+            },
+            "deps": "js/mfeColumnService"
+        },
+        "addContextToWP": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "disableAddButton"
+                },
+                {
+                    "action": "replaceEBOMRevisionInCC"
+                },
+                {
+                    "action": "mfeClosePopupAction"
+                }
+            ]
+        },
+        "mfeClosePopupAction": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "deps": "js/popupService"
+        },
+        "replaceEBOMRevisionInCC":{
+            "actionType": "JSFunctionAsync",
+            "method": "replaceEBOMRevisionInCC",
+            "inputData": {
+                "selectedEBOMObjectFromTile":"{{ctx.epTaskPageContext.EbomStructureContext}}",
+                "selectedEBOMObjectFromPopup":"{{data.dataProviders.availableRevisionTableDataProvider.selectedObjects[0]}}",
+                "revisionRule": {"dbValue":"{{ctx.epTaskPageContext.ebomPCI.props.awb0CurrentRevRule.dbValues[0]}}"}
+            },
+            "deps": "js/epRemoveObjectService"
+        },
+        "disableAddButton": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": false
+            },
+            "outputData": {
+                "updateButtonEnabled": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "unregisterPolicy": {
+            "actionType": "JSFunction",
+            "method": "unregister",
+            "inputData": {
+                "name": "availableRevisionTable"
+            },
+            "deps": "js/mfePolicyService"
+        }
+    },
+    "lifecycleHooks": {
+        "onUnmount": "unregisterPolicy"
+    },
+"conditions": {
+    "isUpdateButtonEnabled": {
+            "expression": "data.updateButtonEnabled && conditions.isEBOMRevisionAvailable && data.dataProviders.availableRevisionTableDataProvider.selectedObjects.length !== 0"
+        },
+    "isEBOMRevisionAvailable": {
+            "expression": "props.subPanelContext.ebomRevisions.length > 0"
+        }
+    },
+    "i18n": {
+        "cancelButton": [ "AdminMessages" ],
+        "updateButton": [ "AdminMessages" ]
+    }
+}

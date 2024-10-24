@@ -1,0 +1,39 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "taktTime": 0,
+        "isTaktTimeFromLine": false
+    },
+    "actions": {
+        "updateStationTaktTime": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": "{{parameters.eventData}}"
+            },
+            "outputData": {
+                "taktTime": "result.taktTime",
+                "isTaktTimeFromLine": "result.isTaktTimeFromLine"
+            },
+            "deps": "js/mfeViewModelUtils"
+        }
+    },
+    "ctx": {
+        "epTaskPageContext": {
+            "type": "object"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "ep.stationOperationsLoaded",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            },
+            "action": "updateStationTaktTime"
+        }
+    ],
+    "i18n": {
+        "stationTaktTime": [ "PlanningMessages" ],
+        "lineTaktTime": [ "PlanningMessages" ]
+    }
+}

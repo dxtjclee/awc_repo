@@ -1,0 +1,664 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+
+    "actions": {
+        "init": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "processGetAssociatedDiagramsResponse"
+                },
+                {
+                    "action": "buildCrumbs"
+                }
+            ]
+        },
+        "buildCrumbs": {
+            "actionType": "JSFunction",
+            "method": "buildFwBreadcrumb",
+            "inputData": {
+                "data": "{{data}}",
+                "context": "{{subPanelContext}}",
+                "breadcrumbConfig": "{{data.breadcrumb.config}}"
+            },
+            "outputData": {
+                "crumbs": "crumbs"
+            },
+            "deps": "js/Ase0FloatingWindowBreadcrumbHandler"
+        },
+        "setAsDefaultDiagram": {
+            "actionType": "JSFunctionAsync",
+            "method": "setAsDefaultDiagram",
+            "inputData": {
+                "data": "{{data}}",
+                "cellState": "{{fields.cellState}}"
+            },
+            "deps": "js/Ase0FloatingWindowHandler"
+        },
+
+        "previewDiagram": {
+            "actionType": "JSFunction",
+            "method": "previewDiagram",
+            "inputData": {
+                "data": "{{data}}"
+            },
+
+            "deps": "js/Ase0FloatingWindowHandler"
+        },
+        "sendViewChangeEvent":{
+            "actionType": "JSFunction",
+            "method": "sendViewChangeEvent",
+            "inputData": {
+            },
+            "deps":"js/Ase0FloatingWindowHandler"
+        },
+        "diagramDoubleClicked": {
+            "actionType": "JSFunction",
+            "method": "diagramDoubleClicked",
+            "inputData": {
+                "data": "{{data}}",
+                "graphDoubleClickItem": "{{data.eventMap['awGraph.doubleClicked'].item}}"
+            },
+
+            "deps": "js/Ase0FloatingWindowHandler"
+        },
+
+        "actionFilterList": {
+            "actionType": "JSFunction",
+            "method": "actionFilterList",
+            "inputData": {
+                "data": "{{data}}"
+            },
+
+            "deps": "js/showAssociatedDiagramsService"
+        },
+
+        "loadAssociatedDiagramsList": {
+            "actionType": "dataProvider",
+            "method": "associatedDiagramsList"
+        },
+
+        "onRevealAction": {
+            "actionType": "dataProvider",
+            "method": "associatedDiagramsList"
+        },
+
+        "refitGraph": {
+            "actionType": "JSFunction",
+            "method": "refitGraph",
+            "inputData": {
+                "graphModel": "{{data.graphModel}}"
+            },
+
+            "deps": "js/Ase0FloatingWindowHandler"
+        },
+
+        "requestView": {
+            "actionType": "JSFunction",
+            "method": "requestView",
+            "deps": "js/Ase0FloatingWindowHandler",
+            "inputData": {
+                "data": "{{data}}",
+                "view": "{{data.eventData.view}}"
+            },
+            "outputData": {
+                "activeView": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "awFloatGraphPopup.viewRevealed",
+                    "eventData": {
+                        "view": "{{data.activeView}}"
+                    }
+                } ]
+            }
+        },
+
+        "closeDialog": {
+            "actionType": "JSFunction",
+            "method": "closeFGPopup",
+            "deps": "js/Ase0FloatingWindowHandler",
+            "inputData": {}
+        },
+
+        "onGetAssociatedDiagramsComplete": {
+            "actionType": "JSFunction",
+            "method": "onGetAssociatedDiagramsComplete",
+            "inputData": {
+                "data": "{{data}}",
+                "context": "{{subPanelContext}}",
+                "eventDataPopup": "{{data.eventMap['awFloatGraphPopup.getAssociatedDiagrams']}}"
+            },
+            "deps": "js/Ase0FloatingWindowHandler"
+        },
+
+        "onDiagramLoadComplete": {
+            "actionType": "JSFunction",
+            "method": "onDiagramLoadComplete",
+            "inputData": {
+                "data": "{{data}}",
+                "eventData": "{{data.eventMap['awFloatGraphPopup.displayDiagramOnGraph']}}"
+            },
+            "outputData": {
+                "currentDiagram": ""
+            },
+            "deps": "js/Ase0FloatingWindowHandler"
+        },
+
+        "getLegendData": {
+            "actionType": "JSFunctionAsync",
+            "method": "getLegendData",
+            "inputData": {
+                "viewName": "Architecture",
+                "data": "{{data.legend}}"
+            },
+
+            "events": {
+                "success": [ {
+                    "name": "FGManageDiagramEvent",
+                    "eventData": {
+                        "userAction": "OpenFloatDiagram"
+                    }
+                } ]
+            },
+
+            "deps": "js/Ase0ArchitectureGraphLegendManager"
+        },
+        "dblClickDiagramInList": {
+            "actionType": "JSFunction",
+            "method": "dblClickDiagramInList",
+            "deps": "js/Ase0FloatingWindowHandler",
+            "inputData": {
+                "data": "{{data}}",
+                "view": "Graph"
+            }
+        },
+        "showDiagram": {
+            "actionType": "JSFunction",
+            "method": "requestView",
+            "deps": "js/Ase0FloatingWindowHandler",
+            "inputData": {
+                "data": "{{data}}",
+                "view": "Graph"
+            },
+            "outputData": {
+                "activeView": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "awFloatGraphPopup.displayDiagramOnGraph",
+                    "eventData": {
+                        "diagramVMO": "{{data.eventMap['awFloatGraphPopup.showDiagram'].diagramVMO}}",
+                        "diagramUID": "{{data.eventMap['awFloatGraphPopup.showDiagram'].diagramUID}}",
+                        "diagramName": "{{data.eventMap['awFloatGraphPopup.showDiagram'].diagramName}}"
+                    }
+                } ]
+            }
+        },
+
+        "displayDiagramOnGraph": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceSysEng-2017-06-DiagramManagement",
+            "method": "manageDiagram2",
+            "inputData": {
+                "input": "{{function:getManageDiagram2Input}}"
+            },
+            "outputData": {
+                "graphData": "{{function:getManageDiagram2Response}}"
+            },
+            "deps": "js/Ase0FloatingWindowHandler"
+        },
+
+        "handleManageDiagram2Complete": {
+            "actionType": "JSFunction",
+            "method": "handleManageDiagram2Complete",
+            "inputData": {
+                "manageDiagramQueue": "{{data.manageDiagramQueue}}",
+                "graphData": "{{data.eventMap['FGManageDiagramComplete'].graphData}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "awFloatGraphPopup.onDiagramLoadComplete"
+                } ]
+            },
+            "deps": "js/Ase0ArchitectureGraphService"
+        },
+
+        "drawGraph": {
+            "actionType": "JSFunction",
+            "method": "drawGraph",
+            "inputData": {
+                "graphData": "{{data.eventMap['FGGraphEvent.drawGraph'].graphData}}",
+                "data": "{{data}}",
+                "isOpenDiagram": true,
+                "isApplyGlobalLayout": "{{data.eventMap['FGGraphEvent.drawGraph'].isApplyGlobalLayout}}",
+                "graphContext": "{{subPanelContext.graphContext}}",
+                "pageState": "{{subPanelContext.pageState}}",
+                "graphState": "{{subPanelContext.graphState}}",
+                "occContext": "{{subPanelContext.context.occContext}}"
+            },
+
+            "deps": "js/Ase0ArchitectureGraphService"
+        },
+        "getAssociatedDiagrams": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "deps": "js/Ase0FloatingWindowHandler",
+            "inputData": {
+                "searchInput": "{{function:getAssociatedDiagramsInput}}"
+            },
+            "policy": {
+                "types": [ {
+                        "name": "Ase0AssocRelationProxy",
+                        "properties": [ {
+                                "name": "ase0Relation",
+                                "modifiers": [ {
+                                    "name": "withProperties",
+                                    "Value": "true"
+                                } ]
+                            },
+                            {
+                                "name": "ase0EndObject",
+                                "modifiers": [ {
+                                    "name": "withProperties",
+                                    "Value": "true"
+                                } ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Ase0DiagramRelation",
+                        "properties": [ {
+                            "name": "ase0IsDefaultDiagram"
+                        } ]
+                    }
+                ]
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}",
+                "searchResultObjects": "ServiceData.modelObjects"
+            },
+            "events": {
+                "success": [ {
+                    "name": "awFloatGraphPopup.processGetAssociatedDiagramsResponse"
+                } ]
+            }
+        },
+        "processGetAssociatedDiagramsResponse": {
+            "actionType": "JSFunctionAsync",
+            "method": "processGetAssociatedDiagramsResponse",
+            "inputData": {
+                "data": "{{data}}",
+                "context": "{{subPanelContext}}"
+            },
+
+            "events": {
+                "success": [ {
+                        "name": "awFloatGraphPopup.openPopupWindow",
+                        "condition": "data.eventMap['awGraph.doubleClicked'].sourceGraph !== data.graphModel && data.relatedDiagramList.dbValue.length > 0"
+                    },
+                    {
+                        "name": "awFloatGraphPopup.reveal",
+                        "condition": "data.eventMap['awGraph.doubleClicked'].sourceGraph !== data.graphModel && data.relatedDiagramList.dbValue.length > 0"
+                    },
+                    {
+                        "name": "awFloatGraphPopup.getAssociatedDiagramsComplete",
+                        "condition": "data.eventMap['awGraph.doubleClicked'].sourceGraph === data.graphModel && data.relatedDiagramList.dbValue.length > 0"
+                    }
+                ]
+            },
+
+            "deps": "js/Ase0FloatingWindowHandler"
+        },
+        "dummyAction": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": []
+            }
+        }
+    },
+
+    "functions": {
+        "getManageDiagram2Response": {
+            "functionName": "getManageDiagram2Response",
+            "parameters": []
+        },
+        "getManageDiagram2Input": {
+            "functionName": "getManageDiagram2Input",
+            "parameters": [
+                "{{data}}",
+                "{{data.manageDiagramQueue}}",
+                "{{data.eventData}}",
+                "{{subPanelContext.graphContext.legendState.activeView}}",
+                "{{subPanelContext}}"
+            ]
+        },
+
+        "getAssociatedDiagramsInput": {
+            "functionName": "getAssociatedDiagramsInput",
+            "parameters": [
+                "{{ctx}}",
+                "{{data}}",
+                "{{data.eventData}}",
+                "{{subPanelContext.context.occContext}}"
+            ]
+        },
+
+        "processGetAssociatedDiagramsResponse": {
+            "functionName": "process",
+            "parameters": [
+                "{{data}}"
+            ]
+        }
+    },
+
+    "data": {
+
+        "modal": true,
+
+        "currentDiagram": null,
+        "currentObject": {},
+
+        "manageDiagramQueue": [
+
+        ],
+        "crumbs": [],
+        "archGraphModel": {
+            "isGraphFitted": false
+        },
+
+        "relatedDiagramList": {
+            "isArray": "true",
+            "dbValue": [
+
+            ]
+        },
+
+        "relatedDiagramFilterList": {
+            "isArray": "true",
+            "dbValue": [
+
+            ]
+        },
+        "cellState": {
+            "initialValues":{
+                "ase0IsDefaultDiagram":false
+            },
+            "meta": {}
+        },
+
+        "filterBox": {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "false",
+            "requiredText": "Filter",
+            "dbValue": ""
+        },
+
+        "legend": {
+            "tabModels": [
+
+            ]
+        },
+
+        "graphModel": {
+            "edgeMap": {
+
+            },
+
+            "config": {
+                "aName": "FLOATING GRAPH",
+                "enableEdit": false,
+                "minZoom": 0,
+                "maxZoom": 1.0,
+                "fitViewPosition": "CENTER",
+                "hoverDelayTime": 75,
+                "nodeHeightUpdateStrategy": "NONE",
+                "movableItems": [],
+                "selectableItems": [],
+
+                "layout": {
+                    "layoutMode": "IncUpdateLayout",
+                    "defaultOption": "TopToBottom",
+                    "options": [
+                        "TopToBottom",
+                        "RightToLeft",
+                        "LeftToRight",
+                        "Incremental",
+                        "BottomToTop"
+                    ],
+                    "config": {
+                        "nodeToNodeDistance": {
+                            "x": 48,
+                            "y": 48
+                        },
+                        "edgeToEdgeDistance": {
+                            "x": 24,
+                            "y": 24
+                        }
+                    }
+                },
+
+                "showNodeOverlay": false,
+                "nodeOverlay": {
+                    "zoomThreshold": 0.7,
+                    "graphOverlayHandler": "js/Ase0ArchitectureGraphOverlayHandler"
+                },
+
+                "tooltipHandler": "js/Ase0ArchitectureGraphTooltipHandler",
+                "moveWithoutSelection": true,
+                "enableAutoPan": false,
+                "enableMarqueeSelection": false,
+                "marqueeSelectionModifierKey": [
+                    [ "Ctrl" ]
+                ],
+
+                "defaults": {
+                    "nodeSize": {
+                        "width": 312,
+                        "height": 120
+                    },
+
+                    "nodeStyle": {
+                        "templateId": "Ase0ArchitectureDummyNodeTemplate"
+                    },
+
+                    "edgeStyle": {
+                        "dashStyle": "DASH",
+                        "thickness": 2.0,
+                        "color": "(0,0,0)"
+                    },
+
+                    "portStyle": {
+                        "portShape": "SQUARE",
+                        "borderColor": "(0, 0, 0)",
+                        "fillColor": "(255, 255, 255)",
+                        "thickness": 1,
+                        "size": 24,
+                        "fillInterior": true,
+                        "iconId": "RedoMarkup"
+                    },
+
+                    "boundaryStyle": {
+                        "thickness": 1,
+                        "strokeDash": "DASH",
+                        "fillColor": "(235,235,227)",
+                        "borderColor": "(150, 150, 130)"
+                    }
+                },
+
+                "shadowEffects": [],
+                "customerFilter": "js/Ase0GraphFilterService",
+                "showFilter": true,
+                "grid": true,
+                "alignment": true
+            },
+            "inputModes": {}
+        },
+        "breadcrumb": {
+            "config": {
+                "overflowIndex": 0,
+                "type": "navigate",
+                "id": "Ase0FloatingWindowBreadcrumb",
+                "noUpdate": true,
+                "vm": "Ase0FloatingWindowPopupBreadcrumb",
+                "crumbDataProvider": "fwBreadcrumbDataProvider",
+                "displayProperty": "object_string",
+                "popuplist": "/html/Ase0FloatingWindowPopupBreadcrumbView.html"
+            }
+        }
+    },
+
+    "dataProviders": {
+        "associatedDiagramsList": {
+            "action": "actionFilterList",
+            "response": "{{data.relatedDiagramFilterList.dbValue}}",
+            "totalFound": "{{data.relatedDiagramFilterList.dbValue.length}}",
+            "selectionModelMode": "single",
+            "deps": "js/showAssociatedDiagramsService",
+            "commandsAnchor": "diagramCellAnchor"
+        }
+    },
+
+    "onEvent": [
+
+        {
+            "eventId": "awFloatGraphPopup.getAssociatedDiagrams",
+            "action": "getAssociatedDiagrams",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "awFloatGraphPopup.reveal",
+            "action": "onGetAssociatedDiagramsComplete",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "awFloatGraphPopup.processGetAssociatedDiagramsResponse",
+            "action": "processGetAssociatedDiagramsResponse",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "awFloatGraphPopup.onDiagramLoadComplete",
+            "action": "onDiagramLoadComplete",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "awFloatGraphPopup.onDiagramLoadComplete",
+            "action": "refitGraph",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "awFloatGraphPopup.resize",
+            "action": "refitGraph",
+            "cacheEventData": true
+        },
+
+        {
+            "eventId": "awFloatGraphPopup.requestView",
+            "action": "requestView",
+            "cacheEventData": true
+        },
+
+        {
+            "eventId": "awFloatGraphPopup.getAssociatedDiagramsComplete",
+            "action": "onGetAssociatedDiagramsComplete",
+            "cacheEventData": true
+        },
+
+        {
+            "eventId": "awFloatGraphPopup.viewRevealed",
+            "action": "loadAssociatedDiagramsList",
+            "criteria": {
+                "view": "DiagramSelect"
+            },
+            "cacheEventData": true
+        },
+
+        {
+            "eventId": "awFloatGraphPopup.viewRevealed",
+            "action": "refitGraph",
+            "criteria": {
+                "view": "Graph"
+            },
+            "cacheEventData": true
+        },
+
+        {
+            "eventId": "awFloatGraphPopup.dblClickDiagramInList",
+            "action": "dblClickDiagramInList",
+            "cacheEventData": true
+        },
+
+        {
+            "eventId": "awFloatGraphPopup.showDiagram",
+            "action": "showDiagram",
+            "cacheEventData": true
+        },
+
+        {
+            "eventId": "awFloatGraphPopup.displayDiagramOnGraph",
+            "action": "displayDiagramOnGraph",
+            "cacheEventData": true
+        },
+
+        {
+            "eventId": "awFloatGraphPopup.loadAssociatedDiagramsList",
+            "action": "loadAssociatedDiagramsList"
+        },
+
+        {
+            "eventId": "awGraph.initialized",
+            "action": "getLegendData"
+        },
+
+        {
+            "eventId": "FGGraphEvent.drawGraph",
+            "action": "drawGraph",
+            "cacheEventData": true
+        },
+
+        {
+            "eventId": "FGManageDiagramComplete",
+            "action": "handleManageDiagram2Complete",
+            "cacheEventData": true
+        },
+
+        {
+            "eventId": "awGraph.doubleClicked",
+            "action": "diagramDoubleClicked",
+            "condition": "conditions.isFloatGraphEvent",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "awFloatGraphPopup.closePopupWindow",
+            "action": "closeDialog"
+        }
+    ],
+    "lifecycleHooks": {
+        "onMount": "init"
+    },
+
+    "conditions": {
+        "isFloatGraphEvent": {
+            "expression": "sourceGraph.uid === data.graphModel.uid"
+        }
+    },
+
+    "i18n": {
+        "Diagram": [
+            "FloatingGraphMessages"
+        ],
+        "SetAsDefaultDiagram": [
+            "FloatingGraphMessages"
+        ],
+        "PreviewDiagram": [
+            "FloatingGraphMessages"
+        ]
+    },
+    "messages": {
+
+    }
+}

@@ -1,0 +1,17 @@
+{
+    "schemaVersion": "1.0.0",
+    "onEvent": [{
+        "eventId": "mfeLargePopup.closeRequest",
+        "action": "closePopupWindow"
+    }],
+    "actions": {
+        "closePopupWindow": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        }
+    }
+}

@@ -1,0 +1,210 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "actions": {        
+        "initializeData": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "preselectGroup"
+                },
+                {
+                    "action": "initPanel"
+                }
+            ]
+        },
+        "preselectGroup": {
+            "actionType": "JSFunction",
+            "method": "getDefaultGroup",
+            "inputData": {
+                "selectedObject": "{{props.subPanelContext.selectionData}}",
+                "loadDefaultGroup": "{{ctx.panelContext.loadDefaultGroup}}"
+            },
+            "outputData": {
+                "filter" : ""
+            },
+            "deps": "js/qa0AuditTeamService"
+        },
+        "initPanel": {
+            "actionType": "JSFunction",
+            "method": "populatePeopleSearchCriteriaContextData",
+            "inputData": {                
+                "panelContext": "{{ctx.panelContext}}",
+                "addUserPanelState": "{{data.addUserPanelState}}",
+                "criteria": {
+                    "providerContentType": "User,GroupMember",
+                    "searchString": "*",
+                    "selectedObject": "",
+                    "searchSubGroup": "true"
+                },
+                "filter": "{{data.filter}}"                
+            },
+            "outputData": {
+                "addUserPanelState": "userPanelState",
+                "isDataInit": "isDataInit"
+            },
+            "deps": "js/qa0AuditTeamService"
+        },
+        "addTeamMember": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "createRelations",
+            "inputData": {
+                "input": "{{function:createAddUserRelationWithAuditInput}}"
+            },
+            "outputData": {
+                "serviceData": "",
+                "errorMessage": "{{function:populateErrorString}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "condition": "props.subPanelContext.selectionData.selected[0].modelType.typeHierarchyArray.indexOf( 'Qa0QualityAudit' )>-1",
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{props.subPanelContext.selectionData.selected[0]}}"
+                            ],
+                            "refreshLocationFlag": false
+                        }
+                    },
+                    {
+                        "condition": "props.subPanelContext.selectionData.pselected.modelType.typeHierarchyArray.indexOf( 'Qa0QualityAudit' )>-1",
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{props.subPanelContext.selectionData.pselected}}"
+                            ],
+                            "refreshLocationFlag": false
+                        }
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ],
+                "failure": [      
+                    {
+                        "condition": "props.subPanelContext.selectionData.selected[0].modelType.typeHierarchyArray.indexOf( 'Qa0QualityAudit' )>-1",
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{props.subPanelContext.selectionData.selected[0]}}"
+                            ],
+                            "refreshLocationFlag": false
+                        }
+                    },
+                    {
+                        "condition": "props.subPanelContext.selectionData.pselected.modelType.typeHierarchyArray.indexOf( 'Qa0QualityAudit' )>-1",
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{props.subPanelContext.selectionData.pselected}}"
+                            ],
+                            "refreshLocationFlag": false
+                        }
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [
+                    {                        
+                        "message": "displayError"
+                    }
+                ]
+            },
+            "deps": "js/qa0AuditTeamService"
+        },
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "complete",
+                        "condition": "!data.isDestroyed()",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "initializeData"       
+    },
+    "ctx": {
+        "selected": {
+            "type": "object"
+        }
+    },
+    "data": {
+        "addUserPanelState": {
+            "initialValues": {
+                "provider": "Awp0PeoplePickerProvider",
+                "selectionModelMode": "multiple",                
+                "criteria": {
+                    "providerContentType": "User,GroupMember",
+                    "searchString": "*",
+                    "selectedObject": "",
+                    "searchSubGroup": "true"
+                },                
+                "selectedUsers": "",
+                "isAddButtonNeeded": false
+            },
+            "meta": {
+                "selectedUsers": {
+                    "field": "true",
+                    "type": "OBJECTARRAY"
+                }
+            }
+        }
+    },
+    "functions": {
+        "createAddUserRelationWithAuditInput": {
+            "functionName": "createAddUserRelationWithAuditInput",
+            "parameters": [
+                "{{ctx.panelContext.relationName}}",
+                "{{addUserPanelState.selectedUsers}}",
+                "{{props.subPanelContext.selectionData}}"
+            ]
+        }
+    },
+    "conditions": {
+        "isValidToAdd": {
+            "expression": "addUserPanelState.selectedUsers != null && addUserPanelState.selectedUsers.length > 0"
+        }
+    },
+    "onEvent": [             
+        {
+            "eventId": "primaryWorkArea.selectionChangeEvent",
+            "action": "closePanel"
+        }
+    ],   
+    "i18n": {
+        "qa0Add": [
+            "qualityauditMessages"
+        ],
+        "qa0PartialError": [
+            "qualityauditMessages"
+        ]  
+    },
+    "messages": {
+        "displayError": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.qa0PartialError}}",
+            "messageTextParams": [
+                "{{data.errorMessage}}"
+            ]
+        }
+    }
+}

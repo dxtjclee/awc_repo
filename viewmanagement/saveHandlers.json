@@ -1,0 +1,26 @@
+[
+  {
+    "conditions": {
+      "$and": [
+        {
+          "selected.modelType.typeHierarchyArray": {
+            "$in": [
+              "Fnd0SearchRecipe"
+            ]
+          }
+        },
+        {
+          "xrtSummaryContextObject.type": {
+            "$eq": [
+              "Fnd0SearchRecipe"
+            ]
+          }
+        }
+      ]
+    },
+    "target": {
+      "method": "getSaveHandler",
+      "deps": "js/Evm1EditHandlerService"
+    }
+  }
+]

@@ -1,0 +1,158 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-panel.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-widget.directive",
+        "js/aw-flex-column.directive"
+    ],
+    "data": {},
+    "dataProviders": {
+        "NCProvider": {
+            "response": "{{data.NamingConvention}}"
+        }
+    },
+    "actions": {
+        "loadData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadProperties",
+            "inputData": {
+                "data": "{{data}}",
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "outputData": {
+                "acp0DefaultVarNamingConvention": "acp0DefaultVarNamingConvention",
+                "acp0DefaultAttNamingConvention": "acp0DefaultAttNamingConvention",
+                "acp0DefaultVisNamingConvention": "acp0DefaultVisNamingConvention",
+                "defaultNCLoaded": "defaultNCLoaded"
+            },
+            "deps": "js/Acp0DefaultNamingConventionsService"
+        },
+        "editStateChanger": {
+            "actionType": "JSFunctionAsync",
+            "method": "DefNCEditStateChanger",
+            "inputData": {
+                "data": "{{data}}",
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "outputData": {
+                "NamingConvention": "NamingConvention",
+                "acp0DefaultVarNamingConvention": "acp0DefaultVarNamingConvention",
+                "acp0DefaultAttNamingConvention": "acp0DefaultAttNamingConvention",
+                "acp0DefaultVisNamingConvention": "acp0DefaultVisNamingConvention"
+            },
+            "deps": "js/Acp0DefaultNamingConventionsService"
+        },
+        "varNCChangeAction": {
+            "actionType": "JSFunction",
+            "method": "varNCChangeAction",
+            "inputData": {
+                "acp0DefaultVarNamingConvention": "{{data.acp0DefaultVarNamingConvention}}",
+                "defaultNCLoaded": "{{data.defaultNCLoaded}}"
+            },
+            "outputData": {
+                "acp0DefaultVarNamingConvention": "acp0DefaultVarNamingConvention"
+            },
+            "deps": "js/Acp0DefaultNamingConventionsService"
+        },
+        "attNCChangeAction": {
+            "actionType": "JSFunction",
+            "method": "attNCChangeAction",
+            "inputData": {
+                "acp0DefaultAttNamingConvention": "{{data.acp0DefaultAttNamingConvention}}",
+                "defaultNCLoaded": "{{data.defaultNCLoaded}}"
+            },
+            "outputData": {
+                "acp0DefaultAttNamingConvention": "acp0DefaultAttNamingConvention"
+            },
+            "deps": "js/Acp0DefaultNamingConventionsService"
+        },
+        "visNCChangeAction": {
+            "actionType": "JSFunction",
+            "method": "visNCChangeAction",
+            "inputData": {
+                "acp0DefaultVisNamingConvention": "{{data.acp0DefaultVisNamingConvention}}",
+                "defaultNCLoaded": "{{data.defaultNCLoaded}}"
+            },
+            "outputData": {
+                "acp0DefaultVisNamingConvention": "acp0DefaultVisNamingConvention"
+            },
+            "deps": "js/Acp0DefaultNamingConventionsService"
+        },
+        "addHtmlPanelData": {
+            "actionType": "JSFunction",
+            "method": "addHtmlPanelPropertiesInDataSource",
+            "inputData": {
+                "updatedProperties": [
+                    "{{data.acp0DefaultVarNamingConvention}}",
+                    "{{data.acp0DefaultAttNamingConvention}}",
+                    "{{data.acp0DefaultVisNamingConvention}}"
+                ],
+                "type": "SUMMARY"
+            },
+            "deps": "js/xrtUtilities"
+        }
+    },
+    "lifecycleHooks": {
+        "onInit": "loadData",
+        "onUpdate": [
+            {
+                "action": "addHtmlPanelData",
+                "observers": [
+                    "viewModel.data.acp0DefaultVarNamingConvention",
+                    "viewModel.data.acp0DefaultAttNamingConvention",
+                    "viewModel.data.acp0DefaultVisNamingConvention"
+                ]
+            }
+        ]
+    },
+    "i18n": {
+        "Acp0invalidNCBErrorMsg": [
+            "ControlInspectionPlanMessages"
+        ]
+    },
+    "onEvent": [
+        {
+            "eventId": "editHandlerStateChange",
+            "action": "editStateChanger"
+        },
+        {
+            "eventId": "condition.expressionValueChanged",
+            "action": "varNCChangeAction",
+            "criteria": {
+                "condition": "conditions.varNCChangeCondition"
+            },
+            "cacheEventData": true
+        },
+        {
+            "eventId": "condition.expressionValueChanged",
+            "action": "attNCChangeAction",
+            "criteria": {
+                "condition": "conditions.attNCChangeCondition"
+            },
+            "cacheEventData": true
+        },
+        {
+            "eventId": "condition.expressionValueChanged",
+            "action": "visNCChangeAction",
+            "criteria": {
+                "condition": "conditions.visNCChangeCondition"
+            },
+            "cacheEventData": true
+        }
+    ],
+    "conditions": {
+        "varNCChangeCondition": {
+            "expression": "data.acp0DefaultVarNamingConvention.dbValue",
+            "trackValues": true
+        },
+        "attNCChangeCondition": {
+            "expression": "data.acp0DefaultAttNamingConvention.dbValue",
+            "trackValues": true
+        },
+        "visNCChangeCondition": {
+            "expression": "data.acp0DefaultVisNamingConvention.dbValue",
+            "trackValues": true
+        }
+    }
+}

@@ -1,0 +1,235 @@
+{
+    "schemaVersion": "1.0.0",
+    "ctx": {
+        "clsAdmin.classSystem": {
+            "type": "object"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "updateClassesSWA",
+        "onUpdate": [
+            {
+                "action": "updateClassesSWA",
+                "observers": [
+                    "props.subPanelContext.context.searchState.propertiesSWA"
+                ]
+            },
+            {
+                "action":"activeClassificationPanelIfAllowed",
+                "observers":[
+                    "props.subPanelContext.context.searchState.isLinkClicked"
+                ]
+            },
+            {
+                "action": "closePanel",
+                "observers": [
+                    "props.subPanelContext.selection"
+                ]
+            }
+        ]
+    },
+    "props":{
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data":{
+    },
+    "actions":{
+        "updateClassesSWA":{
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "initializeClassAttrsSWA"
+                },
+                {
+                    "action": "reloadProcessedAttributes",
+                    "condition": "conditions.supported"
+                }
+            ]
+        },
+        "reloadProcessedAttributes":
+        {
+            "actionType": "dataProvider",
+            "method": "processedAttributes"
+        },
+        "initializeClassAttrsSWA": {
+            "actionType": "JSFunction",
+            "method": "initializeClassAttrsSWA",
+            "inputData": {
+                "subPanelContext": "{{subPanelContext.context.searchState}}"
+            },
+            "outputData": {
+                "currentSecData": "currentSecData",
+                "classAttributes": "classAttributes",
+                "hasClassAttributes": "hasClassAttributes",
+                "referenceLinks": "referenceLinks",
+                "isGroup": "isGroup"
+            },
+            "deps":"js/classifyAdminClassAttrsService"
+        },
+        "selectLink":{
+            "actionType": "JSFunction",
+            "method": "selectNodeForPanel",
+            "inputData": {
+                "data": "{{data}}",
+                "subPanelContext": "{{props.subPanelContext.context}}",
+                "classSystem": "{{ctx.clsAdmin.classSystem}}",
+                "eventDataToSuppress": "{{parameters.eventData}}"
+            },
+            "deps":"js/classifyAdminService"
+        },
+        "externalSelectLink":{
+            "actionType": "JSFunction",
+            "method": "setupDynamicReferenceLinks",
+            "inputData": {
+                "link": "{{parameters.link}}",
+                "attrType": "{{parameters.type}}",
+                "subPanelContext": "{{props.subPanelContext.context}}",
+                "classSystem": "{{ctx.clsAdmin.classSystem}}"
+            },
+            "outputData": {
+                "attrSelected": "attrSelected",
+                "attrprop": "attrprop",
+                "reference": "reference"
+            },
+            "deps": "js/classifyAdminService"
+        },
+
+        "selectLinkOps": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "closePanel"
+                },
+
+                {
+                    "action": "externalSelectLink"
+                },
+                {
+                    "action": "selectLink"
+                },
+                {
+                    "action": "activeClassificationPanel"
+                }
+            ]
+        },
+        "activeClassificationPanelIfAllowed": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "activeClassificationPanel",
+                    "condition": "!conditions.supported"
+                }
+            ]
+        },
+        "activeClassificationPanelIfOpen": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "activeClassificationPanel",
+                    "condition": "!conditions.panelOpen"
+                }
+            ]
+        },
+        "activeClassificationPanel": {
+            "actionType": "JSFunction",
+            "method": "activateCommandPanel",
+            "deps": "js/commandPanel.service",
+            "inputData": {
+                "commandId": "Awp0ClsAdminLink",
+                "location": "aw_toolsAndInfo"
+            }
+        },
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "aw_toolsAndInfo"
+                        }
+                    }
+                ]
+            }
+        },
+        "loadTableAttributes": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTableAttributes",
+            "inputData": {
+                "data": "{{data}}",
+                "type":"Attributes",
+                "classSystem": "{{ctx.clsAdmin.classSystem}}",
+                "columnProvider": "{{columnProviders.attributesColumnProvider}}",
+                "descriptorColumns": "{{props.subPanelContext.context.searchState.propertiesSWA.attrColumns}}",
+                "objects": "{{data.classAttributes}}"
+            },
+            "outputData": {
+                "processedAttributes":"objects",
+                "pTotalFound":"totalFound",
+                "columnProviders.attributesColumnProvider":"columnProvider"
+            },
+            "deps": "js/classifyAdminService"
+        }
+    },
+    "dataProviders": {
+        "processedAttributes":
+        {
+            "action": "loadTableAttributes",
+            "commands": {},
+            "response":"{{data.processedAttributes}}",
+            "totalFound":"{{data.pTotalFound}}",
+            "selectionModelMode": "single"
+        }
+    },
+    "columnProviders": {
+        "attributesColumnProvider": {
+            "columns": [
+            ],
+            "frozenColumnIndex" : -1
+        }
+    },
+    "grids": {
+        "attrGrid": {
+            "dataProvider": "processedAttributes",
+            "columnProvider": "attributesColumnProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "enableColumnMoving": true,
+                "enableGridMenu": true,
+                "enablePinning": true,
+                "enableSorting": false,
+                "useStaticFirstCol": true
+            }
+        }
+    },
+    "onEvent":[
+        {
+            "eventId":"classifyAdmin.launchPanel",
+            "action":"activeClassificationPanel"
+        },
+        {
+            "eventId":"classifyAdmin.linkClicked",
+            "action":"selectLinkOps",
+            "inputArgs": {
+                "link": "{{eventData.linkId}}",
+                "type": "{{eventData.type}}"
+            }
+        }
+    ],
+    "conditions": {
+        "ready": {
+            "expression": "data.hasClassAttributes && data.dataProviders.processedAttributes.viewModelCollection.loadedVMObjects.length > 0 && props.subPanelContext.context.searchState.propertiesSWA.currentSecData && props.subPanelContext.context.searchState.propertiesSWA.currentSecData[0] === data.currentSecData[0]"
+        },
+        "supported": {
+            "expression": "data.hasClassAttributes && (ctx.tcSessionData.tcMajorVersion > 14 || (ctx.tcSessionData.tcMajorVersion === 14 && ctx.tcSessionData.tcMinorVersion >= 3))"
+        }
+    },
+    "i18n": {
+        "GrpClass":     [ "ClassificationAdminMessages" ],
+        "noClassAttrs": [ "ClassificationAdminMessages" ]
+    }
+
+}

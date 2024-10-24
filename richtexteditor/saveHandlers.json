@@ -1,0 +1,118 @@
+[
+  {
+    "conditions": {
+      "$and": [
+        {
+          "NONE._editing": {
+            "$eq": true
+          }
+        },
+        {
+          "selected.modelType.typeHierarchyArray": {
+            "$notin": [
+              "Awb0Element"
+            ]
+          }
+        },
+        {
+          "$or": [
+            {
+              "isRMDocumentationTabActive": {
+                "$eq": true
+              }
+            },
+            {
+              "pageContext.secondaryActiveTabId": {
+                "$eq": "tc_xrt_notetext"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "target": {
+      "method": "getSaveHandler",
+      "deps": "js/Arm0RequirementDocumentation"
+    }
+  },
+  {
+    "conditions": {
+      "$and": [
+        {
+          "pageContext.primaryActiveTabId": {
+            "$eq": "tc_xrt_notetext"
+          }
+        }
+      ]
+    },
+    "target": {
+      "method": "getSaveHandler",
+      "deps": "js/Arm0RequirementDocumentation"
+    }
+  },
+  {
+    "conditions": {
+      "$and": [
+        {
+          "isRMDocumentationTabActive": {
+            "$eq": true
+          }
+        },
+        {
+          "NONE._editing": {
+            "$eq": true
+          }
+        }
+      ]
+    },
+    "target": {
+      "method": "getSaveHandler",
+      "deps": "js/Arm0RequirementDocumentation"
+    }
+  },
+  {
+    "conditions": {
+      "editParaNumberSaveHandler": {
+        "$eq": true
+      }
+    },
+    "target": {
+      "method": "getSaveHandler",
+      "deps": "js/editParagraphNumber"
+    }
+  },
+  {
+    "conditions": {
+      "$and": [
+        {
+          "pageContext.primaryActiveTabId": {
+            "$eq": "tc_xrt_Content"
+          }
+        },
+        {
+          "NONE._editing": {
+            "$eq": true
+          }
+        },
+        {
+          "isRMDocumentationTabActive": {
+            "$eq": true
+          }
+        },
+        {
+          "selected.modelType.typeHierarchyArray": {
+            "$in": [
+              "Awb0Connection",
+              "Ase0LogicalElement",
+              "Ase0FunctionalElement"
+            ]
+          }
+        }
+      ]
+    },
+    "target": {
+      "method": "getSaveHandler",
+      "deps": "js/Arm0RequirementDocumentation"
+    }
+  }
+]

@@ -1,0 +1,83 @@
+{
+    "schemaVersion": "1.0.0",
+    "lifecycleHooks": {
+        "onUpdate": {
+            "action": "openCloseFilterPanelAction",
+            "observers": [
+                "viewModel.searchState.categories"
+            ]
+        }
+    },
+    "data": {
+        "_provider": {
+            "breadcrumbConfig": {
+                "type": "search",
+                "vm": "AwSearchBreadcrumb"
+            },
+            "priority": 1,
+            "label": {
+                "source": "/i18n/ChangeMessages",
+                "key": "allSubLocation"
+            },
+            "clientScopeURI": "fnd0Change",
+            "nameToken": "com.siemens.splm.client.change:allChangesSubLocation",
+            "context": {
+                "search": {
+                    "provider": "Cm1MyChangesProvider",
+                    "criteria": {
+                        "changesProviderContentType": "All",
+                        "searchFromLocation": "global",
+                        "getGroupedCategories": "true",
+                        "dcpSortByDataProvider": "true",
+                        "forceThreshold": "true"
+
+                    },
+                    "isFilteringEnabled": true,
+                    "sortType": "Priority",
+                    "chartTitle": {
+                        "source": "/i18n/ChangeMessages",
+                        "key": "changeResultsChartTitle"
+                    },
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "showLoadingText": true,
+                    "showChartColorBars": true,
+                    "numberOfCategoriesShownInGroupPreference": "AWC_Search_Filter_Panel_Number_Of_Categories_Shown_Inside_Each_Group",
+                    "numberOfMaxGroupsShownPreference": "AWC_Search_Filter_Panel_Number_Of_Groups_Shown"
+                }
+            },
+            "policy": "/policies/changeObjectPropertyPolicy.json",
+            "viewBase": "Awp0Base"
+        },
+        "searchState": {
+            "initialValues": {
+                "filterString": "",
+                "selectedFiltersString": ""
+            },
+            "meta": {
+                "categories": [
+                    {
+                        "filterValues": [
+                            {
+                                "selected": {
+                                    "field": "true",
+                                    "type": "BOOLEAN"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "actions":{
+        "openCloseFilterPanelAction": {
+            "actionType": "JSFunction",
+            "method": "openCloseFilterPanel",
+            "inputData": {
+                "searchState": "{{data.searchState}}"
+            },
+            "deps": "js/Cm1ChangeCommandService"
+    }
+}
+}

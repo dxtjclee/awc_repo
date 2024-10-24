@@ -1,0 +1,14 @@
+<div class="sw-column w-12">
+    <div class="sw-row justify-justified">
+        <aw-advanced-bar type="TOOLBAR" negative="true">
+            <aw-command-bar anchor="ssp0ServicePlanCommandbar" alignment="HORIZONTAL"></aw-command-bar>
+        </aw-advanced-bar>
+    </div>
+    <aw-break> </aw-break>
+    <div class="sw-row" exist-when="conditions.isCurrentRevRuleAvailable">
+        <aw-label prop="data.currentRevisionRule"></aw-label>
+    </div>
+    <div class="sw-row justify-justified">
+        <aw-splm-table class="aw-serviceplanning-table" gridid="servicePlanTreeTable" use-tree="true" show-decorators="true"></aw-splm-table>
+    </div>
+</div>

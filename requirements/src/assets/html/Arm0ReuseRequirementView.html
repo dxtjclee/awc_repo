@@ -1,0 +1,15 @@
+<aw-command-panel caption="i18n.reuseDocumentTitle" context="subPanelContext">
+    <aw-panel-body>
+        <aw-radiobutton action="changeName" prop="data.reuseOptions"></aw-radiobutton>
+        <aw-widget prop="data.name"></aw-widget>
+        <aw-widget prop="data.desc"></aw-widget>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-flex-row>
+            <aw-checkbox prop="data.runInBackgroundReuse" visible-when="awPanelBody.$valid"></aw-checkbox>
+        </aw-flex-row>
+        <aw-button enable-when="!ctx.isReuseEventProgressing" action="updateCtxAndCallReuseSOA" visible-when="awPanelBody.$valid">
+            <aw-i18n>i18n.reuse</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

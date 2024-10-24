@@ -1,0 +1,45 @@
+{
+    "schemaVersion": "1.0.0",
+    "lifecycleHooks": {},
+    "props": {
+        "balancing-data": {
+            "type": "object"
+        }
+    },
+    "conditions": {
+        "taktTimeDefined" : {
+            "expression": "props.balancingData.loadedData.scopeTaktTime !== 0"
+        },
+        "cycleTimeExceeded": {
+            "expression" : "conditions.taktTimeDefined && props.balancingData.loadedData.maxStationsCycleTime > props.balancingData.loadedData.scopeTaktTime"
+        },
+        "cycleTimeOk": {
+            "expression" : "conditions.taktTimeDefined && props.balancingData.loadedData.maxStationsCycleTime <= props.balancingData.loadedData.scopeTaktTime"
+        },
+        "processResourcesExist": {
+            "expression": {
+                "$and": [ {
+                        "$source": "props.balancingData.loadedData.allProcessResources",
+                        "$query": {
+                            "$neq": "undefined"
+                        }
+                    },
+                    {
+                        "$source": "props.balancingData.loadedData.allProcessResources.length",
+                        "$query": {
+                            "$gt": 0
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "i18n": {
+        "taktTimeChip": [ "BalancingMessages" ],
+        "cycleTimeChip": [ "BalancingMessages" ],
+        "totalWaitTimeChip": [ "BalancingMessages" ],
+        "unassignedTimeChip": [ "BalancingMessages" ],
+        "numberOfResourcedChip": [ "BalancingMessages" ],
+        "overridingTaktTimeTooltip": [ "BalancingMessages" ]
+    }
+}

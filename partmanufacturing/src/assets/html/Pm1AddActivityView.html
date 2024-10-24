@@ -1,0 +1,26 @@
+<aw-command-panel caption="i18n.Pm1AddActivityTitle" context="subPanelContext">
+    <div class="aw-layout-flexColumn" show-when="conditions.isActiveStateAddPanel">
+        <aw-panel-header>
+            <aw-panel-section caption="i18n.Pm1ToTitle" exist-when="data.targetActivity">
+                <aw-default-cell vmo="data.targetActivity"></aw-default-cell>
+            </aw-panel-section>
+        </aw-panel-header>
+
+        <aw-form name="createInputs">
+            <aw-add  include-types="MEActivity"
+              type-filter="MEActivity"
+              load-sub-types="true"
+              visible-tabs="new"
+              add-panel-state="fields.addPanelState"
+              active-state="data.activeState"
+              xrt-state="data.xrtState"
+              edit-handler="editHandlers.addPanelEditHandler">
+            </aw-add>
+        </aw-form>
+        <aw-panel-footer>
+            <aw-button action="createAndAddActivity" visible-when="formProp.attributes.valid && conditions.isNewTabAddButtonVisible" >
+                <aw-i18n>i18n.Pm1AddElementBtn</aw-i18n>
+            </aw-button>
+        </aw-panel-footer>
+    </div>
+</aw-command-panel>

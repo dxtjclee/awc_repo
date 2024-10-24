@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "1.0.0",
+  "pasteHandlers": {
+    "acp0DefaultPasteHandler": {
+      "action": "aceDefaultPasteAction",
+      "activeWhen": {
+        "condition": "conditions.isAcp0DefaultPasteHandlerActive"
+      }
+    }
+  },
+  "actions": {},
+  "conditions": {
+    "isAcp0DefaultPasteHandlerActive": {
+      "expression": {
+        "$or": [
+          {
+            "$and": [
+              {
+                "$source": "pasteContext.targetObject",
+                "$query": {
+                  "$typeOf": "Awb0PositionedElement"
+                }
+              },
+              {
+                "$or": [
+                  {
+                    "$source": "pasteContext.sourceObject",
+                    "$query": {
+                      "$typeOf": "Aqc0QcElement"
+                    }
+                  },
+                  {
+                    "$source": "pasteContext.sourceObject",
+                    "$query": {
+                      "$typeOf": "Aqc0CharElementRevision"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "$and": [
+              {
+                "$source": "pasteContext.targetObject",
+                "$query": {
+                  "$typeOf": "Aqc0QcElement"
+                }
+              },
+              {
+                "$or": [
+                  {
+                    "$source": "pasteContext.sourceObject",
+                    "$query": {
+                      "$typeOf": "Awb0PositionedElement"
+                    }
+                  },
+                  {
+                    "$source": "pasteContext.sourceObject",
+                    "$query": {
+                      "$typeOf": "ItemRevision"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

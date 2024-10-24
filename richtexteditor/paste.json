@@ -1,0 +1,284 @@
+{
+  "schemaVersion": "1.0.0",
+  "pasteHandlers": {
+    "arm0ReqPasteHandlerInSplitView": {
+      "action": "pasteActionForReqSpecInSplitView",
+      "activeWhen": {
+        "condition": "conditions.isPasteActionForRequirementInSplitViewActive"
+      }
+    },
+    "arm0ParaSpecPasteHandlerInSplitView": {
+      "action": "pasteActionForReqSpecInSplitView",
+      "activeWhen": {
+        "condition": "conditions.isPasteActionForParagraphInSplitViewActive"
+      }
+    },
+    "arm0ReqSpecPasteHandlerInSplitView": {
+      "action": "pasteActionForReqSpecInSplitView",
+      "activeWhen": {
+        "condition": "conditions.isPasteActionForReqSpecInSplitViewActive"
+      }
+    }
+  },
+  "actions": {
+    "pasteActionForReqSpecInSplitView": {
+      "actionType": "JSFunction",
+      "method": "getDisplayName",
+      "deps": "js/typeDisplayName.service",
+      "inputData": {
+        "modelObject": "{{pasteContext.sourceObject[0]}}"
+      },
+      "outputData": {
+        "displayNameOfSelectedElement": ""
+      },
+      "actionMessages": {
+        "success": [
+          {
+            "condition": "pasteContext.sourceObject.length === 1",
+            "message": "pasteSingleToSpecification"
+          },
+          {
+            "condition": "pasteContext.sourceObject.length > 1",
+            "message": "pasteMultipleToSpecification"
+          }
+        ]
+      }
+    },
+    "arm0AceDefaultPasteAction": {
+      "actionType": "JSFunctionAsync",
+      "method": "aceDefaultPasteHandler",
+      "deps": "js/aceDefaultPasteHandler",
+      "inputData": {
+        "targetObject": "{{pasteContext.targetObject}}",
+        "sourceObject": "{{pasteContext.sourceObject}}",
+        "context": "{{pasteContext}}"
+      },
+      "outputData": {
+        "addElementResponse": "addElementResponse",
+        "totalObjectsAdded": "totalObjectsAdded",
+        "addElementInput": "addElementInput"
+      },
+      "actionMessages": {
+        "failure": [
+          {
+            "message": "addElementsFailuresMessage"
+          }
+        ]
+      }
+    },
+    "arm0PasteObjectCopyAsChildAction": {
+      "actionType": "batchJob",
+      "steps": [
+        {
+          "action": "arm0updateCtxForAddUsingDragDrop"
+        },
+        {
+          "action": "arm0InvokePasteAsCopyPanel"
+        }
+      ]
+    },
+    "arm0updateCtxForAddUsingDragDrop": {
+      "actionType": "JSFunction",
+      "method": "arm0updateCtxForAddUsingDragDrop",
+      "deps": "js/Arm1PasteOperationService",
+      "inputData": {
+        "targetObject": "{{pasteContext.targetObject}}"
+      }
+    },
+    "arm0InvokePasteAsCopyPanel": {
+      "actionType": "JSFunction",
+      "method": "activateCommandPanel",
+      "deps": "js/commandPanel.service",
+      "inputData": {
+        "commandId": "Arm0PasteAsCopy",
+        "location": "aw_toolsAndInfo",
+        "context": {
+          "targetObject": "{{pasteContext.targetObject}}",
+          "sourceObject": "{{pasteContext.sourceObject}}",
+          "pasteId": "CHILD"
+        }
+      }
+    }
+  },
+  "conditions": {
+    "isPasteActionForRequirementInSplitViewActive": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "ctx.splitView.mode",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Arm0RequirementElement"
+            }
+          },
+          {
+            "$or": [
+              {
+                "$source": "pasteContext.sourceObject",
+                "$query": {
+                  "$typeOf": "Arm0RequirementElement"
+                }
+              },
+              {
+                "$source": "pasteContext.sourceObject",
+                "$query": {
+                  "$typeOf": "Arm0ParagraphElement"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "isPasteActionForParagraphInSplitViewActive": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "ctx.splitView.mode",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Arm0ParagraphElement"
+            }
+          },
+          {
+            "$or": [
+              {
+                "$source": "pasteContext.sourceObject",
+                "$query": {
+                  "$typeOf": "Arm0RequirementElement"
+                }
+              },
+              {
+                "$source": "pasteContext.sourceObject",
+                "$query": {
+                  "$typeOf": "Arm0ParagraphElement"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "isPasteActionForReqSpecInSplitViewActive": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "ctx.splitView.mode",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Arm0RequirementSpecElement"
+            }
+          },
+          {
+            "$or": [
+              {
+                "$source": "pasteContext.sourceObject",
+                "$query": {
+                  "$typeOf": "Arm0RequirementElement"
+                }
+              },
+              {
+                "$source": "pasteContext.sourceObject",
+                "$query": {
+                  "$typeOf": "Arm0ParagraphElement"
+                }
+              },
+              {
+                "$source": "pasteContext.sourceObject",
+                "$query": {
+                  "$typeOf": "Arm0RequirementSpecElement"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "messages": {
+    "pasteSingleToSpecification": {
+      "messageType": "WARNING",
+      "messageText": "{{i18n.pasteSingleRequirementConfirmation}}",
+      "navigationOptions": [
+        {
+          "option": "Cancel",
+          "text": "{{i18n.cancel}}"
+        },
+        {
+          "option": "Remove",
+          "text": "{{i18n.arm1PasteObjects}}",
+          "action": "arm0AceDefaultPasteAction"
+        },
+        {
+          "option": "Remove",
+          "text": "{{i18n.pasteAsCopy}}",
+          "action": "arm0PasteObjectCopyAsChildAction"
+        }
+      ],
+      "messageTextParams": [
+        "{{pasteContext.sourceObject[0].props['object_string'].uiValues[0]}}",
+        "{{pasteContext.targetObject.displayName}}"
+      ]
+    },
+    "pasteMultipleToSpecification": {
+      "messageType": "WARNING",
+      "messageText": "{{i18n.pasteMultipleRequirementConfirmation}}",
+      "navigationOptions": [
+        {
+          "option": "Cancel",
+          "text": "{{i18n.cancel}}"
+        },
+        {
+          "option": "Remove",
+          "text": "{{i18n.arm1PasteObjects}}",
+          "action": "arm0AceDefaultPasteAction"
+        },
+        {
+          "option": "Remove",
+          "text": "{{i18n.pasteAsCopy}}",
+          "action": "arm0PasteObjectCopyAsChildAction"
+        }
+      ],
+      "messageTextParams": [
+        "{{pasteContext.sourceObject.length}}",
+        "{{pasteContext.targetObject.displayName}}"
+      ]
+    },
+    "addElementsFailuresMessage": {
+      "messageType": "ERROR",
+      "messageText": "{{errorCode}}"
+    }
+  },
+  "i18n": {
+    "pasteSingleRequirementConfirmation": [
+      "AWReqMgmtSECommandPanelsMessages"
+    ],
+    "pasteMultipleRequirementConfirmation": [
+      "AWReqMgmtSECommandPanelsMessages"
+    ],
+    "arm1PasteObjects": [
+      "AWReqMgmtSECommandPanelsMessages"
+    ],
+    "pasteAsCopy": [
+      "AWReqMgmtSECommandPanelsMessages"
+    ],
+    "cancel": [
+      "ZeroCompileCommandMessages"
+    ]
+  }
+}

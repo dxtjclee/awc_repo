@@ -1,0 +1,8 @@
+<aw-advanced-bar type="TOOLBAR" negative="true" visible-when="conditions.IsVMOValid">
+    <aw-command-bar anchor="ssp0Skillbar" alignment="HORIZONTAL"></aw-command-bar>
+</aw-advanced-bar>
+
+<aw-flex-row height="12f" align-content="center" exist-when="!conditions.IsVMOValid">
+    <mfe-message sub-panel-context="data.messages.selectionIsNotSrOrWcForSkills"></mfe-message>
+</aw-flex-row>
+<ssp0-skills-list visible-when="conditions.IsVMOValid"></ssp0-skills-list>

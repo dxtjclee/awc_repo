@@ -1,0 +1,225 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "discussionsTitle":{
+            "displayName": "{{i18n.mrmDiscussionsTitle}}",
+            "type": "STRING",
+            "isRequired": "false"
+        },
+        "recentTitle":{
+            "displayName": "{{i18n.mrmRecentTitle}}",
+            "type": "STRING",
+            "isRequired": "false"
+        }
+    },
+    "actions": {
+        "getDataForLandingPage": {
+            "actionType": "batchJob",
+            "steps": [{
+                    "action": "getTiles"
+                },
+                {
+                    "action": "loadRecentObjects"
+                }
+            ]
+        },
+        "getTiles":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2022-12-DataManagement",
+            "method": "getCurrentUserGateway3",
+            "inputData":
+            {
+            },
+            "outputData":
+            {
+                "tileGroups": "tileGroups"
+            },
+            "actionMessages":
+            {
+                "failure":
+                [
+                    {
+                        "message": "accessingGatewayFailed"
+                    }
+                ]
+            }
+        },
+        "goToDiscussionLocation": {
+            "actionType": "Navigate",
+            "navigateTo": "#/discussions/feed",
+            "navigationParams": {}
+        },
+        "showHomeFolder": {
+            "actionType": "Navigate",
+            "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+            "navigationParams": {
+                "uid": "{{ctx.user.props.home_folder.dbValues[0]}}",
+                "cmdId": "Awp0ShowAddObject"
+            }
+        },
+        "loadRecentObjects": {
+            "actionType": "dataProvider",
+            "method": "recentObjDataProvider"
+        },
+        "getRecentObjects": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "searchInput": {
+                    "attributesToInflate": [
+                        "awp0CellProperties",
+                        "awp0ThumbnailImageTicket"
+                    ],
+                    "searchCriteria": { "search": "" },
+                    "maxToLoad": 32,
+                    "maxToReturn": 32,
+                    "startIndex": "{{data.dataProviders.recentObjDataProvider.startIndex}}",
+                    "providerName": "Awp0RecentObjectsProvider"
+                }
+            },
+            "outputData": {
+                "recentTotalFound": "totalLoaded",
+                "recentSearchResults": "{{json:searchResultsJSON}}"
+            }
+        },
+        "goToRecentLocation": {
+            "actionType": "Navigate",
+            "navigateTo": "#/myRecentViewedObjects",
+            "navigationParams": {}
+        },
+        "loadData":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Query-2014-11-Finder",
+            "method": "performSearch",
+            "inputData": {
+                "searchInput": {
+                    "maxToLoad": 6,
+                    "maxToReturn": 6,
+                    "providerName": "Pgp0PlanObjsSearchProvider",
+                    "searchCriteria": {
+                        "searchContentType": "ActivePlansBasedOnOwnershipOrResponsibility"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "searchFilterMap": {},
+                    "searchSortCriteria": [],
+                    "startIndex": "{{data.dataProviders.programsListDataProvider.startIndex}}"
+                }
+            },
+            "outputData": {
+                "searchResults": "searchResults",
+                "totalFound": "totalLoaded",
+                "totalLoaded": "totalLoaded"
+            }
+        },
+        "updateTile":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2018-05-DataManagement",
+            "method": "updateTiles",
+            "inputData":
+            {
+                "tiles": "{{data.eventData.tiles}}",
+                "groupNames": "{{data.eventData.groupNames}}"
+            },
+            "outputData":
+            {
+                "tileGroups": "tileGroups"
+            },
+            "actionMessages":
+            {
+                "failure":
+                [
+                    {
+                        "message": "updateTileFailed"
+                    }
+                ]
+            }
+        },
+        "unpinTile":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2018-05-DataManagement",
+            "method": "unpinObjects",
+            "inputData":
+            {
+                "uidsToUnpin":
+                [
+                    "{{data.eventData.relUID}}"
+                ],
+                "returnGateway": true
+            },
+            "outputData":
+            {
+                "tileGroups": "tileGroups"
+            },
+            "actionMessages":
+            {
+                "failure":
+                [
+                    {
+                        "message": "unPinFailed"
+                    }
+                ]
+            }
+        }
+    },
+    "dataProviders": {
+        "recentObjDataProvider": {
+            "action": "getRecentObjects",
+            "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectCellListActionCommands",
+            "inputData": {
+                "selectionModel": "{{subPanelContext.selectionModel}}"
+            },
+            "response": "{{data.recentSearchResults}}",
+            "totalFound": "{{data.recentTotalFound}}",
+            "selectionModelMode": "single"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount" : "getDataForLandingPage"
+    },
+    "onEvent": [
+        {
+            "eventId": "showMRMLandingPage.showHomeFolder",
+            "action": "showHomeFolder"
+        },
+        {
+            "eventId": "gateway.updateTile",
+            "action": "updateTile",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "gateway.unpinTile",
+            "action": "unpinTile",
+            "cacheEventData": true
+        }
+    ],
+    "messages":
+    {
+        "accessingGatewayFailed":
+        {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.pinObjectFailedNoGateway}}"
+        },
+        "unPinFailed":
+        {
+            "messageType": "ERROR",
+            "messageText":"{{i18n.unpinTileFailed}}"
+        },
+        "updateTileFailed":
+        {
+            "messageType": "ERROR",
+            "messageText":"{{i18n.tileUpdateFailedMsg}}"
+        }
+    },
+    "i18n": {
+        "mrmDiscussionsTitle": ["mrmMessages"],
+        "mrmRecentTitle": ["mrmMessages"],
+        "pinObjectFailedNoGateway": [ "GatewayMessages" ],
+        "unpinTileFailed": [ "GatewayMessages" ],
+        "tileUpdateFailedMsg": [ "GatewayMessages" ]
+    }
+}

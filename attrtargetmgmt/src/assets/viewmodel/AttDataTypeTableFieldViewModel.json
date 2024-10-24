@@ -1,0 +1,256 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "render": {
+            "method": "att1InlinePropertyRenderFn",
+            "deps": "js/Att1InlineParameterPropertyRender"
+        },
+        "populateDatatype":{
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2013-05-LOV",
+            "method": "getInitialLOVValues",
+            "inputData": {
+                "initialData": {
+                    "propertyName": "att0AttrType",
+                    "lovInput": {
+                        "operationName": "Create",
+                        "boName": "Att0AttributeDefRevision",
+                        "owningObject": {
+                            "type": "Att0AttributeDefRevision"
+                        },
+                        "propertyValues":{
+                            "att0Application": ["Engineering"],
+                            "att0AttrType": [""]
+                        }
+                    }
+                }
+            },
+            "outputData": {
+                "lovDatatypePropOptions": "{{function:processDatatypeLOV}}"
+            },
+            "deps": "js/addMeasurableAttr"
+        },
+        "updateGMMForSelectedDataType":{
+
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name":"Att1ShowParametersTable.updateDataTypeForInlineParameter",
+                        "eventData":{
+                            "selected":"{{data.eventData.selected}}"
+                        }
+                    }
+                ]
+            }
+
+        },
+        "updateCellsForSelectedParamDef":{
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name":"Att1ShowParametersTable.updateParamDefForInlineParameter",
+                        "eventData":{
+                            "selected":"{{data.eventData.selected}}"
+                        }
+                    }
+                ]
+            }
+        },
+        "populateUsageLOV":{
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2013-05-LOV",
+            "method": "getInitialLOVValues",
+            "inputData": {
+                "initialData": {
+                    "propertyName": "att0Direction",
+                    "lovInput": {
+                        "operationName": "Create",
+                        "boName": "Att0HasParamValue",
+                        "owningObject": {
+                            "type": "Att0HasParamValue"
+                        }
+                    }
+                }
+            },
+            "outputData": {
+                "lovUsagePropOptions": "{{function:processDatatypeLOV}}"
+            },
+            "deps": "js/addMeasurableAttr"
+        },
+        "populateUnitOfMeasure":{
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2013-05-LOV",
+            "method": "getInitialLOVValues",
+            "inputData": {
+                "initialData": {
+                    "filterData": {
+                        "filterString": "{{function:processLOVFilter}}"
+                    },
+                    "propertyName": "uom_tag",
+                    "lovInput": {
+                        "operationName": "Create",
+                        "boName": "Att0AttributeDef"
+                    }
+                }
+            },
+            "outputData": {
+                "lovUnitPropOptions": "{{function:processDatatypeLOV}}"
+            },
+            "deps": "js/addMeasurableAttr"
+        },
+        "populateParamDefs": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "searchInput": {
+                    "attributesToInflate": [],
+                    "internalPropertyName": "",
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Att1EnabledDefinitionProvider",
+                    "searchCriteria": {
+                      "searchString": "{{function:processParamDefLOVFilter}}",
+                      "forceThreshold": "true",
+                      "listOfExpandedCategories": "",
+                      "limitedFilterCategoriesEnabled": "false",
+                      "application":"Engineering",
+                      "dictionary": ""
+                    },
+                    "searchFilterFieldSortType": "Priority",
+                    "searchSortCriteria": [],
+                    "cursor": {
+                      "startIndex": "{{data.dataProviders.paramDefListProvider.startIndex}}",
+                      "endIndex": 0,
+                      "startReached": false,
+                      "endReached": false
+                    },
+                    "columnFilters": [],
+                    "focusObjUid": "",
+                    "pagingType": "",
+                    "startIndex": 0
+                  },
+                  "inflateProperties": false,
+                  "columnConfigInput": {
+                    "clientName": "",
+                    "hostingClientName": "",
+                    "clientScopeURI": "",
+                    "operationType": "",
+                    "columnsToExclude": []
+                  },
+                  "saveColumnConfigData": {
+                    "scope": "",
+                    "scopeName": "",
+                    "clientScopeURI": "",
+                    "columnConfigId": "",
+                    "columns": []
+                  },
+                  "noServiceData": false
+            },
+            "policy": {
+                "types": [
+                    {
+                        "name": "Att0AttributeDefRevision",
+                        "properties": [
+                            {
+                                "name": "att0ListOfValues"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "lovParamDefPropOptions": "{{function:getLOVList}}"
+            },
+            "deps": "js/addMeasurableAttr"
+        }
+    },
+    "data": {
+
+    },
+    "dataProviders":
+    {
+        "dataTypeListProvider": {
+            "action": "populateDatatype",
+            "response": "{{data.lovDatatypePropOptions}}"
+        },
+        "usageListProvider":{
+            "action": "populateUsageLOV",
+            "response": "{{data.lovUsagePropOptions}}"
+        },
+        "uomListProvider":{
+            "action": "populateUnitOfMeasure",
+            "response": "{{data.lovUnitPropOptions}}"
+        },
+        "paramDefListProvider": {
+            "action": "populateParamDefs",
+            "response": "{{data.lovParamDefPropOptions}}",
+            "totalFound": "{{data.totalFound}}",
+            "selectionModelMode": "single"
+        }
+    },
+    "functions":
+    {
+        "processDatatypeLOV": {
+            "functionName": "processDatatypeLOV",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "processLOVFilter": {
+            "functionName": "processLOVFilter",
+            "parameters": [
+                "{{data.dataProviders.uomListProvider}}"
+            ]
+        },
+        "processParamDefLOVFilter": {
+            "functionName": "processLOVFilter",
+            "parameters": [
+                "{{data.dataProviders.paramDefListProvider}}"
+            ]
+        }
+    },
+    "conditions": {},
+    "onEvent": [
+        {
+            "eventId":"dataTypeListProvider.selectionChangeEvent",
+            "cacheEventData":true,
+            "action":"updateGMMForSelectedDataType"
+        },
+        {
+            "eventId":"paramDefListProvider.selectionChangeEvent",
+            "cacheEventData":true,
+            "action":"updateCellsForSelectedParamDef"
+        }
+    ],
+    "lifecycleHooks": {
+        "render": "render"
+    },
+    "props": {
+        "vmo": {
+            "type": "object"
+        }
+    },
+    "ctx": {
+        "panelContext": {}
+    },
+    "i18n": {
+        "Goal": [
+            "Att1Messages"
+        ],
+        "Min": [
+            "Att1Messages"
+        ],
+        "Max": [
+            "Att1Messages"
+        ],
+        "SelectDefinition": [
+            "Att1AttrMappingMessages"
+        ]
+    }
+}

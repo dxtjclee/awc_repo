@@ -1,0 +1,23 @@
+<aw-base-sublocation2 exist-when="props.provider" provider="props.provider" base-selection="props.baseSelection" sub-panel-context="props.subPanelContext">
+     <div class='aw-layout-defaultSublocation aw-layout-flexColumn'>
+        <div class='aw-layout-sublocationContainer'>
+            <aw-sidenav id='aw_navigation' config="data.sideNavRightData" sub-panel-context="{...subPanelContext, parameterState: fields.parameterState,selectionData:fields.selectionData}" exist-when='!props.provider.awSubLocationPref.hideNavigationArea'>
+            </aw-sidenav>
+            <div class='aw-layout-workarea'>
+                <div class='aw-layout-flexbox'>
+                    <!-- TODO:expression not supported with awclass { 'vertical': props.provider.awSubLocationPref.orientation==='HORIZONTAL' }]" -->
+                    <main aw-class="[{'aw-layout-workareaMain':true}]">
+                        <aw-workarea base-selection="props.baseSelection" selection-model="props.selectionModel" selection-data="fields.selectionData" sub-panel-context="{...subPanelContext,...props.provider,baseSelection:props.baseSelection,parameterState:fields.parameterState}" is-horizontal-orientation="props.provider.awSubLocationPref.orientation==='HORIZONTAL'" >
+                        </aw-workarea>
+                    </main>
+                    <aw-sidenav id='aw_toolsAndInfo' config="data.sideNavLeftData" sub-panel-context="{...subPanelContext,selectionData:fields.selectionData,parameterState: fields.parameterState,baseSelection:props.baseSelection}" exist-when='!props.provider.awSubLocationPref || !props.provider.awSubLocationPref.hideToolsAndInfoArea'>
+                    </aw-sidenav>
+                </div>
+            </div>
+            <nav exist-when='!props.provider.awSubLocationPref.hideRightWall' aria-label='i18n.rightHandToolBar' class='aw-layout-flexCommandbar aw-layout-infoCommandbar'>
+                <aw-server-visibility-command-bar context='{parameterState: fields.parameterState,selectionData:fields.selectionData,openedObject:props.baseSelection}' anchor='aw_rightWall' alignment='VERTICAL' mselected='ctx.mselected' pselected='ctx.pselected' class='aw-commands-nativeCommandBar aw-commands-commandBarContainer aw-commands-commandBarVertical'>
+                </aw-server-visibility-command-bar>
+            </nav>
+        </div>
+    </div>
+</aw-base-sublocation2>

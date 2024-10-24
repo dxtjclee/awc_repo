@@ -1,0 +1,23 @@
+{
+  "schema": "1.0.0.0",
+  "tabs": {
+    "servicePropertiesSbom": {
+      "name": {
+        "source": "/i18n/senMessages",
+        "key": "serviceProperties"
+      },
+      "priority": 1,
+      "view": "SenServiceProperties",
+      "visibleWhen": "ctx.locationContext['ActiveWorkspace:SubLocation'] === 'ServiceEngineeringSublocation' && context.occContext.viewKey === 'sbomContext'"
+    },
+    "servicePropertiesEbom": {
+      "name": {
+        "source": "/i18n/senMessages",
+        "key": "serviceProperties"
+      },
+      "priority": 1,
+      "view": "SenServiceProperties",
+      "visibleWhen": "ctx.locationContext['ActiveWorkspace:SubLocation'] === 'ServiceEngineeringSublocation' && context.occContext.viewKey === 'ebomContext'"
+    }
+  }
+}

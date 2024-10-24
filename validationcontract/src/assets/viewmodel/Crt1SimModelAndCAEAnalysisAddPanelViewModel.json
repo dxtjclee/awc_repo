@@ -1,0 +1,391 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/aw-add.directive",
+        "js/visible-when.directive",
+        "js/aw-form.directive",
+        "js/aw-checkbox.directive",
+        "js/aw-panel-body.directive"
+
+    ],
+    "lifecycleHooks": {
+        "onUpdate": {
+            "action": "performPostProcessingAfterXRTLoaded",
+            "observers": ["viewModel.atomicData.xrtState.xrtTypeLoaded"]
+        }
+    },
+    "functions": {
+        "getCreateInput": {
+            "functionName": "getCreateInput",
+            "parameters": [
+                "{{data}}",
+                "",
+                "{{addPanelState.creationType}}",
+                "{{editHandlers.addPanelEditHandler}}"
+            ]
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "actions": {
+        "reveal": {
+            "actionType": "JSFunction",
+            "method": "setObjToDisplayOnAddPanel",
+            "inputData": {
+                "panelContext": "{{ctx.panelContext}}"
+            },
+            "outputData": {
+                "createObj": "createObj",
+                "preferredType": "preferredType",
+                "typeFilter": "typeFilter"
+            },
+
+            "deps": "js/Crt1SimModelAndCAEAnalysisAddPanel"
+        },
+        "createObject": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2016-09-DataManagement",
+            "method": "createAttachAndSubmitObjects",
+            "inputData": {
+                "inputs": "{{function:getCreateInput}}"
+            },
+            "outputData": {
+                "createdMainObject": "output[0].objects[0]",
+                "createdObject": "{{function:getCreatedObject}}"
+            },
+            "events": {
+                "success": [ {
+                        "name": "addObject.addObjectPostProcess"
+                    },
+                    {
+                        "name": "associateProjectToVRForWSO.assignProjects",
+                        "condition": "data.dataProviders.getAssignedProjectsProvider.viewModelCollection.loadedVMObjects.length > 0"
+                    }
+                ]
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "createRelationForPaletteOrSearch": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [{
+                    "name": "addObject.addObjectPostProcessforPalette"
+                }]
+            }
+        },
+        "assignProjectsToCreatedObject2": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2007-09-ProjectLevelSecurity",
+            "method": "assignOrRemoveObjects",
+            "inputData": {
+                "assignedOrRemovedobjects": [{
+                    "projects": "{{data.dataProviders.getAssignedProjectsProvider.viewModelCollection.loadedVMObjects}}",
+                    "objectToAssign": [
+                        "{{data.createdMainObject}}"
+                    ],
+                    "objectToRemove": []
+                }]
+            }
+        },
+        "populateSavedBookmark": {
+            "actionType": "JSFunction",
+            "method": "populateSavedBookmark",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/analysisRequestUtils"
+        },
+        "postProcessVR": {
+            "actionType": "JSFunction",
+            "method": "getManageInputForTables",
+            "inputData": {
+                "parentScopeObject": "{{ctx.panelContext.vrSublocationState.mselected[0]}}",
+                "createdObject": "{{data.createdObject}}",
+                "palletteSearchObjects": "{{addPanelState.sourceObjects}}",
+                "preferences":"{{ctx.preferences.PLE_AddObjectsNotAllowedTypes}}",
+                "addAsOccurrence": "",
+                "autoMapParameter": "{{data.autoPara}}",
+                "throwErrorVRNotCreated": ""
+            },
+            "deps": "js/manageVerificationService",
+            "outputData": {
+                "getManageInputForSimModelAndAnalysisTable": ""
+            },
+            "events": {
+                "success": [{
+                    "name": "manageAnalysisRequests"
+                }]
+            }
+        },
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [{
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                }]
+            }
+        },
+        "throwError": {
+            "actionType": "JSFunction",
+            "method": "throwError",
+            "inputData": {
+                "data": "{{data}}",
+                "sourceObjects": "{{addPanelState.sourceObjects}}"
+            },
+            "events": {
+                "success": [{
+                    "name": "closePanel"
+                }]
+            },
+            "deps": "js/addRemoveFromAR"
+        },
+        "manageAnalysisRequests": {
+            "actionType": "JSFunction",
+            "method": "callManageVerificationSOA",
+            "inputData": {
+                "manageSOAInput": "{{data.getManageInputForSimModelAndAnalysisTable}}",
+                "i18n": "{{data.i18n}}",
+                "primaryActiveTabId":"",
+                "subPanelContext":"{{subPanelContext}}"
+            },
+            "deps": "js/manageVerificationService",
+            "events": {
+                "success": [
+                    {
+                        "name": "awPanel.loadNextValues",
+                        "condition": "subPanelContext.panelPinned"
+                    },
+                    {
+                        "condition": "ctx.ActiveCommandId === 'Crt1AddSimModel'",
+                        "name": "RefreshSimModelTable"
+                    },
+                    {
+                        "name": "closePanel",
+                        "condition": "!subPanelContext.panelPinned"
+                    }
+                ]
+            }
+        },
+        "RefreshSimModelTable": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [{
+                        "name": "simModelTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    },
+                    {
+                        "name": "uniformParamTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            }
+        },
+        "RefreshSimAnalysisTable": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [{
+                        "name": "simAnalysisTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    },
+                    {
+                        "name": "uniformParamTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            }
+        },
+        "performPostProcessingAfterXRTLoaded": {
+            "actionType": "batchJob",
+            "steps": [{
+                "action": "populateSavedBookmark",
+                "condition": "conditions.isXRTTypeLoaded"
+            }]
+        },
+        "setActiveView": {
+            "actionType": "JSFunction",
+            "method": "resetActiveView",
+            "inputData": {
+                "stateName": "{{data.activeState}}",
+                "destPanelId": "AddObjectPrimarySub"
+            },
+            "outputData": {
+                "activeState": ""
+            },
+            "deps": "js/addObjectUtils"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "awPanel.reveal",
+            "action": "reveal"
+        },
+        {
+            "eventId": "addObject.addObjectPostProcess",
+            "action": "postProcessVR"
+        },
+        {
+            "eventId": "associateProjectToVRForWSO.assignProjects",
+            "action": "assignProjectsToCreatedObject2"
+        },
+        {
+            "eventId": "addObject.addObjectPostProcessforPalette",
+            "action": "postProcessVR"
+
+        },
+        {
+            "eventId": "getRecentTypesProvider.selectionChangeEvent",
+            "action": "populateSavedBookmark",
+            "condition": "data.creationType"
+        },
+        {
+            "eventId": "manageAnalysisRequests",
+            "action": "manageAnalysisRequests"
+        },
+        {
+            "eventId": "closePanel",
+            "action": "closePanel"
+        },
+        {
+            "eventId": "Crt1AddWSOToContentTable.throwError",
+            "action": "throwError"
+        },
+        {
+            "eventId": "RefreshSimAnalysisTable",
+            "action": "RefreshSimAnalysisTable"
+        },
+        {
+            "eventId": "RefreshSimModelTable",
+            "action": "RefreshSimModelTable"
+        }
+    ],
+    "data": {
+        "autoPara": {
+            "displayName": "{{i18n.autoMap}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dispValue": "",
+            "dbValue": true,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "addPanelState": {
+            "initialValues": {
+                "creationType": "",
+                "sourceObjects": "",
+                "selectedTab": "",
+                "xrtTypeLoaded": ""
+            },
+            "meta": {}
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "AddObjectPrimarySub",
+                "context": {}
+            },
+            "meta": {}
+        },
+        "projectState": {
+            "initialValues": {
+                "selectedProjects": [],
+                "triggerAssign": false
+            },
+            "meta": {
+                "selectedProjects": {
+                    "field": "true",
+                    "type": "OBJECT"
+                },
+                "triggerAssign": {
+                    "field": "true",
+                    "type": "BOOLEAN"
+                }
+            }
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "conditions": {
+        "isDatasetSelected": {
+            "expression": {
+                "$source": "addPanelState.sourceObjects",
+                "$query": {
+                    "$source": "modelType.typeHierarchyArray",
+                    "$query": {
+                        "$notin": [
+                            "Dataset"
+                        ]
+                    }
+                }
+            }
+        },
+        "isNewTabAddButtonVisible": {
+            "expression": "addPanelState.selectedTab.view==='NewTabPageSub' && addPanelState.selectedTab.view!='PaletteTabPageSub' && addPanelState.selectedTab.tabKey!='search' && ( addPanelState.creationType )"
+        },
+        "isPalatteTabSelection": {
+            "expression": "addPanelState.selectedTab.view==='PaletteTabPageSub' && addPanelState.sourceObjects.length > 0"
+        },
+        "isSearchTabSelection": {
+            "expression": "addPanelState.selectedTab.view!='NewTabPageSub' && addPanelState.selectedTab.view!='PaletteTabPageSub'"
+        },
+        "isXRTTypeLoaded": {
+            "expression": "xrtState.xrtTypeLoaded"
+        },
+        "isActiveStateAddPanel": {
+            "expression": "data.activeState.activeView ==='AddObjectPrimarySub'"
+        }
+    },
+    "ctx": {
+        "panelContext": null,
+        "preferences": null,
+        "xrtSummaryContextObject": null
+
+    },
+    "i18n": {
+        "copyPara": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+
+        "AddTitle": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "throwError": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "throwErrorVRNotCreated": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "PartialError": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "addAsOccurrence": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "autoMap":[
+            "AnalysisRequestCommandPanelsMessages"
+        ]
+
+    }
+}

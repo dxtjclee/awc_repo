@@ -1,0 +1,183 @@
+{
+    "schemaVersion" : "1.0.0",
+    "imports": [],
+
+    "actions":
+    {
+        "reveal":
+        {
+            "actionType": "dataProvider",
+            "method": "requirementsDataProvider"
+        },
+        "gotoAssociatedItemAction":
+        {
+            "actionType": "JSFunction",
+            "deps": "js/associatedItemsService",
+            "method": "gotoAssociatedItem",
+            "inputData":
+            {
+                "data": "{{data.eventData}}"
+            }
+        },
+        "loadTableData":
+        {
+            "actionType": "TcSoaService",
+
+            "serviceName": "Internal-AWS2-2016-03-Finder",
+            "method": "performSearch",
+
+            "deps": "js/associatedItemsService",
+            "inputData":
+            {
+                "columnConfigInput":
+                {
+                    "clientName": "AWClient",
+                    "clientScopeURI": "Ase0ArchitectureModelerView"
+                },
+
+                "searchInput":
+                {
+                    "maxToLoad": 15,
+                    "maxToReturn": 15,
+                    "startIndex": "{{data.dataProviders.requirementsDataProvider.startIndex}}",
+                    "searchCriteria":
+                    {
+                        "elementUids": "{{subPanelContext.selectionData.selected[0].uid}}",
+                        "rootElementUids": "{{function:getRootElementUids}}",
+                        "productContextUids": "{{function:getProductContextUids}}",
+                        "processConnections": "false",
+                        "processTracelinks": "true",
+                        "processConnectionTracelinks": "true"
+                    },
+                    "providerName": "Ase0RelationObjectProvider"
+                }
+            },
+            "outputData":
+            {
+                "searchResults": "{{function:modifyResultsList}}",
+                "dataProviders.requirementsDataProvider.columnConfig": "columnConfig",
+                "ctx.search.totalFound": "totalFound",
+                "ctx.search.totalLoaded": "totalLoaded"
+            },
+            "policy":
+            {
+                "types":
+                [
+                    {
+                        "name": "Ase0TracelinkRelationProxy",
+                        "properties":
+                        [
+                            {
+                                "name": "ase0RelatedElement",
+                                "modifiers": [ {
+                                    "name": "withProperties",
+                                    "Value": "true"
+                                } ]
+                            },
+                            {
+                                "name": "ase0RelationElement"
+                            },
+                            {
+                                "name": "ase0Direction"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Ase0LogicalElement",
+                        "properties":
+                        [
+                            {
+                                "name": "awp0CellProperties"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Awb0PositionedElement",
+                        "properties":
+                        [
+                            {
+                                "name": "awp0CellProperties"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "events":
+            {
+            }
+        }
+    },
+
+    "onEvent":
+    [
+        {
+            "eventId": "requirementsDataProvider.selectionChangeEvent",
+            "action": "gotoAssociatedItemAction",
+            "cacheEventData": true
+        }
+    ],
+
+    "data":
+    {
+        "panelIsActive": false
+    },
+
+    "functions":
+    {
+        "getRootElementUids":
+        {
+            "functionName": "getRootElementUids",
+            "parameters":
+            [
+                "{{data}}"
+            ]
+        },
+
+        "getProductContextUids":
+        {
+            "functionName": "getProductContextUids",
+            "parameters":
+            [
+                "{{data}}"
+            ]
+        },
+        "modifyResultsList":
+        {
+            "functionName": "modifyResultsList",
+            "parameters":
+            [
+                "{{data}}"
+            ]
+        }
+    },
+
+    "dataProviders": {
+        "requirementsDataProvider":
+        {
+            "action": "loadTableData",
+            "deps": "js/associatedItemsService",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.searchResults.length}}"
+        }
+    },
+
+    "conditions":
+    {
+        "showAssociatedItemsPanelIsActive":
+        {
+            "expression": "data.panelIsActive === true"
+        }
+    },
+
+    "lifecycleHooks": {
+        "onUpdate": [ {
+            "action": "reveal",
+            "observers":["props.subPanelContext.selectionData.selected[0].uid"]
+       }]
+    },
+
+    "i18n":
+    {
+        "associatedItems": ["ArchitectureModelerConstants"]
+    }
+}

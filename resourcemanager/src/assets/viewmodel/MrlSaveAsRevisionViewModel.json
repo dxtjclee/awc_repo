@@ -1,0 +1,445 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "autoAssignProperty": {
+            "actionType": "JSFunction",
+            "method": "autoAssignProperty",
+            "inputData": {
+                "prop": "{{data.eventData.prop}}",
+                "operationType": "REVISE",
+                "pattern": "{{data.eventData.newPattern}}",
+                "selectedObj": "{{ctx.panelContext.SelectedObjects[0]}}",
+                "createType": null,
+                "editHandler": "{{editHandlers.saveAsRevisionEditHandler}}"
+            },
+            "deps": "js/autoAssignService"
+        },
+        "revise": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2013-05-DataManagement",
+            "method": "reviseObjects",
+            "inputData": {
+                "reviseIn": [
+                    {
+                        "targetObject": "{{ctx.panelContext.SelectedObjects[0]}}",
+                        "reviseInputs": "{{function:getReviseInputs}}",
+                        "deepCopyDatas": "{{xrtState.deepCopyDatas}}"
+                    }
+                ]
+            },
+            "outputData": {
+                "newObject": "{{dataParseDefinitions:convertRevisedObject}}",
+                "revisedObjectCreated": "output[0].objects[0]",
+                "partialErorrs": "partialErrors"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "reviseObject.assignProjects"
+                    },
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{ctx.pselected}}"
+                            ]
+                        },
+                        "condition": "ctx.pselected && ctx.preferences.AWC_display_configured_revs_for_pwa[0] ==='true'"
+                    },
+                    {
+                        "name": "performPostReviseResource"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "message": "reviseFailureMsg",
+                        "condition": "errorCode.code===48071 || errorCode.code===51003 || errorCode.code===48020"
+                    },
+                    {
+                        "message": "reviseDuplicateFailureMsg",
+                        "condition": "errorCode.code!==48071 && errorCode.code!==51003 && errorCode.code!==48020"
+                    }
+                ]
+            },
+            "deps": "js/Awp0ShowSaveAsService"
+        },
+        "performPostReviseResource": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "addMrlSaveAsReviseObjectToMRLNewResourcesFolder"
+                },
+                {
+                    "action": "openReviseRevisionInNewTab",
+                    "condition": "data.openReviseRevisionInNewTab.dbValue === true"
+                },
+                {
+                    "action": "closePanel",
+                    "condition": "data.openReviseRevisionInNewTab.dbValue === false"
+                }
+            ]
+        },
+        "addMrlSaveAsReviseObjectToMRLNewResourcesFolder": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "createRelations",
+            "inputData": {
+                "input": [
+                    {
+                        "primaryObject": {
+                            "uid": "{{ctx.mrlDashboard.mrlNewResourcesFolderUid}}",
+                            "type": "Folder"
+                        },
+                        "secondaryObject": "{{data.newObject}}",
+                        "relationType": "contents",
+                        "clientId": ""
+                    }
+                ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "reloadNewResources",
+                        "condition": "conditions.isNewResourcesSublocationSelected"
+                    }
+                ]
+            }
+        },
+        "openReviseRevisionInNewTab": {
+            "actionType": "Navigate",
+            "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+            "navigationParams": {
+                "uid": "{{data.newObject.uid}}",
+                "pageId": "tc_xrt_Content"
+            },
+            "navigateIn": "newTab",
+            "events": {
+                "success": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        },
+                        "condition": "!conditions.isNewResourcesSublocationSelected"
+                    }
+                ]
+            }
+        },
+        "assignProjectsToRevisedObject": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2007-09-ProjectLevelSecurity",
+            "method": "assignOrRemoveObjects",
+            "inputData": {
+                "assignedOrRemovedobjects": [
+                    {
+                        "projects": "{{data.dataProviders.getAssignedProjectsProvider.viewModelCollection.loadedVMObjects}}",
+                        "objectToAssign": [
+                            "{{data.revisedObjectCreated}}"
+                        ],
+                        "objectToRemove": []
+                    }
+                ]
+            }
+        },
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "complete",
+                        "condition": "!data.isDestroyed()",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            }
+        },
+        "assignUserProjectsJob": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "navigateToShowSaveAsPage",
+                    "condition": "conditions.isAssignUserProject"
+                },
+                {
+                    "action": "updateAssignedProjectsProvider",
+                    "condition": "conditions.isAssignUserProject"
+                },
+                {
+                    "action": "updateAssignTrigger",
+                    "condition": "conditions.isAssignUserProject"
+                }
+            ]
+        },
+        "updateAssignTrigger": {
+            "actionType": "JSFunction",
+            "method": "updateAtomicDataValue",
+            "inputData": {
+                "AtomicObj": "{{subPanelContext.projectState}}",
+                "value": {
+                    "triggerAssign": false
+                }
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "navigateToShowSaveAsPage": {
+            "actionType": "JSFunction",
+            "method": "updateAtomicDataValue",
+            "inputData": {
+                "AtomicObj": "{{subPanelContext.activeState}}",
+                "value": {
+                    "activeView": "MrlShowSaveAs"
+                }
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "updateAssignedProjectsProvider": {
+            "actionType": "JSFunction",
+            "method": "updateAssignedProjectsProvider",
+            "inputData": {
+                "data": "{{data}}",
+                "selectedObjects": "{{subPanelContext.projectState.value.selectedProjects}}",
+                "removeOnly": "{{subPanelContext.projectState.value.triggerRemove}}"
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "removeUserProjectsJob": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "updateAssignedProjectsProvider",
+                    "condition": "conditions.isRemoveUserProject"
+                },
+                {
+                    "action": "updateRemoveTrigger",
+                    "condition": "conditions.isRemoveUserProject"
+                }
+            ]
+        },
+        "updateRemoveTrigger": {
+            "actionType": "JSFunction",
+            "method": "updateAtomicDataValue",
+            "inputData": {
+                "AtomicObj": "{{subPanelContext.projectState}}",
+                "value": {
+                    "triggerRemove": false
+                }
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "getOwningProjectsAct": {
+            "actionType": "JSFunction",
+            "method": "createViewModelObjectById",
+            "inputData": {
+                "uid": "{{ctx.userSession.props.project.dbValues[0]}}",
+                "operationName": "CREATE"
+            },
+            "outputData": {
+                "owningProjects": ""
+            },
+            "deps": "js/tcViewModelObjectService"
+        },
+        "refreshPWAOfNewResourcesSubLocation": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "primaryWorkarea.reset"
+                    }
+                ]
+            }
+        }
+    },
+    "editHandlers": {
+        "saveAsRevisionEditHandler": {
+            "context": "REVISE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "functions": {
+        "getReviseInputs": {
+            "functionName": "getReviseInputs",
+            "parameters": [ "{{editHandlers.saveAsRevisionEditHandler}}"]
+        },
+        "getDescription": {
+            "functionName": "getDescription",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getPreciseBaseline": {
+            "functionName": "getPreciseBaseline",
+            "parameters": [
+                "{{data}}"
+            ]
+        }
+    },
+    "data": {
+        "widgetProjectSectionCommands": "uiwidget_projectSectionCommands",
+        "openReviseRevisionInNewTab": {
+            "displayName": "{{i18n.openReviseRevisionInNewTab}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": true,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "xrtState": {
+            "initialValues": {
+                "deepCopyDatas": ""
+            },
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        },
+        "revisionOf": {
+            "displayName": "{{i18n.revisionOf}}",
+            "type": "STRING",
+            "dbValue": "",
+            "dispValue": "{{ctx.panelContext.SelectedObjects[0].props.object_string.dbValue}}"
+        }
+    },
+    "dataParseDefinitions": {
+        "convertRevisedObject": {
+            "outputFormatType": "ViewModelObject",
+            "dataInput": "reviseTrees[0].objectCopy.uid",
+            "operationType": "CREATE"
+        }
+    },
+    "dataProviders": {
+        "getOwningProjectsProvider": {
+            "action": "getOwningProjectsAct",
+            "response": [
+                "{{data.owningProjects}}"
+            ],
+            "totalFound": "{{data.owningProjects.length}}",
+            "preSelection": false,
+            "selectionModelMode": "single",
+            "commands": {
+                "Awp0ShowObjectCell": {
+                    "id": "cmdOpen",
+                    "areas": [
+                        "com.siemens.splm.clientfx.ui.modelObjectListActionCommands"
+                    ],
+                    "priorities": [
+                        300
+                    ],
+                    "dependencies": [
+                        "js/showObjectCommandHandler"
+                    ],
+                    "displayOption": "ON_HOVER_AND_SELECTION",
+                    "position": "TOP_RIGHT"
+                }
+            }
+        },
+        "getAssignedProjectsProvider": {
+            "response": "{{data.dataProviders.getUserProjectsProvider.selectedObjects}}",
+            "totalFound": "{{data.dataProviders.getUserProjectsProvider.selectedObjects.length}}",
+            "preSelection": false,
+            "selectionModelMode": "single",
+            "commandsAnchor": "aw_removeProjectCellCommandAction"
+        }
+    },
+    "lifecycleHooks": {
+        "onUpdate": [
+            {
+                "action": "assignUserProjectsJob",
+                "observers": [
+                    "viewModel.subPanelContext.projectState.triggerAssign"
+                ]
+            },
+            {
+                "action": "removeUserProjectsJob",
+                "observers": [
+                    "viewModel.subPanelContext.projectState.triggerRemove"
+                ]
+            }
+        ]
+    },
+    "onEvent": [
+        {
+            "eventId": "awPattern.newPatternSelected",
+            "cacheEventData": true,
+            "action": "autoAssignProperty"
+        },
+        {
+            "eventId": "awPattern.getReviseInput",
+            "action": "getReviseInput"
+        },
+        {
+            "eventId": "reviseObject.assignProjects",
+            "action": "assignProjectsToRevisedObject"
+        },
+        {
+            "eventId": "appCtx.register",
+            "condition": "name === 'mselected'",
+            "action": "closePanel"
+        },
+        {
+            "eventId": "performPostReviseResource",
+            "action": "performPostReviseResource"
+        },
+        {
+            "eventId": "reloadNewResources",
+            "action": "refreshPWAOfNewResourcesSubLocation"
+        }
+    ],
+    "messages": {
+        "reviseDuplicateFailureMsg": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        },
+        "reviseFailureMsg": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.reviseFailureMessage}}",
+            "messageTextParams": [
+                "{{ctx.mselected[0].props.object_string.uiValues}}"
+            ]
+        },
+        "startSaveAsFailure": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "conditions": {
+        "isAssignUserProject": {
+            "expression": "subPanelContext.projectState.value.triggerAssign == true"
+        },
+        "isRemoveUserProject": {
+            "expression": "subPanelContext.projectState.value.triggerRemove == true"
+        },
+        "isNewResourcesSublocationSelected": {
+            "expression": "ctx.sublocation.historyNameToken === 'mrlNewResources'"
+        }
+    },
+    "i18n": {
+        "revisionOf": [
+            "TCUICommandPanelsMessages"
+        ],
+        "save": [
+            "XRTMessages"
+        ],
+        "reviseFailureMessage": [
+            "TCUICommandPanelsMessages"
+        ],
+        "projectsSectionTitle": [
+            "awAddDirectiveMessages"
+        ],
+        "ownProjectSectionTitle": [
+            "awAddDirectiveMessages"
+        ],
+        "openReviseRevisionInNewTab": [
+            "mrlMessages"
+        ]
+    }
+}

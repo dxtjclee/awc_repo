@@ -1,0 +1,241 @@
+{
+    "schemaVersion": "1.0.0",
+    "ports": {
+        "EpPartPlanningActivitiesTreeArea_selectedObjects": {
+            "onChangeAction": "updateSelectionAndLoadTable",
+            "syncObject": {}
+        }
+    },
+    "data": {
+        "selectionData": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "messages":{
+            "selectProcessOrOperation": [
+                {
+                    "text": "{{i18n.selectProcessOrOperation}}"
+                }
+            ],
+            "noActivities": [
+                {
+                    "text": "{{i18n.noActivities}}"
+                }
+            ],
+            "incorrectOperationType": [
+                {
+                    "text": "{{i18n.incorrectOperationType}}"
+                }
+            ]
+        },
+        "activitiesTreeContext": {
+            "editContext": "{{ctx.mfgReadOnlyMode.readOnlyMode === true ? '': 'EP_PROCESS_TREE_TABLE_EDIT_CONTEXT'}}",
+            "objectUid": "",
+            "isTopNode": true,
+            "preferenceName": "EP_PartPlanning_ActivitiesTableColumnConfiguration",
+            "isLeafProperty": "hasChildren",
+            "relatedObjectMapKey": "childAssembly",
+            "loadTypes": [
+                "CommonExpand"
+            ],
+            "additionalPolicyObjects": {
+                "name": "EPActivitiesTreeExtraPolicy",
+                "types": [{
+                    "name": "MEActivity",
+                    "properties": [{
+                            "name": "contents"
+                        }
+                    ]
+                }]
+            },
+            "additionalLoadParamsForRootLoadInputData": [
+                {
+                    "tagName": "expandType",
+                    "attributeName": "type",
+                    "attributeValue": "ExpandActivities"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "level",
+                    "attributeValue": "TOP_WITH_CHILDREN"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "rootsProperty",
+                    "attributeValue": "RootObject"
+                }
+            ],
+            "additionalLoadParamsForChildLoadInputData": [
+                {
+                    "tagName": "expandType",
+                    "attributeName": "type",
+                    "attributeValue": "ExpandActivities"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "level",
+                    "attributeValue": "CHILDREN"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "rootsProperty",
+                    "attributeValue": "RootObject"
+                }
+            ],
+            "epTreeTableCommandAnchor": "",
+            "clientColumns": [],
+            "treeNavigationColumnIndex": 0,
+            "initializeAction": "initializeLoadDataForTree",
+            "relationName": []
+        },
+        "isLoading": false,
+        "propertiesToLoad" : ["contents"]
+    },
+    "actions": {
+        "updateSelectionAndLoadTable": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "setIsLoadingToTrue"
+                },
+                {
+                    "action": "clearSelectedActivity"
+                },
+                {
+                    "action": "getActivities",
+                    "condition": "conditions.hasSyncObject"
+                },
+                {
+                    "action": "setIsLoadingToFalse"
+                }
+            ]
+        },
+        "getActivities": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "getLoadTypeInputForRootActivity"
+                },
+                {
+                    "action": "loadRootActivity"
+                },
+                {
+                    "action": "getRootActivityFromResponse"
+                }
+            ]
+        },
+        "clearSelectedActivity": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": ""
+            },
+            "outputData": {
+                "activitiesTreeContext.objectUid": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "getLoadTypeInputForRootActivity": {
+            "actionType": "JSFunction",
+            "method": "getLoadTypeInputs",
+            "inputData": {
+                "loadType": ["getProperties"],
+                "objectUid": "{{ports.EpPartPlanningActivitiesTreeArea_selectedObjects.syncObject.props.bl_revision.dbValue}}",
+                "props": ["root_activity"]
+            },
+            "outputData": {
+                "loadTypeInputs": ""
+            },
+            "deps": "js/epLoadInputHelper"
+        },
+        "loadRootActivity": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadObject",
+            "inputData": {
+                "loadTypeInputs": "{{data.loadTypeInputs}}"
+            },
+            "outputData": {
+                "responseFromLoad": ""
+            },
+            "deps": "js/epLoadService"
+        },
+        "getRootActivityFromResponse": {
+            "actionType": "JSFunction",
+            "method": "getRootActivityFromResponse",
+            "inputData": {
+                "revisionUID": "{{ports.EpPartPlanningActivitiesTreeArea_selectedObjects.syncObject.props.bl_revision.dbValue}}",
+                "responseModelObjects": "{{data.responseFromLoad.ServiceData.modelObjects}}"
+            },
+            "outputData": {
+                "activitiesTreeContext.objectUid": ""
+            },
+            "deps": "js/epPartPlanningActivitiesService"
+        },
+        "setIsLoadingToTrue": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": true
+            },
+            "outputData": {
+                "isLoading": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "setIsLoadingToFalse": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": false
+            },
+            "outputData": {
+                "isLoading": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        }
+    },
+
+    "messages": {
+        "guidanceMessageAssemblyTree": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.assemblyTreeGuidanceMessage}}",
+            "messageTextLinks": [ {
+                "prop": "data.switch",
+                "action": "toggleSwitchAction"
+            } ]
+        }
+    },
+
+    "conditions": {
+        "hasSyncObject": {
+            "expression": "ports.EpPartPlanningActivitiesTreeArea_selectedObjects.syncObject && ports.EpPartPlanningActivitiesTreeArea_selectedObjects.syncObject.props && ports.EpPartPlanningActivitiesTreeArea_selectedObjects.syncObject.props.bl_revision"
+        },
+        "isPartPlanningOperationSelected": {
+            "expression": "ctx.preferences.AWC_NX_OpenSupportedTypes.indexOf(ports.EpPartPlanningActivitiesTreeArea_selectedObjects.syncObject.props.fnd0bl_line_object_type.dbValues[0]) > -1"
+        },
+        "hasRootActivity": {
+            "expression": "data.activitiesTreeContext.objectUid"
+        },
+        "isLoading": {
+            "expression": "data.isLoading === true"
+        },
+        "isNotLoadingAndNoActivities": {
+            "expression": "!conditions.isLoading && conditions.hasSyncObject && !conditions.hasRootActivity"
+        },
+        "isNotLoadingAndNoSelection": {
+            "expression": "!conditions.isLoading && !conditions.hasSyncObject"
+        },
+        "isIncorrectOperationType": {
+            "expression": "!conditions.isLoading && conditions.hasRootActivity && !conditions.isPartPlanningOperationSelected"
+        },
+        "areActivitiesToDisplay": {
+            "expression": "!conditions.isLoading && conditions.hasRootActivity && conditions.isPartPlanningOperationSelected"
+        }
+    },
+
+    "i18n": {
+        "noActivities": ["PartPlanningMessages"],
+        "incorrectOperationType": ["PartPlanningMessages"],
+        "selectProcessOrOperation": ["PartPlanningMessages"]
+    }
+}

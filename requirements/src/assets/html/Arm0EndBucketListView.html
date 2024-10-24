@@ -1,0 +1,24 @@
+<div class="sw-row aw-tracelink-cell">
+    <!-- Cell list image -->
+    <div class="aw-requirements-tracelinkCellIcon">
+        <aw-pic class="aw-xrt-thumbnailImagePanel" source="data.icon.dbValue" alt="{{props.item.modelType.displayName}}"></aw-pic>
+    </div>
+    <!-- Cell list content -->
+    <div class="aw-widgets-cellListCellContent">
+        <div class="aw-widgets-cellListCellTitleBlock">
+            <aw-clickable-title title="{{props.item.cellHeader1}}" source="list" vmo="props.item"></aw-clickable-title>
+        </div>
+    </div>
+    <div exist-when="conditions.isAwb0Element">
+        <aw-icon-button
+            command="data.CreateOccurrenceCommand"
+            size="large"
+            visible-when="conditions.isCreateOccurrence">
+        </aw-icon-button>
+        <aw-icon-button
+            command="data.CreateRevisionCommand"
+            size="large"
+            visible-when="!conditions.isCreateOccurrence">
+        </aw-icon-button>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+<div class="aw-layout-flexColumn" show-when="data.activeState.value.activeView==='AddObjectPrimarySub'">
+    <aw-form name="commandPanelForm">
+        <aw-add
+            visible-tabs="new"
+            type-override-id="Ase0Diagram"
+            include-types="Ase0Diagram"
+            add-panel-state="fields.addPanelState"
+            active-state="data.activeState"
+            xrt-state="data.xrtState"
+            edit-handler="editHandlers.addPanelEditHandler"
+            auto-select-on-unique-type="true"
+            sub-panel-context="{ ...subPanelContext }">
+        </aw-add>
+        <aw-checkbox prop="data.openOnCreate" visible-when="fields.addPanelState.creationType"></aw-checkbox>
+    </aw-form>
+    <aw-panel-footer visible-when="conditions.showFooter">
+        <!-- panel-footer button for New tab -->
+        <aw-button action="createObject" visible-when="formProp.attributes.valid && conditions.isNewTabAddButtonVisible">
+            <aw-i18n>i18n.add</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</div>
+<aw-add-navigate active-state="data.activeState" action="actions.setActiveView"></aw-add-navigate>

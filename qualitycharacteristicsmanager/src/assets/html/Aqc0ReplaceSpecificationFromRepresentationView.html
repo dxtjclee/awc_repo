@@ -1,0 +1,11 @@
+<aw-command-panel caption="i18n.ReplaceButtonTitle" context="{...subPanelContext, sharedData:data.sharedData}">
+        <aw-command-sub-panel panel-id="Aqc0AddSpecificationsToRepresentation"
+                show-when="data.sharedData.activeView === 'Aqc0AddSpecificationsToRepresentation'"
+                sub-panel-context='{sharedData:data.sharedData}'></aw-command-sub-panel>
+        <aw-navigate-panel title='i18n.backButtontitle'
+                show-when="data.sharedData.activeView === 'Aqc0ShowSpecificationsList'"
+                pre-panel-id='Aqc0AddSpecificationsToRepresentation' panel-id='Aqc0ShowSpecificationsList'
+                sub-panel-context='{sharedData:data.sharedData}'
+                action="aqc0NavigateBackToAqc0AddSpecificationsToRepresentation">
+        </aw-navigate-panel>
+</aw-command-panel>

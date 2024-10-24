@@ -1,0 +1,13 @@
+<aw-command-panel caption="i18n.add">
+    <aw-add visible-tabs="search,palette" type-filter="{{data.typeFilter}}"
+        target-object="ctx.panelContext.target" relations="{{data.relationType}}"
+        add-panel-state="fields.addPanelState"
+        sub-panel-context="{ triggerCreate: data.triggerCreate }"
+        form-object="formProp"></aw-add>
+    <aw-panel-footer >
+        <!-- panel-footer button for New tab -->
+        <aw-button action="createRelationForPaletteOrSearch" visible-when="formProp.attributes.valid && conditions.isAddButtonVisible">
+            <aw-i18n>i18n.add</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

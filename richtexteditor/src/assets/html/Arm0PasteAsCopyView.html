@@ -1,0 +1,25 @@
+<aw-command-panel caption="i18n.Paste" context="subPanelContext">
+    <aw-panel-body>
+        <aw-panel-section caption="i18n.idNamingRule">
+            <aw-panel-section>
+                <aw-radiobutton prop="data.defaultIdsOrIdNamingRuleCheckBox"></aw-radiobutton>
+            </aw-panel-section>
+            <aw-panel-section visible-when="conditions.idNamingRuleSectionVisible">
+                <aw-widget prop="data.prefixTextBox"></aw-widget>
+                <aw-widget prop="data.suffixTextBox"></aw-widget>
+                <aw-widget prop="data.replaceTextBox"></aw-widget>
+                <aw-widget prop="data.withTextBox"></aw-widget>
+            </aw-panel-section>
+        </aw-panel-section>
+    </aw-panel-body>
+
+    <aw-panel-footer>
+        <aw-flex-row>
+        <aw-checkbox prop="data.runInBackgroundCheckBox"></aw-checkbox>
+        </aw-flex-row>
+        <aw-button action="pasteObjectAsCopy" enable-when="conditions.isDuplicatePasteButtonEnable">
+            <aw-i18n>i18n.Paste</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>
+

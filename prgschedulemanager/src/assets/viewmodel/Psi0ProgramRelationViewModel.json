@@ -1,0 +1,174 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "Psi0ProgramRelationCommandAnchor": "Psi0ProgramRelationCommandAnchor",
+        "filterText": {
+            "displayName": "{{i18n.filter}}",
+            "type": "STRING"
+        }
+    },
+    "actions": {
+        "getViewModelObj": {
+            "actionType": "JSFunction",
+            "method": "createViewModelObject",
+            "inputData": {
+                "selectedEvent": "{{props.subPanelContext.selectionData.selected[0]}}"
+            },
+            "outputData": {
+                "selectedEvent": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "updateProgramRelationEvent"
+                    }
+                ]
+            },
+            "deps": "js/viewModelObjectService"
+        },
+        "loadLinkedObjects": {
+            "actionType": "dataProvider",
+            "method": "getLinkedObjectsSearchProvider"
+        },
+       "getProgramObjects" :
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Query-2014-11-Finder",
+            "method": "performSearch",
+            "inputData":
+            {
+                "searchInput":
+                {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Psi0PrgObjsSearchProvider",
+                    "searchCriteria": {
+                        "searchContentType": "LinkedProgramObjects",
+                        "linkedObjectUid" : "{{ctx.mselected[0].uid}}",
+                        "searchString": "{{data.filterText.dbValue}}"
+                    },
+
+                    "searchFilterFieldSortType" : "Alphabetical",
+                    "startIndex": "{{data.dataProviders.getLinkedObjectsSearchProvider.startIndex}}"
+                }
+            },
+            "policy": {
+                "types": [
+                    {
+                        "name": "Psi0ProgramRelation",
+                        "properties": [
+                            {
+                                "name": "primary_object",
+                                 "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "secondary_object",
+                                 "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            }
+
+                        ]
+                    }
+                ]
+            },
+            "outputData": {
+                "searchResults": "searchResults",
+                "totalFound": "totalFound",
+                "totalLoaded": "totalLoaded"
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            },
+            "deps": "js/Psi0ProgramRelationService"
+        },
+
+        "updateLinkedObjectDataAction":
+        {
+            "actionType": "JSFunction",
+            "method": "updateLinkedObjectData",
+            "inputData": {
+                "getLinkedObjectsSearchProvider": "{{data.dataProviders.getLinkedObjectsSearchProvider}}",
+                "deletedVMO": "{{data.eventMap['updateLinkedObjectData'].uid}}"
+            },
+            "outputData": {
+                "searchResults": "searchResults",
+                "totalFound": "totalFound",
+                "totalLoaded": "totalLoaded"
+            },
+            "deps": "js/Psi0ProgramRelationService"
+        },
+        "unregisterLinkedObjectRelationMap" : {
+            "actionType": "JSFunction",
+            "method": "unregisterLinkedObjectRelationMap",
+            "deps": "js/Psi0ProgramRelationService"
+        }
+   },
+    "dataProviders": {
+        "getLinkedObjectsSearchProvider":
+        {
+            "action": "getProgramObjects",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "commandsAnchor": "psi0_prgObjectCellCommand",
+            "selectionModelMode": "single"
+        }
+    },
+    "messages": {
+        "SOAFailureMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "i18n": {
+        "programRelation": [
+            "PrgScheduleManagerMessages"
+        ],
+        "relatedArtifacts": [
+            "PrgScheduleManagerMessages"
+        ],
+        "to": [
+            "PrgScheduleManagerMessages"
+        ],
+        "BACK_BUTTON_TITLE": [
+            "BaseMessages"
+        ]
+    },
+     "onEvent": [
+        {
+            "eventId": "awPanel.reveal",
+            "action": "loadLinkedObjects"
+        },
+        {
+            "eventId": "updateLinkedObjectData",
+            "cacheEventData": true,
+            "action": "updateLinkedObjectDataAction"
+        },
+        {
+            "eventId": "updateProgramRelationEvent",
+            "action": "loadLinkedObjects"
+        },
+        {
+            "eventId": "appCtx.register",
+            "criteria": {
+                "name": "selected"
+            },
+            "action": "loadLinkedObjects"
+        }
+
+    ],
+    "lifecycleHooks": {
+        "onMount": "getViewModelObj",
+        "onUnmount": "unregisterLinkedObjectRelationMap"
+    }
+}

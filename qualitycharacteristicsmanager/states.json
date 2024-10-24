@@ -1,0 +1,91 @@
+{
+  "com_siemens_splm_client_qualityCenterManager_libraryLocation": {
+    "data": {
+      "browserSubTitle": {
+        "source": "/i18n/qualitycentermanagerMessages",
+        "key": "libraryAppDisplayName"
+      },
+      "headerTitle": {
+        "source": "/i18n/qualitycentermanagerMessages",
+        "key": "libraryAppDisplayName"
+      }
+    },
+    "params": {
+      "userId": null
+    },
+    "view": "AwSearchLocation",
+    "parent": "root"
+  },
+  "qualityCenterMasterDataSummary": {
+    "data": {
+      "priority": 0,
+      "label": {
+        "source": "/i18n/qualitycentermanagerMessages",
+        "key": "summary"
+      }
+    },
+    "parent": "com_siemens_splm_client_qualityCenterManager_libraryLocation",
+    "url": "/qualityCenterMasterDataSummary",
+    "view": "Aqc0QualityCenterManager"
+  },
+  "FailureSpecificationSubLocation": {
+    "data": {
+      "priority": 3,
+      "label": {
+        "source": "/i18n/qualitycentermanagerMessages",
+        "key": "failureSpec"
+      }
+    },
+    "parent": "com_siemens_splm_client_qualityCenterManager_libraryLocation",
+    "view": "Aqc0FailureSpec",
+    "url": "/showFailureSpecs"
+  },
+  "CharacteristicsLibrarySubLocation": {
+    "controller": "QualityCharLibrarySublocationCtrl",
+    "data": {
+      "priority": 4,
+      "label": {
+        "source": "/i18n/qualitycentermanagerMessages",
+        "key": "CharacteristicsLibraryTitle"
+      }
+    },
+    "dependencies": [
+      "js/aw.qualityCharacteristicsLibrary.sublocation.controller"
+    ],
+    "params": {
+      "searchCriteria": null,
+      "s_uid": null
+    },
+    "parent": "com_siemens_splm_client_qualityCenterManager_libraryLocation",
+    "reloadOnSearch": false,
+    "view": "Aqc0CharLibrary",
+    "url": "/showCharacteristicslibrary"
+  },
+  "ChecklistSpecificationSubLocation": {
+    "data": {
+      "priority": 5,
+      "label": {
+        "source": "/i18n/qualitycentermanagerMessages",
+        "key": "checklists"
+      }
+    },
+    "params": {
+      "s_uid": null
+    },
+    "parent": "com_siemens_splm_client_qualityCenterManager_libraryLocation",
+    "view": "Aqc0ChecklistSpec",
+    "url": "/showChecklistsSpecs"
+  },
+  "QualityActionSubLocation": {
+    "data": {
+      "priority": 6,
+      "label": {
+        "source": "/i18n/qualitycentermanagerMessages",
+        "key": "quality"
+      }
+    },
+    "parent": "com_siemens_splm_client_qualityCenterManager_libraryLocation",
+    "view": "Aqc0QualityAction",
+    "url": "/showQMDQualityAction"
+  }
+}

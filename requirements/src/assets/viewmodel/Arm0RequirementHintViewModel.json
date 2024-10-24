@@ -1,0 +1,51 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports":
+    [
+        "js/aw-icon-button.directive"
+    ],
+
+    "actions":
+    {
+        "createDropTracelinkHintLabel": {
+            "actionType": "JSFunction",
+            "method": "createDropTracelinkHintLabel",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData":
+            {
+                "dropTracelinkHintLabel1": "hintStringA",
+                "dropTracelinkHintLabel2": "hintStringB"
+            },
+            "deps": "js/Arm0CreateTraceLinkPopupService"
+        }
+    },
+
+    "data":
+    {},
+
+    "dataProviders":
+    {},
+
+    "onEvent":
+    [
+        {
+            "eventId": "Arm0RequirementHint.contentLoaded",
+            "action": "createDropTracelinkHintLabel"
+        }
+    ],
+
+    "conditions":
+    {},
+
+    "i18n":
+    {
+        "dropTracelinkHintLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "createTraceLinkTitle":[
+            "RequirementsCommandPanelsMessages"
+        ]
+    }
+}

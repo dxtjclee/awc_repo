@@ -1,0 +1,2339 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-panel-body.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/aw-listbox.directive",
+        "js/aw-include.directive",
+        "js/visible-when.directive",
+        "js/aw-checkbox.directive",
+        "js/aw-command-panel-section.directive",
+        "js/aw-property-val.directive",
+        "js/aw-list.directive",
+        "js/enable-when.directive",
+        "js/aw-image.directive",
+        "js/aw-flex-row.directive",
+        "js/aw-navigate-panel.directive",
+        "js/exist-when.directive",
+        "js/show-when.directive"
+
+
+    ],
+
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+
+    "actions": {
+        "getExistingStructureOrFileTicketPreview": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "getTransientFileTicketsForImportPreviewEvent",
+                        "condition": "!conditions.isImportAsChildOfSelected && !conditions.isImportAsChildSpecOfSelected"
+                    },
+                    {
+                        "name": "getJsonDataOfExistingStructureEvent",
+                        "condition": "conditions.isImportAsChildOfSelected || conditions.isImportAsChildSpecOfSelected"
+                    }
+                ]
+            }
+        },
+        "getJsonDataOfExistingStructure": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AwReqMgmtSe-2019-12-SpecNavigation",
+            "method": "exportSpecifications",
+            "inputData": {
+                "input": {
+                    "selectedObjects": [
+                        "{{function:getTopSelectedObject}}"
+                    ],
+                    "inputCtxt": "{{function:getInputContext}}",
+                    "options": [],
+                    "isRunInBackground": false,
+                    "mode": "JSON"
+                }
+            },
+            "outputData": {
+                "jsonDataOfExistingStructure": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "importSpecification.setExisitingJSONData"
+                    }
+                ]
+            },
+            "deps": "js/requirementsACEUtils"
+        },
+        "getJsonDataOfExistingStructureForCompare": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AwReqMgmtSe-2019-12-SpecNavigation",
+            "method": "exportSpecifications",
+            "inputData": {
+                "input": {
+                    "selectedObjects": [
+                        "{{function:getTopSelectedObject}}"
+                    ],
+                    "inputCtxt": "{{function:getInputContext}}",
+                    "options": ["includeReleaseStatusProperty"],
+                    "isRunInBackground": false,
+                    "mode": "JSON"
+                }
+            },
+            "outputData": {
+                "jsonDataOfExistingStructure": ""
+            },
+            "events": {
+                "success": [ {
+
+                    "name": "importSpecification.setExistingJSONDataCompare"
+                } ]
+
+            },
+            "deps": "js/requirementsACEUtils"
+        },
+        "setExisitingJSONData": {
+            "actionType": "JSFunction",
+            "method": "setExisitingJSONData",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "progress.start"
+                    },
+                    {
+                        "name": "getTransientFileTicketsForImportPreviewEvent"
+                    }
+                ]
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "setExistingJSONDataCompare": {
+            "actionType": "JSFunction",
+            "method": "setExistingJSONDataCompare",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "events": {
+                "success": [
+                    {
+                    "name": "importSpecification.gotJsonDataOfExistingStructure"
+                } ]
+
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "gotJsonDataOfExistingStructure": {
+            "actionType": "JSFunction",
+            "method": "getTransientFileTicketsForCompareAndPreview",
+            "inputData": {
+                "ctx": "{{ctx}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "importPreview.getTransientFileTicketsForUpload"
+                    }
+                ]
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "startDataCreationForWord": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceReqMgmt-2017-06-ImportExport",
+            "method": "getDisplayableTypes",
+            "inputData": {
+                "input": {
+                    "rootTypeName": "",
+                    "specElementTypeName": "SpecElement",
+                    "exclusionBOTypeNames": [],
+                    "option": ""
+                }
+            },
+            "outputData": {
+                "outputSpecList": "rootTypes",
+                "outputSpecElementList": "specElementTypes"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "importSpecification.gotImportSpecandElementTypes"
+                    },
+                    {
+                        "name": "ImportFromOffice.registerCmdContext"
+                    }
+                ]
+            }
+        },
+        "removeRule": {
+            "actionType": "JSFunction",
+            "method": "removeRule",
+            "inputData": {
+                "data": "{{data}}",
+                "selectedRule": "{{data.eventData}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "ImportFromOffice.refreshImportRuleList"
+                    }
+                ]
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "updateRule": {
+            "actionType": "JSFunction",
+            "method": "updateRuleFn",
+            "inputData": {
+                "data": "{{data}}",
+                "selectedRule": "{{data.eventData}}",
+                "isMicroserviceInstalled": "{{conditions.isMicroserviceInstalled}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "updateRuleEvent": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "awPanel.navigate",
+                        "eventData": {
+                            "destPanelId": "Arm0AddRulesSub",
+                            "title": "Update Rules",
+                            "supportGoBack": true
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "updateAdvanceRuleEvent": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "awPanel.navigate",
+                        "eventData": {
+                            "destPanelId": "Arm0AddAdvanceRulesSub",
+                            "title": "Update Rules",
+                            "supportGoBack": true
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "getSubTypes": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceReqMgmt-2017-06-ImportExport",
+            "method": "getDisplayableTypes",
+            "inputData": {
+                "input": {
+                    "rootTypeName": "{{function:getRootTypeName}}",
+                    "specElementTypeName": "SpecElement",
+                    "exclusionBOTypeNames": [],
+                    "option": ""
+                }
+            },
+            "outputData": {
+                "outputSpecElementList": "specElementTypes"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "importSpecification.gotImportSpeElements"
+                    }
+                ]
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "getTransientFileTicketsForUpload": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2007-01-FileManagement",
+            "method": "getTransientFileTicketsForUpload",
+            "inputData": {
+                "transientFileInfos": [
+                    {
+                        "fileName": "{{subPanelContext.sharedData.fileName}}",
+                        "isBinary": true,
+                        "deleteFlag": false
+                    }
+                ]
+            },
+            "outputData": {
+                "fmsTicket": "transientFileTicketInfos[0].ticket"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0ImportFromOffice.startImportDocument"
+                    },
+                    {
+                        "name": "fmsTicket.update"
+                    }
+                ]
+            }
+        },
+        "updateFormData": {
+            "actionType": "JSFunction",
+            "method": "updateFormData",
+            "inputData": {
+                "formData": "{{subPanelContext.sharedData.formData}}",
+                "key": "fmsTicket",
+                "value": "{{data.fmsTicket}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "importSpecification.gotTransientFileTicket"
+                    },
+                    {
+                        "name": "importSpecification.storeFormDataForUpdatePreviewForImportPDF"
+                    }
+                ]
+            },
+            "deps": "js/fileUploadUtils"
+        },
+        "storeFormDataForUpdatePreviewForImportPDF": {
+            "actionType": "JSFunction",
+            "method": "storeFormDataForUpdatePreviewForImportPDF",
+            "inputData": {
+                "formData": "{{subPanelContext.sharedData.formData}}"
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "uploadFile": {
+            "actionType": "RESTService",
+            "serviceName": "",
+            "method": "POST",
+            "inputData": {
+                "request": {
+                    "method": "POST",
+                    "url": "{{Constants.fmsUrl}}",
+                    "headers": {
+                        "Content-type": "undefined"
+                    },
+                    "data": "{{subPanelContext.sharedData.formData}}"
+                }
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "importSpecification.fileUploaded"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "Arm0ImportFromOffice.importDocumentFailed"
+                    },
+                    {
+                        "name": "progress.end",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            }
+        },
+        "checkImportType": {
+            "actionType": "JSFunction",
+            "method": "checkImportType",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "importSpecificationNonKeyword": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceReqMgmt-2018-05-ImportExport",
+            "method": "importFromWord",
+            "inputData": {
+                "inputs": [
+                    {
+                        "selectedObject": "{{ctx.selected}}",
+                        "transientFileWriteTicket": "{{data.fmsTicket}}",
+                        "applicationFormat": "{{function:getApplicationFormat}}",
+                        "createSpecElementType": "{{data.reqSpecEleType.dbValue}}",
+                        "specificationType": "{{function:getSpecificationTypeForImport}}",
+                        "isLive": false,
+                        "isRunInBackground": "{{function:getRunInBackground}}",
+                        "isPermanentconvertToHtml": "{{function:getImportAsHtml}}",
+                        "importAsSpec": "{{function:getImportAsSpec}}",
+                        "pasteTopSpecRevisionUnderSelection": true,
+                        "specDesc": "{{data.description.dbValue}}",
+                        "keywordImportRules": [],
+                        "importOptions": []
+                    }
+                ]
+            },
+            "outputData": {
+                "importedObject": "output[0].resultObjects[0]"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0ImportFromOffice.updateCtxVariableFalseAndCloseForLegacy"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "Arm0ImportFromOffice.importDocumentFailed"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                    "message": "notificationForImportSpecificationMsg"
+                    }
+                ]
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "showObject": {
+            "actionType": "JSFunction",
+            "method": "go",
+            "deps": "js/locationNavigation.service",
+            "inputData": {
+                "showObject": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+                "toParams": {
+                    "uid": "{{data.importedObject.uid}}"
+                },
+                "option": {
+                    "inherit": false,
+                    "reload": true
+                }
+            }
+        },
+        "importSpecificationKeyword": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ImportExport-2017-11-FileImportExport",
+            "method": "importDocumentOffline",
+            "inputData": {
+                "inputs": [
+                    {
+                        "clientId": "",
+                        "transientFileWriteTicket": "{{data.fmsTicket}}",
+                        "childSpecElementType": "{{data.reqSpecEleType.dbValue}}",
+                        "specificationType": "{{data.reqType.dbValue}}",
+                        "selectedObject": "{{ctx.selected}}",
+                        "keywordImportOptions": "{{function:getkeywordImportOptions}}",
+                        "specDesc": "{{data.description.dbValue}}"
+                    }
+                ]
+            },
+            "outputData": {},
+            "events": {
+                "success": [
+                    {
+                    "name": "Arm0ImportFromOffice.updateCtxVariableFalseAndCloseForLegacy"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "Arm0ImportFromOffice.importDocumentFailed"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "notificationForImportSpecificationMsg"
+                    }
+                ]
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "importSpecificationkeywordTc115OrLater": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceReqMgmt-2018-05-ImportExport",
+            "method": "importFromWord",
+            "inputData": {
+                "inputs": [
+                    {
+                        "selectedObject": "{{ctx.selected}}",
+                        "transientFileWriteTicket": "{{data.fmsTicket}}",
+                        "applicationFormat": "{{function:getApplicationFormat}}",
+                        "createSpecElementType": "{{data.reqSpecEleType.dbValue}}",
+                        "specificationType": "{{function:getSpecificationTypeForImport}}",
+                        "isLive": false,
+                        "isRunInBackground": "{{function:getRunInBackground}}",
+                        "isPermanentconvertToHtml": "{{data.convertToHTML.dbValue}}",
+                        "importAsSpec": "{{function:getImportAsSpec}}",
+                        "pasteTopSpecRevisionUnderSelection": true,
+                        "specDesc": "{{data.description.dbValue}}",
+                        "keywordImportRules": "{{function:getkeywordImportOptions}}",
+                        "importOptions": []
+                    }
+                ]
+            },
+            "outputData": {},
+            "events": {
+                "success": [
+                    {
+                    "name": "Arm0ImportFromOffice.updateCtxVariableFalseAndCloseForLegacy"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "Arm0ImportFromOffice.importDocumentFailed"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "notificationForImportSpecificationMsg"
+                    }
+                ]
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "importUsingJSONData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceReqMgmt-2018-05-ImportExport",
+            "method": "importFromWord",
+            "inputData": {
+                "inputs": [
+                    {
+                        "selectedObject": "{{function:getCtxSelectedObject}}",
+                        "transientFileWriteTicket": "{{data.jsonFmsTicket}}",
+                        "applicationFormat": "PreviewImport",
+                        "createSpecElementType": "{{function:getFileName}}",
+                        "specificationType": "{{function:getSpecificationTypeForImport}}",
+                        "isLive": false,
+                        "isRunInBackground": "{{function:getRunInBackground}}",
+                        "isPermanentconvertToHtml": "{{data.convertToHTML.dbValue}}",
+                        "importAsSpec": "{{function:getImportAsSpec}}",
+                        "pasteTopSpecRevisionUnderSelection": true,
+                        "specDesc": "{{data.description.dbValue}}",
+                        "keywordImportRules": null,
+                        "importOptions": "{{function:getImportOptionsForWordAndPDF}}"
+                    }
+                ]
+            },
+            "outputData": {
+                "importedObject": "output[0].resultObjects[0]"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0ImportFromOffice.documentImported"
+                    },
+                    {
+                        "name": "importPreview.navigateToBack",
+                        "condition": "data.runInBackgroundWord.dbValue"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "Arm0ImportFromOffice.importDocumentFailed"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "notificationForImportSpecificationMsg",
+                    "condition": "data.runInBackgroundWord.dbValue"
+                    }
+                ],
+                "failure": [
+                   {
+                        "message": "handleImportPartialError"
+                    }
+                ]
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "importUsingJSONDataCompare": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceReqMgmt-2018-05-ImportExport",
+            "method": "importFromWord",
+            "inputData": {
+                "inputs": [
+                    {
+                        "selectedObject": "{{function:getCtxSelectedObject}}",
+                        "transientFileWriteTicket": "{{data.jsonFmsTicket}}",
+                        "applicationFormat": "{{function:getNewApplicationFormat}}",
+                        "createSpecElementType": "{{data.fileNameNoExt}}",
+                        "specificationType": "{{function:getSpecificationTypeForImport}}",
+                        "isLive": false,
+                        "isRunInBackground": "{{false}}",
+                        "isPermanentconvertToHtml": "{{data.convertToHTML.dbValue}}",
+                        "importAsSpec": "{{function:getImportAsSpec}}",
+                        "pasteTopSpecRevisionUnderSelection": true,
+                        "specDesc": "{{data.description.dbValue}}",
+                        "keywordImportRules": null,
+                        "importOptions": "{{function:getImportOptionsForWordAndPDF}}"
+                    }
+                ]
+            },
+            "outputData": {
+                "importedObject": "output[0].resultObjects[0]"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0ImportFromOffice.documentImported"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "Arm0ImportFromOffice.importDocumentFailed"
+                    },
+                    {
+                        "condition": "errorCode.code===159014",
+                        "name": "Arm0ImportFromOffice.documentImported"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "condition": "errorCode.code===159015",
+                        "message":"importItemsareReleaseErrorMessage"
+                    },
+                    {
+                        "condition": "errorCode.code===159014",
+                        "message":"importItemsareReleaseWarningMessage"
+                    },
+                    {
+                        "condition":"errorCode.code===83074",
+                        "message":"reviseWorkRevisionLimitExceededErrorMessage"
+                    }
+                ]
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "importPreview": {
+            "actionType": "RESTService",
+            "serviceName": "",
+            "method": "POST",
+            "inputData": {
+                "request": {
+                    "method": "POST",
+                    "url": "{{function:getMicroServiceURL}}",
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "data": {
+                        "keywordImportRules": "{{function:getkeywordImportAdvanceOptions}}",
+                        "specificationType": "{{function:getSpecificationTypeForImport}}",
+                        "specificationDisplayType": "{{function:getSpecificationDisplayTypeForImport}}",
+                        "mode": "Preview",
+                        "defaultDisplayType": "{{data.reqSpecEleType.uiValue}}",
+                        "preserveParagraphNumber": "{{data.preserveNumbering.dbValue}}",
+                        "defaultInternalType": "{{data.reqSpecEleType.dbValue}}",
+                        "documentName": "{{subPanelContext.sharedData.fileName}}",
+                        "inputWordFileTicket": "{{data.fmsTicket}}",
+                        "localizedLabels":"{{function:getLocalizedLabels}}",
+                        "createPlaceholders":"{{data.createEmptyPlaceholder.dbValue}}",
+                        "importSpecPreference" :"{{function:getImportSpecPreferences}}"
+                    }
+                }
+            },
+            "outputData": {
+                "treeData": "data"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "importPreview.saveTreeData",
+                        "condition": "!ctx.compareAndPreviewBtnClicked"
+                    },
+                    {
+                        "name": "importPreview.compareAndSetTreeData",
+                        "condition": "ctx.compareAndPreviewBtnClicked"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "Arm0ImportFromOffice.importDocumentFailed"
+                    },
+                    {
+                        "name": "progress.end",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            },
+
+            "actionMessages": {
+                "failure": [ {
+                    "message": "MicroserviceInstallationErrorPreview"
+                } ]
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "importPreviewForPDF": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceReqMgmt-2020-05-ImportExport",
+            "method": "getPreviewInfo",
+            "inputData": {
+                "input": [
+                    {
+                        "rulesInput": "{{function:getRulesInputJsonTextForPDFPreview}}",
+                        "inputFileTicket": "{{data.fmsTicket}}",
+                        "options": []
+                    }
+                ]
+            },
+            "outputData": {
+                "treeData": "previewJsonFileTicket[0]"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "importPreview.saveTreeData",
+                        "condition": "!ctx.compareAndPreviewBtnClicked"
+                    },
+                    {
+                        "name": "importPreview.compareAndSetTreeData",
+                        "condition": "ctx.compareAndPreviewBtnClicked"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "Arm0ImportFromOffice.importDocumentFailed"
+                    },
+                    {
+                        "name": "progress.end",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            },
+            "actionMessages": {},
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "keywordImport": {
+            "actionType": "RESTService",
+            "serviceName": "",
+            "method": "POST",
+            "inputData": {
+                "request": {
+                    "method": "POST",
+                    "url": "{{function:getMicroServiceURL}}",
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "data": {
+                        "keywordImportRules": "{{function:getkeywordImportAdvanceOptions}}",
+                        "specificationType": "{{function:getSpecificationTypeForImport}}",
+                        "specificationDisplayType": "{{function:getSpecificationDisplayTypeForImport}}",
+                        "mode": "Preview",
+                        "defaultDisplayType": "{{data.reqSpecEleType.uiValue}}",
+                        "defaultInternalType": "{{data.reqSpecEleType.dbValue}}",
+                        "preserveParagraphNumber": "{{data.preserveNumbering.dbValue}}",
+                        "documentName": "{{subPanelContext.sharedData.fileName}}",
+                        "inputWordFileTicket": "{{data.fmsTicket}}",
+                        "localizedLabels":"{{function:getLocalizedLabels}}",
+                        "createPlaceholders":"{{data.createEmptyPlaceholder.dbValue}}",
+                        "importSpecPreference" :"{{function:getImportSpecPreferences}}"
+                    }
+                }
+            },
+            "outputData": {
+                "treeData": "data",
+                "jsonFmsTicket": "data"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "importSpecification.setJSONDataForImport"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "Arm0ImportFromOffice.importDocumentFailed"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "MicroserviceInstallationErrorImport"
+                } ]
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "keywordImportForImportPDF": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceReqMgmt-2020-05-ImportExport",
+            "method": "getPreviewInfo",
+            "inputData": {
+                "input": [
+                    {
+                        "rulesInput": "{{function:getRulesInputJsonTextForPDFPreview}}",
+                        "inputFileTicket": "{{data.fmsTicket}}",
+                        "options": []
+                    }
+                ]
+            },
+            "outputData": {
+                "treeData": "previewJsonFileTicket[0]",
+                "jsonFmsTicket": "previewJsonFileTicket[0]"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "importSpecification.setJSONDataForImport"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "Arm0ImportFromOffice.importDocumentFailed"
+                    }
+                ]
+            },
+            "actionMessages": {},
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "updatePreviewStart": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "progress.start"
+                    },
+                    {
+                        "name": "Arm0ImportFromOffice.startImportDocument"
+                    },
+                    {
+                        "name": "importPreview.updatePreview"
+                    }
+                ]
+            }
+        },
+        "updatePreview": {
+            "actionType": "RESTService",
+            "serviceName": "",
+            "method": "POST",
+            "inputData": {
+                "request": {
+                    "method": "POST",
+                    "url": "{{function:getMicroServiceURL}}",
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "data": {
+                        "keywordImportRules": "{{function:getkeywordImportAdvanceOptions}}",
+                        "specificationType": "{{function:getSpecificationTypeForImport}}",
+                        "specificationDisplayType": "{{function:getSpecificationDisplayTypeForImport}}",
+                        "mode": "Preview",
+                        "defaultDisplayType": "{{data.reqSpecEleType.uiValue}}",
+                        "preserveParagraphNumber": "{{data.preserveNumbering.dbValue}}",
+                        "defaultInternalType": "{{data.reqSpecEleType.dbValue}}",
+                        "documentName": "{{subPanelContext.sharedData.fileName}}",
+                        "inputWordFileTicket": "{{data.fmsTicket}}",
+                        "localizedLabels":"{{function:getLocalizedLabels}}",
+                        "createPlaceholders":"{{data.createEmptyPlaceholder.dbValue}}",
+                        "importSpecPreference" :"{{function:getImportSpecPreferences}}"
+                    }
+                }
+            },
+            "outputData": {
+                "treeData": "data"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "importPreview.saveUpdatedTreeData"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "Arm0ImportFromOffice.importDocumentFailed"
+                    },
+                    {
+                        "name": "progress.end",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "MicroserviceInstallationErrorUpdatePreview"
+                } ]
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "uploadFileForUpdatePreviewForPDFImport": {
+            "actionType": "RESTService",
+            "serviceName": "",
+            "method": "POST",
+            "inputData": {
+                "request": {
+                    "method": "POST",
+                    "url": "{{Constants.fmsUrl}}",
+                    "headers": {
+                        "Content-type": "undefined"
+                    },
+                    "data": "{{function:getCachedFormData}}"
+                }
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "importPreview.updatePreviewForPDFImport"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "progress.end",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "updatePreviewForPDFImport": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceReqMgmt-2020-05-ImportExport",
+            "method": "getPreviewInfo",
+            "inputData": {
+                "input": [
+                    {
+                        "rulesInput": "{{function:getRulesInputJsonTextForPDFPreview}}",
+                        "inputFileTicket": "{{data.fmsTicket}}",
+                        "options": []
+                    }
+                ]
+            },
+            "outputData": {
+                "treeData": "previewJsonFileTicket[0]"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "importPreview.saveUpdatedTreeData"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "Arm0ImportFromOffice.importDocumentFailed"
+                    },
+                    {
+                        "name": "progress.end",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            },
+            "actionMessages": {},
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "updateImportSpecList": {
+            "actionType": "JSFunction",
+            "method": "updateImportSpecList",
+            "inputData": {
+                "data": "{{data}}",
+                "selected" : "{{ctx.selected}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "updateImportSpecElementList": {
+            "actionType": "JSFunction",
+            "method": "updateImportSpecElementList",
+            "inputData": {
+                "data": "{{data}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "outputData": {
+                "reqSpecEleTypeList": "reqSpecEleTypeList",
+                "reqSpecEleType": "reqSpecEleType"
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "loadCells": {
+            "actionType": "dataProvider",
+            "method": "importRulesList"
+        },
+        "updateCtxVariable": {
+            "actionType": "JSFunction",
+            "method": "registerData",
+            "inputData": {
+                "data": "{{data._arm0ImportFromOfficeEventProgressing}}"
+            },
+            "outputData": {
+                "_arm0ImportFromOfficeEventProgressing": "arm0ImportFromOfficeEventProgressing"
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "updateCtxVariableFalse": {
+            "actionType": "JSFunction",
+            "method": "unRegisterData",
+            "inputData": {
+                "data":"{{data._arm0ImportFromOfficeEventProgressing}}"
+            },
+            "outputData": {
+                "_arm0ImportFromOfficeEventProgressing": "arm0ImportFromOfficeEventProgressing"
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "updateCtxVariableFalseAndClose": {
+            "actionType": "JSFunction",
+            "method": "unRegisterData",
+            "inputData": {
+                "data":"{{data._arm0ImportFromOfficeEventProgressing}}"
+            },
+            "outputData": {
+                "_arm0ImportFromOfficeEventProgressing": "arm0ImportFromOfficeEventProgressing"
+            },
+            "events": {
+                "success": [ {
+                        "name": "progress.end"
+                    },
+                    {
+                        "name": "Arm0ImportFromOffice.showObject",
+                        "condition": "!data.runInBackgroundWord.dbValue"
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+
+            "deps": "js/Arm0ImportFromOffice"
+        },
+
+        "updateCtxVariableFalseAndCloseForLegacy": {
+            "actionType": "JSFunction",
+            "method": "unRegisterData",
+            "inputData": {
+                "data":"{{data._arm0ImportFromOfficeEventProgressing}}"
+            },
+            "outputData": {
+                "_arm0ImportFromOfficeEventProgressing": "arm0ImportFromOfficeEventProgressing"
+            },
+            "events": {
+                "success": [ {
+
+                        "name": "progress.end"
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "openImportPreview": {
+            "actionType": "Navigate",
+            "navigateTo": "#/Preview",
+            "navigationParams": {
+                "fileName": "{{subPanelContext.sharedData.fileName}}"
+            }
+        },
+        "saveTreeData": {
+            "actionType": "JSFunction",
+            "method": "setTreeData",
+            "inputData": {
+                "treeData": "{{data.treeData}}"
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "compareAndSetTreeData": {
+            "actionType": "JSFunction",
+            "method": "compareAndSetTreeData",
+            "inputData": {
+                "treeData": "{{data.treeData}}",
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "setJSONDataForImport": {
+            "actionType": "JSFunction",
+            "method": "setJSONDataForImport",
+            "inputData": {
+                "data": "{{data}}",
+                "jsonFmsTicket": "{{data.jsonFmsTicket}}"
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "getJSONDataForCompareImport":{
+            "actionType": "JSFunction",
+            "method": "getJSONDataForCompareImport",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "getJSONDataForImport": {
+            "actionType": "JSFunction",
+            "method": "getJSONDataForImport",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "events": {
+                "success": [ {
+
+                    "name": "Arm0ImportFromOffice.startImportDocument"
+                } ]
+
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "saveUpdatedTreeData": {
+            "actionType": "JSFunction",
+            "method": "setUpdateTreeData",
+            "inputData": {
+                "treeData": "{{data.treeData}}",
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "unRegisterArm0AddRulesSubCtx": {
+            "actionType": "JSFunction",
+            "method": "unRegisterArm0AddRulesSubCtx",
+            "inputData": {
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "getTransientFileTicketsForImportPreview": {
+            "actionType": "JSFunction",
+            "method": "getTransientFileTicketsForImportPreview",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "importPreviewBtnClicked": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "importPreview.getTransientFileTicketsForUpload"
+                    }
+                ]
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "getJsonFileTicketsForImport": {
+            "actionType": "RESTService",
+            "serviceName": "",
+            "method": "POST",
+            "inputData": {
+                "request": {
+                    "method": "POST",
+                    "url": "{{function:getMicroServiceURL}}",
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "data": {
+                        "keywordImportRules": "{{function:getkeywordImportOptions}}",
+                        "specificationType": "{{function:getSpecificationTypeForImport}}",
+                        "specificationDisplayType": "{{function:getSpecificationDisplayTypeForImport}}",
+                        "mode": "Preview",
+                        "defaultDisplayType": "{{data.reqSpecEleType.uiValue}}",
+                        "preserveParagraphNumber": "{{data.preserveNumbering.dbValue}}",
+                        "defaultInternalType": "{{data.reqSpecEleType.dbValue}}",
+                        "documentName": "{{subPanelContext.sharedData.fileName}}",
+                        "inputWordFileTicket": "{{data.fmsTicket}}",
+                        "previewSpecData": "{{data.treeData}}",
+                        "localizedLabels":"{{function:getLocalizedLabels}}",
+                        "createPlaceholders":"{{data.createEmptyPlaceholder.dbValue}}",
+                        "importSpecPreference" :"{{function:getImportSpecPreferences}}"
+                    }
+                }
+            },
+            "outputData": {
+                "jsonFmsTicket": "data"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "importSpecification.setJSONDataForImport"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "Arm0ImportFromOffice.importDocumentFailed"
+                    },
+                    {
+                        "name": "progress.end",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "MicroserviceInstallationErrorImport"
+                } ]
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "closeImportPreview": {
+            "actionType": "JSFunction",
+            "method": "closeImportPreview",
+            "deps": "js/Arm0ImportFromWord",
+            "inputData": {
+                "data": "{{data}}"
+            }
+        },
+        "closeImportPreviewProxyFunction": {
+            "actionType": "JSFunction",
+            "method": "closeImportPreviewProxyFunction",
+            "deps": "js/Arm0ImportFromWord",
+            "inputData": { }
+        },
+        "populateAllImportRules": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceReqMgmt-2019-12-ImportExport",
+            "method": "getRulesInfo",
+            "inputData": {
+                "input": {
+                    "ruleNames": [],
+                    "ruleObjects": [],
+                    "mappingType": "{{subPanelContext.sharedData.mappingType}}"
+                }
+            },
+            "outputData": {
+                "response": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "importSpecification.initRuleLovApi"
+                    }
+                ]
+            }
+        },
+        "initRuleLovApi": {
+            "actionType": "JSFunction",
+            "method": "initRuleLovApi",
+            "inputData": {
+                "data": "{{data}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "outputData": {
+                "savedRulesListBoxValues": ""
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "populateInfoForRule": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceReqMgmt-2019-12-ImportExport",
+            "method": "getRulesInfo",
+            "inputData": {
+                "input": {
+                    "mappingType": "{{subPanelContext.sharedData.mappingType}}",
+                    "ruleNames": [
+                        "{{data.savedRules.dbValue}}"
+                    ],
+                    "ruleObjects": [
+                        "{{subPanelContext.sharedData.selectedRule.ruleObject}}"
+                    ]
+                }
+            },
+            "outputData": {
+                "response": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "importSpecification.populateRulesFromSavedRuleName"
+                    }
+                ]
+            }
+        },
+        "populateRulesFromSavedRuleName": {
+            "actionType": "JSFunction",
+            "method": "populateRulesFromSavedRuleName",
+            "inputData": {
+                "data": "{{data}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "createSaveRulesInput": {
+            "actionType": "JSFunction",
+            "method": "createSaveRulesInput",
+            "inputData": {
+                "data": "{{data}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "checkActionForSave": {
+            "actionType": "JSFunction",
+            "method": "checkActionForSave",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "saveRuleCmdDimension": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "importSpecification.displayPopup1",
+                        "condition": "data.savedRules.dbValue ===''"
+
+                    },
+                    {
+                        "name": "ImportFromOffice.showUpdateRuleNotificationWarning",
+                        "condition": "data.savedRules.dbValue !== ''"
+                    }
+                ]
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "showUpdateRuleNotificationWarning": {
+            "actionType": "JSFunction",
+            "method": "showUpdateRuleNotificationWarning",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "saveImportRule": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceReqMgmt-2019-12-ImportExport",
+            "method": "saveRulesInfo",
+            "inputData": {
+                "input": "{{data.importInput}}"
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "successImportRule"
+                    }
+                ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "importRule.closeSaveRuleBallonPopupWindow"
+                    },
+                    {
+                        "name": "importSpecification.populateAllImportRules"
+                    }
+                ]
+            },
+            "outputData": {
+                "response": ""
+            }
+        },
+
+        "displayPopup": {
+            "actionType": "popup",
+            "inputData": {
+                "options": {
+                    "view": "Arm0ImportRulePopup",
+                    "clickOutsideToClose": true,
+                    "placement": "bottom-start",
+                    "width": 268,
+                    "height": 160,
+                    "hasArrow": true,
+                    "hasCloseButton": false,
+                    "subPanelContext": {
+                        "sharedData": "{{subPanelContext.sharedData}}"
+                    }
+                }
+            }
+        },
+
+        "convertComparedSpecContentsToHTML": {
+            "actionType": "JSFunction",
+            "method": "convertComparedSpecContentsToHTML",
+            "inputData": {
+                "ctx": "{{ctx}}",
+                "htmlContents": "{{data.compareHtmlData}}",
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "applyDFSOnExisting": {
+            "actionType": "JSFunction",
+            "method": "showTreeWithContents",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "getFMSFileTicketForImportPDF": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2007-01-FileManagement",
+            "method": "getTransientFileTicketsForUpload",
+            "inputData": {
+                "transientFileInfos": [
+                    {
+                        "fileName": "pdfImportJsonString.txt",
+                        "isBinary": true
+                    }
+                ]
+            },
+            "outputData": {
+                "jsonFmsTicket": "transientFileTicketInfos[0].ticket"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "importSpecification.updateFileContentInFormDataForImportPDF"
+                    }
+                ]
+            }
+        },
+        "updateFileContentInFormDataForImportPDF": {
+            "actionType": "JSFunction",
+            "method": "updateFileContentInFormDataForImportPDF",
+            "deps": "js/Arm0ImportFromOffice",
+            "inputData": {
+                "data": "{{data}}"
+            }
+        },
+        "wordRuleSelectionChange":{
+            "actionType": "JSFunction",
+            "method": "wordRuleSelectionChangeInListBox",
+            "deps": "js/Arm0ImportFromOffice",
+            "inputData": {
+                "data": "{{data}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+               }
+        },
+        "uploadImportFileForImportPDF": {
+            "actionType": "RESTService",
+            "serviceName": "",
+            "method": "POST",
+            "inputData": {
+                "request": {
+                    "method": "POST",
+                    "url": "{{Constants.fmsUrl}}",
+                    "headers": {
+                        "Content-type": "undefined"
+                    },
+                    "data": "{{data.formDataForImportPDF}}"
+                }
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "importSpecification.setJSONDataForImport"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "Arm0ImportFromOffice.importDocumentFailed"
+                    },
+                    {
+                        "name": "progress.end",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            },
+            "actionMessages": {},
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "columnSelectionChanged": {
+            "actionType": "JSFunction",
+            "method": "columnSelectionChanged",
+            "inputData": {
+                "data": "{{data.dataProviders}}",
+                "sharedData": "{{subPanelContext.sharedData}}"
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "unRegisterCmdContext": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "deps": "js/appCtxService",
+            "inputData": {
+                "name": "Arm0AddRulesCtx"
+            }
+        },
+        "registerCmdContext":{
+            "actionType": "JSFunction",
+            "method": "registerCmdContext",
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "registerSharedData":{
+            "actionType": "JSFunction",
+            "method": "registerSharedData",
+            "inputData": {
+                "subPanelContext":"{{subPanelContext.sharedData}}"
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "ruleMoveUp": {
+            "actionType": "JSFunction",
+            "method": "moveUpDown",
+            "inputData": {
+                "data": "{{data.dataProviders}}",
+                "importRules": "{{data.importRules}}",
+                "moveTo": "Up"
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "ruleMoveDown": {
+            "actionType": "JSFunction",
+            "method": "moveUpDown",
+            "inputData": {
+                "data": "{{data.dataProviders}}",
+                "importRules": "{{data.importRules}}",
+                "moveTo": "Down"
+            },
+            "deps": "js/Arm0ImportFromWord"
+        },
+        "updateImportTypesList": {
+            "actionType": "JSFunction",
+            "method": "updateImportTypesList",
+            "inputData": {
+                "data": "{{data}}",
+                "selected" : "{{data.eventData.selectedObjects[0]}}",
+                "subPanelContext":"{{subPanelContext}}"
+            },
+            "outputData": {
+                "importTypeValues": ""
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "getDisplayImportRules": {
+            "actionType": "JSFunction",
+            "method": "getDisplayImportRules",
+            "inputData": {
+                "importRules": "{{subPanelContext.sharedData.importRules}}"
+            },
+            "outputData": {
+                "importRules":""
+            },
+            "events": {
+                "success": [ {
+                    "name": "ImportFromOffice.refreshImportRuleList1"
+                } ]
+            },
+            "deps": "js/Arm0ImportFromWord"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "importPreview.applyDFSOnExisting",
+            "action": "applyDFSOnExisting"
+        },
+        {
+            "eventId": "importRulesList.selectionChangeEvent",
+            "action": "columnSelectionChanged"
+        },
+        {
+            "eventId": "importRulesList.focusSelection",
+            "action": "columnSelectionChanged"
+        },
+        {
+            "eventId": "ImportFromOffice.registerCmdContext",
+            "action": "registerCmdContext"
+        },
+        {
+            "eventId": "importRulesList.ruleMoveUp",
+            "action": "ruleMoveUp"
+        },
+        {
+            "eventId": "importRulesList.ruleMoveDown",
+            "action": "ruleMoveDown"
+        },
+        {
+            "eventId": "ImportFromOffice.unRegisterCmdContext",
+            "action": "unRegisterCmdContext"
+        },
+        {
+            "eventId": "getTransientFileTicketsForImportPreviewEvent",
+            "action": "getTransientFileTicketsForImportPreview"
+        },
+        {
+            "eventId": "getJsonDataOfExistingStructureEvent",
+            "action": "getJsonDataOfExistingStructure"
+        },
+        {
+            "eventId": "importSpecification.setExisitingJSONData",
+            "action": "setExisitingJSONData"
+        },
+        {
+            "eventId": "fmsTicket.update",
+            "action": "updateFormData"
+        },
+        {
+            "eventId": "importSpecification.fileUploaded",
+            "action": "checkImportType"
+        },
+        {
+            "eventId": "importSpecification.gotTransientFileTicket",
+            "action": "uploadFile"
+        },
+        {
+            "eventId": "importSpecification.storeFormDataForUpdatePreviewForImportPDF",
+            "action": "storeFormDataForUpdatePreviewForImportPDF"
+        },
+        {
+            "eventId": "importSpecification.gotImportSpecandElementTypes",
+            "action": "updateImportSpecList"
+        },
+        {
+            "eventId": "importSpecification.gotImportSpeElements",
+            "action": "updateImportSpecElementList"
+        },
+        {
+            "eventId": "ImportFromOffice.refreshImportRuleList",
+            "action": "getDisplayImportRules"
+        },
+        {
+            "eventId": "ImportFromOffice.refreshImportRuleList1",
+            "action": "loadCells"
+        },
+        {
+            "eventId": "importSpecification.keyword",
+            "action": "importSpecificationKeyword"
+        },
+        {
+            "eventId": "importSpecification.keywordTc115OrLater",
+            "action": "importSpecificationkeywordTc115OrLater"
+        },
+        {
+            "eventId": "importSpecification.importUsingJSONData",
+            "condition": "!ctx.compareAndPreviewBtnClicked",
+            "action": "importUsingJSONData"
+        },
+        {
+            "eventId": "importSpecification.importUsingJSONData",
+            "condition": "ctx.compareAndPreviewBtnClicked",
+            "action": "importUsingJSONDataCompare"
+        },
+        {
+            "eventId": "importSpecification.nonKeyword",
+            "action": "importSpecificationNonKeyword"
+        },
+        {
+            "eventId": "Arm0ImportFromOffice.startDataCreationForWord",
+            "action": "startDataCreationForWord"
+        },
+        {
+            "eventId": "Arm0ImportFromOffice.startImportDocument",
+            "action": "updateCtxVariable"
+        },
+        {
+            "eventId": "Arm0ImportFromOffice.documentImported",
+            "action": "updateCtxVariableFalseAndClose"
+        },
+        {
+            "eventId": "Arm0ImportFromOffice.updateCtxVariableFalseAndCloseForLegacy",
+            "action": "updateCtxVariableFalseAndCloseForLegacy"
+        },
+        {
+            "eventId": "Arm0ImportFromOffice.importDocumentFailed",
+            "action": "updateCtxVariableFalse"
+        },
+        {
+            "eventId": "Arm0ImportFromOffice.showObject",
+            "action": "showObject"
+        },
+        {
+            "eventId": "importPreview.openImportPreview",
+            "action": "openImportPreview"
+        },
+        {
+            "eventId": "importSpecification.importPreview",
+            "action": "importPreview",
+            "condition": "!ctx.isArm0ImportFromPDFSubPanelActive"
+        },
+        {
+            "eventId": "importSpecification.importPreview",
+            "action": "importPreviewForPDF",
+            "condition": "ctx.isArm0ImportFromPDFSubPanelActive"
+        },
+        {
+            "eventId": "importPreview.saveTreeData",
+            "action": "saveTreeData"
+        },
+        {
+            "eventId": "importPreview.compareAndSetTreeData",
+            "action": "compareAndSetTreeData"
+        },
+        {
+            "eventId": "importPreview.saveUpdatedTreeData",
+            "action": "saveUpdatedTreeData"
+        },
+        {
+            "eventId": "importSpecification.keywordImport",
+            "action": "keywordImport"
+        },
+        {
+            "eventId": "importSpecification.setJSONDataForImport",
+            "action": "setJSONDataForImport"
+        },
+        {
+            "eventId": "importSpecification.updateRuleEvent",
+            "action": "updateRuleEvent"
+        },
+        {
+            "eventId": "importSpecification.updateAdvanceRuleEvent",
+            "action": "updateAdvanceRuleEvent"
+        },
+        {
+            "eventId": "importPreview.unRegisterArm0AddRulesSubCtx",
+            "action": "unRegisterArm0AddRulesSubCtx"
+        },
+        {
+            "eventId": "importPreview.unRegisterArm0AddPropRulesCtx",
+            "action": "unRegisterArm0AddPropRulesCtx"
+        },
+        {
+            "eventId": "importPreview.getTransientFileTicketsForUpload",
+            "action": "getTransientFileTicketsForUpload"
+        },
+        {
+            "eventId": "importPreview.updatePreview",
+            "action": "updatePreview",
+            "condition": "!ctx.isArm0ImportFromPDFSubPanelActive"
+        },
+        {
+            "eventId": "importPreview.updatePreview",
+            "action": "uploadFileForUpdatePreviewForPDFImport",
+            "condition": "ctx.isArm0ImportFromPDFSubPanelActive"
+        },
+        {
+            "eventId": "importPreview.updatePreviewForPDFImport",
+            "action": "updatePreviewForPDFImport"
+        },
+        {
+            "eventId": "importPreview.getJsonFileTicketsForImport",
+            "action": "getJsonFileTicketsForImport"
+        },
+        {
+            "eventId": "Arm0ImportPreview.closeImportPreview",
+            "action": "closeImportPreview"
+        },
+        {
+            "eventId": "Arm0ImportPreview.closeImportPreviewProxy",
+            "action": "closeImportPreviewProxyFunction"
+        },
+        {
+            "eventId": "importSpecification.populateAllImportRules",
+            "action": "populateAllImportRules"
+        },
+        {
+            "eventId": "importSpecification.initRuleLovApi",
+            "action": "initRuleLovApi"
+        },
+        {
+            "eventId": "importSpecification.populateInfoForRule",
+            "action": "populateInfoForRule"
+        },
+        {
+            "eventId": "importSpecification.populateRulesFromSavedRuleName",
+            "action": "populateRulesFromSavedRuleName"
+        },
+        {
+            "eventId": "importSpecification.createSaveRulesInput",
+            "action": "createSaveRulesInput"
+        },
+        {
+            "eventId": "importSpecification.saveImportRule",
+            "action": "saveImportRule"
+        },
+        {
+            "eventId": "importSpecification.gotJsonDataOfExistingStructure",
+            "action": "gotJsonDataOfExistingStructure"
+        },
+        {
+            "eventId": "importSpecification.setExistingJSONDataCompare",
+            "action": "setExistingJSONDataCompare"
+        },
+        {
+            "eventId": "importPreview.convertComparedSpecContentsToHTML",
+            "action": "convertComparedSpecContentsToHTML"
+        },
+        {
+            "eventId": "importSpecification.displayPopup1",
+            "action": "displayPopup"
+        },
+        {
+            "eventId": "importSpecification.displayPopup",
+            "action": "checkActionForSave"
+        },
+        {
+            "eventId": "importSpecification.checkActionForSave",
+            "action": "checkActionForSave"
+        },
+
+
+        {
+            "eventId": "importPreview.getFMSFileTicketForImportPDF",
+            "action": "getFMSFileTicketForImportPDF"
+        },
+        {
+            "eventId": "importSpecification.updateFileContentInFormDataForImportPDF",
+            "action": "updateFileContentInFormDataForImportPDF"
+        },
+        {
+            "eventId": "importSpecification.uploadImportFileForImportPDF",
+            "action": "uploadImportFileForImportPDF"
+        },
+        {
+            "eventId": "primaryWorkArea.selectionChangeEvent",
+            "action": "updateImportTypesList",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "importSpecification.keywordImportForImportPDF",
+            "action": "keywordImportForImportPDF"
+        },
+        {
+            "eventId": "importSpecification.removeRule",
+            "action": "removeRule",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "importSpecification.updateRule",
+            "action": "updateRule",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "ImportFromOffice.registerSharedData",
+            "action": "registerSharedData"
+        },
+        {
+            "eventId": "ImportFromOffice.showUpdateRuleNotificationWarning",
+            "action": "showUpdateRuleNotificationWarning"
+        }
+    ],
+    "lifecycleHooks": {
+        "onMount": "startDataCreationForWord"
+    },
+    "data": {
+
+        "importFromWordSubCommands": "arm0_importFromWordSubCommands",
+        "runInBackgroundWord": {
+            "displayName": "{{i18n.runinBG}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "dbValue": false,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "createEmptyPlaceholder": {
+            "displayName": "{{i18n.createEmptyPlaceholder}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "dbValue": false,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "addFileAsAttachmnt": {
+            "displayName": "{{i18n.addFileAsAttachmnt}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "dbValue": false,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "selectFile": {
+            "displayName": "{{i18n.selectFile}}",
+            "type": "STRING"
+        },
+        "reqType": {
+            "displayName": "{{i18n.reqSpecType}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "emptyLOVEntry": false,
+            "hasLov": "true",
+            "dataProvider": "getSpecificationType",
+            "labelPosition": "PROPERTY_LABEL_AT_TOP"
+        },
+        "reqSpecEleType": {
+            "displayName": "{{i18n.defaultElementType}}",
+            "type": "STRING",
+            "isRequired": "true",
+            "emptyLOVEntry": false,
+            "hasLov": "true",
+            "dataProvider": "getRequirementType",
+            "labelPosition": "PROPERTY_LABEL_AT_TOP"
+        },
+        "description": {
+            "displayName": "{{i18n.desc}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "labelPosition": "PROPERTY_LABEL_AT_TOP"
+        },
+        "convertToHTML": {
+            "displayName": "{{i18n.convertToEdit}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "dbValue": true,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "savedRules": {
+            "displayName": "{{i18n.savedRules}}",
+            "type": "STRING",
+            "hasLov": true
+        },
+        "newRules": {
+            "type": "STRING",
+            "isRequired": "true",
+            "isEditable": "true"
+        },
+        "preserveNumbering": {
+            "displayName": "{{i18n.retainNumbering}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "dbValue": false,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "importSubtypeOnlyCheckbox": {
+            "displayName": "{{i18n.importSubtypeOnly}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "dbValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "fieldLabel": {
+            "displayName": "{{i18n.savedRules}}"
+        },
+        "importTypeValues":
+        {
+            "type": "STRING",
+            "dbValue":
+            [
+                {"propDisplayValue" :"{{i18n.asChildReqLabel}}", "dispValue" :"{{i18n.asChildReqLabel}}", "propInternalValue" : "importAsChildReq"}
+            ]
+        },
+        "selectedImportType":
+        {
+            "displayName": "",
+            "type": "STRING",
+            "hasLov": "true",
+            "emptyLOVEntry": false,
+            "dataProvider": "getSelectedImportType",
+            "labelPosition": "PROPERTY_LABEL_AT_TOP"
+        },
+        "_arm0ImportFromOfficeEventProgressing": false
+    },
+    "functions": {
+        "getTopSelectedObject": {
+            "functionName": "getTopSelectedObject",
+            "parameters": [
+                "{{ctx}}"
+            ]
+        },
+        "getInputContext": {
+            "functionName": "getInputContext"
+        },
+        "getCompareHtmlServiceURL": {
+            "functionName": "getCompareHtmlServiceURL",
+            "parameters": []
+        },
+        "getApplicationFormat": {
+            "functionName": "getApplicationFormat",
+            "parameters": [
+                "{{ctx.selected}}"
+            ]
+        },
+        "getNewApplicationFormat": {
+            "functionName": "getNewApplicationFormat",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getRunInBackground": {
+            "functionName": "getRunInBackground",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getImportAsHtml": {
+            "functionName": "getImportAsHtml",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getImportAsSpec": {
+            "functionName": "getImportAsSpec",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getSpecificationTypeForImport": {
+            "functionName": "getSpecificationTypeForImport",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getImportOptions": {
+            "functionName": "getImportOptions",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getkeywordImportOptions": {
+            "functionName": "getkeywordImportOptions",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getImportOptionsForWordAndPDF": {
+            "functionName": "getImportOptionsForWordAndPDF",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getkeywordImportAdvanceOptions": {
+            "functionName": "getkeywordImportAdvanceOptions",
+            "parameters": [
+                "{{data}}",
+                "{{subPanelContext.sharedData}}"
+
+            ]
+        },
+        "getLocalizedLabels":{
+            "functionName": "getLocalizedLabels",
+            "parameters": [
+                "{{data.i18n}}"
+            ]
+        },
+        "getImportSpecPreferences":{
+            "functionName": "getImportSpecPreferences",
+            "parameters": [
+            ]
+        },
+        "getRootTypeName": {
+            "functionName": "getRootTypeName",
+            "parameters": [
+                "{{data}}",
+                "{{ctx.selected}}"
+            ]
+        },
+        "getMicroServiceURL": {
+            "functionName": "getMicroServiceURL",
+            "parameters": [
+                "{{ctx}}"
+            ]
+        },
+        "getSpecificationDisplayTypeForImport": {
+            "functionName": "getSpecificationDisplayTypeForImport",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getFileName":{
+            "functionName": "getFileName",
+            "parameters": [
+                "{{data}}",
+                "{{subPanelContext.sharedData}}"
+            ]
+        },
+        "processpreviewJsonResponse": {
+            "functionName": "processpreviewJsonResponse",
+            "parameters": [
+                "{{data}}",
+                "{{ctx}}"
+            ]
+        },
+        "getCtxSelectedObject": {
+            "functionName": "getCtxSelectedObject",
+            "parameters": [
+                "{{data}}",
+                "{{ctx}}"
+            ]
+        },
+        "getRulesInputJsonTextForPDFPreview": {
+            "functionName": "getRulesInputJsonTextForPDFPreview",
+            "parameters": [
+                "{{data}}",
+                "{{subPanelContext.sharedData}}"
+            ]
+        },
+        "getCachedFormData": {
+            "functionName": "getCachedFormData",
+            "parameters": [ ]
+        }
+    },
+    "dataProviders": {
+        "importRulesList": {
+            "commandsAnchor": "arm0_export_mainDeleteUpdateRule_cellCommands",
+            "response": "{{data.importRules}}",
+            "selectionModelMode": "single"
+        },
+        "getSpecificationType": {
+            "response": "{{data.reqTypeList}}"
+        },
+        "getRequirementType": {
+            "response": "{{data.reqSpecEleTypeList}}"
+        },
+        "getSelectedImportType":{
+            "response": "{{data.importTypeValues.dbValue}}"
+        }
+    },
+    "conditions": {
+        "isImportAllowed": {
+            "expression": "subPanelContext.sharedData.fileName && subPanelContext.sharedData.validFile == true && data.reqType.dbValue.length>0 && data.reqSpecEleType.dbValue.length>0"
+        },
+        "isCompareAndPreviewAllowed": {
+            "expression": "conditions.isMicroserviceInstalled && conditions.isImportAllowed && subPanelContext.occContext && !conditions.isImportAsChildOfSelected && !conditions.isImportAsChildSpecOfSelected && !conditions.isPreserveNumberingSelected"
+        },
+        "isImportPreviewAllowed": {
+            "expression": "subPanelContext.sharedData.fileName && subPanelContext.sharedData.validFile == true && data.reqType.dbValue.length>0 && data.reqSpecEleType.dbValue.length>0 && data.selectedImportType.dbValue !== 'changestoSpec'"
+        },
+        "isDescriptionVisible": {
+            "expression": "data.reqType.dbValue !== 'Requirements (Not in a specification)'"
+        },
+        "isImportAsChildOfSelected": {
+            "expression": "data.selectedImportType.dbValue === 'importAsChildReq' || data.importSubtypeOnlyCheckbox.dbValue == true"
+        },
+        "isImportAsChildSpecOfSelected": {
+            "expression": "data.selectedImportType.dbValue === 'importAsChildSpec'"
+        },
+        "isMicroserviceInstalled": {
+            "expression": "ctx.preferences.REQ_Microservice_Installed[0] === 'true'"
+        },
+        "isSaveRuleAllowed": {
+            "expression": "subPanelContext.sharedData.importRules"
+        },
+        "isSaveRuleAllowed1": {
+            "expression": "( data.savedRules.dbValue.length===0 || (subPanelContext.sharedData.selectedRule && subPanelContext.sharedData.selectedRule.accessRight === 'WRITE' && data.savedRules.dbValue===subPanelContext.sharedData.selectedRule.ruleName)) && subPanelContext.sharedData.importRules.length > 0"
+        },
+        "isImportSubtypeOnlySelected": {
+            "expression": "data.importSubtypeOnlyCheckbox.dbValue == true"
+        },
+        "isPreserveNumberingSelected": {
+            "expression": "data.preserveNumbering.dbValue == true"
+        },
+        "isPreserveNumberingAllowed": {
+            "expression": "conditions.isMicroserviceInstalled && !conditions.isImportAsChildOfSelected && !conditions.isImportAsChildSpecOfSelected && !ctx.importAsChild  && !ctx.compareClick"
+        },
+        "isRunInBackgroundAllowedWithinPreview": {
+            "expression": "data.reqType.dbValue.length>0 && data.reqSpecEleType.dbValue.length>0 && conditions.isMicroserviceInstalled && data.mode == 'preview' && !ctx.importAsChild && !ctx.importAsChildSpec"
+        },
+        "isRunInBackgroundAllowedDefault": {
+            "expression": "conditions.isImportAllowed && conditions.isMicroserviceInstalled && !conditions.isImportAsChildOfSelected && !conditions.isImportAsChildSpecOfSelected"
+        },
+        "isRunInBackgroundAllowedWithinCompare" :{
+            "expression": "!ctx.compareClick"
+        },
+        "isRunningInBackgroundWord": {
+            "expression": "data.runInBackgroundWord.dbValue == true"
+        },
+        "isArm0ImportFromPDFSubPanelActive": {
+            "expression": "ctx.isArm0ImportFromPDFSubPanelActive"
+        }
+    },
+
+    "messages": {
+        "successImportRule": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.successImportRule}}"
+        },
+        "MicroserviceInstallationErrorPreview": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.MicroserviceInstallationError}}",
+            "messageTextParams": [
+                "{{data.i18n.preview}}"
+            ]
+        },
+        "MicroserviceInstallationErrorUpdatePreview": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.MicroserviceInstallationError}}",
+            "messageTextParams": [
+                "{{data.i18n.updatePreviewLabel}}"
+            ]
+        },
+        "MicroserviceInstallationErrorImport": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.MicroserviceInstallationError}}",
+            "messageTextParams": [
+                "{{data.i18n.importTitle}}"
+            ]
+        },
+         "handleImportPartialError": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        },
+        "notificationForImportSpecificationMsg": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.notificationForImportSpecification}}"
+        },
+        "importItemsareReleaseErrorMessage" :{
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        },
+        "importItemsareReleaseWarningMessage" :{
+            "messageType": "WARNING",
+            "messageText": "{{errorCode}}"
+        },
+        "reviseWorkRevisionLimitExceededErrorMessage":{
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "i18n": {
+        "CancelText": [
+            "TCUICommandPanelsMessages"
+        ],
+        "selectFile": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "reqSpecType": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "specElementType": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "retainNumbering": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "defaultElementType": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "asChildReqLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "toLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "asChildSpecLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "changestoSpecLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "notificationForImportSpecification": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "convertToEdit": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "importRules": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "importTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "runinBG": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "importAsChild": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "importSubtypeOnly": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "previewFile": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "preview": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "update": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "delete": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "updatePreviewLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "If": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "operationValuesTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "wordContains": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "hasStyle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "exactMatch": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "partialMatch": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "Add": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "ImportType": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "savedRules": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "successImportRule": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "cancel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "notificationForUpdateMsg": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "preserveNumbering": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "compare": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "revise": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "setFieldTypelabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "createTraceLink": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "alsoLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "desc": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "notificationForPreviewClose": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "closeTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "stayTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "MicroserviceInstallationError":[
+            "RequirementsCommandPanelsMessages"
+        ],
+        "titleLabel":[
+            "RequirementsCommandPanelsMessages"
+        ],
+        "createEmptyPlaceholder": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "addFileAsAttachmnt": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "addRules": [
+            "RequirementsCommandPanelsMessages"
+        ]
+    },
+    "ctx": {
+        "occmgmtContext": null,
+        "isArm0ImportFromWordSubPanelActive": null,
+        "isArm0ImportFromPDFSubPanelActive": null,
+        "compareAndPreviewBtnClicked": null,
+        "locationContext": null
+
+     }
+}

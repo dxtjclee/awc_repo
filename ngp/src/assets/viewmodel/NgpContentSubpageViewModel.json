@@ -1,0 +1,65 @@
+{
+    "schemaVersion": "1.0.0",
+    "ports":{
+        "input_contentSubpage":{
+            "syncObject":{},
+            "onChangeAction":"setReusableContentInput"
+        }
+    },
+    "data":{
+        "reusableManufacturingItemsContentPanelData":{
+            "tabs":[{
+                "name": "{{i18n.reusableManufacturingItemsTitle}}",
+                "tabKey": "NgpBuildStrategyTable",
+                "input": null,
+                "selection": [],
+                "cmdObjects": [],
+                "moveCandidates":[]
+            }]
+        },
+        "detailsContentPanelData":{
+            "tabs":[{
+                "name": "{{i18n.detailsTitle}}",
+                "tabKey": "NgpContentDetails"
+            }]
+        }
+    },
+    "actions": {
+        "setReusableContentInput": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInViewModelUsingPath",
+            "inputData": {
+                "targetObj": "{{data.reusableManufacturingItemsContentPanelData}}",
+                "path": "tabs.0",
+                "value": {
+                    "input": "{{ports.input_contentSubpage.syncObject}}",
+                    "selection": [],
+                    "cmdObjects": [],
+                    "moveCandidates": []
+                }
+            },
+            "outputData": {
+                "reusableManufacturingItemsContentPanelData": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "getInitialPanelSize": {
+            "actionType": "JSFunction",
+            "method": "getPanelSizes",
+            "inputData": {
+                "splitterName": "ngpContentSubpageSplitter"
+            },
+            "outputData": {
+                "reusableManufacturingItemsPanelWidth": "width"
+            },
+            "deps": "js/services/ngpUiPanelSizingService"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "getInitialPanelSize"
+    },
+    "i18n":{
+        "reusableManufacturingItemsTitle":["NgpContentMessages"],
+        "detailsTitle":["NgpContentMessages"]
+    }
+}

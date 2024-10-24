@@ -1,0 +1,229 @@
+{
+    "schemaVersion": "1.0.0",
+    "ports":{
+        "selectedObjects_output":{
+            "syncObject":{}
+        },
+        "selectTabRequest_output":{
+            "syncObject":{}
+        }
+    },
+    "actions":{
+        "registerPolicyAndGetContentElements": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action":"setInLoadingState"
+                },
+                {
+                    "action": "registerPolicy"
+                },
+                {
+                    "action": "loadTableData"
+                },
+                {
+                    "action":"setLoadingCompleteState"
+                }
+            ]
+        },
+        "registerPolicy": {
+            "actionType": "JSFunction",
+            "method": "register",
+            "inputData": {
+                "name": "ngpContentElementsTable",
+                "policyObj": "{{data.dataProviders.ngpContentElementsTableDataProvider.policy}}"
+            },
+            "deps": "js/mfePolicyService"
+        },
+        "unregisterPolicy":{
+            "actionType": "JSFunction",
+            "method": "unregister",
+            "inputData": {
+                "name": "ngpContentElementsTable"
+            },
+            "deps": "js/mfePolicyService"
+        },
+        "loadTableData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadContentElementsTableData",
+            "inputData": {
+                "modelObject": "{{props.subPanelContext.input}}",
+                "dataProvider": "{{data.dataProviders.ngpContentElementsTableDataProvider}}",
+                "sortCriteria": "{{data.columnProviders.ngpContentElementsTableColumnProvider.sortCriteria}}"
+            },
+            "outputData": {
+                "contentElements": ""
+            },
+            "deps": "js/services/ngpDetailedPlanningService"
+        },
+        "createColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "createTableColumns",
+            "inputData": {
+                "preferenceName": "{{subPanelContext.tableSettings.columnConfigPreference}}",
+                "dataProvider": "{{data.dataProviders.ngpContentElementsTableDataProvider}}",
+                "columnProvider": {
+                    "enableSorting": true,
+                    "enableCellEdit": true
+                },
+                "additionalPolicyObjects": "{{subPanelContext.tablePolicy}}",
+                "tableCmdColumnPropName":"object_string"
+            },
+            "deps": "js/services/ngpTableService"
+        },
+        "saveModifiedColumns": {
+            "actionType": "JSFunction",
+            "method": "saveResizedColumnsWidth",
+            "inputData": {
+                "preferenceName": "{{subPanelContext.tableSettings.columnConfigPreference}}",
+                "columns": "{{data.eventMap.columnArrange.columns}}"
+            },
+            "deps": "js/mfeTableService"
+        },
+        "setInLoadingState":{
+            "actionType":"JSFunction",
+            "method":"getValueInViewModel",
+            "inputData":{
+                "value":true
+            },
+            "outputData":{
+                "isInLoadingState":""
+            },
+            "deps":"js/mfeViewModelUtils"
+        },
+        "setLoadingCompleteState":{
+            "actionType":"JSFunction",
+            "method":"getValueInViewModel",
+            "inputData":{
+                "value":false
+            },
+            "outputData":{
+                "isInLoadingState":""
+            },
+            "deps":"js/mfeViewModelUtils"
+        },
+        "updateSelectionPort":{
+            "actionType":"Sync",
+            "inputData":{
+                "port":"selectedObjects_output",
+                "syncObject":"{{data.eventMap['ngpContentElementsTableDataProvider.selectionChangeEvent'].selectedObjects}}"
+            }
+        },
+        "refreshTable":{
+            "actionType":"JSFunction",
+            "method":"refreshTable",
+            "inputData":{
+                "tableId":"ngpContentElementsTable"
+            },
+            "deps":"js/mfeTableService"
+        },
+        "selectDependencyTab":{
+            "actionType":"Sync",
+            "inputData":{
+                "port":"selectTabRequest_output",
+                "syncObject": {
+                    "tabToSelect":"NgpProcessDependenciesTable"
+                }
+            }
+        },
+        "addNewlyCreatedObjects":{
+            "actionType":"JSFunction",
+            "method":"addToDataProvider",
+            "inputData":{
+                "objUidToAddList":"{{data.eventMap['ngp.objectCreated'].childrenCreated}}",
+                "dataProvider":"{{data.dataProviders.ngpContentElementsTableDataProvider}}",
+                "selectAddedObjects": true
+            },
+            "deps":"js/mfeTableService"
+        }
+    },
+    "grids":{
+        "ngpContentElementsTable":{
+            "dataProvider": "ngpContentElementsTableDataProvider",
+            "columnProvider": "ngpContentElementsTableColumnProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "enableGridMenu": true
+            }
+        }
+    },
+    "dataProviders": {
+        "ngpContentElementsTableDataProvider": {
+            "action": "registerPolicyAndGetContentElements",
+            "response": "{{data.contentElements}}",
+            "totalFound": "{{data.contentElements.length}}",
+            "selectionModelMode": "multiple",
+            "editContext":"ngpContentElementsTableDataProvider",
+            "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectCellListActionCommands"
+        }
+    },
+    "columnProviders": {
+        "ngpContentElementsTableColumnProvider": {
+            "loadColumnAction": "createColumns",
+            "resetColumnAction": "saveModifiedColumns",
+            "saveColumnAndLoadAction": "saveModifiedColumns",
+            "frozenColumnIndex": -1
+        }
+    },
+    "conditions":{
+        "hasContentElements":{
+            "expression":{
+                "$source":"data.dataProviders.ngpContentElementsTableDataProvider.viewModelCollection.loadedVMObjects.length",
+                "$query":{
+                    "$gt":0
+                }
+            }
+        },
+        "displayNoContentElementsMsg":{
+            "expression":{
+                "$and":[
+                    {
+                        "$source":"data.isInLoadingState",
+                        "$query":{
+                            "$eq":false
+                        }
+                    },
+                    {
+                        "$source":"data.dataProviders.ngpContentElementsTableDataProvider.viewModelCollection.loadedVMObjects.length",
+                        "$query":{
+                            "$eq":0
+                        }
+                    }
+                ]
+
+            }
+        }
+    },
+    "lifecycleHooks":{
+        "onUnmount":"unregisterPolicy"
+    },
+    "onEvent": [{
+            "eventId": "columnArrange",
+            "condition": "name === 'ngpContentElementsTable'",
+            "cacheEventData": true,
+            "action": "saveModifiedColumns"
+        },
+        {
+            "eventId": "ngpContentElementsTableDataProvider.selectionChangeEvent",
+            "action": "updateSelectionPort",
+            "cacheEventData": true
+        },
+        {
+            "eventId":"ngp.removedExternalPredecessors",
+            "action":"refreshTable"
+        },
+        {
+            "eventId":"ngp.contentElementsTable.dependencyIconClick",
+            "action":"selectDependencyTab"
+        },
+        {
+            "eventId":"ngp.objectCreated",
+            "action":"addNewlyCreatedObjects",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "ngp.submitToWorkflow",
+            "action": "refreshTable"
+        }
+    ]
+}

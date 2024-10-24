@@ -1,0 +1,177 @@
+// @<COPYRIGHT>@
+// ==================================================
+// Copyright 2023.
+// Siemens Product Lifecycle Management Software Inc.
+// All Rights Reserved.
+// ==================================================
+// @<COPYRIGHT>@
+
+
+/* ================================ PRI ================================ */
+
+.aw-epPri-root {
+    width: 100%;
+    padding: rem-calc(20) rem-calc(15) rem-calc(15);
+    display: flex;
+
+    &.aw-epPri-rootDisabledCursor {
+        cursor: not-allowed;
+    }
+}
+
+.mfgGeneralUI-container-absoluteContainer {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
+.aw-epPri-panelWrapper {
+    height: 100%;
+    overflow-y: auto;
+    position: relative;
+    width: 100%;
+
+    &.aw-epPri-panelWrapperDisabled {
+        pointer-events: none;
+        opacity: 0.4;
+    }
+}
+
+.aw-epPri-svgWrapper {
+    position: absolute;
+    left: rem-calc(120);
+}
+
+.aw-epPri-svg {
+    shape-rendering: crispEdges;
+    height: 100%;
+}
+
+.aw-epPri-container {
+    height: rem-calc(40);
+    width: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 rem-calc(10);
+    box-sizing: border-box;
+}
+
+.aw-epPri-container svg {
+    width: rem-calc(16);
+    height: rem-calc(16);
+}
+
+.aw-epPri-namePanel {
+    width: rem-calc(100);
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+    .aw-icon {
+        margin-right: $margin_normal;
+        height: rem-calc(16);
+    }
+}
+
+.aw-epPri-containerCapacity {
+    white-space: nowrap;
+    margin-left: rem-calc(5);
+    border-left: 1px solid;
+    padding-left: rem-calc(5);
+}
+
+.aw-epPri-timePanel {
+    display: flex;
+    width: rem-calc(60);
+}
+
+.aw-epPri-time {
+    width: rem-calc(50);
+    font-weight: 500;
+    text-align: right;
+}
+
+.aw-epPri-panelWrapper * {
+    cursor: default;
+    user-select: none;
+    font-size: $fontsize_normal;
+}
+
+.aw-epPri-itemSelected {
+    stroke-width: 2;
+}
+
+.aw-epPri-itemWrapper:not(.aw-epPri-externalItem) {
+    cursor: pointer;
+}
+
+.aw-epPri-gap {
+    fill: transparent;
+}
+
+.aw-epPri-gap:HOVER~.aw-epPri-gapBorder {
+    stroke-width: 1;
+}
+
+.aw-epPri-time {
+    width: rem-calc(50);
+    font-weight: 500;
+}
+
+.aw-epPri-port {
+    cursor: pointer;
+}
+
+.aw-epPri-arrow {
+    stroke-width: 1;
+    fill: none;
+}
+
+.aw-epPri-currentArrow {
+    stroke-dasharray: 3, 1;
+}
+
+.aw-epPri-existingArrowOverlay {
+    stroke-width: 10;
+    stroke: transparent;
+    fill: none;
+    cursor: pointer;
+}
+
+.aw-epPri-arrowHead {
+    shape-rendering: geometricprecision;
+}
+
+.aw-epPri-indicatorLines {
+    stroke-width: 1;
+}
+
+.aw-epPri-cycleTimeLine {
+    stroke-dasharray: 9, 4;
+}
+
+.aw-epPri-lineOverlay {
+    stroke-width: rem-calc(6);
+    stroke: transparent;
+    fill: none;
+}
+
+.aw-epPri-dropTarget {
+    stroke-width: rem-calc(2);
+}
+
+.aw-epPri-sharedIcon {
+    margin-right: rem-calc(7);
+}
+
+.aw-epPri-textEllipses {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ================================ PRI ================================ */

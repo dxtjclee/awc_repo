@@ -1,0 +1,348 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "data": {
+        "filterBox": {
+            "displayName": "{{i18n.Filter}}",
+            "type": "STRING",
+            "dbValue": ""
+        }
+    },
+    "actions": {
+        "showFailuresList": {
+            "actionType": "dataProvider",
+            "method": "failureListProvider"
+        },
+        "loadSelectedObject": {
+            "actionType": "JSFunction",
+            "method": "getselectedObject",
+            "inputData": {
+                "ctx": "{{ctx}}"
+            },
+            "deps": "js/Aqc0CharSpecOperationsService"
+        },
+        "createRelation": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "createRelations",
+            "inputData": {
+                "input": "{{function:createAddFailuresInput}}"
+            },
+            "outputData": {},
+            "events": {
+                "success": [
+                    {
+                        "name": "cdm.relatedModified",
+                        "condition": "!(ctx.selected.modelType.typeHierarchyArray.indexOf( 'Aqc0QcElement' ) >-1) ||ctx.selected.modelType.typeHierarchyArray.indexOf( 'Aqc0QcElement' ) >-1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'Aqc0CharElementRevision' ) >-1",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{ctx.mselected[0]}}"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "complete",
+                        "condition": "!subPanelContext.panelPinned",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "Aqc0FailureAddMessage",
+                        "condition": "data.selectedObjects.length === 1"
+                    },
+                    {
+                        "message": "Aqc0FailuresAddMessage",
+                        "condition": "data.selectedObjects.length > 1"
+                    }
+                ]
+            },
+                "deps": "js/Aqc0UtilService"
+            
+        },
+            "addFailures": {
+                "actionType": "TcSoaService",
+                "serviceName": "Internal-CharManagerAW-2018-12-QualityManagement",
+                "method": "createSpecificationVersion",
+                "inputData": {
+                    "specificationInputs": "{{function:getVersionInputFAction}}"
+                },
+                "outputData": {
+                    "createdObject": "specificationsOutput[0].newSpecification"
+                },
+                "events": {
+                    "success": [
+                        {
+                            "name": "aqc0.executePostVersionEventActionsForSpecifications"
+                        }
+                    ]
+                },
+                "actionMessages": {
+                    "success": [
+                        {
+                            "message": "versioningSuccessfulMessage"
+                        }
+                    ]
+                },
+                "policy": {
+                    "types": [
+                        {
+                            "name": "Qc0MasterCharSpec",
+                            "properties": [
+                                {
+                                    "name": "Qc0HasActions"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "deps": "js/Aqc0UtilService"
+            },
+            "findSavedQuery": {
+                "actionType": "TcSoaService",
+                "serviceName": "Query-2010-04-SavedQuery",
+                "method": "findSavedQueries",
+                "inputData": {
+                    "inputCriteria": [
+                        {
+                            "queryNames": [
+                                "Failure Specification..."
+                            ]
+                        }
+                    ]
+                },
+                "outputData": {
+                    "generalQuery": "savedQueries[0]"
+                },
+                "events": {
+                    "success": [
+                        {
+                            "name": "saveAsqueryRetreived"
+                        }
+                    ]
+                }
+            },
+            "getSearchResults": {
+                "actionType": "TcSoaService",
+                "serviceName": "Query-2006-03-SavedQuery",
+                "method": "executeSavedQuery",
+                "inputData": {
+                    "query": "{{data.generalQuery}}",
+                    "limit": 50,
+                    "entries": "{{function:getFailureQueryEntries}}",
+                    "values": [
+                        "true",
+                        "true",
+                        "{{function:getSearchFailureFilterBoxValue}}"
+                    ]
+                },
+                "outputData": {
+                    "searchResults": "objects",
+                    "totalFound": "totalFound"
+                },
+                "deps": "js/Aqc0UtilService"
+            },
+            "checkDuplicates": {
+                "actionType": "JSFunction",
+                "method": "checkDuplicatesAndAddFailures",
+                "deps": "js/Aqc0UtilService",
+                "inputData": {
+                    "data": "{{data}}"
+                },
+                "outputData": {
+                    "selectedObjects": "selectedObjects"
+                },
+                "events": {
+                    "success": [
+                        {
+                            "name": "aqc0.addFailuresInCharSpec_TC132Onwards",
+                            "condition": "(ctx.tcSessionData.tcMajorVersion > 13 || ctx.tcSessionData.tcMajorVersion === 13 && ctx.tcSessionData.tcMinorVersion >= 2) && (data.selectedObjects.length > 0 )"
+                        },
+                        {
+                            "name": "aqc0.addFailuresInCharSpec",
+                            "condition": "!(ctx.tcSessionData.tcMajorVersion > 13 || ctx.tcSessionData.tcMajorVersion === 13 && ctx.tcSessionData.tcMinorVersion >= 2) && (data.selectedObjects.length > 0 )"
+                        }
+                    ]
+                },
+                "actionMessages": {
+                    "success": [
+                        {
+                            "condition": "data.selctedObjectsOlderVersionNames.length > 0",
+                            "message": "OlderVersionAlreadyAddedMessage"
+                        },
+                        {
+                            "condition": "data.selectedObjectsAlreadyPresentNames.length > 0",
+                            "message": "duplicateFailureAdditionMessage"
+                        }
+                    ]
+                }
+            },
+            "getFailureObjects": {
+                "actionType": "JSFunction",
+                "method": "getFailureObjects",
+                "inputData": {
+                    "data": "{{data}}"
+                },
+                "outputData": {
+                    "searchResults": "searchResults",
+                    "totalFound": "totalFound"
+                },
+                "deps": "js/Aqc0UtilService"
+            },
+            "executePostVersionEventActionsForSpecifications": {
+                "actionType": "JSFunction",
+                "method": "executePostVersionEventActionsForSpecifications",
+                "inputData": {
+                    "data": "{{data.createdObject}}",
+                    "subPanelContext": "{{props.subPanelContext}}",
+                    "removeOrEditActionflag": false
+                },
+                "deps": "js/Aqc0CharLibraryUtilService"
+            }
+        },
+        "dataProviders": {
+            "failureListProvider": {
+                "action": "getFailureObjects",
+                "response": "{{data.searchResults}}",
+                "totalFound": "{{data.totalFound}}",
+                "selectionModelMode": "multiple",
+                "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectCellListActionCommands"
+            }
+        },
+        "functions": {
+            "getVersionInput": {
+                "functionName": "getVersionInput",
+                "parameters": [
+                    "{{data}}",
+                    "{{ctx}}"
+                ]
+            },
+            "getFailureQueryEntries": {
+                "functionName": "getSavedQueryEntries",
+                "parameters": [
+                    "Qc0Failure",
+                    "[qc0Status,qc0IsLatest,object_name]"
+                ]
+            },
+            "getSearchFailureFilterBoxValue": {
+                "functionName": "getSearchFailureFilterBoxValue",
+                "parameters": [
+                    "{{data.filterBox.dbValue}}"
+                ]
+            },
+            "getRequiredValuesForOperation": {
+                "functionName": "getRequiredValuesForOperation",
+                "parameters": [
+                    "{{ctx}}",
+                    "{{data}}",
+                    "Qc0HasFailures"
+                ]
+            },
+            "createAddFailuresInput": {
+                "functionName": "createAddFailuresInput",
+                "parameters": [
+                    "{{ctx.mselected[0]}}",
+                    "{{data}}"
+                ]
+            },
+            "getVersionInputFAction": {
+                "functionName": "getVersionInputFAction",
+                "parameters": [
+                    "{{data}}"
+                ]
+            }
+        },
+        "messages": {
+            "versioningSuccessfulMessage": {
+                "messageType": "INFO",
+                "messageText": "{{i18n.VersionCreated}}",
+                "messageTextParams": [
+                    "{{ctx.selected.props.object_name.dbValues[0]}}"
+                ]
+            },
+            "duplicateFailureAdditionMessage": {
+                "messageType": "ERROR",
+                "messageText": "{{i18n.DuplicateFailureAdditionMessage}}",
+                "messageTextParams": [
+                    "{{data.selectedObjectsAlreadyPresentNames}}",
+                    "{{ctx.selectedObjectToAddFailures.props.object_name.dbValues[0]}}"
+                ]
+            },
+            "OlderVersionAlreadyAddedMessage": {
+                "messageType": "ERROR",
+                "messageText": "{{i18n.OlderVersionAlreadyAddedMessage}}",
+                "messageTextParams": [
+                    "{{data.selctedObjectsOlderVersionNames}}"
+                ]
+            },
+            "Aqc0FailureAddMessage": {
+                "messageType": "INFO",
+                "messageText": "{{i18n.Aqc0CharSpecificationCreated}}",
+                "messageTextParams": [
+                    "{{data.selectedObjects[0].props.object_name.dbValues[0]}}"
+                ]
+            },
+            "Aqc0FailuresAddMessage": {
+                "messageType": "INFO",
+                "messageText": "{{i18n.Aqc0FailuresAddMessage}}",
+                "messageTextParams": [
+                    "{{ctx.selectedObjectsName}}"
+                ]
+            }
+        },
+        "lifecycleHooks": {
+            "onMount": "showFailuresList",
+            "onInit": "loadSelectedObject"
+        },
+        "onEvent": [
+            {
+                "eventId": "aqc0.addFailuresInCharSpec_TC132Onwards",
+                "action": "createRelation"
+            },
+            {
+                "eventId": "aqc0.addFailuresInCharSpec",
+                "action": "addFailures"
+            },
+            {
+                "eventId": "aqc0.createVersion",
+                "action": "checkDuplicates"
+            },
+            {
+                "eventId": "saveAsqueryRetreived",
+                "action": "showFailuresList"
+            },
+            {
+                "eventId": "aqc0.executePostVersionEventActionsForSpecifications",
+                "action": "executePostVersionEventActionsForSpecifications"
+            }
+        ],
+        "i18n": {
+            "addButtonTitle": [
+                "qualitycharacteristicsmanagerMessages"
+            ],
+            "DuplicateFailureAdditionMessage": [
+                "qualitycharacteristicsmanagerMessages"
+            ],
+            "Filter": [
+                "qualitycharacteristicsmanagerMessages"
+            ],
+            "OlderVersionAlreadyAddedMessage": [
+                "qualitycharacteristicsmanagerMessages"
+            ],
+            "VersionCreated": [
+                "qualitycharacteristicsmanagerMessages"
+            ],
+            "Aqc0CharSpecificationCreated": [
+                "qualitycharacteristicsmanagerMessages"
+            ],
+            "Aqc0FailuresAddMessage": [
+                "qualitycharacteristicsmanagerMessages"
+            ]
+        }
+    }
+
+    

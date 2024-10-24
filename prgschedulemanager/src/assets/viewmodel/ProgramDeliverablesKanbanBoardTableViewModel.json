@@ -1,0 +1,328 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "intializeKanbanBatchJob":{
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "getStateLOVValues"
+                },
+                {
+                    "action": "initializeKanbanColumns"
+                }
+            ]
+        },
+        "getStateLOVValues": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2013-05-LOV",
+            "method": "getInitialLOVValues",
+            "inputData": {
+                "initialData": {
+                    "propertyName": "psi0State",
+                    "lovInput": {
+                        "owningObject": null,
+                        "boName": "Psi0PrgDelRevision",
+                        "operationName": "Search"
+                    }
+                }
+            },
+            "outputData": {
+                "KanbanPropertyString": "{{function:createKanbanPropertyString}}",
+                "kanbanColumns":"{{function:constructKanbanColumns}}"
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "soaFailureMessage"
+                } ]
+            },
+            "deps": "js/PrgDelKanbanService"
+        },
+        "initializeKanbanColumns": {
+            "actionType": "JSFunction",
+            "method": "initializeKanbanColumns",
+            "inputData": {
+                "kanbanColumns": "{{data.kanbanColumns}}",
+                "atomicDataRef": "{{data.atomicDataRef}}",
+                "kanbanId": "{{data.kanbanid}}",
+                "selectionData": "{{props.subPanelContext.selectionData}}",
+                "i18n": "{{data.i18n}}"
+            },
+            "outputData": {
+                "kanbanState": ""
+            },
+            "deps": "js/PrgDelKanbanService"
+        },
+        "loadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Query-2014-11-Finder",
+            "method": "performSearch",
+            "inputData": {
+                "searchInput": {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Pgp0KanbanObjSearchProvider",
+                    "searchCriteria": {
+                        "searchContentType": "kanbanBoardObjects",
+                        "kanbanBOType": "Psi0PrgDelRevision",
+                        "kanbanProperty":"{{data.KanbanPropertyString}}",
+                        "kanbanLaneDisplayLimit": "{{function:getDisplayLimitFromPreference}}",
+                        "kanbanSortingOrder": "{{function:getSortingOrderFromPreference}}",
+                        "kanbanUserRoleProperty": "psi0ResponsibleUsr",
+                        "fetchNullValues": "{{data.fetchNullValues}}"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "searchFilterMap": {},
+                    "searchSortCriteria": [],
+                    "startIndex": "{{data.dataProviders.Pgp0KanbanObjSearchProvider.startIndex}}"
+                }
+            },
+            "policy": {
+                "types": [ {
+                    "name": "Psi0PrgDelRevision",
+                    "properties": [ {
+                            "name": "psi0ForecastDate"
+                        },
+                        {
+                            "name": "item_id"
+                        },
+                        {
+                            "name": "item_revision_id"
+                        },
+                        {
+                            "name": "psi0DueDate"
+                        },
+                        {
+                            "name": "psi0State"
+                        },
+                        {
+                            "name": "psi0PercentComplete"
+                        },
+                        {
+                            "name": "psi0InstanceCount"
+                        }
+                    ]
+                } ]
+            },
+            "outputData": {
+                "kanbanState": "{{function:parseKanbanSOAResponse}}",
+                "totalFound": "totalFound",
+                "totalLoaded": "totalLoaded"
+            },
+            "deps": "js/PrgDelKanbanService"
+        },
+        "handleOperationForPDR": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "validateKanbanCardDragDrop",
+                    "condition": "data.atomicData.kanbanState.operation.action === 'dragDropCard'"
+                } ]
+            }
+        },
+        "validateKanbanCardDragDrop": {
+            "actionType": "JSFunction",
+            "method": "validateKanbanCardDragDrop",
+            "inputData": {
+                "kanbanState": "{{data.atomicData.kanbanState}}"
+            },
+            "deps": "js/PrgDelKanbanService"
+        },
+        "saveEditSOABatchJob": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "loadDataForEditing"
+                },
+                {
+                    "action": "callSaveEditSOA"
+                }
+            ]
+        },
+        "loadDataForEditing": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2017-12-DataManagement",
+            "method": "loadViewModelForEditing2",
+            "inputData": {
+                "inputs":  "{{function:createInputForLoadEditing}}"
+            },
+            "outputData": {
+                "lsd": "{{function:extractSrcObjsLSD}}"
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "message": "soaErrorMessage"
+                    }
+                ]
+            },
+            "deps": "js/PrgDelKanbanService"
+        },
+        "callSaveEditSOA": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2018-05-DataManagement",
+            "method": "saveViewModelEditAndSubmitWorkflow2",
+            "inputData": {
+                "inputs": "{{function:prepareDataForSaveEdit}}"
+            },
+            "events": {
+                "failure": [ {
+                    "name": "Psi0Kanban.dragDropFailure",
+                    "eventData": {
+                        "data": "{{data.eventMap['Psi0Kanban.onAfterDrop']}}",
+                        "failedUids": "{{data.eventMap['Psi0Kanban.onAfterDrop'].dragContext.source}}"
+                    }
+                } ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "Psi0KanbanTableErrorMsg"
+                } ]
+            },
+            "deps": "js/PrgDelKanbanService"
+        },
+        "revertPDRKanbanCardDragDrop": {
+            "actionType": "JSFunction",
+            "method": "revertPDRKanbanCardDragDrop",
+            "inputData": {
+                "kanbanState": "{{data.atomicDataRef.kanbanState}}"
+            },
+            "deps": "js/PrgDelKanbanService"
+        },
+        "updateKanbanCardData": {
+            "actionType": "JSFunction",
+            "method": "updateKanbanCardData",
+            "inputData": {
+                "updatedObjects": "{{data}}"
+            },
+            "deps": "js/PrgDelKanbanService"
+        }
+    },
+    "columnProviders": {
+        "PDRKanbanColumnProvider": {
+
+        }
+    },
+    "grids": {
+        "Psi0Kanban": {
+            "dataProvider": "PDRKanbanBoardProvider",
+            "columnProvider": "PDRKanbanColumnProvider",
+            "gridOptions": {}
+        }
+    },
+    "dataProviders": {
+        "PDRKanbanBoardProvider": {
+            "initAction": "loadData",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "selectionModelMode": "multiple"
+        }
+    },
+    "functions": {
+        "constructKanbanColumns": {
+            "functionName": "constructKanbanColumns",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getSortingOrderFromPreference": {
+            "functionName": "getSortingOrderFromPreference"
+        },
+        "getDisplayLimitFromPreference": {
+            "functionName": "getDisplayLimitFromPreference"
+        },
+        "parseKanbanSOAResponse": {
+            "functionName": "parseKanbanSOAResponse",
+            "parameters": [
+                "{{data}}",
+                "{{data.atomicDataRef.kanbanState}}"
+            ]
+        },
+        "prepareDataForSaveEdit": {
+            "functionName": "prepareDataForSaveEdit",
+            "parameters": [
+                "{{data.atomicData.kanbanState}}",
+                "{{data.lsd}}"
+            ]
+        },
+        "createInputForLoadEditing": {
+            "functionName": "createInputForLoadEditing",
+            "parameters": [
+                "{{data.atomicData.kanbanState}}"
+            ]
+        },
+        "extractSrcObjsLSD": {
+            "functionName": "extractSrcObjsLSD",
+            "parameters": [
+                "{{data.atomicData.kanbanState}}"
+            ]
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "AWKanban.loadData",
+            "cacheEventData": true,
+            "action": "loadData"
+        },
+        {
+            "eventId": "Psi0Kanban.dragDropFailure",
+            "cacheEventData": true,
+            "action": "revertPDRKanbanCardDragDrop"
+        },
+        {
+            "eventId": "validateKanbanCardDragDrop",
+            "cacheEventData": true,
+            "action": "validateKanbanCardDragDrop"
+        },
+        {
+            "eventId": "saveEditSOAEvent",
+            "cacheEventData": true,
+            "action": "saveEditSOABatchJob"
+        },
+        {
+            "eventId": "cdm.updated",
+            "cacheEventData": true,
+            "action": "updateKanbanCardData"
+        }
+    ],
+    "data": {
+        "selectionData" : {
+            "type": "OBJECT"
+        },
+        "kanbanid": "Psi0Kanban",
+        "kanbanColumnMap": {},
+        "kanbanState": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "kanbanColumns": [],
+        "fetchNullValues": "true"
+    },
+    "lifecycleHooks": {
+        "onMount": "intializeKanbanBatchJob",
+        "onUpdate": [
+            {
+                "action": "loadData",
+                "observers": [ "viewModel.atomicData.kanbanState.kanbanInitialized" ]
+            },
+            {
+                "action": "handleOperationForPDR",
+                "observers": [ "viewModel.atomicData.kanbanState.operation" ]
+            },
+            {
+                "action": "loadData",
+                "observers": [ "props.subPanelContext.searchState.displayLimit" ]
+            }
+        ]
+    },
+    "i18n": {
+        "psi0DueDate": [ "PrgScheduleManagerMessages" ],
+        "psi0ForecastDate": [ "PrgScheduleManagerMessages" ],
+        "psi0State": [ "PrgScheduleManagerMessages" ],
+        "psi0PercentComplete": [ "PrgScheduleManagerMessages" ],
+        "psi0InstanceCount": [ "PrgScheduleManagerMessages" ],
+        "Psi0OpenPrgObjectCellCommandDesc": [ "PrgScheduleManagerMessages" ],
+        "open": [ "PrgScheduleManagerMessages" ],
+        "unassignedKanbanColumn": ["PrgScheduleManagerMessages"]
+    }
+}

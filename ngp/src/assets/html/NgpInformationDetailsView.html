@@ -1,0 +1,12 @@
+<aw-flex-column exist-when="conditions.hadValidContext"  width="fill" offset="2f" class="aw-ngp-informationDetailsView">
+    <aw-flex-row height="5f" justify="left" align-content="center">
+        <div class="aw-ngp-informationDetailsTitle">{{data.commandContext.cmdObjects[0].props.object_string.dbValues[0]}}</div>
+    </aw-flex-row>
+    <aw-flex-row height="3f" justify="right" align-content="center">
+        <aw-command-bar exist-when=true context="data.commandContext" anchor="Ngp_informationDetails" alignment="HORIZONTAL"></aw-command-bar>
+    </aw-flex-row>
+    <aw-flex-row height="fill">
+        <aw-xrt type="SUMMARY" vmo="data.commandContext.cmdObjects[0]" xrt-state="data.xrtState"></aw-xrt>
+    </aw-flex-row>
+</aw-flex-column>
+<mfe-loading-message exist-when="!conditions.hadValidContext"></mfe-loading-message>

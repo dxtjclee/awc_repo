@@ -1,0 +1,201 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "reveal": {
+            "actionType": "dataProvider",
+            "method": "customActivity"
+        },
+        "loadActivityTypes": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2007-06-DataManagement",
+            "method": "getAvailableTypes",
+            "inputData": {
+                "classes": [
+                    {
+                        "baseClass": "MEActivity",
+                        "exclusionTypes": []
+                    }
+                ]
+            },
+            "policy": {
+                "types": [
+                    {
+                        "name": "ImanType",
+                        "properties": [
+                            {
+                                "name": "type_name"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "activityList": "{{function:activityList}}"
+            },
+            "deps": "js/ssp0CreateActivityService"
+        },
+        "AddActivityBatchJob": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "AddActivity"
+                },
+                {
+                    "action": "ClosePopUpAction"
+                }
+            ]
+        },
+        "AddActivity": {
+            "actionType": "JSFunction",
+            "method": "addActivity",
+            "inputData": {
+                "data": "{{data}}",
+                "createType": "{{data.selectedType.dbValue}}"
+            },
+            "deps": "js/ssp0ActivityUtilityService"
+        },
+        "ClosePopUpAction": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        },
+        "setSelectedType": {
+            "actionType": "JSFunction",
+            "method": "changeAction",
+            "inputData": {
+                "data": "{{data}}",
+                "fields": "{{fields}}"
+            },
+            "outputData": {
+                "selectedType": "selectedType"
+            },
+            "deps": "js/ssp0CreateActivityService"
+        },
+        "setActivityDataBatchJob": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "setActivityDbValueData"
+                },
+                {
+                    "action": "setActivityUiValueData",
+                    "condition": "conditions.isTotalLengthOne"
+                },
+                {
+                    "action": "setSelectedType"
+                }
+            ]
+        },
+        "setActivityDbValueData": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "propertyToUpdate": "dbValue",
+                "value": "{{data.eventMap['ssp0CreateActivity.updateCurrentActivity'].currentActivityType.propInternalValue}}",
+                "dataToUpdate": "{{data.currentActivity}}"
+            },
+            "outputData": {
+                "currentActivity": ""
+            },
+            "deps": "js/ssp0ActivityUtilityService"
+        },
+        "setActivityUiValueData": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "propertyToUpdate": "uiValue",
+                "value": "{{data.eventMap['ssp0CreateActivity.updateCurrentActivity'].currentActivityType.propDisplayValue}}",
+                "dataToUpdate": "{{data.currentActivity}}"
+            },
+            "outputData": {
+                "currentActivity": ""
+            },
+            "deps": "js/ssp0ActivityUtilityService"
+        }
+    },
+    "conditions": {
+        "isTotalLengthOne": {
+            "expression": "data.dataProviders.customActivity.viewModelCollection.loadedVMObjects.length ===1"
+        },
+        "requiredFieldsEntered": {
+            "expression": "(data.object_name.dbValue && data.object_name.dbValue !='')"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "reveal"
+    },
+    "onEvent": [
+        {
+            "eventId": "awlinkPopup.selected",
+            "action": "setSelectedType"
+        },
+        {
+            "eventId": "ssp0CreateActivity.updateCurrentActivity",
+            "action": "setActivityDataBatchJob",
+            "cacheEventData": true
+        }
+    ],
+    "functions": {
+        "activityList": {
+            "functionName": "activityList",
+            "parameters": [
+                "{{data}}"
+            ]
+        }
+    },
+    "data": {
+        "currentActivity": {
+            "type": "STRING",
+            "displayName": "{{i18n.currentActivity}}",
+            "isRequired": "false",
+            "dbValue": ""
+        },
+        "selectedType": {
+            "type": "STRING",
+            "dbValue": ""
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "dataProviders": {
+        "customActivity": {
+            "dataProviderType": "TcLOV",
+            "action": "loadActivityTypes",
+            "response": "{{data.activityList}}",
+            "totalFound": "{{data.totalFound}}"
+        }
+    },
+    "i18n": {
+        "addActivity": [
+            "timeAnalysisMessages"
+        ],
+        "Cancel": [
+            "ssp0Messages"
+        ],
+        "Add": [
+            "ssp0Messages"
+        ],
+        "currentActivity": [
+            "timeAnalysisMessages"
+        ]
+    }
+}

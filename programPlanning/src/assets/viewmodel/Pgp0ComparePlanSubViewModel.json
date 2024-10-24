@@ -1,0 +1,170 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "Pgp0AddPlanCommandAnchor": "pgp0_addPlanCommandAnchor"
+    },
+    "actions": {
+        "getReferencePlans": {
+            "actionType": "JSFunction",
+            "method": "loadReferencePlan",
+            "inputData": {
+                "refPlanUids": "{{ctx.state.params.comparePlanUids}}",
+                "sharedData": "{{props.subPanelContext.sharedData}}"
+            },
+            "deps": "js/Pgp0ComparePlanPanelService"
+        },
+        "loadPanel": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "callDataProvider"
+                },
+                {
+                    "action": "enableDisableAddAction"
+                }
+            ]
+        },
+        "enableDisableAddAction": {
+            "actionType": "JSFunction",
+            "method": "enableDisableAdd",
+            "inputData": {
+                "totalObjectsLoaded": "{{data.dataProviders.referencePlanDataProvider.vmCollectionObj.vmCollection.totalObjectsLoaded}}",
+                "referenceCount":"{{ctx.preferences.PP_Compare_Plan_Count[0]}}"
+            },
+            "outputData": {
+                "isAddCommandEnabled": ""
+            },
+            "deps": "js/Pgp0ComparePlanPanelService"
+        },
+        "callDataProvider": {
+            "actionType": "dataProvider",
+            "methods": [ "referencePlanDataProvider" ]
+        },
+        "launchAddPanelAction": {
+            "actionType": "JSFunction",
+            "method": "setActiveView",
+            "deps": "js/addObjectUtils",
+            "inputData": {
+                "activeViewState": "{{props.activeState}}",
+                "destPanelId": "Pgp0AddReferencePlan"
+            }
+        },
+        "removeSelectedPlanAction": {
+            "actionType": "JSFunction",
+            "method": "removeSelectedPlan",
+            "inputData": {
+                "referencePlanDataProvider": "{{data.dataProviders.referencePlanDataProvider}}",
+                "sharedData":"{{subPanelContext.sharedData}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Pgp0ComparePlanSub.enableCompare"
+                    }
+                ]
+            },
+            "deps": "js/Pgp0ComparePlanPanelService"
+        },
+        "setCompareConditionAction": {
+            "actionType": "JSFunction",
+            "method": "setCompareCondition",
+            "inputData": {},
+            "outputData": {
+                "isCompareEnabled": ""
+            },
+            "deps": "js/Pgp0ComparePlanPanelService"
+        },
+        "compareAction": {
+            "actionType": "JSFunction",
+            "method": "getPlanUIDs",
+            "inputData": {
+                "referencePlanObjects": "{{data.dataProviders.referencePlanDataProvider.vmCollectionObj.vmCollection.loadedVMObjects}}"
+            },
+            "outputData": {
+                "referenceUIDs" : ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "navigateToTaskLocation",
+                        "condition": "subPanelContext.pageContext.primaryActiveTabId === 'tc_xrt_Timeline'"
+                    },
+                    {
+                        "name": "Pgp0ComparePlanItems.updateSelectedPlans",
+                        "condition": "ctx.sublocation.clientScopeURI === 'Pgp0ComparePlanObjects'",
+                        "eventData": {
+                            "data": "{{data}}"
+                            }
+                    },
+                    {
+                        "name": "complete",
+                        "condition": "ctx.sublocation.clientScopeURI === 'Pgp0ComparePlanObjects'"
+                    }
+                ]
+            },
+            "deps": "js/Pgp0ComparePlanPanelService"
+        },
+        "navigateToTaskLocation": {
+            "actionType": "Navigate",
+            "navigateTo": "#/comparePlans",
+            "navigationParams": {
+                "uid": "{{ctx.mselected[0].uid}}",
+                "comparePlanUids": "{{data.referenceUIDs}}"
+            }
+        }
+    },
+    "dataProviders": {
+        "referencePlanDataProvider": {
+            "selectionModelMode": "single",
+            "response": "{{props.subPanelContext.sharedData.selectedPlans}}",
+            "totalFound": "{{props.subPanelContext.sharedData.selectedPlans.length}}",
+            "totalLoaded": "{{props.subPanelContext.sharedData.selectedPlans.length}}",
+            "commandsAnchor": "pgp0_removePlanCellCommand"
+        }
+    },
+    "messages": {
+        "refPlanSelectionMsg": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.numberOfRefPlansInfoMsg}}",
+            "messageTextParams": [
+                "{{ctx.preferences.PP_Compare_Plan_Count[0]}}"
+            ]
+        }
+    },
+    "onEvent": [
+        {
+        "eventId": "Pgp0ComparePlanSub.openAddPlanPanel",
+        "action": "launchAddPanelAction"
+        },
+        {
+        "eventId": "Pgp0ComparePlanSub.removePlan",
+        "action": "removeSelectedPlanAction"
+        },
+        {
+            "eventId": "Pgp0ComparePlanSub.enableCompare",
+            "action": "setCompareConditionAction"
+        },
+        {
+            "eventId": "navigateToTaskLocation",
+            "action": "navigateToTaskLocation"
+        }
+    ],
+    "lifecycleHooks": {
+        "onMount":"getReferencePlans",
+        "onUpdate": [ {
+            "action": "loadPanel",
+            "observers": [ "props.subPanelContext.sharedData.selectedPlans" ]
+        } ]
+    },
+    "i18n": {
+        "existingPlans": [
+            "ProgramPlanningCommandPanelsMessages"
+        ],
+        "compareHeaderTitle": [
+            "ProgramPlanningCommandPanelsMessages"
+        ],
+        "numberOfRefPlansInfoMsg": [
+            "ProgramPlanningCommandPanelsMessages"
+        ]
+    }
+}

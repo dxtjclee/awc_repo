@@ -1,0 +1,47 @@
+{
+    "schemaVersion": "1.0.0",
+    "data":{
+        "src": null,
+        "hostControlInstance": null
+    },
+    "actions": {
+        "initHosting": {
+            "actionType": "JSFunction",
+            "method": "initHosting",
+            "inputData": {
+                "hostApplication": "ngp"
+            },
+            "outputData":{
+                "src":"src",
+                "hostControlInstance":"hostControlInstance"
+            },
+            "deps": "js/services/mfeHostingService"
+        },
+        "destroyHosting":{
+            "actionType": "JSFunction",
+            "method": "destroyHosting",
+            "deps": "js/services/mfeHostingService"
+        },
+        "updateSrc": {
+            "actionType": "JSFunction",
+            "method": "updateSrc",
+            "inputData": {
+                "hostApplication": "ngp"
+            },
+            "outputData":{
+                "src": "src"
+            },
+            "deps": "js/services/mfeHostingService"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "initHosting",
+        "onUnmount":"destroyHosting"
+    },
+    "onEvent": [
+        {
+            "eventId": "locationChangeSuccess",
+            "action": "updateSrc"
+        }
+    ]
+}

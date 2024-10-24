@@ -1,0 +1,132 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "vmo": {
+            "type": "viewModelObject"
+        },
+        "balancing-data": {
+            "type": "object"
+        }
+    },
+    "data": {
+        "processResources": []
+    },
+    "lifecycleHooks": {
+        "onUpdate": [
+            {
+                "action": "prepareListOfProcessResourcesAndUnassigned",
+                "observers": [
+                    "props.vmo"
+                ]
+            },
+            {
+                "action": "updateSelectionOfUnassigned",
+                "observers": [
+                    "props.vmo.props.elb0unassignedOpsByPV.dbValues"
+                ]
+            }
+        ],
+        "render": "render"
+    },
+    "actions": {
+        "render": {
+            "method": "epBalancingProcessResourceTilesListRender",
+            "deps": "js/epBalancingProcessResourceTilesListService"
+        },
+        "prepareListOfProcessResourcesAndUnassigned": {
+            "actionType": "JSFunction",
+            "method": "prepareListOfProcessResourcesAndUnassigned",
+            "inputData": {
+                "station": "{{props.vmo}}",
+                "prs": "{{props.balancingData.loadedData.allProcessResources}}"
+            },
+            "outputData": {
+                "processResources": ""
+            },
+            "deps": "js/epBalancingService"
+        },
+        "scrollIntoSelectedStation": {
+            "actionType": "JSFunction",
+            "method": "scrollIntoSelectedStation",
+            "inputData": {
+                "balancingStations": "{{props.balancingData.loadedData.balancingStations}}",
+                "selectedStation": "{{props.balancingData.selectionData.station}}"
+            },
+            "deps": "js/epBalancingSelectionService"
+        },
+        "checkIfProcessResourceWasDeleted": {
+            "actionType": "JSFunction",
+            "method": "checkIfProcessResourceWasDeleted",
+            "inputData": {
+                "station": "{{props.vmo}}",
+                "eventData": "{{parameters.eventData}}"
+            },
+            "outputData": {
+                "prDeletedInStation": ""
+            },
+            "deps": "js/epBalancingProcessResourceTilesListService"
+        },
+        "selectStation": {
+            "actionType": "JSFunction",
+            "method": "updateSelection",
+            "inputData": {
+                "balancingData": "{{props.balancingData}}",
+                "station": "{{props.vmo}}"
+            },
+            "deps": "js/epBalancingSelectionService"
+        },
+        "resetPrDeletedInStation": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": false
+            },
+            "outputData": {
+                "prDeletedInStation": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "handleProcessResourceChanged": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "checkIfProcessResourceWasDeleted"
+                },
+                {
+                    "action": "prepareListOfProcessResourcesAndUnassigned",
+                    "condition": "data.prDeletedInStation"
+                },
+                {
+                    "action": "selectStation",
+                    "condition": "data.prDeletedInStation"
+                },
+                {
+                    "action": "scrollIntoSelectedStation",
+                    "condition": "data.prDeletedInStation"
+                },
+                {
+                    "action": "resetPrDeletedInStation",
+                    "condition": "data.prDeletedInStation"
+                }
+            ]
+        },
+        "updateSelectionOfUnassigned": {
+            "actionType": "JSFunction",
+            "method": "updateSelectionOfUnassigned",
+            "inputData": {
+                "balancingData": "{{props.balancingData}}",
+                "station": "{{props.vmo}}"
+            },
+            "deps": "js/epBalancingProcessResourceTilesListService"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "ep.addRemoveEvents",
+            "action": "handleProcessResourceChanged",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            }
+        }
+    ]
+}

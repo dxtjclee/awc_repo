@@ -1,0 +1,47 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "render": {
+            "method": "targetClassesLOVRenderFunction",
+            "deps": "js/mrlTargetClassesLOVService"
+        },
+        "getTargetClassesOptionList": {
+            "actionType": "JSFunction",
+            "method": "getTargetClassesOptionList",
+            "inputData": {
+                "vmo": "{{props.vmo}}",
+                "doNotMapOptionStr": "{{data.i18n.mrlDoNotMapOptionStr}}"
+            },
+            "outputData": {
+                "targetClassesOptionList": "targetClassesOptionList",
+                "moreValuesExist": "moreValuesExist"
+            },
+            "deps": "js/mrlTargetClassesLOVService"
+        }
+    },
+    "data": {},
+    "conditions": {},
+    "onEvent": [],
+    "i18n": {
+        "mrlDoNotMapOptionStr": [
+            "mrlMessages"
+        ]
+    },
+    "dataProviders": {
+        "targetClassesOptionListDataProvider": {
+            "action": "getTargetClassesOptionList",
+            "response": "{{data.targetClassesOptionList}}",
+            "moreValuesExist": "{{data.moreValuesExist}}"
+        }
+    },
+    "functions": {
+    },
+    "lifecycleHooks": {
+        "render": "render"
+    },
+    "props": {
+        "prop": {
+            "type": "field"
+        }
+    }
+}

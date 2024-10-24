@@ -1,0 +1,46 @@
+// @<COPYRIGHT>@
+// ==================================================
+// Copyright 2020.
+// Siemens Product Lifecycle Management Software Inc.
+// All Rights Reserved.
+// ==================================================
+// @<COPYRIGHT>@
+
+@mixin aw-ngp-mcnTileColor {
+    border-color: $brand_table_header_background;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.aw-ngp-historyOfChangeDialog .aw-ngp-historyOfChangePanelBody,
+.aw-ngp-activeMCNPopup .aw-ngp-activeMcnPopupContent {
+
+    .aw-ngp-mcnHistoryOfChangeList,
+    .aw-ngp-historyOfMcnsPanel .aw-ngp-mcnHistoryOfChangeList,
+    .aw-ngp-activeMcnPanel .aw-ngp-activeMcnTile,
+    .aw-ngp-relatedEcnsPanel .aw-ngp-relatedEcnTiles {
+        .aw-widgets-cellListWidget .aw-widgets-cellListItem {
+            @include aw-ngp-mcnTileColor;
+        }
+
+    }
+}
+
+.aw-ngp-mcnIndication {
+    .aw-ngp-activeMcnIndication.sw-button-iconContainer,
+    .aw-ngp-notTrackedIndication.sw-button-iconContainer {
+        &:active,
+        &:hover {
+            background-color: transparent;
+        }
+    }
+}
+
+.aw-layout-popup.aw-layout-popupOverlay.afx-content-background.aw-ngp-impactAnalysisDialog {
+    .ngp-mcnHostingView-subtitletitle {
+        color: $aw_toolbar_narrow_mode;
+    }
+
+    .ngp-mcnHostingView-title {
+        color: $aw_toolbar_narrow_mode;
+    }
+}

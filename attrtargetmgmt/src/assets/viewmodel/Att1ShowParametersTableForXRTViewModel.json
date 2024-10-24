@@ -1,0 +1,66 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-include.directive"
+    ],
+    "data": {
+        "parametersTable": {
+            "initialValues": {
+            },
+            "meta": {
+            }
+        }
+    },
+    "props": {
+        "sub-panel-context":{
+            "type":"object"
+        }
+    },
+    "actions": {
+        "initParametersTableForXRT": {
+            "actionType": "JSFunction",
+            "method": "initParametersTableForXRT",
+            "inputData": {
+                "parentObject": ["{{props.subPanelContext.selected}}"],
+                "commandContext": "{{props.subPanelContext}}",
+                "parametersTable": "{{data.parametersTable}}"
+            },
+            "outputData": {
+                "parametersTable": "parametersTable"
+            },
+            "deps": "js/Att1ShowParametersTableService"
+        }
+    },
+    "lifecycleHooks": {
+        "onInit": "initParametersTableForXRT"
+    },
+    "messages": {
+    },
+    "onEvent": [
+
+    ],
+    "conditions": {},
+    "functions": {
+
+    },
+    "ctx": {
+        "xrtSummaryContextObject": {
+            "type": "object"
+        },
+        "occmgmtContext": {
+            "type": "object"
+        },
+        "requirements": {
+            "type": "object"
+        },
+        "locationContext": {
+            "type": "object"
+        },
+        "parametersTable": {
+            "type": "object"
+        }
+    },
+    "i18n": {
+
+    }
+}

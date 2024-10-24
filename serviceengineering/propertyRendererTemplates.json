@@ -1,0 +1,82 @@
+{
+  "senSbomPLFColumn_template": {
+    "grids": [
+      "senSbomTreeTable"
+    ],
+    "columns": [
+      "traceableValueColumn",
+      "serializedValueColumn",
+      "lotValueColumn",
+      "pQuantityValueColumn",
+      "rotableValueColumn",
+      "consumableValueColumn",
+      "assetValueColumn",
+      "skipPartValueColumn"
+    ],
+    "renderFunction": "getPLFValueRenderer",
+    "deps": "js/senPLFTablePropertyRenderer"
+  },
+  "senEbomAssignmentColumn_template": {
+    "grids": [
+      "senEbomTreeTable"
+    ],
+    "columns": [
+      "assignmentIndication"
+    ],
+    "renderFunction": "getAssignmentIndicationRenderer",
+    "deps": "js/senAlignmentTablePropertyRenderer"
+  },
+  "senEbomMismatchtColumn_template": {
+    "grids": [
+      "senEbomTreeTable"
+    ],
+    "columns": [
+      "mismatchIndication"
+    ],
+    "renderFunction": "getMismatchIndicationRenderer",
+    "deps": "js/senAlignmentTablePropertyRenderer"
+  },
+  "senSbomMismatchtOrMissingColumn_template": {
+    "grids": [
+      "senSbomTreeTable"
+    ],
+    "columns": [
+      "mismatchOrMissingIndication"
+    ],
+    "renderFunction": "getMismatchOrMissingIndicationRenderer",
+    "deps": "js/senAlignmentTablePropertyRenderer"
+  },
+  "senSbomUsagePLFColumn_template": {
+    "grids": [
+      "senSbomTreeTable"
+    ],
+    "columns": [
+      "usagePLFColumn"
+    ],
+    "renderFunction": "usagePLFRenderer",
+    "deps": "js/senUsagePLFRenderer"
+  },
+  "senAlignmentColumnHeader_template": {
+    "grids": [
+      "senEbomTreeTable",
+      "senSbomTreeTable"
+    ],
+    "columns": [
+      "assignmentIndication",
+      "mismatchIndication",
+      "mismatchOrMissingIndication"
+    ],
+    "headerRenderFunction": "getAlignmentColumnHeaderRenderer",
+    "deps": "js/senAlignmentTablePropertyRenderer"
+  },
+  "senSbomEOLColumn_template": {
+    "grids": [
+      "senSbomTreeTable"
+    ],
+    "columns": [
+      "lifeLimitedValueColumn"
+    ],
+    "renderFunction": "EOLValueRenderer",
+    "deps": "js/senEOLValueRenderer"
+  }
+}

@@ -1,0 +1,63 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "props": {
+        "vr-sublocation-state": {
+            "type": "object"
+        },
+        "sub-panel-context":{
+            "type":"object"
+            }
+    },
+    "actions": {
+        "buildCrumbs": {
+            "actionType": "JSFunction",
+            "method": "buildNavigateBreadcrumb",
+            "inputData": {
+                "selectedObjects": "{{props.vrSublocationState}}",
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "outputData": {
+                "crumbs": "crumbs"
+            },
+            "deps": "js/Crt1VRBreadcrumbService"
+        },
+        "syncSelections": {
+            "actionType": "JSFunction",
+            "method": "syncSelections",
+            "inputData": {
+                "selectedObjects": "{{data.eventData.selectedObjects}}",
+                "openedObject": "{{props.subPanelContext.openedObject}}",
+                "vrSublocationState": "{{props.vrSublocationState}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/Crt1VRSublocationService"
+        }
+    },
+    "data": {
+    },
+    "dataProviders": {
+        "vrBreadCrumbDataProvider": {
+            "action": "buildCrumbs",
+            "response": "{{data.crumbs}}",
+            "totalFound": "{{data.crumbs.length}}"
+        }
+    },
+    "ctx": {},
+    "lifecycleHooks": {
+        "onMount": "buildCrumbs",
+        "onUpdate": [ {
+            "action": "buildCrumbs",
+            "observers": [ "props.vrSublocationState.mselected" ]
+        } ]
+    },
+    "onEvent": [ {
+        "eventId": "viewModelObject.propsUpdated",
+        "action": "buildCrumbs"
+    },
+    {
+        "eventId": "gridDataProvider.selectionChangeEvent",
+        "cacheEventData": true,
+        "action": "syncSelections"
+    } ]
+}

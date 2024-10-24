@@ -1,0 +1,1075 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        },
+        "table-settings":{
+            "type":"object"
+        }
+    },
+    "data": {
+        "noContextMsg": [{
+            "text": "{{i18n.noContextForProductSourceTable}}"
+        }],
+        "noProductScopeForCurrentContextMsg": [{
+            "text": "{{i18n.noProductScopeDefinedForContext}}"
+        }],
+        "tabDisplayMode": "ShowNoProductFound",
+        "productScopeData": {
+            "productScopeFromStorage": null,
+            "productScopeFromStorageUid": "",
+            "productScopeShortUid": "",
+            "productScope": null,
+            "buildElement": null,
+            "subsetDefObject": null
+        },
+        "filterMode": false,
+        "tablePolicy": {
+            "types": [
+                {
+                    "name": "Cpd0DesignElement",
+                    "properties": [
+                        {
+                            "name": "cpd0is_leaf"
+                        },
+                        {
+                            "name": "cpd0design_element_id"
+                        },
+                        {
+                            "name": "cpd0presented_parent",
+                            "modifiers": [
+                                {
+                                    "name": "withProperties",
+                                    "Value": "true"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Mdl0ConditionalElement",
+                    "properties": [
+                        {
+                            "name": "release_status_list",
+                            "modifiers": [
+                            {
+                                "name": "withProperties",
+                                "Value": "true"
+                            }
+                        ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Cpd0DesignFeature",
+                    "properties": [
+                        {
+                            "name": "cpd0design_feature_id"
+                        }
+                    ]
+                }
+            ]
+        },
+        "tableSettings": {
+            "columnConfigPreference": "NGPBuildStrategyProductScopeColumns",
+            "tableObjectsBaseTypes": ["Cpd0DesignElement", "Cpd0DesignFeature"],
+            "fixedColumns": ["object_string"],
+            "clientColumns": [
+                {
+                    "propertyName": "assignmentIndication",
+                    "displayName": "{{i18n.assignmentIndicationColumnName}}",
+                    "typeName": "assignmentIndication",
+                    "drawnWidth": 55,
+                    "alternateID": "assignmentIndication.assignmentIndication"
+                },
+                {
+                    "propertyName": "MismatchStatus",
+                    "displayName": "{{i18n.mismatchStatusColumnName}}",
+                    "typeName": "MismatchStatus",
+                    "drawnWidth": 55,
+                    "alternateID": "MismatchStatus.MismatchStatus"
+                },
+                {
+                    "propertyName": "AssignedToProcesses",
+                    "displayName": "{{i18n.assignedToProcessesColumnName}}",
+                    "typeName": "AssignedToProcesses",
+                    "drawnWidth": 55,
+                    "alternateID": "AssignedToProcesses.AssignedToProcesses"
+                },
+                {
+                    "propertyName": "AssignedToActivities",
+                    "displayName": "{{i18n.assignedToActivitiesColumnName}}",
+                    "typeName": "AssignedToActivities",
+                    "drawnWidth": 55,
+                    "alternateID": "AssignedToActivities.AssignedToActivities"
+                },
+                {
+                    "propertyName": "AssignedToBuildElements",
+                    "displayName": "{{i18n.assignedToBuildElementsColumnName}}",
+                    "typeName": "AssignedToBuildElements",
+                    "drawnWidth": 55,
+                    "alternateID": "AssignedToBuildElements.AssignedToBuildElements"
+                }
+            ]
+        }
+    },
+    "actions":{
+        "saveProductScopeContext":{
+            "actionType":"JSFunction",
+            "method":"saveUidsAndPropNamesInStorage",
+            "inputData":{
+                "storageKey" : "NGP_PRODUCT_SCOPE_CONTEXT_{{data.productScopeData.productScopeShortUid}}",
+                "uids": ["{{data.buildElementShortUid}}"]
+            },
+            "deps":"js/services/ngpStorageService"
+        },
+        "resetProductScopeData":{
+            "actionType": "JSFunction",
+            "method": "mergeValueInViewModel",
+            "inputData": {
+                "targetObj": "{{data.productScopeData}}",
+                "sourceObj":{
+                    "productScopeFromStorage": null,
+                    "productScopeFromStorageUid": "",
+                    "productScopeShortUid": "",
+                    "productScope": "{{props.subPanelContext.tabs[0].input}}",
+                    "buildElement": null,
+                    "subsetDefObject": null
+                }
+            },
+            "outputData":{
+                "productScopeData": ""
+            },
+            "deps":"js/mfeViewModelUtils"
+        },
+        "getProductScopeUidFromStorage":{
+            "actionType":"JSFunction",
+            "method":"getFromStorage",
+            "inputData":{
+                "storageKey":"NGP_PRODUCT_SCOPE_CONTEXT_{{data.productScopeData.productScopeShortUid}}",
+                "parsed":"true"
+            },
+            "outputData":{
+                "productScopeData.productScopeFromStorageUid":"uids[0]"
+            },
+            "deps":"js/services/ngpStorageService"
+        },
+        "ensureProductScopeObjectsLoaded":{
+            "actionType":"JSFunctionAsync",
+            "method":"ensureObjectsLoaded",
+            "inputData":{
+                "uids":["{{data.productScopeData.productScopeFromStorageUid}}"],
+                "options":{ "errorsToIgnore": {
+                    "description": "The given tag () does not exist in the database or is not a persistent object tag.",
+                    "errorNum": 515024,
+                    "printError": false
+                }}
+            },
+            "events": {
+                "failure": [
+                    {
+                    "name": "ngpProductScopeTable.handleProductScopeNotFound"
+                    }
+             ]
+            },
+           "deps":"js/services/ngpLoadService"
+        },
+        "triggerLoadProductScopeContext":{
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "ngp.setProductSourceContext",
+                    "eventData": {
+                        "context": ["{{data.productScopeData.productScopeFromStorage}}"]
+                    },
+                    "condition": "conditions.foundProductScopeFromStorage"
+                    }
+                 ]
+            }
+        },
+        "saveNewScopeAndLoadTableIfNeeded":{
+            "actionType":"batchJob",
+            "steps":[
+                {
+                    "action":"handleProductSourceContextChange"
+                },
+                {
+                    "action": "getProductScopeConfiguration",
+                    "condition":"data.contextHasChanged === true"
+                },
+                {
+                    "action": "loadTree",
+                    "condition":"data.contextHasChanged === true && data.productScopeData.subsetDefObject.uid.length > 0"
+                }
+            ]
+        },
+        "onObjectDeleted" : {
+            "actionType":"batchJob",
+            "steps":[
+                {
+                    "action":"checkObjectDeleted"
+                },
+                {
+                    "action": "updateAssignedObjects"
+                }
+            ]
+        },
+        "checkObjectDeleted" : {
+            "actionType":"JSFunction",
+            "method":"checkObjectDeleted",
+            "inputData":{
+                "removedUids":"{{data.eventMap['ngp.removedObjects'].removedUids}}",
+                "currentSubsetDefObject" : "{{data.productScopeData.subsetDefObject}}",
+                "currentProductContext": "{{data.productScopeData.buildElement}}",
+                "productScopeFromStorage": "{{data.productScopeData.productScopeFromStorage}}",
+                "tabDisplayMode" :  "{{data.tabDisplayMode}}",
+                "storageKey":"NGP_PRODUCT_SCOPE_CONTEXT_{{data.productScopeData.productScopeShortUid}}"
+            },
+            "outputData":{
+                "tabDisplayMode" : "tabDisplayMode",
+                "productScopeData.buildElement" : "productSourceContext",
+                "productScopeData.subsetDefObject" : "subsetDefinition",
+                "productScopeData.productScopeFromStorage":"productScopeFromStorage"
+            },
+            "events": {
+                "success": [ {
+                    "name": "ngp.updateTabTitle",
+                    "eventData": {
+                        "tabKey": "{{props.subPanelContext.tabKey}}",
+                        "title": "{{props.subPanelContext.tabNamePrefix}}"
+                    },
+                    "condition": "data.productScopeData.subsetDefObject === null"
+                } ]
+            },
+            "deps":"js/services/ngpProductScopeService"
+        },
+        "reloadTableWhenSubsetUpdated":{
+            "actionType":"batchJob",
+            "steps":[
+                {
+                    "action":"checkRelatedPartitionsUpdated"
+                },
+                {
+                    "action": "getProductScopeConfiguration",
+                    "condition":"data.relatedPartitionsUpdated === true"
+                },
+                {
+                    "action": "loadTree",
+                    "condition": "data.relatedPartitionsUpdated === true"
+                },
+                {
+                    "action": "updateStatuses",
+                    "condition": "data.relatedPartitionsUpdated === false"
+                }
+            ]
+        },
+        "setLoadingTrue":{
+            "actionType": "JSFunction",
+            "method":"getValueInViewModel",
+            "inputData":{
+                "value": "Loading"
+            },
+            "outputData":{
+                "tabDisplayMode": ""
+            },
+            "deps":"js/mfeViewModelUtils"
+        },
+        "handleProductScopeNotFound":{
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action":"setProductScopeShowNoProductFound"
+                },
+                {
+                    "action":"removeProductScopeUidFromStorage"
+                }
+            ]
+        },
+        "removeProductScopeUidFromStorage":{
+            "actionType":"JSFunction",
+            "method":"removeItemFromLocalStorage",
+            "inputData":{
+                "storageKey" : "NGP_PRODUCT_SCOPE_CONTEXT_{{data.productScopeData.productScopeShortUid}}"
+            },
+            "deps":"js/services/ngpStorageService"
+        },
+        "initialization": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action":"setVisInteropHandlers"
+                },
+                {
+                    "action": "updateView"
+                }
+            ]
+        },
+        "updateView": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action":"setLoadingTrue"
+                },
+                {
+                    "action": "resetProductScopeData"
+                },
+                {
+                    "action": "resetDataProvider",
+                    "condition": "data.dataProviders.ngpProductScopeTableDataProvider.viewModelCollection.loadedVMObjects.length > 0"
+                },
+                {
+                    "action":"extractShortUidFromProductScope"
+                },
+                {
+                    "action": "getProductScopeUidFromStorage"
+                },
+                {
+                    "action":"ensureProductScopeObjectsLoaded"
+                },
+                {
+                    "action":"extractProductScopeObjectFromCache"
+                },
+                {
+                    "action": "setProductScopeShowNoProductFound",
+                    "condition": "!data.productScopeData.productScopeFromStorage.uid.length > 0"
+                },
+                {
+                    "action": "triggerLoadProductScopeContext"
+                },
+                {
+                    "action": "saveProductSourceContextInCommandContext",
+                    "condition":"data.productScopeData.subsetDefObject.uid.length > 0"
+                }
+            ]
+        },
+        "updateViewIfNeeded": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action":"updateView",
+                    "condition": "props.subPanelContext.tabs[0].input.uid && props.subPanelContext.tabs[0].input.uid !== data.productScopeData.productScope.uid"
+                }
+            ]
+        },
+        "extractShortUidFromBuildElement":{
+            "actionType": "JSFunction",
+            "method":"getFoundationIdFromUid",
+            "inputData":{
+                "uid":"{{data.productScopeData.buildElement.uid}}"
+            },
+            "outputData":{
+                "buildElementShortUid":""
+            },
+            "deps":"js/utils/ngpDataUtils"
+        },
+        "extractShortUidFromProductScope":{
+            "actionType": "JSFunction",
+            "method":"getFoundationIdFromUid",
+            "inputData":{
+                "uid":"{{ctx.state.params.uid}}"
+            },
+            "outputData":{
+                "productScopeData.productScopeShortUid":""
+            },
+            "deps":"js/utils/ngpDataUtils"
+        },
+        "extractProductScopeObjectFromCache":{
+            "actionType": "JSFunction",
+            "method": "getObject",
+            "inputData": {
+                "uid": "{{data.productScopeData.productScopeFromStorageUid}}"
+            },
+            "outputData":{
+                "productScopeData.productScopeFromStorage": ""
+            },
+            "deps": "soa/kernel/clientDataModel"
+        },
+        "checkRelatedPartitionsUpdated":{
+            "actionType":"JSFunction",
+            "method":"checkRelatedPartitionsUpdated",
+            "inputData":{
+                "updatedProductScope":"{{data.eventMap['ngp.subsetDefinitionUpdate'].planningScopeModelObject}}",
+                "currentProductContext": "{{data.productScopeData.buildElement}}"
+            },
+            "outputData":{
+                "relatedPartitionsUpdated" : ""
+            },
+            "deps":"js/services/ngpProductScopeService"
+        },
+        "handleProductSourceContextChange":{
+            "actionType":"JSFunction",
+            "method":"handleProductSourceContextChangeRequest",
+            "inputData":{
+                "newContextArray":"{{data.eventMap['ngp.setProductSourceContext'].context}}",
+                "currentContext":"{{data.productScopeData.buildElement}}"
+            },
+            "outputData":{
+                "newPotentialBuildElement": "newPotentialBuildElement",
+                "contextHasChanged" : "contextHasChanged"
+            },
+            "deps":"js/services/ngpProductScopeService"
+        },
+        "saveProductSourceContextInCommandContext": {
+            "actionType":"JSFunction",
+            "method": "setCommandContext",
+            "inputData":{
+                "tabModel": "{{props.subPanelContext}}",
+                "commandContext":{
+                    "input": "{{data.productScopeData.buildElement}}",
+                    "productScopeDefinition": "{{data.productScopeData.subsetDefObject}}"
+                }
+            },
+            "deps":"js/mfeContentPanelUtil"
+        },
+        "loadTree": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "saveProductSourceContextInCommandContext",
+                    "condition":"data.productScopeData.subsetDefObject.uid.length > 0"
+                },
+                {
+                    "action":"setLoadingTrue",
+                    "condition":"data.productScopeData.subsetDefObject.uid.length > 0"
+                },
+                {
+                    "action": "clearProductContext",
+                    "condition":"data.productScopeData.subsetDefObject.uid.length > 0"
+                },
+                {
+                    "action":"extractShortUidFromProductScope"
+                },
+                {
+                    "action":"extractShortUidFromBuildElement"
+                },
+                {
+                    "action": "saveProductScopeContext",
+                    "condition":"data.productScopeData.subsetDefObject.uid.length > 0"
+                },
+                {
+                    "action": "setProductScopeShowTable",
+                    "condition":"data.productScopeData.subsetDefObject.uid.length > 0"
+                },
+                {
+                    "action": "reloadTable",
+                    "condition":"data.productScopeData.subsetDefObject.uid.length > 0"
+                }
+              ]
+        },
+        "reloadTable":{
+            "actionType":"JSFunction",
+            "method":"reloadTable",
+            "inputData":{
+                "tableId":"ngpProductScopeTable"
+            },
+            "deps":"js/mfeTableService"
+
+        },
+        "loadTableData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTableData",
+            "inputData": {
+                "treeLoadInput": "{{data.treeLoadInput}}",
+                "dataProvider": "{{data.dataProviders.ngpProductScopeTableDataProvider}}",
+                "sortCriteria": "{{data.columnProviders.ngpProductScopeTableColumnProvider.sortCriteria}}",
+                "planningScopeModelObject": "{{data.productScopeData.buildElement}}"
+            },
+            "outputData": {
+                "treeLoadResult": "treeLoadResult",
+                "isInLoadingState": false
+            },
+            "events": {
+                "success": [
+                    {
+                    "name": "ngpProductScopeTable.tableLoaded"
+                }
+             ]
+            },
+            "deps": "js/services/ngpProductScopeService"
+        },
+        "getProductScopeConfiguration": {
+            "actionType": "JSFunctionAsync",
+            "method": "getProductScopeConfiguration",
+            "inputData": {
+                "currentBuildElement" : "{{data.productScopeData.buildElement}}",
+                "newPotentialBuildElement": "{{data.newPotentialBuildElement}}",
+                "currentSubsetDefObject": "{{data.productScopeData.subsetDefObject}}",
+                "currentPartitions": "{{data.partitions}}",
+                "currentPartitionScheme": "{{data.partitionScheme}}"
+            },
+            "outputData": {
+                "productScopeData.subsetDefObject": "subsetDefinition",
+                "partitions": "partitions",
+                "partitionScheme": "partitionScheme",
+                "productScopeData.buildElement" : "buildElement"
+            },
+            "events": {
+                "success": [ {
+                    "name": "ngp.updateTabTitle",
+                    "eventData": {
+                        "tabKey": "{{props.subPanelContext.tabKey}}",
+                        "title": "{{props.subPanelContext.tabNamePrefix}} | {{data.productScopeData.buildElement.props.object_name.uiValues[0]}}"
+                    },
+                    "condition": "data.productScopeData.subsetDefObject.uid.length > 0"
+                } ]
+            },
+            "deps": "js/services/ngpProductScopeService"
+        },
+        "clearProductContext": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": null
+            },
+            "outputData": {
+                "productContext": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "registerPolicy": {
+            "actionType": "JSFunction",
+            "method": "register",
+            "inputData": {
+                "name": "ngpProductScopeTable",
+                "policyObj": "{{data.dataProviders.ngpProductScopeTableDataProvider.policy}}"
+            },
+            "deps": "js/mfePolicyService"
+        },
+        "unregisterPolicy": {
+            "actionType": "JSFunction",
+            "method": "unregister",
+            "inputData": {
+                "name": "ngpProductScopeTable"
+            },
+            "deps": "js/mfePolicyService"
+        },
+        "registerPolicyAndLoadTableData": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "registerPolicy"
+                },
+                {
+                    "action": "loadTableData"
+                }
+            ]
+        },
+        "createColumns": {
+            "actionType": "JSFunction",
+            "method": "createColumns",
+            "inputData": {
+                "preferenceName": "NGPBuildStrategyProductScopeColumns",
+                "dataProvider": "{{data.dataProviders.ngpProductScopeTableDataProvider}}",
+                "columnProvider": "{{data.columnProviders.ngpProductScopeTableColumnProvider}}",
+                "additionalPolicyObjects": "{{data.tablePolicy}}",
+                "tableCmdColumnPropName": "",
+                "tableTreeNavColumnPropName":"object_string"
+            },
+            "deps": "js/mfeTableService"
+        },
+        "saveModifiedColumns": {
+            "actionType": "JSFunction",
+            "method": "saveResizedColumnsWidth",
+            "inputData": {
+                "preferenceName": "NGPBuildStrategyProductScopeColumns",
+                "columns": "{{data.eventMap.columnArrange.columns}}"
+            },
+            "deps": "js/mfeTableService"
+        },
+        "refreshObjects":{
+            "actionType":"JSFunctionAsync",
+            "method":"refreshObjects",
+            "inputData":{
+                "modelObjects": "{{data.dataProviders.ngpProductScopeTableDataProvider.viewModelCollection.loadedVMObjects}}"
+            },
+            "deps": "js/services/ngpLoadService"
+        },
+        "arrangeColumnsAndRefresh":{
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "unregisterPolicy"
+                },
+                {
+                    "action": "createColumns"
+                },
+                {
+                    "action": "updateStatuses"
+                },
+                {
+                    "action": "registerPolicy"
+                },
+                {
+                    "action": "refreshObjects"
+                }
+            ]
+        },
+         "setProductScopeShowTable":{
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": "ShowTable"
+            },
+            "outputData":{
+                "tabDisplayMode": ""
+            },
+            "deps":"js/mfeViewModelUtils"
+        },
+        "setProductScopeShowNoProductFound":{
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": "ShowNoProductFound"
+            },
+            "outputData":{
+                "tabDisplayMode": ""
+            },
+            "deps":"js/mfeViewModelUtils"
+        },
+        "setVisInteropHandlers":
+        {
+            "actionType": "JSFunction",
+            "method": "setVisInteropHandlers",
+            "deps": "js/services/ngpVisInteropService"
+        },
+        "setSelectionInVis":
+        {
+            "actionType": "JSFunction",
+            "method": "setSelectionInVis",
+            "inputData": {
+                "selectedObjects": "{{data.eventMap['ngpProductScopeTable.gridSelection'].selectedObjects}}"
+            },
+            "deps": "js/services/ngpVisInteropService"
+        },
+        "updateSelectionFromVis":
+        {
+            "actionType": "JSFunction",
+            "method": "updateSelectionFromVis",
+            "inputData": {
+                "selection": "{{data.eventMap['ngpVisInterop.selectionChangeEvent']}}",
+                "dataProvider": "{{data.dataProviders.ngpProductScopeTableDataProvider}}",
+                "viewModelData": "{{data}}"
+            },
+            "deps": "js/services/ngpProductScopeService"
+        },
+        "updateStatuses":
+        {
+            "actionType": "JSFunction",
+            "method": "updateStatuses",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.ngpProductScopeTableDataProvider}}",
+                "contextObject": "{{data.productScopeData.buildElement}}"
+            },
+            "deps": "js/services/ngpProductScopeService"
+        },
+        "toggleFilterAssigned": {
+            "actionType": "JSFunction",
+            "method": "getToggledBoolean",
+            "inputData": {
+                "booleanToToggle": "{{ctx.ngp.filterAssignedMode}}"
+            },
+            "outputData": {
+                "filterMode": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "updateAssignedObjects":{
+            "actionType":"batchJob",
+            "steps":[
+                {
+                    "action":"reloadTable",
+                    "condition": "conditions.isInFilterAssignedMode"
+                },
+                {
+                    "action": "updateStatuses",
+                    "condition": "!conditions.isInFilterAssignedMode"
+                }
+            ]
+        },
+        "handleFilterAssigned": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "toggleFilterAssigned"
+                },
+                {
+                    "action": "updatePartialContextForFilterAssigned"
+                },
+                {
+                    "action": "reloadTable"
+                }
+            ]
+        },
+        "updatePartialContextForFilterAssigned": {
+            "actionType": "JSFunction",
+            "method": "updatePartialCtx",
+            "inputData": {
+                "path": "ngp.filterAssignedMode",
+                "value": "{{data.filterMode}}"
+            },
+            "deps": "js/appCtxService"
+        },
+        "removeProductScopeFromStorage" : {
+            "actionType":"JSFunction",
+            "method":"removeItemFromLocalStorage",
+            "inputData":{
+                "storageKey":"NGP_PRODUCT_SCOPE_CONTEXT_{{data.productScopeData.productScopeShortUid}}"
+            },
+            "deps":"js/services/ngpStorageService"
+        },
+        "updateProductScopeDataForRemove" : {
+            "actionType":"JSFunction",
+            "method":"updateProductScopeDataForRemove",
+            "outputData":{
+                "tabDisplayMode" : "tabDisplayMode",
+                "productScopeData.buildElement" : "productSourceContext",
+                "productScopeData.subsetDefObject" : "subsetDefinition",
+                "productScopeData.productScopeFromStorage":"productScopeFromStorage"
+            },
+            "deps":"js/services/ngpProductScopeService"
+        },
+        "clearProductScopeData":{
+            "actionType":"batchJob",
+            "steps":[
+                {
+                    "action":"removeProductScopeFromStorage"
+                },
+                {
+                    "action":"updateProductScopeDataForRemove"
+                }
+            ]
+        },
+        "checkIfCurrentProductScopeWasRemoved":{
+            "actionType":"JSFunction",
+            "method":"checkRelatedPartitionsUpdated",
+            "inputData":{
+                "updatedProductScope": ["{{data.eventMap['ngp.productScopeRemoved'].planningScopeModelObject}}"],
+                "currentProductContext": "{{data.productScopeData.buildElement}}"
+            },
+            "outputData":{
+                "shouldClearProductScopeData" : ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "ngp.updateTabTitle",
+                    "eventData": {
+                        "tabKey": "{{props.subPanelContext.tabKey}}",
+                        "title": "{{props.subPanelContext.tabNamePrefix}}"
+                    },
+                    "condition": "conditions.shouldClearProductScopeData"
+                } ]
+            },
+            "deps":"js/services/ngpProductScopeService"
+        },
+        "handleProductScopeRemoved": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "checkIfCurrentProductScopeWasRemoved"
+                },
+                {
+                    "action": "clearProductScopeData",
+                    "condition": "data.shouldClearProductScopeData"
+                }
+            ]
+        },
+        "updateStatusesAfterExpansion":
+        {
+            "actionType": "JSFunction",
+            "method": "updateStatuses",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.ngpProductScopeTableDataProvider}}",
+                "contextObject": "{{data.productScopeData.buildElement}}",
+                "currentNodeExpanded": "{{data.eventData}}"
+            },
+            "deps": "js/services/ngpProductScopeService"
+        },
+        "handleNodeExpansion":{
+            "actionType":"batchJob",
+            "steps":[
+                {
+                    "action":"updateStatusesAfterExpansion",
+                    "condition": "conditions.expandingAnAlreadyExpandedNode"
+                }
+            ]
+        },
+        "resetDataProvider": {
+            "actionType": "dataProvider",
+            "method": "ngpProductScopeTableDataProvider"
+        }
+    },
+    "columnProviders": {
+        "ngpProductScopeTableColumnProvider": {
+            "loadColumnAction": "createColumns",
+            "resetColumnAction": "saveModifiedColumns",
+            "saveColumnAndLoadAction": "saveModifiedColumns",
+            "frozenColumnIndex": -1,
+            "enableSorting": true,
+            "enableCellEdit": false,
+            "columnInfos": [
+                {
+                    "name": "assignmentIndication",
+                    "displayName": "{{i18n.assignmentIndicationColumnName}}",
+                    "enableSorting": false
+                },
+                {
+                    "name": "MismatchStatus",
+                    "displayName": "{{i18n.mismatchStatusColumnName}}",
+                    "enableSorting": false
+                },
+                {
+                    "name": "AssignedToProcesses",
+                    "displayName": "{{i18n.assignedToProcessesColumnName}}",
+                    "enableSorting": false
+                },
+                {
+                    "name": "AssignedToActivities",
+                    "displayName": "{{i18n.assignedToActivitiesColumnName}}",
+                    "enableSorting": false
+                },
+                {
+                    "name": "AssignedToBuildElements",
+                    "displayName": "{{i18n.assignedToBuildElementsColumnName}}",
+                    "enableSorting": false
+                }
+            ]
+
+        }
+    },
+    "dataProviders": {
+        "ngpProductScopeTableDataProvider": {
+            "initializeAction": "registerPolicyAndLoadTableData",
+            "nextAction": "loadTableData",
+            "previousAction": "loadTableData",
+            "treeLoadResult": "action.result.treeLoadResult",
+            "treePageSize": 200,
+            "selectionModelMode": "multiple",
+            "cacheCollapse": true,
+            "inputData": {
+                "accessMode": "tree",
+                "topNodeUid": "{{data.topNodeUid}}"
+            }
+        }
+    },
+    "conditions": {
+        "contextHasChanged" :{
+            "expression":{
+                "$source":"data.contextHasChanged",
+                "$query":{
+                    "$eq": true
+                }
+            }
+        },
+        "isInLoadingState":{
+            "expression":{
+                "$source":"data.tabDisplayMode",
+                "$query":{
+                    "$eq": "Loading"
+                }
+            }
+        },
+        "shouldShowTable": {
+            "expression":{
+                "$source":"data.tabDisplayMode",
+                "$query":{
+                    "$eq": "ShowTable"
+                }
+            }
+        },
+        "foundProductScopeFromStorage": {
+            "expression":{
+                "$source": "data.productScopeData.productScopeFromStorage",
+                    "$query": {
+                        "$ne": null
+                    }
+            }
+        },
+        "showNoProductFoundMessage":{
+            "expression":{
+                "$source":"data.tabDisplayMode",
+                "$query":{
+                    "$eq": "ShowNoProductFound"
+                }
+            }
+        },
+        "isInFilterAssignedMode" :{
+            "expression":{
+                "$source":"data.filterMode",
+                "$query":{
+                    "$eq": true
+                }
+            }
+        },
+        "isNodeExpanded" :{
+            "expression":{
+                "$source":"data.eventData.isExpanded",
+                "$query":{
+                    "$eq": true
+                }
+            }
+        },
+        "hasSubsetAndProductSourceContextChanged":{
+            "expression":{
+                "$and" :[
+                {
+                "$source":"data.relatedPartitionsUpdated",
+                    "$query":{
+                        "$eq": true
+                    }
+                },
+                {
+                "$source": "data.productScopeData.subsetDefObject.uid.length",
+                    "$query": {
+                        "$gt": 0
+                    }
+                }
+            ]
+            }
+        },
+        "shouldClearProductScopeData":{
+            "expression":{
+                "$source":"data.shouldClearProductScopeData",
+                "$query":{
+                    "$eq": true
+                }
+            }
+        },
+        "expandingAnAlreadyExpandedNode": {
+            "expression": {
+                "$and": [ {
+                        "$source": "data.eventData.isExpanded",
+                        "$query": {
+                            "$eq": true
+                        }
+                    },
+                    {
+                        "$source": "data.eventData.hasAlreadyBeenExpanded",
+                        "$query": {
+                            "$eq": true
+                        }
+                    }
+                ]
+            }
+        },
+        "shouldUpdateSelectionInVis": {
+            "expression": {
+                    "$source": "ctx.aw_host_type",
+                    "$query": {
+                        "$eq": "Vis"
+                    }
+            }
+        }
+    },
+    "grids": {
+        "ngpProductScopeTable": {
+            "dataProvider": "ngpProductScopeTableDataProvider",
+            "columnProvider": "ngpProductScopeTableColumnProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "enableGridMenu": true,
+                "textBundle": {
+                    "TwistieTooltipCollapsed": "{{i18n.expand}}",
+                    "TwistieTooltipExpanded": "{{i18n.collapse}}"
+                }
+            }
+        }
+    },
+    "lifecycleHooks": {
+        "onUnmount": "unregisterPolicy",
+        "onMount": "initialization",
+        "onUpdate": {
+            "action": "updateViewIfNeeded",
+            "observers": [ "props.subPanelContext.tabs.0.input" ]
+        }
+    },
+    "onEvent":
+    [
+        {
+            "eventId": "ngp.setProductSourceContext",
+            "action": "saveNewScopeAndLoadTableIfNeeded",
+            "cacheEventData": true
+        },
+        {
+            "eventId" : "ngp.subsetDefinitionUpdate",
+            "action" : "reloadTableWhenSubsetUpdated",
+            "cacheEventData": true
+        },
+        {
+            "eventId" : "ngp.removedObjects",
+            "action" :  "onObjectDeleted",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "columnArrange",
+            "condition": "name === 'ngpProductScopeTable'",
+            "cacheEventData": true,
+            "action": "saveModifiedColumns"
+        },
+        {
+            "eventId": "ngp.updateColumns",
+            "action": "arrangeColumnsAndRefresh",
+            "condition": "tableId === 'NGPBuildStrategyProductScopeColumns'"
+        },
+        {
+            "eventId": "ngpProductScopeTable.gridSelection",
+            "action": "setSelectionInVis",
+            "condition": "conditions.shouldUpdateSelectionInVis",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "ngpVisInterop.selectionChangeEvent",
+            "action": "updateSelectionFromVis",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "ngp.objectsUnassignedEvent",
+            "action": "updateAssignedObjects",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "ngp.assignedPartsTableRefreshEvent",
+            "action": "updateAssignedObjects",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "ngp.filterAssigned",
+            "action": "handleFilterAssigned",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "ngpProductScopeTable.plTable.toggleTreeNode",
+            "action": "handleNodeExpansion",
+            "cacheEventData": true
+        },
+        {
+            "eventId":"ngpProductScopeTable.handleProductScopeNotFound",
+            "action":"handleProductScopeNotFound"
+        },
+        {
+            "eventId": "ngp.objectsUnassignedFromPlanElementEvent",
+            "action": "updateAssignedObjects",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "ngp.productScopeRemoved",
+            "action": "handleProductScopeRemoved",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "ngp.candidatesMoved",
+            "action": "updateAssignedObjects"
+        }
+    ],
+    "i18n":{
+        "noContextForProductSourceTable": ["NgpAssociatePartitionsMessages"],
+        "noProductScopeDefinedForContext": ["NgpAssociatePartitionsMessages"],
+        "collapse": [ "NgpBuildStrategyMessages" ],
+        "expand": [ "NgpBuildStrategyMessages" ],
+        "assignmentIndicationColumnName": [ "NgpProductAssignmentMessages" ],
+        "mismatchStatusColumnName": [ "NgpProductAssignmentMessages" ],
+        "assignedToProcessesColumnName": [ "NgpProductAssignmentMessages" ],
+        "assignedToActivitiesColumnName": [ "NgpProductAssignmentMessages" ],
+        "assignedToBuildElementsColumnName": [ "NgpProductAssignmentMessages" ]
+    }
+}

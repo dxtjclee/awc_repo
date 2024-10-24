@@ -1,0 +1,20 @@
+<aw-popup2>
+    <aw-panel>
+        <aw-panel-body>
+            <aw-link-with-popup-menu prop="data.currentWorkCard" dataprovider="data.dataProviders.customWorkCard" visible-when="data.dataProviders.customWorkCard.viewModelCollection.loadedVMObjects.length > 1"></aw-link-with-popup-menu>
+            <div class="aw-serviceplanning-popupLabel">
+                <aw-label prop="data.currentWorkCard" visible-when="data.dataProviders.customWorkCard.viewModelCollection.loadedVMObjects.length ===1"></aw-label>
+            </div>
+            <aw-xrt type="CREATE" object-type="{{data.selectedType.dbValue}}" xrt-state="data.xrtState" visible-when="data.dataProviders.customWorkCard.viewModelCollection.loadedVMObjects.length>0"></aw-xrt>
+        </aw-panel-body>
+
+        <aw-panel-footer>
+            <aw-button button-type="base" action="ClosePopUpAction" size="auto">
+                <aw-i18n>i18n.Cancel</aw-i18n>
+            </aw-button>
+            <aw-button size="auto" action="AddWorkCardBatchJob" visible-when="formProp.attributes.valid && data.totalFound > 0">
+                <aw-i18n>i18n.Add</aw-i18n>
+            </aw-button>
+        </aw-panel-footer>
+    </aw-panel>
+</aw-popup2>

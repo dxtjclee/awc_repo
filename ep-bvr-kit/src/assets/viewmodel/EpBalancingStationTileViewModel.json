@@ -1,0 +1,75 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "vmo": {
+            "type": "viewModelObject"
+        },
+        "balancing-data": {
+            "type": "object"
+        }
+    },
+    "actions": {
+        "render":{
+            "method": "epBalancingStationTileRender",
+            "deps": "js/epBalancingStationTileService"
+        },
+        "updateCycleTime": {
+            "actionType": "JSFunction",
+            "method": "stringToFloat",
+            "inputData": {
+                "value": "{{props.vmo.props.elb0cycleTime.displayValues[0]}}"
+            },
+            "outputData": {
+                "stationCycleTime": ""
+            },
+            "deps": "js/epBalancingLabelsService"
+        },
+        "getTimeUnits": {
+            "actionType": "JSFunction",
+            "method": "getCurrentTimeUnitShort",
+            "outputData": {
+                "timeUnits": ""
+            },
+            "deps": "js/epTimeUnitsService"
+        },
+        "updateTimeParams": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "updateCycleTime"
+                },
+                {
+                    "action": "getTimeUnits"
+                },
+                {
+                    "action": "loadInputObject"
+                }
+            ]
+        },
+        "loadInputObject": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": "{{props.vmo}}"
+            },
+            "outputData": {
+                "inputObject": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        }
+    },
+    "lifecycleHooks": {
+        "render": "render",
+        "onUpdate": [
+            {
+                "action": "updateTimeParams",
+                "observers": [
+                    "props.vmo.props.elb0cycleTime.displayValues"
+                ]
+            }
+        ]
+    },
+    "i18n": {
+        "cycleTimeChip": [ "BalancingMessages" ]
+    }
+}

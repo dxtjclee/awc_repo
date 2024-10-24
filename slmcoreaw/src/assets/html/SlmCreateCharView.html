@@ -1,0 +1,87 @@
+<aw-popup2>
+    <aw-panel>
+        <aw-tab-set tabs="data.addPanelTabModels"
+            visible-when="!(ctx.selected.modelType.typeHierarchyArray.indexOf('Folder') > -1)"></aw-tab-set>
+        <aw-panel-body>
+            <aw-panel-section visible-when="data.selectedTab.tabKey === 'search'">
+                <aw-search-box prop="data.searchBox" action="doSearch"></aw-search-box>
+            </aw-panel-section>
+            <aw-panel-section
+                visible-when="(!data.selectedTab.tabKey === 'search' || data.selectedTab.tabKey === 'newChar' || (ctx.selected.modelType.typeHierarchyArray.indexOf('Folder') > -1)) && !ctx.showDateCharPanel && !ctx.showLifeCharPanel && !ctx.showObsCharPanel && !ctx.showDerivedCharPanel">
+                <aw-list dataprovider="data.dataProviders.charType">
+                    <aw-default-cell vmo="item"></aw-default-cell>
+                </aw-list>
+            </aw-panel-section>
+            <aw-panel-section visible-when="data.selectedTab.tabKey === 'search'">
+                <aw-list dataprovider="data.dataProviders.charDefListProvider"
+                    visible-when="data.searchResponse != undefined && data.searchResponse">
+                    <aw-default-cell vmo="item"></aw-default-cell>
+                </aw-list>
+                <div exist-when="(data.searchResponse === undefined && data.totalFound === 0)">
+                    <aw-i18n>i18n.noResultsFound</aw-i18n>
+                </div>
+            </aw-panel-section>
+            <div
+                visible-when="((ctx.showDateCharPanel && ctx.showDateCharPanel === true) || (ctx.showLifeCharPanel && ctx.showLifeCharPanel === true) || (ctx.showObsCharPanel && ctx.showObsCharPanel === true) || (ctx.showDerivedCharPanel && ctx.showDerivedCharPanel === true)) && data.selectedTab.tabKey !== 'search'">
+                <aw-icon-button command="data.buttonCommand" class="aw-slmcoreaw-backButton"></aw-icon-button>
+                <span visible-when="ctx.showDateCharPanel && ctx.showDateCharPanel === true"
+                    class="aw-slmcoreaw-dateChar">
+                    <aw-i18n>i18n.DateCharacteristics</aw-i18n>
+                </span>
+                <span visible-when="ctx.showLifeCharPanel && ctx.showLifeCharPanel === true"
+                    class="aw-slmcoreaw-dateChar">
+                    <aw-i18n>i18n.LifeCharacteristics</aw-i18n>
+                </span>
+                <span visible-when="ctx.showObsCharPanel && ctx.showObsCharPanel === true"
+                    class="aw-slmcoreaw-dateChar">
+                    <aw-i18n>i18n.ObsCharacteristics</aw-i18n>
+                </span>
+                <span visible-when="ctx.showDerivedCharPanel && ctx.showDerivedCharPanel === true"
+                    class="aw-slmcoreaw-dateChar">
+                    <aw-i18n>i18n.DerivedCharacteristics</aw-i18n>
+                </span>
+                <aw-panel-section class="aw-slmcoreaw-charPanel" visible-when="ctx.showDateCharPanel && ctx.showDateCharPanel === true">
+                    <aw-textbox prop="data.charName"></aw-textbox>
+                </aw-panel-section>
+                <aw-panel-section class="aw-slmcoreaw-charPanel" visible-when="ctx.showLifeCharPanel && ctx.showLifeCharPanel === true">
+                    <aw-textbox prop="data.charName"></aw-textbox>
+                    <aw-textbox prop="data.charUnit"></aw-textbox>
+                    <aw-textbox prop="data.precision"></aw-textbox>
+                </aw-panel-section>
+                <aw-panel-section class="aw-slmcoreaw-charPanel" visible-when="ctx.showObsCharPanel && ctx.showObsCharPanel === true">
+                    <aw-textbox prop="data.charName"></aw-textbox>
+                    <aw-listbox prop="data.typeOf" list="data.typeOfValues.dbValue"></aw-listbox>
+                    <aw-textbox prop="data.charUnit" visible-when="data.typeOf.dbValue==='Numeric'"></aw-textbox>
+                    <aw-textbox prop="data.precision" visible-when="data.typeOf.dbValue==='Numeric'"></aw-textbox>
+                    <aw-textbox prop="data.trueValues" visible-when="data.typeOf.dbValue==='Logical'"></aw-textbox>
+                    <aw-textbox prop="data.falseValues" visible-when="data.typeOf.dbValue==='Logical'"></aw-textbox>
+                    <aw-widget prop="data.stringList" visible-when="data.typeOf.dbValue==='Textual'"></aw-widget>
+                </aw-panel-section>
+                <aw-panel-section class="aw-slmcoreaw-charPanel" visible-when="ctx.showDerivedCharPanel && ctx.showDerivedCharPanel === true">
+                    <aw-textbox prop="data.charName"></aw-textbox>
+                    <aw-textbox prop="data.expressionValue"></aw-textbox>
+                    <div class="sw-row">
+                        <div class="sw-column justify-justified aw-slmcoreaw-devChar">
+                            <aw-widget prop="data.charListBox" action="prepareCharExpressionValue"></aw-widget>
+                        </div>
+                        <div class="sw-column justify-justified aw-slmcoreaw-devChar">
+                            <aw-widget prop="data.operatorListBox" action="prepareOperExpressionValue"></aw-widget>
+                        </div>
+                    </div>
+                    <aw-textbox prop="data.charUnit"></aw-textbox>
+                    <aw-textbox prop="data.precision"></aw-textbox>
+                </aw-panel-section>
+            </div>
+        </aw-panel-body>
+        <aw-panel-footer>
+            <aw-button button-type="base" size="auto" action="clearAndClose">
+                <aw-i18n>i18n.CancelText</aw-i18n>
+            </aw-button>
+            <aw-button
+                visible-when="conditions.isSelectionPageVisibility && (conditions.requiredFieldsEnteredForDate || conditions.requiredFieldsEnteredForLife || conditions.requiredFieldsEnteredForObs || conditions.requiredFieldsEnteredForLogicalObs || conditions.requiredFieldsEnteredForDerived) || (conditions.isCharSelectedFromSearch && data.selectedTab.tabKey === 'search')"
+                size="auto" action="getNeutralPart">
+                <aw-i18n>i18n.Add</aw-i18n>
+            </aw-button>
+        </aw-panel-footer>
+    </aw-panel>
+</aw-popup2>

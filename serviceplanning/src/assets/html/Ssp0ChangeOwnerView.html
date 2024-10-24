@@ -1,0 +1,12 @@
+<aw-command-panel caption="i18n.Ssp0ChangeOwner">
+    <aw-panel-body scrollable="false">
+        <aw-panel-section class="aw-results-section" caption="i18n.user">
+            <aw-people-picker sub-panel-context="{...props.subPanelContext, addUserPanelState : data.addUserPanelState}"></aw-people-picker>
+        </aw-panel-section>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button action="ssp0ChangeOwner" enable-when="conditions.isValidToAdd">
+            <aw-i18n>i18n.change</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

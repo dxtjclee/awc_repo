@@ -1,0 +1,637 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "data": {
+        "previewInfotooltipView": {
+            "view": "Arm0PreviewInfoTooltip"
+        }
+    },
+     "actions": {
+        "populateSecArea": {
+            "actionType": "JSFunction",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "method": "populateSecArea",
+            "deps": "js/ImportPreview",
+            "events": {
+                "success": [ {
+                    "name": "progress.end",
+                    "excludeLocalDataCtx": true
+                },
+                {
+                    "name": "specificationSummaryDataProvider.reset"
+                } ],
+                "failure": [
+                {
+                    "name": "progress.end",
+                    "excludeLocalDataCtx": true
+                } ]
+            }
+        },
+        "registerCxtForActionsPanel": {
+            "actionType": "JSFunction",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "method": "registerCxtForActionsPanel",
+            "deps": "js/ImportPreview"
+        },
+        "setHeaderTitle": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "setHeaderTitleOnDerivedMerge",
+                    "condition": "ctx.sublocation.clientScopeURI === 'RequirementMergePreviewURI'"
+                },
+                {
+                    "action": "setHeaderTitleOnRoundTrip",
+                    "condition": "ctx.sublocation.clientScopeURI === 'RequirementRoundTripPreviewURI'"
+                }
+            ]
+
+        },
+        "setHeaderTitleOnDerivedMerge": {
+            "actionType": "JSFunction",
+            "inputData": {
+                "jsonMaster": "jsonMaster"
+            },
+            "method": "setHeaderTitle",
+            "deps": "js/Arm0DerivedAndMergeService"
+        },
+        "setHeaderTitleOnRoundTrip": {
+            "actionType": "JSFunction",
+            "inputData": {
+                "jsonMaster": "jsonMaster"
+            },
+            "method": "setHeaderTitleOnRoundTrip",
+            "deps": "js/Arm0ImportChangesInWordRoundTrip"
+        },
+        "registerCxtForSettingsPanel": {
+            "actionType": "JSFunction",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "method": "registerCxtForSettingsPanel",
+            "deps": "js/ImportPreview"
+        },
+        "showActionsPanel": {
+            "actionType": "JSFunction",
+            "method": "show",
+            "inputData": {
+                "data": {
+                    "declView": "Arm0ShowTypeChangePanel",
+                    "options": {
+                        "reference": "{{data.eventData.target}}",
+                        "height": "200",
+                        "placement": "right-start",
+                        "hasArrow": true,
+                        "draggable":false,
+                        "clickOutsideToClose": true
+                    }
+                }
+            },
+            "outputData": {
+                "actionsPopupId": "id",
+                "actionsPopupElement": "panelEl"
+            },
+            "deps": "js/popupService"
+        },
+        "showActionsPanelMutiselectObject": {
+            "actionType": "JSFunction",
+            "method": "show",
+            "inputData": {
+                "data": {
+                    "declView": "Arm0ShowTypeChangePanel",
+                    "options": {
+                        "reference": "button[button-id='Arm0ChangeTypeImportPreviewCmd']",
+                        "toggleMode": true,
+                        "placement": "bottom-end",
+                        "draggable":false,
+                        "clickOutsideToClose": true
+                    }
+                }
+            },
+            "outputData": {
+                "actionsPopupId": "id",
+                "actionsPopupElement": "panelEl"
+            },
+            "deps": "js/popupService"
+        },
+
+        "showSettingsPanel": {
+            "actionType": "JSFunction",
+            "method": "show",
+            "inputData": {
+                "data": {
+                    "declView": "Arm0ShowSettingChangePanel",
+                    "options": {
+                        "reference": "{{data.eventData.target}}",
+                        "width": "auto",
+                        "placement": "right-start",
+                        "hasArrow": true,
+                        "draggable":false,
+                        "clickOutsideToClose": true
+                    }
+                }
+            },
+            "outputData": {
+                "actionsPopupId": "id",
+                "actionsPopupElement": "panelEl"
+            },
+
+            "deps": "js/popupService"
+        },
+
+        "unRegisterData": {
+            "actionType": "JSFunction",
+            "method": "unRegisterPreviewData",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0ImportFromOffice"
+        },
+        "contentUnloadedPreview": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "deps": "js/appCtxService",
+            "inputData": {
+                "name": "compareAndPreviewBtnClicked"
+            }
+        },
+        "populateSpecificationSummaryDataForPreview":
+        {
+            "actionType": "JSFunction",
+            "method": "populateSpecificationSummaryDataForPreview",
+            "inputData":
+            {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "summaryChips": "summaryChips"
+            },
+            "deps": "js/ImportPreview"
+        },
+        "previewContentUpdatedForObject": {
+            "actionType": "JSFunction",
+            "method": "previewContentUpdatedForObject",
+            "inputData":
+            {
+                "eventData": "{{data.eventMap['importPreview.previewContentUpdatedForObject']}}"
+            },
+            "deps": "js/ImportPreview"
+        },
+        "mergeAction":{
+            "actionType": "JSFunction",
+            "method": "getJSONDataForMerge",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "treeData": "treeData",
+                "mergeApplicationFormat": "mergeApplicationFormat"
+            },
+            "deps": "js/Arm0DerivedAndMergeService",
+            "events": {
+                "success": [
+                    {
+                        "name": "progress.start"
+                    }
+                ]
+            }
+        },
+        "reviseAction":{
+            "actionType": "JSFunction",
+            "method": "getJSONDataForRevise",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "treeData": "treeData",
+                "mergeApplicationFormat": "mergeApplicationFormat"
+            },
+            "deps": "js/Arm0DerivedAndMergeService",
+            "events": {
+                "success": [
+                    {
+                        "name": "progress.start"
+                    }
+                ]
+            }
+        },
+        "getFMSFileTicketForMerge": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2007-01-FileManagement",
+            "method": "getTransientFileTicketsForUpload",
+            "inputData": {
+                "transientFileInfos": [
+                    {
+                        "fileName": "mergeJsonString.txt",
+                        "isBinary": true
+                    }
+                ]
+            },
+            "outputData": {
+                "jsonFmsTicketForMerge": "transientFileTicketInfos[0].ticket"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "importSpecification.updateFileContentInFormDataForMerge"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "progress.end",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            }
+        },
+        "updateFileContentInFormDataForMerge": {
+            "actionType": "JSFunction",
+            "method": "updateFileContentInFormDataForMerge",
+            "deps": "js/Arm0DerivedAndMergeService",
+            "inputData": {
+                "data": "{{data}}"
+            }
+        },
+        "uploadImportFileForMerge": {
+            "actionType": "RESTService",
+            "serviceName": "",
+            "method": "POST",
+            "inputData": {
+                "request": {
+                    "method": "POST",
+                    "url": "{{Constants.fmsUrl}}",
+                    "headers": {
+                        "Content-type": "undefined"
+                    },
+                    "data": "{{data.formDataForMerge}}"
+                }
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "importSpecification.setJSONDataForMerge"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "progress.end",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            },
+            "actionMessages": {},
+            "deps": "js/Arm0DerivedAndMergeService"
+        },
+        "setJSONDataForMerge": {
+            "actionType": "JSFunction",
+            "method": "setJSONDataForMerge",
+            "inputData": {
+                "data": "{{data}}",
+                "jsonFmsTicket": "{{data.jsonFmsTicketForMerge}}"
+            },
+            "deps": "js/Arm0DerivedAndMergeService"
+        },
+        "mergeUsingJSONData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceReqMgmt-2018-05-ImportExport",
+            "method": "importFromWord",
+            "inputData": {
+                "inputs": [
+                    {
+                        "selectedObject": "{{ctx.masterItemUid}}",
+                        "transientFileWriteTicket": "{{data.jsonFmsTicket}}",
+                        "applicationFormat": "{{data.mergeApplicationFormat}}",
+                        "createSpecElementType": "derived",
+                        "specificationType": "",
+                        "isLive": false,
+                        "isRunInBackground": false,
+                        "isPermanentconvertToHtml": false,
+                        "importAsSpec": true,
+                        "pasteTopSpecRevisionUnderSelection": true,
+                        "specDesc": "{{data.description.dbValue}}",
+                        "keywordImportRules": null,
+                        "importOptions": []
+                    }
+                ]
+            },
+            "outputData": {
+                "importedObject": "output[0].resultObjects[0]",
+                "partialErrors": "ServiceData.partialErrors"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "importSpecification.showObject"
+                    },
+                    {
+                        "name": "progress.end",
+                        "excludeLocalDataCtx": true
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "progress.end",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "condition": "partialErrors",
+                    "message": "errorMessageOnAction"
+                } ]
+            },
+            "deps": "js/Arm0DerivedAndMergeService"
+        },
+        "showObject": {
+            "actionType": "JSFunction",
+            "method": "go",
+            "deps": "js/locationNavigation.service",
+            "inputData": {
+                "showObject": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+                "toParams": {
+                    "uid": "{{data.importedObject.uid}}"
+                },
+                "option": {
+                    "inherit": false,
+                    "reload": true
+                }
+            }
+        },
+        "unRegisterMergeContextData": {
+            "actionType": "JSFunction",
+            "method": "unRegisterMergeContextData",
+            "inputData": {
+            },
+            "deps": "js/Arm0DerivedAndMergeService"
+        },
+        "importRoundTripAction": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "updateFileContentInFormDataForRoundTripImport"
+                },
+                {
+                    "action": "uploadImportFileForRoundTrip"
+                },
+                {
+                    "action": "importRoundTripSoaCall"
+                }
+            ]
+
+        },
+        "updateFileContentInFormDataForRoundTripImport": {
+            "actionType": "JSFunction",
+            "method": "updateFileContentInFormDataForRoundTripImport",
+            "deps": "js/Arm0ImportChangesInWordRoundTrip",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "formDataForRoundTripImport": "formDataForRoundTripImport",
+                "topLineToOpenOnRoundTrip": "topLineToOpenOnRoundTrip"
+            }
+        },
+        "uploadImportFileForRoundTrip": {
+            "actionType": "RESTService",
+            "serviceName": "",
+            "method": "POST",
+            "inputData": {
+                "request": {
+                    "method": "POST",
+                    "url": "{{Constants.fmsUrl}}",
+                    "headers": {
+                        "Content-type": "undefined"
+                    },
+                    "data": "{{data.formDataForRoundTripImport}}"
+                }
+            }
+        },
+        "importRoundTripSoaCall": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceReqMgmt-2018-05-ImportExport",
+            "method": "importFromWord",
+            "inputData": {
+                "inputs": "{{function:getImportWordDocumentInputInPreviewMode}}"
+            },
+            "outputData": {
+                "importedObject": "output[0].resultObjects[0]",
+                "partialErrors": "ServiceData.partialErrors",
+                "updatedobjects":"ServiceData.updated",
+                "createdObjects":"ServiceData.created"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "importSpecification.checkUpdatedObjectsForDocTabAndOpenSpec"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                        "condition": "partialErrors",
+                        "message": "errorMessageOnAction"
+                } ]
+            },
+            "deps": "js/Arm0ImportChangesInWordRoundTrip"
+        },
+        "checkUpdatedObjectsForDocTabAndOpenSpec": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "checkUpdatedObjectsForDocTab"
+                },
+                {
+                    "action": "showObjectAfterRoundTrip"
+                }
+            ]
+        },
+        "checkUpdatedObjectsForDocTab": {
+            "actionType": "JSFunction",
+            "method": "checkUpdatedObjectsForDocTab",
+            "inputData": {
+                "updatedobjects": "{{data.updatedobjects}}",
+                "createdObjects": "{{data.createdObjects}}"
+            },
+            "deps": "js/Arm0DocumentationUpdateOnRoundtripService"
+        },
+        "showObjectAfterRoundTrip": {
+            "actionType": "JSFunction",
+            "method": "go",
+            "deps": "js/locationNavigation.service",
+            "inputData": {
+                "showObject": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+                "toParams": {
+                    "uid": "{{data.topLineToOpenOnRoundTrip.uid}}"
+                },
+                "option": {
+                    "inherit": false,
+                    "reload": true
+                }
+            }
+        }
+
+    },
+    "messages":
+    {
+        "errorMessageOnAction": {
+            "messageType": "WARNING",
+            "messageText": "{{data.partialErrors[0].errorValues[0].message}}"
+        }
+
+    },
+    "dataProviders":
+    {
+        "specificationSummaryDataProvider":
+        {
+            "type": "Static",
+            "action": "populateSpecificationSummaryDataForPreview",
+            "response": "{{data.summaryChips}}",
+            "totalFound": "{{data.summaryChips.length}}",
+            "deps": "js/ImportPreview",
+            "selectionModelMode": "none"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "setHeaderTitle"
+    },
+    "onEvent": [
+        {
+            "eventId": "importPreview.populateSecArea",
+            "cacheEventData": true,
+            "action": "populateSecArea"
+        },
+        {
+            "eventId": "importPreview.registerCxtForActionsPanel",
+            "cacheEventData": true,
+            "action": "registerCxtForActionsPanel"
+        },
+        {
+            "eventId": "importPreview.registerCxtForSettingsPanel",
+            "cacheEventData": true,
+            "action": "registerCxtForSettingsPanel"
+        },
+        {
+            "eventId": "importPreview.showActionsPanel",
+            "action": "showActionsPanel",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "importPreview.showActionsPanelMutiselectObject",
+            "action": "showActionsPanelMutiselectObject",
+            "cacheEventData": true
+        },
+
+        {
+            "eventId": "importPreview.showSettingsPanel",
+            "action": "showSettingsPanel",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "ImportPreview.contentUnloaded",
+            "action": "contentUnloadedPreview"
+        },
+        {
+            "eventId": "ImportPreview.contentUnloaded",
+            "action":"unRegisterData"
+        },
+        {
+            "eventId": "ImportPreview.contentUnloaded",
+            "action":"unRegisterMergeContextData",
+            "condition": "ctx.sublocation.clientScopeURI === 'RequirementMergePreview'"
+        },
+        {
+            "eventId": "importPreview.previewContentUpdatedForObject",
+            "action": "previewContentUpdatedForObject",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "importPreview.getFMSFileTicketForMerge",
+            "action": "getFMSFileTicketForMerge"
+        },
+        {
+            "eventId": "importSpecification.updateFileContentInFormDataForMerge",
+            "action": "updateFileContentInFormDataForMerge"
+        },
+        {
+            "eventId": "importSpecification.uploadImportFileForMerge",
+            "action": "uploadImportFileForMerge"
+        },
+        {
+            "eventId": "importSpecification.setJSONDataForMerge",
+            "action": "setJSONDataForMerge"
+        },
+        {
+            "eventId": "importSpecification.mergeUsingJSONData",
+            "action": "mergeUsingJSONData"
+        },
+        {
+            "eventId": "importSpecification.showObject",
+            "action": "showObject"
+        },
+        {
+            "eventId": "specificationSummaryDataProvider.reset",
+            "action": "populateSpecificationSummaryDataForPreview"
+        },
+        {
+            "eventId": "importSpecification.showObjectAfterRoundTrip",
+            "action": "showObjectAfterRoundTrip"
+        },
+        {
+            "eventId": "importSpecification.checkUpdatedObjectsForDocTabAndOpenSpec",
+            "action": "checkUpdatedObjectsForDocTabAndOpenSpec"
+        }
+    ],
+    "conditions":
+    {
+    },
+    "functions": {
+        "getImportWordDocumentInputInPreviewMode": {
+            "functionName": "getImportWordDocumentInputInPreviewMode",
+            "parameters": [
+            ]
+        }
+    },
+    "i18n": {
+        "settingLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "revise": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "mergeCommandTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "added": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "removed": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "modified": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "existing": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "import": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "RejectedOverwrittenTooltip":[
+            "RequirementsCommandPanelsMessages"
+        ],
+        "overwrittenTooltip":[
+            "RequirementsCommandPanelsMessages"
+        ],
+        "FrozenToNonLatestTooltip":[
+            "RequirementsCommandPanelsMessages"
+        ],
+        "FrozenToLatestTooltip":[
+            "RequirementsCommandPanelsMessages"
+        ],
+        "UnfrozenTooltip":[
+            "RequirementsCommandPanelsMessages"
+        ]
+    }
+}

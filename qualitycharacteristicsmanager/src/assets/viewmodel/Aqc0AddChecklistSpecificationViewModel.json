@@ -1,0 +1,200 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-command-sub-panel.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-add.directive",
+        "js/visible-when.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/aw-xrt.directive"
+    ],
+    "data": {
+        "selectedType":
+        {
+            "type": "STRING",
+            "dbValue": "Qc0ChecklistSpecification"
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "AddObjectPrimarySub",
+                "context": {}
+            },
+            "meta": {}
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "actions": {
+        "createObjects": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2008-06-DataManagement",
+            "method": "createObjects",
+            "inputData": {
+                "input": "{{function:getCreateInputDataForChecklistSpec}}"
+            },
+            "outputData": {
+                "createdObject": "output[0].objects[0]",
+                "serviceData": "ServiceData",
+                "selectedNodes": "output[0].objects",
+                "rootNode": "output[0].objects[0]"
+            },
+            "events": {
+                "success": [
+                    {
+                        "condition": "!subPanelContext.panelPinned",
+                        "name": "aqc0.refereshLocation"
+                    },
+                    {
+                        "name": "complete",
+                        "condition": "!subPanelContext.panelPinned",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    },
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{ctx.xrtSummaryContextObject}}"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "selectNewlyCreatedObject"
+                    },
+                    {
+                        "name": "aqc0.addChecklistSpec",
+                        "eventData": {
+                            "addElementResponse": "{{data.addElementResponse}}",
+                            "addElementInput": "{{data.createdObject}}",
+                            "pinUnpinFlag": "{{subPanelContext.panelPinned}}"
+                        }
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "complete",
+                        "condition": "!subPanelContext.panelPinned",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "message": "SOAFailureMsg"
+                    }
+                ]
+            },
+            "deps": "js/Aqc0ChecklistSpecService"
+        },
+        "refereshLocation": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            }
+        },
+        "selectNewlyCreatedObject": {
+            "actionType": "JSFunction",
+            "method": "selectNewlyAddedElement",
+            "inputData": {
+                "data": "{{data}}",
+                "subPanelContext": "{{subPanelContext}}"
+            },
+            "outputData": {},
+            "deps": "js/Aqc0ChecklistSpecTreeTableService"
+        },
+        "setActiveView":{
+            "actionType": "JSFunction",
+            "method": "resetActiveView",
+            "inputData": {
+                "stateName": "{{data.activeState}}",
+                "destPanelId": "AddObjectPrimarySub"
+            },
+            "outputData": {
+                "activeState": ""
+            },
+            "deps": "js/addObjectUtils"
+        }
+    },
+    "messages": {
+        "SOAFailureMsg": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "functions": {
+        "getParentChecklistSpecProperty": {
+            "functionName": "getParentChecklistSpecProperty",
+            "parameters": [
+                "{{ctx}}"
+            ]
+        },
+        "getCreateInputDataForChecklistSpec": {
+            "functionName": "getCreateInputDataForChecklistSpec",
+            "parameters": [
+                "{{data}}",
+                "{{ctx}}",
+                "{{props}}",
+                "{{editHandlers.addPanelEditHandler}}"
+            ]
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "aqc0.refereshLocation",
+            "action": "refereshLocation"
+        },
+        {
+            "eventId": "selectNewlyCreatedObject",
+            "action": "selectNewlyCreatedObject"
+        },
+        {
+            "eventId": "aqc0.addChecklistSpec",
+            "cacheEventData": true
+        }
+    ],
+    "conditions": {
+        "Aqc0AddButtonVisibleCondition": {
+            "expression": "data.qc0ChecklistId.dbValue && data.object_name.dbValue && data.qc0ChecklistType.dbValue"
+        }
+    },
+    "i18n": {
+        "Aqc0Add": [
+            "qualityfailuremanagerMessages"
+        ],
+        "BACK_BUTTON_TITLE":["BaseMessages"]
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    }
+}

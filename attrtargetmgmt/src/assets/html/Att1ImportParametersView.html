@@ -1,0 +1,19 @@
+<aw-command-panel caption="i18n.importNewCmdTitle">
+    <aw-panel-body>
+        <div  class="aw-attrtargetmgmt-importPanelHelpIcon aw-aria-border" tabindex="0" extended-tooltip="data.importNewHelpTooltipView">
+            <aw-icon  icon-id="homehelp" ></aw-icon>
+        </div>
+        <aw-panel-section>
+            <aw-file-upload file-change-action="startDataCreation" type-filter=".xlsx,.xlsm,.zip" is-required="true"></aw-file-upload>
+            <aw-link class="aw-attrtargetmgmt-cfxTemplateLink" visible-when="data.isParamDictionarySelected ||  (ctx.panelContext.parametersTable && !ctx.panelContext.parametersTable.isParameterWidePanelOpen)" prop="data.importXlsTemplate" action="downloadImportTemplate"></aw-link>
+        </aw-panel-section>
+
+    </aw-panel-body>
+        <aw-checkbox prop="data.paramDefRelease" exist-when="data.isParamDictionarySelected"></aw-checkbox>
+        <aw-checkbox prop="data.autoCreateAndReleaseparamDef" exist-when="!data.isParamDictionarySelected && ctx.panelContext.parametersTable && !ctx.panelContext.parametersTable.isParameterWidePanelOpen && (conditions.useDefinitionCond || !conditions.isTcReleaseAtLeast142)"></aw-checkbox>
+        <aw-panel-footer>
+            <aw-button action="setImportInProgress" enable-when="!data.isImportInProgress" visible-when="awPanelBody.$valid && ( data.fileExt === 'xlsx' ||data.fileExt === 'xlsm' || data.fileExt === 'zip' ) && !data.importFileUploadInProgress">
+                <aw-i18n>i18n.import</aw-i18n>
+            </aw-button>
+        </aw-panel-footer>
+</aw-command-panel>

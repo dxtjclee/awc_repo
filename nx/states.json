@@ -1,0 +1,86 @@
+{
+  "com_siemens_splm_client_hosted_selectSubsetLocation": {
+    "data": {},
+    "params": {
+      "uid": ""
+    },
+    "type": "location"
+  },
+  "fileSelectComponent": {
+    "params": {
+      "componentId": null,
+      "embeddedLocationView": null,
+      "uid": null
+    },
+    "url": "/fileSelectComponentLocation",
+    "view": "Awn0FileSelect"
+  },
+  "selectItem": {
+    "data": {
+      "priority": 0,
+      "label": {
+        "source": "/i18n/NXConstants",
+        "key": "selectObject"
+      },
+      "clientScopeURI": "Awp0SearchResults",
+      "nameToken": "com.siemens.splm.client.hosted:selectSubsetSubLocation"
+    },
+    "params": {
+      "searchCriteria": null,
+      "filter": null,
+      "refresh": null
+    },
+    "parent": "com_siemens_splm_client_hosted_selectSubsetLocation",
+    "presenter": "SelectObjectSubLocationPresenter",
+    "type": "subLocation",
+    "url": "/selectItem"
+  },
+  "com_siemens_splm_client_hosted_selectSubsetLocationDev": {
+    "data": {},
+    "params": {
+      "uid": ""
+    },
+    "type": "location",
+    "url": "/si"
+  },
+  "selectItemDev": {
+    "data": {
+      "priority": 0,
+      "label": {
+        "source": "/i18n/NXConstants",
+        "key": "selectObject"
+      },
+      "clientScopeURI": "Awp0SearchResults",
+      "nameToken": "com.siemens.splm.client.hosted:selectSubsetSubLocation",
+      "context": {
+        "search": {
+          "provider": "Awp0FullTextSearchProvider",
+          "sortType": "Priority",
+          "chartTitle": {
+            "source": "/i18n/ChangeMessages",
+            "key": "changeResultsChartTitle"
+          },
+          "maxToLoad": 50,
+          "maxToReturn": 50,
+          "tableViewProperties": [
+            "object_name",
+            "checked_out_user",
+            "object_desc",
+            "release_status_list",
+            "fnd0InProcess",
+            "ics_subclass_name"
+          ]
+        }
+      },
+      "viewBase": "Awp0Base"
+    },
+    "params": {
+      "searchCriteria": "*",
+      "filter": null,
+      "refresh": null
+    },
+    "parent": "com_siemens_splm_client_hosted_selectSubsetLocationDev",
+    "type": "subLocation",
+    "url": "/selectItem"
+  }
+}

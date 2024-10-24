@@ -1,0 +1,114 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "getHTMLTextContent": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2017-06-RequirementsManagement",
+            "method": "exportToApplication3",
+            "inputData": {
+                "input": [
+                    {
+                        "templateName": "",
+                        "applicationFormat": "HTML",
+                        "objectsToExport": [
+                            {
+                                "uid": "{{ctx.selected.uid}}",
+                                "type": "{{ctx.selected.type}}"
+                            }
+                        ],
+                        "targetObjectsToExport": [],
+                        "exportOptions": "{{function:getExportOptions}}",
+                        "recipeSourceObjects": [],
+                        "recipeTargetObjects": [],
+                        "attributesToExport": [],
+                        "objectTemplateInputs": [],
+                        "includeAttachments": false
+                    }
+                ]
+            },
+            "policy": {
+                "types": [
+                    {
+                        "name": "Dataset",
+                        "properties": [
+                            {
+                                "name": "object_name"
+                            },
+                            {
+                                "name": "ref_list",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "outputData": {
+                "htmlContent": "transientFileReadTickets[0]"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0HtmlHeaderFooterPreview.initContent"
+                    }
+                ]
+            },
+            "deps": "js/Arm0HtmlHeaderFooterPreview"
+        },
+        "initContent": {
+            "actionType": "JSFunction",
+            "method": "initContent",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0HtmlHeaderFooterPreview"
+        }
+    },
+    "data": {},
+    "functions": {
+        "getExportOptions": {
+            "functionName": "getExportOptions",
+            "parameters": [
+                "{{data}}"
+            ]
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "documentViewer.getRequirementContent",
+            "action": "getHTMLTextContent"
+        },
+        {
+            "eventId": "Arm0HtmlHeaderFooterPreview.initContent",
+            "cacheEventData": true,
+            "action": "initContent"
+        }
+    ],
+    "i18n": {
+        "coverPageLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "headerLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "footerLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "specContentLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "figuresLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "tablesLabel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "pageBreakLabel": [
+            "RequirementsCommandPanelsMessages"
+        ]
+    }
+}

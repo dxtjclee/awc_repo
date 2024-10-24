@@ -1,0 +1,7 @@
+<aw-column width="fill" height="fill">
+    <aw-panel-section collapsed="disabled" class="aw-systemmodeler-connectionSection" caption="{{ conditions.isBundledConnectionSelected ? i18n.externalConnectionsTable : i18n.internalConnectionsTable }}"
+    exist-when="conditions.validSelectionToShowConnectionTable">
+    </aw-panel-section>
+    <aw-splm-table gridid="connectionTable" visible-when="!data.dataProviders.connectionDataProvider.noResults" exist-when="conditions.validSelectionToShowConnectionTable"></aw-splm-table>
+</aw-column>
+

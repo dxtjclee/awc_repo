@@ -1,0 +1,21 @@
+<aw-command-panel caption="i18n.addButtonTitle" context="subPanelContext">
+    <div class="aw-layout-flexColumn" show-when="conditions.isActiveStateAddPanel">
+        <aw-add target-object="ctx.xrtSummaryContextObject" relations="psi0ChecklistQuestions" include-types="Psi0ChecklistQuestion" auto-select-on-unique-type="true"
+            type-filter="Psi0ChecklistQuestion" visible-tabs="new"
+            add-panel-state="fields.addPanelState"
+            xrt-state="data.xrtState"
+            edit-handler="editHandlers.addPanelEditHandler"
+            sub-panel-context="{...subPanelContext}"
+            active-state="data.activeState"
+            project-state="data.projectState">
+        </aw-add>
+        <aw-panel-footer>
+            <!-- panel-footer button for New tab -->
+            <aw-button default="true" action="createObject" visible-when="conditions.isTypeNotNull" enable-when="formProp.attributes.valid && conditions.isNewTabAddButtonVisible">
+                <aw-i18n>i18n.addButtonTitle</aw-i18n>
+            </aw-button>
+        </aw-panel-footer>
+    </div>
+
+    <aw-add-navigate active-state="data.activeState" project-state="data.projectState" action="actions.setActiveView"></aw-add-navigate>
+</aw-command-panel>

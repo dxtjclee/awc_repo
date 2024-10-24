@@ -1,0 +1,56 @@
+{
+    "schemaVersion" : "1.0.0",
+    "actions":
+    {
+        "render":{
+            "method": "awTracelinkTypeMatrixFilterPanelRenderFunction",
+            "deps": "js/AwTracelinkTypeMatrixFilterService"
+        },
+        "selectTracelinkTypeFilterAction":
+        {
+            "actionType": "JSFunction",
+            "method": "selectTracelinkTypeFilterAction",
+            "inputData":
+            {
+                "category": "{{category}}",
+                "filter": "{{filter}}",
+                "sharedData": "{{data.subPanelContext.sharedData}}"
+            },
+            "deps": "js/Arm0FilterTMService"
+        }
+    },
+    "functions": {
+    },
+    "onEvent":
+    [
+    ],
+    "conditions": {
+    },
+    "data":
+    {
+        "searchState": {
+            "initialValues": {},
+            "meta": {
+                "categories": [ {
+                    "filterValues": [ {
+                        "selected": {
+                            "field": "true",
+                            "type": "BOOLEAN"
+                        }
+                    } ]
+                } ]
+            }
+        }
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "lifecycleHooks": {
+        "render": "render"
+    },
+    "i18n":
+    {
+    }
+}

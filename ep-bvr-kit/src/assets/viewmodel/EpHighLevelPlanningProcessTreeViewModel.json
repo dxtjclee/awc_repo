@@ -1,0 +1,185 @@
+{
+    "schemaVersion": "1.0.0",
+    "ports": {
+        "EpHighLevelPlanningProcessTree_setAssemblySelection": {
+            "onChangeAction": "handleAssemblySelection",
+            "syncObject": {}
+        }
+    },
+    "data": {
+        "selectionData": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "processTreeContext": {
+            "editContext": "{{ctx.mfgReadOnlyMode.readOnlyMode === true ? '': 'EP_PROCESS_TREE_TABLE_EDIT_CONTEXT'}}",
+            "objectUid": "{{ctx.epPageContext.processStructure.uid}}",
+            "isTopNode": true,
+            "preferenceName": "EP_BopBreakdownProcessTreeColumnConfiguration",
+            "propertyToSort": "bl_sequence_no",
+            "isLeafProperty": "hasChildren",
+            "reloadType": {
+                "epTreeTable": "CommonExpand"
+            },
+            "loadTypes": [
+                "CommonExpand"
+            ],
+            "additionalPolicyObjects": {
+                "name": "EpHighLevelPlanningProcess",
+                "types": [
+                    {
+                        "name": "Mfg0BvrProcess",
+                        "properties": [
+                            {
+                                "name": "bl_parent"
+                            },
+                            {
+                                "name": "mbc0BopQualifier"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "ImanItemBOPLine",
+                        "properties": [
+                            {
+                                "name": "bl_rev_last_release_status"
+                            },
+                            {
+                                "name": "bl_rev_fnd0InProcess"
+                            },
+                            {
+                                "name": "bl_rev_fnd0AllWorkflows"
+                            },
+                            {
+                                "name": "bl_rev_checked_out_user"
+                            },
+                            {
+                                "name": "awb0RevisionRelStatusList"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Mfg0BvrProcessArea",
+                        "properties": [
+                            {
+                                "name": "bl_parent"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "createTitle": "{{i18n.createFolderTitle}}",
+            "epTreeTableCommandAnchor": "processTree_OnHoverCommand",
+            "treeNavigationColumnIndex": 1,
+            "guidanceMessageText": "processTreeGuidanceMsg",
+            "tabModel": "{{data.processTreeContext.tabContext}}",
+            "clientColumns": [
+                {
+                    "clientColumn": true,
+                    "name": "releaseStatusFlag",
+                    "propertyDisplayName": "{{i18n.releaseStatusFlagColumnName}}"
+                }
+            ],
+            "additionalLoadParamsForRootLoadInputData": [
+                {
+                    "tagName": "expandType",
+                    "attributeName": "type",
+                    "attributeValue": "ExpandProcessHighLevelPlanning"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "level",
+                    "attributeValue": "TOP_WITH_CHILDREN"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "rootsProperty",
+                    "attributeValue": "RootObject"
+                }
+            ],
+            "additionalLoadParamsForChildLoadInputData": [
+                {
+                    "tagName": "expandType",
+                    "attributeName": "type",
+                    "attributeValue": "ExpandProcessHighLevelPlanning"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "level",
+                    "attributeValue": "CHILDREN"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "rootsProperty",
+                    "attributeValue": "RootObject"
+                }
+            ],
+            "additionalLoadParamsForGetHierarchyInputData":[
+                {
+                    "tagName": "hierarchyType",
+                    "attributeName": "type",
+                    "attributeValue": "GetHierarchyProcessHighLevelPlanning"
+                }
+            ],
+            "relatedObjectMapKey": "childAssembly",
+            "initializeAction": "loadSortedNodes",
+            "selectionFromPERTView": "{{subPanelContext.contextObject}}",
+            "enableSorting": true,
+            "alwaysVisibleColumns":["object_string"],
+            "enableArrangeColumn": true
+        }
+    },
+    "actions": {
+        "updateTreeNodeAfterSync":{
+            "actionType": "JSFunction",
+            "method": "fireTreeExpandEvent",
+            "inputData": {
+                "eventData": "{{parameters.eventData.objectsToSync}}",
+                "tableId": "EpTreeTable"
+            },
+            "deps": "js/syncOperationService"
+        },
+        "handleAssemblySelection": {
+            "actionType": "JSFunction",
+            "method": "setCommandContext",
+            "inputData": {
+                "tabModel": "{{subPanelContext}}",
+                "commandContext": {
+                    "assemblySelection": "{{ports.EpHighLevelPlanningProcessTree_setAssemblySelection.syncObject}}"
+                }
+            },
+            "deps": "js/mfeContentPanelUtil"
+        },
+        "getValueInViewModel": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "tabData": "{{subPanelContext}}"
+            },
+            "outputData": {
+                "processTreeContext.tabContext": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "getValueInViewModel"
+    },
+    "onEvent":[
+        {
+            "eventId": "ep.syncSuccess",
+            "action": "updateTreeNodeAfterSync",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            }
+        }
+    ],
+    "i18n": {
+        "createFolderTitle": [
+            "HighLevelPlanningMessages"
+        ],
+        "releaseStatusFlagColumnName": [
+            "AssemblyMessages"
+        ]
+    }
+}

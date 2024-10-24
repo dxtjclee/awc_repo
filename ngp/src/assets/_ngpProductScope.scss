@@ -1,0 +1,118 @@
+// @<COPYRIGHT>@
+// ==================================================
+// Copyright 2021.
+// Siemens Product Lifecycle Management Software Inc.
+// All Rights Reserved.
+// ==================================================
+// @<COPYRIGHT>@
+
+.aw-ngp-associatePartitionsPanel{
+    height: 100%;
+
+    .aw-layout-panelContent{
+        height: 100%;
+        .aw-ngp-associatePartitionsPanelBody{
+            height: calc(100% - 60px);
+
+            .aw-ngp-partitionsTable{
+                .aw-splm-table{
+                    height: 100%;
+                }
+            }
+
+            .sw-property{
+                .sw-property-name{
+                    padding-top: $padding_normal;
+                }
+
+                .sw-lov-container{
+                    max-width:rem-calc(350);
+                    min-width: rem-calc(250);
+                }
+             }
+
+            .aw-ngp-associatePartitionEmptyMsg{
+                border: rem-calc(1) solid;
+            }
+
+            .aw-ngp-associatePartitionsCmdBar{
+                height: 100%;
+                justify-content: center;
+                button.aw-commands-commandIconButton{
+                    border: none;
+                    background: none;
+                    margin-bottom: $margin_large;
+
+                    &:hover{
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+
+        .aw-ngp-associatePartitionsPanelFooter{
+            margin-top: $margin_normal;
+        }
+    }
+
+    .aw-ngp-associatePartitionsLoadingMsg{
+        height: 100%;
+    }
+
+}
+
+
+.aw-ngp-productRevisionRulesPanel{
+    height: 100%;
+    .aw-ngp-productRevisionRulesPanelBody{
+        height: calc(100% - 60px);
+
+        .sw-property-name{
+            padding-top: $padding_normal;
+        }
+        .sw-lov-container{
+            min-width: rem-calc(250);
+        }
+    }
+    .aw-ngp-productRevisionRulesLoadingMsg{
+        height: 100%;
+    }
+    .aw-ngp-productScopeObjectName{
+        margin: 0 0 20px 0;
+        font-style: italic;
+    }
+}
+
+.aw-ngp-inScopeTitle,
+.aw-ngp-outOfScopeTitle {
+    font-weight: 600;
+    margin-left: $margin_normal;
+    padding-bottom: $padding_normal;
+    font-weight: bold;
+    font-size: $fontsize_large;
+}
+
+.aw-ngp-assignmentIndicationAssignedInSeparator.aw-xrt-separator {
+    margin: 0;
+    padding: 0;
+}
+
+.aw-layout-popup .aw-ngp-assignmentIndicationAssignedInList {
+    margin-bottom: 0;
+    max-width: rem-calc(476);
+    .aw-widgets-cellListItemCell {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 100%;
+    }
+}
+
+.aw-ngp-cellListItemAssignIndicationName {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    .sw-button-iconContainer {
+        display: inline;
+    }
+}
+

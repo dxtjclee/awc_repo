@@ -1,0 +1,21 @@
+<aw-textbox prop="data.ParameterName" exist-when="conditions.noDefinitionCond"></aw-textbox>
+<aw-textbox prop="data.parameterDefinitionName" exist-when="!conditions.isTcReleaseAtLeast142 || conditions.useDefinitionCond"></aw-textbox>
+<aw-textbox prop="data.Description" exist-when="conditions.noDefinitionCond"></aw-textbox>
+<aw-textbox prop="data.attrDefDesc" exist-when="!conditions.isTcReleaseAtLeast142 || conditions.useDefinitionCond"></aw-textbox>
+<aw-widget prop="data.Application" exist-when="conditions.useApplicationCond"></aw-widget>
+
+<aw-widget prop="data.Datatype" depend-on="Application" on-change="clearList" exist-when="conditions.noDefinitionCond"></aw-widget>
+<aw-listbox prop="data.lovUnitProp" list="data.lovUnitPropOptions.dbValue" exist-when="conditions.noDefinitionCond"></aw-listbox>
+
+<aw-listbox prop="data.Dictionary" list="data.dictionaryProvider.dbValue" exist-when="!conditions.isTcReleaseAtLeast142 || conditions.useDefinitionCond"></aw-listbox>
+<aw-widget prop="data.lstParameterDefinitions" label placeholder="{{i18n.SelectDefinition}}" exist-when="!conditions.isTcReleaseAtLeast142 || conditions.useDefinitionCond"></aw-widget>
+<aw-label prop="data.uomType" exist-when="(!conditions.isTcReleaseAtLeast142 || conditions.useDefinitionCond) && data.isDefinitionSelected === true"></aw-label>
+<aw-label prop="data.attrType" exist-when="(!conditions.isTcReleaseAtLeast142 || conditions.useDefinitionCond) && data.isDefinitionSelected === true"></aw-label>
+<aw-scrollpanel>
+    <div exist-when="data.isLoadAlternateXRTForSameDataType === undefined ||data.isLoadAlternateXRTForSameDataType === false">
+        <aw-xrt type="CREATE" object-type="{{data.xrtTypeToLoad}}" xrt-state="data.xrtState" exist-when="data.isDefinitionSelected || data.Datatype.dbValue!==''"></aw-xrt>
+    </div>
+    <div exist-when="data.isLoadAlternateXRTForSameDataType === true">
+        <aw-xrt type="CREATE" object-type="{{data.xrtTypeToLoad}}" xrt-state="data.xrtState" exist-when="data.isDefinitionSelected || data.Datatype.dbValue!==''"></aw-xrt>
+    </div>
+</aw-scrollpanel>

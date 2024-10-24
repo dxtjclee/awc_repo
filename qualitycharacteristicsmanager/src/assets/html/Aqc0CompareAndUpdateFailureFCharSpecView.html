@@ -1,0 +1,23 @@
+<aw-command-panel caption="i18n.Aqc0CompareAndUpdateFailureFCharSpecTitle">
+    <aw-panel-body aw-init="data.panelId='Aqc0AddActionForCharSpec'">
+            <aw-panel-section caption="i18n.Current">
+                 <aw-widget prop="data.qc0FailureCode"></aw-widget>
+                 <aw-widget prop="data.qc0BasedOnId"></aw-widget>
+                 <aw-widget prop="data.object_name"></aw-widget>
+                 <aw-widget prop="data.object_desc"></aw-widget>
+                 <aw-widget prop="data.qc0IsLatest"></aw-widget>
+                 <aw-widget prop="data.qc0Status"></aw-widget>
+            </aw-panel-section>
+            <aw-panel-section caption="i18n.Latest">
+                <aw-widget prop="data.qc0FailureCodeL"></aw-widget>
+                <aw-widget prop="data.qc0BasedOnIdL"></aw-widget>
+                <aw-widget prop="data.object_nameL"></aw-widget>
+                <aw-widget prop="data.object_descL"></aw-widget>
+                <aw-widget prop="data.qc0IsLatestL"></aw-widget>
+                <aw-widget prop="data.qc0StatusL"></aw-widget>
+           </aw-panel-section>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button action="updateFailureToLatest"><aw-i18n>i18n.UpdateToLatest</aw-i18n></aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

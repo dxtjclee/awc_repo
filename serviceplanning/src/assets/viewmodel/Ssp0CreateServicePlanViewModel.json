@@ -1,0 +1,388 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-popup2.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-i18n.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive",
+        "js/visible-when.directive",
+        "js/aw-xrt.directive",
+        "js/aw-link-with-popup-menu.directive"
+    ],
+    "actions": {
+        "reveal": {
+            "actionType": "dataProvider",
+            "method": "customServicePlan"
+        },
+        "loadServicePlanTypes": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2016-03-Finder",
+            "method": "performSearch",
+            "inputData": {
+                "searchInput": {
+                    "maxToLoad": 25,
+                    "maxToReturn": 25,
+                    "providerName": "Awp0TypeSearchProvider",
+                    "searchCriteria": {
+                        "searchString": "",
+                        "typeSelectorId": "",
+                        "listOfIncludeObjectTypes": "SSP0ServicePlan",
+                        "loadSubTypes": "true"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "startIndex": "{{data.dataProviders.performSearch.startIndex}}",
+                    "attributesToInflate": [
+                        "parent_types",
+                        "type_name"
+                    ]
+                }
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "servicePlanList": "{{function:servicePlanList}}"
+            },
+            "deps": "js/Ssp0CreateServicePlan"
+        },
+        "createServicePlan": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "getCreateServicePlanInput"
+                },
+                {
+                    "action": "createServicePlanBatch"
+                }
+            ]
+        },
+        "createServicePlanBatch": {
+            "actionType": "TcSoaService",
+            "serviceName": "Manufacturing-2009-10-DataManagement",
+            "method": "createObjects",
+            "inputData": {
+                "input": [
+                    {
+                        "clientId": "ssp0ServicePlanning",
+                        "relationName": "",
+                        "data": {
+                            "type": "{{data.selectedType.dbValue}}",
+                            "stringProps": "{{data.stringProps}}",
+                            "compoundCreateInput": {
+                                "context_settings": [
+                                    {
+                                        "type": "context_settings",
+                                        "boolProps": {
+                                            "ShowSuppressedOccs": true,
+                                            "ShowUnconfiguredAssignedOccurrences": true,
+                                            "ShowUnconfiguredVariants": true,
+                                            "ShowUnconfiguredChanges": true,
+                                            "ShowUnconfiguredOccurrencesEffectivity": true,
+                                            "IsProductConfigurator": false
+                                        }
+                                    }
+                                ],
+                                "IMAN_MEView": [
+                                    {
+                                        "type": "SSP0ServicePartition"
+                                    }
+                                ],
+                                "revision": [
+                                    {
+                                        "type": "{{data.revisionType}}",
+                                        "stringProps": {
+                                            "item_revision_id": ""
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "getNeutralPart"
+                    }
+                ]
+            },
+            "outputData": {
+                "output": "output",
+                "serviceData": "ServiceData"
+            },
+            "deps": "js/Ssp0CreateServicePlan"
+        },
+        "getNeutralPart": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData": {
+                "attributes": [
+                    "bl_has_children",
+                    "bl_line_name",
+                    "awp0ThumbnailImageTicket"
+                ],
+                "objects": [
+                    {
+                        "uid": "{{ctx.selected.props.awb0UnderlyingObject.dbValues[0]}}",
+                        "type": "BOMLine"
+                    }
+                ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "relateObjects"
+                    }
+                ]
+            },
+            "outputData": {
+                "secondaryObject": "{{function:getSecondaryObject}}"
+            },
+            "deps": "js/Ssp0CreateServicePlan"
+        },
+        "relateServicePlan": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "createRelations",
+            "inputData": {
+                "input": [
+                    {
+                        "primaryObject": "{{function:getPrimaryObj}}",
+                        "secondaryObject": "{{data.secondaryObject}}",
+                        "relationType": "SSP0PlanForNeutralProduct",
+                        "clientId": ""
+                    }
+                ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "close"
+                    },
+                    {
+                        "name": "servicePlanCreated"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "servicePlanCreated"
+                    }
+                ]
+            },
+            "deps": "js/Ssp0CreateServicePlan"
+        },
+        "openServicePlan": {
+            "actionType": "Navigate",
+            "navigateTo": "servicePlanning",
+            "navigationParams": {
+                "uid": "{{data.servicePlanRevisionId}}"
+            }
+        },
+        "getCreateServicePlanInput": {
+            "actionType": "JSFunction",
+            "method": "getCreateServicePlanInput",
+            "inputData": {
+                "data": "{{data}}",
+                "createType": "{{data.selectedType.dbValue}}"
+            },
+            "outputData": {
+                "revisionType": "revisionType",
+                "stringProps": "stringProps"
+            },
+            "deps": "js/Ssp0CreateServicePlan"
+        },
+        "closePopup": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupEl": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        },
+        "setSelectedType": {
+            "actionType": "JSFunction",
+            "method": "changeAction",
+            "inputData": {
+                "data": "{{data}}",
+                "fields": "{{fields}}"
+            },
+            "outputData": {
+                "selectedType": "selectedType"
+            },
+            "deps": "js/Ssp0CreateServicePlan"
+        },
+        "setServicePlanDataBatchJob": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "setServicePlanDataDbValueData"
+                },
+                {
+                    "action": "setServicePlanDataUiValueData",
+                    "condition": "conditions.isTotalLengthOne"
+                },
+                {
+                    "action": "setSelectedType"
+                }
+            ]
+        },
+        "setServicePlanDataDbValueData": {
+            "actionType": "JSFunction",
+            "method": "getServicePlanValueInViewModel",
+            "inputData": {
+                "propertyToUpdate": "dbValue",
+                "value": "{{data.eventMap['ssp0CreateServicePlan.updateCurrentServicePlan'].currentServicePlanType.propInternalValue}}",
+                "dataToUpdate": "{{data.currentServicePlan}}"
+            },
+            "outputData": {
+                "currentServicePlan": ""
+            },
+            "deps": "js/Ssp0CreateServicePlan"
+        },
+        "setServicePlanDataUiValueData": {
+            "actionType": "JSFunction",
+            "method": "getServicePlanValueInViewModel",
+            "inputData": {
+                "propertyToUpdate": "uiValue",
+                "value": "{{data.eventMap['ssp0CreateServicePlan.updateCurrentServicePlan'].currentServicePlanType.propDisplayValue}}",
+                "dataToUpdate": "{{data.currentServicePlan}}"
+            },
+            "outputData": {
+                "currentServicePlan": ""
+            },
+            "deps": "js/Ssp0CreateServicePlan"
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "lifecycleHooks": {
+        "onInit": "reveal"
+    },
+    "onEvent": [
+        {
+            "eventId": "ssp0CreateServicePlan.updateCurrentServicePlan",
+            "action": "setServicePlanDataBatchJob",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "awlinkPopup.selected",
+            "action": "setSelectedType"
+        },
+        {
+            "eventId": "relateObjects",
+            "action": "relateServicePlan"
+        },
+        {
+            "eventId": "getNeutralPart",
+            "action": "getNeutralPart"
+        },
+        {
+            "eventId": "servicePlanCreated",
+            "action": "openServicePlan"
+        },
+        {
+            "eventId": "close",
+            "action": "closePopup"
+        }
+    ],
+    "columnProviders": {},
+    "grids": {},
+    "conditions": {
+        "isTotalLengthOne": {
+            "expression": "data.dataProviders.customServicePlan.viewModelCollection.loadedVMObjects.length ===1"
+        },
+        "requiredFieldsEntered": {
+            "expression": "(data.object_name.dbValue)"
+        }
+    },
+    "functions": {
+        "getSecondaryObject": {
+            "functionName": "getSecondaryObject",
+            "parameters": []
+        },
+        "getNeutralPart": {
+            "functionName": "getNeutralPart",
+            "parameters": []
+        },
+        "getPrimaryObj": {
+            "functionName": "getPrimaryObj",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "servicePlanList": {
+            "functionName": "servicePlanList",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getCreateServicePlanInput": {
+            "functionName": "getCreateServicePlanInput",
+            "parameters": [
+                "{{data}}",
+                "{{data.selectedType.dbValue}}"
+            ]
+        }
+    },
+    "data": {
+        "currentServicePlan": {
+            "type": "STRING",
+            "displayName": "{{i18n.currentServicePlan}}",
+            "isRequired": "false",
+            "dbValue": ""
+        },
+        "selectedType": {
+            "type": "STRING",
+            "dbValue": ""
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "dataProviders": {
+        "customServicePlan": {
+            "dataProviderType": "TcLOV",
+            "action": "loadServicePlanTypes",
+            "response": "{{data.servicePlanList}}",
+            "totalFound": "{{data.totalFound}}"
+        }
+    },
+    "i18n": {
+        "CreateServicePlan": [
+            "ServicePlannerConstants"
+        ],
+        "CreateButtonTitle": [
+            "ServicePlannerConstants"
+        ],
+        "Close": [
+            "ServicePlannerConstants"
+        ],
+        "servicePlanCreated": [
+            "ssp0Messages"
+        ],
+        "currentServicePlan": [
+            "ServicePlannerConstants"
+        ]
+    },
+    "messages": {
+        "servicePlanCreated": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.servicePlanCreated}}"
+        }
+    }
+}

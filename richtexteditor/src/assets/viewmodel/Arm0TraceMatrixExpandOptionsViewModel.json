@@ -1,0 +1,70 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-panel.directive",
+        "js/aw-command-bar.directive",
+        "js/aw-form.directive",
+        "js/aw-widget.directive",
+        "js/aw-enter-key.directive"
+    ],
+    "actions": {
+        "performExpandToLevel": {
+            "actionType": "JSFunction",
+            "method": "performExpandBelow",
+            "inputData": {
+                "expansionLevel": "{{data.expansionLevel.dbValue}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "hideExpandOptionsPopup"
+                } ]
+            },
+            "deps": "js/Arm0TraceabilityMatrix"
+        },
+        "performExpandToLevelIfApplicable": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "performExpandToLevelIfApplicable",
+                    "eventData": {
+                        "data": "{{data}}"
+                    }
+                } ]
+            }
+        },
+        "hideExpandOptionsPopup": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "deps": "js/popupService"
+        }
+    },
+
+    "data": {
+        "expansionLevel": {
+            "type": "INTEGER",
+            "displayName": "{{i18n.expandToLevel}}",
+            "isEditable": "true",
+            "requiredText": "{{i18n.n}}",
+            "isEnabled":"{{ctx.MatrixContext.selectedOccurrence.length === 1 && ctx.MatrixContext.selectedOccurrence[0].props.awb0NumberOfChildren && ctx.MatrixContext.selectedOccurrence[0].props.awb0NumberOfChildren.dbValues > 0}}"
+
+        }
+    },
+    "lifecycleHooks": {
+    },
+    "onEvent": [
+        {
+            "eventId": "hideExpandOptionsPopup",
+            "action": "hideExpandOptionsPopup"
+        },
+        {
+            "eventId": "performExpandToLevelIfApplicable",
+            "action": "performExpandToLevel",
+            "condition": "data.expansionLevel.dbValue && data.expansionLevel.dbValue > 0"
+        }
+    ],
+    "i18n": {
+        "expandToLevel": [ "MatrixMessages" ],
+        "n": [ "MatrixMessages" ]
+    }
+}

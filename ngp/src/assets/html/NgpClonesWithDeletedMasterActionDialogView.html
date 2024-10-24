@@ -1,0 +1,14 @@
+<aw-panel-body>
+    <div class="aw-ngp-updateClonesDialogWarning aw-mfe-informationWarning">
+        {{data.warningMsg}}
+    </div>
+    <aw-radiobutton prop="data.handleClonesWithDeletedMasters" list="data.handleClonesWithDeletedMastersOptions.dbValue" ></aw-radiobutton>
+    <div class="aw-ngp-updateClonesDialogFirstMsg">
+        <aw-i18n>i18n.updateClonesDialogFirstMsg</aw-i18n>
+    </div>
+    <aw-i18n>i18n.updateClonesDialogSecondMsg</aw-i18n>
+</aw-panel-body>
+<aw-panel-footer>
+    <aw-button button-type="base" action="closeDialog" size="auto">{{i18n.cancel}}</aw-button>
+    <aw-button action="onUpdateClick" size="auto">{{i18n.update}}</aw-button>
+</aw-panel-footer>

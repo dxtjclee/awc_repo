@@ -1,0 +1,65 @@
+{
+    "schemaVersion" : "1.0.0",
+    "imports":
+    [
+        "js/exist-when.directive",
+        "js/aw-include.directive",
+        "js/aw-command-panel-section.directive"
+    ],
+
+    "actions":
+    {
+        "toggleGroup":
+        {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "Arm0Markup.handleToggle",
+                        "eventData": {
+                            "groupData": "{{props.vmo}}"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "props": {
+        "vmo":{
+            "type": "viewModelObject"
+        },
+        "sub-panel-context":{
+            "type": "object"
+        },
+        "vmdata":{
+            "type": "object"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "awCommandPanelSection.collapse",
+            "cacheEventData": true,
+            "action": "toggleGroup"
+        }
+    ],
+     "messages":
+    {
+
+    },
+    "data":
+    {
+
+    },
+    "functions":
+    {
+
+    },
+    "conditions":
+    {
+    },
+
+    "i18n":
+    {
+    }
+}

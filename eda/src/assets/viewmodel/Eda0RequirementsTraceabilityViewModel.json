@@ -1,0 +1,303 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports":
+    [
+        "js/aw-splm-table.directive",
+        "js/aw-splitter.directive",
+        "js/aw-command-sub-panel.directive",
+        "js/aw-scrollpanel.directive"
+    ],
+
+    "actions":
+    {
+        "rowSelected":
+        {
+            "actionType": "JSFunction",
+            "method": "rowSelected",
+            "inputData":
+            {
+                "data": "{{data}}"
+            },
+            "deps": "js/Eda0RequirementsTraceabilityService"
+        },
+
+        "loadTreeTableData":
+        {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableData",
+            "inputData":
+            {
+                "treeLoadInput": "request.treeLoadInput",
+                "dataProvider": "{{data.dataProviders.RequirementsTreeDataProvider}}",
+                "elementUids": "{{function:getElementUid}}",
+                "rootElementUids": "{{function:getRootElementUids}}",
+                "productContextUids": "{{function:getProductContextUids}}",
+                "ctx": "{{ctx}}",
+                "sort": {
+                    "sortCriteria": "{{data.columnProviders.TreeColumnProvider.sortCriteria}}",
+                    "default": [ {
+                        "fieldName": "awb0ArchetypeRevName",
+                        "sortDirection": "ASC"
+                    } ]
+                }
+            },
+            "outputData":
+            {
+                "ctx.search.totalFound": "result.treeLoadResult.totalRootCount",
+                "ctx.search.totalLoaded": "result.treeLoadResult.childNodes.length"
+            },
+            "deps": "js/Eda0RequirementsTraceabilityService"
+        },
+
+        "loadTreeTableProperties":
+        {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableProperties",
+            "inputData":
+            {
+                "propertyLoadInput": "request.propertyLoadInput"
+            },
+            "outputData": { },
+            "deps": "js/Eda0RequirementsTraceabilityService"
+        },
+
+        "loadTreeTableColumns":
+        {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableColumns",
+            "inputData":
+            {
+                "dataProvider": "{{data.dataProviders.RequirementsTreeDataProvider}}"
+            },
+            "deps": "js/Eda0RequirementsTraceabilityService"
+        },
+
+        "reloadTreeTableColumns":
+        {
+            "actionType": "JSFunctionAsync",
+            "method": "reloadTreeTableColumns",
+            "inputData":
+            {
+                "dataProvider": "{{data.dataProviders.RequirementsTreeDataProvider}}"
+            },
+            "deps": "js/Eda0RequirementsTraceabilityService"
+        },
+
+        "saveColumnConfig": {
+            "actionType": "TcSoaService",
+            "deps": "js/Eda0RequirementsTraceabilityService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "saveUIColumnConfigs2",
+            "inputData": {
+                "columnConfigurations": [
+                    {
+                        "clientScopeURI" : "Eda0RequirementsTraceabilityTable",
+                        "columnConfigId" : "edareqcols",
+                        "columns": "{{data.dataProviders.RequirementsTreeDataProvider.newColumns}}",
+                        "scope" : "LoginUser",
+                        "scopeName": ""
+                    }
+                ]
+            },
+            "outputData": {},
+            "events": {}
+        },
+
+        "resetColumnConfig":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "getOrResetUIColumnConfigs4",
+            "inputData":
+            {
+                "getOrResetUiConfigsIn":
+                [
+                    {
+                        "scope": "LoginUser",
+                        "scopeName": "",
+                        "clientName": "AWClient",
+                        "resetColumnConfig": true,
+                        "columnConfigQueryInfos":
+                        [
+                            {
+                                "clientScopeURI": "Eda0RequirementsTraceabilityTable",
+                                "operationType": "configured",
+                                "typeNames": [ "WorkspaceObject" ],
+                                "columnsToExclude": []
+                            }
+                        ],
+
+                        "businessObjects": [{}]
+                    }
+                ]
+            },
+            "outputData":
+            {
+                "dataProviders.GridTreePropertyProvider.columnConfig": "columnConfigurations[0].columnConfigurations[0]"
+            },
+            "events": {
+                "success": [
+                 {
+                    "name": "loadTreeTableColumnsEvent"
+                } ]
+            }
+        },
+
+        "doArrangeEvent" :
+        {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData":
+            {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/columnArrangeService"
+        },
+
+        "doGridDataProvider": {
+            "actionType": "dataProvider",
+            "method": "RequirementsTreeDataProvider"
+        }
+    },
+
+    "functions":
+    {
+        "getElementUid":
+        {
+            "functionName": "getElementUid",
+            "parameters":
+            [
+            ]
+        },
+
+        "getRootElementUids":
+        {
+            "functionName": "getRootElementUids",
+            "parameters":
+            [
+            ]
+        },
+
+        "getProductContextUids":
+        {
+            "functionName": "getProductContextUids",
+            "parameters":
+            [
+            ]
+        }
+    },
+
+    "dataProviders":
+    {
+        "RequirementsTreeDataProvider":
+        {
+            "initializeAction": "loadTreeTableData",
+            "nextAction": "loadTreeTableData",
+            "previousAction": "loadTreeTableData",
+            "editContext": "REQUIREMENTS_TREE_CONTEXT",
+            "selectionModelMode": "single",
+            "treeLoadResult": "action.result.treeLoadResult",
+
+            "commandsAnchor": "req_tree_cell_commands",
+
+            "inputData":
+            {
+                "accessMode": "tree"
+            },
+
+            "policy":
+            {
+                "types":
+                [
+                    {
+                        "name": "Awb0ConditionalElement",
+                        "properties":
+                        [
+                            { "name": "awb0ArchetypeName" },
+                            { "name": "awb0ArchetypeRevName" },
+                            { "name": "awb0ArchetypeId" },
+                            { "name": "awb0ArchetypeRevRelStatus" },
+                            { "name": "awb0ArchetypeRevOwningUser" },
+                            { "name": "awb0ArchetypeRevReleaseDate" },
+                            { "name": "awb0DisplayedName" }
+                        ]
+                    }
+                ]
+            }
+        },
+
+        "GridTreePropertyProvider":
+        {
+            "action": "loadTreeTableProperties",
+            "propertyLoadResult": "action.result.propertyLoadResult"
+        }
+    },
+
+    "columnProviders":
+    {
+        "TreeColumnProvider":
+        {
+            "loadColumnAction": "loadTreeTableColumns",
+            "saveColumnAndLoadAction": "saveColumnConfig",
+            "saveColumnAction": "saveColumnConfig",
+            "resetColumnAction": "resetColumnConfig",
+            "sortCriteria": [ ],
+            "id": "Eda0RequirementsTraceabilityTable"
+        }
+    },
+
+    "grids":
+    {
+        "RequirementsTree":
+        {
+            "dataProvider": "RequirementsTreeDataProvider",
+            "propertyProvider": "GridTreePropertyProvider",
+            "columnProvider": "TreeColumnProvider",
+
+            "enableArrangeMenu": true,
+
+            "addIconColumn": false,
+            "gridOptions":
+            {
+                "useStaticFirstCol": true
+            }
+        }
+    },
+
+    "onEvent":
+    [
+        {
+            "eventId": "RequirementsTreeDataProvider.selectionChangeEvent",
+            "action": "rowSelected",
+            "cacheEventData": true
+        },
+
+        {
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        },
+
+        {
+            "eventId": "loadTreeTableColumnsEvent",
+            "action": "loadTreeTableColumns"
+        },
+
+        {
+            "eventId": "reloadTreeTableEvent",
+            "action": "doGridDataProvider"
+        }
+
+    ],
+
+    "conditions":
+    {
+
+    },
+
+    "i18n":
+    {
+
+    }
+}

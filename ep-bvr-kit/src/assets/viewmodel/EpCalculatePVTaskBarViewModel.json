@@ -1,0 +1,129 @@
+{
+    "schemaVersion": "1.0.0",
+    "ports": {
+        "EpCalculatePVTaskBar_changeIndicationMode": {
+            "onChangeAction": "getValueInViewModel",
+            "syncObject": {}
+        }
+    },
+    "data": {
+        "showPV": {
+            "displayName": "",
+            "type": "BOOLEAN",
+            "dbValue": false
+        }
+    },
+    "actions": {
+        "calculatePVAction": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "calculateImpactedProductViews"
+                },
+                {
+                    "action": "setPVValue"
+
+                }
+            ]
+        },
+        "destroy": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "destroyCache"
+                },
+                {
+                    "action": "destroyPVObjectCache"
+
+                }
+            ]
+        },
+        "destroyCache": {
+            "actionType": "JSFunction",
+            "method": "destroy",
+            "inputData": {
+                "indicationMode": false,
+                "reloadInputName": "{{data.affectedUIds.response}}"
+            },
+            "deps": "js/epChangeIndicationService"
+        },
+        "destroyPVObjectCache": {
+            "actionType": "JSFunction",
+            "method": "destroyPVObjectCache",
+            "inputData": {
+                "processContextUid": "{{ctx.epPageContext.processStructure.uid}}",
+                "reloadInputName": "{{data.affectedUIds.response}}"
+            },
+            "deps": "js/epChangeIndicationService"
+        },
+        "getValueInViewModel":{
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "assignmentIndicationValue": "{{ports.EpCalculatePVTaskBar_changeIndicationMode.syncObject.isIndicationToggleOn}}"
+            },
+            "outputData":{
+                "assignmentIndicationMode":""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "setPVValue": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "showPV": true
+            },
+            "outputData": {
+                "showPV.dbValue": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "resetPVValue":{
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "showPV": false
+            },
+            "outputData": {
+                "showPV.dbValue": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "calculateImpactedProductViews": {
+            "actionType": "JSFunction",
+            "method": "loadProductViewChangeIndication",
+            "outputData": {
+                "affectedUIds": ""
+            },
+            "deps": "js/epChangeIndicationService"
+        }
+    },
+    "i18n":
+    {
+         "calculatePV": ["changeIndicationMessages"],
+         "refreshPV":["changeIndicationMessages"]
+
+    },
+    "conditions":
+    {
+        "isCalculatePV":
+        {
+            "expression": "data.showPV.dbValue === false && data.assignmentIndicationMode === true"
+        },
+        "isRefreshPV": {
+            "expression": "data.showPV.dbValue === true && data.assignmentIndicationMode === true"
+        },
+        "isAssignmentIndicationOn": {
+            "expression": "data.assignmentIndicationMode === true"
+        }
+    },
+    "onEvent":[
+        {
+            "eventId": "LOCATION_CHANGE_COMPLETE",
+            "action": "resetPVValue"
+        }
+    ],
+    "lifecycleHooks": {
+        "onUnmount": "destroy"
+    }
+}

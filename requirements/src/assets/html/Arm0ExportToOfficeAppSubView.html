@@ -1,0 +1,32 @@
+<aw-panel-body>
+    <aw-panel-section>
+        <aw-radiobutton prop="data.exportType1" visible-when="conditions.isExportoAllResultbuttonVisible"></aw-radiobutton>
+        <aw-radiobutton prop="data.exportOption"></aw-radiobutton>
+    </aw-panel-section>
+    <aw-panel-section aw-class="{'aw-export-panel-section': !conditions.asShownVisible}">
+        <aw-listbox prop="data.activity" visible-when="data.exportOption.dbValue"></aw-listbox>
+        <aw-listbox prop="data.exportWordActivity" visible-when="!data.exportOption.dbValue" list="data.exportWordActivityList"></aw-listbox>
+        <aw-listbox prop="data.specTemplates" visible-when="!data.exportOption.dbValue" list="data.response.specTemplatesList"></aw-listbox>
+        <aw-listbox prop="data.excelTemplates" visible-when="data.exportOption.dbValue" list="data.response.excelTemplatesList"></aw-listbox>
+
+        <aw-widget prop="data.compare" visible-when="conditions.isCompareAllowed"></aw-widget>
+        <aw-widget prop="data.checkOutWord" visible-when="conditions.toVisibleWordCheckOutButton"></aw-widget>
+        <aw-widget prop="data.checkOutExcel" visible-when="conditions.toVisibleExcelCheckOutButton"></aw-widget>
+    </aw-panel-section>
+    <aw-command-panel-section caption="i18n.overrideTypeTitle" anchor="data.exportCommands" context="subPanelContext" exist-when="conditions.toVisibleOverrideTypes && !conditions.asShownVisible">
+        <aw-list dataprovider="data.dataProviders.overrideTypeList" item-options="subPanelContext.sharedData" visible-when="data.overrideTypes.length >0">
+            <aw-include name="Arm0OverrideTypeCell" sub-panel-context="item"></aw-include>
+        </aw-list>
+    </aw-command-panel-section>
+</aw-panel-body>
+
+<aw-panel-footer>
+    <div class="sw-row aw-requirements-runInBackgroundChechbox">
+        <aw-checkbox prop="data.runInBackgroundExcel" visible-when="conditions.toVisibleRunInBackgroundExcelButton"></aw-checkbox>
+        <aw-checkbox prop="data.runInBackgroundWord" visible-when="conditions.toVisibleRunInBackgroundWordButton"></aw-checkbox>
+    </div>
+    <aw-button action="exportSearchResultsBatchJob" visible-when="conditions.toVisibleExportButton">
+        <aw-i18n>i18n.export</aw-i18n>
+    </aw-button>
+
+</aw-panel-footer>

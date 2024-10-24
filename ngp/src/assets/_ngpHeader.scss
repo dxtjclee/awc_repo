@@ -1,0 +1,73 @@
+// @<COPYRIGHT>@
+// ==================================================
+// Copyright 2020.
+// Siemens Product Lifecycle Management Software Inc.
+// All Rights Reserved.
+// ==================================================
+// @<COPYRIGHT>@
+
+@mixin text-overflow {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.aw-ngp-headerTitle {
+    font-size: $fontsize_2x_large;
+    font-weight: normal;
+}
+
+.aw-ngp-headerIcon {
+    .aw-base-icon {
+        max-height: 48px;
+        max-width: 48px;
+    }
+}
+.aw-flex-column.afx-fill.aw-ngp-headerSearch{
+    flex:none;
+}
+
+.aw-ngp-headerSeparator {
+    height: 24px;
+}
+
+.aw-ngp-chipContainer {
+    @include flexbox();
+
+    .aw-ngp-scopeObjectChips {
+        @include flexbox();
+
+        .aw-ngp-effectivityIndication {
+            .aw-widgets-chip {
+                max-width: 100px;
+            }
+        }
+
+        .aw-ngp-classLibraryIndication {
+            .aw-widgets-chip {
+                max-width: 300px;
+            }
+        }
+
+        .aw-widgets-chipLabel {
+            @include text-overflow;
+        }
+    }
+}
+
+.aw-command-bar .aw-command .aw-widgets-groupCommand .aw-commands-cellDecorator {
+    .aw-ngp-discontinuedSubElementsBadge {
+        position: fixed;
+        top: rem-calc(97);
+        margin-left: $margin_large + $margin_small;
+    }
+}
+
+
+/*=========================== Toolbar START ===========================*/
+
+.aw-advanced-bar-horizontal.aw-ngp-taskbar {
+    border: none;
+}
+
+/*=========================== Toolbar END ===========================*/

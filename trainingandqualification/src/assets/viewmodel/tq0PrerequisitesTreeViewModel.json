@@ -1,0 +1,117 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-splm-table.directive",
+        "js/aw-toolbar.directive",
+        "js/aw-row.directive",
+        "js/aw-command-panel-section.directive"
+    ],
+    "actions": {
+        "reveal": {
+            "actionType": "dataProvider",
+            "method": "prerequisiteProvider"
+        },
+        "loadRequiredProperties": {
+            "actionType": "JSFunction",
+            "method": "loadRequiredProperties",
+            "inputData": {
+                "selectedCondObj": "{{ctx.mselected}}",
+                "data": "{{data}}",
+                "ruleBuilderPanelFlag": false
+            },
+            "deps": "js/tq0PrerequisitesTreeTableService"
+        },
+        "loadData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadPrerequisites",
+            "inputData": {
+                "treeLoadInput": "request.treeLoadInput",
+                "dataProvider": "{{data.dataProviders.prerequisiteProvider}}",
+                "delayTimeTree": "{{data.delayTimeTree}}",
+                "maxTreeLevel": "{{data.maxTreeLevel}}",
+                "sortCriteria": "{{data.columnProviders.prerequisiteProvider.sortCriteria}}",
+                "i18nString": "{{data.i18n}}"
+            },
+            "outputData": {
+                "totalFound": "result.treeLoadResult.totalChildCount",
+                "totalLoaded": "result.treeLoadResult.childNodes.length",
+                "searchResults": "result.treeLoadResult.childNodes"
+            },
+
+            "deps": "js/tq0PrerequisitesTreeTableService"
+        },
+        "loadColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableColumns",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.prerequisiteProvider}}"
+            },
+            "deps": "js/tq0PrerequisitesTreeTableService"
+        }
+    },
+    "data": {
+        "delayTimeTree": {
+            "type": "INTEGER",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "20",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        },
+        "maxTreeLevel": {
+            "type": "INTEGER",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "100",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        }
+    },
+    "dataProviders": {
+        "prerequisiteProvider": {
+            "action": "loadData",
+            "initializeAction": "loadData",
+            "nextAction": "loadData",
+            "previousAction": "loadData",
+            "treeLoadResult": "action.result.treeLoadResult",
+            "selectionModelMode": "multiple",
+            "treePageSize": 100,
+            "inputData": {
+                "accessMode": "tree",
+                "selectionModel": "{{subPanelContext.selectionModel}}",
+                "selectionData": "{{subPanelContext.selectionData}}"
+            },
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectCellListActionCommands"
+        }
+    },
+    "columnProviders": {
+        "prerequisiteColumnProvider": {
+            "loadColumnAction": "loadColumns",
+            "columns": "{{data.columns}}",
+            "soaEnabled": false,
+            "sortCriteria": [ {
+                "fieldName": "creation_date",
+                "sortDirection": "DESC"
+            } ]
+        }
+    },
+    "grids": {
+        "tq0PrerequisitesGrid": {
+            "dataProvider": "prerequisiteProvider",
+            "columnProvider": "prerequisiteColumnProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "enableGridMenu": false,
+                "enablePinning": false,
+                "enableSorting": false
+            }
+        }
+    },
+    "functions": {
+    },
+    "lifecycleHooks": {
+        "onMount": "reveal"
+    },
+    "i18n": {
+    }
+}

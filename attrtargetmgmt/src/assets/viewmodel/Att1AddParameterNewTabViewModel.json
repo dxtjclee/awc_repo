@@ -1,0 +1,1074 @@
+{
+    "schemaVersion" : "1.0.0",
+    "imports":
+        [
+
+        ],
+        "actions":
+        {
+            "checkAddButtonEnablementCondition":{
+                "actionType": "JSFunction",
+                "method": "checkAddButtonEnablementCondition",
+                "inputData": {
+                    "data": "{{data}}"
+                },
+                "outputData": {
+                },
+                "deps": "js/addMeasurableAttr"
+            },
+            "getAttributeDefinition": {
+                "actionType": "JSFunction",
+                "method": "getAttributeDefinition",
+                "inputData": {
+                    "data": "{{data}}",
+                    "addPanelState": "{{subPanelContext.addPanelState}}",
+                    "paramName": "{{fields.parameterDefinitionName}}"
+                },
+                "outputData": {
+                    "xrtTypeToLoad": "xrtTypeToLoad",
+                    "attrType":"attrType",
+                    "attributeDefinition": "attributeDefinition",
+                    "parameterDefinitionName": "parameterDefinitionName",
+                    "attrDefDesc": "attrDefDesc",
+                    "objName":"objName",
+                    "uomType":"uomType",
+                    "Goal":"Goal",
+                    "Max":"Max",
+                    "Min":"Min",
+                    "isDefinitionSelected" : "isDefinitionSelected",
+                    "isLoadAlternateXRTForSameDataType":"isLoadAlternateXRTForSameDataType"
+                },
+                "deps": "js/addMeasurableAttr"
+            },
+            "populateXRT": {
+                "actionType": "JSFunction",
+                "method": "populateXRT",
+                "inputData": {
+                    "data": "{{data}}",
+                    "editHandler": "{{editHandlers.addPanelEditHandler}}"
+                },
+                "outputData": {
+                },
+                "deps": "js/addMeasurableAttr"
+            },
+            "createAttributeInput": {
+                "actionType": "JSFunction",
+                "method": "registerCtx",
+                "inputData": {
+                    "name": "addItemEventProgressing",
+                    "value": true
+                },
+                "events": {
+                    "success": [ {
+                        "name": "Att1CreateParameter.prepareAttributeInput"
+                    } ]
+                },
+                "deps": "js/appCtxService"
+            },
+            "prepareAttributeInputBatchJob": {
+                "actionType": "batchJob",
+                "steps": [
+                    {
+                        "action": "prepareAttributeInputCreateAttributeInput",
+                        "condition": "!(ctx.tcSessionData.tcMajorVersion >14 || (ctx.tcSessionData.tcMajorVersion === 14 && ctx.tcSessionData.tcMinorVersion >=2))"
+                    },
+                    {
+                        "action": "prepareAttributeInput",
+                        "condition": "(ctx.tcSessionData.tcMajorVersion >14 || (ctx.tcSessionData.tcMajorVersion === 14 && ctx.tcSessionData.tcMinorVersion >=2))"
+                    }
+                ]
+            },
+            "prepareAttributeInput": {
+                "actionType": "JSFunction",
+                "method": "prepareInputForCreateParametersSoa",
+                "inputData": {
+                    "data": "{{data}}",
+                    "editHandler": "{{editHandlers.addPanelEditHandler}}"
+                },
+                "outputData": {
+                    "createParametersInput": ""
+                },
+                "events": {
+                    "success": [ {
+                        "name": "createParametersSoaCall"
+                    } ]
+                },
+                "deps": "js/addMeasurableAttr"
+            },
+            "prepareAttributeInputCreateAttributeInput": {
+                "actionType": "JSFunction",
+                "method": "createAttributeInput",
+                "inputData": {
+                    "data": "{{data}}",
+                    "editHandler": "{{editHandlers.addPanelEditHandler}}"
+                },
+                "outputData": {
+                    "createOrUpdateMeasurableSoaInput": ""
+                },
+                "events": {
+                    "success": [ {
+                        "name": "createOrUpdateMeasurableAttributeSoaCall"
+                    } ]
+                },
+                "deps": "js/addMeasurableAttr"
+            },
+            "createParametersSoaCall": {
+                "actionType": "TcSoaService",
+                "serviceName": "AttrTargetMgmt-2020-12-AttributeTargetManagement",
+                "method": "createParameters",
+                "inputData": {
+                    "inputs": "{{data.createParametersInput}}"
+                },
+                "outputData": {
+                    "createdObject": "",
+                    "errorDetails": "{{function:processCreateParamName}}"
+                },
+                "events": {
+                    "success": [ {
+                        "name": "att1AddParameter.setItemEventProgressing",
+                        "eventData": {
+                            "valueToSet": false
+                        }
+                    },
+                    {
+                        "name": "insertRowForNewParameter",
+                        "condition":"conditions.isInsertRowAfterAddParameter"
+                    },
+                    {
+                        "name": "postAddParameterWithReload",
+                        "condition":"!conditions.isInsertRowAfterAddParameter"
+                    }
+                ],
+                    "failure": [ {
+                            "name": "att1AddParameter.setItemEventProgressing",
+                            "eventData": {
+                                "valueToSet": false
+                            }
+                        },
+                        {
+                            "name": "confirmWriteAccessError",
+                            "condition": "data.errorDetails.errorCode === 185074"
+                        },
+                        {
+                            "name": "notWriteAccessError",
+                            "condition": "data.errorDetails.errorCode !== 185074"
+                        }
+                    ]
+                },
+                "deps": "js/addMeasurableAttr"
+            },
+            "createOrUpdateMeasurableAttributeSoaCall": {
+                "actionType": "TcSoaService",
+                "serviceName": "AttrTargetMgmtAW-2015-10-AttributeTargetManagement",
+                "method": "createOrUpdateMeasurableAttribute",
+                "inputData": {
+                    "inputs": "{{data.createOrUpdateMeasurableSoaInput}}"
+                },
+                "outputData": {
+                    "createdObject": "{{function:getCreatedObject}}"
+                },
+                "actionMessages": {
+                    "failure": [
+                        {
+                            "message": "createParamFailureMessage"
+                        }
+                    ]
+                },
+                "events": {
+                    "success": [ {
+                            "name": "att1AddParameter.setItemEventProgressing",
+                            "eventData": {
+                                "valueToSet": false
+                            }
+                        },
+                        {
+                            "name": "refreshEvent"
+                        },
+                        {
+                            "name": "uniformParamTable.reloadTable",
+                            "eventData": {
+                                "reusable": "{{ctx.panelContext.reusableParamTable}}"
+                            }
+                        },
+                        {
+                            "condition": "!subPanelContext.panelPinned",
+                            "name": "closeAddParameterPanel"
+                        }
+                    ],
+                    "failure": [ {
+                        "name": "att1AddParameter.setItemEventProgressing",
+                        "eventData": {
+                            "valueToSet": false
+                        }
+                    } ]
+                },
+                "deps": "js/addMeasurableAttr"
+            },
+            "closeAddParameterPanel":
+            {
+                "actionType": "Event",
+                "method": "Event",
+                "inputData":
+                {
+                    "events":
+                    [
+                        {
+                            "name": "complete",
+                            "eventData":
+                            {
+                                "source": "toolAndInfoPanel"
+                            }
+                        }
+                    ]
+                }
+            },
+            "reloadUniformTable":
+            {
+                "actionType": "Event",
+                "method": "Event",
+                "inputData":
+                {
+                    "events":
+                    [
+                        {
+                            "name": "uniformParamTable.reloadTable",
+                            "eventData": {
+                                "reusable": "{{ctx.panelContext.reusableParamTable}}"
+                            }
+                        }
+                    ]
+                }
+            },
+            "refreshAction":{
+                "actionType": "JSFunction",
+                "method": "refreshParameterTable",
+                "inputData": {
+                    "attachMeasurableAttributesSoaOutput": "{{data.createdObject}}",
+                    "source":"attachParameter",
+                    "subPanelContext":"{{subPanelContext}}",
+                    "parametersTable":"{{ctx.panelContext.parametersTable}}"
+
+                },
+                "deps": "js/Att1ParameterMgmtUtilService"
+            },
+            "refreshParamProject": {
+                "actionType": "JSFunction",
+                "method": "refreshParamProject",
+                "inputData": {
+                    "paramProject": "{{data.eventData.relatedModified}}",
+                    "data": "{{data}}"
+                },
+                "deps": "js/addMeasurableAttr"
+            },
+            "performPostProcessingAfterXRTLoaded": {
+                "actionType": "batchJob",
+                "steps": [
+                    {
+                        "action": "populateXRT",
+                        "condition": "conditions.isXRTTypeLoaded"
+                    }
+                ]
+            },
+            "XRTLoadBatchJob": {
+                "actionType": "batchJob",
+                "steps": [
+                    {
+                        "action": "getAttributeDefinition"
+                    },
+                    {
+                        "action": "performPostProcessingAfterXRTLoaded"
+                    }
+                ]
+            },
+            "resetDefinitionListBox": {
+                "actionType": "JSFunction",
+                "method": "resetDefinitionListBox",
+                "inputData": {
+                    "subPanelContext": "{{subPanelContext}}",
+                    "data": "{{data}}"
+                },
+                "outputData": {
+                    "isDefinitionSelected":"isDefinitionSelected",
+                    "xrtTypeToLoad":"xrtTypeToLoad"
+                },
+                "deps": "js/addMeasurableAttr"
+            },
+            "BatchJobLovChange": {
+                "actionType": "batchJob",
+                "steps": [
+                    {
+                        "action": "clearListDefinition"
+                    },
+                    {
+                        "action": "populateDefaultDatatype",
+                        "condition":"conditions.noDefinitionCond"
+                    }
+                ]
+            },
+            "getParameterDefinitions": {
+                "actionType": "TcSoaService",
+                "serviceName": "Internal-AWS2-2023-06-Finder",
+                "method": "performSearchViewModel5",
+                "inputData": {
+                    "searchInput": {
+                        "attributesToInflate": [],
+                        "internalPropertyName": "",
+                        "maxToLoad": 50,
+                        "maxToReturn": 50,
+                        "providerName": "Att1EnabledDefinitionProvider",
+                        "searchCriteria": {
+                          "searchString": "{{ (fields.lstParameterDefinitions.__vmprop__().filterString === null || fields.lstParameterDefinitions.__vmprop__().filterString.length === 0 ) ? '*' : fields.lstParameterDefinitions.__vmprop__().filterString}}",
+                          "forceThreshold": "true",
+                          "listOfExpandedCategories": "",
+                          "limitedFilterCategoriesEnabled": "false",
+                          "application":"{{data.Application.dbValue}}",
+                          "dictionary": "{{data.Dictionary.dbValue}}"
+                        },
+                        "searchFilterFieldSortType": "Priority",
+                        "searchSortCriteria": [],
+                        "cursor": {
+                          "startIndex": "{{data.dataProviders.paramDefinitionListProvider.startIndex}}",
+                          "endIndex": 0,
+                          "startReached": false,
+                          "endReached": false
+                        },
+                        "columnFilters": [],
+                        "focusObjUid": "",
+                        "pagingType": "",
+                        "startIndex": 0
+                      },
+                      "inflateProperties": false,
+                      "columnConfigInput": {
+                        "clientName": "",
+                        "hostingClientName": "",
+                        "clientScopeURI": "",
+                        "operationType": "",
+                        "columnsToExclude": []
+                      },
+                      "saveColumnConfigData": {
+                        "scope": "",
+                        "scopeName": "",
+                        "clientScopeURI": "",
+                        "columnConfigId": "",
+                        "columns": []
+                      },
+                      "noServiceData": false
+                },
+                "policy": {
+                    "types": [
+                        {
+                            "name": "Att0AttributeDefRevision",
+                            "properties": [
+                                {
+                                    "name": "att0ListOfValues"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "outputData": {
+                    "totalFound": "totalFound",
+                    "searchResults": "{{function:getLOVList}}"
+                },
+                "deps": "js/addMeasurableAttr"
+            },
+            "getParameterDictionaries": {
+                "actionType": "TcSoaService",
+                "serviceName": "Internal-AWS2-2023-06-Finder",
+                "method": "performSearchViewModel5",
+                "inputData": {
+                    "searchInput": {
+                        "attributesToInflate": [],
+                        "internalPropertyName": "",
+                        "maxToLoad": 50,
+                        "maxToReturn": 50,
+                        "providerName": "Awp0FullTextSearchProvider",
+                        "searchCriteria": {
+                          "searchString": "*",
+                          "forceThreshold": "true",
+                          "listOfExpandedCategories": "",
+                          "limitedFilterCategoriesEnabled": "false"
+                        },
+                        "searchFilterFieldSortType": "Priority",
+                        "searchFilterMap6": {
+                          "WorkspaceObject.object_type": [
+                            {
+                              "searchFilterType": "StringFilter",
+                              "stringValue": "Att0ParamDictionary"
+                            }
+                          ]
+                        },
+                        "searchSortCriteria": [],
+                        "cursor": {
+                          "startIndex": "{{data.dataProviders.paramDictionaryListProvider.startIndex}}",
+                          "endIndex": 0,
+                          "startReached": false,
+                          "endReached": false
+                        },
+                        "columnFilters": [],
+                        "focusObjUid": "",
+                        "pagingType": "",
+                        "startIndex": 0
+                      },
+                      "inflateProperties": false,
+                      "columnConfigInput": {
+                        "clientName": "",
+                        "hostingClientName": "",
+                        "clientScopeURI": "",
+                        "operationType": "",
+                        "columnsToExclude": []
+                      },
+                      "saveColumnConfigData": {
+                        "scope": "",
+                        "scopeName": "",
+                        "clientScopeURI": "",
+                        "columnConfigId": "",
+                        "columns": []
+                      },
+                      "noServiceData": false
+                },
+                "outputData": {
+                    "totalFound": "totalFound",
+                    "searchResults": "{{function:getLOVListForDictionaries}}"
+                },
+                "deps": "js/addMeasurableAttr"
+            },
+            "clearSelectedType": {
+                "actionType": "JSFunction",
+                "method": "clearSelectedType",
+                "inputData": {
+                    "data": "{{data}}"
+                },
+                "deps": "js/addMeasurableAttr"
+            },
+            "getMeasurableAttrParentObjectTypes": {
+                "actionType": "JSFunction",
+                "method": "getMeasurableAttrParentObjectTypes",
+                "inputData": {
+                },
+                "outputData": {
+                    "parentObjectTypes": "parentObjectTypes"
+                },
+                "deps": "js/attributeDefinitionTypesService"
+            },
+            "reveal": {
+                "actionType": "batchJob",
+                "steps": [
+                    {
+                        "action": "populateDefaultDatatype",
+                        "condition":"conditions.noDefinitionCond"
+                    },
+                    {
+                        "action": "populateUnitOfMeasure"
+                    }
+                ]
+            },
+            "populateUnitOfMeasure":{
+                "actionType": "JSFunction",
+                "method": "populateUnitOfMeasure",
+                "inputData": {
+                    "data":"{{data}}",
+                    "lovUnitPropOptions": "{{data.lovUnitPropOptions}}"
+                },
+                "outputData": {
+                    "lovUnitPropOptions": ""
+                },
+                "deps": "js/addMeasurableAttr"
+            },
+            "populateDefaultDatatype":{
+                "actionType": "JSFunction",
+                "method": "populateDefaultDatatype",
+                "inputData": {
+                    "dataType":"{{data.Datatype}}",
+                    "applicationName":"{{data.Application}}",
+                    "doubleLocalText":"{{data.i18n.Double}}"
+                },
+                "outputData": {
+                    "Datatype": ""
+                },
+                "events":
+                {
+                    "success":
+                    [
+                        {
+                           "name": "Datatype.lovValueChanged",
+                           "condition": "data.Datatype.dbValue !== ''"
+                        }
+                    ]
+                },
+                "deps": "js/addMeasurableAttr"
+            },
+            "populateApplication":{
+                "actionType": "TcSoaService",
+                "serviceName": "Core-2013-05-LOV",
+                "method": "getInitialLOVValues",
+                "inputData": {
+                    "initialData": {
+                        "propertyName": "att0Application",
+                        "lovInput": {
+                            "operationName": "Search",
+                            "boName": "Att0AttributeDefRevision"
+                        }
+                    }
+                },
+                "outputData": {
+                    "lovApplicationPropOptions": "{{function:processApplicationLOV}}"
+                },
+                "deps": "js/addMeasurableAttr"
+            },
+            "populateDatatype":{
+                "actionType": "TcSoaService",
+                "serviceName": "Core-2013-05-LOV",
+                "method": "getInitialLOVValues",
+                "inputData": {
+                    "initialData": {
+                        "propertyName": "att0AttrType",
+                        "lovInput": {
+                            "operationName": "Create",
+                            "boName": "Att0AttributeDefRevision",
+                            "owningObject": {
+                                "type": "Att0AttributeDefRevision"
+                            },
+                            "propertyValues":{
+                                "att0Application": ["{{data.Application.dbValue}}"],
+                                "att0AttrType": [""]
+                            }
+                        }
+                    }
+                },
+                "outputData": {
+                    "lovDatatypePropOptions": "{{function:processDatatypeLOV}}"
+                },
+                "deps": "js/addMeasurableAttr"
+            },
+            "clearList": {
+                "actionType": "JSFunction",
+                "method": "clearList",
+                "inputData": {
+                    "prop": "{{data.Datatype}}",
+                    "subPanelContext":"{{data.subPanelContext}}"
+                },
+                "outputData": {
+                    "Datatype": ""
+                },
+                "deps": "js/addMeasurableAttr"
+            },
+            "clearName": {
+                "actionType": "JSFunction",
+                "method": "clearList",
+                "inputData": {
+                    "prop": "{{data.parameterDefinitionName}}",
+                    "subPanelContext":"{{data.subPanelContext}}"
+                },
+                "outputData": {
+                    "parameterDefinitionName": ""
+                },
+                "deps": "js/addMeasurableAttr"
+            },
+            "clearDesc": {
+                "actionType": "JSFunction",
+                "method": "clearList",
+                "inputData": {
+                    "prop": "{{data.attrDefDesc}}",
+                    "subPanelContext":"{{data.subPanelContext}}"
+                },
+                "outputData": {
+                    "attrDefDesc": ""
+                },
+                "deps": "js/addMeasurableAttr"
+            },
+            "clearListDefinition": {
+                "actionType": "JSFunction",
+                "method": "clearList",
+                "inputData": {
+                    "prop": "{{data.lstParameterDefinitions}}",
+                    "subPanelContext":"{{data.subPanelContext}}"
+                },
+                "outputData": {
+                    "lstParameterDefinitions": "",
+                    "isDefinitionSelected":"isDefinitionSelected",
+                    "xrtTypeToLoad":"xrtTypeToLoad"
+                },
+                "deps": "js/addMeasurableAttr"
+            },
+            "createParameterNew": {
+                "actionType": "Event",
+                "method": "Event",
+                "inputData": {
+                    "events": [ {
+                        "name": "Att1CreateParameter.createParameterNew"
+                    } ]
+                }
+            },
+            "loadXrtType": {
+                "actionType": "JSFunction",
+                "method": "getParameterBOType",
+                "inputData": {
+                    "applicationName":"{{data.Application.dbValue}}",
+                    "datatype": "{{data.Datatype.dbValue}}"
+                },
+                "outputData": {
+                    "xrtTypeToLoad": "xrtTypeToLoad"
+                },
+                "deps": "js/addMeasurableAttr"
+            },
+
+            "postAddParameterBatchJob": {
+                "actionType": "batchJob",
+                "steps": [
+                    {
+                        "action": "reloadUniformTable"
+                    },
+                    {
+                        "action": "closeAddParameterPanel",
+                        "condition":"!subPanelContext.panelPinned"
+                    }
+                ]
+            },
+
+            "getParameterVMOObjectsSoaCall": {
+                "actionType": "TcSoaService",
+                "serviceName": "AttrTargetMgmtAW-2023-06-AttributeTargetManagement",
+                "method": "getParameterVMOObjects",
+                "inputData": {
+                    "inputs": "{{function:prepareGetParameterVMOObjectsInput}}"
+                },
+                "policy": {
+                    "types": [ {
+                        "name": "Att1AttributeAlignmentProxy",
+                        "properties": [ {
+                            "name": "att1SourceAttribute",
+                            "modifiers": [ {
+                                "name": "withProperties",
+                                "Value": "true"
+                            } ]
+                        }, {
+                            "name": "att1HasChildren"
+                        }, {
+                            "name": "att1SourceElement"
+                        }, {
+                            "name": "att1Parent"
+                        }, {
+                            "name": "att1HasParentWriteAccess"
+                        },{
+                            "name": "att1AttrContext"
+                        } ]
+                    } ]
+                },
+                "outputData": {
+                    "createdObjectVMO": "",
+                    "response": ""
+                },
+                "events": {
+                    "success": [
+                        {
+                            "name": "uniformParamTable.addNewParams",
+                            "eventData": {
+                                "response": "{{data.response}}",
+                                "createdObject":"{{data.createdObject}}"
+                            }
+                        },
+                        {
+                            "condition": "!subPanelContext.panelPinned",
+                            "name": "closeAddParameterPanel"
+                        }
+                    ],
+                    "failure": [{
+                        "name": "uniformParamTable.reloadTable",
+                        "eventData": {
+                            "reusable": "{{ctx.panelContext.reusableParamTable}}"
+                        }
+                    }]
+                },
+                "deps": "js/addMeasurableAttr"
+            }
+        },
+        "functions":
+        {
+            "processDatatypeLOV": {
+                "functionName": "processDatatypeLOV",
+                "parameters": [
+                    "{{data}}"
+                ]
+            },
+            "processApplicationLOV": {
+                "functionName": "processApplicationLOV",
+                "parameters": [
+                    "{{data}}"
+                ]
+            },
+            "processCreateParamName": {
+                "functionName": "processCreateParamName",
+                "parameters": [
+                    "{{data}}"
+                ]
+            },
+            "prepareGetParameterVMOObjectsInput": {
+                "functionName": "prepareGetParameterVMOObjectsInput",
+                "parameters": [
+                    "{{data.createdObject}}",
+                    "{{data.ctx.panelContext.dataProvider}}",
+                    "{{data.ctx.panelContext.parametersTable}}"
+                ]
+             }
+        },
+        "data":
+        {
+            "lstParameterDefinitions": {
+                "displayName": "{{i18n.attributeDefinition}}",
+                "type": "STRING",
+                "isRequired": "true",
+                "dataProvider": "paramDefinitionListProvider",
+                "emptyLOVEntry": false,
+                "dbValue": "",
+                "uiValue": ""
+            },
+            "Dictionary": {
+                "displayName": "{{i18n.Dictionary}}",
+                "type": "STRING",
+                "dataProvider": "paramDictionaryListProvider",
+                "emptyLOVEntry": false,
+                "dbValue": ""
+            },
+            "ParameterName": {
+                "displayName": "{{i18n.Name}}",
+                "type": "STRING",
+                "isRequired": "true",
+                "isEditable": "true",
+                "dbValue": ""
+            },
+            "Description": {
+                "displayName": "{{i18n.Description}}",
+                "type": "STRING",
+                "isRequired": "false",
+                "isEditable": "true",
+                "dbValue": ""
+            },
+            "Application":{
+                "displayName": "{{i18n.Application}}",
+                "type": "STRING",
+                "isRequired": "true",
+                "dataProvider": "listProviderApplication",
+                "dbValue": "Engineering",
+                "uiValue": "{{i18n.Engineering}}"
+            },
+            "lovApplicationPropOptions":{
+                "propDisplayValue": "",
+                "dispValue":"",
+                "propInternalValue":""
+            },
+            "Datatype":{
+                "displayName": "{{i18n.Datatype}}",
+                "type": "STRING",
+                "isRequired": "true",
+                "dataProvider": "listProviderDatatype",
+                "dbValue": "",
+                "uiValue": ""
+            },
+            "lovUnitProp":{
+                "displayName": "{{i18n.UnitOfMeasure}}",
+                "type": "STRING",
+                "isRequired": "false",
+                "hasLov":true,
+                "isEditable": "true",
+                "dbValue": "",
+                "uiValue": ""
+            },
+            "lovUnitPropOptions":{
+                "type": "STRING",
+                "dbValue": ""
+            },
+            "dictionaryProvider":{
+                "type": "STRING",
+                "dbValue": ""
+            },
+            "objName": {
+                "displayName": "",
+                "type": "STRING",
+                "isRequired": "false",
+                "dbValue": ""
+            },
+            "uomType": {
+                "displayName": ""
+            },
+            "attrType": {
+                "displayName": ""
+            },
+            "Goal": {
+                "displayName": "",
+                "type": "STRING",
+                "isRequired": "false",
+                "isEditable": "true",
+                "dbValue": ""
+            },
+            "Min": {
+                "displayName": "",
+                "type": "STRING",
+                "isRequired": "false",
+                "isEditable": "true",
+                "dbValue": ""
+            },
+            "Max": {
+                "displayName": "",
+                "type": "STRING",
+                "isRequired": "false",
+                "isEditable": "true",
+                "dbValue": ""
+            },
+            "GoalFiles": {
+                "displayName": ""
+            },
+            "object_desc": {
+                "displayName": ""
+            },
+            "attrDefDesc": {
+                "displayName": "{{i18n.Description}}",
+                "isRequired": "false",
+                "type": "STRING",
+                "isEditable": "true",
+                "dbValue": ""
+            },
+            "parameterDefinitionName":{
+                "displayName": "{{i18n.Name}}",
+                "isRequired": "true",
+                "type": "STRING",
+                "isEditable": "true",
+                "dbValue": ""
+            },
+            "isXrtCompletelyLoaded": false,
+            "xrtState": {
+                "initialValues": {
+                    "xrtTypeLoaded": ""
+                },
+                "meta": {
+                    "xrtVMO": {
+                        "field": "true",
+                        "type": "viewModelObject"
+                    }
+                }
+            },
+            "typeFilter":"Att0AttributeDefRevision",
+            "searchBox":
+            {
+                "displayName": "",
+                "type": "STRING",
+                "isRequired": "true",
+                "dbValue":"*"
+            }
+        },
+        "editHandlers": {
+            "addPanelEditHandler": {
+                "context": "CREATE_PANEL_CONTEXT",
+                "dataSource": {
+                    "xrtVMO": "{{data.xrtState}}"
+                }
+            }
+        },
+        "conditions":
+        {
+             "showSearchFilterPanel":
+            {
+                "expression": "data.showSearchFilter != undefined && data.showSearchFilter == true"
+            },
+            "isNewTab": {
+                "expression": "data.selectedTab.tabKey==='results' && data.selectedTab.panelId==='resultsTabPageSub'"
+            },
+            "showAddForNew":{
+                "expression": "data.dataProviders.performSearch.selectedObjects.length  === 1 "
+            },
+            "isXRTTypeLoaded": {
+                "expression": "xrtState.xrtTypeLoaded"
+            },
+            "useDefinitionCond": {
+                "expression": "conditions.isTcReleaseAtLeast142 && ctx.preferences.PLE_Parameter_Create_With_Definition_Ux[0] === 'true'"
+            },
+            "noDefinitionCond": {
+                "expression": "conditions.isTcReleaseAtLeast142 && ctx.preferences.PLE_Parameter_Create_With_Definition_Ux[0] === 'false'"
+            },
+            "useApplicationCond": {
+                "expression": "ctx.preferences.PLE_Parameter_Create_With_Application_Ux && ctx.preferences.PLE_Parameter_Create_With_Application_Ux[0] === 'true'"
+            },
+            "isTcReleaseAtLeast142": {
+                "expression": "ctx.tcSessionData.tcMajorVersion > 14 || (ctx.tcSessionData.tcMajorVersion === 14 && ctx.tcSessionData.tcMinorVersion >= 2)"
+            },
+            "selectedTypeCond": {
+                "expression": "(xrtState.xrtTypeLoaded.type === 'Att0MeasurableAttributePnt' && !conditions.isNullPointX && !conditions.isNullPointY && !conditions.isNullPointZ) || xrtState.xrtTypeLoaded.type === 'Att0MeasurableAttributeDbl' || xrtState.xrtTypeLoaded.type === 'Att0MeasurableAttributeStr' || xrtState.xrtTypeLoaded.type === 'Att0MeasurableAttributeInt' || xrtState.xrtTypeLoaded.type === 'Att0MeasurableAttributeBool' || xrtState.xrtTypeLoaded.type === 'Wnb0MassMeasurableAttribute'"
+            },
+            "isNullPointX": {
+                "expression": "xrtState.xrtVMO.props.att0PointX.dbValue === null || xrtState.xrtVMO.props.att0PointX.dbValue === undefined || xrtState.xrtVMO.props.att0PointX.dbValue === ''"
+            },
+            "isNullPointY": {
+                "expression": "xrtState.xrtVMO.props.att0PointY.dbValue === null || xrtState.xrtVMO.props.att0PointY.dbValue === undefined || xrtState.xrtVMO.props.att0PointY.dbValue === ''"
+            },
+            "isNullPointZ": {
+                "expression": "xrtState.xrtVMO.props.att0PointZ.dbValue === null || xrtState.xrtVMO.props.att0PointZ.dbValue === undefined || xrtState.xrtVMO.props.att0PointZ.dbValue === ''"
+            },
+            "isDefintionSelected":{
+                "expression":"data.isDefinitionSelected === true"
+            },
+            "isInVRContext": {
+                "expression": "(subPanelContext.openedObject.modelType.typeHierarchyArray.indexOf( 'Crt0VldnContractRevision' ) > -1 )"
+            },
+            "isInsertRowAfterAddParameter":{
+                "expression": "!conditions.isInVRContext && ctx.panelContext.reusableParamTable === undefined && ctx.panelContext.dataProvider !== undefined && ctx.panelContext.parametersTable.parametersTableViewMode.viewModeContext !== 'showChildLines'"
+            }
+        },
+        "onEvent": [
+            {
+                "eventId": "awPanel.reveal",
+                "action": "getMeasurableAttrParentObjectTypes"
+            },
+            {
+                "eventId": "getMeasurableAttrParentObjectTypes",
+                "action": "getMeasurableAttrParentObjectTypes"
+            },
+            {
+                "eventId": "lstParameterDefinitions.lovValueChanged",
+                "action": "XRTLoadBatchJob"
+            },
+            {
+                "eventId": "paramDefinitionListProvider.selectionChangeEvent",
+                "action": "resetDefinitionListBox",
+                "condition": "data.lstParameterDefinitions.dbValue === ''"
+            },
+            {
+                "eventId": "Application.lovValueChanged",
+                "action": "BatchJobLovChange"
+            },
+            {
+                "eventId": "Dictionary.lovValueChanged",
+                "action": "BatchJobLovChange"
+            },
+            {
+                "eventId": "createOrUpdateMeasurableAttributeSoaCall",
+                "action": "createOrUpdateMeasurableAttributeSoaCall"
+            },
+            {
+                "eventId": "insertRowForNewParameter",
+                "action": "getParameterVMOObjectsSoaCall"
+            },
+            {
+                "eventId": "postAddParameterWithReload",
+                "action": "postAddParameterBatchJob"
+            },
+            {
+                "eventId": "refreshEvent",
+                "action": "refreshAction"
+            },
+            {
+                "eventId": "closeAddParameterPanel",
+                "action": "closeAddParameterPanel"
+            },
+            {
+                "eventId": "paramProject.paramCreated",
+                "cacheEventData": true,
+                "action": "refreshParamProject"
+            },
+            {
+                "eventId": "Att1CreateParameter.prepareAttributeInput",
+                "action": "prepareAttributeInputBatchJob"
+            },
+            {
+                "eventId": "Att1CreateParameter.createParameterNew",
+                "action": "createAttributeInput"
+            },
+            {
+                "eventId": "createParametersSoaCall",
+                "action": "createParametersSoaCall"
+            },
+            {
+                "eventId": "Datatype.lovValueChanged",
+                "action": "loadXrtType"
+            },
+            {
+                "eventId": "confirmWriteAccessError",
+                "message": "createParameterFailMessage"
+            },
+            {
+                "eventId": "notWriteAccessError",
+                "message": "paramCreateFail"
+            }
+        ],
+        "messages":
+        {
+            "createParamFailureMessage":{
+                "messageType": "ERROR",
+                "messageText": "{{errorCode}}"
+            },
+            "createParameterFailMessage":{
+                "messageType": "ERROR",
+                "messageText": "{{i18n.createParameterFailureMessage}}",
+                "messageTextParams": [
+                    "{{data.errorDetails.paramName}}",
+                    "{{subPanelContext.selectionData.selected[0].props.object_string.uiValues[0]}}"
+                ]
+            },
+            "paramCreateFail":{
+                "messageType": "ERROR",
+                "messageText": "{{i18n.att1FailureMessage}}",
+                "messageTextParams": [
+                    "{{data.errorDetails.message}}"
+                ]
+            }
+        },
+        "i18n":
+        {
+            "attributeDefinition": [ "Att1AttrMappingMessages" ],
+            "UnitOfMeasure": [ "Att1Messages" ],
+            "Datatype": [ "Att1Messages" ],
+            "Application": [ "Att1Messages" ],
+            "add": [ "Att1Messages" ],
+            "Engineering" : [ "Att1Messages" ],
+            "Dictionary": [ "Att1Messages" ],
+            "Description" : [ "Att1Messages" ],
+            "Name" : [ "Att1Messages" ],
+            "Goal" : [ "Att1Messages" ],
+            "Min" : [ "Att1Messages" ],
+            "Max" : [ "Att1Messages" ],
+            "SelectDefinition": [ "Att1AttrMappingMessages" ],
+            "createParameterFailureMessage": [ "Att1AttrMappingMessages" ],
+            "att1FailureMessage": [ "Att1AttrMappingMessages" ],
+            "Double" : [ "Att1Messages" ]
+        },
+        "lifecycleHooks": {
+            "onInit": "reveal",
+            "onUpdate": [
+                {
+                    "action": "performPostProcessingAfterXRTLoaded",
+                    "observers": [
+                        "viewModel.atomicData.xrtState.xrtTypeLoaded"
+                    ]
+                },
+                {
+                    "action": "checkAddButtonEnablementCondition",
+                    "observers": [
+                        "viewModel.data.ParameterName",
+                        "viewModel.data.Datatype",
+                        "viewModel.data.parameterDefinitionName"
+                    ]
+                }
+            ]
+        },
+        "dataProviders": {
+            "paramDefinitionListProvider": {
+                "action": "getParameterDefinitions",
+                "response": "{{data.searchResults}}",
+                "totalFound": "{{data.totalFound}}",
+                "selectionModelMode": "single"
+            },
+            "paramDictionaryListProvider": {
+                "action": "getParameterDictionaries",
+                "response": "{{data.searchResults}}",
+                "totalFound": "{{data.totalFound}}",
+                "selectionModelMode": "single"
+            },
+            "listProviderApplication": {
+                "action": "populateApplication",
+                "response": "{{data.lovApplicationPropOptions}}"
+            },
+            "listProviderDatatype": {
+                "action": "populateDatatype",
+                "response": "{{data.lovDatatypePropOptions}}"
+            }
+        }
+    }

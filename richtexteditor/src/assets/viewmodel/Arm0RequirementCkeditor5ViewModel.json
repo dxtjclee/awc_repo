@@ -1,0 +1,236 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports":
+    [
+        "js/aw-command-bar.directive",
+        "js/aw-command-panel-section.directive",
+        "js/aw-textbox.directive",
+        "js/aw-tab-set.directive",
+        "js/visible-when.directive",
+        "js/aw-break.directive"
+    ],
+    "actions":{
+        "initCkeditor":{
+            "actionType": "JSFunction",
+            "method": "initCkeditor",
+            "inputData":
+            {
+                "data": "{{data}}",
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Arm0RequirementCkeditor5Service"
+        },
+        "destroyCkeditor":{
+            "actionType": "JSFunction",
+            "method": "destroyCkeditor",
+            "inputData":
+            {
+            },
+            "deps": "js/Arm0RequirementCkeditor5Service"
+        },
+        "resizeEditor":{
+            "actionType": "JSFunction",
+            "method": "resizeEditor",
+            "inputData":
+            {
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Arm0RequirementCkeditor5Service"
+        },
+        "filterCommentsTrackchanges": {
+            "actionType": "JSFunction",
+            "method": "filterCommentsTrackchanges",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0Ck5CommentsHandler"
+        },
+        "sidebarTabChanged": {
+            "actionType": "JSFunction",
+            "method": "filterCommentsTrackchangesOnTab",
+            "inputData": {
+                "data": "{{data.data}}"
+            },
+            "outputData": {
+                "previousSelectedTab": ""
+            },
+            "deps": "js/Arm0Ck5CommentsHandler"
+        },
+        "resetFilterAnnotationsBackupMap": {
+            "actionType": "JSFunction",
+            "method": "resetFilterAnnotationsBackupMap",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0Ck5CommentsHandler"
+        },
+        "refreshPageUpDownButtonsVisibility": {
+            "actionType": "JSFunction",
+            "method": "refreshPageUpDownButtonsVisibility",
+            "inputData": {
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/Arm0RequirementCkeditor5Service"
+        },
+        "toggleSidebarListener": {
+            "actionType": "JSFunction",
+            "method": "toggleSidebarListener",
+            "inputData":
+            {
+            },
+            "deps": "js/Arm0RequirementCkeditor5Service"
+        },
+        "toggleShowOriginalOnContentChange": {
+            "actionType": "JSFunction",
+            "method": "toggleShowOriginalOnContentChange",
+            "inputData":{},
+            "deps": "js/Arm0RequirementCkeditor5Service"
+        },
+        "reInitializeCkeditorInstanceWithCollaboration":{
+            "actionType": "JSFunction",
+            "method": "reInitializeCkeditorInstanceWithCollaboration",
+            "inputData":
+            {
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Arm0RequirementCkeditor5Service"
+        },
+        "reInitializeCkeditorInstanceWithoutCollaboration": {
+            "actionType": "JSFunction",
+            "method": "reInitializeCkeditorInstanceWithoutCollaboration",
+            "inputData":
+            {
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Arm0RequirementCkeditor5Service"
+        },
+        "collabSessionDisconnected": {
+            "actionType": "JSFunction",
+            "method": "collabSessionDisconnected",
+            "inputData":
+            {
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Arm0RequirementCkeditor5Service"
+        }
+    },
+
+    "data": {
+        "sidebarFilterText": {
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "true",
+            "requiredText": "{{i18n.sidebarFilterText}}"
+        },
+        "sidebarTabs": [
+            {
+                "name": "{{i18n.all}}",
+                "tabKey": "all",
+                "selectedTab": true
+            },
+            {
+                "name": "{{i18n.comments}}",
+                "tabKey": "comments"
+            },
+            {
+                "name": "{{i18n.trackedChanges}}",
+                "tabKey": "trackchanges"
+            }
+        ]
+    },
+    "conditions": {
+        "commentFilterChangedCondition": {
+            "expression": "data.sidebarFilterText.dbValue",
+            "trackValues": true
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "initCkeditor",
+        "onUnmount": "destroyCkeditor",
+        "onUpdate": [ {
+            "action":"resizeEditor",
+            "observers":["props.subPanelContext.fullScreenState"]
+        }]
+    },
+    "onEvent":
+    [
+        {
+            "eventId": "aw.windowResize",
+            "action": "resizeEditor"
+        },
+        {
+            "eventId": "condition.expressionValueChanged",
+            "action": "filterCommentsTrackchanges",
+            "criteria": {
+                "condition": "conditions.commentFilterChangedCondition"
+            },
+            "cacheEventData": true
+        },
+        {
+            "eventId": "awTab.selected",
+            "action": "sidebarTabChanged"
+        },
+        {
+            "eventId": "Arm0RequirementCkeditor5.resetFilterAnnotationsBackupMap",
+            "action": "resetFilterAnnotationsBackupMap"
+        },
+        {
+            "eventId": "Arm0RequirementCkeditor5.toggleShowOriginalOnContentChange",
+            "action": "toggleShowOriginalOnContentChange"
+        },
+        {
+            "eventId": "Arm0RequirementCkeditor.refreshPageUpDownButtons",
+            "action": "refreshPageUpDownButtonsVisibility",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "appCtx.update",
+            "criteria": {
+                "name": "ckeditorSidebar"
+            },
+            "action": "toggleSidebarListener"
+        },
+        {
+            "eventId": "appCtx.register",
+            "criteria": {
+                "name": "ckeditorSidebar"
+            },
+            "action": "toggleSidebarListener"
+        },
+        {
+            "eventId": "Arm0RequirementCkeditor5.reInitializeCkeditorInstanceWithCollaboration",
+            "action": "reInitializeCkeditorInstanceWithCollaboration"
+        },
+        {
+            "eventId": "Arm0RequirementCkeditor5.reInitializeCkeditorInstanceWithoutCollaboration",
+            "action": "reInitializeCkeditorInstanceWithoutCollaboration"
+        },
+        {
+            "eventId": "Arm0RequirementCkeditor5.collabSessionDisconnected",
+            "action": "collabSessionDisconnected"
+        }
+    ],
+    "preferences": [
+        "Req_TrackChanges_enabled"
+    ],
+    "i18n": {
+        "RichTextEditorSidebarCaption": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "sidebarFilterText": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "all": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "comments": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "trackedChanges": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "noResultsFound":[
+            "RequirementsCommandPanelsMessages"
+        ]
+    }
+}

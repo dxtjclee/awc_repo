@@ -1,0 +1,35 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-checkbox.directive"
+    ],
+    "actions": {
+        "handleIncludeToggle": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "evm1SeedIncludeToggled",
+                    "eventData": {
+                        "treeNodeUid": "{{props.subPanelContextForTooltipWithPropertyOverride.treeNodeUid}}",
+                        "newValue": "{{data.evm1IncludeData.dbValue}}"
+                    }
+                } ]
+            }
+        }
+    },
+    "data": {
+        "evm1IncludeData": {
+            "displayName": "",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEnabled": "{{props.subPanelContextForTooltipWithPropertyOverride.isEnabled}}",
+            "dbValue": "{{props.subPanelContextForTooltipWithPropertyOverride.dbValue}}",
+            "dispValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        }
+    },
+    "i18n": {
+
+    }
+}

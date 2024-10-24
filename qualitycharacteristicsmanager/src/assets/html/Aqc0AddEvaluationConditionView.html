@@ -1,0 +1,15 @@
+<aw-panel-body scrollable="false">
+    <aw-guidance-message exist-when="conditions.showGuidanceMessageForDuplicateError" message="duplicatePropertyErrorMsg" closable="false" show-type="false" show-icon="false">
+    </aw-guidance-message>
+    <aw-listbox prop="data.propertyContext" list="data.propertyContextValues.dbValue" action="selectionChangeOfPropertyContext"></aw-listbox>    
+    <aw-widget prop="data.genericWidget" visible-when="conditions.showGenericWidget &&  conditions.checkForStringType "></aw-widget>    
+    <aw-break ></aw-break>
+    <!-- TODO::Add support for LISTBOX -->        
+    <aw-widget prop="data.genericWidget" visible-when="conditions.showGenericWidget && !conditions.checkForStringType"></aw-widget>       
+</aw-panel-body>
+<aw-panel-footer>
+    <aw-button action="addConditionToFilter" visible-when="conditions.showAddWidget || conditions.showSaveWidget">
+        <aw-i18n visible-when="conditions.showAddWidget">i18n.Aqc0Add</aw-i18n>  
+        <aw-i18n visible-when="conditions.showSaveWidget">i18n.Aqc0Save</aw-i18n>      
+    </aw-button>
+</aw-panel-footer>

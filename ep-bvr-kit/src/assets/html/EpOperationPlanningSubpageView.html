@@ -1,0 +1,9 @@
+<ep-configuration-chip-area exist-when="ctx.epTaskPageContext.loadedObject.uid && ctx.ep.scopeObject.uid" configuration-chips-data = "data.configurationChipsData"></ep-configuration-chip-area>
+<aw-sublocation sub-location-preference="data.awSubLocationPref" sub-panel-context="{provider : data.provider}" class="afx-content-background">
+    <mfe-loading-message exist-when="!ctx.epPageContext.loadedObject.uid"></mfe-loading-message>
+    <mfe-content-container container-direction="HORIZONTAL" container-name="OperationPlanningPage" class="h-12" exist-when="ctx.epTaskPageContext.loadedObject.uid">
+        <mfe-content-container container-direction="VERTICAL" container-name="OperationPlanningPageLeftArea" class="w-12">
+            <mfe-content-panel occ-context="data.occContext" sub-panel-context="{...data,...props.subPanelContext, occContext:data.occContext}"></mfe-content-panel>
+            </mfe-content-container>
+    </mfe-content-container>
+</aw-sublocation>

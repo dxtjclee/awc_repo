@@ -1,0 +1,5 @@
+<div aw-class="[props.viewId]" class="sw-row w-12 h-12">
+    <mfe-loading-message exist-when="!conditions.isTreeDataLoaded && !conditions.isTreeDataMissing"></mfe-loading-message>
+    <mfe-message exist-when="conditions.isTreeDataMissing" sub-panel-context="data.messages.noAssemblyStructure"></mfe-message>
+    <aw-splm-table show-when="conditions.isTreeDataLoaded" table-context="{ columnsData: fields.columnsData }" selection-data="props.selectionData" class="aw-ep-treeTable" gridid="EpTreeTable" use-tree="true" show-decorators="true" reusable="true"></aw-splm-table>
+</div>

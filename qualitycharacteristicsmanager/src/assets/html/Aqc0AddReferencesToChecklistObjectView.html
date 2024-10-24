@@ -1,0 +1,22 @@
+<aw-command-panel caption="i18n.addButtonTitle">
+    <div class="aw-layout-flexColumn" show-when="data.activeState.value.activeView==='AddObjectPrimarySub'">
+        <aw-add
+            target-object="ctx.selected"
+            include-types="Item,ItemRevision"
+            type-filter="ItemRevision"
+            visible-tabs="new,palette,search"
+            max-recent-count="5"
+            add-panel-state="fields.addPanelState"
+            active-state="data.activeState"
+            project-state="data.projectState"
+            xrt-state="data.xrtState"
+            edit-handler="editHandlers.addPanelEditHandler">
+        </aw-add>
+        <aw-panel-footer >
+            <aw-button action="addChecklistReference" visible-when="formProp.attributes.valid && conditions.isAddButtonVisible">
+                <aw-i18n>i18n.addButtonTitle</aw-i18n>
+            </aw-button>
+        </aw-panel-footer>
+    </div>
+    <aw-add-navigate active-state="data.activeState" project-state="data.projectState" action="actions.setActiveView"></aw-add-navigate>
+</aw-command-panel>

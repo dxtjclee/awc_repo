@@ -1,0 +1,59 @@
+{
+    "schemaVersion" : "1.0.0",
+    "data":{
+        "_provider": {
+            "breadcrumbConfig": {
+                "type": "search",
+                "vm" : "AwSearchBreadcrumb"
+            },
+            "priority": 1,
+            "clientScopeURI": "Dpv1ClusterGroups",
+            "nameToken": "com.siemens.splm.client.dpv:createdDpvSublocation",
+            "context": {
+                "search": {
+                    "hideInContentSearchBox": true,
+                    "provider": "Awp0SavedQuerySearchProvider",
+                    "sortType": "Priority",
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "criteria": {
+                        "Name": "*",
+                        "Type": "MEPrPlantProcessRevision;MEPrPlantRevision;Mfg0MEPlantBOPRevision",
+                        "lastEndIndex": "",
+                        "queryName": "Item Revision...",
+                        "totalObjectsFoundReportedToClient": "",
+                        "typeOfSearch": "ADVANCED_SEARCH",
+                        "utcOffset": "330"
+                    },
+                    "sortCriteria": [
+                        {
+                            "fieldName": "object_name",
+                            "sortDirection": "ASC"
+                        }
+                    ]
+                }
+            },
+            "viewModes": {
+                "TableSummaryView":{
+                    "primaryWorkArea": "table",
+                    "secondaryWorkArea": true
+                },
+                "TableView":{
+                    "primaryWorkArea": "table",
+                    "secondaryWorkArea": false
+                },
+                "ListView": {
+                    "primaryWorkArea": "list",
+                    "secondaryWorkArea": false
+                },
+                "SummaryView": {
+                    "primaryWorkArea": "list",
+                    "secondaryWorkArea": true
+                }
+            },
+            "defaultDisplayMode" : "TableSummaryView",
+            "policy": "/policies/DpvObjectPropertyPolicy.json",
+            "viewBase": "Awp0Base"
+        }
+    }
+}

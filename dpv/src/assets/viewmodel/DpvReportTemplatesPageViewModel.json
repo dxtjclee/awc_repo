@@ -1,0 +1,59 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "_provider": {
+            "breadcrumbConfig": {
+                "type": "search",
+                "vm" : "AwSearchBreadcrumb"
+            },
+            "priority": 1,
+            "label": {
+                "source": "/i18n/DpvMessages",
+                "key": "reportTemplates"
+            },
+            "isXrtApplicable": true,
+            "clientScopeURI": "Awp0ObjectNavigation",
+            "nameToken": "com.siemens.splm.client.dpv:graRepTemplatesSubLocation",
+            "defaultDisplayMode": "SummaryView",
+            "context": {
+                "search": {
+                    "hideInContentSearchBox": true,
+                    "provider": "Awp0ObjectSetRowProvider",
+                    "criteria": {
+                        "objectSet": "contents.WorkspaceObject",
+                        "returnTargetObjs": "true"
+                    },
+                    "sortCriteria": [
+                        {
+                            "fieldName": "last_mod_date",
+                            "sortDirection": "DESC"
+                        }
+                    ],
+                    "activeFilterMap": {},
+                    "sortType": "Priority",
+                    "maxToLoad": 50,
+                    "maxToReturn": 50
+                }
+            },
+            "viewBase": "Dpv1ReportTemplate",
+            "viewModes": {
+                "TreeView": {
+                    "primaryWorkArea": "tree",
+                    "secondaryWorkArea": false
+                },
+                "TreeSummaryView": {
+                    "primaryWorkArea": "tree",
+                    "secondaryWorkArea": true
+                },
+                "SummaryView": {
+                    "primaryWorkArea": "list",
+                    "secondaryWorkArea": true
+                },
+                "ListView": {
+                    "primaryWorkArea": "list",
+                    "secondaryWorkArea": false
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,134 @@
+[
+  {
+    "conditions": {
+      "$and": [
+        {
+          "pageContext.primaryActiveTabId": {
+            "$eq": "tc_xrt_Content"
+          }
+        },
+        {
+          "selected.modelType.typeHierarchyArray": {
+            "$in": [
+              "Arm0RequirementElement",
+              "Arm0ParagraphElement",
+              "Arm0RequirementSpecElement"
+            ]
+          }
+        },
+        {
+          "NONE._editing": {
+            "$eq": true
+          }
+        },
+        {
+          "pageContext.secondaryActiveTabId": {
+            "$eq": "tc_xrt_Documentation"
+          }
+        }
+      ]
+    },
+    "target": {
+      "method": "getSaveHandler",
+      "deps": "js/Arm0RequirementDocumentationACE"
+    }
+  },
+  {
+    "conditions": {
+      "$and": [
+        {
+          "pageContext.primaryActiveTabId": {
+            "$eq": "test"
+          }
+        }
+      ]
+    },
+    "target": {
+      "method": "getSaveHandler",
+      "deps": "js/Arm0HTMLSpecTemplateEdit"
+    }
+  },
+  {
+    "conditions": {
+      "$and": [
+        {
+          "NONE._editing": {
+            "$eq": true
+          }
+        },
+        {
+          "editHeaderFooterSaveHandler": {
+            "$eq": true
+          }
+        }
+      ]
+    },
+    "target": {
+      "method": "getSaveHandler",
+      "deps": "js/Arm0HtmlHeaderFooter"
+    }
+  },
+  {
+    "conditions": {
+      "$and": [
+        {
+          "pageContext.secondaryActiveTabId": {
+            "$eq": "tc_xrt_SystemRequirements"
+          }
+        },
+        {
+          "SystemRequirements.pageSplit": {
+            "$eq": "all"
+          }
+        },
+        {
+          "visibleServerCommands.Ase0ShowSplitPanel": {
+            "$eq": true
+          }
+        }
+      ]
+    },
+    "target": {
+      "method": "getSaveHandler",
+      "deps": "js/Ase0DualSaveHandler"
+    }
+  },
+  {
+    "conditions": {
+      "$and": [
+        {
+          "pageContext.secondaryActiveTabId": {
+            "$eq": "tc_xrt_SystemRequirements"
+          }
+        },
+        {
+          "$or": [
+            {
+              "$and": [
+                {
+                  "SystemRequirements.pageSplit": {
+                    "$eq": "all"
+                  }
+                },
+                {
+                  "visibleServerCommands.Ase0ShowSplitPanel": {
+                    "$eq": false
+                  }
+                }
+              ]
+            },
+            {
+              "SystemRequirements.pageSplit": {
+                "$eq": "doc"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "target": {
+      "method": "getSaveHandler",
+      "deps": "js/Arm0RequirementDocumentation"
+    }
+  }
+]

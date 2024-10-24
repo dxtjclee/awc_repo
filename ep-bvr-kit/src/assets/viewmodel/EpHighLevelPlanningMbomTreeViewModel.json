@@ -1,0 +1,145 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "initHighLevelPlanningContent": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "getValueInViewModel"
+                },
+                {
+                    "action": "updateSearchContext"
+                }
+            ]
+        },
+        "getValueInViewModel": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "tabData": "{{subPanelContext}}"
+            },
+            "outputData": {
+                "highLevelPlanningMbomTreeContext.tabContext": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "updateSearchContext": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInAtomicData",
+            "inputData": {
+                "targetAtomicData": "{{fields.epMbomTreeSearchContext}}",
+                "updatedValues": {
+                    "searchPlaceholderString": "{{i18n.searchForPart}}"
+                }
+            },
+            "deps": "js/mfeViewModelUtils"
+        }
+    },
+    "data": {
+        "selectionData": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "epMbomTreeSearchContext": {
+            "initialValues": {
+                "searchObjectType": "BOMLine",
+                "searchPlaceholderString": "{{i18n.searchForPart}}",
+                "searchScopeUid": ""
+            },
+            "meta": {}
+        },
+        "highLevelPlanningMbomTreeContext": {
+            "objectUid": "{{ctx.epPageContext.mbomStructure.uid}}",
+            "isTableEditable": false,
+            "isTopNode": true,
+            "preferenceName": "EP_BopBreakdownAssemblyTreeColumnConfiguration",
+            "isLeafProperty": "bl_has_children",
+            "reloadType": "CommonExpand",
+            "additionalPolicyObjects": {
+                "name": "EpHighLevelPlanningMbom",
+                "types": [ {
+                    "name": "BOMLine",
+                    "properties": [ {
+                        "name": "bl_has_children"
+                    } ]
+                } ]
+            },
+            "epTreeTableCommandAnchor": "assemblyTree_onHoverCommand",
+            "treeNavigationColumnIndex": 0,
+            "tabModel": "{{data.highLevelPlanningMbomTreeContext.tabContext}}",
+            "additionalLoadParamsForRootLoadInputData": [ {
+                    "tagName": "expandType",
+                    "attributeName": "type",
+                    "attributeValue": "ExpandMBOMHighLevelPlanning"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "level",
+                    "attributeValue": "TOP_WITH_CHILDREN"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "rootsProperty",
+                    "attributeValue": "RootObject"
+                }
+            ],
+            "additionalLoadParamsForChildLoadInputData": [ {
+                    "tagName": "expandType",
+                    "attributeName": "type",
+                    "attributeValue": "ExpandMBOMHighLevelPlanning"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "level",
+                    "attributeValue": "CHILDREN"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "rootsProperty",
+                    "attributeValue": "RootObject"
+                }
+            ],
+            "relatedObjectMapKey": "childAssembly",
+            "initializeAction": "loadSortedNodes",
+            "enableSorting": true,
+            "noMBOMStructureAssociated": [ {
+                "text": "{{i18n.noMBOMStructureAssociated}}"
+            } ],
+            "alwaysVisibleColumns":["object_string"],
+            "enableArrangeColumn": true
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "initHighLevelPlanningContent"
+    },
+    "i18n": {
+        "searchForPart": [
+            "TablesMessages"
+        ],
+        "noAssemblyStructure": [
+            "AssemblyMessages"
+        ],
+        "noMBOMStructureAssociated": [
+            "HighLevelPlanningMessages"
+        ]
+    },
+    "conditions": {
+        "isMBOMExist": {
+            "expression": "ctx.epTaskPageContext.mbomStructure"
+        },
+        "isClassicBOPLoaded": {
+            "expression": {
+                "$source": "ctx.ep.scopeObject",
+                "$query": {
+                    "$all": {
+                        "$source": "modelType.typeHierarchyArray",
+                        "$query": {
+                            "$in": [
+                                "Mfg0BvrProcess"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

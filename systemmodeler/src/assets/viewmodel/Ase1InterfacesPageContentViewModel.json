@@ -1,0 +1,328 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+
+    "actions": {
+        "init": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "handleInterfacesPageLoad"
+                },
+                {
+                    "action": "loadInterfaceTypes"
+                }
+            ]
+        },
+        "handleInterfacesPageLoad": {
+            "actionType": "JSFunction",
+            "method": "handleInterfacesPageLoad",
+            "inputData": {
+                "interfacePageState": "{{data.interfacePageState}}"
+            },
+            "outputData": {
+                "interfacePageState": "result.pageState",
+                "actionState": "result.actionState"
+            },
+            "deps": "js/Ase1InterfacesPageService"
+        },
+
+        "loadInterfaceTypes": {
+            "actionType": "JSFunction",
+            "method": "ensureModelTypesLoaded",
+            "inputData": {
+                "typeNames": [ "Awb0Connection",
+                    "Ase0BundledConnection"
+            ] },
+            "deps": "soa/kernel/soaService"
+        },
+
+        "getInterfaces": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-SystemsModeling-2017-06-DiagramManagement",
+            "method": "getInterfaces",
+            "inputData": {
+                "input": "{{function:getInterfacesInput}}"
+            },
+            "policy": {
+                "types": [ {
+                        "name": "Sys1PhysCompElement",
+                        "properties": [ {
+                                "name": "sys1IsActor"
+                            },
+                            {
+                                "name": "sys1IsParent"
+                            },
+                            {
+                                "name": "sys1Nature"
+                            },
+                            {
+                                "name": "object_string"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Sys1LogicalCompElement",
+                        "properties": [ {
+                                "name": "sys1IsActor"
+                            },
+                            {
+                                "name": "sys1IsParent"
+                            },
+                            {
+                                "name": "object_string"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Sys1SystemElement",
+                        "properties": [ {
+                                "name": "sys1IsActor"
+                            },
+                            {
+                                "name": "sys1IsParent"
+                            },
+                            {
+                                "name": "object_string"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "outputData": {
+                "interfacePageState": "{{function:getInterfacesOutput}}",
+                "actionState": {
+                    "modelUpdated": true
+                }
+            },
+            "deps": "js/Ase1InterfacesPageService"
+        },
+
+        "processObjectDoubleClick": {
+            "actionType": "JSFunction",
+            "method": "processObjectDoubleClick",
+            "inputData": {
+                "interfacePageState": "{{data.interfacePageState}}"
+            },
+            "outputData": {
+                "interfacePageState": "result.pageState",
+                "actionState": "result.actionState"
+            },
+            "deps": "js/Ase1InterfacesPageService"
+        },
+
+        "processGoUpCommandClick": {
+            "actionType": "JSFunction",
+            "method": "processGoUpCommandClick",
+            "inputData": {
+                "modelData": "{{data.interfacePageState.modelData}}",
+                "interfacePageState": "{{data.interfacePageState}}"
+            },
+            "outputData": {
+                "interfacePageState": "result.pageState",
+                "actionState": "result.actionState"
+            },
+            "deps": "js/Ase1InterfacesPageService"
+        },
+        "processFocusOnSystemCommandClick": {
+            "actionType": "JSFunction",
+            "method": "processFocusOnSystemCommandClick",
+            "inputData": {
+                "systemOfInterest": "{{subPanelContext.selected}}",
+                "primarySelectionData": "{{data.primarySelectionData}}",
+                "modelData": "{{data.interfacePageState.modelData}}"
+            },
+            "outputData": {
+                "actionState": ""
+            },
+            "deps": "js/Ase1InterfacesPageService"
+        },
+
+        "processSelectionChange": {
+            "actionType": "JSFunction",
+            "method": "processSelectionChange",
+            "inputData": {
+                "primarySelectionData": "{{data.primarySelectionData}}",
+                "secondarySelectionData": "{{data.secondarySelectionData}}",
+                "selectionData": "{{subPanelContext.selectionData}}"
+            },
+
+            "deps": "js/Ase1InterfacesPageService"
+        },
+        "configurationChanged": {
+            "actionType": "JSFunction",
+            "method": "configurationChanged",
+            "inputData": {
+                "eventdata": "{{data.eventData.value}}"
+            },
+
+            "deps": "js/Ase1InterfacesPageService"
+        },
+
+        "resetContent": {
+            "actionType": "JSFunction",
+            "method": "resetContent",
+            "inputData": {},
+            "deps": "js/Ase1InterfacesPageService"
+        },
+        "viewChanged": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "Ase1InterfacesPage.selectionChanged",
+                    "eventData": {
+                        "selection": []
+                    }
+                } ]
+            }
+        },
+        "applyLabel": {
+            "actionType": "JSFunction",
+            "method": "applyLabel",
+            "inputData": {
+                "labelToApply": "{{data.actionState.applyLabel}}",
+                "pageState": "{{data.interfacePageState}}"
+            },
+            "outputData": {
+                "interfacePageState.selectedLabelProperty": "result.selectedLabelProperty",
+                "actionState": "result.actionState",
+                "ctx.preferences.ASE1_Interfaces_Node_Label_Property[0]": "result.selectedLabelProperty.name"
+            },
+            "deps": "js/Ase1InterfacesPageService"
+        }
+    },
+
+    "lifecycleHooks": {
+        "onMount": "init",
+        "onUpdate": [ {
+            "action": "getInterfaces",
+            "observers": [ "viewModel.atomicData.actionState.getInterfaces" ]
+        },
+        {
+            "action": "processSelectionChange",
+            "observers": [ "viewModel.atomicData.primarySelectionData", "viewModel.atomicData.secondarySelectionData" ]
+        },
+        {
+            "action": "processObjectDoubleClick",
+            "observers": [ "viewModel.atomicData.interfacePageState.doubleClickedObject" ]
+        },
+        {
+            "action": "processGoUpCommandClick",
+            "observers": [ "viewModel.atomicData.actionState.GoUpCommandClicked" ]
+        },
+        {
+            "action": "processFocusOnSystemCommandClick",
+            "observers": [ "viewModel.atomicData.actionState.FocusOnSystemCommandClicked" ]
+        },
+        {
+            "action": "applyLabel",
+            "observers": [ "viewModel.atomicData.actionState.applyLabel" ]
+        } ]
+    },
+
+    "data": {
+        "interfacePageState": {
+            "initialValues": {
+                "isInterfacesActive": true,
+                "internalSystemsExists": false,
+                "showInterfaceDetailsPanel": false
+            },
+            "meta": {}
+        },
+        "actionState": {
+            "initialValues": {
+            },
+            "meta": {}
+        },
+        "primarySelectionData": {
+            "initialValues": {
+            },
+            "meta": {}
+        },
+        "secondarySelectionData": {
+            "initialValues": {
+            },
+            "meta": {}
+        }
+    },
+
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+
+    "functions": {
+        "getInterfacesInput": {
+            "functionName": "getInterfacesInput",
+            "parameters": [
+                "{{data.actionState.getInterfaces}}",
+                "{{subPanelContext.selected}}",
+                "{{subPanelContext.context.occContext.productContextInfo}}",
+                "{{data.interfacePageState.modelData}}"
+            ]
+        },
+        "getInterfacesOutput": {
+            "functionName": "getInterfacesOutput",
+            "parameters": [
+                "{{subPanelContext.selected}}",
+                "{{data.interfacePageState}}"
+            ]
+        }
+    },
+
+    "preferences": [
+        "ASE1_Interfaces_Node_Label_Property"
+    ],
+
+    "onEvent": [ {
+            "eventId": "Ase1InterfacesPage.objectDoubleClicked",
+            "condition": "data.interfacePageState.modelData.hasSystemModelerLicense",
+            "action": "processObjectDoubleClick",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "Ase1InterfacesPage.selectionChanged",
+            "action": "processSelectionChange",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "Ase1InterfacesPage.FocusOnSystemCommandClickedEvent",
+            "condition": "data.interfacePageState.modelData.hasSystemModelerLicense",
+            "action": "processFocusOnSystemCommandClick"
+        },
+        {
+            "eventId": "configurationChangeStarted",
+            "action": "configurationChanged",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "appCtx.update",
+            "criteria": {
+                "name": "interfacesViewModeCtx",
+                "target": "viewMode"
+            },
+            "action": "viewChanged"
+        },
+        {
+            "eventId": "ace.ResetContentEvent",
+            "action": "resetContent",
+            "cacheEventData": true
+        }
+    ],
+
+    "conditions": {
+        "validSelectionToShowConnectionTable": {
+            "expression": "data.primarySelectionData.selected.length === 1 && data.interfacePageState.modelData.hasSystemModelerLicense"
+        },
+        "showConnectionTableAtBottomCondition": {
+            "expression": "data.interfacePageState.selectedSplitPanelLocation === 'bottom' && conditions.validSelectionToShowConnectionTable"
+        },
+        "showConnectionTableAtRightCondition": {
+            "expression": "data.interfacePageState.selectedSplitPanelLocation === 'right' && conditions.validSelectionToShowConnectionTable"
+        },
+        "isInterfaceDetailsPanelVisible": {
+            "expression": "data.interfacePageState.showInterfaceDetailsPanel && data.interfacePageState.showInterfaceDetailsPanel === true"
+        }
+    }
+}

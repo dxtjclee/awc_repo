@@ -1,0 +1,638 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+
+        "js/aw-command-panel.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/aw-add.directive",
+        "js/visible-when.directive",
+        "js/aw-form.directive",
+        "js/aw-checkbox.directive",
+        "js/aw-panel-body.directive"
+
+    ],
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "lifecycleHooks": {
+        "onUpdate": {
+            "action": "performPostProcessing",
+            "observers": [ "viewModel.atomicData.addPanelState.createdObject" ]
+        }
+    },
+    "functions": {
+
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "actions": {
+        "reveal": {
+            "actionType": "JSFunction",
+            "method": "setObjToDisplayPanel",
+            "inputData": {
+                "panelContext": "{{ctx.panelContext}}"
+            },
+            "outputData": {
+                "createObj": "createObj",
+                "preferredType": "preferredType",
+                "typeFilter": "typeFilter",
+                "commandId": "commandId",
+                "crt0Domain":"crt0Domain",
+                "tabsToShow":"tabsToShow"
+            },
+            "deps": "js/Crt1AddContentsPanelService"
+        },
+        "createObject": {
+            "actionType": "JSFunction",
+            "method": "updateCreateTrigger",
+            "inputData": {
+                "triggerCreate": "{{data.triggerCreate}}",
+                "value": true
+            },
+            "outputData": {
+                "triggerCreate": "triggerCreate"
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "performPostProcessing": {
+            "actionType": "batchJob",
+            "steps": [ {
+                "action": "postProcessVR",
+                "condition": "conditions.isObjectCreated"
+            } ]
+        },
+        "createRelationForPaletteOrSearch": {
+
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+
+                "events": [ {
+
+                    "name": "addObject.addObjectPostProcessforPalette"
+                } ]
+
+            }
+        },
+        "postProcessVR": {
+            "actionType": "JSFunction",
+            "method": "getManageInputForTables",
+            "inputData": {
+                "parentScopeObject": "{{ctx.panelContext.vrSublocationState.mselected[0]}}",
+                "createdObject": "{{data.addPanelState.createdObject}}",
+                "palletteSearchObjects": "{{addPanelState.sourceObjects}}",
+                "preferences":"{{ctx.preferences.PLE_AddObjectsNotAllowedTypes}}",
+                "addAsOccurrence": "{{data.addAsOccurrence}}",
+                "copyParameter": "",
+                "throwErrorVRNotCreated": "{{data.i18n.throwErrorVRNotCreated}}"
+            },
+            "deps": "js/manageVerificationService",
+            "outputData": {
+                "getManageInputForTables": ""
+            },
+            "events": {
+                "success": [ {
+
+                    "name": "manageAnalysisRequests"
+                } ]
+
+            }
+        },
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+
+            }
+        },
+        "manageAnalysisRequests": {
+            "actionType": "batchJob",
+            "steps": [
+            {
+                "action": "manageAnalysisRequestsFoAdd"
+            },
+            {
+                "condition": "data.addAsOccurrence.dbValue === true && data.crt0Domain === null",
+                "action": "refreshLocation"
+            },
+            {
+                "condition": "data.commandId === 'Crt1AddRequirement'",
+                "action": "ReqTableRefresh"
+            },
+            {
+                "condition": "data.commandId === 'Crt1AddFunction'",
+                "action": "FunctionTableRefresh"
+            },
+            {
+                "condition": "data.commandId === 'Crt1AddSystem'",
+                "action": "SystemTableRefresh"
+            },
+            {
+                "condition": "data.commandId === 'Crt1AddPart'",
+                "action": "PartTableRefresh"
+            },
+            {
+                "condition": "data.commandId === 'Crt1AddOthers'",
+                "action": "OthersTableRefresh"
+            },
+            {
+                "condition": "data.commandId === 'Crt1AddConfigTableOne'",
+                "action": "ConfigTableOneRefresh"
+            },
+            {
+                "condition": "data.commandId === 'Crt1AddConfigTableTwo'",
+                "action": "ConfigTableTwoRefresh"
+            },
+            {
+                "condition": "data.commandId === 'Crt1AddConfigTableThree'",
+                "action": "ConfigTableThreeRefresh"
+            },
+            {
+                "condition": "data.commandId === 'Crt1AddConfigTableFour'",
+                "action": "ConfigTableFourRefresh"
+            },
+            {
+                "condition": "data.commandId === 'Crt1AddConfigTableFive'",
+                "action": "ConfigTableFiveRefresh"
+            },
+            {
+                "condition": "data.commandId === 'Crt1AddConfigTableSix'",
+                "action": "ConfigTableSixRefresh"
+            },
+            {
+                "condition": "data.commandId === 'Crt1AddConfigTableSeven'",
+                "action": "ConfigTableSevenRefresh"
+            },
+            {
+                "condition": "data.commandId === 'Crt1AddConfigTableEight'",
+                "action": "ConfigTableEightRefresh"
+            },
+            {
+                "condition": "data.commandId === 'Crt1AddConfigTableNine'",
+                "action": "ConfigTableNineRefresh"
+            },
+            {
+                "condition": "data.commandId === 'Crt1AddConfigTableTen'",
+                "action": "ConfigTableTenRefresh"
+            },
+            {
+                "condition": "data.commandId === 'Crt1AddSoftware'",
+                "action": "SoftwareTableRefresh"
+            },
+            {
+                "condition": "subPanelContext.panelPinned",
+                "action": "generateNextValues"
+            },
+            {
+                "condition": "!subPanelContext.panelPinned",
+                "action": "closePanel"
+            }
+           ]
+        },
+        "generateNextValues": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+
+                    "name": "awPanel.loadNextValues"
+                }
+                ]
+            }
+        },
+        "refreshLocation": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "cdm.relatedModified",
+                    "eventData": {
+                        "refreshLocationFlag": true,
+                        "relatedModified": [
+                            "{{ctx.xrtSummaryContextObject}}"
+                        ]
+                    }
+                }]
+            }
+        },
+        "manageAnalysisRequestsFoAdd": {
+            "actionType": "JSFunction",
+            "method": "callManageVerificationSOA",
+            "inputData": {
+                "manageSOAInput": "{{data.getManageInputForTables}}",
+                "i18n": "{{data.i18n}}",
+                "primaryActiveTabId":"",
+                "subPanelContext":"{{props.subPanelContext}}"
+            },
+            "deps": "js/manageVerificationService"
+        },
+        "ReqTableRefresh": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+
+                        "name": "requirementsTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    },
+                    {
+                        "name": "uniformParamTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            }
+        },
+        "FunctionTableRefresh": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+
+                        "name": "functionsTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    },
+                    {
+                        "name": "uniformParamTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            }
+        },
+        "SystemTableRefresh": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+
+                        "name": "systemsTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    },
+                    {
+                            "name": "uniformParamTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            }
+        },
+        "PartTableRefresh": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+
+                        "name": "partsTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    },
+                    {
+                            "name": "uniformParamTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            }
+        },
+        "OthersTableRefresh": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+
+                        "name": "othersTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    },
+                    {
+                            "name": "uniformParamTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            }
+        },
+        "ConfigTableOneRefresh": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+
+                        "name": "configTableOne.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    },
+                    {
+                        "name": "uniformParamTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            }
+        },
+        "ConfigTableTwoRefresh": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+
+                        "name": "configTableTwo.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    },
+                    {
+                        "name": "uniformParamTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            }
+        },
+        "ConfigTableThreeRefresh": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+
+                        "name": "configTableThree.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    },
+                    {
+                        "name": "uniformParamTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            }
+        },
+        "ConfigTableFourRefresh": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+
+                        "name": "configTableFour.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    },
+                    {
+                        "name": "uniformParamTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            }
+        },
+        "ConfigTableFiveRefresh": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+
+                        "name": "configTableFive.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    },
+                    {
+                        "name": "uniformParamTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            }
+        },
+        "ConfigTableSixRefresh": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+
+                        "name": "configTableSix.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    },
+                    {
+                        "name": "uniformParamTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            }
+        },
+        "ConfigTableSevenRefresh": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+
+                        "name": "configTableSeven.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    },
+                    {
+                        "name": "uniformParamTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            }
+        },
+        "ConfigTableEightRefresh": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+
+                        "name": "configTableEight.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    },
+                    {
+                        "name": "uniformParamTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            }
+        },
+        "ConfigTableNineRefresh": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+
+                        "name": "configTableNine.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    },
+                    {
+                        "name": "uniformParamTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            }
+        },
+        "ConfigTableTenRefresh": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+
+                        "name": "configTableTen.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    },
+                    {
+                        "name": "uniformParamTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            }
+        },
+        "SoftwareTableRefresh": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+
+                        "name": "softwareTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    },
+                    {
+                        "name": "uniformParamTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            }
+        },
+        "setActiveView":{
+            "actionType": "JSFunction",
+            "method": "resetActiveView",
+            "inputData": {
+                "stateName": "{{data.activeState}}",
+                "destPanelId": "AddObjectPrimarySub"
+            },
+            "outputData": {
+                "activeState": ""
+            },
+            "deps": "js/addObjectUtils"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "addObject.addObjectPostProcessforPalette",
+            "action": "postProcessVR"
+
+        },
+        {
+            "eventId": "manageAnalysisRequests",
+            "action": "manageAnalysisRequests"
+        },
+        {
+            "eventId": "closePanel",
+            "action": "closePanel"
+        }
+    ],
+    "data": {
+        "addAsOccurrence": {
+            "displayName": "{{i18n.addAsOccurrence}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dispValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "triggerCreate": {
+            "dbValue": false,
+            "type": "BOOLEAN"
+        },
+        "addPanelState": {
+            "initialValues": {
+                "creationType": "",
+                "createdObject": "",
+                "sourceObjects": "",
+                "selectedTab": ""
+            },
+            "meta": {}
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "AddObjectPrimarySub",
+                "context": {}
+            },
+            "meta": {}
+        },
+        "projectState": {
+            "initialValues": {
+                "selectedProjects": [],
+                "triggerAssign": false
+            },
+            "meta": {
+                "selectedProjects": {
+                    "field": "true",
+                    "type": "OBJECT"
+                },
+                "triggerAssign": {
+                    "field": "true",
+                    "type": "BOOLEAN"
+                }
+            }
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "conditions": {
+
+        "isDatasetSelected": {
+            "expression": {
+                "$source": "data.sourceObjects",
+                "$query": {
+                    "$source": "modelType.typeHierarchyArray",
+                    "$query": {
+                        "$notin": [
+                            "Dataset"
+                        ]
+                    }
+                }
+            }
+        },
+        "isNewTabAddButtonVisible": {
+
+            "expression": "addPanelState.creationType"
+        },
+        "isPalatteTabSelection": {
+            "expression": "conditions.isNewTabAddButtonVisible ===  false && addPanelState.sourceObjects && addPanelState.sourceObjects.length > 0"
+        },
+        "isActiveStateAddPanel": {
+            "expression": "data.activeState.activeView ==='AddObjectPrimarySub'"
+        },
+        "isObjectCreated": {
+            "expression": "addPanelState.createdObject"
+        }
+    },
+    "ctx": {
+        "panelContext": null,
+        "preferences": null,
+        "xrtSummaryContextObject": null
+
+    },
+    "i18n": {
+
+        "AddTitle": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "PartialError": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "addAsOccurrence": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "throwErrorVRNotCreated": [
+                "AnalysisRequestCommandPanelsMessages"
+            ],
+            "detailedInfoMessageForInvalidTypes": [
+            "AnalysisRequestCommandPanelsMessages"
+        ]
+    }
+}

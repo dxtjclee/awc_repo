@@ -1,0 +1,396 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "addPanelState": {
+            "initialValues": {
+                "creationType": "",
+                "createdObject": "",
+                "sourceObjects": "",
+                "selectedTab": "",
+                "isDatasetCreate": "",
+                "formData": ""
+            },
+            "meta": {
+                "datasetVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "AddObjectPrimarySub",
+                "context": {}
+            },
+            "meta": {}
+        },
+        "projectState": {
+            "initialValues": {
+                "selectedProjects": [],
+                "triggerAssign": false
+            },
+            "meta": {
+                "selectedProjects": {
+                    "field": "true",
+                    "type": "OBJECT"
+                },
+                "triggerAssign": {
+                    "field": "true",
+                    "type": "BOOLEAN"
+                }
+            }
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "actions": {
+        "checkObject": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "getDatasetFileInfos",
+                    "condition": "addPanelState.datasetVMO"
+                },
+                {
+                    "action": "createObject",
+                    "condition": "!addPanelState.datasetVMO && conditions.isNewTabAddButtonVisible"
+                } ]
+        },
+        "getDatasetFileInfos": {
+            "actionType": "JSFunction",
+            "method": "getDatasetFileInfos",
+            "inputData": {
+                "addPanelState": "{{data.addPanelState}}"
+            },
+            "outputData": {
+                "isTextFile": "isTextFile",
+                "namedReferenceName": "namedReferenceName",
+                "fileName": "fileName"
+            },
+            "events": {
+                "success": [ {
+                    "name": "addDelInstance.createDataset"
+                } ]
+            },
+            "deps": "js/ShowDeliverableInstances"
+        },
+        "createDataset": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-04-DataManagement",
+            "method": "createDatasets",
+            "deps": "js/addObjectUtils",
+            "inputData": {
+                "input": [ {
+                    "clientId": "{{data.addPanelState.datasetVMO.props.datasetName.dbValue}}",
+                    "container": {
+                        "uid": "AAAAAAAAAAAAAA",
+                        "type": "unknownType"
+                    },
+
+                    "datasetFileInfos": [ {
+                        "allowReplace": false,
+                        "clientId": "",
+                        "fileName": "{{data.fileName}}",
+                        "namedReferenceName": "{{data.namedReferenceName}}",
+                        "isText": "{{data.isTextFile}}"
+                    } ],
+                    "relationType": "",
+                    "description": "{{data.addPanelState.datasetVMO.props.datasetDesc.dbValue}}",
+                    "name": "{{data.addPanelState.datasetVMO.props.datasetName.dbValue}}",
+                    "type": "{{data.addPanelState.datasetVMO.props.datasetType.dbValue.props.object_string.dbValues[0]}}"
+                } ]
+            },
+            "outputData": {
+                "fmsTicket": "datasetOutput[0].commitInfo[0].datasetFileTicketInfos[0].ticket",
+                "commitInfos": "datasetOutput[0].commitInfo[0]",
+                "relatedModified": "datasetOutput[0].dataset",
+                "createdObject": "datasetOutput[0].dataset"
+            },
+            "events": {
+                "success": [ {
+                    "name": "addDelInstance.updateFormData"
+                } ]
+            }
+        },
+        "updateFormData": {
+            "actionType": "JSFunction",
+            "method": "updateFormData",
+            "inputData": {
+                "formData": "{{data.addPanelState.formData}}",
+                "key": "fmsTicket",
+                "value": "{{data.fmsTicket}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "addDelInstance.uploadFile"
+                } ]
+            },
+            "deps": "js/fileUploadUtils"
+        },
+        "uploadFile": {
+            "actionType": "RESTService",
+            "serviceName": "",
+            "method": "POST",
+            "inputData": {
+                "request": {
+                    "method": "POST",
+                    "url": "{{Constants.fmsUrl}}",
+                    "headers": {
+                        "Content-type": "undefined"
+                    },
+                    "data": "{{data.addPanelState.formData}}"
+                }
+            },
+            "events": {
+                "success": [ {
+                    "name": "addDelInstance.fileUploaded"
+                } ]
+            }
+        },
+        "commitDatasetFiles": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-FileManagement",
+            "method": "commitDatasetFiles",
+            "inputData": {
+                "commitInput": [ {
+                    "dataset": "{{data.commitInfos.dataset}}",
+                    "createNewVersion": true,
+                    "datasetFileTicketInfos": [ {
+                        "datasetFileInfo": {
+                            "clientId": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.clientId}}",
+                            "fileName": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.fileName}}",
+                            "namedReferencedName": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.namedReferenceName}}",
+                            "isText": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.isText}}",
+                            "allowReplace": "{{data.commitInfos.datasetFileTicketInfos[0].datasetFileInfo.allowReplace}}"
+                        },
+
+                        "ticket": "{{data.fmsTicket}}"
+                    } ]
+                } ]
+            },
+            "events": {
+                "success": [ {
+                    "name": "addDelInstance.addDeliverableInstance"
+                } ]
+            }
+        },
+        "createObject": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-Core-2012-10-DataManagement",
+            "method": "createRelateAndSubmitObjects",
+            "inputData":
+            {
+                "inputs":"{{function:getCreateInput}}"
+            },
+            "outputData":
+            {
+                "createdMainObject": "output[0].objects[0]",
+                "createdObject": "{{function:getCreatedObject}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "addDelInstance.callSoa"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            },
+            "policy": {
+                "types": [{
+                    "name": "Psi0PrgDelRevision",
+                    "properties": [{
+                            "name": "psi0InstanceCount"
+                        }
+                    ]
+                }]
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "addDeliverableInstance": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "createRelations",
+            "inputData":
+            {
+                "input":"{{function:getCreateRelationsInput}}"
+            },
+            "events": {
+                "success": [ {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{props.subPanelContext.selectionData.value.selected[0]}}"
+                            ],
+                            "isPinnedFlag": "subPanelContext.panelPinned"
+                        }
+                    },
+                    {
+                        "name": "awPanel.loadNextValues",
+                        "condition": "subPanelContext.panelPinned"
+                    },
+                    {
+                        "name": "complete",
+                        "condition": "!subPanelContext.panelPinned",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/ShowDeliverableInstances"
+        },
+        "getObjCreateEditableProperties": {
+            "actionType": "JSFunction",
+            "method": "getObjCreateEditableProperties",
+            "inputData": {
+                "createType": "{{addPanelState.creationType.props.type_name.dbValues[0]}}",
+                "type": "CREATE",
+                "propertyNames": [ "object_name" ],
+                "editHandler": "{{editHandlers.addPanelEditHandler}}"
+            },
+            "outputData":{
+                "object_name": "object_name"
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "addDelInstance": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "getObjCreateEditableProperties"
+                },
+                {
+                    "action": "addDeliverableInstance"
+                }
+            ]
+        },
+        "setActiveView":{
+            "actionType": "JSFunction",
+            "method": "resetActiveView",
+            "inputData": {
+                "stateName": "{{data.activeState}}",
+                "destPanelId": "AddObjectPrimarySub"
+            },
+            "outputData": {
+                "activeState": ""
+            },
+            "deps": "js/addObjectUtils"
+        }
+    },
+    "functions":{
+        "getCreateInput":{
+            "functionName": "getCreateInput",
+            "parameters": [
+                "{{data}}",
+                "",
+                "{{addPanelState.creationType}}",
+                "{{editHandlers.addPanelEditHandler}}"
+            ]
+        },
+        "getCreatedObject":
+        {
+            "functionName": "getCreatedObject",
+            "parameters":
+            [
+
+            ]
+        },
+        "getCreateRelationsInput": {
+            "functionName": "getCreateRelationsInput",
+            "parameters": [
+                "{{data}}",
+                "{{props.subPanelContext.selectionData.selected[0]}}"
+            ]
+        }
+    },
+    "dataProviders": {
+        "getDatasetTypeListProvider": {
+            "response": "{{data.addPanelState.datasetTypeList}}",
+            "totalFound": "{{data.addPanelState.datasetTypeList.length}}"
+        },
+        "getDatasetReferenceListProvider": {
+            "response": "{{data.addPanelState.references}}",
+            "totalFound": "{{data.addPanelState.references.length}}"
+        }
+    },
+    "conditions" : {
+        "ispinned": {
+            "expression": "subPanelContext.panelPinned"
+        },
+        "isActiveStateAddPanel": {
+            "expression": "data.activeState.activeView ==='AddObjectPrimarySub'"
+        },
+        "isNewTabAddButtonVisible":
+        {
+          "expression":"addPanelState.selectedTab.view==='NewTabPageSub' && addPanelState.creationType"
+        },
+        "isPaletteSearchTabAddButtonVisible":
+        {
+            "expression": "addPanelState.selectedTab.view!=='NewTabPageSub' && addPanelState.sourceObjects && addPanelState.sourceObjects.length === 1"
+        }
+    },
+    "messages":{
+        "SOAFailureMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "onEvent":[
+        {
+            "eventId":"addDelInstance.callSoa",
+            "action":"addDelInstance"
+        },
+        {
+            "eventId": "addDelInstance.createDataset",
+            "action": "createDataset"
+        },
+        {
+            "eventId": "addDelInstance.updateFormData",
+            "action": "updateFormData"
+        },
+        {
+            "eventId": "addDelInstance.uploadFile",
+            "action": "uploadFile"
+        },
+        {
+            "eventId": "addDelInstance.fileUploaded",
+            "action": "commitDatasetFiles"
+        },
+        {
+            "eventId": "addDelInstance.addDeliverableInstance",
+            "action": "addDeliverableInstance"
+        }
+    ],
+    "i18n": {
+        "addButtonTitle":[
+            "PrgScheduleManagerMessages"
+        ],
+        "Psi0AbsChecklistAdd":[
+            "PrgScheduleManagerMessages"
+        ],
+        "Psi0addMultipleChecklistFromPaletteSearch":[
+            "PrgScheduleManagerMessages"
+        ],
+        "Psi0AddChecklistErrorMsg":[
+            "PrgScheduleManagerMessages"
+        ]
+    }
+}

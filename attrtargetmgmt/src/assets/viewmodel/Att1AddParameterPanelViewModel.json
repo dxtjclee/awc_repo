@@ -1,0 +1,107 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-command-sub-panel.directive",
+        "js/visible-when.directive",
+        "js/aw-init.directive"
+    ],
+
+    "actions": {
+
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+
+                    "name": "complete",
+
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            }
+        }
+    },
+    "data": {
+        "activeView":"Att1AddParameterPanelSub",
+        "searchState":"",
+        "addParameterTabsModel":
+        [
+                {
+                    "tabKey": "new",
+                    "panelId": "Att1AddParameterNewTab",
+                    "name": "{{i18n.newTabTitle}}",
+                    "recreatePanel": true,
+                    "isolateMode": true
+                },
+                {
+                    "tabKey": "palette",
+                    "panelId": "PaletteTabPageSub",
+                    "name": "{{i18n.paletteTabTitle}}",
+                    "recreatePanel": true,
+                    "isolateMode": true
+                },
+                {
+                    "tabKey": "search",
+                    "panelId": "SearchTabPageSub",
+                    "name": "{{i18n.searchTabTitle}}",
+                    "isolateMode": true,
+                    "recreatePanel": true
+                }
+        ],
+        "searchFilterTabModels": [ {
+                "autoSelectTabOnLoad": true,
+                "displayTab": true,
+                "tabKey": "results",
+                "panelId": "results",
+                "name": "{{i18n.resultsTabTitle}}",
+                "recreatePanel": true,
+                "selectedTab": true
+            },
+            {
+                "autoSelectTabOnLoad": true,
+                "displayTab": true,
+                "tabKey": "filters",
+                "panelId": "filters",
+                "name": "{{i18n.filterTabTitle}}",
+                "recreatePanel": true,
+                "selectedTab": false
+            }
+        ]
+    },
+    "onEvent": [
+        {
+            "eventId": "addMeasurableAttribute.closePanel",
+            "action": "closePanel"
+        },
+
+        {
+            "eventId": "primaryWorkArea.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "closePanel"
+        },
+        {
+            "eventId": "gridDataProvider.selectionChangeEvent",
+            "action": "closePanel",
+            "condition": "ctx.locationContext['ActiveWorkspace:SubLocation']==='com.siemens.splm.client.attrtarget.paramProjectSubLocation'"
+        }
+
+    ],
+    "conditions": {},
+    "i18n": {
+        "addParameter": [ "Att1AttrMappingMessages" ],
+        "resultsTabTitle": [ "Att1AttrMappingMessages" ],
+        "filterTabTitle": [ "Att1AttrMappingMessages" ],
+        "newTabTitle": [
+            "Att1AttrMappingMessages"
+        ],
+        "paletteTabTitle": [
+            "Att1AttrMappingMessages"
+        ],
+        "searchTabTitle": [
+            "Att1AttrMappingMessages"
+        ]
+    }
+}

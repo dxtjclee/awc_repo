@@ -1,0 +1,10 @@
+<aw-form name="showAssociatedDiagramsPanelForm">
+    <aw-panel-header>
+        <aw-command-bar sub-panel-context="subPanelContext" class="aw-xrt-objectSetCommandPanel" anchor="ase0_showAssociatedDiagramCommands" alignment="HORIZONTAL" context="{data, subPanelContext:props.subPanelContext , associateDiagramState:fields.associateDiagramState}"></aw-command-bar>
+    </aw-panel-header>
+    <aw-panel-body>
+        <aw-list-filter  prop="data.filterBox" dataprovider="data.dataProviders.associatedDiagramsList">
+            <aw-default-cell vmo="item"></aw-default-cell>
+        </aw-list-filter>
+    </aw-panel-body>
+</aw-form>

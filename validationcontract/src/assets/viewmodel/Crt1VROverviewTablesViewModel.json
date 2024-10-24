@@ -1,0 +1,292 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-panel-section.directive",
+        "js/exist-when.directive",
+        "js/aw-include.directive",
+        "js/aw-repeat.directive"
+    ],
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "renderCheckboxes",
+        "onUpdate": {
+            "action": "unregisterFlags",
+            "observers": [ "props.subPanelContext.activeTab.tabKey" ]
+        },
+        "onUnmount": "unRegisterFlagAndCountOnTabShift"
+    },
+    "actions": {
+        "renderCheckboxes": {
+            "actionType": "JSFunction",
+            "method": "renderCheckboxes",
+            "inputData": {
+                "data": "{{data}}",
+                "selObj": "{{subPanelContext.selection[0]}}",
+                "vrSublocationState": "{{subPanelContext.context.vrSublocationState}}"
+            },
+            "outputData": {
+                "checkBoxes": "checkBoxes",
+                "checkBoxesInfo": "checkBoxesInfo",
+                "tableList": "tableList",
+                "columnConfig":"columnConfig",
+                "scopeURI":"scopeURI",
+                "typesToInclude":"typesToInclude",
+                "CountTablesLoaded":"CountTablesLoaded",
+                "objNckbxState":"objNckbxState",
+                "showChart": "showChart"
+            },
+            "events": {
+                "success": [ {
+                    "name": "Crt1VR.outputProcessForOverview"
+                } ]
+            },
+
+            "deps": "js/dynamicTableUtils"
+        },
+        "processOutput": {
+            "actionType": "JSFunction",
+            "method": "processOutput",
+            "inputData": {
+                "ckBoxes": "{{data.checkBoxesInfo}}",
+                "vrObj": "{{subPanelContext}}",
+                "columnConfig":"{{data.columnConfig}}",
+                "scopeURI":"{{data.scopeURI}}",
+                "typesToInclude":"{{data.typesToInclude}}",
+                "CountTablesLoaded":"{{data.CountTablesLoaded}}",
+                "objNckbxState":"{{data.objNckbxState}}",
+                "showChart": "{{data.showChart}}"
+            },
+            "deps": "js/dynamicTableUtils"
+        },
+
+        "unRegisterFlagAndCountOnTabShift": {
+            "actionType": "JSFunction",
+            "method": "unRegisterFlagAndCountOnTabShift",
+            "inputData": {
+                "subPanleCtx": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "isAttrItemUpdated": {
+            "actionType": "JSFunction",
+            "method": "isAttrItemUpdated",
+            "inputData": {
+                "eventMap": "{{data.eventMap}}",
+                "scopeSel": "{{props.subPanelContext.context.vrSublocationState.mselected[0]}}",
+                "subPanleCtx": "{{props.subPanelContext}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "refreshPreviewPanel": {
+            "actionType": "JSFunction",
+            "method": "refreshPreviewPanel",
+            "inputData": {
+                "data": "{{data}}",
+                "subPanelContext": "{{subPanelContext}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "updateRefreshPreviewFlagOnClose": {
+            "actionType": "JSFunction",
+            "method": "updateRefreshPreviewFlagOnClose",
+            "inputData": {
+                "pieChartData": "{{props.subPanelContext.context.vrSublocationState}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "updateRefreshPreviewFlagOnOpen": {
+            "actionType": "JSFunction",
+            "method": "updateRefreshPreviewFlagOnOpen",
+            "inputData": {
+                "pieChartData": "{{props.subPanelContext.context.vrSublocationState}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "unregisterFlags": {
+            "actionType": "JSFunction",
+            "method": "unregisterFlags",
+            "inputData": {
+                "callback": "{{subPanelContext}}"
+            },
+            "deps": "js/dynamicTableUtils"
+        },
+        "reloadTable": {
+            "actionType": "JSFunction",
+            "method": "reloadTable",
+            "inputData": {
+                "vrSublocationState":"{{subPanelContext.context.vrSublocationState}}",
+                "scopeSel": "{{props.subPanelContext.context.vrSublocationState.mselected[0]}}",
+                "subPanleCtx": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Crt1ChartService"
+        },
+        "callGetResultAndChartSOAfterImport": {
+            "actionType": "JSFunction",
+            "method": "getResultSOAInputForPageLoad",
+            "inputData": {
+                "visibleProxies":"{{props.subPanelContext.context.vrSublocationState.allRows}}",
+                "scopeSel": "{{props.subPanelContext.context.vrSublocationState.mselected[0]}}",
+                "subPanleCtx": "{{props.subPanelContext}}"
+            },
+            "outputData": {},
+            "events": {
+                "success": [ {
+                    "name": "uniformParamTable.reloadTable"
+                } ]
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        }
+    },
+    "functions": {},
+    "dataProviders": {},
+    "columnProviders": {},
+    "grids": {},
+    "data": {
+    },
+    "onEvent": [
+        {
+            "eventId": "cdm.updated",
+            "cacheEventData": true,
+            "action": "isAttrItemUpdated"
+        },
+
+        {
+            "eventId": "refreshPreviewPanel",
+            "cacheEventData": true,
+            "action": "refreshPreviewPanel"
+
+        },
+        {
+            "eventId": "updateRefreshPreviewFlagOnClose",
+            "action": "updateRefreshPreviewFlagOnClose"
+        },
+        {
+            "eventId": "updateRefreshPreviewFlagOnOpen",
+            "action": "updateRefreshPreviewFlagOnOpen"
+        },
+        {
+            "eventId": "Crt1VR.outputProcessForOverview",
+            "action": "processOutput"
+        },
+        {
+            "eventId": "Att1ImportParameter.completed",
+            "cacheEventData": true,
+            "action": "callGetResultAndChartSOAfterImport"
+
+        },
+        {
+            "eventId":"Att1ParameterWidePanel.ClosePopup",
+            "action": "reloadTable"
+        }
+
+    ],
+    "i18n": {
+        "Preview": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "AddTitle": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "PartialError": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "addAsOccurrence": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "throwErrorVRNotCreated": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "detailedInfoMessageForInvalidTypes": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Crt1TypesSection": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Crt1ProgramEventSection": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "TestResult": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Crt1ScopeSection": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Others": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Requirement": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "IAV0TestCase": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "IAV0TestProcedur": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Functionality": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Fnd0LogicalBlock": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Part": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "CAEModel": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "IAV0TestRequest": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "ProductAndTestEBOMs": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "PhysicalPart": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Att0MeasurableAttribute": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "reports": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "ConfigTableOne": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "ConfigTableTwo": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "ConfigTableThree": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "ConfigTableFour": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "ConfigTableFive": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "ConfigTableSix": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "ConfigTableSeven": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "ConfigTableEight": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "ConfigTableNine": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "ConfigTableTen": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Software": [
+            "AnalysisRequestCommandPanelsMessages"
+        ]
+    }
+}

@@ -1,0 +1,221 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "cancelMapProductsForMultiTargetClassesUsingBtn": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "MrlImportVendor.cancelMapProductsForMultiTargetClasses"
+                    },
+                    {
+                        "name": "MrlImportVendor.closePopupWindow"
+                    }
+                ]
+            }
+        },
+        "closePopupWindow": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}",
+                "targetEvent": "{{$event}}"
+            },
+            "deps": "js/popupService"
+        },
+        "getProductsInfoForMutliTargetClasses": {
+            "actionType": "JSFunction",
+            "method": "getProductsInfoForMutliTargetClasses",
+            "inputData": {
+                "icosWithMultiTargetClassesInfo":"{{subPanelContext.icosWithMultiTargetClassesInfo}}"
+            },
+            "outputData": {
+                "productsInfoForMutliTargetClasses": "productsInfoForMutliTargetClasses",
+                "totalFound": "{{data.productsInfoForMutliTargetClasses.length}}"
+            },
+            "deps": "js/mrlImportVendorService"
+        },
+        "getTargetClassesOptionList": {
+            "actionType": "JSFunction",
+            "method": "getTargetClassesOptionList",
+            "inputData": {
+                "vmo": "{{props.vmo}}",
+                "doNotMapOptionStr": "{{data.i18n.mrlDoNotMapOptionStr}}"
+            },
+            "outputData": {
+                "targetClassesOptionList": "targetClassesOptionList",
+                "moreValuesExist": "moreValuesExist"
+            },
+            "deps": "js/mrlTargetClassesLOVService"
+        },
+        "startEditTargetClasses": {
+            "actionType": "JSFunction",
+            "method": "startEditTargetClasses",
+            "deps": "js/mrlTargetClassesLOVService"
+        },
+        "saveEditedTargetClasses": {
+            "actionType": "JSFunctionAsync",
+            "method": "saveEditedTargetClasses",
+            "deps": "js/mrlTargetClassesLOVService"
+        },
+        "startEditAction": {
+            "actionType": "dataProvider",
+            "method": "productsInfoForMutliTargetClassesDataProvider",
+            "inputData": {
+                "action": "startEdit"
+            }
+        },
+        "cancelEditAction": {
+            "actionType": "dataProvider",
+            "method": "productsInfoForMutliTargetClassesDataProvider",
+            "inputData": {
+                "action": "cancelEdits"
+            }
+        },
+        "saveEditAction": {
+            "actionType": "dataProvider",
+            "method": "productsInfoForMutliTargetClassesDataProvider",
+            "inputData": {
+                "action": "saveEdits"
+            }
+        },
+        "createMapToMultiTargetClassesInput": {
+            "actionType": "JSFunction",
+            "method": "createMapToMultiTargetClassesInput",
+            "inputData": {
+                "targetItemTypeName":"{{subPanelContext.selectedItemType}}",
+                "totalProductsCount": "{{subPanelContext.totalProductsCount}}",
+                "icosWithMultiTargetClassesInfo":"{{subPanelContext.icosWithMultiTargetClassesInfo}}",
+                "selectedSourceAndTargetClassesInfo":"{{data.dataProviders.productsInfoForMutliTargetClassesDataProvider.viewModelCollection.loadedVMObjects}}",
+                "logFileInfoOfMapToSingleTargetClass": "{{subPanelContext.logFileInfoOfMapToSingleTargetClass}}"
+            },
+            "outputData": {
+                "mapToMultiTargetClassesInput":"mapToMultiTargetClassesInput"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "MrlImportVendor.startMapProductsForMultiTargetClasses",
+                        "eventData": {
+                            "mapToMultiTargetClassesInput": "{{data.mapToMultiTargetClassesInput}}"
+                        }
+                    },
+                    {
+                        "name": "MrlImportVendor.closePopupWindow"
+                    }
+                ]
+            },
+            "deps": "js/mrlImportVendorService"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "awp.startEdit",
+            "action": "startEditAction"
+        },
+        {
+            "eventId": "awp.cancelEdit",
+            "action": "cancelEditAction"
+        },
+        {
+            "eventId": "awp.saveEdit",
+            "action": "saveEditAction"
+        },
+        {
+            "eventId": "MrlImportVendor.closePopupWindow",
+            "action": "closePopupWindow"
+        }
+    ],
+    "i18n": {
+        "Mrm0Cancel": [
+            "mrmMessages"
+        ],
+        "mrlMapSelectedICOs": [
+            "mrlMessages"
+        ],
+        "mrlSourceClass": [
+            "mrlMessages"
+        ],
+        "mrlTargetClass": [
+            "mrlMessages"
+        ],
+        "mrlNumberOfICOs": [
+            "mrlMessages"
+        ],
+        "mrlMapProducts": [
+            "mrlMessages"
+        ],
+        "mrlSelectTargetClassesText": [
+            "mrlMessages"
+        ],
+        "mrlDoNotMapOptionStr": [
+            "mrlMessages"
+        ]
+    },
+    "dataProviders": {
+        "productsInfoForMutliTargetClassesDataProvider": {
+            "action": "getProductsInfoForMutliTargetClasses",
+            "response": "{{data.productsInfoForMutliTargetClasses}}",
+            "totalFound": "{{data.totalFound}}",
+            "editConfig": {
+                "startEditAction": "startEditTargetClasses",
+                "saveEditAction": "saveEditedTargetClasses",
+                "identifier": "uid"
+            },
+            "selectionModelMode": "single"
+        },
+        "targetClassesOptionListDataProvider": {
+            "action": "getTargetClassesOptionList",
+            "response": "{{data.targetClassesOptionList}}",
+            "moreValuesExist": "{{data.moreValuesExist}}"
+        }
+    },
+    "columnProviders": {
+        "productsInfoForMutliTargetClassesColumnProvider": {
+            "frozenColumnIndex": -1,
+            "columns": [
+                {
+                    "name": "sourceClass",
+                    "displayName": "{{i18n.mrlSourceClass}}",
+                    "minWidth": 350,
+                    "width": 350,
+                    "enableColumnMenu": false,
+                    "enableColumnMoving": false,
+                    "pinnedLeft": false
+                },
+                {
+                    "name": "numberOfICOs",
+                    "displayName": "{{i18n.mrlNumberOfICOs}}",
+                    "width": 60,
+                    "minWidth": 60,
+                    "enableColumnMenu": false,
+                    "enableColumnMoving": false,
+                    "pinnedLeft": false
+                },
+                {
+                    "name": "targetClass",
+                    "displayName": "{{i18n.mrlTargetClass}}",
+                    "minWidth": 350,
+                    "width": 350,
+                    "enableColumnMenu": false,
+                    "enableColumnMoving": false,
+                    "renderingHint": "MrlTargetClassesLOV",
+                    "pinnedLeft": false
+                }
+            ]
+        }
+    },
+    "grids": {
+        "mrlMapProductsForMultiTargetClassesTableGrid": {
+            "dataProvider": "productsInfoForMutliTargetClassesDataProvider",
+            "columnProvider": "productsInfoForMutliTargetClassesColumnProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "enablePinning": false,
+                "enableSorting": false,
+                "enableGridMenu":false
+            }
+        }
+    }
+}

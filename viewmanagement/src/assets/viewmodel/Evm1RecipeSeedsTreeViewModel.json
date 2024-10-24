@@ -1,0 +1,243 @@
+{
+    "schemaVersion": "1.0.0",
+
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        },
+        "recipe-state": {
+            "type": "object"
+        }
+    },
+    "data": {
+        "showSeedsTree": false,
+        "inContext": {
+            "displayName": "{{i18n.evm1InContext}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": false,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        }
+    },
+
+    "dataProviders": {
+        "seedTreeDataProvider": {
+            "initializeAction": "loadSeedTreeData",
+            "nextAction": "getSeedTreeChildren",
+            "treeLoadResult": "{{data.treeLoadResult}}",
+            "inputData": {
+                "accessMode": "tree",
+                "topNodeUid": "top",
+                "selectionModel": "{{subPanelContext.selectionModel}}",
+                "selectionData": "{{subPanelContext.selectionData}}"
+            }
+        }
+    },
+
+    "columnProviders": {
+        "seedTreeColumnProvider": {
+            "columns": [ {
+                    "name": "object_string",
+                    "displayName": "{{i18n.evm1NameColumn}}",
+                    "minWidth": 150,
+                    "width": 200,
+                    "isTreeNavigation": true
+                },
+                {
+                    "name": "CustType",
+                    "displayName": "{{i18n.evm1CategoryColumn}}",
+                    "minWidth": 125,
+                    "width": 150
+                },
+                {
+                    "name": "item_revision_id",
+                    "displayName": "{{i18n.evm1RevisionColumn}}",
+                    "minWidth": 100,
+                    "width": 125
+                },
+                {
+                    "name": "evm1Include",
+                    "displayName": "{{i18n.evm1IncludeColumn}}",
+                    "minWidth": 65,
+                    "width": 75
+                },
+                {
+                    "name": "owning_user",
+                    "displayName": "{{i18n.evm1OwnerColumn}}",
+                    "minWidth": 150,
+                    "width": 200
+                }
+            ]
+        }
+    },
+
+    "grids": {
+        "seedTreeGrid": {
+            "dataProvider": "seedTreeDataProvider",
+            "columnProvider": "seedTreeColumnProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "enableGridMenu": false,
+                "enablePinning": false,
+                "enableSorting": false,
+                "useStaticFirstCol": true
+            }
+        }
+    },
+
+    "actions": {
+        "getSeedTreeChildren": {
+            "actionType": "JSFunction",
+            "method": "getSeedTreeChildren",
+            "inputData": {
+                "data": "{{data}}",
+                "treeLoadInput": "request.treeLoadInput",
+                "recipeState": "{{props.recipeState}}"
+            },
+            "outputData": {
+                "treeLoadResult": "treeLoadResult"
+            },
+            "deps": "js/Evm1RecipeSeedTreeTableService"
+        },
+        "loadSeedTreeData": {
+            "actionType": "JSFunction",
+            "method": "loadSeedTreeData",
+            "inputData": {
+                "data": "{{data}}",
+                "treeLoadInput": "request.treeLoadInput",
+                "recipeState": "{{props.recipeState}}"
+            },
+            "outputData": {
+                "treeLoadResult": "treeLoadResult"
+            },
+            "deps": "js/Evm1RecipeSeedTreeTableService"
+        },
+        "resetSeedTreeDataProvider": {
+            "actionType": "dataProvider",
+            "method": "seedTreeDataProvider"
+        },
+        "seedTreeDataProviderReset":{
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "resetSeedTreeDataProvider",
+                    "condition": "data.showSeedsTree"
+                },
+                {
+                    "action": "showSeedsTree",
+                    "condition": "!data.showSeedsTree"
+                }
+            ]
+        },
+        "showSeedsTree": {
+            "actionType": "JSFunction",
+            "method": "showSeedsTree",
+            "inputData": {
+                "showSeedsTree": "{{data.showSeedsTree}}"
+            },
+            "outputData": {
+                "showSeedsTree": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "evm1ShowExecuteRecipeResults",
+                    "condition": "ctx.recipeCtx.userAction === 'execute'"
+                } ]
+            },
+            "deps": "js/Evm1RecipeSeedTreeTableService"
+        },
+        "storeSeedSelectionFromEvent": {
+            "actionType": "JSFunction",
+            "method": "storeSeedSelectionFromEvent",
+            "inputData": {
+                "seedsToAdd": "{{data.eventData.seedsToAdd}}",
+                "recipeState": "{{props.recipeState}}"
+            },
+            "events": {
+                "success": [ {
+                        "name": "evm1seedTreeDataProvider.reset"
+                    }
+                ]
+            },
+            "deps": "js/Evm1RecipeSeedTreeTableService"
+        },
+        "updateSeedTreeNodesOnIncludeToggled": {
+            "actionType": "JSFunction",
+            "method": "updateSeedTreeNodesOnIncludeToggled",
+            "inputData": {
+                "treeNodeUid": "{{data.eventMap['evm1SeedIncludeToggled'].treeNodeUid}}",
+                "newValue": "{{data.eventMap['evm1SeedIncludeToggled'].newValue}}",
+                "seedTreeNodes": "{{data.dataProviders.seedTreeDataProvider.viewModelCollection.loadedVMObjects}}",
+                "recipeState": "{{props.recipeState}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "seedTreeGrid.plTable.clientRefresh"
+                } ]
+            },
+            "deps": "js/Evm1RecipeSeedTreeTableService"
+        },
+        "updateSeedTreeOnObjectChanged": {
+            "actionType": "JSFunction",
+            "method": "updateSeedTreeOnObjectChanged",
+            "inputData": {
+                "updatedObjects": "{{data.eventMap['cdm.updated'].updatedObjects}}",
+                "seedTreeNodes": "{{data.dataProviders.seedTreeDataProvider.viewModelCollection.loadedVMObjects}}"
+            },
+            "deps": "js/Evm1RecipeSeedTreeTableService"
+        },
+        "processSeedTreeSelection": {
+            "actionType": "JSFunction",
+            "method": "processSeedTreeSelection",
+            "inputData": {
+                "eventData": "{{data.eventData}}",
+                "recipeState": "{{props.recipeState}}"
+            },
+            "deps": "js/Evm1RecipeSeedTreeTableService"
+        }
+    },
+
+    "onEvent": [
+        {
+            "eventId": "evm1seedTreeDataProvider.reset",
+            "action": "seedTreeDataProviderReset"
+        },
+        {
+            "eventId": "evm1SeedSelectionAdded",
+            "action": "storeSeedSelectionFromEvent",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "evm1SeedIncludeToggled",
+            "action": "updateSeedTreeNodesOnIncludeToggled",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "cdm.updated",
+            "action": "updateSeedTreeOnObjectChanged",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "seedTreeDataProvider.selectionChangeEvent",
+            "action": "processSeedTreeSelection",
+            "cacheEventData": true
+        }
+    ],
+
+    "lifecycleHooks": {
+    },
+
+    "i18n": {
+        "Selection": [ "RecipeCommandPanelsMessages" ],
+        "evm1NameColumn": [ "RecipeCommandPanelsMessages" ],
+        "evm1CategoryColumn": [ "RecipeCommandPanelsMessages" ],
+        "evm1RevisionColumn": [ "RecipeCommandPanelsMessages" ],
+        "evm1OwnerColumn": [ "RecipeCommandPanelsMessages" ],
+        "evm1TOPBOMNode": [ "RecipeCommandPanelsMessages" ],
+        "evm1TOPBOMNodeAndSeed": [ "RecipeCommandPanelsMessages" ],
+        "evm1Context": [ "RecipeCommandPanelsMessages" ],
+        "evm1ContextAndSeed": [ "RecipeCommandPanelsMessages" ],
+        "evm1IncludeColumn": [ "RecipeCommandPanelsMessages" ],
+        "evm1InContext": [ "RecipeCommandPanelsMessages" ]
+    }
+}

@@ -1,0 +1,37 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "vmo": {
+            "type": "viewModelObject"
+        }
+    },
+    "actions": {
+        "getUnitDuration": {
+            "actionType": "JSFunction",
+            "method": "getEOLDurationString",
+            "inputData": {
+                "eolVmo": "{{props.vmo}}"
+            },
+            "outputData": {
+                "unitDurationString": ""
+            },
+            "deps": "js/senEOLValueRenderer"
+        }
+    },
+    "i18n": {
+        "releaseStatusPropName": [
+            "senMessages"
+        ],
+        "revisionPropName": [
+            "senMessages"
+        ]
+    },
+    "conditions": {
+        "isDataAvailable": {
+            "expression": "data.unitDurationString"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "getUnitDuration"
+    }
+}

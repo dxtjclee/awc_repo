@@ -1,0 +1,21 @@
+<aw-row align-content="center" >
+    <aw-column width="50%">
+        <aw-datetime prop="data.date"  exist-when ="data.date.dbValue !== ''"></aw-datetime>
+    </aw-column>
+    <aw-column width="80%"></aw-column>
+    <aw-column width="26%">
+        <aw-break></aw-break>
+        <aw-button action="callAssignedQUDataProviderAction" aw-class="{'disabled':ctx.tq0DisableRefreshQrsButton}">
+            <aw-i18n>i18n.tq0RefereshQRsButton</aw-i18n>
+        </aw-button>
+    </aw-column>
+</aw-row>
+<aw-row>
+    <aw-toolbar first-anchor="" second-anchor="tq0_removeButtonPanel" orientation="HORIZONTAL"></aw-toolbar>
+</aw-row>
+<aw-row>
+    <aw-splm-table gridid="qualificationRecordsTable"></aw-splm-table>
+</aw-row>
+
+
+

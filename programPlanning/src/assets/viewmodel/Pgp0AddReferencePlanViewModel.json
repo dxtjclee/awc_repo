@@ -1,0 +1,118 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "activeView": "AddObjectPrimarySub",
+        "addPanelState": {
+            "initialValues": {
+                "creationType": "",
+                "createdObject": "",
+                "sourceObjects": "",
+                "selectedTab": "",
+                "xrtTypeLoaded": ""
+            },
+            "meta": {}
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "AddObjectPrimarySub",
+                "context": {}
+            },
+            "meta": {}
+        }
+    },
+    "actions": {
+        "setFilterAction": {
+            "actionType": "JSFunction",
+            "method": "setSearchFilter",
+            "inputData": {
+                "timelineSelectedObject": "{{ctx.mselected[0]}}",
+                "compareMainObject":"{{ctx.state.params.uid}}"
+            },
+            "outputData": {
+                "searchFilter": ""
+            },
+            "deps": "js/Pgp0ComparePlanPanelService"
+        },
+        "checkPreferenceCountAction": {
+            "actionType": "JSFunction",
+            "method": "checkPreferenceCount",
+            "inputData": {
+                "eventData": "{{data.eventData}}",
+                "sharedData": "{{subPanelContext.sharedData}}",
+                "referenceCount": "{{ctx.preferences.PP_Compare_Plan_Count[0]}}"
+            },
+            "deps": "js/Pgp0ComparePlanPanelService"
+        },
+        "addPlanAction": {
+            "actionType": "JSFunction",
+            "method": "addPlans",
+            "inputData": {
+                "eventData": "{{data.eventData}}",
+                "sharedData": "{{subPanelContext.sharedData}}",
+                "referenceCount": "{{ctx.preferences.PP_Compare_Plan_Count[0]}}",
+                "currentPlan": "{{ctx.state.params}}",
+                "currentTimelinePlan": "{{ctx.selected}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "navigateToMainComparePanelEvent"
+                    },
+                    {
+                        "name": "Pgp0ComparePlanSub.enableCompare"
+                    }
+                ]
+
+            },
+            "deps": "js/Pgp0ComparePlanPanelService"
+        },
+        "navigateToMainComparePanelAction": {
+            "actionType": "JSFunction",
+            "method": "setActiveView",
+            "deps": "js/addObjectUtils",
+            "inputData": {
+                "activeViewState": "{{props.activeState}}",
+                "destPanelId": "Pgp0ComparePlanSub"
+            }
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "navigateToMainComparePanelEvent",
+            "action": "navigateToMainComparePanelAction"
+        },
+        {
+            "eventId": "searchListDataProvider.selectionChangeEvent",
+            "action": "checkPreferenceCountAction",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "getRecentObjsProvider.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "checkPreferenceCountAction"
+        },
+        {
+            "eventId": "getFavoriteProvider.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "checkPreferenceCountAction"
+        },
+        {
+            "eventId": "getClipboardProvider.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "checkPreferenceCountAction"
+        }
+    ],
+    "conditions": {
+        "isAddButtonEnabled": {
+            "expression": "data.addPanelState.sourceObjects.length > 0"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "setFilterAction"
+    },
+    "i18n": {
+        "addButtonCommandTitle": [
+            "ProgramPlanningCommandPanelsMessages"
+        ]
+    }
+}

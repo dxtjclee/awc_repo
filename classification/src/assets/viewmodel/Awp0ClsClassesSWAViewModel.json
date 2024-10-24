@@ -1,0 +1,98 @@
+{
+    "schemaVersion": "1.0.0",
+    "ctx": {
+        "clsAdmin.classSystem": {
+            "type": "object"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "initializeClassesSWA",
+        "onUpdate": [
+            {
+                "action": "updateClassesSWA",
+                "observers": [
+                    "props.subPanelContext.context.searchState.propertiesSWA"
+                ]
+            }
+        ]
+    },
+    "props":{
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data":{
+        "tabModels": [
+            {
+                "tabKey": "Awp0ClsClassesOverview",
+                "name": "{{i18n.overview}}"
+            },
+            {
+                "tabKey": "Awp0ClsClassesAttributes",
+                "name": "{{i18n.classAttributes}}"
+            }
+        ]
+    },
+    "actions":{
+        "updateClassesSWA":{
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "initializeClassesSWA"
+                }
+            ]
+        },
+        "initializeClassesSWA": {
+            "actionType": "JSFunction",
+            "method": "initializeSWA",
+            "inputData": {
+                "subPanelContext": "{{subPanelContext.context.searchState}}",
+                "subLocationName": "Classes",
+                "optionsTitle": "{{i18n.optionsTitle}}",
+                "aliasTitle": "{{i18n.aliasTitle}}"
+            },
+            "outputData": {
+                "currentSecData": "currentSecData",
+                "aspects": "aspects",
+                "property": "property",
+                "classAttributes": "classAttributes",
+                "hasClassAttributes": "hasClassAttributes",
+                "referenceLinks": "referenceLinks",
+                "attrprop": "attrprop",
+                "attrSelected": false,
+                "optionsTitle": "optionsTitle",
+                "aliasTitle": "aliasTitle",
+                "options": "options",
+                "hasOptions": "hasOptions",
+                "alias": "alias",
+                "hasAlias": "hasAlias",
+                "hasImages": "hasImages",
+                "selectedUid": "selectedUid",
+                "multiSiteData": "multiSiteData"
+            },
+            "deps":"js/classifyAdminService"
+        }
+
+    },
+    "dataProviders": {
+    },
+    "columnProviders": {
+    },
+    "grids": {
+    },
+    "onEvent":[
+    ],
+    "conditions": {
+        "showOverviewPage": {
+            "expression": "data.selectedTab.tabKey === 'Awp0ClsClassesOverview'"
+        },
+        "showAttributesPage": {
+            "expression": "data.selectedTab.tabKey === 'Awp0ClsClassesAttributes'"
+        }
+    },
+    "i18n": {
+        "classAttributes":  [ "ClassificationAdminMessages" ],
+        "overview":         [ "ClassificationAdminMessages" ]
+    }
+
+}

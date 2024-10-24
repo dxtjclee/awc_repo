@@ -1,0 +1,45 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "actions": {        
+        "setActiveView":{
+            "actionType": "JSFunction",
+            "method": "resetActiveView",
+            "inputData": {
+                "stateName": "{{data.activeState}}",
+                "destPanelId": "Aqc0AddChecklistEvaluationRuleSub"
+            },
+            "outputData": {
+                "activeState": ""
+            },
+            "deps": "js/addObjectUtils"
+        }
+    },
+    "data": {
+        "activeView": "Aqc0AddChecklistEvaluationRuleSub",
+        "activeState": {
+            "initialValues": {
+                "activeView": "Aqc0AddChecklistEvaluationRuleSub"
+            },
+            "meta": {}
+        },
+        "addPanelState": {
+            "initialValues": {
+                "checklistRatingConditions": "",
+                "triggerConditionAdded": false,
+                "editParameterContext": ""
+            },
+            "meta": {}
+        }
+    },
+    "i18n": {
+        "Aqc0Add": [
+            "qualitycentermanagerMessages"
+        ]
+    }
+}

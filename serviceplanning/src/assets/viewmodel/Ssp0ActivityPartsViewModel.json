@@ -1,0 +1,299 @@
+{
+    "actions":{
+        "getChildNodeData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData": {
+                "attributes": [
+                    "al_activity_tool_bl_list"
+                ],
+                "objects": [
+                    {
+                        "uid": "{{ctx.selectedActivity.uid}}",
+                        "type": "BomLine"
+                    }
+                ]
+            },
+            "outputData": {
+                "uids": "{{function:getActivityParts}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "getChildNodeProperties"
+                    }
+                ]
+            },
+            "deps": "js/Ssp0ActivityPartsService"
+        },
+        "getChildNodeProperties": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "getProperties",
+            "inputData": {
+                "attributes": [
+                    "bl_has_children",
+                    "bl_line_name",
+                    "bl_occ_type",
+                    "bl_item_object_desc",
+                    "bl_item_object_type",
+                    "bl_rev_fnd0objectId"
+                ],
+                "objects": "{{data.uids}}"
+            },
+            "outputData": {
+                "treeLoadResult": "{{function:setTreeProperties}}"
+            },
+            "policy": {
+                "types": [
+                    {
+                        "name": "BOMLine",
+                        "properties": [
+                            {
+                                "name": "bl_line_object",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "bl_rev_fnd0objectId",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "deps": "js/Ssp0ActivityPartsService"
+        },
+        "loadPartsTree": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "getChildNodeData"
+                },
+                {
+                    "action": "getChildNodeProperties"
+                }
+            ]
+        },
+        "loadPartsTreeTableColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadPartsTreeTableColumns",
+            "inputData": {
+                "i18n": "{{i18n}}"
+            },
+            "outputData": {
+                "dataProviders.partsTreeDataProvider.columnConfig": "columnConfig"
+            },
+            "deps": "js/Ssp0ActivityPartsService"
+        },
+        "doGridDataProvider": {
+            "actionType": "dataProvider",
+            "method": "partsTreeDataProvider"
+        },
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/columnArrangeService"
+        },
+        "saveColumnConfigLoadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "saveUIColumnConfigs2",
+            "inputData": {
+                "columnConfigurations": [
+                    {
+                        "clientScopeURI": "Ssp0PartTableManagement",
+                        "columnConfigId": "{{data.dataProviders.partsTreeDataProvider.columnConfig.columnConfigId}}",
+                        "columns": "{{data.dataProviders.partsTreeDataProvider.newColumns}}",
+                        "scope": "LoginUser",
+                        "scopeName": ""
+                    }
+                ]
+            },
+            "outputData": {},
+            "events": {
+                "success": [
+                    {
+                        "name": "slm.partTableColumnConfig.saved"
+                    }
+                ]
+            }
+        },
+        "loadDataForSavedColumnConfig":{
+            "actionType": "JSFunctionAsync",
+            "method": "getTableViewModelProperties",
+            "deps": "js/tcViewModelObjectService",
+            "inputData": {
+                "vmNodes": "{{data.dataProviders.partsTreeDataProvider.viewModelCollection.loadedVMObjects}}",
+                "context": {
+                    "clientScopeURI": "Ssp0PartTableManagement",
+                    "clientName": "AWClient",
+                    "columnConfigId": "Ssp0PartTableManagement",
+                    "columnsToExclude": "{{ctx.sbomProductContext.columnsToExclude}}",
+                    "operationType": "{{eventData.operationType}}"
+                }
+            },
+            "outputData": {
+                "newColumnConfig": "result.output.columnConfig"
+            }
+        },
+        "resetColumnConfig": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "getOrResetUIColumnConfigs4",
+            "inputData": {
+                "getOrResetUiConfigsIn": [
+                    {
+                        "scope": "LoginUser",
+                        "scopeName": "",
+                        "clientName": "AWClient",
+                        "resetColumnConfig": true,
+                        "columnConfigQueryInfos": [
+                            {
+                                "clientScopeURI": "Ssp0PartTableManagement",
+                                "operationType": "union",
+                                "columnsToExclude": []
+                            }
+                        ],
+                        "businessObjects": [
+                            {}
+                        ]
+                    }
+                ]
+            },
+            "outputData": {
+                "dataProviders.partsTreeDataProvider.columnConfig": "{{function:postResetFunction}}"
+            },
+            "deps": "js/tcarrange.service"
+        }
+    },
+
+    "dataProviders": {
+        "partsTreeDataProvider": {
+            "action":"loadPartsTree",
+            "response": "{{data.treeLoadResult.response}}",
+            "totalFound": "{{data.treeLoadResult.totalFound}}",
+            "selectionModelMode": "single"
+        }
+    },
+
+    "columnProviders": {
+        "partsTreeColumnProvider": {
+            "loadColumnAction": "loadPartsTreeTableColumns",
+            "saveColumnAndLoadAction": "saveColumnConfigLoadData",
+            "resetColumnAction": "resetColumnConfig",
+            "columns": "{{data.columns}}",
+            "frozenColumnIndex": -1
+        }
+    },
+
+    "grids": {
+        "partsTree": {
+            "dataProvider": "partsTreeDataProvider",
+            "columnProvider": "partsTreeColumnProvider",
+            "enableArrangeMenu": true,
+            "addIconColumn": false,
+            "gridOptions": {
+
+                "useStaticFirstCol": true,
+                "enableExpandAndPaginationInEdit": true
+            }
+        }
+    },
+
+    "functions":{
+        "getActivityParts": {
+            "functionName": "getActivityParts",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "setTreeProperties": {
+            "functionName": "setTreeProperties",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "postResetFunction": {
+            "functionName": "postResetFunction",
+            "parameters": [
+                "{{data.dataProviders.partsTreeDataProvider.columnConfig}}"
+            ]
+        }
+    },
+
+    "onEvent": [
+        {
+            "eventId": "Ssp0ActivityParts.triggerFunction",
+            "action": "loadPartsTree"
+        },
+        {
+            "eventId": "Ssp0ActivityParts.reloadPartToolTables",
+            "action": "doGridDataProvider"
+        },
+        {
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        },
+        {
+            "eventId": "slm.partTableColumnConfig.saved",
+            "cacheEventData": true,
+            "action": "loadDataForSavedColumnConfig"
+        }
+    ],
+
+    "lifecycleHooks": {
+        "onUpdate": {
+            "action": "doGridDataProvider",
+            "observers": [
+                "viewModel.ctx.selectedActivity"
+            ]
+        }
+    },
+
+    "data": {
+        "messages": {
+            "noPartsConsumed": [
+                {
+                    "text": "{{i18n.noPartsConsumed}}"
+                }
+            ]
+        }
+    },
+
+    "conditions": {
+        "arePartsConsumed": {
+            "expression": "data.treeLoadResult.totalFound > 0"
+        }
+    },
+
+    "i18n": {
+        "nameValueColumn": [
+            "timeAnalysisMessages"
+        ],
+        "descriptionValueColumn": [
+            "timeAnalysisMessages"
+        ],
+        "occurrenceTypeColumn": [
+            "timeAnalysisMessages"
+        ],
+        "noPartsConsumed": [
+            "timeAnalysisMessages"
+        ]
+    }
+}

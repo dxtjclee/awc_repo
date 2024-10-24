@@ -1,0 +1,213 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data": {
+        "selectionData": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "productBopStructureData": {
+            "editContext": "",
+            "objectUid": "{{ctx.epPageContext.functionalPlan.uid}}",
+            "isTopNode": true,
+            "preferenceName": "EP_FunctionalPlanBalancingColumnPreference",
+            "additionalPolicyObjects": {
+                "name": "EpBalancingProductBOP",
+                "types": [
+                    {
+                        "name": "Mfg0BvrProcess",
+                        "properties": [
+                            {
+                                "name": "mbc0BopQualifier"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "isLeafProperty": "hasChildren",
+            "relatedObjectMapKey": "childAssembly",
+            "additionalLoadParamsForRootLoadInputData": [ {
+                    "tagName": "expandType",
+                    "attributeName": "type",
+                    "attributeValue": "ExpandProcessDetailedPlanning"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "level",
+                    "attributeValue": "TOP_WITH_CHILDREN"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "rootsProperty",
+                    "attributeValue": "RootObject"
+                }
+            ],
+            "additionalLoadParamsForChildLoadInputData": [ {
+                    "tagName": "expandType",
+                    "attributeName": "type",
+                    "attributeValue": "ExpandProcessDetailedPlanning"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "level",
+                    "attributeValue": "CHILDREN"
+                }
+            ],
+            "treeNavigationColumnIndex": 1,
+            "initializeAction": "initializeLoadDataForTree",
+            "reloadTree": true,
+            "clientColumns": [ {
+                "clientColumn": true,
+                "name": "allocationIndication",
+                "propertyDisplayName": "{{i18n.allocationIndicationColumnName}}"
+            } ],
+            "relationName": ["Mbc0CutPaste","elb0allocatedOpsByPV"],
+            "rowRenderer": {
+                "style": "aw-epBalancing-processHighlighted",
+                "types": [ "Mfg0BvrProductBOP" ]
+            },
+            "rowRenderByPropertyValue": {
+                "conditions": [
+                    {
+                        "name": "isFunctionalGroup",
+                        "property": "mbc0BopQualifier",
+                        "value": "FunctionalGroup"
+                    }
+                ],
+                "classes": [
+                    "aw-epBalancing-processHighlighted"
+                ]
+            }
+        },
+        "epProductBopSearchContext": {
+            "initialValues": {
+                "searchObjectType": ["Mfg0BvrOperation","Mfg0BvrProcess"],
+                "searchPlaceholderString": "{{i18n.search}}",
+                "searchScopeUid": "{{ctx.epPageContext.functionalPlan.uid}}"
+            },
+            "meta": {}
+        }
+    },
+    "actions": {
+        "initProductBopStructureContent":{
+            "actionType":"batchJob",
+            "steps":[
+                {
+                    "action":"getTabContext"
+                },
+                {
+                    "action":"updateSearchContextTitle"
+                },
+                {
+                    "action":"productBOPPanelActive"
+                }
+            ]
+        },
+        "getTabContext": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "tabData": "{{subPanelContext}}"
+            },
+            "outputData": {
+                "productBopStructureData.tabContext": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "updateSearchContextTitle": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInAtomicData",
+            "inputData": {
+                "targetAtomicData": "{{fields.epProductBopSearchContext}}",
+                "updatedValues":{
+                    "searchPlaceholderString": "{{i18n.search}}"
+                }
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "handleProductVariantChangedAction": {
+            "actionType": "JSFunction",
+            "method": "handleProductVariantChanged",
+            "inputData": {
+                "reloadTree": "{{data.productBopStructureData.reloadTree}}"
+            },
+            "outputData": {
+                "productBopStructureData.reloadTree": ""
+            },
+            "deps": "js/epBalancingProductVariantsService"
+        },
+        "handleTreeTableLoadedAction": {
+            "actionType": "JSFunction",
+            "method": "registerStationTilesPolicy",
+            "deps": "js/epBalancingService"
+        },
+        "productBOPPanelActive": {
+            "actionType": "JSFunction",
+            "method": "updatePartialCtx",
+            "inputData": {
+                "path": "isProductBOPPanelActive",
+                "value":  true
+            },
+            "deps": "js/appCtxService"
+        },
+        "productBOPPanelDeactivated": {
+            "actionType": "JSFunction",
+            "method": "updatePartialCtx",
+            "inputData": {
+                "path": "isProductBOPPanelActive",
+                "value":  false
+            },
+            "deps": "js/appCtxService"
+        },
+        "updateTreeSelection": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInAtomicData",
+            "inputData": {
+                "targetAtomicData": "{{props.subPanelContext}}",
+                "updatedValues": {
+                    "findIn": {
+                        "selectedFindIn": "{{props.subPanelContext.balancingData.selectionData.findInProductBOP}}",
+                        "selectedFindInPending": "{{props.subPanelContext.balancingData.selectionData.findInProductBOP}}"
+                    }
+                }
+            },
+            "deps": "js/mfeViewModelUtils"
+        }
+    },
+    "conditions": {
+        "isProductBOPExists": {
+            "expression": "ctx.epTaskPageContext.functionalPlan"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "initProductBopStructureContent",
+        "onUnmount" : "productBOPPanelDeactivated",
+        "onUpdate": {
+            "action": "updateTreeSelection",
+            "observers": [
+                "props.subPanelContext.balancingData.selectionData.findInProductBOP"
+            ]
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "ep.productVariant.productBOPChanged",
+            "action": "handleProductVariantChangedAction"
+        },
+        {
+            "eventId": "epTreeTable.setInitialSelection",
+            "action": "handleTreeTableLoadedAction",
+            "eventSource": "self"
+        }
+    ],
+    "i18n": {
+        "search": [ "FunctionalPlanMessages" ],
+        "allocationIndicationColumnName": [
+            "allocationIndicationMessages"
+        ]
+    }
+}

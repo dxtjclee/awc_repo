@@ -1,0 +1,209 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "workflowTemplatesLabel": {
+            "displayName": "{{i18n.workflowTemplatesLabel}}",
+            "type": "STRING",
+            "hasLov": true
+        },
+        "workFlowNameLabel": {
+            "displayName": "{{i18n.workflowNameLabel}}",
+            "type": "STRING",
+            "isRequired": true,
+            "isEditable": true,
+            "dbValue": "{{props.subPanelContext.workflowCandidates[0].props.object_string.dbValues[0]}}",
+            "uiValue": "{{props.subPanelContext.workflowCandidates[0].props.object_string.dbValues[0]}}"
+        },
+        "descriptionLabel": {
+            "displayName": "{{i18n.workflowDescriptionLabel}}",
+            "type": "STRING"
+        },
+        "allowAlternateProcedures": {
+            "displayName": "",
+            "type": "BOOLEAN",
+            "dbValue": false,
+            "propertyRadioTrueText": "{{i18n.all}}",
+            "propertyRadioFalseText": "{{i18n.assigned}}",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+         },
+        "submitInProgress": false
+    },
+    "actions": {
+        "submit": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "setSubmitInProgress"
+                },
+                {
+                    "action":"setWorkflowCandidates"
+                },
+                {
+                    "action": "createWorkflowProcess"
+                },
+                {
+                    "action": "closeDialog"
+                }
+            ]
+        },
+        "setSubmitInProgress": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value":true
+            },
+            "outputData":{
+                "submitInProgress":""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "setWorkflowCandidates" :{
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value":"{{props.subPanelContext.workflowCandidates}}"
+            },
+            "outputData":{
+                "workflowCandidates":""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "createWorkflowProcess": {
+            "actionType": "JSFunctionAsync",
+            "method": "createWorkflowProcess",
+            "inputData": {
+                "workflowCandidates": "{{props.subPanelContext.workflowCandidates}}",
+                "name": "{{data.workFlowNameLabel.dbValue}}",
+                "processTemplate": "{{data.workflowTemplatesLabel.dbValue.props.template_name.dbValues[0]}}",
+                "description": "{{data.descriptionLabel.dbValue}}",
+                "startImmediately": true,
+                "subject": ""
+            },
+            "outputData": {
+                "workflowCreated": ""
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "successfullySubmitToWorkflowSingle",
+                        "condition": "data.workflowCandidates.length === 1 && data.workflowCreated"
+                    },
+                    {
+                        "message": "successfullySubmitToWorkflowMultiple",
+                        "condition": "data.workflowCandidates.length > 1 && data.workflowCreated"
+                    }
+                ]
+            },
+            "deps": "js/services/ngpWorkflowService"
+        },
+        "closeDialog": {
+            "actionType": "JSFunction",
+            "method": "close",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/declpopupService"
+        },
+        "initializeDialog" : {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "initializeData"
+                },
+                {
+                    "action":"getValidTemplates"
+                }
+            ]
+        },
+        "initializeData" : {
+            "actionType": "JSFunction",
+            "method": "initializeData",
+            "inputData": {
+                "workflowTemplatesData": "{{props.subPanelContext.workflowTemplatesData}}"
+            },
+            "outputData": {
+                "allTemplates": "allTemplates",
+                "filteredTemplates": "filteredTemplates",
+                "allowAlternateProcedures.dbValue": "allowAlternateProcedures"
+            },
+            "deps": "js/services/ngpWorkflowService"
+        },
+        "getValidTemplates": {
+            "actionType": "JSFunction",
+            "method": "getValidTemplates",
+            "inputData": {
+                "getAllTemplates" : "{{data.allowAlternateProcedures.dbValue}}",
+                "allTemplates": "{{data.allTemplates}}",
+                "filteredTemplates": "{{data.filteredTemplates}}",
+                "workflowTemplatesLabel": "{{data.workflowTemplatesLabel}}"
+            },
+            "outputData": {
+                "workflowTemplatesList" : "workflowTemplatesList",
+                "workflowTemplatesLabel" : "workflowNameProp"
+            },
+            "deps": "js/services/ngpWorkflowService"
+        }
+    },
+    "conditions": {
+        "isNotValidToSubmit": {
+            "expression": "data.workFlowNameLabel.uiValue === '' || data.submitInProgress === true"
+        },
+        "isSubmitInProgress": {
+            "expression": "data.submitInProgress === true"
+        },
+        "isAllowAlternateProcedures": {
+            "expression": "ctx.preferences.CR_allow_alternate_procedures[0] !== 'none'"
+        }
+     },
+    "messages": {
+        "successfullySubmitToWorkflowSingle": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.successfullySubmitToWorkflowSingle}}",
+            "messageTextParams": [
+                "{{data.workflowCandidates[0].props.object_string.dbValues[0]}}"
+            ]
+        },
+        "successfullySubmitToWorkflowMultiple": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.successfullySubmitToWorkflowMultiple}}",
+            "messageTextParams": [
+                "{{data.workflowCandidates.length}}"
+            ]
+        }
+    },
+    "lifecycleHooks": {
+        "onInit": "initializeDialog"
+    },
+    "i18n": {
+        "cancel": [
+            "NgpDataMgmtMessages"
+        ],
+        "submit": [
+            "NgpDataMgmtMessages"
+        ],
+        "workflowTemplatesLabel": [
+            "NgpDataMgmtMessages"
+        ],
+        "workflowNameLabel": [
+            "NgpDataMgmtMessages"
+        ],
+        "workflowDescriptionLabel": [
+            "NgpDataMgmtMessages"
+        ],
+        "successfullySubmitToWorkflowSingle": [
+            "NgpDataMgmtMessages"
+        ],
+        "successfullySubmitToWorkflowMultiple": [
+            "NgpDataMgmtMessages"
+        ],
+        "submitToWorkflowCmdTitle": [
+            "NgpDataMgmtMessages"
+        ],
+        "all": [
+            "NgpDataMgmtMessages"
+        ],
+        "assigned": [
+            "NgpDataMgmtMessages"
+        ]
+    }
+}

@@ -1,0 +1,168 @@
+{
+    "schemaVersion": "1.0.0",
+    "dataProviders": {
+        "inScopeAssignmentIndicationDataProvider": {
+            "dataProviderType": "Static",
+            "response": "{{data.assignmentIndicationResponseData.inScopeNodes}}",
+            "totalFound": "{{data.assignmentIndicationResponseData.inScopeNodes.length}}",
+            "selectionModelMode": "single"
+        },
+        "outOfScopeAssignmentIndicationDataProvider": {
+            "dataProviderType": "Static",
+            "response": "{{data.assignmentIndicationResponseData.outOfScopeNodes}}",
+            "totalFound": "{{data.assignmentIndicationResponseData.outOfScopeNodes.length}}",
+            "selectionModelMode": "single"
+        }
+    },
+    "actions": {
+        "initializeAssignmentIndicationAssignedInData": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "addInScopeDataProviderToSubPanelContext"
+                },
+                {
+                    "action": "addOutOfScopeDataProviderToSubPanelContext"
+                },
+                {
+                    "action": "loadAssignmentData"
+                },
+                {
+                    "action": "initializeInScopeAssignmentIndicationDataProvider"
+                },
+                {
+                    "action": "initializeOutOfScopeAssignmentIndicationDataProvider"
+                }
+            ]
+        },
+        "addInScopeDataProviderToSubPanelContext": {
+            "actionType": "JSFunction",
+            "method": "addDataProviderToObject",
+            "inputData": {
+                "inputObject": "{{subPanelContext}}",
+                "dataProviderName": "inScopeAssignmentIndicationDataProvider",
+                "dataProvider": "{{data.dataProviders.inScopeAssignmentIndicationDataProvider}}"
+            },
+            "deps": "js/services/ngpAssignmentStatusesTableCellService"
+        },
+        "addOutOfScopeDataProviderToSubPanelContext": {
+            "actionType": "JSFunction",
+            "method": "addDataProviderToObject",
+            "inputData": {
+                "inputObject": "{{subPanelContext}}",
+                "dataProviderName": "outOfScopeAssignmentIndicationDataProvider",
+                "dataProvider": "{{data.dataProviders.outOfScopeAssignmentIndicationDataProvider}}"
+            },
+            "deps": "js/services/ngpAssignmentStatusesTableCellService"
+        },
+        "loadAssignmentData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadAssignmentData",
+            "inputData": {
+                "subPanelContext": "{{subPanelContext}}"
+            },
+            "outputData": {
+                "assignmentIndicationResponseData": ""
+            },
+            "deps": "js/services/ngpAssignmentStatusesTableCellService"
+        },
+        "initializeInScopeAssignmentIndicationDataProvider": {
+            "actionType": "dataProvider",
+            "method": "inScopeAssignmentIndicationDataProvider"
+        },
+        "initializeOutOfScopeAssignmentIndicationDataProvider": {
+            "actionType": "dataProvider",
+            "method": "outOfScopeAssignmentIndicationDataProvider"
+        },
+        "findAndRevealAssignedToInScope": {
+            "actionType": "JSFunction",
+            "method": "findAndRevealAssignedTo",
+            "inputData": {
+                "uidsToSelectInBuildStrategy": ["{{data.dataProviders.inScopeAssignmentIndicationDataProvider.selectedObjects[0].uid}}"],
+                "uidsToSelectInAssignedPartsTable": ["{{subPanelContext.contextObject.uid}}"]
+            },
+            "deps": "js/services/ngpAssignmentStatusesTableCellService"
+        },
+        "findAndRevealAssignedToOutScope": {
+            "actionType": "JSFunction",
+            "method": "findAndRevealAssignedTo",
+            "inputData": {
+                "uidsToSelectInBuildStrategy": ["{{data.dataProviders.outOfScopeAssignmentIndicationDataProvider.selectedObjects[0].uid}}"],
+                "uidsToSelectInAssignedPartsTable": ["{{subPanelContext.contextObject.uid}}"]
+            },
+            "deps": "js/services/ngpAssignmentStatusesTableCellService"
+        },
+        "closePopup": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupEl": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        },
+        "findAndRevealAssignedToInScopeAction": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "findAndRevealAssignedToInScope"
+                },
+                {
+                    "action": "closePopup"
+                }
+            ]
+        },
+        "findAndRevealAssignedToOutScopeAction": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "findAndRevealAssignedToOutScope"
+                },
+                {
+                    "action": "closePopup"
+                }
+            ]
+        }
+    },
+    "data": {
+        "findAndRevealAssignedToCommand" : {
+            "iconName": "Search",
+            "tooltip": ""
+        }
+    },
+    "conditions": {
+        "showInScopeNodes": {
+            "expression": {
+                "$source": "data.assignmentIndicationResponseData.inScopeNodes.length",
+                "$query": {
+                    "$gt": 0
+                }
+            }
+        },
+        "showOutOfScopeNodes": {
+            "expression": {
+                "$source": "data.assignmentIndicationResponseData.outOfScopeNodes.length",
+                "$query": {
+                    "$gt": 0
+                }
+            }
+        }
+    },
+    "onEvent": [ {
+        "eventId": "inScopeAssignmentIndicationDataProvider.selectionChangeEvent",
+        "cacheEventData": true,
+        "action": "findAndRevealAssignedToInScopeAction"
+    },
+    {
+        "eventId": "outOfScopeAssignmentIndicationDataProvider.selectionChangeEvent",
+        "cacheEventData": true,
+        "action": "findAndRevealAssignedToOutScopeAction"
+    }
+    ],
+    "lifecycleHooks": {
+        "onInit": "initializeAssignmentIndicationAssignedInData"
+    },
+    "i18n": {
+        "assignmentsInScope": [ "NgpProductAssignmentMessages" ],
+        "assignmentsInAnotherScope":[ "NgpProductAssignmentMessages" ]
+    }
+}

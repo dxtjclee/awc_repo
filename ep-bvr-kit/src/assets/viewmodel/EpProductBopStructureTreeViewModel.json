@@ -1,0 +1,195 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "view-path": {
+            "type": "object"
+        },
+        "view-id": {
+            "type": "string"
+        },
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data": {
+        "selectionData": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "epProductBopSearchContext": {
+            "initialValues": {
+                "searchObjectType": ["Mfg0BvrOperation","Mfg0BvrProcess"],
+                "searchPlaceholderString": "{{i18n.search}}",
+                "searchScopeUid": ""
+            },
+            "meta": {}
+        },
+        "productBopStructureData": {
+            "editContext": "{{ctx.mfgReadOnlyMode.readOnlyMode === true ? '': 'EP_PROCESS_TREE_TABLE_EDIT_CONTEXT'}}",
+            "objectUid": "{{ctx.epTaskPageContext.functionalPlan.uid}}",
+            "preferenceName": "EP_FunctionalPlanOperationsColumnPreference",
+            "isTopNode": true,
+            "isLeafProperty": "hasChildren",
+            "reloadType": {
+                "epTreeTable": "CommonExpand"
+            },
+            "relatedObjectMapKey": "childAssembly",
+            "loadTypes": [
+                "CommonExpand"
+            ],
+            "additionalPolicyObjects": {
+                "name": "EpProductBopStructureTree",
+                "types": [
+                    {
+                        "name": "ImanItemBOPLine",
+                        "properties": [
+                            {
+                                "name": "bl_parent"
+                            },
+                            {
+                                "name": "bl_rev_last_release_status"
+                            },
+                            {
+                                "name": "bl_rev_fnd0InProcess"
+                            },
+                            {
+                                "name": "bl_rev_fnd0AllWorkflows"
+                            },
+                            {
+                                "name": "awb0RevisionRelStatusList"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Mfg0BvrProcess",
+                        "properties": [
+                            {
+                                "name": "mbc0BopQualifier"
+                            },
+                            {
+                                "name": "elb0allocatedTimeByPV"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Mfg0BvrOperation",
+                        "properties": [
+                            {
+                                "name": "elb0allocatedTimeByPV"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "additionalLoadParamsForRootLoadInputData": [
+                {
+                    "tagName": "expandType",
+                    "attributeName": "type",
+                    "attributeValue": "ExpandProductBOP"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "level",
+                    "attributeValue": "TOP_WITH_CHILDREN"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "rootsProperty",
+                    "attributeValue": "RootObject"
+                }
+            ],
+            "additionalLoadParamsForChildLoadInputData": [
+                {
+                    "tagName": "expandType",
+                    "attributeName": "type",
+                    "attributeValue": "ExpandProductBOP"
+                },
+                {
+                    "tagName": "expandInfo",
+                    "attributeName": "level",
+                    "attributeValue": "CHILDREN"
+                }
+            ],
+            "clientColumns": [
+                {
+                    "clientColumn": true,
+                    "name": "graphicVisibility",
+                    "propertyDisplayName": "{{i18n.GraphicVisibilityColumnName}}"
+                },
+                {
+                    "clientColumn": true,
+                    "name": "releaseStatusFlag",
+                    "propertyDisplayName": "{{i18n.releaseStatusFlagColumnName}}"
+                },
+                {
+                    "clientColumn": true,
+                    "name": "changeIndication",
+                    "propertyDisplayName": "{{i18n.ChangeIndicationColumnName}}"
+                }
+            ],
+            "epTreeTableCommandAnchor": "productBOP_onHoverCommand",
+            "treeNavigationColumnIndex": 3,
+            "initializeAction": "initializeLoadDataForTree",
+            "alwaysVisibleColumns":["object_string"],
+            "enableArrangeColumn": true,
+            "enableSorting":true
+        }
+    },
+    "actions": {
+        "initProductBopStructureContent": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "getTabContext"
+                },
+                {
+                    "action": "updateSearchContextTitle"
+                }
+            ]
+        },
+        "getTabContext": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "tabData": "{{subPanelContext}}"
+            },
+            "outputData": {
+                "productBopStructureData.tabContext": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "updateSearchContextTitle": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInAtomicData",
+            "inputData": {
+                "targetAtomicData": "{{fields.epProductBopSearchContext}}",
+                "updatedValues": {
+                    "searchPlaceholderString": "{{i18n.search}}"
+                }
+            },
+            "deps": "js/mfeViewModelUtils"
+        }
+    },
+    "conditions": {
+        "isProductBopExist": {
+            "expression": "ctx.epPageContext.functionalPlan.uid"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "initProductBopStructureContent"
+    },
+    "i18n": {
+        "search": [
+            "FunctionalPlanMessages"
+        ],
+        "GraphicVisibilityColumnName": [
+            "BvrGraphicsMessages"
+        ],
+        "ChangeIndicationColumnName": [
+            "changeIndicationMessages"
+        ],
+        "releaseStatusFlagColumnName": [
+            "AssemblyMessages"
+        ]
+    }
+}

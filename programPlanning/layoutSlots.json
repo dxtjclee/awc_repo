@@ -1,0 +1,33 @@
+{
+  "slots": {
+    "programPlanningPrimaryWorkAreaCommandBarSlot": {
+      "name": "aw_pwaCommandBar",
+      "view": "Pgp0PwaCommandBar",
+      "activeWhen": {
+        "condition": "conditions.isPlanNavigationPage"
+      }
+    },
+    "Pgp0ComparePlanHeaderSlot": {
+      "name": "aw_headerTitle",
+      "view": "Pgp0ComparePlanHeaderPage",
+      "activeWhen": {
+        "condition": "conditions.isComparePlansPage"
+      }
+    },
+    "Pgp0ComparePlanTaskbarSlot": {
+      "name": "aw_taskBar",
+      "view": "Pgp0ComparePlansTaskbar",
+      "activeWhen": {
+        "condition": "conditions.isComparePlansPage"
+      }
+    }
+  },
+  "conditions": {
+    "isPlanNavigationPage": {
+      "expression": "context.nameToken === 'com.siemens.splm.client.prgplanning:PlanNavigationSubLocation'"
+    },
+    "isComparePlansPage": {
+      "expression": "ctx.sublocation.nameToken === 'com.siemens.splm.client.comparePlan:CompareSublocation'"
+    }
+  }
+}

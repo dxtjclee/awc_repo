@@ -1,0 +1,22 @@
+<mfe-loading-message exist-when="!props.scopeObject"></mfe-loading-message>
+<aw-flex-row exist-when="props.scopeObject && props.scopeObject.uid">
+    <aw-flex-column width="{{data.leftPanelWidth ? data.leftPanelWidth : 6}}">
+        <aw-flex-row height="{{data.topLeftPanelHeight ? data.topLeftPanelHeight : 6}}">
+            <aw-include name="MfeContentPanel" sub-panel-context="data.subsetPanelData"></aw-include>
+        </aw-flex-row>
+        <aw-splitter direction="HORIZONTAL" splitter-id="ngpDetailedPlanningLeftHorizontalSplitter" min-size-1="100px" min-size-2="100px" class="aw-mfe-transparentSplitter aw-mfe-thinSplitter"></aw-splitter>
+        <aw-flex-row>
+            <aw-include name="MfeContentPanel" sub-panel-context="data.graphicsPanelData"></aw-include>
+        </aw-flex-row>
+    </aw-flex-column>
+    <aw-splitter splitter-id="ngpDetailedPlanningVerticalSplitter" min-size-1="200px" min-size-2="200px" class="aw-mfe-transparentSplitter"></aw-splitter>
+    <aw-flex-column width="fill">
+        <aw-flex-row height="{{data.topRightPanelHeight ? data.topRightPanelHeight : 6}}">
+            <aw-include name="MfeContentPanel" sub-panel-context="props.panelsData.contentElementsPanelData"></aw-include>
+        </aw-flex-row>
+        <aw-splitter direction="HORIZONTAL" splitter-id="ngpDetailedPlanningRightHorizontalSplitter" min-size-1="100px" min-size-2="100px" class="aw-mfe-transparentSplitter aw-mfe-thinSplitter"></aw-splitter>
+        <aw-flex-row>
+            <aw-include view-id="NgpContentElementsDetailsContentPanel" name="MfeContentPanel" sub-panel-context="props.panelsData.contentElementDetailsPanelData"></aw-include>
+        </aw-flex-row>
+    </aw-flex-column>
+</aw-flex-row>

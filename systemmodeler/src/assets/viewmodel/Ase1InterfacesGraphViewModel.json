@@ -1,0 +1,255 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+
+    "actions": {
+        "updateGraphView": {
+            "actionType": "JSFunction",
+            "method": "updateGraphView",
+            "inputData": {
+                "graphModel": "{{data.graphModel}}",
+                "activeLegendView": "{{data.activeLegendView}}",
+                "modelData": "{{subPanelContext.pageState.modelData}}",
+                "actionState": "{{subPanelContext.actionState}}",
+                "data":"{{data}}"
+            },
+            "deps": "js/Ase1InterfacesGraphService"
+        },
+        "getLegendData": {
+            "actionType": "JSFunctionAsync",
+            "method": "getLegendData",
+            "inputData": {
+                "viewName": "Interfaces",
+                "actionState": "{{subPanelContext.actionState}}"
+            },
+            "outputData": {
+                "activeLegendView": ""
+            },
+            "deps": "js/Ase1InterfacesGraphLegendManager"
+        },
+
+        "onGraphObjectDoubleClicked": {
+            "actionType": "JSFunction",
+            "method": "graphObjectDoubleClicked",
+            "inputData": {
+                "graphModel": "{{data.graphModel}}",
+                "graphItem": "{{parameters.doubleClickEventData.item}}",
+                "pageState": "{{subPanelContext.pageState}}"
+            },
+            "deps": "js/Ase1InterfacesGraphService"
+        },
+
+        "setDiagramSelection": {
+            "actionType": "JSFunction",
+            "method": "setDiagramSelection",
+            "inputData": {
+                "selected": "{{parameters.selectedGraphItems}}",
+                "unselected": "{{parameters.unSelectedGraphItems}}",
+                "graphModel": "{{data.graphModel}}",
+                "activeLegendView":"{{data.activeLegendView}}",
+                "modelData": "{{subPanelContext.pageState.modelData}}",
+                "selectionData": "{{subPanelContext.primarySelectionData}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "Ase1InterfacesPage.UpdateInterfaceTable",
+                    "excludeLocalDataCtx": true
+                } ]
+            },
+            "deps": "js/Ase1InterfacesGraphService"
+        },
+
+        "clearGraphView": {
+            "actionType": "JSFunction",
+            "method": "clearGraphView",
+            "inputData": {
+                "graphModel":"{{data.graphModel}}"
+            },
+            "deps": "js/Ase1InterfacesGraphService"
+        },
+
+        "updateFromInfoPanel": {
+            "actionType": "JSFunction",
+            "method": "updateFromInfoPanel",
+            "inputData": {
+                "data": "{{data.eventData}}",
+                "graphModel":"{{data.graphModel}}",
+                "activeLegendView":"{{data.activeLegendView}}",
+                "modelData": "{{subPanelContext.pageState.modelData}}"
+            },
+            "deps": "js/Ase1InterfacesGraphService"
+        },
+        "setDiagramHover": {
+            "actionType": "JSFunction",
+            "method": "setDiagramHover",
+            "inputData": {
+                "hoveredItem": "{{data.eventMap['awGraph.hoverChanged'].hoveredItem}}",
+                "unHoveredItem": "{{data.eventMap['awGraph.hoverChanged'].unHoveredItem}}",
+                "graphModel": "{{data.graphModel}}",
+                "activeLegendView":"{{data.activeLegendView}}",
+                "modelData": "{{subPanelContext.pageState.modelData}}"
+            },
+            "deps": "js/Ase1InterfacesGraphService"
+        },
+        "showContextMenuOnNode": {
+            "actionType": "JSFunction",
+            "method": "showPopupMenu",
+            "inputData": {
+                "graphModel": "{{data.graphModel}}",
+                "groupCommandId": "Ase1FocusOnSystemGroupCmd",
+                "graphItem": "{{parameters.itemRightClickedData.item}}",
+                "position": "{{parameters.itemRightClickedData.position}}"
+            },
+            "deps": "js/graphUtils"
+        },
+        "clearGraphSelection": {
+            "actionType": "JSFunction",
+            "method": "clearGraphSelection",
+            "inputData": {
+                "graphModel": "{{data.graphModel}}"
+            },
+            "deps": "js/Ase1InterfacesGraphService"
+        }
+    },
+
+    "data": {
+        "graphModel": {
+            "config": {
+                "enableEdit": false,
+                "hitTestHandler": "js/Ase1InterfaceGraphControlHitHandler",
+                "minZoom": 0,
+                "maxZoom": 1.0,
+                "fitViewPosition": "CENTER",
+                "hoverDelayTime": 75,
+                "movableItems": [],
+                "disableSelectionOnDbclick": true,
+                "doubleClickSpeed": 200,
+                "selectableItems": [
+                    "Node",
+                    "Edge"
+                ],
+                "layout": {
+                    "layoutMode": "ColumnLayout",
+                    "config": {
+                        "nodeToNodeDistance": {
+                            "x": 24,
+                            "y": 24
+                        }
+                    }
+                },
+                "showNodeOverlay": false,
+                "nodeOverlay": {
+                    "zoomThreshold": 0.7
+                },
+                "inputMode": "viewInputMode",
+                "moveWithoutSelection": true,
+                "enableAutoPan": true,
+                "enableMarqueeSelection": false,
+                "defaultTextCapHeightFactor": 0.9,
+                "defaults": {
+                    "nodeSize": {
+                        "width": 180,
+                        "height": 32
+                    },
+                    "nodeStyle": {
+                        "templateId": "Ase1InterfacesCircleNodeTemplate"
+                    },
+                    "edgeStyle": {
+                        "dashStyle": "SOLID",
+                        "thickness": 2.0,
+                        "color": "(255,150,50)"
+                    },
+                    "portStyle": {}
+                },
+
+                "shadowEffects": []
+            },
+            "inputModes": {
+                "viewInputMode": {
+                    "editMode": false,
+                    "enableManualEdgeRouting": false,
+                    "enableNodeResize": false,
+                    "enableLabelEdit": false
+                }
+            },
+            "isBasicNodeApply": false
+        }
+    },
+
+    "lifecycleHooks": {
+        "onUpdate": [ {
+            "action": "updateGraphView",
+            "observers": [ "viewModel.subPanelContext.actionState.modelUpdated" ]
+        },
+        {
+            "action": "clearGraphSelection",
+            "observers": [ "viewModel.subPanelContext.actionState.GoUpCommandClicked" ]
+        },
+        {
+            "action": "clearGraphView",
+            "observers": [ "viewModel.subPanelContext.actionState.applyLabel" ]
+        } ]
+    },
+
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+
+    "onEvent": [ {
+            "eventId": "awGraph.initialized",
+            "action": "getLegendData"
+        },
+        {
+            "eventId": "Ase1InterfacesPage.modelUpdated",
+            "condition": "conditions.isGraphViewActiveAndLoaded",
+            "action": "updateGraphView"
+        },
+        {
+            "eventId": "awGraph.doubleClicked",
+            "action": "onGraphObjectDoubleClicked",
+            "inputArgs": {
+                "doubleClickEventData": "{{eventData}}"
+            }
+        },
+        {
+            "eventId": "awGraph.selectionChanged",
+            "action": "setDiagramSelection",
+            "inputArgs": {
+                "selectedGraphItems": "{{eventData.selected}}",
+                "unSelectedGraphItems": "{{eventData.unSelected}}"
+            }
+        },
+        {
+            "eventId": "Ase1InterfacesPage.clearPrimaryView",
+            "action": "clearGraphView"
+        },
+        {
+            "eventId": "cdm.updated",
+            "action": "updateFromInfoPanel",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "awGraph.hoverChanged",
+            "action": "setDiagramHover",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "awGraph.rightClicked",
+            "condition": "conditions.showContextMenuOnNodeCondition",
+            "action": "showContextMenuOnNode",
+            "inputArgs": {
+                "itemRightClickedData": "{{eventData}}"
+            }
+        }
+    ],
+    "conditions": {
+        "isGraphViewActiveAndLoaded": {
+            "expression": "data.graphModel.graphControl && data.activeLegendView && subPanelContext.pageState.viewName === 'Ase1InterfacesGraph' && subPanelContext.pageState.modelData.systemInView"
+        },
+        "showContextMenuOnNodeCondition": {
+            "expression": "item.category === 'Node' && item.model.modelObject.uid !== subPanelContext.pageState.modelData.systemOfInterest.nodeObject.uid"
+        }
+    }
+}

@@ -1,0 +1,163 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+    ],
+    "actions": {
+        "afterReveal": {
+            "actionType": "JSFunction",
+            "method": "initPopup",
+            "inputData": {
+                "data":"{{data}}"
+            },
+            "outputData": {
+                "pasteOptionsItems": "pasteOptionsItems",
+                "selectedObject": "selectedObject",
+                "handlePasteCrossRefSelection":"handlePasteCrossRefSelection"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "pasteCrossReferenceLinkPopup.defaultSelection"
+                    },
+                    {
+                        "name": "pasteCrossReferenceLinkPopup.refreshPasteOptionsItems"
+                    }
+                ]
+            },
+            "deps": "js/Arm0PasteCrossReferenceLinkPopup"
+        },
+        "defaultSelection":{
+            "actionType": "JSFunction",
+            "method": "defaultSelection",
+            "inputData": {
+                "data":"{{data}}"
+            },
+            "deps": "js/Arm0PasteCrossReferenceLinkPopup"
+        },
+        "selectAction":{
+            "actionType": "JSFunction",
+            "method": "selectAction",
+            "inputData": {
+                "data": "{{data}}"            },
+            "outputData": {
+                "selectedObject":"selectedObject",
+                "canShowCustomTextBox":"canShowCustomTextBox"
+            },
+            "deps": "js/Arm0PasteCrossReferenceLinkPopup"
+        },
+        "closePopupWindow": {
+            "actionType": "JSFunction",
+            "method": "close",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/declpopupService"
+        },
+        "pasteCrossRefLink":
+        {
+            "actionType": "JSFunction",
+            "method": "pasteCrossRefLink",
+            "inputData": {
+                "data":"{{data}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "aw.closePopup"
+                } ]
+            },
+            "deps": "js/Arm0PasteCrossReferenceLinkPopup"
+        },
+        "refreshPasteOptionsItems":
+        {
+            "actionType": "dataProvider",
+            "method": "actionsList"
+        }
+    },
+    "data": {
+        "pasteOptions":
+        {
+            "type": "BOOLEAN",
+            "isRequired": "true",
+            "dbValue":"paraNumAndName",
+            "labelPosition": "PROPERTY_LABEL_AT_TOP",
+            "vertical":true
+        },
+        "customTextBox":
+        {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "{{i18n.DefaultName}}",
+            "dispValue": "{{i18n.DefaultName}}"
+        },
+        "pasteOptionsItems": {
+            "isArray": "true",
+            "dbValue": [
+                {
+                    "displayName": "",
+                    "iconURL": "",
+                    "checked":true
+                },
+                {
+                    "displayName": "",
+                    "iconURL": ""
+                },
+                {
+                    "displayName": "",
+                    "iconURL": ""
+                },
+                {
+                    "displayName": "",
+                    "iconURL": ""
+                },
+                {
+                    "displayName": "{{i18n.customLabel}}",
+                    "iconURL": ""
+                }
+            ]
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "aw.closePopup",
+            "action": "closePopupWindow"
+        },
+        {
+            "eventId": "pasteCrossReferenceLinkPopup.refreshPasteOptionsItems",
+            "action": "refreshPasteOptionsItems"
+        },
+        {
+            "eventId": "actionsList.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "selectAction"
+        },
+        {
+            "eventId": "pasteCrossReferenceLinkPopup.defaultSelection",
+            "action": "defaultSelection"
+        }
+    ],
+    "i18n": {
+        "ShowCrossReferenceAs": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "Paste": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "DefaultName": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "customLabel": [
+            "RichTextEditorCommandPanelsMessages"
+        ]
+    },
+    "dataProviders": {
+        "actionsList": {
+            "response": "{{data.pasteOptionsItems.dbValue}}",
+            "selectionModelMode": "single"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "afterReveal"
+    }
+}

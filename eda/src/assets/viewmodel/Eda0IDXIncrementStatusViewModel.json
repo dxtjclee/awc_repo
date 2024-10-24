@@ -1,0 +1,74 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-step-progress.directive"
+    ],
+    "actions": {
+        "reveal": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2013-05-LOV",
+            "method": "getInitialLOVValues",
+            "inputData": {
+               "initialData":{
+                "filterData": {
+                    "filterString": "",
+                    "maxResults": 0,
+                    "numberToReturn": 25,
+                    "order": 1,
+                    "sortPropertyName": ""
+                },
+                "lov": {
+                    "uid": "",
+                    "type": ""
+                },
+                "lovInput": {
+                    "boName": "{{ctx.mselected[0].type}}",
+                    "operationName": "Create",
+                    "owningObject": {
+                        "type": "{{ctx.mselected[0].type}}",
+                        "uid": "{{ctx.mselected[0].uid}}"
+                    },
+                    "propertyValues": {}
+                },
+                "propertyName": "eda0Maturity"
+               }
+            },
+            "outputData":
+            {
+                "loadedStates": "lovValues"
+            },
+            "events": {
+                "success": [ {
+                    "name": "statesLoaded"
+                } ]
+            }
+        },
+        "setProgressBar": {
+            "actionType": "JSFunction",
+            "method": "showSteps",
+            "inputData": {
+                "selectedUid": "{{subPanelContext.selected.uid}}",
+                "propName": "{{data.propertyName}}",
+                "loadedStates": "{{data.loadedStates}}"
+            },
+            "outputData":{
+                "steps":"states",
+                "currStep": "currState"
+            },
+            "deps": "js/Eda0IDXIncrementStatusService"
+        }
+    },
+    "data": {
+        "propertyName":"eda0Maturity"
+    },
+    "onEvent": [
+        {
+            "eventId":"Eda0IDXIncrementStatus.contentLoaded",
+            "action": "reveal"
+        },
+        {
+            "eventId": "statesLoaded",
+            "action": "setProgressBar"
+        }
+    ]
+}

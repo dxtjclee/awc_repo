@@ -1,0 +1,13 @@
+
+
+<div exist-when="props.column.field === 'releaseStatusFlag'" class="ep-planning-operationsHeaderIcon">
+    <aw-icon class="aw-visual-indicator" icon-id="miscTableHeaderInWorkflow16"></aw-icon>
+</div>
+<div exist-when="props.column.field !== 'releaseStatusFlag'" class="ep-planning-operationsHeaderLabel"> {props.column.displayName} </div>
+
+<div class="sw-row w-12 ep-planning-operationsHeader">
+    <div class="ep-planning-operationsHeaderTotalLabel" exist-when="props.column.field === 'releaseStatusFlag'"> <aw-i18n>i18n.total</aw-i18n></div>
+    <div class="ep-planning-operationsHeaderTotalLabel" exist-when="props.column.field === 'elb0allocatedTimeByPV'">{data.total}</div>
+    <div class="ep-planning-operationsHeaderTotalLabel" exist-when="props.column.field === 'weightedTime'">{data.weightedTimeTotal}</div>
+    <div class="ep-planning-operationsHeaderTotalLabel" exist-when="props.column.pv">{{data.pvColumnTotal}}</div>
+</div>

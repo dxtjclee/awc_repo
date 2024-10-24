@@ -1,0 +1,31 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data": {
+        "messages": {
+            "eolNotPresent": [ {
+                "text": "{{i18n.noEOLPresent}}"
+            } ]
+        }
+    },
+    "i18n": {
+        "noEOLPresent": [
+            "senMessages"
+        ]
+    },
+    "conditions": {
+        "isEolPresentOnPart": {
+            "expression": "ctx.isEolAvailable"
+        },
+        "enableListView": {
+            "expression": "ctx.isEolAvailable && (ctx.eolSectionViewType ==='listView') "
+        },
+        "enableTreeView": {
+            "expression": "ctx.isEolAvailable && (ctx.eolSectionViewType ==='treeView') "
+        }
+    }
+}

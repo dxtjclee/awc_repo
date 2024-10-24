@@ -1,0 +1,175 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "displayHistoryOfMcnsPanel": false,
+        "finishedLoading":false,
+        "historyOfChangeLinkData": {
+            "displayName": "{{i18n.historyOfChangeLinkTitle}}",
+            "type": "STRING"
+        },
+        "backToChangeManagementLinkData": {
+            "displayName": "{{i18n.backToChangeManagementLinkTitle}}",
+            "type": "STRING"
+        }
+    },
+    "actions": {
+        "initActiveMcnDataProvider": {
+            "actionType": "dataProvider",
+            "method": "activeMcnDataProvider"
+        },
+        "initRelatedEcnsDataProvider": {
+            "actionType": "dataProvider",
+            "method": "relatedEcnsDataProvider"
+        },
+        "getActiveMcnObject": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadActiveMcn",
+            "inputData": {
+                "activeMcnUid": "{{subPanelContext.activeMcnUid}}"
+            },
+            "outputData": {
+                "activeMcn": ""
+            },
+            "deps": "js/services/ngpChangeManagementService"
+        },
+        "getRelatedEcns": {
+            "actionType": "JSFunction",
+            "method": "loadRelatedEcns",
+            "inputData": {
+                "activeMcnUid": "{{subPanelContext.activeMcnUid}}"
+            },
+            "outputData":{
+                "relatedEcns": ""
+            },
+            "deps": "js/services/ngpChangeManagementService"
+        },
+        "changeMcnPanelViews": {
+            "actionType": "JSFunction",
+            "method": "getToggledBoolean",
+            "inputData": {
+                "booleanToToggle": "{{data.displayHistoryOfMcnsPanel}}"
+            },
+            "outputData": {
+                "displayHistoryOfMcnsPanel": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "getPreviousMcnUids":{
+            "actionType":"JSFunction",
+            "method": "getPreviousMcnUids",
+            "inputData": {
+                "modelObject": "{{subPanelContext.scopeObject}}"
+            },
+            "outputData":{
+                "previousMcnUids":""
+            },
+            "deps": "js/services/ngpChangeManagementService"
+        },
+        "setFinishedLoading":{
+            "actionType":"JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": true
+            },
+            "outputData": {
+                "finishedLoading": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "loadRelevantData":{
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "initActiveMcnDataProvider"
+                },
+                {
+                    "action": "initRelatedEcnsDataProvider"
+                },
+                {
+                    "action":"getPreviousMcnUids"
+                },
+                {
+                    "action": "setFinishedLoading"
+                }
+            ]
+        }
+    },
+    "dataProviders": {
+        "activeMcnDataProvider": {
+            "action": "getActiveMcnObject",
+            "response": [ "{{data.activeMcn}}" ],
+            "totalFound": 1,
+            "commandsAnchor": "ngp_changeManagementTile",
+            "selectionModelMode": "none"
+        },
+        "relatedEcnsDataProvider": {
+            "action": "getRelatedEcns",
+            "response": "{{data.relatedEcns}}",
+            "totalFound": "{{data.relatedEcns.length}}",
+            "commandsAnchor": "ngp_changeManagementTile",
+            "selectionModelMode": "none"
+        }
+    },
+    "lifecycleHooks": {
+        "onInit": "loadRelevantData"
+    },
+    "conditions": {
+        "hasHistoryOfMcns": {
+            "expression": {
+                "$source":"data.previousMcnUids.length",
+                "$query":{
+                    "$gt": 0
+                }
+            }
+        },
+        "hasRelatedEcns": {
+            "expression": {
+                "$source":"data.dataProviders.relatedEcnsDataProvider.viewModelCollection.loadedVMObjects.length",
+                "$query":{
+                    "$gt": 0
+                }
+            }
+        },
+        "displayHistoryOfMcnsPanel":{
+            "expression":{
+                "$and":[
+                    {
+                        "$source":"data.displayHistoryOfMcnsPanel",
+                        "$query":{
+                            "$eq": true
+                        }
+                    },
+                    {
+                        "$source":"data.finishedLoading",
+                        "$query":{
+                            "$eq": true
+                        }
+                    }
+                ]
+            }
+        },
+        "displayRelatedEcnsPanel":{
+            "expression":{
+                "$and":[
+                    {
+                        "$source":"data.displayHistoryOfMcnsPanel",
+                        "$query":{
+                            "$eq": false
+                        }
+                    },
+                    {
+                        "$source":"data.finishedLoading",
+                        "$query":{
+                            "$eq": true
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "i18n": {
+        "activeManufacturingChangeHeader": [ "NgpChangeMgmtMessages" ],
+        "historyOfChangeLinkTitle": [ "NgpChangeMgmtMessages" ],
+        "backToChangeManagementLinkTitle": [ "NgpChangeMgmtMessages" ],
+        "listOfEcnsHeader": [ "NgpChangeMgmtMessages" ]
+    }
+}

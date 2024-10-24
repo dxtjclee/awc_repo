@@ -1,0 +1,26 @@
+<div class="sw-row aw-taskbar-container aw-occmgmtSplit-taskbarHeight afx-accent-background aw-layout-fill">
+    <div class="sw-column flex-auto">
+        <!--  <taskbar-header exist-when="ctx.taskbarfullscreen && ctx.taskbarfullscreen === 'true'" task-name="Split View" subtask-name="Split View" context-Object="">
+            </taskbar-header> -->
+        <div class="sw-row flex-auto" exist-when="subPanelContext.subLocationTabCond.currentTab !== 'VRExecute'">
+            <aw-server-visibility-command-bar anchor="aw_vr_contentView_taskbar" alignment="HORIZONTAL" context="{openedObject:data.vrTaskBarContext.openedObject}" overflow="true"></aw-server-visibility-command-bar>
+        </div>
+        <div class='sw-row sw-button-group sw-button-wrapper justify-left' exist-when="subPanelContext.subLocationTabCond.currentTab === 'VRExecute'">
+            <aw-chip chip="data.clickableChip[0]" button-type="accent-positive" action="passAction"></aw-chip>
+            <aw-chip chip="data.clickableChip[1]" button-type="accent-negative" action="failAction"></aw-chip>
+            <aw-chip chip="data.clickableChip[2]" button-type="accent-caution" action="blockedAction"></aw-chip>
+            <aw-chip chip="data.clickableChip[3]" button-type="accent-high-contrast" action="cautionAction"></aw-chip>
+            <div class='sw-row sw-button-group justify-right align-right w-10' exist-when="subPanelContext.subLocationTabCond.currentTab === 'VRExecute'">
+                <aw-button action="previousAction">{{i18n.Previous}}</aw-button>
+                <aw-button action="nextAction">{{i18n.Next}}</aw-button>
+                <aw-button action="finishExecution">{{i18n.Finish}}</aw-button>
+            </div>
+        </div>
+    </div>
+    <div class="sw-column align-right w-1">
+        <aw-server-visibility-command-bar anchor="aw_vr_contentView_taskbarForExecute" alignment="HORIZONTAL" context="{openedObject:data.vrTaskBarContext.openedObject}" overflow="true"></aw-server-visibility-command-bar>
+    </div>
+    <div class="sw-column justify-center">
+        <aw-command-bar anchor="toolbarRightSlot" alignment="HORIZONTAL"></aw-command-bar>
+    </div>
+</div>

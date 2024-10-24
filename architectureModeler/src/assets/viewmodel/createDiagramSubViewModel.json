@@ -1,0 +1,202 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-form.directive",
+        "js/aw-form-validator.directive",
+        "js/aw-checkbox.directive",
+        "js/aw-add.directive"
+    ],
+
+    "actions": {
+
+        "createObject": {
+            "actionType": "JSFunction",
+            "method": "saveUserWorkingContextState",
+            "inputData": {
+                "shouldFireEventOnSuccess": true
+            },
+            "deps": "js/backgroundWorkingContextService"
+        },
+
+        "startCreateDiagram": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceSysEng-2014-11-DiagramManagement",
+            "method": "manageDiagram",
+            "inputData": {
+                "input": "{{function:getCreateInput}}"
+            },
+
+            "outputData": {
+                "createdMainObject": "output[0]",
+                "createdObject": "{{function:getCreatedObject}}"
+            },
+
+            "events": {
+                "success": [ {
+                    "name": "createDiagramSub.DiagramCreated"
+                } ]
+            },
+
+            "deps": "js/createDiagramService"
+        },
+
+        "processCreateDiagram": {
+            "actionType": "JSFunction",
+            "method": "processCreateDiagramSuccess",
+            "inputData": {
+                "data": "{{data}}"
+            },
+
+            "deps": "js/createDiagramService"
+        },
+
+        "reveal": {
+            "actionType": "JSFunction",
+            "method": "initNavigateFunction",
+            "inputData": {
+                "declViewModel": "{{data}}"
+            },
+
+            "deps": "js/createDiagramService"
+        },
+
+        "initiateSelection": {
+            "actionType": "JSFunction",
+            "method": "navigateAndCreateInput",
+            "inputData": {
+                "data": "{{data}}",
+                "creationType": "{{addPanelState.creationType}}"
+            },
+
+            "deps": "js/createDiagramService"
+        },
+        "setActiveView":{
+            "actionType": "JSFunction",
+            "method": "resetActiveView",
+            "inputData": {
+                "stateName": "{{data.activeState}}",
+                "destPanelId": "AddObjectPrimarySub"
+            },
+            "outputData": {
+                "activeState": ""
+            },
+            "deps": "js/addObjectUtils"
+        }
+    },
+
+    "conditions": {
+        "isValidToCreateObjects": {
+            "expression": "true"
+        },
+        "isNewTabAddButtonVisible": {
+            "expression": "addPanelState.creationType"
+        },
+        "isPaletteSearchTabAddButtonVisible": {
+            "expression": "addPanelState.selectedTab.view!='NewTabPageSub' && addPanelState.sourceObjects.length>0"
+        },
+        "showFooter": {
+            "expression": "data.activeView!='createDiagramSub'"
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_SUB_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "data": {
+        "openOnCreate": {
+            "displayName": "{{i18n.addAndOpen}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": true,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "recentUsedTypes": [],
+        "addPanelState": {
+            "initialValues": {
+                "creationType": "",
+                "selectedTab": ""
+            },
+            "meta": {}
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "AddObjectPrimarySub",
+                "context": {}
+            },
+            "meta": {}
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+
+    "onEvent": [ {
+            "eventId": "createDiagramSub.DiagramCreated",
+            "action": "processCreateDiagram"
+        },
+        {
+            "eventId": "awTypeSelector.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "initiateSelection"
+        },
+        {
+            "eventId": "getRecentTypesProvider.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "initiateSelection"
+        },
+        {
+            "eventId": "awPanel.reveal",
+            "criteria": {
+                "panelId": "createDiagramSub"
+            },
+            "action": "reveal"
+        },
+        {
+            "eventId": "saveBWC.success",
+            "action": "startCreateDiagram"
+        }
+    ],
+    "functions": {
+        "getCreateInput": {
+            "functionName": "getCreateInput",
+            "parameters": [
+                "{{data}}",
+                "{{addPanelState.creationType}}",
+                "{{props.occContext}}",
+                "{{editHandlers.addPanelEditHandler}}"
+            ]
+        },
+        "getCreatedObject": {
+            "functionName": "getCreatedObject",
+            "parameters": []
+        }
+
+    },
+    "i18n": {
+        "addAndOpen": [
+            "ArchitectureModelerConstants"
+        ],
+        "add": [
+            "ArchitectureModelerConstants"
+        ],
+        "BACK_BUTTON_TITLE": [
+            "BaseMessages"
+        ]
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    }
+}

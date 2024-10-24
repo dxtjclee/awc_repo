@@ -1,0 +1,11 @@
+<aw-toolbar visible-when="!conditions.isInterfaceDetailsPanelVisible" first-anchor="aw_interfacesViewer" second-anchor="aw_toolbarRight,aw_fullScreen" orientation="HORIZONTAL" context="{pageState:fields.interfacePageState, primarySelectionData:fields.primarySelectionData, actionState:fields.actionState, data:data, ...props.subPanelContext}"></aw-toolbar>
+<div class="sw-row aw-systemmodeler-interfacePage ">
+    <aw-include name="{{data.interfacePageState.viewName}}" visible-when="!conditions.isInterfaceDetailsPanelVisible" sub-panel-context="{pageState:fields.interfacePageState, primarySelectionData:fields.primarySelectionData, actionState:fields.actionState}">
+    </aw-include>
+    <aw-splitter direction="HORIZONTAL" exist-when="conditions.showConnectionTableAtBottomCondition && !conditions.isInterfaceDetailsPanelVisible"></aw-splitter>
+    <ase1-interfaces-in-context-secondary page-state="data.interfacePageState" primary-selection="fields.primarySelectionData" secondary-selection="fields.secondarySelectionData" sub-panel-context="subPanelContext"></ase1-interfaces-in-context-secondary>
+    <aw-splitter exist-when="conditions.showConnectionTableAtRightCondition"></aw-splitter>
+    <div class="sw-column w-4" exist-when="conditions.showConnectionTableAtRightCondition">
+        <ase1-connection-table page-state="fields.interfacePageState" primary-selection="data.primarySelectionData" secondary-selection="fields.secondarySelectionData" sub-panel-context="subPanelContext"></ase1-connection-table>
+    </div>
+</div>

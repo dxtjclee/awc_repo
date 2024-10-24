@@ -1,0 +1,10 @@
+<aw-panel-body>
+    <aw-radiobutton prop="data.allowAlternateProcedures" visible-when="conditions.isAllowAlternateProcedures" action="getValidTemplates"></aw-radiobutton>
+    <aw-listbox prop="data.workflowTemplatesLabel" list="data.workflowTemplatesList" aw-class="{'disabled': conditions.isSubmitInProgress}"></aw-listbox>
+    <aw-textbox prop="data.workFlowNameLabel" aw-class="{'disabled': conditions.isSubmitInProgress}"></aw-textbox>
+    <aw-widget prop="data.descriptionLabel" hint="textarea" aw-class="{'disabled': conditions.isSubmitInProgress}"></aw-widget>
+</aw-panel-body>
+<aw-panel-footer>
+    <aw-button button-type="base" action="closeDialog" size="auto" aw-class="{'disabled': conditions.isSubmitInProgress}">{{i18n.cancel}}</aw-button>
+    <aw-button action="submit" size="auto" aw-class="{'disabled': conditions.isNotValidToSubmit}">{{i18n.submit}}</aw-button>
+</aw-panel-footer>

@@ -1,0 +1,22 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "messages": {
+            "selectionIsNotSrOrWcForSkills": [
+                {
+                    "text": "{{i18n.selectionIsNotSrOrWcForSkills}}"
+                }
+            ]
+        }
+    },
+    "conditions": {
+        "IsVMOValid": {
+            "expression": "ctx.selectedVMO.modelType.typeHierarchyArray.includes('SSP0BvrServiceRequirement') || ctx.selectedVMO.modelType.typeHierarchyArray.includes('SSP0BvrWorkCard')"
+        }
+    },
+    "i18n": {
+        "selectionIsNotSrOrWcForSkills": [
+            "ssp0Messages"
+        ]
+    }
+}

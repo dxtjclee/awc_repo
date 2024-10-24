@@ -1,0 +1,16 @@
+<aw-command-panel caption="i18n.replace">
+    <aw-panel-body>
+        <div>
+            <aw-panel-section>
+                <aw-radiobutton prop="data.replaceType"></aw-radiobutton>
+                <aw-add max-recent-count='6' visible-tabs="search" add-panel-state="fields.addPanelState">
+                </aw-add>
+            </aw-panel-section>
+        </div>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button action="generateTraceabilityMatrix" enable-when="conditions.replaceButtonEnabled">
+            <aw-i18n>i18n.replace</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

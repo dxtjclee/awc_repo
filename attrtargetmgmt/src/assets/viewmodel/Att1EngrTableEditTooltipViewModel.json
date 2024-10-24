@@ -1,0 +1,103 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-textbox.directive",
+        "js/aw-row.directive",
+        "js/aw-balloon-popup-panel.directive",
+        "js/aw-image.directive"
+    ],
+    "actions":{
+        "reveal":{
+            "actionType": "JSFunction",
+            "method": "getGMMPopupInfo",
+            "inputData": {
+                "data": "{{data}}",
+                "cellInfo":"{{subPanelContext.cellTooltipInfo}}"
+            },
+            "outputData":
+            {
+                "editImagePath": "editImagePath",
+                "saveImagePath":"saveImagePath",
+                "Goal": "Goal",
+                "Min": "Min",
+                "Max": "Max",
+                "isTooltipDirty":"isTooltipDirty"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "startEditOnGMMPopup":{
+            "actionType": "JSFunction",
+            "method": "startEditModeForGMMPPopup",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData":
+            {               
+                "Goal": "Goal",
+                "Min": "Min",
+                "Max": "Max",
+                "isTooltipDirty":"isTooltipDirty"
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "saveGMMPopup":{
+            "actionType": "JSFunction",
+            "method": "saveGMMPopup",
+            "inputData": {
+                "data": "{{data}}",
+                "subPanelContext": "{{subPanelContext}}",                
+                "cellInfo":"{{subPanelContext.cellTooltipInfo}}"
+            },
+            "outputData":
+            {               
+                "Goal": "Goal",
+                "Min": "Min",
+                "Max": "Max",
+                "isTooltipDirty":"isTooltipDirty"
+            },
+            "deps": "js/Att1EngrTableService"
+        }
+
+    },
+    "data": {
+        "isTooltipDirty":false,
+        "Goal": {
+            "displayName": "{{i18n.Goal}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "",
+            "dispValue": ""
+        },
+        "Min": {
+            "displayName": "{{i18n.Min}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "",
+            "dispValue": ""
+        },
+        "Max": {
+            "displayName": "{{i18n.Max}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "",
+            "dispValue": ""
+        },
+        "isIcon": true
+    },
+    "lifecycleHooks": {
+        "onInit": "reveal"
+    },
+    "onEvent":
+    [
+
+    ],
+    "i18n": {
+        "Goal": ["Att1Messages"],
+        "Min": ["Att1Messages"],
+        "Max": ["Att1Messages"],
+        "MeasurementTitle": ["Att1Messages"]
+    }
+}

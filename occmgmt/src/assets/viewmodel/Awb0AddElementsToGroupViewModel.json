@@ -1,0 +1,215 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {},
+    "ctx": {
+        "search": {
+            "type": "object"
+        },
+        "selected": {
+            "type": "object"
+        },
+        "advancedSearch": {
+            "type": "object"
+        },
+        "preferences": {
+            "type": "object"
+        }
+    },
+    "actions": {
+        "reveal": {
+            "actionType": "dataProvider",
+            "method": "performSearch"
+        },
+        "search": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient"
+                },
+                "searchInput": {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Awb0SubstitutesProvider",
+                    "searchCriteria": {
+                        "selectedElement": "{{props.subPanelContext.occContext.selectedModelObjects[0].uid}}",
+                        "substituteGroup": "{{data.ctx.mselected[0].fnd0SubstituteGroupObj.uid}}",
+                        "usecase": "AddElementsToSubstituteGroup"
+                    },
+                    "searchFilterFieldSortType": "Priority"
+                }
+            },
+            "policy": {
+                "types": [
+                    {
+                        "name": "BOMLine",
+                        "properties": [
+                            {
+                                "name": "fnd0bl_substitute_groups"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}"
+            }
+        },
+        "addElementsToGroup": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "setPropertiesOnBomline"
+                },
+                {
+                    "action": "saveBomWindow"
+                }
+            ]
+        },
+        "setPropertiesOnBomline": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-09-DataManagement",
+            "method": "setProperties",
+            "inputData": {
+                "info": "{{function:getPropertiesInput}}"
+            },
+            "policy": {
+                "types": [
+                    {
+                        "name": "BOMLine",
+                        "properties": [
+                            {
+                                "name": "bl_window"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Awb0ConditionalElement",
+                        "properties": [
+                            {
+                                "name": "awb0HasSubstitues"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "message": "addSubstituteFailure"
+                    }
+                ]
+            },
+            "deps": "js/substituteGroupService"
+        },
+        "saveBomWindow": {
+            "actionType": "TcSoaService",
+            "serviceName": "Cad-2008-06-StructureManagement",
+            "method": "saveBOMWindows",
+            "inputData": {
+                "bomWindows": [
+                    {
+                        "uid": "{{data.dataProviders.performSearch.selectedObjects[0].props.bl_window.dbValues[0]}}",
+                        "type": ""
+                    }
+                ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "reloadsubstituteGroupTable"
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            }
+        },
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "lifecycleHooks": {},
+    "dataProviders": {
+        "performSearch": {
+            "action": "search",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "primaryWorkArea.selectionChangeEvent",
+            "action": "closePanel",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "substituteGroupDataProvider.selectionChangeEvent",
+            "action": "closePanel",
+            "cacheEventData": true
+        }
+    ],
+    "functions": {
+        "getInputForSaveViewModel": {
+            "functionName": "getInputForSaveViewModel",
+            "parameters": [
+                "{{data}}",
+                "{{ctx}}",
+                "{{subPanelContext}}"
+            ]
+        },
+        "getPropertiesInput": {
+            "functionName": "getPropertiesInput",
+            "parameters": [
+                "{{ctx.selected.fnd0SubstituteGroupObj.uid}}",
+                "{{data.dataProviders.performSearch.selectedObjects}}"
+            ]
+        }
+    },
+    "conditions": {
+        "isPanelPinned": {
+            "expression": "subPanelContext.panelPinned"
+        }
+    },
+    "messages": {
+        "addSubstituteFailure": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "i18n": {
+        "addElementBtn": [
+            "OccurrenceManagementConstants"
+        ],
+        "addElements": [
+            "OccurrenceManagementConstants"
+        ],
+        "toTitle": [
+            "OccurrenceManagementConstants"
+        ],
+        "Elements": [
+            "OccurrenceManagementConstants"
+        ]
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    }
+}

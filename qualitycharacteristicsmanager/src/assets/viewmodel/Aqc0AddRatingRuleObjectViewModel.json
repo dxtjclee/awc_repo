@@ -1,0 +1,133 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "data": {
+        "addPanelState": {
+            "initialValues": {
+                "creationType": "",
+                "createdObject": "",
+                "sourceObjects": "",
+                "selectedTab": "",
+                "isDatasetCreate": ""
+            },
+            "meta": {}
+        },       
+        "tabs": [
+            {
+                "tabKey": "Aqc0AddRatingRuleNewTab",                                
+                "name": "{{i18n.Aqc0New}}"                           
+            }            
+        ],
+        "triggerCreate": {
+            "dbValue": false,
+            "type": "BOOLEAN"
+        },
+        "searchState": {
+            "initialValues": {
+                "hideFilters": true
+            },
+            "meta": {
+            }
+        },
+        "filterBox": {
+            "displayName": "",
+            "type": "STRING",
+            "dbValue": ""
+        },        
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        },        
+        "selectedType": {
+            "type": "STRING",
+            "dbValue": "Qc0RatingRule"
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "Aqc0AddRatingRuleObject"
+            },
+            "meta": {}
+        }
+    },
+    "actions": {                    
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            }
+        },
+        "createRatingRuleObject": {
+            "actionType": "JSFunction",
+            "method": "updateCreateTrigger",
+            "inputData": {
+                "triggerCreate": "{{data.triggerCreate}}",
+                "value": true
+            },
+            "outputData": {
+                "triggerCreate": "triggerCreate"
+            },
+            "deps": "js/Aqc0ChecklistSpecService"
+        },
+        "attachRatingRuleObject": {
+            "actionType": "JSFunction",
+            "method": "updateCreateTrigger",
+            "inputData": {
+                "triggerCreate": "{{data.triggerCreate}}",
+                "value": true
+            },
+            "outputData": {
+                "triggerCreate": "triggerCreate"
+            },
+            "deps": "js/Aqc0ChecklistSpecService"
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },   
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },   
+    "functions": {},   
+    "onEvent": [                    
+        {
+            "eventId": "gwt.SubLocationContentSelectionChangeEvent",
+            "action": "closePanel"
+        }
+    ],
+    "i18n": {
+        "Aqc0Add": [
+            "qualitycentermanagerMessages"
+        ],
+        "Aqc0AddRatingRule": [
+            "qualitycentermanagerMessages"
+        ],
+        "Aqc0New": [
+            "qualitycentermanagerMessages"
+        ]     
+    },
+    "messages": {        
+    },
+    "conditions": {                  
+        "isNewTabAddButtonVisible": {
+            "expression": "data.selectedTab.tabKey ==='Aqc0AddRatingRuleNewTab' && addPanelState.creationType"
+        }
+    }    
+}

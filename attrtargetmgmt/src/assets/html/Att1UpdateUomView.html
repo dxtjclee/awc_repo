@@ -1,0 +1,17 @@
+<aw-balloon-popup-panel>
+    <aw-panel>
+        <div>
+            <label class="aw-splm-tableHeaderCellLabel">{{i18n.UomPopupTitle}}</label>
+        </div>
+        <br>
+        <div>
+            <aw-textbox prop="data.ColumnHeaderName"></aw-textbox>
+            <aw-listbox prop="data.lovUnitProp" list="data.lovUnitPropOptions.dbValue"></aw-listbox>
+        </div>
+        <aw-panel-footer>
+            <aw-button button-type="base" size="auto" action="handleCancleAction"> <aw-i18n>i18n.cancel</aw-i18n></aw-button>
+            <aw-button button-type="base" size="auto" action="handleOkAction"> <aw-i18n>i18n.ok</aw-i18n></aw-button>
+        </aw-panel-footer>
+    </aw-panel>
+</aw-balloon-popup-panel>
+

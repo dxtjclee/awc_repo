@@ -1,0 +1,18 @@
+<div class="aw-layout-flexRow">
+    <div class="aw-widgets-cellListCellImage">
+        <aw-avatar size="small" source="props.vmo.userObj.typeIconURL" title="{{props.vmo.toShareInfo}}"></aw-avatar>
+    </div>
+    <div class="aw-markup-cellContent">
+        <div class="aw-widgets-cellListCellTitleBlock">
+            <h3 class="aw-widgets-cellListCellTitle">{{props.vmo.displayname}}</h3>
+            <label class="aw-widgets-cellListCellItemType aw-base-small">{{props.vmo.statusInfo}}</label>
+        </div>
+        <div class="aw-widgets-cellListCellProperties">
+            <label class="aw-widgets-propertyValue aw-base-small">{{props.vmo.date.toLocaleString()}}</label>
+        </div>
+        <label visible-when="props.vmo.selected">{{ctx.reqMarkupCtx.commentName.toTrusted}}</label>
+        <div visible-when="!props.vmo.selected" class="aw-widgets-cellListCellProperties">
+            <label class="aw-widgets-propertyValue aw-base-small">{{props.vmo.toOneLine}}</label>
+        </div>
+    </div>
+</div>

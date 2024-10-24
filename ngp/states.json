@@ -1,0 +1,272 @@
+{
+  "com_siemens_splm_client_mfg_ngp": {
+    "abstract": false,
+    "view": "NgpCommonLocation",
+    "parent": "root",
+    "url": "/com.siemens.splm.client.mfg.ngp?uid",
+    "data": {
+      "browserSubTitle": {
+        "source": "/i18n/NgpBaseMessages",
+        "key": "ngp"
+      },
+      "headerTitle": {
+        "source": "/i18n/NgpBaseMessages",
+        "key": "ngp"
+      }
+    }
+  },
+  "mfg_dualview": {
+    "abstract": false,
+    "data": {
+      "hostApplication": "ngp"
+    },
+    "dependencies": [
+      "js/mfe-hostView.controller"
+    ],
+    "controller": "HostedViewCtrl",
+    "templateUrl": "/html/aw-hostView.directive.html",
+    "params": {
+      "token": null,
+      "guid": null
+    },
+    "view": "NgpCommonLocation",
+    "parent": "root",
+    "url": "/mfg_dualview"
+  },
+  "information": {
+    "type": "subLocation",
+    "url": "/information",
+    "parent": "com_siemens_splm_client_mfg_ngp",
+    "view": "NgpInformationPanel",
+    "abstract": false,
+    "visibleWhen": {
+      "expression": {
+        "$source": "ngpObjectToNavigate.modelType.typeHierarchyArray",
+        "$query": {
+          "$in": [
+            "Mpr0BOPElement",
+            "Mpr0ManufacturingElement"
+          ]
+        }
+      }
+    },
+    "data": {
+      "label": {
+        "source": "/i18n/NgpSubpagesMessages",
+        "key": "informationSubpageTitle"
+      },
+      "nameToken": "ngpInformationSubLocation",
+      "clientScopeURI": "ngpInformation",
+      "priority": 100,
+      "defaultSubpagePriority": 300
+    }
+  },
+  "buildStrategy": {
+    "type": "subLocation",
+    "url": "/buildStrategy",
+    "parent": "com_siemens_splm_client_mfg_ngp",
+    "view": "NgpBuildStrategySubpage",
+    "abstract": false,
+    "visibleWhen": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "ngpObjectToNavigate.modelType.typeHierarchyArray",
+            "$query": {
+              "$in": [
+                "Mpr0Activity",
+                "Mpr0BuildElement"
+              ]
+            }
+          },
+          {
+            "$source": "ngpObjectToNavigate.props.mpr0isLibrary.dbValues.0",
+            "$query": {
+              "$eq": "0"
+            }
+          }
+        ]
+      }
+    },
+    "data": {
+      "label": {
+        "source": "/i18n/NgpSubpagesMessages",
+        "key": "buildStrategySubpageTitle"
+      },
+      "nameToken": "ngpBuildStrategySubLocation",
+      "clientScopeURI": "ngpBuildStrategy",
+      "priority": 200,
+      "defaultSubpagePriority": 200
+    }
+  },
+  "content": {
+    "type": "subLocation",
+    "url": "/content",
+    "parent": "com_siemens_splm_client_mfg_ngp",
+    "view": "NgpContentSubpage",
+    "abstract": false,
+    "visibleWhen": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "ngpObjectToNavigate.modelType.typeHierarchyArray",
+            "$query": {
+              "$in": [
+                "Mpr0Activity",
+                "Mpr0BuildElement"
+              ]
+            }
+          },
+          {
+            "$source": "ngpObjectToNavigate.props.mpr0isLibrary.dbValues.0",
+            "$query": {
+              "$eq": "1"
+            }
+          }
+        ]
+      }
+    },
+    "data": {
+      "label": {
+        "source": "/i18n/NgpSubpagesMessages",
+        "key": "contentSubpageTitle"
+      },
+      "nameToken": "ngpContentSubLocation",
+      "clientScopeURI": "ngpContent",
+      "priority": 200,
+      "defaultSubpagePriority": 200
+    }
+  },
+  "productSubset": {
+    "type": "subLocation",
+    "view": "NgpHosting",
+    "url": "/productSubset",
+    "parent": "com_siemens_splm_client_mfg_ngp",
+    "abstract": false,
+    "visibleWhen": {
+      "expression": {
+        "$source": "ngpObjectToNavigate.modelType.typeHierarchyArray",
+        "$query": {
+          "$in": [
+            "Mpr0Activity"
+          ]
+        }
+      }
+    },
+    "data": {
+      "label": {
+        "source": "/i18n/NgpSubpagesMessages",
+        "key": "productSubsetSubpageTitle"
+      },
+      "nameToken": "ngpProductSubsetSubLocation",
+      "clientScopeURI": "ngpProductSubset",
+      "priority": 300,
+      "defaultSubpagePriority": 400,
+      "hostApplication": "ngp"
+    }
+  },
+  "workunitBuildup": {
+    "type": "subLocation",
+    "url": "/workunitBuildup",
+    "view": "NgpHosting",
+    "parent": "com_siemens_splm_client_mfg_ngp",
+    "abstract": false,
+    "visibleWhen": {
+      "expression": {
+        "$source": "ngpObjectToNavigate.modelType.typeHierarchyArray",
+        "$query": {
+          "$in": [
+            "Mpr0Activity"
+          ]
+        }
+      }
+    },
+    "data": {
+      "label": {
+        "source": "/i18n/NgpSubpagesMessages",
+        "key": "workUnitSubpageTitle"
+      },
+      "nameToken": "ngpWorkUnitSubLocation",
+      "clientScopeURI": "ngpWorkUnit",
+      "priority": 400,
+      "defaultSubpagePriority": 100
+    }
+  },
+  "operations": {
+    "type": "subLocation",
+    "url": "/operations",
+    "view": "NgpHosting",
+    "parent": "com_siemens_splm_client_mfg_ngp",
+    "abstract": false,
+    "visibleWhen": {
+      "expression": {
+        "$source": "ngpObjectToNavigate.modelType.typeHierarchyArray",
+        "$query": {
+          "$in": [
+            "Mpr0ProcessElementBase"
+          ]
+        }
+      }
+    },
+    "data": {
+      "label": {
+        "source": "/i18n/NgpSubpagesMessages",
+        "key": "operationsSubpageTitle"
+      },
+      "nameToken": "ngpOperationsSubLocation",
+      "clientScopeURI": "ngpOperations",
+      "priority": 400,
+      "defaultSubpagePriority": 100
+    }
+  },
+  "modelviews": {
+    "type": "subLocation",
+    "url": "/modelviews",
+    "view": "NgpHosting",
+    "parent": "com_siemens_splm_client_mfg_ngp",
+    "abstract": false,
+    "visibleWhen": {
+      "expression": {
+        "$source": "ngpObjectToNavigate.modelType.typeHierarchyArray",
+        "$query": {
+          "$in": [
+            "Mpr0ProcessElementBase"
+          ]
+        }
+      }
+    },
+    "data": {
+      "label": {
+        "source": "/i18n/NgpSubpagesMessages",
+        "key": "modelViewsSubpageTitle"
+      },
+      "nameToken": "ngpModelViewsSubLocation",
+      "clientScopeURI": "ngpModelViews",
+      "priority": 500,
+      "defaultSubpagePriority": 100
+    }
+  },
+  "com_siemens_splm_client_mfg_ngp_ewi": {
+    "abstract": false,
+    "view": "commonLocation",
+    "parent": "root",
+    "url": "/com.siemens.splm.client.mfg.ngp.ewi?uid"
+  },
+  "processWorkInstructions": {
+    "controller": "HostedViewCtrl",
+    "templateUrl": "/html/aw-hostView.directive.html",
+    "type": "subLocation",
+    "url": "/processWorkInstructions",
+    "parent": "com_siemens_splm_client_mfg_ngp_ewi",
+    "abstract": false,
+    "visibleWhen": true,
+    "data": {
+      "nameToken": "ngpEwiProcessSubLocation",
+      "clientScopeURI": "",
+      "hostApplication": "ngp"
+    },
+    "dependencies": [
+      "js/mfe-hostView.controller"
+    ]
+  }
+}

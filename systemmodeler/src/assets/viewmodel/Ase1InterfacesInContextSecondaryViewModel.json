@@ -1,0 +1,98 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "props": {
+        "page-state": {
+            "type": "object"
+        },
+        "primary-selection": {
+            "type": "object"
+        },
+        "secondary-selection": {
+            "type": "object"
+        },
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+
+    "data": {
+        "primarySelectionData": {
+            "initialValues": {
+            },
+            "meta": {}
+        },
+        "secondarySelectionData": {
+            "initialValues": {
+            },
+            "meta": {}
+        }
+    },
+
+    "actions": {
+        "processSelectionChange": {
+            "actionType": "JSFunction",
+            "method": "processSelectionChange",
+            "inputData": {
+                "primarySelectionData": "{{data.primarySelectionData}}",
+                "secondarySelectionData": "{{data.secondarySelectionData}}",
+                "selectionData": "{{props.secondarySelection}}"
+            },
+            "outputData": {},
+            "deps": "js/Ase1InterfacesUtilService"
+        },
+        "getInterfacesSelection": {
+            "actionType": "JSFunctionAsync",
+            "method": "getAdaptedObjects",
+            "inputData": {
+                "sourceObjects": "{{data.primarySelectionData.selected}}"
+            },
+            "outputData": {
+                "selection": ""
+            },
+            "deps": "js/adapterService"
+        }
+    },
+
+    "dataProviders": {
+    },
+
+    "columnProviders": {
+    },
+
+    "grids": {
+    },
+
+    "functions": {
+    },
+
+    "dataParseDefinitions": {},
+    "onEvent": [
+    ],
+
+    "lifecycleHooks": {
+        "onUpdate": [ {
+            "action": "processSelectionChange",
+            "observers": [ "viewModel.atomicData.primarySelectionData", "viewModel.atomicData.secondarySelectionData" ]
+        },
+        {
+            "action": "getInterfacesSelection",
+            "observers": [ "viewModel.atomicData.primarySelectionData.selected" ]
+        }]
+    },
+
+    "i18n": {
+    },
+    "messages": {},
+    "conditions": {
+        "validSelectionToShowConnectionTable": {
+            "expression": "props.primarySelection.selected.length === 1 && props.pageState.modelData.hasSystemModelerLicense"
+        },
+        "showConnectionTableAtBottomCondition": {
+            "expression": "props.pageState.selectedSplitPanelLocation === 'bottom' && conditions.validSelectionToShowConnectionTable"
+        },
+        "isInterfaceDetailsPanelVisible": {
+            "expression": "props.pageState.showInterfaceDetailsPanel"
+        }
+    }
+}

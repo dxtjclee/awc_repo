@@ -1,0 +1,121 @@
+{
+    "schemaVersion": "1.0.0",
+    "lifecycleHooks": {
+        "onMount": "reveal",
+        "onUpdate": [
+            {
+                "action": "addHtmlPanelPropertiesInDataSource",
+                "observers": [
+                    "viewModel.data.runProperty[0]",
+                    "viewModel.data.runProperty[1]",
+                    "viewModel.data.trendProperty[0]",
+                    "viewModel.data.trendProperty[1]",
+                    "viewModel.data.ruleProperties[0]",
+                    "viewModel.data.ruleProperties[1]",
+                    "viewModel.data.ruleProperties[2]",
+                    "viewModel.data.ruleProperties[3]",
+                    "viewModel.data.ruleProperties[4]",
+                    "viewModel.data.ruleProperties[5]",
+                    "viewModel.data.ruleProperties[6]",
+                    "viewModel.data.westingHoueRuleProperties[0]",
+                    "viewModel.data.westingHoueRuleProperties[1]",
+                    "viewModel.data.westingHoueRuleProperties[2]",
+                    "viewModel.data.westingHoueRuleProperties[3]",
+                    "viewModel.data.westingHoueRuleProperties[4]",
+                    "viewModel.data.westingHoueRuleProperties[5]",
+                    "viewModel.data.westingHoueRuleProperties[6]",
+                    "viewModel.data.westingHoueRuleProperties[7]",
+                    "viewModel.data.westingHoueRuleProperties[8]",
+                    "viewModel.data.westingHoueRuleProperties[9]"
+                ]
+            }]
+    },
+    "actions": {
+        "addHtmlPanelPropertiesInDataSource": {
+            "actionType": "JSFunction",
+            "method": "addHtmlPanelPropertiesInDataSource",
+            "inputData": {
+                "updatedProperties": [
+                    "{{data.runProperty[0]}}",
+                    "{{data.runProperty[1]}}",
+                    "{{data.trendProperty[0]}}",
+                    "{{data.trendProperty[1]}}",
+                    "{{data.ruleProperties[0]}}",
+                    "{{data.ruleProperties[1]}}",
+                    "{{data.ruleProperties[2]}}",
+                    "{{data.ruleProperties[3]}}",
+                    "{{data.ruleProperties[4]}}",
+                    "{{data.ruleProperties[5]}}",
+                    "{{data.ruleProperties[6]}}",
+                    "{{data.westingHoueRuleProperties[0]}}",
+                    "{{data.westingHoueRuleProperties[1]}}",
+                    "{{data.westingHoueRuleProperties[2]}}",
+                    "{{data.westingHoueRuleProperties[3]}}",
+                    "{{data.westingHoueRuleProperties[4]}}",
+                    "{{data.westingHoueRuleProperties[5]}}",
+                    "{{data.westingHoueRuleProperties[6]}}",
+                    "{{data.westingHoueRuleProperties[7]}}",
+                    "{{data.westingHoueRuleProperties[8]}}",
+                    "{{data.westingHoueRuleProperties[9]}}"
+                ],
+                "type": "SUMMARY"
+            },
+            "deps": "js/xrtUtilities"
+        },
+        "reveal": {
+            "actionType": "JSFunction",
+            "method": "populatePanelData",
+            "inputData": {
+               "subPanelContext":"{{subPanelContext}}"
+            },
+            "outputData":{
+                "runProperty":"runProperty",
+                "trendProperty":"trendProperty",
+                "ruleProperties":"ruleProperties",
+                "westingHoueRuleProperties":"westingHoueRuleProperties"
+            },
+            "deps": "js/Acp0IndustryRuleService"
+        },
+        "editEventAction": {
+            "actionType": "JSFunction",
+            "method": "processEditData",
+            "inputData": {
+                "data": "{{data}}",
+                "selectedObj":"{{subPanelContext.selected}}"
+            },
+            "outputData":{
+                "runProperty":"tempRunProperties",
+                "trendProperty":"tempTrendProperties",
+                "ruleProperties":"tempRuleProperties",
+                "westingHoueRuleProperties":"westingHoueRuleProperties"
+            },
+            "deps": "js/Acp0IndustryRuleService"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "editHandlerStateChange",
+            "cacheEventData": true,
+            "action": "editEventAction"
+            }
+    ],
+
+    "conditions": {
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data": {
+
+    },
+    "functions": {
+    },
+
+    "i18n": {
+        "acp0OutOfRules": [
+            "ControlInspectionPlanMessages"
+        ]
+    }
+}

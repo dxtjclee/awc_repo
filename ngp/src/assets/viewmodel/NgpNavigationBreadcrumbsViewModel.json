@@ -1,0 +1,47 @@
+{
+    "schemaVersion": "1.0.0",
+    "props":{
+        "scope-object":{
+            "type":"object"
+        }
+    },
+    "actions": {
+        "getBreadcrumbs": {
+            "actionType": "JSFunctionAsync",
+            "method": "getObjectBreadcrumbs",
+            "inputData": {
+                "modelObject": "{{props.scopeObject}}"
+            },
+            "outputData": {
+                "crumbs": ""
+            },
+            "deps": "js/services/ngpBreadcrumbsService"
+        },
+        "updateBreadcrumbs": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "getBreadcrumbs",
+                    "condition": "data.eventData.modelObjects[0].uid === data.crumbs[data.crumbs.length-1].scopedUid && data.eventData.modelObjects[0].props.object_string.uiValues[0] !== data.crumbs[data.crumbs.length-1].displayName"
+                }
+            ]
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "getBreadcrumbs",
+        "onUpdate":{
+            "action": "getBreadcrumbs",
+            "observers": ["props.scopeObject"]
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "mfe.updated",
+            "action": "updateBreadcrumbs",
+            "cacheEventData": true
+        }
+    ],
+    "i18n": {
+        "noChildrenFound": [ "NgpHeaderMessages" ]
+    }
+}

@@ -1,0 +1,68 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-command-sub-panel.directive",
+        "js/visible-when.directive",
+        "js/aw-i18n.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive"
+    ],
+
+    "actions": {
+        "executeRecipe": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "processExecuteRecipe",
+                    "condition": "data.executeRecipeState.selectedObject.uid"
+                },
+                {
+                    "action": "openRecipe",
+                    "condition": "data.executeRecipeState.selectedObject.uid"
+                }
+            ]
+        },
+
+        "processExecuteRecipe":{
+            "actionType": "JSFunction",
+            "method": "processExecuteRecipe",
+            "inputData": {
+                "occContext": "{{subPanelContext.occContext}}"
+            },
+            "deps": "js/Evm1ShowRecipeService"
+        },
+
+        "openRecipe": {
+            "actionType": "Navigate",
+            "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+            "navigationParams": {
+                "uid": "{{data.executeRecipeState.selectedObject.uid}}"
+            }
+        }
+    },
+
+    "data": {
+        "executeRecipeState": {
+            "initialValues": {
+                "selectedObject":{}
+            },
+            "meta": {}
+        }
+    },
+
+    "dataProviders": {},
+    "lifecycleHooks": {
+        "onUpdate": [ {
+            "action": "executeRecipe",
+            "observers": [ "viewModel.atomicData.executeRecipeState.selectedObject" ]
+        }]
+    },
+    "i18n": {
+        "ExecuteRecipe": [
+            "RecipeCommandPanelsMessages"
+        ],
+        "execute": [
+            "RecipeCommandPanelsMessages"
+        ]
+    }
+}

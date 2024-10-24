@@ -1,0 +1,77 @@
+{
+    "schemaVersion": "1.0.0",
+    "props":{
+        "scope-object":{
+            "type":"object"
+        }
+    },
+    "data": {
+        "effectivityValue": "",
+        "chipData": {
+            "chipType": "STATIC",
+            "labelDisplayName": ""
+        },
+        "extendedTooltip":{
+            "title": ""
+        }
+    },
+    "actions": {
+        "getEffectivityAndTooltipValues":{
+            "actionType":"batchJob",
+            "steps":[
+                {
+                    "action":"getEffectivityValue"
+                },
+                {
+                    "action":"formatTooltipTitle"
+                }
+            ]
+        },
+        "getEffectivityValue": {
+            "actionType": "JSFunctionAsync",
+            "method": "getProductEffectivityValue",
+            "inputData": {
+                "modelObject": "{{props.scopeObject}}"
+            },
+            "outputData": {
+                "chipData.labelDisplayName": "displayValue",
+                "effectivityValue": "effectivityValue"
+            },
+            "deps": "js/services/ngpEffectivityService"
+        },
+        "formatTooltipTitle":{
+            "actionType":"JSFunction",
+            "method":"applyMessagesParams",
+            "inputData":{
+                "messagesData": [{
+                    "text":"{{i18n.effectivityTooltip}}",
+                    "textParams":[ "{{data.effectivityValue}}"]
+                }]
+            },
+            "outputData":{
+                "extendedTooltip.title":"0.text"
+            },
+            "deps":"js/mfeMessagesService"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "getEffectivityAndTooltipValues",
+        "onUpdate":{
+            "action": "getEffectivityAndTooltipValues",
+            "observers": ["props.scopeObject"]
+        }
+    },
+    "conditions":{
+        "shouldDisplayEffectivityChip":{
+            "expression":{
+                "$source":"data.chipData.labelDisplayName",
+                "$query":{
+                    "$ne":""
+                }
+            }
+        }
+    },
+    "i18n": {
+        "effectivityTooltip": [ "NgpHeaderMessages" ]
+    }
+}

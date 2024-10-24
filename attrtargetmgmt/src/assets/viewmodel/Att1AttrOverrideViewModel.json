@@ -1,0 +1,48 @@
+{
+    "schemaVersion" : "1.0.0",
+    "imports":
+    [
+    ],
+
+    "actions":
+    {
+        "isAttrOpenedAndOverridden":
+        {
+            "actionType": "JSFunction",
+            "method": "isAttrOpenedAndOverridden",
+            "deps": "js/Att1MeasurableAttributeService",
+            "inputData":
+            {
+                 "eventMap": "{{data.eventMap}}",
+                 "subPanelContext" : "{{subPanelContext}}"
+            }
+        },
+
+        "openNewAttribute":
+        {
+            "actionType": "Navigate",
+            "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+            "navigationParams": {
+                "uid": "{{data.eventMap.Att1AttrOverridden.newAttrObj.uid}}"
+            }
+        }
+    },
+
+    "onEvent":
+    [
+        {
+            "eventId": "cdm.updated",
+            "cacheEventData": true,
+            "action": "isAttrOpenedAndOverridden"
+        },
+        {
+            "eventId": "Att1AttrOverridden",
+            "cacheEventData": true,
+            "action": "openNewAttribute"
+        }
+    ],
+
+    "i18n":
+    {
+    }
+}

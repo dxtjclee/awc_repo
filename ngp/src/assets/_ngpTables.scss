@@ -1,0 +1,77 @@
+// @<COPYRIGHT>@
+// ==================================================
+// Copyright 2021.
+// Siemens Product Lifecycle Management Software Inc.
+// All Rights Reserved.
+// ==================================================
+// @<COPYRIGHT>@
+
+.aw-ngp-table{
+    height:100%;
+    width: 100%;
+
+    aw-splm-table{
+        height:100%;
+        .aw-splm-table{
+            height: 100%;
+        }
+    }
+}
+
+.aw-ngp-arrangeDlgPanel{
+    height: 594px;
+
+    .aw-ngp-arrangeDialogCmds{
+        button.aw-commands-commandIconButton{
+            border: none;
+            background: none;
+            margin-bottom: 16px;
+
+            &:hover{
+                cursor: pointer;
+            }
+        }
+    }
+
+    .aw-ngp-arrangeDlgListPanel{
+        border: 1px solid;
+        border-top: none;
+        height: inherit;
+
+        .sw-section{
+            height: inherit;
+
+            .sw-section-content{
+                height: calc(100% - 32px);
+
+                .sw-listAfterFilter{
+                    width: 100%;
+                    max-height: none;
+                }
+            }
+        }
+
+
+        .aw-ngp-arrangeDlgListItem{
+            @include ellipsis;
+        }
+
+        .aw-layout-panelSection {
+            margin-bottom: 0;
+
+            .aw-layout-panelSectionTitle{
+                text-transform: uppercase;
+                font-size:$fontsize_large;
+                font-weight: $bold_font_weight;
+            }
+        }
+    }
+}
+
+.aw-ngp-boldedTableRow {
+    &.aw-splm-tableRow {
+        .aw-splm-tableCellText{
+            font-weight: 700;
+        }
+    }
+}

@@ -1,0 +1,27 @@
+<div class="aw-requirement-tooltipCell aw-layout-flexRowContainer aw-richtexteditor-traceLinkTooltipsub">
+    <span class="aw-requirement-tooltipCellIcon">
+           <aw-icon class="aw-base-icon" icon-id="{{subPanelContext.tracelinkIcon}}" alt="{{subPanelContext.tracelinkIcon}}"></aw-icon>
+    </span>
+    <span class="aw-requirement-tooltipCellIcon" >
+           <aw-image visible-when="subPanelContext && subPanelContext.iconURL"
+            class="aw-xrt-thumbnailImagePanel" source=subPanelContext.iconURL is-icon="data.isIcon"></aw-image>
+    </span>
+    <span class="aw-requirement-tooltipCellLabel">
+           {{subPanelContext.displayName}}
+    </span>
+    <span class="aw-widgets-cellListCellItemType aw-base-small aw-commands-svg aw-base-icon" visible-when="subPanelContext.suspectReviewTaskList.length > 0">
+        <aw-icon-button size="small" command="data.buttonSuspectCommand" > </aw-icon-button>
+    </span>
+    <span class="aw-widgets-cellListCellItemType aw-base-small aw-commands-svg aw-base-icon" visible-when="subPanelContext.openMasterReqIcon">
+        <aw-icon-button size="small" command="data.buttonMasterReqCommand" > </aw-icon-button>
+    </span>
+    <span class="aw-widgets-cellListCellItemType aw-base-small aw-commands-svg aw-base-icon" visible-when="subPanelContext.openbasedOnMasterReqIcon">
+        <aw-icon-button size="small" command="data.buttonBasedOnMasterReqCommand" > </aw-icon-button>
+    </span>
+   <span class="aw-widgets-cellListCellItemType aw-base-small aw-commands-svg aw-base-icon" visible-when="subPanelContext.openTracelinkedObjectIcon">
+        <aw-icon-button size="small"  command="data.buttonOpenCommand"> </aw-icon-button>
+    </span>
+    <span class="aw-widgets-cellListCellItemType aw-base-small aw-commands-svg aw-base-icon" visible-when="subPanelContext.removeTracelinkedObjectIcon">
+        <aw-icon-button size="small" command="data.buttonRemoveCommand" > </aw-icon-button>
+    </span>
+</div>

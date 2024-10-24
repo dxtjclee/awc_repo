@@ -1,0 +1,10 @@
+<mfe-loading-message exist-when="!ports.input_ngpInformationPanel.syncObject.uid"></mfe-loading-message>
+<aw-flex-row exist-when="ports.input_ngpInformationPanel.syncObject.uid">
+    <aw-flex-column width="{{data.attachmentsInfoPanelWidth ? data.attachmentsInfoPanelWidth : 3}}">
+        <ngp-attachments-information scope-object="ports.input_ngpInformationPanel.syncObject"></ngp-attachments-information>
+    </aw-flex-column>
+    <aw-splitter splitter-id="ngpInformationPanelSplitter" min-size-1="200px" min-size-2="200px" class="aw-mfe-transparentSplitter aw-mfe-thinSplitter"></aw-splitter>
+    <aw-flex-column width="fill">
+        <ngp-information-details></ngp-information-details>
+    </aw-flex-column>
+</aw-flex-row>

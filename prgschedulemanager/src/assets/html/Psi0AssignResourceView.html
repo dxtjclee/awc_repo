@@ -1,0 +1,8 @@
+<aw-command-panel caption="i18n.psi0AssignResource">
+    <aw-people-picker visible-when="data.isDataInit" sub-panel-context="{...props.subPanelContext, addUserPanelState : data.addUserPanelState}"></aw-people-picker>
+    <aw-panel-footer>
+        <aw-button action="assignResource" enable-when="conditions.isValidToAssign">
+            <aw-i18n>i18n.assign</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

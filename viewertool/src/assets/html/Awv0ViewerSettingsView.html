@@ -1,0 +1,70 @@
+<aw-command-panel caption="i18n.toolPanelTitle" context="subPanelContext">
+    <aw-panel-body>
+        <aw-panel-section caption="i18n.unitPanelTitle">
+            <aw-label prop="data.modelTitleProp"></aw-label>
+            <aw-widget prop="data.unitTextProp" action="setDisplayUnit" is-select-only="true" ></aw-widget>
+        </aw-panel-section>
+        <aw-panel-section caption="i18n.renderPanelTitle">
+
+            <aw-checkbox prop="data.shadedCheckboxProp" exist-when="conditions.showShadedWithEdges" action="shadedWithEdgesSettingChanged"></aw-checkbox>
+            <div class="sw-row aw-viewertool-selectedMaterial" exist-when="conditions.viewerLicenceOnOrAboveStandard && conditions.isSSRViewer">
+                <div class="aw-viewertool-selectedMaterialCheckbox">
+                    <aw-checkbox prop="data.materialCheckboxProp" action="materialSettingChanged"></aw-checkbox>
+                </div>
+                <div aw-click="actions.launchMaterialPopup" id="materialRefId" class="aw-viewertool-selectedMaterialIcon">
+                    <aw-image id="materialRefId" source="data.materialProp.iconUrl" is-icon="true"></aw-image>
+                </div>
+                <div class="sw-property-name aw-viewertool-selectedMaterialText">
+                    {{data.materialProp.tooltip}}
+                </div>
+            </div>
+            <aw-checkbox prop="data.trihedronCheckboxProp" action="trihedronSettingChanged"></aw-checkbox>
+            <aw-radiobutton prop="data.renderSourceRadioProp" action="renderSourceChanged" exist-when="conditions.showRenderOptions" enable-when="conditions.enableRenderOptions"></aw-radiobutton>
+            <aw-widget prop="data.occCullProp" exist-when="!conditions.isSSRViewer" hide-filter=true  action="occCullingSelectionChange" is-select-only="true"></aw-widget>
+        </aw-panel-section>
+        <aw-panel-section caption="i18n.colorThemeTitle">
+            <aw-widget prop="data.themeProp"  hide-filter=true  action="themeSelectionChange" is-select-only="true"></aw-widget>
+        </aw-panel-section>
+        <aw-panel-section caption="i18n.floorPanelTitle" exist-when="conditions.viewerLicenceOnOrAboveProfessional && conditions.isSSRViewer">
+            <aw-checkbox prop="data.showFloorCheckboxProp" action="showFloorSettingChanged"></aw-checkbox>
+            <aw-widget prop="data.floorPlanProp"  hide-filter=true  action="viewerFloorPlaneChanged" is-select-only="true" exist-when="conditions.showFloorOptions"></aw-widget>
+            <aw-label prop="data.offsetLabelProp" exist-when="conditions.showFloorOptions"></aw-label>
+            <aw-slider prop="data.floorSliderProp" exist-when="conditions.showFloorOptions"></aw-slider>
+            <aw-checkbox prop="data.gridCheckboxProp" action="gridSettingChanged" exist-when="conditions.showFloorOptions"></aw-checkbox>
+            <aw-checkbox prop="data.shadowCheckboxProp" action="shadowSettingChanged" exist-when="conditions.showFloorOptions"></aw-checkbox>
+            <aw-checkbox prop="data.reflectionCheckboxProp" action="reflectionSettingChanged" exist-when="conditions.showFloorOptions"></aw-checkbox>
+        </aw-panel-section>
+        <aw-panel-section caption="i18n.pmiPanelTitle" exist-when="conditions.showPMI">
+            <aw-checkbox prop="data.pmiCheckboxProp" action="pmiSettingChanged"></aw-checkbox>
+        </aw-panel-section>
+        <aw-panel-section caption="i18n.navigationPanelTitle" exist-when="conditions.viewerLicenceOnOrAboveStandard && conditions.isSSRViewer">
+            <aw-radiobutton class="sw-column" prop="data.navigationRadioProp" action="navigationSettingChanged"></aw-radiobutton>
+        </aw-panel-section>
+        <aw-panel-section caption="i18n.selectionDisplayPanelTitle">
+            <aw-checkbox prop="data.useTransparencyCheckboxProp" action="useTransparencySettingChanged"></aw-checkbox>
+        </aw-panel-section>
+        <aw-panel-section caption="i18n.IndexedModePanelTitle" exist-when="conditions.showIndexedOption">
+            <aw-checkbox prop="data.useIndexedCheckboxProp" action="useIndexedSettingChanged"></aw-checkbox>
+        </aw-panel-section>
+        <aw-panel-section caption="i18n.diagnostics">
+            <div class="sw-row">
+                <div class="sw-column w-1">
+                        <aw-icon class="sw-pic-thumbnail" icon-id="cmdFile"></aw-icon>
+                </div>
+                <div class="sw-column w-7">
+                        <div class="sw-row"> {{i18n.viewerDiagnosticReport}}</div>
+                        <div class="sw-row"> {{i18n.txtFile}}</div>
+                </div>
+                <div class="sw-column w-4">
+                        <aw-icon-button command="data.viewerDiagnosticReport"></aw-icon-button>
+                </div>
+            </div>
+        </aw-panel-section>
+    </aw-panel-body>
+    <aw-panel-footer>
+    </aw-panel-footer>
+</aw-command-panel>
+
+<aw-popup options="actions.launchMaterialPopup.options" popup="launchMaterialPopup">
+    <aw-include name="Awv0MaterialGridPopup" sub-panel-context="{ materialProp:fields.materialProp }"></aw-include>
+</aw-popup>

@@ -1,0 +1,204 @@
+{
+    "schemaVersion": "1.0.0",
+    "data":{
+        "2":{
+            "title":"{{i18n.assignedTitle}}",
+            "description":{
+                "text":"{{i18n.assignedDesc}}"
+            },
+            "clickDescription":"{{i18n.assignedClickDesc}}"
+        },
+        "4":{
+            "title":"{{i18n.assignedTitle}}",
+            "description":{
+                "text":"{{i18n.assignedDesc}}"
+            },
+            "clickDescription":"{{i18n.assignedClickDesc}}"
+        },
+        "5":{
+            "title": "{{i18n.multipleAssignedTitle}}",
+            "description":{
+                "text":"{{i18n.multipleAssignedDesc}}"
+            },
+            "clickDescription":"{{i18n.assignedClickDesc}}"
+        },
+        "6":{
+            "title": "{{i18n.multipleAssignedTitle}}",
+            "description":{
+                "text":"{{i18n.multipleAssignedDesc}}"
+            },
+            "clickDescription":"{{i18n.assignedClickDesc}}"
+        },
+        "51":{
+            "title": "{{i18n.partiallyAssignedAssemblyTitle}}",
+            "description":{
+                "text":"{{i18n.partiallyAssignedAssemblyDesc}}"
+            }
+        },
+        "52":{
+            "title": "{{i18n.partiallyAssignedAssemblyTitle}}",
+            "description":{
+                "text":"{{i18n.partiallyAssignedAssemblyDesc}}"
+            }
+        },
+        "53":{
+            "title": "{{i18n.completelyAssignedTitle}}",
+            "description":{
+                "text":"{{i18n.completelyAssignedDesc}}"
+            }
+        },
+        "54":{
+            "title": "{{i18n.completelyAssignedTitle}}",
+            "description":{
+                "text":"{{i18n.completelyAssignedDesc}}"
+            }
+        },
+        "57":{
+            "title": "{{i18n.partiallyAssignedTitle}}",
+            "clickDescription":"{{i18n.assignedClickDesc}}"
+        },
+        "58":{
+            "title": "{{i18n.partiallyAssignedTitle}}",
+            "clickDescription":"{{i18n.assignedClickDesc}}"
+        },
+        "59":{
+            "title": "{{i18n.senPackUnassignOverassignOccTitle}}",
+            "description":{
+                "text":"{{i18n.senPackUnassignOverassignOccDesc}}"
+            },
+            "subDescription":"{{i18n.handleOccurrenceDesc}}"
+        },
+        "60":{
+            "title": "{{i18n.senPackUnassignOverassignOccTitle}}",
+            "description":{
+                "text":"{{i18n.senPackUnassignOverassignOccDesc}}"
+            },
+            "subDescription":"{{i18n.handleOccurrenceDesc}}"
+        },
+        "61":{
+            "title": "{{i18n.packUnassignOccTitle}}",
+            "description":{
+                "text":"{{i18n.packUnassignOccDesc}}"
+            },
+            "subDescription":"{{i18n.handleOccurrenceDesc}}"
+        },
+        "62":{
+            "title": "{{i18n.senPackOverassignOccTitle}}",
+            "description":{
+                "text":"{{i18n.senPackOverassignOccDesc}}"
+            },
+            "clickDescription":"{{i18n.assignedClickDesc}}",
+            "subDescription":"{{i18n.handleOccurrenceDesc}}"
+        },
+        "63":{
+            "title": "{{i18n.senPackAssignOccTitle}}",
+            "description":{
+                "text":"{{i18n.senPackAssignOccDesc}}"
+            },
+            "clickDescription":"{{i18n.assignedClickDesc}}",
+            "subDescription":"{{i18n.handleOccurrenceDesc}}"
+        },
+        "64":{
+            "title": "{{i18n.senPackOverassignOccTitle}}",
+            "description":{
+                "text":"{{i18n.senPackOverassignOccDesc}}"
+            },
+            "clickDescription":"{{i18n.assignedClickDesc}}",
+            "subDescription":"{{i18n.handleOccurrenceDesc}}"
+        },
+        "65":{
+            "title": "{{i18n.packUnassignOccTitle}}",
+            "description":{
+                "text":"{{i18n.packUnassignOccDesc}}"
+            },
+            "subDescription":"{{i18n.handleOccurrenceDesc}}"
+        },
+        "66":{
+            "title": "{{i18n.senPackAssignOccTitle}}",
+            "description":{
+                "text":"{{i18n.senPackAssignOccDesc}}"
+            },
+            "clickDescription":"{{i18n.assignedClickDesc}}",
+            "subDescription":"{{i18n.handleOccurrenceDesc}}"
+        },
+        "70":{
+            "title": "{{i18n.packUnassignOccTitle}}",
+            "description":{
+                "text":"{{i18n.packUnassignOccDesc}}"
+            },
+            "subDescription":"{{i18n.handleOccurrenceDesc}}"
+        },
+        "111":{
+            "title": "{{i18n.completelyAssignedWithMultipleTitle}}",
+            "description":{
+                "text":"{{i18n.completelyAssignedWithMultipleDesc}}"
+            }
+        },
+        "112":{
+            "title": "{{i18n.partiallyAssignedAssemblyWithMultipleTitle}}",
+            "description":{
+                "text":"{{i18n.partiallyAssignedAssemblyWithMultipleDesc}}"
+            }
+        },
+        "115":{
+            "title": "{{i18n.completelyAssignedWithMultipleTitle}}",
+            "description":{
+                "text":"{{i18n.completelyAssignedWithMultipleDesc}}"
+            }
+        },
+        "116":{
+            "title": "{{i18n.partiallyAssignedAssemblyWithMultipleTitle}}",
+            "description":{
+                "text":"{{i18n.partiallyAssignedAssemblyWithMultipleDesc}}"
+            }
+        }
+    },
+
+    "actions":{
+        "initializeTooltipData":{
+            "actionType": "JSFunction",
+            "method": "getTooltipData",
+            "inputData": {
+                "resource":"senMessages",
+                "key": "partiallyAssignedDesc",
+                "params":["{{subPanelContext.quantityInfo.assignedQuantity}}", "{{subPanelContext.quantityInfo.totalQuantity}}"]
+            },
+            "outputData":{
+                "57.description.text":"",
+                "58.description.text":""
+            },
+            "deps": "js/senAlignmentTablePropertyRenderer"
+        }
+    },
+
+    "lifecycleHooks": {
+        "onMount": "initializeTooltipData"
+    },
+
+    "i18n": {
+        "assignedTitle": ["senMessages"],
+        "assignedDesc": ["senMessages"],
+        "multipleAssignedTitle":["senMessages"],
+        "multipleAssignedDesc":["senMessages"],
+        "assignedClickDesc":["senMessages"],
+        "partiallyAssignedAssemblyTitle":["senMessages"],
+        "partiallyAssignedAssemblyDesc":["senMessages"],
+        "completelyAssignedTitle":["senMessages"],
+        "completelyAssignedDesc":["senMessages"],
+        "completelyAssignedWithMultipleTitle":["senMessages"],
+        "completelyAssignedWithMultipleDesc":["senMessages"],
+        "partiallyAssignedTitle":["senMessages"],
+        "partiallyAssignedDesc":["senMessages"],
+        "partiallyAssignedAssemblyWithMultipleTitle":["senMessages"],
+        "partiallyAssignedAssemblyWithMultipleDesc":["senMessages"],
+        "packUnassignOccTitle":["senMessages"],
+        "packUnassignOccDesc":["senMessages"],
+        "handleOccurrenceDesc":["senMessages"],
+        "senPackAssignOccTitle":["senMessages"],
+        "senPackAssignOccDesc":["senMessages"],
+        "senPackOverassignOccTitle":["senMessages"],
+        "senPackOverassignOccDesc":["senMessages"],
+        "senPackUnassignOverassignOccTitle":["senMessages"],
+        "senPackUnassignOverassignOccDesc":["senMessages"]
+    }
+}

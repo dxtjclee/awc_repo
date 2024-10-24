@@ -1,0 +1,298 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-command-panel-section.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-add.directive",
+        "js/aw-form.directive",
+        "js/visible-when.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive"
+    ],
+    "data": {
+        "addPanelState": {
+            "initialValues": {
+                "creationType": "",
+                "createdObject": "",
+                "sourceObjects": "",
+                "selectedTab": "",
+                "isDatasetCreate": ""
+            },
+            "meta": {}
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "AddObjectPrimarySub",
+                "context": {}
+            },
+            "meta": {}
+        },
+        "projectState": {
+            "initialValues": {
+                "selectedProjects": [],
+                "triggerAssign": false
+            },
+            "meta": {
+                "selectedProjects": {
+                    "field": "true",
+                    "type": "OBJECT"
+                },
+                "triggerAssign": {
+                    "field": "true",
+                    "type": "BOOLEAN"
+                }
+            }
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "actions": {
+        "createObject": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-Core-2012-10-DataManagement",
+            "method": "createRelateAndSubmitObjects",
+            "inputData":
+            {
+                "inputs":"{{function:getCreateInput}}"
+
+            },
+
+            "outputData":
+            {
+                "createdMainObject": "output[0].objects[0]",
+                "createdObject": "{{function:getCreatedObject}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "addChecklist.callSoa"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [ {
+                    "message": "SOAFailureMessage"
+                } ]
+            },
+            "deps": "js/addObjectUtils"
+        },
+
+        "addChecklistCallSoa": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "createRelations",
+            "inputData":
+            {
+                "input":"{{function:getCreateRelationsInput}}"
+            },
+
+            "outputData":
+            {
+
+            },
+            "events": {
+                "success": [ {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{ctx.xrtSummaryContextObject}}"
+                            ],
+                            "isPinnedFlag": "subPanelContext.panelPinned"
+                        }
+                    },
+                    {
+                        "name": "awPanel.loadNextValues",
+                        "condition": "subPanelContext.panelPinned"
+                    },
+                    {
+                        "name": "complete",
+                        "condition": "!subPanelContext.panelPinned",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    },
+                    {
+                        "name": "primaryWorkarea.reset",
+                        "condition": "ctx.xrtPageContext.primaryXrtPageID !== 'tc_xrt_Timeline'"
+                    }
+                ]
+            },
+            "actionMessages":{
+                "success":[{
+                    "condition":"data.object_name.dbValue && addPanelState.selectedTab.view === 'NewTabPageSub'",
+                    "message":"checklistAddedInfoMessage"
+                },
+                {
+                    "condition":"addPanelState.sourceObjects.length === 1 && addPanelState.selectedTab.view !== 'NewTabPageSub'",
+                    "message":"addSingleChecklistFromPalatteSearch"
+                },
+               {
+                "condition":"addPanelState.sourceObjects.length > 1 && addPanelState.selectedTab.view !== 'NewTabPageSub'",
+                "message":"addMultipleChecklistFromPalatteSearch"
+               }],
+               "failure": [ {
+                   "condition": "errorCode.code === 89010",
+                   "message": "AddChecklistErrorMessage"
+               } ]
+            },
+            "deps": "js/Psi0ChecklistService"
+        },
+        "getObjCreateEditableProperties": {
+            "actionType": "JSFunction",
+            "method": "getObjCreateEditableProperties",
+            "inputData": {
+                "createType": "{{addPanelState.creationType.props.type_name.dbValues[0]}}",
+                "type": "CREATE",
+                "propertyNames": [ "object_name" ],
+                "editHandler": "{{editHandlers.addPanelEditHandler}}"
+            },
+            "outputData":{
+                "object_name": "object_name"
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "addChecklist": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "getObjCreateEditableProperties"
+                },
+                {
+                    "action": "addChecklistCallSoa"
+                }
+            ]
+        },
+        "setActiveView":{
+            "actionType": "JSFunction",
+            "method": "resetActiveView",
+            "inputData": {
+                "stateName": "{{data.activeState}}",
+                "destPanelId": "AddObjectPrimarySub"
+            },
+            "outputData": {
+                "activeState": ""
+            },
+            "deps": "js/addObjectUtils"
+        }
+    },
+    "functions":{
+        "getCreateInput":{
+            "functionName": "getCreateInput",
+            "parameters": [
+                "{{data}}",
+                "",
+                "{{addPanelState.creationType}}",
+                "{{editHandlers.addPanelEditHandler}}"
+            ]
+        },
+        "getCreatedObject":
+        {
+            "functionName": "getCreatedObject",
+            "parameters":
+            [
+
+            ]
+        },
+        "getCreateRelationsInput": {
+            "functionName": "getCreateRelationsInput",
+            "parameters": [
+                "{{data}}",
+                "{{ctx}}",
+                "{{addPanelState.sourceObjects}}"
+            ]
+        }
+    },
+    "conditions" : {
+        "ispinned": {
+            "expression": "subPanelContext.panelPinned"
+        },
+        "isNewTabAddButtonEnable": {
+            "expression": "addPanelState.selectedTab.view=='NewTabPageSub' && addPanelState.creationType"
+        },
+        "isPaletteSearchTabAddButtonEnable": {
+            "expression": "addPanelState.sourceObjects && addPanelState.sourceObjects.length === 1 && ( addPanelState.selectedTab.view==='SearchTabPageSub' || addPanelState.selectedTab.view==='PaletteTabPageSub' )"
+        },
+        "isActiveStateAddPanel": {
+            "expression": "data.activeState.activeView ==='AddObjectPrimarySub'"
+        },
+        "isNewTabAddButtonVisible": {
+            "expression": "addPanelState.selectedTab.view==='NewTabPageSub' && addPanelState.creationType.props.type_name.dbValues[0]"
+        },
+        "isPaletteSearchAddButtonVisible": {
+            "expression": "addPanelState.selectedTab.view!=='NewTabPageSub'"
+        }
+    },
+    "messages":{
+        "SOAFailureMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        },
+        "AddChecklistErrorMessage":{
+            "messageType": "ERROR",
+            "messageText": "{{i18n.Psi0AddChecklistErrorMsg}}",
+            "messageTextParams": [
+                "{{addPanelState.sourceObjects[0].props.object_name.uiValue}}"
+            ]
+        },
+        "checklistAddedInfoMessage":{
+            "messageType": "INFO",
+            "messageText": "{{i18n.Psi0AbsChecklistAdd}}",
+            "messageTextParams": [
+                "{{data.object_name.dbValue}}"
+            ]
+        },
+        "addSingleChecklistFromPalatteSearch":{
+            "messageType": "INFO",
+            "messageText": "{{i18n.Psi0AbsChecklistAdd}}",
+            "messageTextParams": [
+                "{{addPanelState.sourceObjects[0].props.object_name.dbValue}}"
+            ]
+        },
+        "addMultipleChecklistFromPalatteSearch":{
+            "messageType": "INFO",
+            "messageText": "{{i18n.Psi0addMultipleChecklistFromPaletteSearch}}",
+            "messageTextParams": [
+                "{{addPanelState.sourceObjects.length}}"
+            ]
+        }
+    },
+    "onEvent":[
+        {
+            "eventId":"addChecklist.callSoa",
+            "action":"addChecklist"
+        }
+    ],
+    "i18n": {
+        "addChecklistCommandTitle": [
+            "PrgScheduleManagerMessages"
+        ],
+        "addButtonTitle":[
+            "PrgScheduleManagerMessages"
+        ],
+        "Psi0AbsChecklistAdd":[
+            "PrgScheduleManagerMessages"
+        ],
+        "Psi0addMultipleChecklistFromPaletteSearch":[
+            "PrgScheduleManagerMessages"
+        ],
+        "Psi0AddChecklistErrorMsg":[
+            "PrgScheduleManagerMessages"
+        ]
+    }
+}

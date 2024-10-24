@@ -1,0 +1,140 @@
+{
+  "commands": {
+    "Pec0RemoveChange": {
+      "iconId": "cmdRemove",
+      "title": "{{i18n.RemoveChangeCommandTitle}}",
+      "description": "{{i18n.Pec0RemoveChangeDesc}}"
+    },
+    "Pec0RelateChange": {
+      "iconId": "cmdAdd",
+      "title": "{{i18n.RelateChangeTitle}}",
+      "description": "{{i18n.Pec0RelateChangeDesc}}"
+    },
+    "Pec0AddEvent": {
+      "iconId": "cmdAdd",
+      "title": "{{i18n.Awp0AddObjectTitle}}",
+      "description": "{{i18n.Pec0AddEvent}}"
+    }
+  },
+  "commandHandlers": {
+    "RemoveChangeCommandHandler": {
+      "id": "Pec0RemoveChange",
+      "action": "Pec0RemoveEventChangeOperation",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.removeChangeVisibility"
+      }
+    },
+    "RelateChangeCommandHandler": {
+      "id": "Pec0RelateChange",
+      "action": "Pec0AddEventChangeOperation",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.relateChangeVisibility"
+      }
+    },
+    "Pec0AddEventCommandHandler": {
+      "id": "Pec0AddEvent",
+      "action": "Pec0AddEventCommandAction",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.addEventCommandVisibility"
+      }
+    }
+  },
+  "commandPlacements": {
+    "Pec0RemoveChange": {
+      "id": "Pec0RemoveChange",
+      "uiAnchor": "aw_rightWall",
+      "priority": 312,
+      "parentGroupId": "Awp0EditGroup"
+    }
+  },
+  "actions": {
+    "Pec0RemoveEventChangeOperation": {
+      "actionType": "TcSoaService",
+      "serviceName": "Core-2006-03-DataManagement",
+      "method": "deleteRelations",
+      "inputData": {
+        "input": "{{function:removeEventChangeOperation}}"
+      },
+      "events": {
+        "success": [
+          {
+            "name": "cdm.relatedModified",
+            "eventData": {
+              "relatedModified": [
+                "{{ctx.pselected}}"
+              ]
+            }
+          }
+        ]
+      },
+      "actionMessages": {
+        "failure": [
+          {
+            "message": "SOAFailureMessage"
+          }
+        ]
+      },
+      "deps": "js/prgPlanningEventChangeService"
+    },
+    "Pec0AddEventChangeOperation": {
+      "actionType": "activateCommandPanel",
+      "inputData": {
+        "commandId": "Pec0RelateChange",
+        "location": "aw_toolsAndInfo",
+        "config": {
+          "isPinUnpinEnabled": true
+        }
+      }
+    },
+    "Pec0AddEventCommandAction": {
+      "actionType": "activateCommandPanel",
+      "inputData": {
+        "commandId": "Pec0AddEvent",
+        "location": "aw_toolsAndInfo"
+      }
+    }
+  },
+  "functions": {
+    "removeEventChangeOperation": {
+      "functionName": "removeEventChangeOperation",
+      "parameters": []
+    }
+  },
+  "conditions": {
+    "removeChangeVisibility": {
+      "expression": "( ctx.selected.modelType.typeHierarchyArray.indexOf('ChangeItemRevision') > -1 ) && ( commandContext.pageContext.primaryActiveTabId === 'tc_xrt_Timeline' && ctx.pselected.modelType.typeHierarchyArray.indexOf('Prg0AbsEvent') > -1 ) || ( commandContext.openedObject.modelType.typeHierarchyArray.indexOf('Prg0AbsEvent') > -1 && commandContext.pageContext.primaryActiveTabId === 'tc_xrt_Changes')"
+    },
+    "relateChangeVisibility": {
+      "expression": "( commandContext.vmo.modelType.typeHierarchyArray.indexOf('Prg0AbsEvent') > -1 ) && ( commandContext.pageContext.primaryActiveTabId === 'tc_xrt_Changes' || commandContext.pageContext.secondaryActiveTabId === 'tc_xrt_Changes' || commandContext.pageContext.primaryActiveTabId === 'tc_xrt_Timeline' || commandContext.pageContext.secondaryActiveTabId === 'tc_xrt_Timeline' ) && !ctx.editInProgress"
+    },
+    "addEventCommandVisibility": {
+      "expression": "(commandContext.pageContext.primaryActiveTabId === 'tc_xrt_ReferenceItems' || commandContext.pageContext.secondaryActiveTabId === 'tc_xrt_ReferenceItems') && (commandContext.objectSetSource === 'S2P:Pec0EventChangeRelation.Prg0AbsEvent')"
+    }
+  },
+  "messages": {
+    "SOAFailureMessage": {
+      "messageType": "ERROR",
+      "messageText": "{{errorCode}}"
+    }
+  },
+  "i18n": {
+    "RemoveChangeCommandTitle": [
+      "PrgPlanningEventChangeConstants"
+    ],
+    "RelateChangeTitle": [
+      "PrgPlanningEventChangeConstants"
+    ],
+    "Pec0AddEventChangeCommandDesc": [
+      "PrgPlanningEventChangeConstants"
+    ],
+    "Pec0RemoveChangeDesc": [
+      "PrgPlanningEventChangeConstants"
+    ],
+    "Pec0RelateChangeDesc": [
+      "PrgPlanningEventChangeConstants"
+    ]
+  }
+}

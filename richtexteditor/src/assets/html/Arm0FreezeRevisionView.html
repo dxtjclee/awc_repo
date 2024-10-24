@@ -1,0 +1,18 @@
+<aw-command-panel caption="i18n.freeze" >
+    <aw-panel-header>
+        <aw-command-panel-section caption="{{ conditions.isSourceMultiSelected ? i18n.freezeToLatest : i18n.revision }}" collapsed="disabled">
+            <aw-splm-table gridid="freezeRevisionsTable"></aw-splm-table>
+        </aw-command-panel-section>
+        <aw-command-panel-section caption="{{i18n.preview}}" collapsed="disabled">
+        </aw-command-panel-section>
+    </aw-panel-header>
+    <aw-panel-body class="aw-richtexteditor-freezepopup">
+        <div id='arm0fullTextBodyText' class="sw-section sw-section-content"></div>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button title="{{i18n.freeze}}" action="freezeObject"
+            enable-when="data.dataProviders.freezeRevisionsDataProvider.selectedObjects.length > 0">
+            <aw-i18n>i18n.freeze</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

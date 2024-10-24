@@ -1,0 +1,12 @@
+<aw-command-panel caption="i18n.addButtonTitle">
+    <aw-panel-body aw-init="data.panelId='Aqc0AddActionForCharSpec'">
+            <aw-panel-section>
+                 <aw-widget prop="data.fnd0ActionItemId"></aw-widget>
+                 <aw-widget prop="data.object_name"></aw-widget>
+                 <aw-widget prop="data.object_desc"></aw-widget>
+            </aw-panel-section>
+    </aw-panel-body>
+    <aw-panel-footer>
+            <aw-button action="createAddActionForCharSpec" visible-when="data.object_name.dbValue !=='' && data.object_name.dbValue !==null && data.object_name.dbValue !== undefined && data.fnd0ActionItemId.dbValue !=='' && data.fnd0ActionItemId.dbValue !==null && data.fnd0ActionItemId.dbValue !== undefined"><aw-i18n>i18n.create</aw-i18n></aw-button>  
+    </aw-panel-footer>
+</aw-command-panel>

@@ -1,0 +1,334 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports":[],
+    "actions":{
+        "loadData":
+        {
+            "actionType": "dataProvider",
+            "method": "associatedDiagramsList"
+        },
+
+        "getAssociatedDiagrams":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Query-2014-11-Finder",
+            "method": "performSearch",
+            "inputData":
+            {
+                "searchInput":
+                {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Ase0AssocDiagramProvider",
+                    "searchCriteria": {
+                        "elementUids": "{{subPanelContext.selectionData.selected[0].uid}}",
+                        "productContextUids": "{{subPanelContext.occContext.productContextInfo.uid}}"
+                    },
+                    "startIndex": "{{data.dataProviders.associatedDiagramsList.startIndex}}"
+                }
+            },
+            "policy":
+            {
+                "types":
+                [
+                    {
+                        "name": "Ase0AssocRelationProxy",
+                        "properties":
+                        [
+                            {
+                                "name": "ase0EndObject",
+                                "modifiers": [
+                                                 {
+                                                    "name": "withProperties",
+                                                    "Value": "true"
+                                                 }
+                                             ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "outputData":
+            {
+                "totalFound": "totalFound",
+                "searchResults": "searchResults",
+                "searchResultObjects": "ServiceData.modelObjects"
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "showAssociatedDiagramsSub.processResponse"
+                    }
+                ]
+            }
+        },
+
+        "deleteDiagram":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "deleteObjects",
+           "inputData":
+            {
+                "objects": "{{data.dataProviders.associatedDiagramsList.selectedObjects}}"
+            },
+
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "showAssociatedDiagramsSub.updatePanel"
+                    }
+                ]
+            },
+            "outputData":
+            {
+                "ctx.architectureCtx.showDeleteButton": "false"
+            },
+
+            "deps": "js/showAssociatedDiagramsService"
+        },
+
+        "actionFilterList":
+        {
+            "actionType": "JSFunction",
+            "method": "actionFilterList",
+            "inputData":
+            {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "associateDiagramState": ""
+            },
+
+            "deps": "js/showAssociatedDiagramsService"
+        },
+
+        "confirmDelete":
+        {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData":
+            {
+                "events":
+                 [
+                      {
+                         "name": "showAssociatedDiagramsSub.confirmSingleDelete",
+                         "condition":"data.dataProviders.associatedDiagramsList.selectedObjects.length === 1"
+                      },
+                      {
+                         "name": "showAssociatedDiagramsSub.confirmMultiDelete",
+                         "condition":"data.dataProviders.associatedDiagramsList.selectedObjects.length > 1"
+                      }
+                 ]
+            }
+        },
+
+        "updateDeleteButtonVisibility":
+        {
+            "actionType": "JSFunction",
+            "method": "updateDeleteButtonVisibility",
+            "inputData":
+            {
+                "dataprovider": "{{data.dataProviders.associatedDiagramsList}}",
+                "occMgmtContext": "{{subPanelContext.occContext}}",
+                "associateDiagramState": "{{data.associateDiagramState}}"
+            },
+            "outputData": {
+                "associateDiagramState": ""
+            },
+
+            "deps": "js/showAssociatedDiagramsService"
+        },
+
+        "processSoaResponse":
+        {
+            "actionType": "JSFunction",
+            "method": "processSoaResponseFunc",
+            "inputData":
+            {
+                "data": "{{data}}"
+            },
+
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "showAssociatedDiagramsSub.loadData"
+                    }
+                ]
+            },
+
+            "deps": "js/showAssociatedDiagramsService"
+        }
+    },
+
+   "data":
+    {
+        "relatedDiagramList":
+        {
+            "isArray": "true",
+            "dbValue":
+            [
+
+            ]
+        },
+
+        "relatedDiagramFilterList":
+        {
+            "isArray": "true",
+            "dbValue":
+            [
+
+            ]
+        },
+
+        "filterBox":
+        {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "false",
+            "requiredText": "Filter",
+            "dbValue": ""
+        },
+
+        "associateDiagramState": {
+            "initialValues": {
+                "showDeleteButton" : "false"
+             },
+            "meta": {}
+        }
+    },
+
+    "dataProviders":
+    {
+        "associatedDiagramsList":
+        {
+            "action": "actionFilterList",
+            "response": "{{data.relatedDiagramFilterList.dbValue}}",
+            "totalFound": "{{data.relatedDiagramFilterList.dbValue.length}}",
+            "selectionModelMode": "multiple",
+            "commandsAnchor": "Ase0AssociatedDiagramCommandCellAnchor",
+            "deps": "js/showAssociatedDiagramsService"
+        }
+    },
+
+    "onEvent": [
+        {
+            "eventId": "showAssociatedDiagramsSub.updatePanel",
+            "action": "getAssociatedDiagrams"
+        },
+        {
+            "eventId": "showAssociatedDiagramsSub.processResponse",
+            "action": "processSoaResponse"
+        },
+        {
+            "eventId": "awPanel.reveal",
+            "criteria":
+            {
+                "panelId": "showAssociatedDiagramsSub"
+            },
+            "action": "getAssociatedDiagrams"
+        },
+        {
+            "eventId": "showAssociatedDiagramsSub.loadData",
+            "action": "loadData"
+        },
+        {
+            "eventId": "showAssociatedDiagramsSub.confirmSingleDelete",
+            "message": "confirmSingleDelete"
+        },
+        {
+            "eventId": "showAssociatedDiagramsSub.confirmMultiDelete",
+            "message": "confirmMultiDelete"
+        },
+        {
+            "eventId": "associatedDiagramsList.selectionChangeEvent",
+            "action": "updateDeleteButtonVisibility"
+        },
+        {
+            "eventId": "ase0AssociatedDiagramDeleteCmdEvent",
+            "action": "confirmDelete"
+        }],
+
+     "messages":
+    {
+        "confirmSingleDelete":
+        {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.diagramSingleDeleteConfirmMsg}}",
+            "messageTextParams": [
+                "{{data.dataProviders.associatedDiagramsList.selectedObjects[0].props.object_string.dbValues[0]}}"
+            ],
+            "navigationOptions":
+            [
+                {
+                    "option": "Cancel",
+                    "text": "{{i18n.cancel}}"
+                },
+                {
+                    "option": "Delete",
+                    "text": "{{i18n.delete}}",
+                    "action": "deleteDiagram"
+                }
+            ]
+        },
+        "confirmMultiDelete":
+        {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.diagramMultiDeleteConfirmMsg}}",
+            "messageTextParams": [
+                "{{data.dataProviders.associatedDiagramsList.selectedObjects.length}}"
+            ],
+            "navigationOptions":
+            [
+                {
+                    "option": "Cancel",
+                    "text": "{{i18n.cancel}}"
+                },
+                {
+                    "option": "Delete",
+                    "text": "{{i18n.delete}}",
+                    "action": "deleteDiagram"
+                }
+            ]
+        }
+    },
+
+   "i18n": {
+       "associatedPanelName": [
+           "ArchitectureModelerConstants"
+       ],
+       "diagramSingleDeleteConfirmMsg": [
+           "ArchitectureModelerMessages"
+       ],
+       "add": [
+           "ArchitectureModelerMessages"
+       ],
+       "diagramMultiDeleteConfirmMsg": [
+           "ArchitectureModelerMessages"
+       ],
+       "cancel": [
+           "ArchitectureModelerConstants"
+       ],
+       "delete": [
+           "ArchitectureModelerConstants"
+       ]
+   },
+   "lifecycleHooks": {
+    "onUpdate": [ {
+        "action": "getAssociatedDiagrams",
+        "observers":["props.subPanelContext.selectionData.selected[0].uid"]
+     }]
+    },
+   "props":
+   {
+       "sub-panel-context": {
+           "type": "object"
+       }
+   }
+}

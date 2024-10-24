@@ -1,0 +1,32 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-command-sub-panel.directive"
+    ],
+    "data": {
+        "activeView": "Aqc0AddRootFailureSpec"
+    },
+    "actions": {
+        "setAddElementInputParentElementNull": {
+            "actionType": "JSFunction",
+            "method": "setAddElementInputParentElementNull",
+            "inputData": {
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "outputData": {},
+            "deps": "js/Aqc0FailureManagerUtils"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "setAddElementInputParentElementNull"                   
+    },
+    "i18n": {
+        "Aqc0Add": [
+            "qualityfailuremanagerMessages"
+        ],
+        "Aqc0AddFailureSpecTitle": [
+            "qualityfailuremanagerMessages"
+        ]
+    }
+}

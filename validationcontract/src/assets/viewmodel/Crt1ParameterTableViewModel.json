@@ -1,0 +1,158 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-panel-section.directive",
+        "js/aw-column.directive",
+        "js/aw-include.directive",
+        "js/aw-am-table-panel.directive"
+    ],
+    "lifecycleHooks": {
+        "onUnmount": "removeSelection",
+        "onMount": "modelObjectsLoaded"
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "ports": {
+        "inputUnuseFlagForSync": {
+            "syncObject": {}
+        },
+        "inputColumnFiltersForSync": {
+            "syncObject": {}
+        }
+    },
+    "actions": {
+        "processSyncActionForVRIfChartClicked": {
+            "actionType": "Sync",
+            "inputData": {
+                "port": "inputColumnFiltersForSync",
+                "syncObject": "{{data.inputDataIfChartClicked}}"
+            }
+        },
+        "removeSelection": {
+            "actionType": "JSFunction",
+            "method": "changeSelectionToAttribute",
+            "inputData": {
+                "selectedObjects": [],
+                "scopeSelection": "{{subPanelContext.context.vrSublocationState.mselected[0]}}",
+                "vrSublocationState": "{{subPanelContext.context.vrSublocationState}}"
+            },
+            "deps": "js/Crt1ChartService"
+        },
+        "processSyncActionForVR": {
+            "actionType": "Sync",
+            "inputData": {
+                "port": "inputUnuseFlagForSync",
+                "syncObject": "{{data.inputData}}"
+            }
+        },
+        "measurementsUpdated":{
+            "actionType": "JSFunction",
+            "method": "measurementsUpdated",
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "modelObjectsLoaded": {
+            "actionType": "JSFunction",
+            "method": "modelObjectsLoaded",
+            "inputData": {
+                "data": "{{data}}",
+                "eventMap": "{{data.eventMap}}",
+                "scopeSel": "{{props.subPanelContext.context.vrSublocationState.mselected[0]}}",
+                "subPanleCtx": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "changeSelectionToAttribute": {
+            "actionType": "JSFunction",
+            "method": "changeSelectionToAttribute",
+            "inputData": {
+                "selectedObjects": "{{data.eventData.selectedObjects}}",
+                "scopeSelection":"{{subPanelContext.context.vrSublocationState.mselected[0]}}",
+                "vrSublocationState":"{{subPanelContext.context.vrSublocationState}}"
+            },
+            "deps": "js/Crt1ChartService"
+        },
+        "isParameterChartClicked":{
+            "actionType": "JSFunction",
+            "method": "isParameterChartClicked",
+            "inputData": {
+                "subPanelContext":"{{subPanelContext}}"
+            },
+            "outputData": {
+                "inputDataIfChartClicked": "inputDataIfChartClicked"
+            },
+            "deps": "js/Crt1PieChartsService",
+            "events": {
+                "success": [ {
+                    "condition": "data.inputDataIfChartClicked.columnFilters",
+                    "name": "uniformParamTableForVR.applySyncForChartClicked"
+                } ]
+            }
+
+        }
+    },
+    "functions": {
+    },
+    "dataProviders": {
+    },
+    "columnProviders": {
+    },
+    "grids": {
+    },
+    "data":{
+        "checkBoxes": []
+    },
+    "onEvent": [
+        {
+            "eventId": "uniformParamTableForVR.applySync",
+            "cacheEventData": true,
+            "action": "processSyncActionForVR"
+
+        },
+        {
+            "eventId": "uniformParamTableForVR.applySyncForChartClicked",
+            "cacheEventData": true,
+            "action": "processSyncActionForVRIfChartClicked"
+
+        },
+        {
+            "eventId": "uniformParamDataProvider.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "changeSelectionToAttribute"
+        },
+        {
+            "eventId": "uniformParamTable.updateMeasurementsIfUpdated",
+            "cacheEventData": true,
+            "action": "measurementsUpdated"
+        },
+        {
+            "eventId": "isParameterChartClicked",
+            "action": "isParameterChartClicked"
+
+        }
+    ],
+    "conditions": {
+        "showUniformTable": {
+            "expression": "conditions.showUniformOutputTable === false && conditions.showUniformInputTable === false"
+        },
+        "showUniformOutputTable" : {
+            "expression": "((props.subPanelContext.context.vrSublocationState.mselected[0].modelType.typeHierarchyArray.indexOf('Crt0StudyRevision') > -1 && props.subPanelContext.context.vrSublocationState.mselected[0].modelType.typeHierarchyArray.indexOf('Crt0RunRevision') === -1 && props.subPanelContext.context.vrSublocationState.mselected[0].modelType.typeHierarchyArray.indexOf('IAV0TestStudyRevision') === -1) || (props.subPanelContext.context.vrSublocationState.mselected[0].modelType.typeHierarchyArray.indexOf('Crt0SimStudyRevision') > -1 ) )"
+        },
+        "showUniformInputTable" : {
+            "expression": "((props.subPanelContext.context.vrSublocationState.mselected[0].modelType.typeHierarchyArray.indexOf('Crt0StudyRevision') > -1 && props.subPanelContext.context.vrSublocationState.mselected[0].modelType.typeHierarchyArray.indexOf('Crt0RunRevision') === -1 && props.subPanelContext.context.vrSublocationState.mselected[0].modelType.typeHierarchyArray.indexOf('IAV0TestStudyRevision') === -1) || (props.subPanelContext.context.vrSublocationState.mselected[0].modelType.typeHierarchyArray.indexOf('Crt0SimStudyRevision') > -1 ) )"
+        }
+    },
+    "i18n": {
+        "Parameters":[
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "OutputParaTable": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "InputParaTable": [
+            "AnalysisRequestCommandPanelsMessages"
+        ]
+    }
+}

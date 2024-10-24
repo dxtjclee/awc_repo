@@ -1,0 +1,29 @@
+<aw-command-panel caption="i18n.createIssue" context="subPanelContext">
+    <aw-panel-body>
+        <aw-add max-recent-count='3' visible-tabs="new,palette,search" type-override-id="CreateAR"
+            include-types="{{data.preferredType}}" preferred-type="{{data.preferredType}}"
+            type-filter="{{data.typeFilter}}" load-sub-types="true" add-panel-state="fields.addPanelState"
+            xrt-state="data.xrtState" edit-handler="editHandlers.addPanelEditHandler"
+            sub-panel-context="{...subPanelContext}" active-state="data.activeState"
+            project-state="data.projectState">
+        </aw-add>
+
+        <aw-checkbox prop="data.openOnCreate" enable-when="!subPanelContext.panelPinned"
+            visible-when="conditions.isNewTabAddButtonVisible"></aw-checkbox>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button action="createObject"
+            visible-when="conditions.isNewTabAddButtonVisible && formProp.attributes.valid">
+            <aw-i18n>i18n.CreateButtonText</aw-i18n>
+        </aw-button>
+
+        <aw-button action="createRelationForPaletteOrSearch"
+            visible-when="conditions.isPalatteTabSelection && fields.addPanelState.sourceObjects.length > 0">
+            <aw-i18n>i18n.ADD_BUTTON_TITLE</aw-i18n>
+        </aw-button>
+        <aw-button action="createRelationForPaletteOrSearch"
+            visible-when="conditions.isSearchTabSelection && fields.addPanelState.sourceObjects.length > 0">
+            <aw-i18n>i18n.ADD_BUTTON_TITLE</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>    
+</aw-command-panel>

@@ -1,0 +1,47 @@
+<aw-panel>
+    <aw-panel-body>
+        <aw-panel-section>
+            <div class="sw-row h-6 flex-grow" show-when="conditions.crt1TcMajorMinorVersion === true">
+                <div class="sw-column w-6">
+                    <aw-panel-section caption="i18n.resultPieChartTitle" collapsed="false">
+                        <div exist-when="conditions.noResultDataForPie">
+                            <aw-i18n>i18n.noDataToDisplay</aw-i18n>
+                        </div>
+                        <div class="sw-row demo-h-17f">
+                            <aw-chart exist-when="!conditions.noResultDataForPie" chart-provider="data.chartProviders.pieChartForResult" chart-points="data.pieChartForResult_chartPoints"></aw-chart>
+                        </div>
+                    </aw-panel-section>
+                </div>
+                <aw-splitter direction="VERTICAL"></aw-splitter>
+                <div class="sw-column w-6 flex-grow">
+                    <aw-panel-section caption="i18n.executionPieChartTitle" collapsed="false">
+                        <div exist-when="conditions.noExecutionStatusDataForPie">
+                            <aw-i18n>i18n.noDataToDisplay</aw-i18n>
+                        </div>
+                        <div class="sw-row demo-h-18f">
+                            <aw-chart exist-when="!conditions.noExecutionStatusDataForPie" chart-provider="data.chartProviders.pieChartForExecution" chart-points="data.pieChartForExecution_chartPoints"></aw-chart>
+                        </div>
+                    </aw-panel-section>
+                </div>
+            </div>
+            <aw-splitter direction="HORIZONTAL" show-when="conditions.crt1TcMajorMinorVersion === true"></aw-splitter>
+            <div class="sw-row h-6 flex-grow">
+                <aw-scrollpanel>
+                    <aw-panel-section caption="i18n.testResults" collapsed="false">
+                        <div class="sw-column">
+                            <div class="aw-xrt-objectSetCommandPanel aw-advanced-bar-horizontal">
+                                <aw-command-bar anchor="aw_showHideTestResultsCommandbar" class="aw-commands-commandBarHorizontalRight" alignment="HORIZONTAL" context="{...subPanelContext,dataProvider:dataProviders.testResultTreeTableProvider,vrTestResultsTabState:fields.vrTestResultsTabState}"></aw-command-bar>
+                            </div>
+                            <aw-splm-table gridid="testResultTreeTable" use-tree="true" show-decorators="true" show-context-menu="true"></aw-splm-table>
+                        </div>
+                    </aw-panel-section>
+                    <aw-panel-section exist-when="data.vrTestResultsTabState.showHideParaCommand === true">
+                        <div class="sw-column">
+                            <aw-include name="Att1ShowParametersTableForSync" sub-panel-context="{ ...subPanelContext,vrTestResultsTabState:fields.vrTestResultsTabState }"></aw-include>
+                        </div>
+                    </aw-panel-section>
+                </aw-scrollpanel>
+            </div>
+        </aw-panel-section>
+    </aw-panel-body>
+</aw-panel>

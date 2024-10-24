@@ -1,0 +1,748 @@
+{
+    "schemaVersion" : "1.0.0",
+    "imports":
+    [
+    ],
+
+    "actions":
+    {
+        "setFileParameters": {
+            "actionType": "JSFunction",
+            "method": "setFileParameters",
+            "inputData": {
+                "fileName": "{{parameters.fileName}}",
+                "validFile": "{{parameters.validFile}}",
+                "fileNameNoExt": "{{parameters.fileNameNoExt}}",
+                "fileExt": "{{parameters.fileExt}}",
+                "formData": "{{parameters.formData}}"
+            },
+            "outputData": {
+                "fileName": "fileName",
+                "validFile": "validFile",
+                "fileNameNoExt": "fileNameNoExt",
+                "fileExt": "fileExt",
+                "formData": "formData"
+            },
+            "events": {
+                "success": [{
+                    "name": "getDatasetType"
+                }]
+            },
+            "deps": "js/fileUploadUtils"
+        },
+        "reveal":
+        {
+            "actionType": "JSFunction",
+            "method": "getMeasureValue",
+            "deps": "js/Att1DatasetService",
+            "outputData": {
+                "measureValue": ""
+            },
+            "events": {
+                "success": [{
+                    "name": "getFileSoaCall"
+                }]
+            }
+        },
+        "getAttachedGoalFile":
+        {
+            "actionType": "dataProvider",
+            "method": "getAttachedGoalFile"
+        },
+        "getAttachedMeasurementFile":
+        {
+            "actionType": "dataProvider",
+            "method": "getAttachedMeasurementFile"
+        },
+        "getFileSoaCall":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2007-09-DataManagement",
+            "method": "expandGRMRelationsForPrimary",
+            "inputData":
+            {
+                "primaryObjects":
+                [
+                    {
+                        "uid": "{{ctx.owningParam.uid}}",
+                        "type": "{{ctx.owningParam.type}}"
+                    },
+                    {
+                        "uid": "{{data.measureValue.uid}}",
+                        "type": "{{data.measureValue.type}}"
+                    }
+                ],
+                "pref":
+                {
+                    "expItemRev": false,
+                    "returnRelations": true,
+                    "info":
+                    [
+                        {
+                            "relationTypeName": "Att0HasGoalFile"
+                        },
+                        {
+                            "relationTypeName": "Att0HasMeasurementFile"
+                        }
+                    ]
+                }
+            },
+            "policy":
+            {
+                "types":
+                [
+                    {
+                        "name": "Att0MeasurableAttributeInt",
+                        "properties":
+                        [
+                            {
+                                "name": "att0CurrentValue"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "outputData":
+            {
+                "soaResponse": ""
+            },
+            "events": {
+                "success": [{
+                    "name": "goalFile.get"
+                },
+                {
+                    "name": "measurementFile.get"
+                }]
+            },
+            "deps": "js/Att1DatasetService"
+
+        },
+        "getFiles":
+        {
+            "actionType": "JSFunction",
+            "method": "getDatasets",
+            "deps": "js/Att1DatasetService",
+            "inputData": {
+                "response": "{{data.soaResponse}}"
+            },
+            "outputData": {
+                "datasets": ""
+            }
+        },
+        "getDatasetType":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2007-06-DataManagement",
+            "method": "getDatasetTypeInfo",
+            "inputData":
+            {
+                "datasetTypeNames":
+                [
+                    "{{ctx.dataset.type}}"
+                ]
+            },
+
+            "outputData":
+            {
+                "refInfos": "infos[0].refInfos"
+            },
+
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "replaceFile.createDataset",
+                        "condition": "ctx.pselected.modelType.typeHierarchyArray.indexOf('Awb0Element') > -1 && ctx.owningParam.props.att1InContext.dbValues[0] === '0' && ctx.owningParam.props.att1InOut.dbValues[0] === ''"
+                    },
+                    {
+                        "name": "replaceFile.datasetFileTypeLoaded",
+                        "condition": "ctx.pselected.modelType.typeHierarchyArray.indexOf('Awb0Element') === -1 || ctx.owningParam.props.att1InContext.dbValues[0] === '1' || ctx.owningParam.props.att1InOut.dbValues[0] !== ''"
+                    }
+                ]
+            }
+        },
+        "createDatasets":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-04-DataManagement",
+            "method": "createDatasets",
+            "inputData":
+            {
+                "input":
+                [{
+                    "clientId": "{{data.fileNameNoExt}}",
+                    "name": "{{data.fileNameNoExt}}",
+                    "type": "{{ctx.dataset.type}}",
+                    "datasetFileInfos": [ {
+                        "fileName": "{{data.fileName}}",
+                        "namedReferenceName": "Text",
+                        "isText": true,
+                        "allowReplace": true
+                    } ]
+                }]
+            },
+
+            "outputData":
+            {
+                "newDataset": "{{function:getCreatedDataset}}",
+                "commitInfos2": "datasetOutput[0].commitInfo[0]",
+                "fmsTicket2": "datasetOutput[0].commitInfo[0].datasetFileTicketInfos[0].ticket"
+            },
+
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "fmsTicketForOverride.update"
+                    }
+                ]
+            },
+            "deps": "js/Att1DatasetService"
+        },
+        "getDatasetWriteTickets":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-FileManagement",
+            "method": "getDatasetWriteTickets",
+            "inputData":
+            {
+                "inputs":
+                [
+                    {
+                        "createNewVersion": true,
+                        "dataset": "{{ctx.dataset}}",
+                        "datasetFileInfos": "{{function:getDatasetFileInfos}}"
+                    }
+                ]
+            },
+
+            "outputData":
+            {
+                "fmsTicket1": "commitInfo[0].datasetFileTicketInfos[0].ticket",
+                "commitInfos1": "commitInfo[0]"
+            },
+
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "fmsTicketForReplace.update"
+                    }
+                ]
+            },
+
+            "actionMessages":
+            {
+                "failure":
+                [
+                    {
+                        "condition": "errorCode=='replaceFileError'",
+                        "message": "replaceFileError"
+                    }
+                ]
+            },
+
+            "deps": "js/Awp0ReplaceDatasetService"
+        },
+        "updateFormDataForReplace":
+        {
+            "actionType": "JSFunction",
+            "method": "updateFormData",
+            "inputData":
+            {
+                "formData": "{{data.formData}}",
+                "key": "fmsTicket",
+                "value": "{{data.fmsTicket1}}"
+            },
+            "events":
+            {
+                "success":
+                [
+
+                    {
+                        "name": "replaceFile.datasetWriteTicketsCreated"
+                    }
+                ]
+            },
+            "deps": "js/fileUploadUtils"
+        },
+        "updateFormDataForOverride":
+        {
+            "actionType": "JSFunction",
+            "method": "updateFormData",
+            "inputData":
+            {
+                "fileData":
+                {
+                    "key"  : "fmsTicket",
+                    "value": "{{data.fmsTicket2}}"
+                },
+                "data":"{{data}}"
+            },
+            "events":
+            {
+                "success":
+                [
+
+                    {
+                        "name": "replaceFile.datasetWriteTicketsCreated"
+                    }
+                ]
+            },
+
+            "deps": "js/declUtils"
+        },
+        "uploadFile":
+        {
+            "actionType": "RESTService",
+            "serviceName": "",
+            "method": "POST",
+            "inputData":
+            {
+                "request":
+                {
+                    "method": "POST",
+                    "url": "{{Constants.fmsUrl}}",
+                    "headers":
+                    {
+                        "Content-type": "undefined"
+                    },
+                    "data": "{{data.formData}}"
+                }
+            },
+
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "overrideFile.fileUploaded",
+                        "condition": "ctx.isNewDataset"
+                    },
+                    {
+                        "name": "replaceFile.fileUploaded",
+                        "condition": "!ctx.isNewDataset"
+                    }
+                ]
+            }
+        },
+        "commitDatasetFilesForReplace":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-FileManagement",
+            "method": "commitDatasetFiles",
+            "inputData":
+            {
+                "commitInput": [ "{{data.commitInfos1}}" ]
+            },
+            "outputData":
+            {
+                "fmsTicket": "commitInfo[0].datasetFileTicketInfos[0].ticket",
+                "commitInfos": "commitInfo[0]"
+            },
+
+            "policy":
+            {
+                "types":
+                [
+                    {
+                        "name": "Dataset",
+                        "properties":
+                        [
+                            {
+                                "name": "ref_list"
+                            }
+                        ]
+                    }
+                ]
+            },
+
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "replaceFile.updateDatasetProperty",
+                        "condition": "data.fileNameNoExt !== data.datasetName.dbValue"
+                    },
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData":
+                        {
+                            "relatedModified": "{{function:getUpdatedObjects}}"
+                        },
+                        "condition": "data.fileNameNoExt === data.datasetName.dbValue"
+                    }
+                ]
+            },
+
+            "actionMessages":
+            {
+                "success":
+                [
+                    {
+                        "message": "replaceFileSuccess_multiple",
+                        "condition": "data.fileNameNoExt != data.datasetName.dbValue"
+                    }
+                ]
+            },
+
+            "deps": "js/Awp0ReplaceDatasetService"
+        },
+        "commitDatasetFilesForOverride":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-FileManagement",
+            "method": "commitDatasetFiles",
+            "inputData":
+            {
+                "commitInput": [ {
+                    "dataset": "{{data.commitInfos2.dataset}}",
+                    "createNewVersion": true,
+                    "datasetFileTicketInfos": [ {
+                        "datasetFileInfo": {
+                            "clientId": "{{data.commitInfos2.datasetFileTicketInfos[0].datasetFileInfo.clientId}}",
+                            "fileName": "{{data.commitInfos2.datasetFileTicketInfos[0].datasetFileInfo.fileName}}",
+                            "namedReferencedName": "{{data.commitInfos2.datasetFileTicketInfos[0].datasetFileInfo.namedReferenceName}}",
+                            "isText": "{{data.commitInfos2.datasetFileTicketInfos[0].datasetFileInfo.isText}}",
+                            "allowReplace": "{{data.commitInfos2.datasetFileTicketInfos[0].datasetFileInfo.allowReplace}}"
+                        },
+                        "ticket": "{{data.commitInfos2.datasetFileTicketInfos[0].ticket}}"
+                    } ]
+                } ]
+            },
+
+            "outputData":
+            {
+                "fmsTicket": "commitInfo[0].datasetFileTicketInfos[0].ticket",
+                "commitInfos": "commitInfo[0]"
+            },
+
+            "policy":
+            {
+                "types":
+                [
+                    {
+                        "name": "Dataset",
+                        "properties":
+                        [
+                            {
+                                "name": "ref_list"
+                            }
+                        ]
+                    }
+                ]
+            },
+
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "getCreateOrUpdateMeasurableAttributeSoaInput"
+                    }
+                ]
+            },
+
+            "deps": "js/Awp0ReplaceDatasetService"
+        },
+
+        "setProperties":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-09-DataManagement",
+            "method": "setProperties",
+            "inputData":
+            {
+                "info":
+                [
+                    {
+                        "object": "{{ctx.dataset}}",
+                        "timestamp": "",
+                        "vecNameVal":
+                        [
+                            {
+                                "name": "object_name",
+                                "values":
+                                [
+                                    "{{data.fileNameNoExt}}"
+                                ]
+                            }
+                        ]
+                    },
+
+                    {
+                        "object": "{{function:getDatasetRefObj}}",
+                        "timestamp": "",
+                        "vecNameVal":
+                        [
+                            {
+                                "name": "original_file_name",
+                                "values":
+                                [
+                                    "{{data.fileName}}"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+
+            "events":
+            {
+                "success":
+                [
+
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData":
+                        {
+                            "relatedModified": "{{function:getUpdatedObjects}}"
+                        }
+                    }
+                ]
+            },
+
+            "deps": "js/Awp0ReplaceDatasetService"
+        },
+        "getCreateOrUpdateMeasurableAttributeSoaInput":
+        {
+            "actionType": "JSFunction",
+            "method": "getCreateOrUpdateMeasurableAttributeSoaInput",
+            "deps": "js/Att1DatasetService",
+            "inputData":
+            {
+                "datasetFiles": "{{data.datasets}}"
+            },
+            "outputData":
+            {
+                "createOrUpdateMeasurableAttributeSoaInput": ""
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "createOrUpdateMeasurableAttributeSoaCall"
+                    }
+                ]
+            }
+        },
+        "createOrUpdateMeasurableAttributeSoaCall":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "AttrTargetMgmtAW-2015-10-AttributeTargetManagement",
+            "method": "createOrUpdateMeasurableAttribute",
+            "inputData":
+            {
+                "inputs": "{{data.createOrUpdateMeasurableAttributeSoaInput}}"
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData":
+                        {
+                            "relatedModified": "{{function:getUpdatedObjects}}"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/Awp0ReplaceDatasetService"
+        }
+    },
+
+    "functions":
+    {
+
+        "getDatasets": {
+            "functionName": "getDatasets",
+            "parameters": [
+                "{{response}}"
+            ]
+        },
+
+        "getDatasetFileInfos":
+        {
+            "functionName": "getDatasetFileInfos",
+            "parameters":
+            [
+                "{{ctx.dataset}}",
+                "{{data}}",
+                "{{data}}"
+            ]
+        },
+
+        "getDatasetRefObj":
+        {
+            "functionName": "getDatasetRefObj",
+            "parameters":
+            [
+                "{{ctx.dataset}}"
+            ]
+        },
+
+        "getUpdatedObjects":
+        {
+            "functionName": "getUpdatedObjects",
+            "parameters":
+            [
+                "{{ctx.dataset}}",
+                "{{ctx.pselected}}"
+            ]
+        },
+
+        "getCreatedDataset":
+        {
+            "functionName": "getCreatedDataset",
+            "parameters":
+            [
+                "{{response}}"
+            ]
+        }
+    },
+
+    "messages":
+    {
+        "replaceFileSuccess_multiple":
+        {
+            "messageType": "INFO",
+            "messageText": "{{i18n.replaceSuccessWithFileName}}",
+            "messageTextParams":
+            [
+                "{{ctx.dataset.props.object_name.dbValues[0]}}"
+            ]
+        },
+
+        "replaceFileError":
+        {
+            "messageType": "INFO",
+            "messageText": "{{i18n.replaceFileError}}"
+        }
+    },
+
+    "data":
+    {
+        "datasetName":
+        {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "true",
+            "dbValue": "",
+            "dispValue": ""
+        },
+
+        "datasetFileName":
+        {
+            "displayName": "",
+            "type": "STRING",
+            "hasLov": true,
+            "dbValue": "",
+            "dispValue": ""
+        }
+    },
+    "dataProviders":
+    {
+        "getAttachedGoalFile":
+        {
+            "action": "getFiles",
+            "response": "{{data.datasets.goalFile}}",
+            "totalFound": "{{data.datasets.goalFile.length}}",
+            "selectionModelMode": "multiple",
+            "commandsAnchor": "dataset_commands"
+        },
+        "getAttachedMeasurementFile":
+        {
+            "action": "getFiles",
+            "response": "{{data.datasets.measurementFile}}",
+            "totalFound": "{{data.datasets.measurementFile.length}}",
+            "selectionModelMode": "multiple",
+            "commandsAnchor": "dataset_commands"
+        }
+    },
+
+    "onEvent": [
+        {
+            "eventId" : "fmsTicketForOverride.update",
+            "action" : "updateFormDataForOverride"
+        },
+        {
+            "eventId" : "fmsTicketForReplace.update",
+            "action" : "updateFormDataForReplace"
+        },
+
+
+        {
+            "eventId": "replaceFile.datasetFileTypeLoaded",
+            "action": "getDatasetWriteTickets"
+        },
+        {
+            "eventId": "replaceFile.fileUploaded",
+            "action": "commitDatasetFilesForReplace"
+        },
+        {
+            "eventId": "overrideFile.fileUploaded",
+            "action": "commitDatasetFilesForOverride"
+        },
+        {
+            "eventId": "replaceFile.updateDatasetProperty",
+            "action": "setProperties"
+        },
+        {
+            "eventId": "replaceFile.datasetWriteTicketsCreated",
+            "action": "uploadFile"
+        },
+        {
+            "eventId": "goalFile.get",
+            "action": "getAttachedGoalFile"
+        },
+        {
+            "eventId": "measurementFile.get",
+            "action": "getAttachedMeasurementFile"
+        },
+        {
+            "eventId": "getCreateOrUpdateMeasurableAttributeSoaInput",
+            "action": "getCreateOrUpdateMeasurableAttributeSoaInput"
+        },
+        {
+            "eventId": "createOrUpdateMeasurableAttributeSoaCall",
+            "action": "createOrUpdateMeasurableAttributeSoaCall"
+        },
+        {
+            "eventId": "replaceFile.createDataset",
+            "action": "createDatasets"
+        },
+        {
+            "eventId": "getFileSoaCall",
+            "action": "getFileSoaCall"
+        },
+        {
+            "eventId": "getDatasetType",
+            "action": "getDatasetType"
+        }
+    ],
+    "i18n":
+    {
+        "replaceFileError":
+        [
+            "Att1AttrMappingMessages"
+        ],
+        "replaceSuccessWithFileName":
+        [
+            "Att1AttrMappingMessages"
+        ],
+        "goalFile":
+        [
+            "Att1AttrMappingMessages"
+        ],
+        "measurementFile":
+        [
+            "Att1AttrMappingMessages"
+        ]
+    }
+}

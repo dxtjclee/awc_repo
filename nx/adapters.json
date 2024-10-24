@@ -1,0 +1,19 @@
+[
+  {
+    "conditions": {
+      "modelType.typeHierarchyArray": {
+        "$in": [
+          "Nxp1Sheet",
+          "Nxp1Run",
+          "Nxp1EquipmentElement",
+          "Nxp1ConnectionElement"
+        ]
+      }
+    },
+    "target": {
+      "prop": "awb0UnderlyingObject",
+      "method": "getAlternateSelectedObjects",
+      "deps": "js/selection.service"
+    }
+  }
+]

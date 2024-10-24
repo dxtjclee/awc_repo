@@ -1,0 +1,70 @@
+{
+    "schemaVersion" : "1.0.0",
+    "imports": [],
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "actions": {
+        "openWorkflowTaskInNewTab": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "getWorkflowTask"
+                },
+                {
+                    "action": "navigateWorkflowTaskInNewTab",
+                    "condition": "data.workflowTaskUid"
+                }
+            ]
+        },
+        "getWorkflowTask": {
+            "actionType": "JSFunctionAsync",
+            "method": "getReviewSuspectWorkflowTask",
+            "inputData": {
+                "vmo": "{{subPanelContext.vmo}}"
+            },
+            "outputData": {
+                "workflowTaskUid": ""
+            },
+            "deps": "js/requirementsManager"
+        },
+        "navigateWorkflowTaskInNewTab": {
+            "actionType": "Navigate",
+            "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+            "navigationParams": {
+                "uid": "{{data.workflowTaskUid}}"
+            },
+            "navigateIn": "newTab"
+        }
+    },
+    "conditions": {
+        "canShowSuspectIconForSummaryTable": {
+            "expression": "subPanelContext.vmo.props['REF(arm0SourceElement,Awb0Element).awb0IsSuspect'].dbValues[0]==='true'"
+        },
+        "canShowSuspectIconForDashboardTable": {
+            "expression": "subPanelContext.vmo.props.awb0IsSuspect.dbValues[0]==='1'"
+        }
+    },
+    "data": {
+        "openWorkflowTaskCmd": {
+            "iconName": "indicatorSuspectLink",
+            "tooltip": "{{i18n.reviewSuspectTitle}}",
+            "action": "openWorkflowTaskInNewTab"
+        }
+    },
+    "functions": {
+        "getReviewSuspectWorkflowTask": {
+            "functionName": "getReviewSuspectWorkflowTask",
+            "parameters": [
+                "{{subPanelContext.vmo}}"
+            ]
+        }
+    },
+    "i18n": {
+        "reviewSuspectTitle": [
+            "RequirementsCommandPanelsMessages"
+        ]
+    }
+}

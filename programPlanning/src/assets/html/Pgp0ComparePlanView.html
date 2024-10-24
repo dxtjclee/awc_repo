@@ -1,0 +1,11 @@
+<aw-command-panel caption="i18n.Pgp0ComparePlans" context="subPanelContext">
+    <aw-command-sub-panel show-when="data.activeState.value.activeView ==='Pgp0ComparePlanSub'"
+        panel-id="Pgp0ComparePlanSub"
+        sub-panel-context='{...subPanelContext,activeState: data.activeState, sharedData:data.sharedData}'>
+    </aw-command-sub-panel>
+    <aw-navigate-panel exist-when="data.activeState.value.activeView ==='Pgp0AddReferencePlan'"
+        title="i18n.addButtonCommandTitle" active-state="data.activeState" action="actions.setActiveView"
+        panel-id="Pgp0AddReferencePlan" pre-panel-id="Pgp0ComparePlanSub"
+        sub-panel-context='{activeState: data.activeState, sharedData:data.sharedData}'>
+    </aw-navigate-panel>
+</aw-command-panel>

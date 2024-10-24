@@ -1,0 +1,52 @@
+<aw-scrollpanel>
+    <div class="aw-clsadmin-properties w-12">
+        <aw-toolbar second-anchor="aw_summaryHeader" exist-when="conditions.isSummaryHeaderHidden" context="props.subPanelContext.context"></aw-toolbar>
+        <div class="sw-row" >
+            <aw-command-panel-section caption="{{i18n.propertiesTitle}}" visible-when="data.currentSecData.length > 0"
+                collapsed="false" anchor="data.clsadminPropCommands" context="props.subPanelContext.context"
+                class="h-12 aw-clsadmin-prop-properties">
+                    <div class="aw-clspadmin-prop-section" aw-repeat="item : data.currentSecData" visible-when="item.value !== '' || props.subPanelContext.context.searchState.showAllProp === true">
+                        <aw-widget prop="item"></aw-widget>
+                    </div>
+            </aw-command-panel-section>
+        </div>
+        <aw-panel-section caption="{{i18n.dataType}}" visible-when=" data.dataTypeMetric.length > 0" collapsed="false">
+            <div class="sw-row">
+                <aw-panel-section aw-class="[{'w-6' : data.dataTypeNonMetric.length > 0},{'w-12' : data.dataTypeNonMetric.length === 0}]"
+                    caption="{{i18n.metric}}" visible-when=" data.dataTypeMetric.length > 0" collapsed="false">
+                    <div class="aw-clspadmin-prop-section" aw-repeat="item : data.dataTypeMetric" visible-when="item.value !== '' || props.subPanelContext.context.searchState.showAllProp === true">
+                        <aw-widget prop="item"></aw-widget>
+                    </div>
+                    <!-- Add KeyLOV entries under Metric datatype. Replaces KeyLOV setcion -->
+                    <aw-panel-section caption="{{i18n.entries}}" visible-when="conditions.showKeyLovMetric"  collapsed="false">
+                        <aw-tree name="propertiesKeyLOVMetric" tree="subPanelContext.context.searchState.value.propertiesSWA.keyLOVTreeDataMetric">
+                            {{node.label}}
+                        </aw-tree>
+                    </aw-panel-section>
+                </aw-panel-section>
+
+                <aw-panel-section class="w-12" caption="{{i18n.nonMetric}}" visible-when="data.dataTypeNonMetric.length > 0" collapsed="false">
+                    <div class="aw-clspadmin-prop-section" aw-repeat="item : data.dataTypeNonMetric" visible-when="item.value !== '' || props.subPanelContext.context.searchState.showAllProp === true">
+                        <aw-widget prop="item"  ></aw-widget>
+                    </div>
+                    <!-- Add KeyLOV entries under NonMetric datatype. Replaces KeyLOV setcion -->
+                    <aw-panel-section caption="{{i18n.entries}}" visible-when="conditions.showKeyLovNonMetric" collapsed="false">
+                        <aw-tree name="propertiesKeyLOVNonMetric" tree="subPanelContext.context.searchState.value.propertiesSWA.keyLOVTreeDataNonMetric">
+                            {{node.label}}
+                        </aw-tree>
+                    </aw-panel-section>
+                </aw-panel-section>
+            </div>
+        </aw-panel-section>
+        <aw-panel-section class="w-12" caption="{{i18n.multiSite}}" visible-when="data.multiSiteData.length > 0" collapsed="false">
+            <div class="aw-clspadmin-prop-section" aw-repeat="item : data.multiSiteData" visible-when="item.value !== '' || props.subPanelContext.context.searchState.showAllProp === true">
+                <aw-widget prop="item"></aw-widget>
+            </div>
+        </aw-panel-section>
+        <aw-panel-section class="w-12" caption="{{i18n.referenceAttribute}}" visible-when="data.referenceAttrData.length > 0" collapsed="false">
+            <div class="aw-clspadmin-prop-section" aw-repeat="item : data.referenceAttrData" visible-when="item.value !== '' || props.subPanelContext.context.searchState.showAllProp === true">
+                <aw-widget prop="item"></aw-widget>
+            </div>
+        </aw-panel-section>
+    </div>
+</aw-scrollpanel>

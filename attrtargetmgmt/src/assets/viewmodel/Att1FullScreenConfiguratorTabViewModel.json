@@ -1,0 +1,139 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-include.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-panel.directive",
+        "js/aw-i18n.directive"
+    ],
+
+    "actions": {
+        "resetHasVariantConfigContext": {
+            "actionType": "JSFunction",
+            "method": "resetHasVariantConfigContext",
+            "inputData":{
+                "context":"{{subPanelContext}}",
+                "parameterState":"{{subPanelContext.context.parameterState}}"
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "Att1FullScreenConfiguratorTab.initializeFSC"
+                    }
+                ]
+            },
+            "deps": "js/Att1VariantInfoConfigurationService"
+        },
+        "initializeFSCForOtherObjThanProject":{
+            "actionType": "JSFunction",
+            "method": "initializeFSCForOtherObjThanProject",
+            "inputData":{
+                "openedObject":"{{ctx.locationContext.modelObject}}"
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "Att1FullScreenConfiguratorTab.initializeFSC"
+                    }
+                ]
+            },
+            "deps": "js/Att1VariantInfoConfigurationService"
+        },
+        "initializeFSC":{
+            "actionType": "JSFunction",
+            "method": "applySelectedVariantRuleOnFSC",
+            "inputData":{
+                "data":"{{data}}"
+            },
+            "deps": "js/Att1VariantInfoConfigurationService"
+        },
+        "applySelectedVariantRuleOnFSC": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "Att1FullScreenConfigurator.updateAppliedVROnFSC"
+                } ]
+            }
+        },
+        "changeConfiguration":{
+            "actionType": "JSFunction",
+            "method": "changeConfiguration",
+            "inputData":{
+                "activeVariantRuleUID":"{{data.eventMap['Pca0FullScreenConfiguration.configureContent'].variantRules[0]}}",
+                "subPanelContext": "{{subPanelContext}}"
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "primaryWorkarea.reset"
+                    }
+                ]
+            },
+            "deps": "js/Att1VariantInfoConfigurationService"
+        },
+        "resetContext":{
+            "actionType": "Event",
+            "method": "Event",
+            "inputData":
+            {
+                 "events":
+                 [
+                     {
+                     "name": "Att1FullScreenConfiguratorTab.resetContext"
+                     }
+                 ]
+            }
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "resetHasVariantConfigContext"
+    },
+    "functions": {
+        "isVariantConfigurationContextAttached": {
+            "functionName": "isVariantConfigurationContextAttached",
+            "parameters": []
+        }
+    },
+    "onEvent": [
+        {
+            "eventId":"Att1FullScreenConfiguratorTab.initializeFSC",
+            "action": "initializeFSC",
+            "cacheEventData": true
+        },
+        {
+            "eventId":"Att1FullScreenConfiguratorTab.resetContext",
+            "action": "resetHasVariantConfigContext",
+            "condition":"subPanelContext.selected.modelType.typeHierarchyArray.indexOf( 'Att0ParamProject' ) > -1" ,
+            "cacheEventData": true
+        },
+        {
+            "eventId":"Att1FullScreenConfiguratorTab.contentLoaded",
+            "action": "initializeFSCForOtherObjThanProject",
+            "condition":"ctx.locationContext.modelObject.modelType.typeHierarchyArray.indexOf( 'Crt0VldnContractRevision' ) > -1" ,
+            "cacheEventData": true
+        },
+        {
+            "eventId": "Pca0FullScreenConfiguration.configureContent",
+            "action": "applySelectedVariantRuleOnFSC",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "Att1FullScreenConfigurator.updateAppliedVROnFSC",
+            "action": "changeConfiguration",
+            "cacheEventData": true
+
+        }
+    ],
+
+    "i18n": {
+        "noConfigContextFound": [ "Att1AttrMappingMessages" ]
+    }
+
+}

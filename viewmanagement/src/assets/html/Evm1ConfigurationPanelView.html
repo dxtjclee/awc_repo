@@ -1,0 +1,9 @@
+<aw-command-panel caption="i18n.Configuration">
+    <aw-command-sub-panel sub-panel-context="{occContext: fields.occContext, recipeConfigState: fields.recipeConfigState, baseView:'ConfigurationPanelFilters'}" panel-id="AwNestedNavigation" exist-when="data.activeView === 'ConfigurationPanelFilters'"></aw-command-sub-panel>
+    <aw-command-sub-panel sub-panel-context="{occContext: fields.occContext, recipeConfigState: fields.recipeConfigState}" panel-id="Evm1ConfigPanelFilters" exist-when="data.activeView === 'Evm1ConfigPanelFilters'"></aw-command-sub-panel>
+    <aw-panel-footer>
+        <aw-button action="addConfigOnRecipeBuilderAction" visible-when="conditions.isActiveStateAddPanel">
+            <aw-i18n>i18n.evm1UpdateBtn</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

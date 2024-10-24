@@ -1,0 +1,197 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "view-path": {
+            "type": "object"
+        },
+        "view-id": {
+            "type": "string"
+        },
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data": {
+        "selectionData": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "partTableContext": {
+            "editContext": "{{ctx.mfgReadOnlyMode.readOnlyMode === true ? '': 'EP_DETAILS_TABLE_EDIT_CONTEXT'}}",
+            "preferenceName": "EP_AssignedPartsAreaColumnConfiguration",
+            "enableSorting": true,
+            "reloadTable" : true,
+            "relationName": [
+                "Mfg0all_material",
+                "Mfg0sub_elements"
+            ],
+            "loadInputObject": {
+                "loadTypes": [
+                    "getProperties"
+                ],
+                "propertiesToLoad": [
+                    "Mfg0all_material"
+                ]
+            },
+            "messages": {
+                "noElementSelected": [
+                    {
+                        "text": "{{i18n.selectProcessOrOperation}}",
+                        "textParams": [
+                            "{{i18n.parts}}"
+                        ]
+                    }
+                ],
+                "noAssigned": [
+                    {
+                        "text": "{{i18n.noAssigned}}",
+                        "textParams": [
+                            "{{i18n.parts}}"
+                        ]
+                    },
+                    {
+                        "iconId": "miscDropIndication"
+                    },
+                    {
+                        "text": "{{i18n.dropToAssign}}"
+                    }
+                ]
+            },
+            "excludeInputTypes": [
+                "Mfg0BvrProcessResource"
+            ],
+            "customColumns": "{{subPanelContext.customColumns}}",
+            "alwaysVisibleColumns":["object_string"],
+            "enableArrangeColumn": true
+        }
+    },
+    "actions": {
+        "getValueInViewModel": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "tabData": "{{subPanelContext.tabContext}}"
+            },
+            "outputData": {
+                "partTableContext.tabContext": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "setSelectedModelObjectAsDesignElementInOccContext": {
+            "actionType": "JSFunctionAsync",
+            "method": "initOccContext",
+            "inputData": {
+                "occContext": "{{subPanelContext.occContext}}",
+                "value": "{{fields.selectionData.selected[0].uid}}"
+            },
+            "deps": "js/epSetEffectivityService"
+        },
+        "setSelectedModelObjectAsDesignElementInOccContextBatchAction": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "setSelectedModelObjectAsDesignElementInOccContext",
+                    "condition": "ctx.activeToolsAndInfoCommand.commandId === 'Awb0OccurrenceEffectivity'"
+                },
+                {
+                    "action": "calculateImpactForSelectionAndsetCommandContextForHandleImpact",
+                    "condition": "props.subPanelContext.sharedSelectionData.isIndicationToggleOn === true && ctx.state.params.tracking_cn !== null && ctx.state.params.tracking_cn !== undefined"
+                }
+            ]
+        },
+        "calculateImpactForSelectionAndsetCommandContextForHandleImpact": {
+            "actionType": "batchJob",
+            "steps": [
+
+                {
+                    "action": "calculateImpactForSelection",
+                    "condition": "props.subPanelContext.sharedSelectionData.isIndicationToggleOn === true && ctx.state.params.tracking_cn !== null && ctx.state.params.tracking_cn !== undefined",
+                    "outputArg": [
+                        "handleImpact"
+                    ]
+                },
+                {
+                    "action": "setCommandContextForHandleImpact",
+                    "condition": "props.subPanelContext.sharedSelectionData.isIndicationToggleOn === true && ctx.state.params.tracking_cn !== null && ctx.state.params.tracking_cn !== undefined",
+                    "inputArg": {
+                        "handleImpact": "{{actionData.handleImpact}}"
+                    }
+                }
+            ]
+        },
+        "setCommandContextForHandleImpact": {
+            "actionType": "JSFunction",
+            "method": "setCommandContext",
+            "inputData": {
+                "tabModel": "{{subPanelContext.tabContext}}",
+                "commandContext": {
+                    "handleImpact": "{{parameters.handleImpact}}"
+                }
+
+            },
+            "deps": "js/mfeContentPanelUtil"
+        },
+        "calculateImpactForSelection": {
+            "actionType": "JSFunction",
+            "method": "calculateImpactForSelection",
+            "inputData": {
+                "vmo": "{{fields.selectionData.selected}}"
+            },
+            "outputData": {
+                "handleImpact": ""
+            },
+
+            "deps": "js/epChangeIndicationService"
+        },
+        "updatePackUnpackEvent": {
+            "actionType": "JSFunction",
+            "method": "getToggledBoolean",
+            "inputData": {
+                "booleanToToggle": "{{data.partTableContext.reloadTable}}"
+            },
+            "outputData": {
+                "partTableContext.reloadTable": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "getValueInViewModel",
+        "onUpdate": [
+            {
+                "action": "setSelectedModelObjectAsDesignElementInOccContextBatchAction",
+                "observers": [ "viewModel.atomicData.selectionData.selected" ]
+            },
+            {
+                "action": "calculateImpactForSelectionAndsetCommandContextForHandleImpact",
+                "observers": [
+                    "props.subPanelContext.sharedSelectionData.isIndicationToggleOn"
+                ]
+            }
+        ]
+    },
+    "onEvent": [
+        {
+            "eventId": "ep.publishAssignmentIndicationChange",
+            "action": "calculateImpactForSelectionAndsetCommandContextForHandleImpact"
+        },
+        {
+            "eventId": "epPostPackOrUnpackEvent",
+            "action": "updatePackUnpackEvent"
+        }
+    ],
+    "i18n": {
+        "parts": [
+            "DetailsMessages"
+        ],
+        "selectProcessOrOperation": [
+            "DetailsMessages"
+        ],
+        "noAssigned": [
+            "DetailsMessages"
+        ],
+        "dropToAssign": [
+            "DetailsMessages"
+        ]
+    }
+}

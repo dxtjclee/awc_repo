@@ -1,0 +1,300 @@
+{
+    "schemaVersion": "1.0.0",
+    "data":{
+        "scope":{
+            "scopeObject": null
+        },
+        "noProcessOperationsMsg":[{
+            "text":"{{i18n.noProcessOperations}}"
+        }],
+        "selectToSeeOperations":[{
+            "text":"{{i18n.selectToSeeOperations}}"
+        }],
+        "isInLoadingState" : false,
+        "tableSettings": {
+            "columnConfigPreference":"NGPWorkUnitOperationsColumnConfiguration",
+            "tableObjectsBaseTypes": ["Mpr0BaseOperation"],
+            "fixedColumns":["object_string"]
+        }
+    },
+    "ports":{
+        "scopeObject_input":{
+            "syncObject":null,
+            "onChangeAction":"onScopeObjectChange"
+        }
+    },
+    "actions":{
+        "onScopeObjectChange":{
+            "actionType":"batchJob",
+            "steps":[
+                {
+                    "action":"saveGivenScopeObject"
+                },
+                {
+                    "action":"initOperationsTableDataProvider"
+                }
+            ]
+        },
+        "initOperationsTableDataProvider": {
+            "actionType": "dataProvider",
+            "method": "ngpOperationsTableDataProvider"
+        },
+        "registerPolicyAndGetOperations": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "setInLoadingStateTrue"
+                },
+                {
+                    "action": "registerPolicy"
+                },
+                {
+                    "action": "getAllOperations"
+                },
+                {
+                    "action": "setInLoadingStateFalse"
+                }
+            ]
+        },
+        "registerPolicy": {
+            "actionType": "JSFunction",
+            "method": "register",
+            "inputData": {
+                "name": "ngpOperationsTable",
+                "policyObj": "{{data.dataProviders.ngpOperationsTableDataProvider.policy}}"
+            },
+            "deps": "js/mfePolicyService"
+        },
+        "unregisterPolicy":{
+            "actionType": "JSFunction",
+            "method": "unregister",
+            "inputData": {
+                "name": "ngpOperationsTable"
+            },
+            "deps": "js/mfePolicyService"
+        },
+        "saveGivenScopeObject":{
+            "actionType":"JSFunction",
+            "method":"setValueInViewModel",
+            "inputData":{
+                "object":"{{data.scope}}",
+                "key":"scopeObject",
+                "value":"{{ports.scopeObject_input.syncObject.modelObj}}"
+            },
+            "outputData":{
+                "scope":""
+            },
+            "deps":"js/mfeViewModelUtils"
+        },
+        "setInLoadingStateTrue":{
+            "actionType":"JSFunction",
+            "method":"getValueInViewModel",
+            "inputData":{
+                "value":true
+            },
+            "outputData":{
+                "isInLoadingState":""
+            },
+            "deps":"js/mfeViewModelUtils"
+        },
+        "setInLoadingStateFalse":{
+            "actionType":"JSFunction",
+            "method":"getValueInViewModel",
+            "inputData":{
+                "value":false
+            },
+            "outputData":{
+                "isInLoadingState":""
+            },
+            "deps":"js/mfeViewModelUtils"
+        },
+        "getAllOperations": {
+            "actionType": "JSFunctionAsync",
+            "method": "getContentElements",
+            "inputData": {
+                "uid":  "{{data.scope.scopeObject.uid}}",
+                "returnAsVMOs" :false
+            },
+            "outputData": {
+                "processOperations":""
+            },
+            "deps":"js/services/ngpRelationService"
+        },
+        "saveModifiedColumns": {
+            "actionType": "JSFunction",
+            "method": "saveResizedColumnsWidth",
+            "inputData": {
+                "preferenceName": "NGPWorkUnitOperationsColumnConfiguration",
+                "columns": "{{data.eventMap.columnArrange.columns}}"
+            },
+            "deps": "js/mfeTableService"
+        },
+        "createColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "createTableColumns",
+            "inputData": {
+                "preferenceName": "NGPWorkUnitOperationsColumnConfiguration",
+                "dataProvider": "{{data.dataProviders.ngpOperationsTableDataProvider}}",
+                "columnProvider": {
+                    "enableSorting": true,
+                    "enableCellEdit": true
+                },
+                "additionalPolicyObjects": {},
+                "tableCmdColumnPropName":"object_string"
+
+            },
+            "deps": "js/services/ngpTableService"
+        },
+        "arrangeColumnsAndRefresh":{
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "unregisterPolicy"
+                },
+                {
+                    "action": "createColumns"
+                },
+                {
+                    "action": "registerPolicy"
+                },
+                {
+                    "action": "refreshTableObjects"
+                },
+                {
+                    "action": "refreshTable"
+                }
+            ]
+        },
+        "refreshTableObjects":{
+            "actionType":"JSFunctionAsync",
+            "method":"refreshObjects",
+            "inputData":{
+                "modelObjects":"{{data.dataProviders.ngpOperationsTableDataProvider.viewModelCollection.loadedVMObjects}}"
+            },
+            "deps":"js/services/ngpLoadService"
+        },
+        "refreshTable":{
+            "actionType":"JSFunction",
+            "method":"refreshTable",
+            "inputData":{
+                "tableId":"ngpOperationsTable"
+            },
+            "deps":"js/mfeTableService"
+        }
+    },
+    "grids":{
+        "ngpOperationsTable":{
+            "dataProvider": "ngpOperationsTableDataProvider",
+            "columnProvider": "ngpOperationsTableColumnProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "enableGridMenu": true
+            }
+        }
+    },
+    "dataProviders": {
+        "ngpOperationsTableDataProvider": {
+            "action": "registerPolicyAndGetOperations",
+            "response": "{{data.processOperations}}",
+            "totalFound": "{{data.processOperations.length}}",
+            "selectionModelMode": "multiple",
+            "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectCellListActionCommands",
+            "editContext":"ngpOperationsTableDataProvider"
+        }
+    },
+    "columnProviders": {
+        "ngpOperationsTableColumnProvider": {
+            "loadColumnAction": "createColumns",
+            "resetColumnAction": "saveModifiedColumns",
+            "saveColumnAndLoadAction": "saveModifiedColumns",
+            "frozenColumnIndex": -1
+        }
+    },
+    "conditions":{
+        "showLoadingMsg":{
+            "expression":{
+                "$and":[
+                    {
+                        "$source":"conditions.scopeObjectIsValid",
+                        "$query":{
+                            "$eq":true
+                        }
+                    },
+                    {
+                        "$source":"conditions.isInLoadingState",
+                        "$query":{
+                            "$eq":true
+                        }
+                    }
+                ]
+            }
+        },
+        "isInLoadingState":{
+            "expression":{
+                "$source":"data.isInLoadingState",
+                "$query":{
+                    "$eq": true
+                }
+            }
+        },
+        "scopeObjectIsValid":{
+            "expression": {
+                "$source": "data.scope.scopeObject",
+                "$query": {
+                    "$notNull": true
+                }
+            }
+        },
+        "hasOperations":{
+            "expression":{
+                "$source":"data.dataProviders.ngpOperationsTableDataProvider.viewModelCollection.loadedVMObjects.length",
+                "$query":{
+                    "$gt": 0
+                }
+            }
+        },
+        "showNoOperationsMsg":{
+            "expression":{
+                "$and":[
+                    {
+                        "$source":"conditions.hasOperations",
+                        "$query":{
+                            "$eq": false
+                        }
+                    },
+                    {
+                        "$source":"conditions.scopeObjectIsValid",
+                        "$query":{
+                            "$eq": true
+                        }
+                    },{
+                        "$source":"conditions.isInLoadingState",
+                        "$query":{
+                            "$eq": false
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "lifecycleHooks":{
+        "onUnmount":"unregisterPolicy"
+    },
+    "onEvent": [
+        {
+            "eventId": "columnArrange",
+            "condition": "name === 'ngpOperationsTable'",
+            "cacheEventData": true,
+            "action": "saveModifiedColumns"
+        },
+        {
+            "eventId": "ngp.updateColumns",
+            "action": "arrangeColumnsAndRefresh",
+            "condition": "tableId === 'NGPWorkUnitOperationsColumnConfiguration'"
+        }
+    ],
+    "i18n":{
+        "noProcessOperations":["NgpDetailedPlanningMessages"],
+        "selectToSeeOperations":["NgpDetailedPlanningMessages"]
+    }
+}

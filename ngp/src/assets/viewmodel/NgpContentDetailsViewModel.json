@@ -1,0 +1,29 @@
+{
+    "schemaVersion": "1.0.0",
+    "ports":{
+        "input_ngpContentDetails":{
+            "syncObject":{},
+            "onChangeAction":"onInputChange"
+        },
+        "output_ngpContentDetails":{
+            "syncObject":{}
+        }
+    },
+    "data":{
+        "noSelectedItemsMsg":[{
+            "text":"{{i18n.noSelectedReusableItems}}"
+        }]
+    },
+    "actions":{
+        "onInputChange":{
+            "actionType":"Sync",
+            "inputData":{
+                "port":"output_ngpContentDetails",
+                "syncObject":"{{ports.input_ngpContentDetails.syncObject[0]}}"
+            }
+        }
+    },
+    "i18n":{
+        "noSelectedReusableItems":["NgpContentMessages"]
+    }
+}

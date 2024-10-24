@@ -1,0 +1,38 @@
+[
+  {
+    "conditions": {
+      "modelType.typeHierarchyArray": {
+        "$in": "Seg0Implements"
+      }
+    },
+    "target": {
+      "prop": "secondary_object",
+      "method": "getAlternateSelectedObjects",
+      "deps": "js/selection.service"
+    }
+  },
+  {
+    "conditions": {
+      "modelType.typeHierarchyArray": {
+        "$in": "Ase1ExchangeTableProxy"
+      }
+    },
+    "target": {
+      "prop": "ase1ExchangeObject",
+      "method": "getAlternateSelectedObjects",
+      "deps": "js/selection.service"
+    }
+  },
+  {
+    "conditions": {
+      "modelType.typeHierarchyArray": {
+        "$in": "Ase1InterfaceTableProxy"
+      }
+    },
+    "target": {
+      "prop": "ase1InterfaceObject",
+      "method": "getAlternateSelectedObjects",
+      "deps": "js/selection.service"
+    }
+  }
+]

@@ -1,0 +1,129 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-panel-footer.directive",
+        "js/visible-when.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/aw-add.directive"
+    ],
+    "data": {
+        "addPanelState": {
+            "initialValues": {
+                "sourceObjects": "",
+                "selectedTab": ""
+            },
+            "meta": {}
+        }
+    },
+    "actions": {
+        "createRelationForPaletteOrSearch":
+        {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData":
+            {
+                 "events":
+                 [
+                     {
+                         "name": "addPhyBOM.addPhyBOMPostProcess"
+                     }
+                 ]
+            }
+
+        },
+        "postProcess":
+        {
+            "actionType": "JSFunction",
+            "method": "getManageInputForTables",
+            "inputData": {
+                "parentScopeObject": "{{subPanelContext.provider.vrSublocationState.mselected[0]}}",
+                "createdObject": "",
+                "palletteSearchObjects": "{{addPanelState.sourceObjects}}",
+                "preferences":"",
+                "addAsOccurrence": true,
+                "copyParameter": "",
+                "throwErrorVRNotCreated": ""
+            },
+            "deps": "js/manageVerificationService",
+            "outputData": {
+                "getManageInputForBOMTable": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "manageAnalysisRequests"
+                    }
+                ]
+            }
+        },
+        "manageAnalysisRequests": {
+            "actionType": "JSFunction",
+            "method": "callManageVerificationSOA",
+            "inputData": {
+                "manageSOAInput": "{{data.getManageInputForBOMTable}}",
+                "i18n": "{{data.i18n}}"
+            },
+            "deps": "js/manageVerificationService",
+            "events": {
+                "success": [
+                    {
+                        "name": "testEBOMTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    },
+                    {
+                        "name": "closePanel"
+                    }
+                ]
+            }
+        },
+        "closePanel":
+        {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData":
+            {
+                 "events":
+                 [
+                     {
+                        "name": "complete",
+                        "eventData":
+                        {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+
+                 ]
+            }
+        }
+    },
+
+    "onEvent": [
+        {
+            "eventId": "closePanel",
+            "action": "closePanel"
+        },
+        {
+            "eventId": "addPhyBOM.addPhyBOMPostProcess",
+            "action": "postProcess"
+        },
+        {
+            "eventId": "manageAnalysisRequests",
+            "action": "manageAnalysisRequests"
+        }
+    ],
+    "i18n": {
+        "AddBOMTitle": [
+            "verificationMgmtmMessages"
+        ],
+        "Add": [
+            "verificationMgmtmMessages"
+        ]
+    },
+    "ctx": {
+        "panelContext": null,
+        "preferences": null,
+        "xrtSummaryContextObject": null
+    }
+}

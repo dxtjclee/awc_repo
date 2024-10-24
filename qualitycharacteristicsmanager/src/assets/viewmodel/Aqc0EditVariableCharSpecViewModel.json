@@ -1,0 +1,267 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-listbox.directive",
+        "js/aw-widget.directive",
+        "js/exist-when.directive",
+        "js/aw-row.directive",
+        "js/aw-column.directive"
+    ],
+    "actions": {
+        "getClassificationPropSupportedVersion": {
+            "actionType": "JSFunction",
+            "method": "getSupportedTCVersion",
+            "deps": "js/Aqc0CharManagerUtils"
+        },
+        "loadClassificationValues": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2013-05-LOV",
+            "method": "getInitialLOVValues",
+            "inputData": {
+                "initialData": {
+                    "propertyName": "qc0Criticality",
+                    "lovInput": {
+                        "operationName": "Edit",
+                        "boName": "Qc0MasterCharSpec"
+                    }
+                }
+            },
+            "outputData": {
+                "qc0CriticalityList": "{{function:getClassificationLOVList}}"
+            },
+            "deps": "js/Aqc0CharManagerUtils2"
+        },
+        "loadQc0limitation": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2013-05-LOV",
+            "method": "getInitialLOVValues",
+            "inputData": {
+                "initialData": {
+                    "propertyName": "qc0limitation",
+                    "lovInput": {
+                        "operationName": "Edit",
+                        "boName": "Qc0VariableCharSpec"
+                    }
+                }
+            },
+            "outputData": {
+                "qc0limitationList": "{{function:getLOVList}}"
+            },
+            "deps": "js/Aqc0CharManagerUtils"
+        },
+        "loadQc0ToleranceType": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2013-05-LOV",
+            "method": "getInitialLOVValues",
+            "inputData": {
+                "initialData": {
+                    "propertyName": "qc0ToleranceType",
+                    "lovInput": {
+                        "operationName": "Edit",
+                        "boName": "Qc0VariableCharSpec"
+                    }
+                }
+            },
+            "outputData": {
+                "ToleranceTypeList": "{{function:getLOVList}}"
+            },
+            "deps": "js/Aqc0CharManagerUtils"
+        },
+        "loadUnitOfMeasure": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2013-05-LOV",
+            "method": "getInitialLOVValues",
+            "inputData": {
+                "initialData": {
+                    "propertyName": "qc0UnitOfMeasure",
+                    "lovInput": {
+                        "operationName": "Edit",
+                        "boName": "Qc0VariableCharSpec"
+                    }
+                }
+            },
+            "outputData": {
+                "unitOfMeasureList": "{{function:getLOVList}}"
+            },
+            "deps": "js/Aqc0CharManagerUtils"
+        },
+        "updateUpperLowerTol": {
+            "actionType": "JSFunction",
+            "method": "updateUpperLowerTol",
+            "inputData": {
+                "subPanelContext": "{{subPanelContext}}"
+            },
+            "deps": "js/Aqc0CharManagerUtils"
+        },
+        "clearMapOfCharGroupAndSpecificationAction": {
+            "actionType": "JSFunction",
+            "method": "clearMapOfCharGroupAndSpecification",
+            "deps": "js/Aqc0CharLibraryTreeTableService"
+        }
+    },
+    "lifecycleHooks": {
+        "onInit": "getClassificationPropSupportedVersion"
+    },
+    "conditions": {
+        "isVariableSymmetricFS": {
+            "expression": "data.checkSymmetric.dbValue===true && ctx.pselected.props.qc0CharacteristicsType.dbValues[0]==='Variable'"
+        },
+        "isVariableSpecFS": {
+            "expression": "ctx.pselected.props.qc0CharacteristicsType.dbValues[0]==='Variable'"
+        },
+        "isAttributiveSpecFS": {
+            "expression": "ctx.pselected.props.qc0CharacteristicsType.dbValues[0]==='Attributive'"
+        },
+        "isVisualSpecFS": {
+            "expression": "ctx.pselected.props.qc0CharacteristicsType.dbValues[0]==='Visual'"
+        },
+        "seletedAttributeChangeCondition": {
+            "expression": "subPanelContext.fields.selected.properties.qc0ToleranceType.value",
+            "trackValues": true
+        },
+        "showHideUpperTolerance":{
+            "expression": "props.subPanelContext.selected.props.qc0limitation.dbValues[0] === 'Both Sides' || props.subPanelContext.selected.props.qc0limitation.dbValues[0] === 'Zero' ||  props.subPanelContext.selected.props.qc0limitation.dbValues[0] === 'Down'"
+        },
+        "showHideLowerTolerance":{
+            "expression": "props.subPanelContext.selected.props.qc0limitation.dbValues[0] === 'Both Sides' || props.subPanelContext.selected.props.qc0limitation.dbValues[0] === 'Up'"
+        }
+        
+    },
+    "functions": {
+        "getLOVList": {
+            "functionName": "getLOVList",
+            "parameters": []
+        }
+    },
+    "data": {
+        "criticality": {
+            "displayName": "{{props.subPanelContext.selected.props.qc0Criticality.propertyDisplayName}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "dbValue": "{{props.subPanelContext.selected.props.qc0Criticality.dbValues[0]}}",
+            "hasLov": "true",
+            "isEditable": "false",
+            "uiValue": "{{props.subPanelContext.selected.props.qc0Criticality.uiValues[0]}}"
+        },
+        "context":{
+            "displayName": "{{props.subPanelContext.selected.props.qc0Context.propertyDisplayName}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "dbValue": "{{props.subPanelContext.selected.props.qc0Context.dbValues[0]}}",
+            "hasLov": "true",
+            "isEditable": "false",
+            "uiValue": "{{props.subPanelContext.selected.props.qc0Context.uiValues[0]}}"
+        },
+        "description":{
+            "displayName": "{{props.subPanelContext.selected.props.object_desc.propertyDisplayName}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "dbValue": "{{props.subPanelContext.selected.props.object_desc.dbValues[0]}}",
+            "hasLov": "false",
+            "isEditable": "false",
+            "uiValue": "{{props.subPanelContext.selected.props.object_desc.uiValues[0]}}"
+        },
+        "limitation": {
+            "displayName": "{{props.subPanelContext.selected.props.qc0limitation.propertyDisplayName}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "dbValue": "{{props.subPanelContext.selected.props.qc0limitation.dbValues[0]}}",
+            "hasLov": "true",
+            "isEditable": "false",
+            "uiValue": "{{props.subPanelContext.selected.props.qc0limitation.uiValues[0]}}"
+        },
+        "unitOfMeasure": {
+            "displayName": "{{props.subPanelContext.selected.props.qc0UnitOfMeasure.propertyDisplayName}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "dbValue": "{{props.subPanelContext.selected.props.qc0UnitOfMeasure.dbValues[0]}}",
+            "hasLov": "false",
+            "isEditable": "false",
+            "uiValue": "{{props.subPanelContext.selected.props.qc0UnitOfMeasure.uiValues[0]}}"
+        },
+        "nominalValue": {
+            "displayName": "{{props.subPanelContext.selected.props.qc0NominalValue.propertyDisplayName}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "dbValue": "{{props.subPanelContext.selected.props.qc0NominalValue.dbValues[0]}}",
+            "hasLov": "false",
+            "isEditable": "false",
+            "uiValue": "{{props.subPanelContext.selected.props.qc0NominalValue.uiValues[0]}}"
+        },
+        "toleranceType": {
+            "displayName": "{{props.subPanelContext.selected.props.qc0ToleranceType.propertyDisplayName}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "dbValue": "{{props.subPanelContext.selected.props.qc0ToleranceType.dbValues[0]}}",
+            "hasLov": "false",
+            "isEditable": "false",
+            "uiValue": "{{props.subPanelContext.selected.props.qc0ToleranceType.uiValues[0]}}"
+        },
+        "upperTolerance": {
+            "displayName": "{{props.subPanelContext.selected.props.qc0UpperTolerance.propertyDisplayName}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "dbValue": "{{props.subPanelContext.selected.props.qc0UpperTolerance.dbValues[0]}}",
+            "hasLov": "false",
+            "isEditable": "false",
+            "uiValue": "{{props.subPanelContext.selected.props.qc0UpperTolerance.uiValues[0]}}"
+        },
+        "lowerTolerance": {
+            "displayName": "{{props.subPanelContext.selected.props.qc0LowerTolerance.propertyDisplayName}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "dbValue": "{{props.subPanelContext.selected.props.qc0LowerTolerance.dbValues[0]}}",
+            "hasLov": "false",
+            "isEditable": "false",
+            "uiValue": "{{props.subPanelContext.selected.props.qc0LowerTolerance.uiValues[0]}}"
+        }
+
+    },
+    "ctx": {
+        "isAW52_13XOnwardsSupported": {
+            "type": "boolean"
+        },
+        "isTC13_2OnwardsSupported": {
+            "type": "boolean"
+        },
+        "isTC12_4OnwardsSupported": {
+            "type": "boolean"
+        },
+        "isTC13_1OnwardsSupported": {
+            "type": "boolean"
+        }
+    },
+    "i18n": {
+        "ClassificationType": [
+            "qualitycharacteristicsmanagerMessages"
+        ]
+    },
+    "messages": {
+        "saveAsSuccessfull": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.saveAsSuccess}}",
+            "messageTextParams": [
+                "{{data.nextId}}"
+            ]
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "editHandlerStateChange",
+            "condition": "ctx.isTC12_4OnwardsSupported && data.qc0limitationList.length === 0",
+            "action": "loadQc0limitation"
+        },
+        {
+            "eventId": "aqc0NullMapEventForEditVarCharSpecs",
+            "action": "clearMapOfCharGroupAndSpecificationAction"
+        },
+        {
+            "eventId": "condition.expressionValueChanged",
+            "action": "updateUpperLowerTol",
+            "criteria": {
+                "condition": "conditions.seletedAttributeChangeCondition"
+            },
+            "cacheEventData": true
+        }
+    ]
+}

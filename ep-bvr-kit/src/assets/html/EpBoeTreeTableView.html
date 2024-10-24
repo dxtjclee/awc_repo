@@ -1,0 +1,14 @@
+<div class="sw-column flex-auto">
+    <div class="sw-row h-12">
+        <mfe-message exist-when="conditions.isBoeStructureMissing" sub-panel-context="subPanelContext.noBoeStructure"></mfe-message>
+        <div class="sw-column w-12" exist-when="!conditions.isBoeStructureMissing">
+            <div class="sw-row aw-ep-searchBoxStyle">
+                <ep-structure-search view-id="EpBoeTreeTable_EpStructureSearch" sub-panel-context="fields.epBoeTreeTableSearchContext"></ep-structure-search>
+            </div>
+            <div class="sw-row h-12">
+                <mfe-loading-message exist-when="data.isLoading"></mfe-loading-message>
+                <aw-splm-table show-when="conditions.isTreeDataLoaded" class="aw-ep-treeTable" table-context="{ columnsData: fields.columnsData }" gridid="EpBoeTreeTable" use-tree="true" show-decorators="true" structure-search-context="fields.epBoeTreeTableSearchContext"></aw-splm-table>
+            </div>
+        </div>
+    </div>
+</div>

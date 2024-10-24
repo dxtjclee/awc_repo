@@ -1,0 +1,23 @@
+<aw-scrollpanel>
+    <aw-toolbar second-anchor="aw_summaryHeader" exist-when="conditions.isSummaryHeaderHidden" context="props.subPanelContext.context"></aw-toolbar>
+    <div class="aw-clsadmin-keylov w-12">
+        <aw-command-panel-section caption="{{i18n.propertiesTitle}}" visible-when="data.currentSecData.length > 0"
+            collapsed="false" anchor="data.clsadminPropCommands" context="props.subPanelContext.context"
+            class="aw-clsadmin-keylov-properties">
+                <div class="aw-clspadmin-prop-section" aw-repeat="item : data.currentSecData" visible-when="item.value !== '' || props.subPanelContext.context.searchState.showAllProp === true">
+                    <aw-widget prop="item"  ></aw-widget>
+                </div>
+        </aw-command-panel-section>
+    <aw-panel-section caption="{{i18n.entries}}" exist-when="data.lovTypeItems.length > 0 && conditions.ready && conditions.supported" collapsed="false">
+        <aw-splm-table gridid="keyLovGrid" use-tree="true" show-decorators="true"></aw-splm-table>
+    </aw-panel-section>
+    <aw-panel-section caption="{{i18n.entries}}" visible-when="data.lovTypeItems.length > 0 && !conditions.supported" collapsed="false">
+            <aw-splm-table gridid="entryGridForKeyLOV" use-tree="true" show-decorators="true"></aw-splm-table>
+        </aw-panel-section>
+        <aw-panel-section class="w-12" caption="{{i18n.multiSite}}" visible-when="data.multiSiteData.length > 0" collapsed="false">
+            <div class="aw-clspadmin-prop-section" aw-repeat="item : data.multiSiteData" visible-when="item.value !== '' || props.subPanelContext.context.searchState.showAllProp === true">
+                <aw-widget prop="item"  ></aw-widget>
+            </div>
+        </aw-panel-section>
+    </div>
+</aw-scrollpanel>

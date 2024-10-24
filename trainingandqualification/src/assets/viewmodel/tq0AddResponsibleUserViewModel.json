@@ -1,0 +1,403 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/visible-when.directive",
+        "js/aw-command-panel-section.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-listbox.directive",
+        "js/aw-list.directive",
+        "js/aw-list-filter.directive",
+        "js/enable-when.directive",
+        "js/aw-include.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/aw-checkbox.directive",
+        "js/aw-break.directive",
+        "js/aw-widget.directive",
+        "js/aw-property-label.directive"
+    ],
+    "actions": {
+        "initializeData": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "executeUserPanel"
+                }
+            ]
+        },
+        "executeUserPanel": {
+            "actionType": "dataProvider",
+            "method": "userPerformSearch"
+        },
+        "loadGroupData": {
+            "actionType": "JSFunctionAsync",
+            "method": "performLOVSearch",
+            "inputData": {
+                "contentType": "Group",
+                "data": "{{data}}",
+                "startIndex": "{{data.dataProviders.groupLovProvider.startIndex}}",
+                "filter": "{{data.allGroups.filterString}}"
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "pageList": "pageList",
+                "moreValuesExist": "moreValuesExist"
+            },
+            "deps": "js/responsibleUserPanelService"
+        },
+        "loadRoleData": {
+            "actionType": "JSFunctionAsync",
+            "method": "performLOVSearch",
+            "inputData": {
+                "contentType": "Role",
+                "data": "{{data}}",
+                "startIndex": "{{data.dataProviders.roleLovProvider.startIndex}}",
+                "filter": "{{data.allRoles.filterString}}"
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "pageList": "pageList",
+                "moreValuesExist": "moreValuesExist"
+            },
+            "deps": "js/responsibleUserPanelService"
+        },
+        "validateGroupSelection": {
+            "actionType": "JSFunction",
+            "method": "validateSelection",
+            "inputData": {
+                "contentType": "Group",
+                "data": "{{data}}",
+                "selected": "request.selected",
+                "suggestion": "request.suggestion"
+            },
+            "outputData": {
+                "valid": "valid"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "awPopupWidget.close"
+                    }
+                ]
+            },
+            "deps": "js/responsibleUserPanelService"
+        },
+        "validateRoleSelection": {
+            "actionType": "JSFunction",
+            "method": "validateSelection",
+            "inputData": {
+                "contentType": "Role",
+                "data": "{{data}}",
+                "selected": "request.selected",
+                "suggestion": "request.suggestion"
+            },
+            "outputData": {
+                "valid": "valid"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "awPopupWidget.close"
+                    }
+                ]
+            },
+            "deps": "js/responsibleUserPanelService"
+        },
+        "search": {
+            "actionType": "JSFunction",
+            "method": "performSearch",
+            "inputData": {
+                "data": "{{data}}",
+                "dataProvider": "{{dataProviders.userPerformSearch}}"
+            },
+            "outputData": {
+                "searchResults": "searchResults",
+                "totalFound": "totalFound",
+                "totalLoaded": "totalLoaded"
+            },
+            "policy": {
+                "types": [
+                    {
+                        "name": "POM_member",
+                        "properties": [
+                            {
+                                "name": "user",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "GroupMember",
+                        "properties": [
+                            {
+                                "name": "group",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "role",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Role",
+                        "properties": [
+                            {
+                                "name": "role_name"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Group",
+                        "properties": [
+                            {
+                                "name": "name"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "POM_user",
+                        "properties": [
+                            {
+                                "name": "user_id"
+                            },
+                            {
+                                "name": "user_name"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "User",
+                        "properties": [
+                            {
+                                "name": "person",
+                                "modifiers": [
+                                    {
+                                        "name": "withProperties",
+                                        "Value": "true"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Person",
+                        "properties": [
+                            {
+                                "name": "user_name"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "deps": "js/responsibleUserPanelService"
+        },
+        "assign": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-09-DataManagement",
+            "method": "setProperties",
+            "inputData": {
+                "info": "{{function:addResponsibleUser}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{ctx.selected}}"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "deps": "js/responsibleUserPanelService"
+        },
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "dataProviders": {
+        "userPerformSearch": {
+            "action": "search",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "totalLoaded": "{{data.totalLoaded}}",
+            "selectionModelMode": "multiple",
+            "commands": {
+                "Awp0ShowObjectCell": {
+                    "id": "cmdOpen",
+                    "areas": [
+                        "com.siemens.splm.clientfx.ui.modelObjectListActionCommands"
+                    ],
+                    "priorities": [
+                        300
+                    ],
+                    "dependencies": [
+                        "js/showObjectCommandHandler"
+                    ],
+                    "displayOption": "ON_HOVER_AND_SELECTION",
+                    "position": "TOP_RIGHT"
+                }
+            }
+        },
+        "groupLovProvider": {
+            "initializeAction": "loadGroupData",
+            "nextAction": "loadGroupData",
+            "validateAction": "validateGroupSelection",
+            "response": "{{data.pageList}}",
+            "totalFound": "{{data.totalFound}}",
+            "valid": "{{data.valid}}",
+            "moreValuesExist": "{{data.moreValuesExist}}"
+        },
+        "roleLovProvider": {
+            "initializeAction": "loadRoleData",
+            "nextAction": "loadRoleData",
+            "validateAction": "validateRoleSelection",
+            "response": "{{data.pageList}}",
+            "totalFound": "{{data.totalFound}}",
+            "moreValuesExist": "{{data.moreValuesExist}}"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "defaultGroupSet",
+            "action": "executeUserPanel"
+        },
+        {
+            "eventId": "awPopupWidget.close",
+            "action": "userPerformSearch"
+        },
+        {
+            "eventId": "primaryWorkArea.selectionChangeEvent",
+            "action": "closePanel"
+        }
+    ],
+    "functions": {
+        "addResponsibleUser": {
+            "functionName": "addResponsibleUser",
+            "parameters": [
+                "{{data}}",
+                "{{ctx}}"
+            ]
+        }
+    },
+    "conditions": {
+        "enableGroupRoleView": {
+            "expression": "!data.showUsersWithoutGroupRole.dbValue"
+        },
+        "enableGroupSelection": {
+            "expression": "!data.disabledGroup"
+        },
+        "enableRoleSelection": {
+            "expression": "!data.disabledRole"
+        },
+        "isValidToAdd": {
+            "expression": "dataProviders.userPerformSearch.selectedObjects.length > 0"
+        },
+        "isValidObjectToAdd": {
+            "expression": "conditions.isValidToAdd"
+        }
+    },
+    "data": {
+        "filterBox": {
+            "displayName": "{{i18n.filterBox}}",
+            "type": "STRING",
+            "dbValue": ""
+        },
+        "allGroups": {
+            "displayName": "{{i18n.group}}",
+            "name": "allGroups",
+            "type": "STRING",
+            "hasLov": true,
+            "dataProvider": "groupLovProvider"
+        },
+        "allRoles": {
+            "displayName": "{{i18n.role}}",
+            "name": "allRoles",
+            "type": "STRING",
+            "hasLov": true,
+            "emptyLOVEntry": false,
+            "dataProvider": "roleLovProvider"
+        },
+        "showUsersWithoutGroupRole": {
+            "displayName": "{{i18n.showUsersWithoutGroupRole}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dispValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT",
+            "dbValue": false
+        },
+        "additionalSearchCriteria": {
+            "group": ""
+        },
+        "searchString": {
+            "type": "STRING",
+            "dbValue": ""
+        },
+        "displayGroupRoleList": {
+            "dbValue": false
+        }
+    },
+    "lifecycleHooks": {
+        "onInit": "initializeData"
+    },
+    "i18n": {
+        "tq0AddResponsibleUserTitle": [
+            "responsibleUserMessages"
+        ],
+        "group": [
+            "responsibleUserMessages"
+        ],
+        "role": [
+            "responsibleUserMessages"
+        ],
+        "project": [
+            "responsibleUserMessages"
+        ],
+        "allGroups": [
+            "responsibleUserMessages"
+        ],
+        "allRoles": [
+            "responsibleUserMessages"
+        ],
+        "filterBox": [
+            "responsibleUserMessages"
+        ]
+    }
+}

@@ -1,0 +1,342 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-command-panel-section.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-form.directive",
+        "js/visible-when.directive",
+        "js/exist-when.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/aw-list.directive",
+        "js/aw-type-cell.directive",
+        "js/aw-type-icon.directive",
+        "js/aw-xrt.directive",
+        "js/aw-listbox.directive",
+        "js/aw-title-link.directive"
+    ],
+    "actions": {
+        "reveal": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "CreateReqSpec.getSpecSubtypes"
+                },
+                {
+                    "name": "CreateReqSpec.fetchHtmlSpecTemplates"
+                } ]
+            }
+        },
+        "fetchHtmlSpecTemplates":
+        {
+            "actionType": "JSFunction",
+            "method": "getInitialValues",
+            "inputData":
+            {
+                "soaInput": {
+                    "initialData":
+                    {
+                        "lov": "",
+                        "lovInput":
+                        {
+                            "owningObject": {
+                            "uid": "AAAAAAAAAAAAAA",
+                            "type": "RequirementSpec"
+                            },
+                            "boName": "RequirementSpec",
+                            "operationName": "CREATE",
+                            "propertyValues":
+                            {
+                            }
+                        },
+                        "propertyName": "arm0HtmlSpecTemplate",
+                        "filterData":
+                        {
+                            "filterString": "",
+                            "maxResults": 0,
+                            "numberToReturn": 25,
+                            "sortPropertyName": "",
+                            "order": 1
+                        }
+                    }
+                }
+            },
+
+            "outputData":
+            {
+                "htmlSpecTemplateListInput": "htmlSpecTemplateList"
+            },
+
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "CreateReqSpec.generateHTMLSpecTemplateList"
+                    }
+                ]
+            },
+            "deps": "js/globalCreateReqSpecification"
+        },
+
+        "convertToHTMLSpecTemplateList":
+        {
+            "actionType": "JSFunction",
+            "method": "createListModelObjectsFromStrings",
+            "inputData":
+            {
+                "input": "{{data.htmlSpecTemplateListInput}}"
+            },
+
+            "outputData":
+            {
+                "htmlSpecTemplateList": ""
+            },
+
+            "deps": "js/listBoxService"
+        },
+        "getDisplayableTypes": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceReqMgmt-2017-06-ImportExport",
+            "method": "getDisplayableTypes",
+            "inputData": {
+                "input": {
+                    "rootTypeName": "",
+                    "specElementTypeName": "",
+                    "exclusionBOTypeNames": [],
+                    "option": ""
+                }
+            },
+            "outputData": {
+                "getReqSpecSubtypesResponse": "rootTypes"
+            },
+            "events": {
+                "success": [ {
+                    "name": "CreateReqSpec.receivedSubtypes"
+                } ]
+            },
+            "deps": "js/globalCreateReqSpecification"
+        },
+        "clearSelectedType": {
+            "actionType": "JSFunction",
+            "method": "clearSelectedTypeJs",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/globalCreateReqSpecification"
+        },
+        "selectHtmlSpecTemplate": {
+            "actionType": "JSFunction",
+            "method": "selectHtmlSpecTemplate",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/globalCreateReqSpecification"
+        },
+        "processReqSpecSubtypes": {
+            "actionType": "JSFunction",
+            "method": "initSpecSubtypeList",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/globalCreateReqSpecification"
+        },
+        "enableDataProvider": {
+            "actionType": "dataProvider",
+            "method": "getReqSpecTypes"
+        },
+        "ensureReqSpecTypesLoaded": {
+            "actionType": "JSFunctionAsync",
+            "method": "ensureReqSpecTypesLoadedJs",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "searchResults"
+            },
+            "events": {
+                "success": [ {
+                    "condition": "data.totalFound <= 0",
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            },
+            "deps": "js/globalCreateReqSpecification"
+        },
+        "handleTypeSelection": {
+            "actionType": "JSFunction",
+            "method": "handleTypeSelectionJs",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/globalCreateReqSpecification"
+        },
+        "createReqSpec": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceReqMgmt-2019-06-SpecNavigation",
+            "method": "createReqSpecFromHTMLTemplate",
+            "inputData":
+            {
+                "createInput": "{{function:getCreateReqSpecInput}}"
+            },
+            "outputData":
+            {
+                "createdObjectUid": "created[0]"
+            },
+
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "CreateReqSpec.SpecCreated"
+                    }
+                ]
+            },
+
+            "deps": "js/globalCreateReqSpecification"
+        },
+        "OpenSpecification":
+        {
+            "actionType": "Navigate",
+            "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+            "navigationParams":
+            {
+                "uid": "{{data.createdObjectUid}}",
+                "o_uid": "{{ctx.mselected[0].props.fnd0UnderlyingObject.dbValues[0]}}",
+                "pageId": "tc_xrt_Content",
+                "spage": "tc_xrt_Documentation"
+            }
+        },
+        "refreshLocation": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            },
+            "events": {
+                "success": [ {
+                    "name": "CreateReqSpec.OpenSpecification"
+
+                } ]
+            }
+        }
+
+
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "onEvent": [ {
+            "eventId": "CreateReqSpec.getSpecSubtypes",
+            "action": "getDisplayableTypes"
+        },
+        {
+            "eventId": "CreateReqSpec.generateHTMLSpecTemplateList",
+            "action": "convertToHTMLSpecTemplateList"
+        },
+        {
+            "eventId": "CreateReqSpec.fetchHtmlSpecTemplates",
+            "action":"fetchHtmlSpecTemplates"
+        },
+        {
+            "eventId": "CreateReqSpec.receivedSubtypes",
+            "action": "processReqSpecSubtypes"
+        },
+        {
+            "eventId": "CreateReqSpec.receivedSubtypes2",
+            "action": "enableDataProvider"
+        },
+        {
+            "eventId": "getReqSpecTypes.selectionChangeEvent",
+            "action": "handleTypeSelection"
+        },
+        {
+            "eventId": "CreateReqSpec.SpecCreated",
+            "action": "refreshLocation"
+        },
+        {
+            "eventId": "CreateReqSpec.OpenSpecification",
+            "action": "OpenSpecification"
+        }
+    ],
+    "data": {
+        "selectedType": {
+            "type": "STRING",
+            "dbValue": "RequirementSpec"
+        },
+        "displayedType": {
+            "type": "STRING",
+            "propertyDisplayName": "Requirement Specification"
+        },
+        "htmlSpecTemplate":
+        {
+            "displayName": "{{i18n.htmlSpecTemplateTitle}}",
+            "type": "STRING",
+            "isRequired": "false",
+            "hasLov": true
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "dataProviders": {
+        "getReqSpecTypes": {
+            "action": "ensureReqSpecTypesLoaded",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "selectionModelMode": "single"
+        }
+    },
+    "messages": {},
+    "preferences": [
+        "REQ_DefaultReqSpecType",
+        "REQ_DefaultReqType"
+    ],
+    "functions": {
+        "getCreateReqSpecInput":
+        {
+            "functionName": "getCreateReqSpecInput",
+            "parameters":
+            [
+                "{{data}}",
+                "{{subPanelContext.selectionData.selected[0]}}",
+                "{{editHandlers.addPanelEditHandler}}"
+            ]
+        }
+    },
+    "conditions": {
+        "noSpecTypeSelected": {
+            "expression": "data.selectedType.dbValue == ''"
+        }
+    },
+    "i18n": {
+        "createReqSpecTitle": [ "RequirementsCommandPanelsMessages" ],
+        "reqSpecType": [ "RequirementsCommandPanelsMessages" ],
+        "Add": [ "RequirementsCommandPanelsMessages" ],
+        "htmlSpecTemplateTitle": [ "RequirementsCommandPanelsMessages" ]
+    }
+}

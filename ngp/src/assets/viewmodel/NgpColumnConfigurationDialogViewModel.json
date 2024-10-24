@@ -1,0 +1,133 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "availableColumnsFilter": {
+            "dbValue": "",
+            "displayName": "",
+            "type": "STRING"
+        },
+        "availableColumns": null,
+        "filteredAvailableColumns": null
+    },
+    "actions": {
+        "closeDialog": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        },
+        "saveColumnsAndCloseDialog": {
+            "actionType": "batchJob",
+            "steps": [{
+                    "action": "saveColumnConfig"
+                },
+                {
+                    "action": "closeDialog"
+                }
+            ]
+        },
+        "saveColumnConfig": {
+            "actionType": "JSFunction",
+            "method": "saveResizedColumnsWidth",
+            "inputData": {
+                "tableSettings": "{{subPanelContext.tableSettings}}",
+                "columns": "{{data.currentColumns}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "ngp.updateColumns",
+                        "eventData": {
+                            "tableId": "{{subPanelContext.tableSettings.columnConfigPreference}}"
+                        },
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            },
+            "deps": "js/services/ngpTableService"
+        },
+        "loadDataForArrangeColumnsDialog": {
+            "actionType": "batchJob",
+            "steps": [{
+                    "action": "getAvailableAndCurrentColumns"
+                },
+                {
+                    "action": "initAvailableColumnConfigsDataProvider"
+                },
+                {
+                    "action": "initColumnConfigsDataProvider"
+                }
+           ]
+        },
+        "getAvailableAndCurrentColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "getAvailableAndCurrentColumns",
+            "inputData": {
+                "tableObjectsBaseTypes": "{{subPanelContext.tableSettings.tableObjectsBaseTypes}}",
+                "subTypeExclusionList": [],
+                "columnConfig": "{{subPanelContext.columnConfig}}",
+                "tableSettings": "{{subPanelContext.tableSettings}}"
+            },
+            "outputData": {
+                "currentColumns": "currentColumns",
+                "availableColumns": "availableColumns"
+            },
+            "deps": "js/services/ngpArrangeColumnsService"
+        },
+        "filterAvailableColumns": {
+            "actionType": "JSFunction",
+            "method": "filterAvailableColumns",
+            "inputData": {
+                "filterValue": "{{data.availableColumnsFilter.dbValue}}",
+                "availableColumns": "{{data.availableColumns}}"
+            },
+            "outputData": {
+                "filteredAvailableColumns": ""
+            },
+            "deps": "js/services/ngpArrangeColumnsService"
+        },
+        "initColumnConfigsDataProvider": {
+            "actionType": "dataProvider",
+            "method": "currentTableColumnsDataProvider"
+        },
+        "initAvailableColumnConfigsDataProvider": {
+            "actionType": "dataProvider",
+            "method": "availableColumnsDataProvider"
+        }
+    },
+    "dataProviders": {
+        "currentTableColumnsDataProvider": {
+            "dataProviderType": "Static",
+            "response": "{{data.currentColumns}}",
+            "totalFound": "{{data.currentColumns.length}}",
+            "selectionModelMode": "multiple"
+        },
+        "availableColumnsDataProvider": {
+            "action": "filterAvailableColumns",
+            "response": "{{data.filteredAvailableColumns}}",
+            "totalFound": "{{data.filteredAvailableColumns.length}}",
+            "selectionModelMode": "multiple"
+        }
+    },
+    "i18n": {
+        "tableColumnsTitle": [ "ngpColumnConfigurationMessages" ],
+        "availableColumnsTitle": [ "ngpColumnConfigurationMessages" ],
+        "cancel": [ "ngpColumnConfigurationMessages" ],
+        "done": [ "ngpColumnConfigurationMessages" ]
+    },
+    "lifecycleHooks": {
+        "onInit": "loadDataForArrangeColumnsDialog"
+    },
+    "conditions":{
+        "willHaveColumnsInTable":{
+            "expression": {
+                "$source":"data.currentColumns.length",
+                "$query":{
+                    "$gt": 0
+                }
+            }
+        }
+    }
+}

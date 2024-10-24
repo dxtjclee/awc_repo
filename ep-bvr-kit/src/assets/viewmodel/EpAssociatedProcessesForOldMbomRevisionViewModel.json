@@ -1,0 +1,224 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "current-processes": {
+            "type": "object"
+        },
+        "view-id": {
+            "type": "string"
+        }
+    },
+    "ports": {
+        "EpAssociatedProcessesForOldMbomRevision_selectedProcess": {
+            "syncObject": {}
+        }
+    },
+
+    "grids": {
+        "oldRevisionassociatedProcessesTable": {
+            "dataProvider": "oldRevisionassociatedProcessesTableDataProvider",
+            "columnProvider": "oldRevisionassociatedProcessesTableColumnProvider",
+            "addIconColumn": true,
+            "gridOptions": {
+                "enablePinning": true
+            }
+        }
+    },
+    "dataProviders": {
+        "oldRevisionassociatedProcessesTableDataProvider": {
+            "initializeAction": "loadSortedNodes",
+            "response": "{{data.loadedTreeNodes}}",
+            "totalFound": "{{data.response.totalFound}}"
+        }
+    },
+    "columnProviders": {
+        "oldRevisionassociatedProcessesTableColumnProvider": {
+            "loadColumnAction": "createColumns"
+        }
+    },
+    "actions": {
+        "createColumns": {
+            "actionType": "JSFunction",
+            "method": "createColumns",
+            "inputData": {
+                "preferenceValues": "EP_OpenInDetailedPlanningPageProcessTableColumnConfiguration",
+                "dataProvider": "{{data.dataProviders.oldRevisionassociatedProcessesTableDataProvider}}",
+                "columnProvider": {
+                    "enableSorting": true
+                }
+            },
+            "deps": "js/mfeTableService"
+        },
+        "closePopup": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupEl": "{{data.associatedProcessesForMbomNodePopupId}}",
+                "targetEvent": "{{$event}}"
+            },
+            "deps": "js/popupService"
+        },
+
+        "loadSortedNodes": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "initialLoadData"
+                },
+                {
+                    "action": "getSortedNodesIfSortCriteriaGiven"
+                }
+            ]
+        },
+
+         "getSortedNodesIfSortCriteriaGiven": {
+            "actionType": "JSFunction",
+            "method": "getSortedNodesIfSortCriteriaGiven",
+            "inputData": {
+                "loadedTreeNodes": "{{data.response.processes}}",
+                "sortCriteria": "{{data.columnProviders.oldRevisionassociatedProcessesTableColumnProvider.sortCriteria}}"
+            },
+            "outputData": {
+                "loadedTreeNodes": "loadedTreeNodes",
+                "isLoading": false
+            },
+            "deps": "js/epTableService"
+        },
+
+        "initialLoadData": {
+            "actionType": "JSFunctionAsync",
+            "method": "initialLoadData",
+            "inputData": {
+                "processes": "{{props.currentProcesses.associatedProcessData.currentRevisionProcesses}}"
+            },
+            "outputData": {
+                "response": ""
+            },
+            "deps": "js/associatedProcessesForMbomNodeService"
+        },
+
+        "openProcessInSelectedPage": {
+            "actionType": "JSFunction",
+            "method": "navigate",
+            "deps": "js/navigationService",
+            "inputData": {
+                "action": {
+                    "actionType": "Navigate",
+                    "navigateTo": "{{props.currentProcesses.associatedProcessData.navigatePageToSelectedProcess}}"
+                },
+                "navigationParams": {
+                    "uid": "{{data.dataProviders.oldRevisionassociatedProcessesTableDataProvider.selectedObjects[0].uid}}",
+                    "impacting_cn": "{{ctx.state.params.tracking_cn}}",
+                    "tracking_cn": "{{ctx.state.params.tracking_cn}}",
+                    "ebomPCI": "{{ctx.epPageContext.ebomPCI.uid}}",
+                    "mbomPCI": "{{ctx.epPageContext.mbomPCI.uid}}",
+                    "processPCI": "{{ctx.epPageContext.processPCI.uid}}",
+                    "productPCI": "{{ctx.epPageContext.productPCI.uid}}",
+                    "productionProgramPCI": "{{ctx.epPageContext.productionProgramPCI.uid}}",
+                    "plantPCI": "{{ctx.epPageContext.plantPCI.uid}}",
+                    "functionalPlanPCI": "{{ctx.epPageContext.functionalPlanPCI.uid}}"
+                }
+            }
+        },
+
+        "openProcessInAssemblyPlanningOrWIAuthoring": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "openProcessInSelectedPage"
+                },
+                {
+                    "action": "closePopup"
+                }
+            ]
+        },
+        "findInBopAction": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "publishSelectionPort"
+                },
+                {
+                    "action": "closePopup"
+                }
+            ]
+        },
+        "publishSelectionPort": {
+            "actionType": "Sync",
+            "inputData": {
+                "port": "EpAssociatedProcessesForOldMbomRevision_selectedProcess",
+                "syncObject": "{{data.dataProviders.oldRevisionassociatedProcessesTableDataProvider.selectedObjects[0]}}"
+            }
+        },
+        "selectDefaultProcess": {
+            "actionType": "JSFunction",
+            "method": "setSelection",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.oldRevisionassociatedProcessesTableDataProvider}}",
+                "objectsToSelect": "{{data.dataProviders.oldRevisionassociatedProcessesTableDataProvider.viewModelCollection.loadedVMObjects[0]}}"
+            },
+            "deps": "js/mfeSyncUtils"
+        },
+        "refreshAndLinkProcessToCurrentRevisionMBOM": {
+            "actionType": "JSFunction",
+            "method": "addNewObjectsToDataProvider",
+            "inputData": {
+                "nodeObjectUid": [ "{{parameters.eventData.eventData}}" ],
+                "dataProvider": "{{data.dataProviders.oldRevisionassociatedProcessesTableDataProvider}}",
+                "selectNewOnject": false
+            },
+            "deps": "js/epTableService"
+        }
+    },
+    "conditions": {
+        "hasProcessSelection": {
+            "expression": {
+                "$source": "data.dataProviders.oldRevisionassociatedProcessesTableDataProvider.selectedObjects.length",
+                "$query": {
+                    "$eq": 1
+                }
+            }
+        },
+        "isHighLevelPlanningPage": {
+            "expression": {
+                "$source": "ctx.locationContext['ActiveWorkspace:SubLocation']",
+                "$query": {
+                    "$eq": "highLevelPlanning"
+                }
+            }
+        },
+        "hasCurrentRevisionData": {
+            "expression": "data.dataProviders.oldRevisionassociatedProcessesTableDataProvider.viewModelCollection.loadedVMObjects.length > 0"
+        }
+    },
+    "i18n": {
+        "findInBop": [
+            "navigationMessages"
+        ],
+        "cancelButtonLabel": [
+            "navigationMessages"
+        ],
+        "openButtonLabel": [
+            "navigationMessages"
+        ],
+        "associatedProcessesLabel": [
+            "navigationMessages"
+        ],
+        "errorMessageForCurrentProcess": [
+            "navigationMessages"
+        ]
+    },
+    "onEvent": [ {
+            "eventId": "aw.closePopup",
+            "action": "closePopup"
+        },
+        {
+            "eventId": "oldRevisionassociatedProcessesTableDataProvider.modelObjectsUpdated",
+            "action": "selectDefaultProcess"
+        },
+        {
+            "eventId": "ep.associatedProcess",
+            "action": "refreshAndLinkProcessToCurrentRevisionMBOM",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            }
+        }
+    ]
+}

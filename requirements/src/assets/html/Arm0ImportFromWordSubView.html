@@ -1,0 +1,74 @@
+<aw-panel-body>
+    <aw-panel-section exist-when="subPanelContext.occContext" collapsed="disabled" caption="i18n.toLabel">
+        <br>
+        <div class="aw-splm-tableRow ui-grid-row aw-row-icon">
+            <div class="aw-splm-tableTreeCommandCell aw-jswidgets-tablecell">
+                <div class="aw-jswidgets-cellTop aw-jswidgets-uiNonEditCell">
+                    <div class="aw-widgets-dataGridCellImage" title="">
+                        <aw-pic class="" is-icon="true" source="subPanelContext.data.selectedSpecObj.iconURL" exist-when="subPanelContext.data.selectedSpecObj.iconURL"></aw-pic>
+                    </div>
+                    <div class="aw-jswidgets-tableNonEditContainer aw-layout-flexRowContainer" title="">
+                        <div class="aw-splm-tableCellText" exist-when="subPanelContext.data.selectedSpecObj.specName">{{subPanelContext.data.selectedSpecObj.specName}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aw-panel-section>
+    <div class="aw-requirement-importSubViewContainer">
+        <aw-widget prop="data.selectedImportType" action="getSubTypes" exist-when="subPanelContext.occContext && (ctx.isArm0ImportFromWordSubPanelActive || ctx.isArm0ImportFromPDFSubPanelActive)"></aw-widget>
+        <div class="aw-requirement-importSubViewCheckbox">
+            <div class="sw-row" align-content="end" visible-when="!(ctx.locationContext[ 'ActiveWorkspace:Location' ] == 'ImportPreviewLocation')">
+                <aw-checkbox prop="data.importSubtypeOnlyCheckbox" visible-when="!subPanelContext.occContext" action="getSubTypes"></aw-checkbox>
+            </div>
+            <div class="sw-row" visible-when="conditions.isPreserveNumberingAllowed">
+                <aw-checkbox prop="data.preserveNumbering"></aw-checkbox>
+            </div>
+            <div class="sw-row" visible-when="conditions.isMicroserviceInstalled">
+                <aw-checkbox prop="data.createEmptyPlaceholder"></aw-checkbox>
+            </div>
+            <div class="sw-row" visible-when="conditions.isMicroserviceInstalled">
+                <aw-checkbox prop="data.addFileAsAttachmnt"></aw-checkbox>
+            </div>
+        </div>
+        <aw-widget prop="data.reqType" action="getSubTypes" visible-when="!conditions.isImportAsChildOfSelected"></aw-widget>
+        <aw-widget prop="data.reqSpecEleType"></aw-widget>
+        <aw-panel-section visible-when="ctx.preferences.AWC_ReqImportAsHtml && ctx.preferences.AWC_ReqImportAsHtml[0] === 'false'">
+            <aw-checkbox prop="data.convertToHTML"></aw-checkbox>
+        </aw-panel-section>
+        <aw-command-panel-section caption="i18n.importRules" anchor="data.importFromWordSubCommands" context='{sharedData:props.sharedData, savedRules:data.savedRules, conditions}'>
+            <aw-listbox prop="data.savedRules" list="subPanelContext.sharedData.savedRulesListBoxValues" action="wordRuleSelectionChange"></aw-listbox>
+            <aw-list dataprovider="data.dataProviders.importRulesList" exist-when="!conditions.isMicroserviceInstalled && props.sharedData.importRules.length >0">
+                <aw-include name="Arm0ImportRulesCell" sub-panel-context="item"></aw-include>
+            </aw-list>
+            <aw-list dataprovider="data.dataProviders.importRulesList"  exist-when="conditions.isMicroserviceInstalled && props.sharedData.importRules.length >0">
+                <aw-include name="Arm0ImportAdvanceRulesCell" sub-panel-context="item"></aw-include>
+            </aw-list>
+        </aw-command-panel-section>
+    </div>
+</aw-panel-body>
+<aw-panel-footer>
+    <aw-flex-row>
+        <aw-checkbox enable-when="!data.arm0ImportFromOfficeEventProgressing" prop="data.runInBackgroundWord" visible-when="(conditions.isRunInBackgroundAllowedWithinPreview || conditions.isRunInBackgroundAllowedDefault) && conditions.isRunInBackgroundAllowedWithinCompare"></aw-checkbox>
+    </aw-flex-row>
+    <aw-button enable-when="!data.arm0ImportFromOfficeEventProgressing" visible-when="conditions.isCompareAndPreviewAllowed && !conditions.isRunningInBackgroundWord" action="getJsonDataOfExistingStructureForCompare">
+        <aw-i18n>i18n.compare</aw-i18n>
+    </aw-button>
+    <aw-button button-type="base" enable-when="!data._arm0ImportFromOfficeEventProgressing && data.mode !== 'preview'" visible-when="conditions.isImportPreviewAllowed && conditions.isMicroserviceInstalled && !conditions.isImportSubtypeOnlySelected && !conditions.isRunningInBackgroundWord" action="getExistingStructureOrFileTicketPreview">
+        <aw-i18n>i18n.preview</aw-i18n>
+    </aw-button>
+    <aw-button enable-when="!data._arm0ImportFromOfficeEventProgressing && data.mode !== 'preview'" visible-when="conditions.isImportAllowed && !conditions.isCompareAndPreviewAllowed" action="getTransientFileTicketsForUpload">
+        <aw-i18n>i18n.importTitle</aw-i18n>
+    </aw-button>
+    <aw-button  button-type="base" enable-when="!data._arm0ImportFromOfficeEventProgressing" visible-when="(ctx.locationContext[ 'ActiveWorkspace:Location' ] == 'ImportPreviewLocation') && conditions.isMicroserviceInstalled && !conditions.isRunningInBackgroundWord" action="updatePreviewStart">
+        <aw-i18n>i18n.updatePreviewLabel</aw-i18n>
+    </aw-button>
+    <aw-button enable-when="!data._arm0ImportFromOfficeEventProgressing" visible-when="!ctx.compareAndPreviewBtnClicked && (ctx.locationContext[ 'ActiveWorkspace:Location' ] == 'ImportPreviewLocation') && conditions.isMicroserviceInstalled" action="getJSONDataForImport">
+        <aw-i18n>i18n.importTitle</aw-i18n>
+    </aw-button>
+    <aw-button enable-when="!data._arm0ImportFromOfficeEventProgressing" visible-when="conditions.isMicroserviceInstalled && ctx.compareAndPreviewBtnClicked && (ctx.locationContext[ 'ActiveWorkspace:Location' ] == 'ImportPreviewLocation')" action="getJSONDataForCompareImport">
+        <aw-i18n>i18n.importTitle</aw-i18n>
+    </aw-button>
+    <aw-button enable-when="!data._arm0ImportFromOfficeEventProgressing" visible-when="ctx.compareAndPreviewBtnClicked && (ctx.locationContext[ 'ActiveWorkspace:Location' ] == 'ImportPreviewLocation') && conditions.isMicroserviceInstalled && !conditions.isRunningInBackgroundWord" action="getJSONDataForImport">
+        <aw-i18n>i18n.revise</aw-i18n>
+    </aw-button>
+</aw-panel-footer>

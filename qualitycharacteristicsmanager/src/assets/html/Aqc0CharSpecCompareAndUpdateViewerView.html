@@ -1,0 +1,22 @@
+<aw-row>
+    <aw-column width="fill">
+        <aw-panel-section caption="i18n.Current">
+            <aw-xrt sub-panel-context="data.currentCharSpecxrtViewModel"></aw-xrt>
+        </aw-panel-section>
+    </aw-column>
+    <aw-splitter exist-when="data.latestCharSpecxrtViewModel" min-size-1="200" min-size-2="320" isprimarysplitter="false" direction="vertical"></aw-splitter>
+    <aw-column exist-when="data.latestCharSpecxrtViewModel" width="fill">
+        <aw-panel-section caption="i18n.Latest">
+            <aw-xrt sub-panel-context="data.latestCharSpecxrtViewModel"></aw-xrt>
+        </aw-panel-section>
+    </aw-column>
+</aw-row>
+<aw-row exist-when="data.latestCharSpecxrtViewModel">
+    <aw-button button-type="base" class="aw-qualitycharacteristicsmanager-closeCompareViewBtn"
+        action="closeCompareView">
+        <aw-i18n>i18n.Close</aw-i18n>
+    </aw-button>
+    <aw-button enable-when="ctx.isAllowedToUpdateLatestSpecification" class="aw-qualitycharacteristicsmanager-updateCharacteristicsToLatest" action="removeCurrentRelation">
+        <aw-i18n>i18n.UpdateToLatest</aw-i18n>
+    </aw-button>
+</aw-row>

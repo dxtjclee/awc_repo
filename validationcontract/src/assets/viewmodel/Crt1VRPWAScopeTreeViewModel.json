@@ -1,0 +1,372 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-splm-table.directive",
+        "js/aw-scrollpanel.directive"
+    ],
+    "lifecycleHooks": {
+        "onMount": "initializeSelection"
+    },
+    "actions": {
+        "editEventAction": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "gridView.plTable.reload"
+                } ]
+            }
+        },
+        "syncSelections": {
+            "actionType": "JSFunction",
+            "method": "syncSelections",
+            "inputData": {
+                "selectedObjects": "{{data.eventData.selectedObjects}}",
+                "openedObject": "{{subPanelContext.baseSelection}}",
+                "vrSublocationState": "{{subPanelContext.vrSublocationState}}"
+            },
+            "events": {
+                "success": [ {
+                    "name": "Crt1AddCheckboxes.refreshCheckboxes"
+                } ]
+            },
+            "deps": "js/Crt1VRSublocationService"
+        },
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/columnArrangeService"
+        },
+        "saveColumnConfigLoadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "saveUIColumnConfigs2",
+            "inputData": {
+                "columnConfigurations": [ {
+                    "clientScopeURI": "{{ctx.sublocation.clientScopeURI}}",
+                    "columnConfigId": "{{data.dataProviders.gridDataProvider.columnConfig.columnConfigId}}",
+                    "columns": "{{data.dataProviders.gridDataProvider.newColumns}}",
+                    "scope": "LoginUser",
+                    "scopeName": ""
+                } ]
+            },
+            "outputData": {},
+            "events": {
+                "success": [ {
+                    "name": "paramProjectColumnConfig.saved"
+                } ]
+            }
+        },
+        "loadDataForSavedColumnConfig": {
+            "actionType": "JSFunctionAsync",
+            "method": "getTableViewModelProperties",
+            "deps": "js/tcViewModelObjectService",
+            "inputData": {
+                "vmNodes": "{{data.dataProviders.gridDataProvider.viewModelCollection.loadedVMObjects}}",
+                "context": {
+                    "clientScopeURI": "{{ctx.sublocation.clientScopeURI}}",
+                    "clientName": "AWClient"
+                }
+            },
+            "outputData": {
+                "newColumnConfig": "result.output.columnConfig"
+            },
+            "events": {
+                "success": [ {
+                    "name": "paramProjectTreeTable.updateParamTreeColumns"
+                } ]
+            }
+        },
+        "resetColumnConfig": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "getOrResetUIColumnConfigs4",
+            "inputData": {
+                "getOrResetUiConfigsIn": [ {
+                    "scope": "LoginUser",
+                    "scopeName": "",
+                    "clientName": "AWClient",
+                    "resetColumnConfig": true,
+                    "columnConfigQueryInfos": [ {
+                        "clientScopeURI": "{{ctx.sublocation.clientScopeURI}}",
+                        "operationType": "configured",
+                        "typeNames": "{{data.dataProviders.gridDataProvider.columnConfig.typesForArrange}}",
+                        "columnsToExclude": []
+                    } ],
+                    "businessObjects": [
+                        {}
+                    ]
+                } ]
+            },
+            "outputData": {
+                "dataProviders.gridDataProvider.columnConfig": "{{function:postResetFunction}}"
+            },
+            "deps": "js/tcarrange.service"
+        },
+        "sortCriteriaChangeEvent": {
+            "actionType": "JSFunction",
+            "method": "sortCriteriaUpdated",
+            "inputData": {
+                "data": "{{ctx.search.criteria}}"
+            },
+            "deps": "js/objectNavigationService"
+        },
+        "doGridDataProvider": {
+            "actionType": "dataProvider",
+            "method": "gridDataProvider"
+        },
+        "initializeSelection": {
+            "actionType": "JSFunctionAsync",
+            "method": "initializeSelection",
+            "inputData": {
+                "subPanelContext": "{{subPanelContext}}"
+            },
+            "deps": "js/Crt1VRSublocationService"
+        },
+        "loadTreeColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableColumns",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.gridDataProvider}}"
+            },
+            "deps": "js/Crt1VRSublocationService"
+        },
+        "loadTreeData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableData",
+            "inputData": {
+                "treeLoadInput": "request.treeLoadInput",
+                "subPanelContext": "{{props.subPanelContext}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "outputData": {
+                "ctx.search.totalFound": "result.treeLoadResult.totalChildCount",
+                "ctx.search.totalLoaded": "result.treeLoadResult.childNodes.length",
+                "searchResults": "result.treeLoadResult.childNodes"
+            },
+            "deps": "js/Crt1VRSublocationService"
+        },
+        "loadProjectProperties": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableProperties",
+            "inputData": {
+                "propertyLoadInput": "request.propertyLoadInput",
+                "vrSublocationState": "{{props.subPanelContext.vrSublocationState}}",
+                "dataProvider":"{{data.dataProviders.gridDataProvider}}"
+            },
+            "outputData": {
+                "dataProviders.gridDataProvider.columnConfig": "result.propertyLoadResult.columnConfig"
+            },
+            "deps": "js/Crt1VRSublocationService"
+        },
+
+        "updateParamTreeColumns": {
+            "actionType": "JSFunction",
+            "method": "updateVRPWATreeColumns",
+            "inputData": {
+                "data": "{{data.newColumnConfig}}",
+                "dataProvider": "{{data.dataProviders.gridDataProvider}}"
+            },
+            "deps": "js/Crt1VRSublocationService"
+        },
+
+        "registerCtxSelection":{
+            "actionType": "JSFunction",
+            "method": "registerCtxSelection",
+            "inputData": {
+                "dataProviders":"{{data.dataProviders.gridDataProvider}}",
+                "eventData": "{{data.eventData}}",
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Crt1VRSublocationService"
+        },
+        "setSelectionBackInPWA": {
+            "actionType": "JSFunction",
+            "method": "setSelectionBackInPWA",
+            "deps": "js/Crt1VRSublocationService",
+            "inputData": {
+                "data":"{{data}}"
+            }
+        }
+    },
+    "dataProviders": {
+        "gridDataProvider": {
+            "initializeAction": "loadTreeData",
+            "nextAction": "loadTreeData",
+            "previousAction": "loadTreeData",
+            "editContext": "TABLE_CONTEXT",
+            "treeLoadResult": "action.result.treeLoadResult",
+            "selectionModelMode": "single",
+            "inputData": {
+                "selectionData": "{{subPanelContext.selectionData}}",
+                "accessMode": "tree",
+                "topNodeUid": "{{ctx.state.params.uid}}"
+            },
+            "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectCellListActionCommands"
+        },
+        "projectPropertyProvider": {
+            "action": "loadProjectProperties",
+            "propertyLoadResult": "action.result.propertyLoadResult"
+        }
+    },
+    "columnProviders": {
+        "clientScopeUI": {
+            "loadColumnAction": "loadTreeColumns",
+            "columns": "{{data.columns}}",
+            "saveColumnAndLoadAction": "saveColumnConfigLoadData",
+            "resetColumnAction": "resetColumnConfig",
+            "sortCriteria": []
+        }
+    },
+    "grids": {
+        "gridView": {
+            "dataProvider": "gridDataProvider",
+            "propertyProvider": "projectPropertyProvider",
+            "columnProvider": "clientScopeUI",
+            "enableArrangeMenu": true,
+            "addIconColumn": false,
+            "gridOptions": {
+                "useStaticFirstCol": true,
+                "isFilteringEnabled": true
+            }
+        }
+    },
+    "data": {
+        "uid": "{{ctx.search.criteria.parentUid}}"
+    },
+    "ctx": {
+        "sublocation":{
+            "type": "object"
+        }
+    },
+    "onEvent": [ {
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        },
+        {
+            "eventId": "appCtx.update",
+            "criteria": {
+                "name": "Awp0ObjectNavigation"
+            },
+            "action": "sortCriteriaChangeEvent"
+        },
+
+        {
+            "eventId": "gridDataProvider.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "syncSelections"
+        },
+        {
+            "eventId": "paramProjectColumnConfig.saved",
+            "cacheEventData": true,
+            "action": "loadDataForSavedColumnConfig",
+            "condition": "!ctx.editInProgress"
+        },
+        {
+            "eventId": "paramProjectTreeTable.updateParamTreeColumns",
+            "action": "updateParamTreeColumns"
+        },
+
+        {
+            "eventId":"gridDataProvider.selectionChangeEvent",
+            "action":"registerCtxSelection",
+            "cacheEventData": true
+        },
+        {
+            "eventId":"vrPWATreeTable.setSelection",
+            "action":"setSelectionBackInPWA",
+            "cacheEventData": true
+
+        }
+    ],
+    "functions": {
+        "getTypeNames": {
+            "functionName": "getTypeNames",
+            "parameters": [
+                "{{ctx.searchResponseInfo.searchFilterMap}}"
+            ]
+        },
+        "postResetFunction": {
+            "functionName": "postResetFunction",
+            "parameters": [
+                "{{data.dataProviders.gridDataProvider.columnConfig}}"
+            ]
+        },
+        "getDefaultPageSize": {
+            "functionName": "getDefaultPageSize",
+            "parameters": [
+                "{{ctx.preferences.AWC_DefaultPageSize}}"
+            ]
+        }
+    },
+    "i18n": {
+        "AddTitle": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "PartialError": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "addAsOccurrence": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "throwErrorVRNotCreated": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "detailedInfoMessageForInvalidTypes": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Crt1TypesSection": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Crt1ProgramEventSection": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "TestResult": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Crt1ScopeSection": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Others": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Requirement": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "IAV0TestCase": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "IAV0TestProcedur": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Functionality": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Fnd0LogicalBlock": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Part": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "CAEModel": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "IAV0TestRequest": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "PhysicalPart": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Att0MeasurableAttribute": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "reports": [
+            "AnalysisRequestCommandPanelsMessages"
+        ]
+    }
+}

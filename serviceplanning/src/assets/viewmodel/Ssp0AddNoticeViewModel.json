@@ -1,0 +1,428 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "loadData": {
+            "actionType": "dataProvider",
+            "method": "customNotice"
+        },
+        "batchAction": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "loadData"
+                },
+                {
+                    "action": "findSavedQuery"
+                }
+            ]
+        },
+        "createOrAttachNotice": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "addNoticeAction",
+                    "condition": "data.selectedTab.tabKey === 'newNotice'"
+                },
+                {
+                    "action": "createRelation",
+                    "condition": "data.dataProviders.noticesListProvider.selectedObjects.length && data.selectedTab.tabKey === 'search'"
+                }
+            ]
+        },
+        "findSavedQuery": {
+            "actionType": "TcSoaService",
+            "serviceName": "Query-2010-04-SavedQuery",
+            "method": "findSavedQueries",
+            "inputData": {
+                "inputCriteria": [
+                    {
+                        "queryNames": [
+                            "MRO Notice"
+                        ]
+                    }
+                ]
+            },
+            "outputData": {
+                "generalQuery": "savedQueries[0]"
+            }
+        },
+        "loadNoticeTypes": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2016-03-Finder",
+            "method": "performSearch",
+            "inputData": {
+                "searchInput": {
+                    "maxToLoad": 25,
+                    "maxToReturn": 25,
+                    "providerName": "Awp0TypeSearchProvider",
+                    "searchCriteria": {
+                        "searchString": "",
+                        "typeSelectorId": "",
+                        "listOfIncludeObjectTypes": "Smr0Warning",
+                        "loadSubTypes": "true"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "startIndex": "{{data.dataProviders.performSearch.startIndex}}",
+                    "attributesToInflate": [
+                        "parent_types",
+                        "type_name"
+                    ]
+                }
+            },
+            "outputData": {
+                "totalFound": "totalFound",
+                "noticeList": "{{function:noticeList}}"
+            },
+            "deps": "js/ssp0AddNoticeService"
+        },
+        "addNoticeAction": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2016-09-DataManagement",
+            "method": "createAttachAndSubmitObjects",
+            "inputData": {
+                "inputs": "{{function:getCreateInput}}"
+            },
+            "outputData": {
+                "output": "output",
+                "createdObject": "output[0].objects[0]",
+                "serviceData": "ServiceData"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Notice.Created"
+                    },
+                    {
+                        "name": "relateObject"
+                    },
+                    {
+                        "name":"Ssp0Notices.triggerFunction"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "newNoticeCreated"
+                    }
+                ],
+                "failure": [
+                    {
+                        "message": "newNoticeFailed"
+                    }
+                ]
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "createRelation": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "createRelations",
+            "inputData": {
+                "input": "{{function:createRelationInput}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Notice.Created"
+                    },
+                    {
+                        "name":"Ssp0Notices.triggerFunction"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "assignNotice"
+                    }
+                ],
+                "failure": [
+                    {
+                        "message": "newNoticeFailed"
+                    }
+                ]
+            },
+            "deps": "js/ssp0AddNoticeService"
+        },
+        "ClosePopUpAction": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/popupService"
+        },
+        "setSelectedType": {
+            "actionType": "JSFunction",
+            "method": "changeAction",
+            "inputData": {
+                "data": "{{data}}",
+                "fields": "{{fields}}"
+            },
+            "outputData": {
+                "selectedType": "selectedType"
+            },
+            "deps": "js/ssp0AddNoticeService"
+        },
+        "doSearch": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "searchInitiated"
+                    }
+                ]
+            }
+        },
+        "getNotice": {
+            "actionType": "dataProvider",
+            "method": "noticesListProvider"
+        },
+        "searchNotices": {
+            "actionType": "TcSoaService",
+            "serviceName": "Query-2006-03-SavedQuery",
+            "method": "executeSavedQuery",
+            "inputData": {
+                "query": "{{data.generalQuery}}",
+                "limit": 0,
+                "entries": [
+                    "Name"
+                ],
+                "values": [
+                    "{{data.searchBox.dbValue}}"
+                ]
+            },
+            "outputData": {
+                "searchResponse": "objects",
+                "totalFound": "nFound"
+            }
+        },
+        "setNoticesDataBatchJob": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "setNoticeDbValueData"
+                },
+                {
+                    "action": "setNoticeUiValueData",
+                    "condition": "conditions.isTotalLengthOne"
+                },
+                {
+                    "action": "setSelectedType"
+                }
+            ]
+        },
+        "setNoticeDbValueData": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "propertyToUpdate": "dbValue",
+                "value": "{{data.eventMap['ssp0AddNotices.updateCurrentNotice'].currentNoticeType.propInternalValue}}",
+                "dataToUpdate": "{{data.currentNotice}}"
+            },
+            "outputData": {
+                "currentNotice": ""
+            },
+            "deps": "js/ssp0CreateObjectService"
+        },
+        "setNoticeUiValueData": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "propertyToUpdate": "uiValue",
+                "value": "{{data.eventMap['ssp0AddNotices.updateCurrentNotice'].currentNoticeType.propDisplayValue}}",
+                "dataToUpdate": "{{data.currentNotice}}"
+            },
+            "outputData": {
+                "currentNotice": ""
+            },
+            "deps": "js/ssp0CreateObjectService"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "Notice.Created",
+            "action": "ClosePopUpAction"
+        },
+        {
+            "eventId": "relateObject",
+            "action": "createRelation"
+        },
+        {
+            "eventId": "awlinkPopup.selected",
+            "action": "setSelectedType"
+        },
+        {
+            "eventId": "searchInitiated",
+            "condition": "data.searchBox.dbValue && data.searchBox.dbValue.length>0",
+            "action": "getNotice"
+        },
+        {
+            "eventId": "reloadNotices",
+            "action": "reloadIfNoticessTab"
+        },
+        {
+            "eventId": "ssp0AddNotices.updateCurrentNotice",
+            "action": "setNoticesDataBatchJob",
+            "cacheEventData": true
+        }
+    ],
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "data": {
+        "addPanelTabModels": [
+            {
+                "tabKey": "newNotice",
+                "name": "{{i18n.newNotice}}"
+            },
+            {
+                "tabKey": "search",
+                "name": "{{i18n.Search}}",
+                "recreatePanel": true
+            }
+        ],
+        "searchBox": {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "false",
+            "dbValue": ""
+        },
+        "currentNotice": {
+            "type": "STRING",
+            "displayName": "{{i18n.currentNotice}}",
+            "isRequired": "false",
+            "dbValue": ""
+        },
+        "selectedType": {
+            "type": "STRING",
+            "dbValue": "Smr0Warning"
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "dataProviders": {
+        "customNotice": {
+            "dataProviderType": "TcLOV",
+            "action": "loadNoticeTypes",
+            "response": "{{data.noticeList}}",
+            "totalFound": "{{data.totalFound}}"
+        },
+        "noticesListProvider": {
+            "action": "searchNotices",
+            "response": "{{data.searchResponse}}",
+            "totalFound": "{{data.totalFound}}",
+            "selectionModelMode": "multiple"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "batchAction"
+    },
+    "functions": {
+        "getCreateInput": {
+            "functionName": "getCreateInput",
+            "parameters": [
+                "{{data}}",
+                "",
+                "{{data.selectedType.dbValue}}",
+                "{{editHandlers.addPanelEditHandler}}"
+            ]
+        },
+        "getElementsToAdd": {
+            "functionName": "getElementsToAdd",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "noticeList": {
+            "functionName": "noticeList",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "createRelationInput": {
+            "functionName": "createRelationInput",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "processCreateRelationOutput": {
+            "functionName": "processCreateRelationOutput",
+            "parameters": [
+                "{{data}}"
+            ]
+        }
+
+    },
+    "conditions": {
+        "isTotalLengthOne": {
+            "expression": "data.dataProviders.customNotice.viewModelCollection.loadedVMObjects.length ===1"
+        },
+        "isNoticeSelectedFromSearch": {
+            "expression": "(data.dataProviders.noticesListProvider.selectedObjects.length)"
+        }
+    },
+    "messages": {
+        "newNoticeCreated": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.newNoticeCreated}}",
+            "messageTextParams": [
+                "{{data.createdObject}}"
+            ]
+        },
+        "newNoticeFailed": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.newNoticeFailed}}"
+        },
+        "assignNotice": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.assignNotice}}",
+            "messageTextParams": [
+                "{{data.dataProviders.noticesListProvider.selectedObjects[0]}}"
+            ]
+        }
+    },
+    "i18n": {
+        "Cancel": [
+            "ServicePlannerConstants"
+        ],
+        "Add": [
+            "ServicePlannerConstants"
+        ],
+        "newNoticeCreated": [
+            "ssp0Messages"
+        ],
+        "newNoticeFailed": [
+            "ssp0Messages"
+        ],
+        "assignNotice": [
+            "ssp0Messages"
+        ],
+        "currentNotice": [
+            "ServicePlannerConstants"
+        ],
+        "newNotice": [
+            "ServicePlannerConstants"
+        ],
+        "Search": [
+            "ServicePlannerConstants"
+        ],
+        "noResultsFound": [
+            "ServicePlannerConstants"
+        ]
+    }
+}

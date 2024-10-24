@@ -1,0 +1,96 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "checklistAnswerConfigLoadData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadChecklistAnswerConfigTreeTableData",
+            "inputData": {
+                "data": "{{data}}",
+                "subPanelContext": "{{subPanelContext}}"
+            },
+            "outputData": {
+                "totalFound": "result.tableRows.length",
+                "totalLoaded": "result.tableRows.length",
+                "searchResults": "result.tableRows"
+            },
+            "deps": "js/Aqc0ChecklistSpecAnswerOptionsConfigService"
+        },
+        "loadColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadChecklistAnswerConfigTableColumns",
+            "inputData": {
+                "data" : "{{data}}"
+            },
+            "deps": "js/Aqc0ChecklistSpecAnswerOptionsConfigService"
+        },
+        "loadRatingRuleObjectWithProps":  {
+            "actionType": "JSFunction",
+            "method": "loadRatingRuleObjectWithProps",
+            "inputData": {
+                "ctx":"{{ctx}}"
+            },
+            "outputData":{
+                "ratingObject": "result.ratingObject"
+            },
+            "deps": "js/Aqc0ChecklistSpecService"
+        }
+    },
+    "ctx":{
+        "selected": {
+            "type":"object"
+        },
+        "pselected":{
+            "type":"object"
+        }
+    },
+    "dataProviders": {
+        "checklistAnswerConfigDataProvider": {
+            "action": "checklistAnswerConfigLoadData",
+            "selectionModelMode": "multiple",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}"
+        }
+    },
+    "columnProviders": {
+        "checklistAnswerConfigColumnProvider": {
+            "loadColumnAction": "loadColumns",
+            "columns": "{{data.columns}}",
+            "soaEnabled": false
+        }
+    },
+    "grids": {
+        "checklistAnswerConfigGrid": {
+            "dataProvider": "checklistAnswerConfigDataProvider",
+            "columnProvider": "checklistAnswerConfigColumnProvider",
+            "addIconColumn": false,
+            "gridOptions": {
+                "enableGridMenu": false,
+                "enablePinning": false,
+                "enableSorting": false
+            }
+        }
+    },
+    "conditions":{
+    },
+    "functions": {
+    },
+    "lifecycleHooks": {
+        "onMount": "loadRatingRuleObjectWithProps"
+    },
+    "onEvent": [],
+    "data": {
+        "Aqc0ChecklistAnswerTableColumnName": {
+            "displayName": "{{i18n.Aqc0ChecklistAnswerTableColumnName}}",
+            "type": "STRING"
+        },
+        "Aqc0ChecklistAnswerValueTableColumnName": {
+            "displayName": "{{i18n.Aqc0ChecklistAnswerValueTableColumnName}}",
+            "type": "STRING"
+        }
+    },
+    "i18n": {
+        "Aqc0ChecklistAnswerConfigSectionTitle": ["qualitycentermanagerMessages"],
+        "Aqc0ChecklistAnswerTableColumnName": ["qualitycentermanagerMessages"],
+        "Aqc0ChecklistAnswerValueTableColumnName": ["qualitycentermanagerMessages"]
+    }
+}

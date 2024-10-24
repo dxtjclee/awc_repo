@@ -1,0 +1,479 @@
+{
+      "schemaVersion": "1.0.0",
+      "imports": [
+          "js/aw-splm-table.directive",
+          "js/aw-panel-section.directive",
+          "js/aw-chart.directive",
+          "js/aw-row.directive",
+          "js/aw-column.directive",
+          "js/aw-i18n.directive",
+          "js/aw-command-bar.directive",
+          "js/aw-am-table-panel.directive"
+      ],
+      "props": {
+          "sub-panel-context": {
+              "type": "object"
+          }
+      },
+      "lifecycleHooks": {
+        "onUnmount": "removePieChartData",
+        "onUpdate": [
+            {
+                "action": "createPieChartForDynamicTables",
+                "observers": [
+                    "props.subPanelContext.context.vrSublocationState.pieChartData.vrTables.softwareTableProvider.chartData"
+                ]
+            },
+            {
+                "action": "redrawSoftwareTablePieChart",
+                "observers": [
+                    "props.subPanelContext.context.vrSublocationState.pieChartData.vrTables.softwareTableProvider.redrawSoftwarePieAsDoubleFilter"
+                ]
+            },
+            {
+                "action": "handleSelectionChange",
+                "observers": [
+                    "viewModel.atomicData.selectionData"
+                ]
+            }
+        ]
+    },
+      "actions": {
+          "handleSelectionChange": {
+              "actionType": "JSFunction",
+              "method": "handleSelectionChange",
+              "inputData": {
+                  "data": "{{data.dataProviders.softwareTableProvider}}",
+                  "subPanelContext": "{{subPanelContext}}"
+              },
+              "outputData": {},
+              "deps": "js/Crt1VROverviewTablesService"
+          },
+          "redrawSoftwareTablePieChart": {
+            "actionType": "JSFunction",
+            "method": "redrawSecondaryPieCharts",
+            "inputData": {
+                "input": "{{data}}"
+            },
+            "outputData": {
+                "pieChartForSoftwareTableProvider_chartPoints": ""
+            },
+            "deps": "js/Crt1VROverviewTablesService",
+            "events": {
+                "success": [ {
+                    "name": "redrawPieChartForDynamicTables"
+                } ]
+            }
+        },
+        "removePieChartData": {
+            "actionType": "JSFunction",
+            "method": "removePieChartData",
+            "inputData": {
+                "vrSublocationState": "{{subPanelContext.context.vrSublocationState}}",
+                "table": "softwareTableProvider",
+                "pieClickedFlag": "softwarePieClicked",
+                "pieDedrawFlag": "redrawSoftwarePieAsDoubleFilter",
+                "subPanelContext": "{{subPanelContext}}",
+                "dataProvider": "{{data.dataProviders.softwareTableProvider}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+          "editEventAction": {
+              "actionType": "Event",
+              "method": "Event",
+              "inputData": {
+                  "events": [
+                      {
+                          "name": "plTable.editStateChange",
+                          "eventData": {
+                              "state": "{{data.eventData.state}}",
+                              "dataSource": {
+                                  "dataProviders": "{{data.dataProviders}}"
+                              }
+                          }
+                      }
+                  ]
+              }
+          },
+          "handleVMCollectionUpdate": {
+              "actionType": "JSFunction",
+              "method": "handleHtmlPanelVMCollection",
+              "deps": "js/xrtUtilities",
+              "inputData": {
+                  "callback": "{{subPanelContext.callback.updateVMCollectionCallback}}",
+                  "response": {
+                      "dataProvider": "{{data.dataProviders.softwareTableProvider}}"
+                  }
+              }
+          },
+          "doArrangeEvent": {
+              "actionType": "JSFunctionAsync",
+              "method": "arrangeColumns",
+              "inputData": {
+                  "declViewModel": "{{data}}",
+                  "eventData": "{{data.eventData}}"
+              },
+              "deps": "js/dynamicTableUtils"
+          },
+          "saveColumnConfigLoadData": {
+              "actionType": "TcSoaService",
+              "serviceName": "Internal-AWS2-2023-06-Finder",
+              "method": "performSearchViewModel5",
+
+              "inputData": {
+                  "columnConfigInput": {
+                      "clientName": "AWClient",
+                      "operationType": "as_arranged",
+                      "clientScopeURI": "{{subPanelContext.context.vrSublocationState.scopeURI.get('Software')}}"
+                  },
+                  "saveColumnConfigData": {
+                      "clientScopeURI": "{{subPanelContext.context.vrSublocationState.scopeURI.get('Software')}}",
+                      "columnConfigId": "{{subPanelContext.context.vrSublocationState.columnConfig.get('Software')}}",
+                      "columns": "{{data.dataProviders.softwareTableProvider.newColumns}}",
+                      "scope": "LoginUser",
+                      "scopeName": ""
+                  },
+                  "searchInput": {
+                      "maxToLoad": 30,
+                      "maxToReturn": 30,
+                      "providerName": "Crt1AnalysisRequestInProvider",
+                      "attributesToInflate":["crt1SourceObject"],
+                      "searchCriteria": {
+                          "parentUid": "{{function:getParentUid}}",
+                          "dcpSortByDataProvider": "true",
+                          "tableUID":"Software"
+                      },
+                      "searchFilterFieldSortType": "Alphabetical",
+                      "searchSortCriteria": "{{data.columnProviders.softwareTableColumnProvider.sortCriteria}}",
+                      "startIndex": "{{data.dataProviders.softwareTableProvider.startIndex}}",
+                      "columnFilters": "{{function:getColumnFiltersForDynamicTables}}"
+                  },
+                  "inflateProperties": true
+              },
+              "outputData": {
+                  "totalFound": "totalFound",
+                  "searchResults": "{{json:searchResultsJSON}}",
+                  "dataProviders.softwareTableProvider.columnConfig": "function:getColumnDataForDynamicTables"
+              },
+              "deps": "js/Crt1VROverviewTablesService"
+          },
+          "resetColumnConfig": {
+              "actionType": "TcSoaService",
+              "serviceName": "Internal-AWS2-2023-06-UiConfig",
+              "method": "getOrResetUIColumnConfigs4",
+              "inputData": {
+                  "getOrResetUiConfigsIn": [
+                      {
+                          "scope": "LoginUser",
+                          "scopeName": "",
+                          "clientName": "AWClient",
+                          "resetColumnConfig": true,
+                          "columnConfigQueryInfos": [
+                              {
+                                  "clientScopeURI": "{{subPanelContext.context.vrSublocationState.scopeURI.get('Software')}}",
+                                  "operationType": "configured",
+                                  "typeNames": [
+                                      "WorkspaceObject"
+                                  ],
+                                  "columnsToExclude": []
+                              }
+                          ],
+                          "businessObjects": [
+                              {}
+                          ]
+                      }
+                  ]
+              },
+              "outputData": {
+                  "dataProviders.softwareTableProvider.resetColumnConfigs": "function:getColumnDataForDynamicTables"
+              },
+              "events": {
+                  "success": [ {
+                      "name": "softwareTable.plTable.reload"
+                  } ]
+              },
+              "deps": "js/Crt1VROverviewTablesService"
+          },
+          "loadDataForSoftwareTable": {
+              "actionType": "TcSoaService",
+              "serviceName": "Internal-AWS2-2023-06-Finder",
+              "method": "performSearchViewModel5",
+              "inputData": {
+                  "columnConfigInput": {
+                      "clientName": "AWClient",
+                      "clientScopeURI": "{{subPanelContext.context.vrSublocationState.scopeURI.get('Software')}}",
+                      "operationType": "as_configured"
+                  },
+                  "searchInput": {
+                      "maxToLoad": 30,
+                      "maxToReturn": 30,
+                      "providerName": "Crt1AnalysisRequestInProvider",
+                      "attributesToInflate":["crt1SourceObject"],
+                      "searchCriteria": {
+                          "parentUid": "{{function:getParentUid}}",
+                          "dcpSortByDataProvider": "true",
+                          "tableUID":"Software"
+                      },
+                      "searchFilterFieldSortType": "Alphabetical",
+                      "searchSortCriteria": "{{data.columnProviders.softwareTableColumnProvider.sortCriteria}}",
+                      "startIndex": "{{data.dataProviders.softwareTableProvider.startIndex}}",
+                      "columnFilters": "{{function:getColumnFiltersForDynamicTables}}"
+                  },
+                  "inflateProperties": true
+              },
+              "outputData": {
+                  "totalFound": "totalFound",
+                  "searchResults": "{{json:searchResultsJSON}}",
+                  "dataProviders.softwareTableProvider.columnConfig": "function:getColumnDataForDynamicTables"
+              },
+              "deps": "js/Crt1VROverviewTablesService"
+          },
+          "createPieChartForDynamicTables": {
+            "actionType": "JSFunction",
+            "method": "createPieChartForDynamicTables",
+            "inputData": {
+                "input": "{{data}}",
+                "tableColumnFilters": "softwareTableColumnFilter",
+                "redrawFlag": "redrawSoftwarePieAsDoubleFilter",
+                "chartData": "{{subPanelContext.context.vrSublocationState.pieChartData.vrTables.softwareTableProvider}}",
+                "seriesName": "{{data.i18n.Software}}",
+                "subPanelContext": "{{subPanelContext.context.vrSublocationState}}",
+                "table": "softwareTableProvider"
+            },
+            "outputData": {
+                "pieChartForSoftwareTableProvider_chartPoints": ""
+            },
+            "deps": "js/Crt1PieChartsService"
+        },
+        "checkAndReloadSoftwareTableChart": {
+            "actionType": "JSFunction",
+            "method": "checkAndReloadSoftwareTableChart",
+            "inputData": {
+                "data": "{{data}}",
+                "subPanelContext": "{{subPanelContext.context.vrSublocationState}}"
+            },
+            "deps": "js/Crt1SoftwareTableService",
+            "events": {
+                "success": [ {
+                    "name": "softwareTableProvider.modelObjectsEdited"
+                } ]
+            }
+        },
+        "filterSoftwareTable": {
+            "actionType": "JSFunction",
+            "method": "filterSoftwareTable",
+            "inputData": {
+                "data": "{{data}}",
+                "chartProp": "{{subPanelContext.context.vrSublocationState}}",
+                "provider": "softwareTableProvider",
+                "pieClicked": "softwarePieClicked",
+                "softwareTableColumnFilter": "softwareTableColumnFilter",
+                "seriesName": "{{data.i18n.Software}}"
+            },
+            "deps": "js/Crt1SoftwareTableService",
+            "events": {
+                "success": [ {
+                    "name": "softwareTable.plTable.reload"
+                } ]
+            }
+        },
+        "displayAllSoftwareTable": {
+            "actionType": "JSFunction",
+            "method": "displayAllSoftwareTable",
+            "inputData": {
+                "data": "{{data}}",
+                "chartProp": "{{subPanelContext.context.vrSublocationState}}",
+                "provider": "softwareTableProvider",
+                "pieClicked": "softwarePieClicked",
+                "softwareTableColumnFilter": "softwareTableColumnFilter",
+                "seriesName": "{{data.i18n.Software}}"
+            },
+            "deps": "js/Crt1SoftwareTableService",
+            "events": {
+                "success": [ {
+                    "name": "softwareTable.plTable.reload"
+                } ]
+            }
+        },
+        "modelObjectsLoaded": {
+            "actionType": "JSFunction",
+            "method": "modelObjectsLoaded",
+            "inputData": {
+                "dataProviders": "{{data.dataProviders.softwareTableProvider}}",
+                "eventMap": "{{data.eventMap}}",
+                "scopeSel": "{{props.subPanelContext.context.vrSublocationState.mselected[0]}}",
+                "subPanleCtx": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        },
+        "modelObjectEdited": {
+            "actionType": "JSFunction",
+            "method": "modelObjectEdited",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.softwareTableProvider}}",
+                "scopeSel": "{{props.subPanelContext.context.vrSublocationState.mselected[0]}}",
+                "subPanleCtx": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Crt1VROverviewTablesService"
+        }
+      },
+      "functions": {
+        "getColumnFiltersForDynamicTables": {
+            "functionName": "getColumnFiltersForDynamicTables",
+            "parameters": [
+                "{{data.columnProviders.softwareTableColumnProvider}}",
+                "{{subPanelContext.context.vrSublocationState.pieChartData.vrTables.softwareTableProvider.softwareTableColumnFilter}}",
+                "{{subPanelContext.context.vrSublocationState.pieChartData.vrTables.topPieChart.testResultColumnFilters}}"
+            ]
+        },
+        "getColumnDataForDynamicTables": {
+            "functionName": "getColumnDataForDynamicTables",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+          "getParentUid": {
+              "functionName": "getParentUid",
+              "parameters": [
+                  "{{subPanelContext}}"
+              ]
+          }
+      },
+      "columnProviders": {
+          "softwareTableColumnProvider": {
+              "saveColumnAndLoadAction": "saveColumnConfigLoadData",
+              "resetColumnAction": "resetColumnConfig",
+              "sortCriteria": []
+          }
+      },
+      "dataProviders": {
+          "softwareTableProvider": {
+              "action": "loadDataForSoftwareTable",
+              "response": "{{data.searchResults}}",
+              "totalFound": "{{data.totalFound}}",
+              "selectionModelMode": "multiple",
+              "editContext": "NONE",
+              "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectCellListActionCommands",
+              "contextMenuCommandsAnchor": "aw_softwareTable_contextMenu",
+              "inputData": {
+                  "selectionData": "{{fields.selectionData}}"
+              }
+          }
+      },
+      "grids": {
+          "softwareTable": {
+              "columnProvider": "softwareTableColumnProvider",
+              "dataProvider": "softwareTableProvider",
+              "enableArrangeMenu": true,
+              "gridOptions": {
+                  "enableSorting": true,
+                  "maxRowsToShow": 10,
+                  "isFilteringEnabled": true
+              }
+          }
+      },
+      "data": {
+          "chartProviders" : {
+            "pieChartForSoftwareTableProvider": {
+                "chartType": "pie",
+                "chartColorOverrideClass":"aw-verificationManagement-chartStatusColor",
+                "chartConfig": {
+                    "isChartZoomable": true,
+                    "isYAxisLinearOrLogarithmic": "logarithmic",
+                    "xAxisLabel": "",
+                    "yAxisLabel": "",
+                    "isDataLabelOnChartEnabled": true
+                }
+            }
+          },
+          "primaryActiveTabId": {
+              "dbValue": "",
+              "type": "OBJECT"
+          },
+          "selectionData": {
+              "initialValues": {},
+              "meta": {}
+          }
+      },
+      "onEvent": [
+          {
+              "eventId": "columnArrange",
+              "cacheEventData": true,
+              "action": "doArrangeEvent"
+          },
+          {
+              "eventId": "softwareTableProvider.modelObjectsUpdated",
+              "cacheEventData": true,
+              "action": "modelObjectsLoaded"
+          },
+          {
+              "eventId": "softwareTableProvider.modelObjectsEdited",
+              "cacheEventData": true,
+              "action": "modelObjectEdited"
+          },
+          {
+              "eventId": "softwareTableProvider.modelObjectsUpdated",
+              "cacheEventData": true,
+              "action": "handleVMCollectionUpdate"
+          },
+          {
+              "eventId": "editHandlerStateChange",
+              "cacheEventData": true,
+              "action": "editEventAction"
+          },
+          {
+              "eventId": "plTable.editStateChange",
+              "action": "checkAndReloadSoftwareTableChart"
+          },
+          {
+              "eventId": "undefined.selected",
+              "cacheEventData": true,
+              "action": "filterSoftwareTable"
+          },
+          {
+              "eventId": "undefined.unselected",
+              "cacheEventData": true,
+              "action": "displayAllSoftwareTable"
+          },
+          {
+              "eventId": "Crt1SoftwareTable.drawPieChart",
+              "action": "loadDataForSoftwareTableAfterEdit"
+          },
+          {
+              "eventId": "redrawPieChartForDynamicTables",
+              "action": "createPieChartForDynamicTables"
+          }
+
+      ],
+      "conditions": {
+        "showSoftwareTableMessageString": {
+            "expression": "data.pieChartForSoftwareTableProvider_chartPoints[0].keyValueDataForChart[0].value === 0 && data.pieChartForSoftwareTableProvider_chartPoints[0].keyValueDataForChart[1].value === 0 && data.pieChartForSoftwareTableProvider_chartPoints[0].keyValueDataForChart[2].value === 0 && data.pieChartForSoftwareTableProvider_chartPoints[0].keyValueDataForChart[3].value === 0 && data.pieChartForSoftwareTableProvider_chartPoints[0].keyValueDataForChart[4].value === 0"
+        },
+        "showSoftwareTableChart" : {
+            "expression": "data.pieChartForSoftwareTableProvider_chartPoints && data.pieChartForSoftwareTableProvider_chartPoints[0] && data.pieChartForSoftwareTableProvider_chartPoints[0].keyValueDataForChart[0].value != -1"
+        }
+      },
+      "i18n": {
+        "NoResult": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Fail": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Pass": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Software":[
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "noSoftwareToDisplayChart":[
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Caution": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Blocked": [
+            "AnalysisRequestCommandPanelsMessages"
+        ]
+      }
+  }

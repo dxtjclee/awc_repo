@@ -1,0 +1,13 @@
+<aw-command-panel caption="i18n.tq0AddResponsibleUserTitle" context="data">
+    <aw-panel-body scrollable="false">
+        <aw-widget prop="data.allGroups" enable-when="conditions.enableGroupSelection" visible-when="conditions.enableGroupRoleView" ></aw-widget>
+        <aw-widget prop="data.allRoles"  enable-when="conditions.enableRoleSelection" visible-when="conditions.enableGroupRoleView"></aw-widget>
+        <aw-property-label prop="data.searchString"></aw-property-label>
+        <aw-list-filter id="userListFilter" prop="data.filterBox" dataprovider="data.dataProviders.userPerformSearch">
+            <aw-include name="Awp0UserPanelCell" sub-panel-context="item"></aw-include>
+        </aw-list-filter>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button action="assign" visible-when="conditions.isValidObjectToAdd"><aw-i18n>i18n.tq0AddResponsibleUserTitle</aw-i18n></aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

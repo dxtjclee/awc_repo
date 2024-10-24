@@ -1,0 +1,414 @@
+{
+  "schemaVersion": "1.0.0",
+  "pasteHandlers": {
+    "pasteHandlerForArm0RequirementSpecElement": {
+      "action": "aceDefaultPasteAction",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForArm0RequirementSpecElement"
+      }
+    },
+    "pasteHandlerForArm0RequirementElement": {
+      "action": "aceDefaultPasteAction",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForArm0RequirementElement"
+      }
+    },
+    "pasteHandlerForArm0ParagraphElement": {
+      "action": "aceDefaultPasteAction",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForArm0ParagraphElement"
+      }
+    },
+    "pasteHandlerForRequirementSpecRevision": {
+      "action": "aceDefaultPasteAction",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForRequirementSpecRevision"
+      }
+    },
+    "pasteHandlerForParagraphRevision": {
+      "action": "aceDefaultPasteAction",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForParagraphRevision"
+      }
+    },
+    "pasteHandlerForRequirementRevision": {
+      "action": "aceDefaultPasteAction",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForRequirementRevision"
+      }
+    },
+    "pasteHandlerForArm0RequirementElementArm0RequirementElement": {
+      "action": "aceDefaultPasteAction",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForArm0RequirementElementArm0RequirementElement"
+      }
+    },
+    "pasteHandlerForArm0RequirementElementArm0ParagraphElement": {
+      "action": "aceDefaultPasteAction",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForArm0RequirementElementArm0ParagraphElement"
+      }
+    },
+    "pasteHandlerForArm0RequirementElementRequirementRevision": {
+      "action": "aceDefaultPasteAction",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForArm0RequirementElementRequirementRevision"
+      }
+    },
+    "pasteHandlerForArm0RequirementElementParagraphRevision": {
+      "action": "aceDefaultPasteAction",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForArm0RequirementElementParagraphRevision"
+      }
+    },
+    "pasteHandlerForArm0ParagraphElementArm0RequirementElement": {
+      "action": "aceDefaultPasteAction",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForArm0ParagraphElementArm0RequirementElement"
+      }
+    },
+    "pasteHandlerForArm0ParagraphElementArm0ParagraphElement": {
+      "action": "aceDefaultPasteAction",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForArm0ParagraphElementArm0ParagraphElement"
+      }
+    },
+    "pasteHandlerForArm0ParagraphElementRequirementRevision": {
+      "action": "aceDefaultPasteAction",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForArm0ParagraphElementRequirementRevision"
+      }
+    },
+    "pasteHandlerForArm0ParagraphElementParagraphRevision": {
+      "action": "aceDefaultPasteAction",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForArm0ParagraphElementParagraphRevision"
+      }
+    },
+    "pasteHandlerForCreateTracelinkWorkspaceObject": {
+      "action": "actionForCreateTracelink",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForCreateTracelinkWorkspaceObject"
+      }
+    },
+    "pasteHandlerForCreateTracelinkAwb0Element": {
+      "action": "actionForCreateTracelink",
+      "activeWhen": {
+        "condition": "conditions.isPasteHandlerActiveForCreateTracelinkAwb0Element"
+      }
+    }
+  },
+  "actions": {
+    "actionForCreateTracelink": {
+      "actionType": "JSFunction",
+      "method": "pasteObjectsInList",
+      "deps": "js/Arm0CreateTraceLink",
+      "inputData": {
+        "targetObject": "{{pasteContext.targetObject}}",
+        "sourceObject": "{{pasteContext.sourceObject}}"
+      },
+      "events": {
+        "success": [
+          {
+            "name": "dragDrop.success",
+            "condition": "pasteContext.isDragDropIntent",
+            "eventData": {
+              "sourceObjects": "{{pasteContext.sourceObject}}",
+              "targetObject": "{{pasteContext.targetObject}}"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "conditions": {
+    "isPasteHandlerActiveForArm0RequirementSpecElement": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Arm0RequirementSpecElement"
+            }
+          },
+          {
+            "$source": "pasteContext.sourceObject",
+            "$query": {
+              "$typeOf": "Arm0RequirementSpecElement"
+            }
+          }
+        ]
+      }
+    },
+    "isPasteHandlerActiveForArm0RequirementElement": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Arm0RequirementSpecElement"
+            }
+          },
+          {
+            "$source": "pasteContext.sourceObject",
+            "$query": {
+              "$typeOf": "Arm0RequirementElement"
+            }
+          }
+        ]
+      }
+    },
+    "isPasteHandlerActiveForRequirementSpecRevision": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Arm0RequirementSpecElement"
+            }
+          },
+          {
+            "$source": "pasteContext.sourceObject",
+            "$query": {
+              "$typeOf": "RequirementSpec Revision"
+            }
+          }
+        ]
+      }
+    },
+    "isPasteHandlerActiveForArm0ParagraphElement": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Arm0RequirementSpecElement"
+            }
+          },
+          {
+            "$source": "pasteContext.sourceObject",
+            "$query": {
+              "$typeOf": "Arm0ParagraphElement"
+            }
+          }
+        ]
+      }
+    },
+    "isPasteHandlerActiveForParagraphRevision": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Arm0RequirementSpecElement"
+            }
+          },
+          {
+            "$source": "pasteContext.sourceObject",
+            "$query": {
+              "$typeOf": "Paragraph Revision"
+            }
+          }
+        ]
+      }
+    },
+    "isPasteHandlerActiveForRequirementRevision": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Arm0RequirementSpecElement"
+            }
+          },
+          {
+            "$source": "pasteContext.sourceObject",
+            "$query": {
+              "$typeOf": "Requirement Revision"
+            }
+          }
+        ]
+      }
+    },
+    "isPasteHandlerActiveForArm0RequirementElementArm0RequirementElement": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Arm0RequirementElement"
+            }
+          },
+          {
+            "$source": "pasteContext.sourceObject",
+            "$query": {
+              "$typeOf": "Arm0RequirementElement"
+            }
+          }
+        ]
+      }
+    },
+    "isPasteHandlerActiveForArm0RequirementElementArm0ParagraphElement": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Arm0RequirementElement"
+            }
+          },
+          {
+            "$source": "pasteContext.sourceObject",
+            "$query": {
+              "$typeOf": "Arm0ParagraphElement"
+            }
+          }
+        ]
+      }
+    },
+    "isPasteHandlerActiveForArm0RequirementElementRequirementRevision": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Arm0RequirementElement"
+            }
+          },
+          {
+            "$source": "pasteContext.sourceObject",
+            "$query": {
+              "$typeOf": "Requirement Revision"
+            }
+          }
+        ]
+      }
+    },
+    "isPasteHandlerActiveForArm0RequirementElementParagraphRevision": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Arm0RequirementElement"
+            }
+          },
+          {
+            "$source": "pasteContext.sourceObject",
+            "$query": {
+              "$typeOf": "Paragraph Revision"
+            }
+          }
+        ]
+      }
+    },
+    "isPasteHandlerActiveForArm0ParagraphElementArm0RequirementElement": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Arm0ParagraphElement"
+            }
+          },
+          {
+            "$source": "pasteContext.sourceObject",
+            "$query": {
+              "$typeOf": "Arm0RequirementElement"
+            }
+          }
+        ]
+      }
+    },
+    "isPasteHandlerActiveForArm0ParagraphElementArm0ParagraphElement": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Arm0ParagraphElement"
+            }
+          },
+          {
+            "$source": "pasteContext.sourceObject",
+            "$query": {
+              "$typeOf": "Arm0ParagraphElement"
+            }
+          }
+        ]
+      }
+    },
+    "isPasteHandlerActiveForArm0ParagraphElementRequirementRevision": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Arm0ParagraphElement"
+            }
+          },
+          {
+            "$source": "pasteContext.sourceObject",
+            "$query": {
+              "$typeOf": "Requirement Revision"
+            }
+          }
+        ]
+      }
+    },
+    "isPasteHandlerActiveForArm0ParagraphElementParagraphRevision": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "Arm0ParagraphElement"
+            }
+          },
+          {
+            "$source": "pasteContext.sourceObject",
+            "$query": {
+              "$typeOf": "Paragraph Revision"
+            }
+          }
+        ]
+      }
+    },
+    "isPasteHandlerActiveForCreateTracelinkWorkspaceObject": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "CreateTracelink"
+            }
+          },
+          {
+            "$source": "pasteContext.sourceObject",
+            "$query": {
+              "$typeOf": "WorkspaceObject"
+            }
+          }
+        ]
+      }
+    },
+    "isPasteHandlerActiveForCreateTracelinkAwb0Element": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "pasteContext.targetObject",
+            "$query": {
+              "$typeOf": "CreateTracelink"
+            }
+          },
+          {
+            "$source": "pasteContext.sourceObject",
+            "$query": {
+              "$typeOf": "Awb0Element"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

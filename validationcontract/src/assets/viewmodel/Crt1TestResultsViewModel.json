@@ -1,0 +1,198 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-chart.directive",
+        "js/aw-row.directive",
+        "js/aw-i18n.directive",
+        "js/exist-when.directive"
+    ],
+    "props": {
+        "sub-panel-context":{
+            "type":"object"
+        }
+    },
+    "lifecycleHooks": {
+        "onUpdate": [ {
+            "action": "createPieChartForTestResult",
+            "observers": [ "props.subPanelContext.context.vrSublocationState.pieChartData.vrTables.topPieChart.chartData" ]
+        },
+        {
+            "action": "resetPieChart",
+            "observers": [ "props.subPanelContext.context.vrSublocationState.pieChartData.vrTables.topPieChart.redrawTestResultPieAsDoubleFilter" ]
+        } ]
+    },
+    "actions": {
+         "resetPieChart": {
+            "actionType": "JSFunction",
+            "method": "resetPieChart",
+            "inputData": {
+                "input": "{{data}}",
+                "tpPieChart":"{{props.subPanelContext.context.vrSublocationState}}"
+
+            },
+            "outputData": {
+                "pieChartForTestResult_chartPoints": ""
+            },
+            "deps": "js/Crt1TestResultsService",
+            "events": {
+                "success": [ {
+                    "name": "createPieChartForTestResultEvent"
+                } ]
+            }
+        },
+
+        "createPieChartForTestResult": {
+            "actionType": "JSFunction",
+            "method": "createPieChartForTestResult",
+            "inputData": {
+                "input": "{{data}}",
+                "topPieChart":"{{props.subPanelContext.context.vrSublocationState.pieChartData.vrTables.topPieChart}}",
+                "tpPieChart":"{{props.subPanelContext.context.vrSublocationState.pieChartData}}",
+                "vrSublocationState": "{{props.subPanelContext.context.vrSublocationState}}"
+            },
+            "outputData": {
+                "pieChartForTestResult_chartPoints": ""
+            },
+            "deps": "js/Crt1TestResultsService",
+            "events": {
+                "success": [ {
+                    "name": "resetSWCTable"
+                } ]
+            }
+        },
+
+        "filterTestResultTable": {
+            "actionType": "JSFunction",
+            "method": "filterTestResultTable",
+            "inputData": {
+                "data": "{{data}}",
+                "chartProp": "{{props.subPanelContext.context.vrSublocationState}}"
+            },
+            "deps": "js/Crt1TestResultsService"
+
+        },
+        "displayAllTestResult": {
+            "actionType": "JSFunction",
+            "method": "displayAllTestResult",
+            "inputData": {
+                "data": "{{data}}",
+                "chartProp": "{{props.subPanelContext.context.vrSublocationState}}"
+            },
+            "deps": "js/Crt1TestResultsService"
+
+        },
+        "resetColumnFiltersForTestResult": {
+            "actionType": "JSFunction",
+            "method": "resetColumnFiltersForTestResult",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Crt1TestResultsService"
+        },
+        "resetSWCTable": {
+            "actionType": "JSFunction",
+            "method": "resetSWCTable",
+            "inputData": {
+                "vrSublocationState":"{{props.subPanelContext.context.vrSublocationState}}"
+            },
+            "deps": "js/Crt1TestResultsService"
+        }
+    },
+    "functions": {
+        "getColumnFiltersForTestResult": {
+            "functionName": "getColumnFiltersForTestResult",
+            "parameters": [
+                "{{data}}"
+            ]
+        }
+    },
+    "data": {
+        "chartProviders": {
+            "pieChartForTestResult": {
+                "chartType": "pie",
+                "chartColorOverrideClass": "aw-verificationManagement-chartStatusColor",
+                "chartConfig": {
+                    "isChartZoomable": true,
+                    "isYAxisLinearOrLogarithmic": "logarithmic",
+                    "xAxisLabel": "",
+                    "yAxisLabel": "",
+                    "isDataLabelOnChartEnabled": true
+                }
+            }
+        }
+    },
+    "ctx": {
+        "noTestResult": null,
+        "testResultPassCount": null,
+        "testResultFailCount": null,
+        "testResultUnprocessCount": null
+    },
+    "onEvent": [
+        {
+            "eventId": "resetPieChart",
+            "action": "resetPieChart"
+        },
+        {
+            "eventId": "createPieChartForTestResultEvent",
+            "action": "createPieChartForTestResult"
+        },
+        {
+            "eventId": "undefined.selected",
+            "cacheEventData": true,
+            "action": "filterTestResultTable"
+        },
+        {
+            "eventId": "undefined.unselected",
+            "cacheEventData": true,
+            "action": "displayAllTestResult"
+        },
+        {
+            "eventId": "Crt1TestResults.contentUnloaded",
+            "cacheEventData": true,
+            "action": "resetColumnFiltersForTestResult"
+        },
+        {
+            "eventId": "redrawTestResultChart",
+            "action": "getDataForChart"
+
+        },
+        {
+            "eventId": "resetSWCTable",
+            "action": "resetSWCTable"
+        }
+    ],
+    "conditions": {
+        "showTestResultMessageString": {
+            "expression": "!(data.pieChartForTestResult_chartPoints) || (conditions.allZeroTestResultPoints)"
+        },
+        "showTestResultChart" : {
+            "expression": "!(conditions.allZeroTestResultPoints) && data.pieChartForTestResult_chartPoints && data.pieChartForTestResult_chartPoints[0] && data.pieChartForTestResult_chartPoints[0].keyValueDataForChart[0].value != -1 && data.pieChartForTestResult_chartPoints[0].keyValueDataForChart[1].value != -1 && data.pieChartForTestResult_chartPoints[0].keyValueDataForChart[2].value != -1 && data.pieChartForTestResult_chartPoints[0].keyValueDataForChart[3].value != -1 && data.pieChartForTestResult_chartPoints[0].keyValueDataForChart[4].value != -1"
+        },
+        "allZeroTestResultPoints" : {
+            "expression": "(data.pieChartForTestResult_chartPoints[0] && data.pieChartForTestResult_chartPoints[0].keyValueDataForChart[0].value === 0 && data.pieChartForTestResult_chartPoints[0].keyValueDataForChart[1].value === 0 && data.pieChartForTestResult_chartPoints[0].keyValueDataForChart[2].value === 0 && data.pieChartForTestResult_chartPoints[0].keyValueDataForChart[3].value === 0 && data.pieChartForTestResult_chartPoints[0].keyValueDataForChart[4].value === 0)"
+        }
+    },
+    "i18n": {
+        "NoResult": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Fail": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Pass": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "TestResult": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "noResultsToDisplayChart": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Caution": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Blocked": [
+            "AnalysisRequestCommandPanelsMessages"
+        ]
+    }
+}

@@ -1,0 +1,300 @@
+{
+    "schemaVersion" : "1.0.0",
+    "imports":
+    [
+        "js/aw-panel-body.directive",
+        "js/aw-panel-header.directive",
+        "js/aw-tab-set.directive",
+        "js/aw-list-filter.directive",
+        "js/exist-when.directive",
+        "js/aw-image.directive",
+        "js/aw-i18n.directive",
+        "js/aw-break.directive",
+        "js/aw-include.directive",
+        "js/aw-button.directive",
+        "js/aw-panel-footer.directive"
+    ],
+    "actions":
+    {
+        "showPanel":
+        {
+            "actionType": "JSFunction",
+            "method": "showPanel",
+            "inputData":
+            {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0MarkupService"
+        },
+        "handleEdit":
+        {
+            "actionType": "JSFunction",
+            "method": "editMarkup",
+            "inputData":
+            {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0MarkupService"
+        },
+        "handleDelete":
+        {
+            "actionType": "JSFunction",
+            "method": "deleteMarkup",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0MarkupService"
+        },
+        "handleToggle":
+        {
+            "actionType": "JSFunction",
+            "method": "toggleGroup",
+            "inputData":
+            {
+                "context":"{{data.eventData.groupData}}",
+                "data":"{{data}}"
+            },
+            "deps": "js/Arm0MarkupService"
+        },
+        "hidePanel":
+        {
+            "actionType": "JSFunction",
+            "method": "hidePanel",
+            "deps": "js/Arm0MarkupService"
+        },
+        "loadUsers":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-Query-2008-06-Finder",
+            "method": "findObjectsByClassAndAttributes",
+            "inputData":
+            {
+                "input":
+                {
+                    "className": "User",
+                    "clientId": "AW_THIN_CLIENT",
+                    "attrAndValues":
+                    [
+                        { "attrName": "user_name", "values": "{{ctx.markup.userNames}}" }
+                    ]
+                }
+            },
+            "policy":
+            {
+                "types":
+                [
+                    {
+                        "name": "User",
+                        "properties":
+                        [
+                            { "name": "user_id" },
+                            { "name": "user_name" },
+                            { "name": "awp0ThumbnailImageTicket" }
+                        ]
+                    }
+                ]
+            },
+            "outputData":
+            {
+                "users": "{{function:processUsers}}"
+            },
+            "deps": "js/Arm0MarkupService"
+        },
+        "callDataProvider":
+        {
+            "actionType": "dataProvider",
+            "method": "visibleMarkups"
+        },
+        "getVisibleMarkups":
+        {
+            "actionType": "JSFunction",
+            "method": "filterMarkups",
+            "inputData":
+            {
+                "data": "{{data}}"
+            },
+            "outputData":
+            {
+                "visibleMarkupList": []
+            },
+            "deps": "js/Arm0MarkupService"
+        },
+        "onTabSelected":
+        {
+            "actionType": "JSFunction",
+            "method": "onTabSelected",
+            "inputData":
+            {
+                "data": "{{data}}"
+            },
+            "deps": "js/Arm0MarkupService"
+        },
+        "markupSelected":
+        {
+            "actionType": "JSFunction",
+            "method": "markupSelectedInPanel",
+            "inputData":
+            {
+                "eventData": "{{data}}"
+            },
+            "deps": "js/Arm0MarkupService"
+        },
+        "saveAllMarkupEdits":
+        {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "Arm0SummaryTable.saveAllMarkupEdits"
+                    },
+                    {
+                        "name": "Arm0Markup.closeMarkupPanel"
+                    }
+                ]
+            }
+        },
+        "closeMarkupPanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "complete",
+                        "condition":"ctx.activeToolsAndInfoCommand.commandId === 'Arm0MarkupMain'",
+                        "eventData":
+                        {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+
+    "data":
+    {
+        "filterBox":
+        {
+            "displayName": "",
+            "type": "STRING",
+            "dbValue": ""
+        },
+        "tabsModel":
+        {
+            "isArray": "true",
+            "dbValue":
+            [
+                {
+                    "name": "{{i18n.all}}",
+                    "tabKey": "all",
+                    "selectedTab": true
+                },
+                {
+                    "name": "{{i18n.user}}",
+                    "tabKey": "user"
+                },
+                {
+                    "name": "{{i18n.date}}",
+                    "tabKey": "date"
+                },
+                {
+                    "name": "{{i18n.status}}",
+                    "tabKey": "status"
+                }
+            ]
+        },
+        "highLightIcon": {
+            "dbValue": "assets/image/cmdHighlight24.svg"
+        },
+        "isIcon": true
+    },
+
+    "i18n":
+    {
+        "all": [ "RichTextEditorCommandPanelsMessages" ],
+        "user": [ "RichTextEditorCommandPanelsMessages" ],
+        "date": [ "RichTextEditorCommandPanelsMessages" ],
+        "status": [ "RichTextEditorCommandPanelsMessages" ],
+        "noComments": [ "RichTextEditorCommandPanelsMessages"],
+        "createCommentMessage":[ "RichTextEditorCommandPanelsMessages"],
+        "saveComments": [ "RichTextEditorCommandPanelsMessages"]
+    },
+
+    "props": {
+        "vmo":{
+            "type": "viewModelObject"
+        },
+        "sub-panel-context":{
+            "type": "object"
+        },
+        "vmdata":{
+            "type": "object"
+        }
+    },
+    "dataProviders":
+    {
+        "visibleMarkups":
+        {
+            "action": "getVisibleMarkups",
+            "response": "{{data.markupList}}",
+            "totalFound": "{{data.markupList.length}}",
+            "selectionModelMode": "single",
+            "commandsAnchor": "arm0_aw_comment_cell_commands"
+        }
+    },
+    "conditions": {
+        "isSummaryTableActive":{
+            "expression": "data.subPanelContext.pageContext.secondaryActiveTabId === 'tc_xrt_summary_table'"
+        }
+    },
+    "onEvent":
+    [
+        {
+            "eventId": "awPanel.reveal",
+            "action": "showPanel",
+            "criteria": { "panelId": "Arm0Markup" }
+        },
+        {
+            "eventId": "Arm0MarkupMain.contentUnloaded",
+            "action": "hidePanel"
+        },
+        {
+            "eventId": "awTab.selected",
+            "cacheEventData": true,
+            "action": "onTabSelected"
+        },
+        {
+            "eventId": "Arm0Markup.callDataProvider",
+            "action": "callDataProvider"
+        },
+        {
+            "eventId": "Arm0Markup.loadUsers",
+            "action": "loadUsers"
+        },
+        {
+            "eventId": "visibleMarkups.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "markupSelected"
+        },
+        {
+            "eventId": "Arm0Markup.handleEdit",
+            "cacheEventData": true,
+            "action": "handleEdit"
+        },
+        {
+            "eventId": "Arm0Markup.handleDelete",
+            "cacheEventData": true,
+            "action": "handleDelete"
+        },
+        {
+            "eventId": "Arm0Markup.handleToggle",
+            "cacheEventData": true,
+            "action": "handleToggle"
+        },
+        {
+            "eventId": "Arm0Markup.closeMarkupPanel",
+            "action": "closeMarkupPanel"
+        }
+    ]
+}

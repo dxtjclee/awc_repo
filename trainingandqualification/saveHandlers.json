@@ -1,0 +1,19 @@
+[
+  {
+    "conditions": {
+      "$and": [
+        {
+          "xrtSummaryContextObject.modelType.typeHierarchyArray": {
+            "$in": [
+              "Tq0QualificationUnit"
+            ]
+          }
+        }
+      ]
+    },
+    "target": {
+      "method": "getSaveHandlerForQU",
+      "deps": "js/tq0Utils"
+    }
+  }
+]

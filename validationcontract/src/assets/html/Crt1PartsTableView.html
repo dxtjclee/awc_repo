@@ -1,0 +1,17 @@
+<div class="sw-row">
+    <div class="sw-column  w-12" >
+        <div class="aw-xrt-objectSetCommandPanel aw-advanced-bar-horizontal">
+            <aw-server-visibility-command-bar anchor="aw_addPartsCommandbar" context="{dataProvider:dataProviders.partsTableProvider, selObj:subPanelContext.selObj, subPanelContext:subPanelContext, pageId:subPanelContext.pageContext.primaryActiveTabId, selectionData:subPanelContext.selectionData, vrSublocationState:subPanelContext.context.vrSublocationState}" class="aw-commands-commandBarHorizontalRight" alignment="HORIZONTAL"></aw-server-visibility-command-bar>
+        </div>
+        <aw-splm-table gridid="partsTable" show-decorators="false" show-context-menu="true"></aw-splm-table>
+    </div>
+
+    <div class="sw-column w-5"  exist-when = "props.subPanelContext.context.vrSublocationState.showChart === undefined || props.subPanelContext.context.vrSublocationState.showChart === true">
+        <div exist-when="conditions.showPartsMessageString">
+            <aw-i18n>i18n.noPartsToDisplayChart</aw-i18n>
+        </div>
+        <div class="sw-row demo-h-20f" >
+            <aw-chart exist-when="conditions.showPartsChart && !conditions.showPartsMessageString" chart-provider="data.chartProviders.pieChartForPartsProvider" chart-points="data.pieChartForPartsProvider_chartPoints"></aw-chart>
+        </div>
+    </div>
+</div>

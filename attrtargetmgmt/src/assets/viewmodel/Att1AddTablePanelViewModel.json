@@ -1,0 +1,197 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "addNewComplexTable": {
+            "actionType": "JSFunction",
+            "method": "addNewComplexTable",
+            "deps": "js/Att1EngrTableService",
+            "inputData": {
+            "data": "{{data}}",
+            "openedObject":"{{subPanelContext.openedObject}}"
+            }
+        },
+        "setAttributeComplexDataSoaCallOverride": {
+            "actionType": "TcSoaService",
+            "serviceName": "AttrTargetMgmt-2021-12-AttributeTargetManagement",
+            "method": "updateParameters2",
+            "inputData":
+            {
+               "inputs": [{
+                   "clientId": "AWClient",
+                   "parameters":[ {
+                        "clientId": "String",
+                        "parameter": "{{subPanelContext.openedObject}}",
+                        "goalTableInput":{
+                        "operation": "Create",
+                        "jsonString": "{{function:createJson}}"
+                        }
+                    } ]
+               }]
+            },
+            "outputData": {
+                "updateParametersResp": "",
+                "importMessages":"{{function:processPartialErrorForComplexData}}"
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "refreshLocationFlag": true,
+                            "relatedModified": [
+                                "{{subPanelContext.openedObject}}"
+                            ]
+                        },
+                        "condition": "subPanelContext.pageContext.primaryActiveTabId == 'tc_xrt_Values'"
+                    },
+                    {
+                        "name": "openValuesTab",
+                        "condition": "subPanelContext.pageContext.primaryActiveTabId == 'tc_xrt_Overview'"
+                    },
+                    {
+                        "name": "closeDialog"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "closeDialog"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "newTableValueCreationSucceed"
+                    }
+                ],
+                "failure": [
+                    {
+                        "message": "newTableValueCreationFailed"
+                    }
+                ]
+            },
+            "deps": "js/Att1EngrTableService"
+        },
+        "openValuesTab": {
+            "actionType": "Navigate",
+            "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+            "navigationParams": {
+                "uid": "{{subPanelContext.openedObject.uid}}",
+                "page": "Values",
+                "pageId": "tc_xrt_Values"
+            }
+        },
+        "closeDialogPanel":
+        {
+            "actionType": "JSFunction",
+            "method": "closeDialog",
+            "inputData": {
+                "editContext": "INFO_PANEL_CONTEXT",
+                "popupId": "{{subPanelContext.popupOptions.popupId}}"
+            },
+            "deps": "js/dialogService"
+        }
+    },
+    "onEvent":
+    [
+        {
+            "eventId": "setAttributeComplexDataSoaCallOverride",
+            "action": "setAttributeComplexDataSoaCallOverride"
+        },
+        {
+            "eventId": "openValuesTab",
+            "action": "openValuesTab"
+        },
+        {
+            "eventId": "closeDialog",
+            "action": "closeDialogPanel"
+        }
+    ],
+    "data":
+    {
+        "rows": {
+            "displayName": "{{i18n.rows}}",
+            "type": "INTEGER",
+            "dbValue": "",
+            "isRequired": "true",
+            "isEditable": "true"
+        },
+        "columns": {
+            "displayName": "{{i18n.columns}}",
+            "type": "INTEGER",
+            "dbValue": "",
+            "isRequired": "true",
+            "isEditable": "true"
+        }
+    },
+    "functions":
+    {
+        "processPartialErrorForComplexData": {
+            "functionName": "processPartialErrorForComplexData",
+            "parameters": [
+                "{{updateParametersResp}}"
+            ]
+        },
+        "createJson": {
+            "functionName": "createJson",
+            "parameters": []
+        }
+    },
+    "messages":
+    {
+        "importDone":
+        {
+            "messageType": "INFO",
+            "messageText": "{{i18n.ImportSuccessful}}"
+        },
+        "importFailureMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.att1FailureMessage}}",
+            "messageTextParams": [
+                "{{data.importMessages}}"
+            ]
+        },
+        "newTableValueCreationSucceed":{
+            "messageType": "INFO",
+            "messageText": "{{i18n.newTableValueCreationSuccess}}",
+            "messageTextParams": [
+                "{{data.rows.dbValue}}",
+                "{{data.columns.dbValue}}",
+                "{{subPanelContext.openedObject.props.object_name.uiValues[0]}}"
+            ]
+        },
+        "newTableValueCreationFailed":{
+            "messageType": "ERROR",
+            "messageText": "{{i18n.newTableValueCreationFail}}",
+            "messageTextParams": [
+                "{{data.rows.dbValue}}",
+                "{{data.columns.dbValue}}",
+                "{{subPanelContext.openedObject.props.object_name.uiValues[0]}}"
+            ]
+        }
+    },
+    "conditions": {
+        "positiveIntegerCond": {
+            "expression": "data.rows.dbValue > 0 && data.columns.dbValue > 0"
+        }
+    },
+    "i18n":
+    {
+        "insert": [ "Att1Messages" ],
+        "insertBlankTable": [ "Att1Messages" ],
+        "rows": [ "Att1Messages" ],
+        "columns": [ "Att1Messages" ],
+        "CreateTableManually": [ "Att1Messages" ],
+        "ImportSuccessful" : ["Att1AttrMappingMessages"],
+        "att1FailureMessage": ["Att1AttrMappingMessages"],
+        "Values" : ["Att1Messages"],
+        "newTableValueCreationSuccess" : [
+            "Att1Messages"
+        ],
+        "newTableValueCreationFail":[
+            "Att1Messages"
+        ]
+    }
+}

@@ -1,0 +1,53 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "rbContextObj": {
+            "selected": "{{props.subPanelContext.selected}}"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "initializeGraphState",
+        "onUpdate": [{
+            "action": "updateSelectionData",
+            "observers": [ "viewModel.subPanelContext.selectionData.selected" ]
+        }]
+    },
+    "actions":
+    {
+        "initializeGraphState":{
+            "actionType": "Event",
+            "method": "Event",
+            "events": {
+                "success": [
+                    {
+                        "name": "awGraphLegend.activeViewChanged"
+                    }
+                ]
+            }
+        },
+        "updateSelectionData":{
+            "actionType": "JSFunction",
+            "method": "updateSelectionData",
+            "inputData": {
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Psi0ViewDependenciesService",
+            "outputData": {
+                "rbContextObj": ""
+            },
+            "events": {
+                "success": [
+                {
+                    "name": "awGraphLegend.activeViewChanged"
+                }
+                ]
+            }
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "Psi0ViewDependencies.updateRelationViewer",
+            "action": "updateSelectionData"
+        }
+    ]
+}

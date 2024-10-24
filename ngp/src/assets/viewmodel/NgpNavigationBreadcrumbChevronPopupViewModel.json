@@ -1,0 +1,50 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports":[],
+    "actions":{
+        "getCrumbChildren": {
+            "actionType": "JSFunctionAsync",
+            "method": "getContentElements",
+            "inputData": {
+                "uid": "{{props.selectedCrumb.scopedUid}}",
+                "returnAsVMOs": true
+            },
+            "outputData": {
+                "children": ""
+            },
+            "deps": "js/services/ngpRelationService"
+        },
+        "initCrumbChildrenDataProvider": {
+            "actionType": "dataProvider",
+            "method": "crumbChildren"
+        },
+        "onSelectedCrumbChild":{
+            "actionType": "JSFunction",
+            "method": "navigateWithInNgp",
+            "inputData": {
+                "uid": "{{data.eventMap['crumbChildren.selectionChangeEvent'].selectedObjects[0].uid}}",
+                "chevronPopup": "{{props.chevronPopup}}"
+            },
+            "deps": "js/services/ngpNavigationService"
+        }
+    },
+    "dataProviders":{
+        "crumbChildren":{
+            "action": "getCrumbChildren",
+            "response": "{{data.children}}",
+            "totalFound": "{{data.children.length}}",
+            "noResultsFound":"{{i18n.noChildrenFound}}"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "initCrumbChildrenDataProvider"
+    },
+    "onEvent": [ {
+        "eventId": "crumbChildren.selectionChangeEvent",
+        "action": "onSelectedCrumbChild",
+        "cacheEventData": true
+    } ],
+    "i18n":{
+        "noChildrenFound":["NgpHeaderMessages"]
+    }
+}

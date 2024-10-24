@@ -1,0 +1,284 @@
+{
+    "schemaVersion": "1.0.0",
+    "props":{
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "ports": {
+        "selection_ngpAttachmentsAgsFormsLists": {
+            "syncObject": {}
+        }
+    },
+    "data": {
+        "allDataProvidersPopulated": false
+    },
+    "conditions": {
+        "shouldDisplayForms": {
+            "expression": {
+                "$source": "props.subPanelContext.tabs[0].input.modelType.typeHierarchyArray",
+                "$query": {
+                    "$in": ["Cpd0DesignFeature", "Cpd0DesignElement"]
+                }
+            }
+        }
+    },
+    "actions": {
+        "setCommandContext":{
+            "actionType":"JSFunction",
+            "method":"setCommandContext",
+            "inputData":{
+                "tabModel": "{{props.subPanelContext}}",
+                "commandContext": {
+                    "input": "{{props.subPanelContext.tabs[0].input}}",
+                    "cmdObjects": ["{{props.subPanelContext.tabs[0].input}}"]
+                }
+            },
+            "deps":"js/mfeContentPanelUtil"
+        },
+        "loadDataForAttachmentsAgsForms": {
+            "actionType": "batchJob",
+            "steps": [{
+                    "action": "setCommandContext"
+                },
+                {
+                    "action": "loadAttachmentsAgsAndForms"
+                },
+                {
+                    "action": "initAttachmentsDataProvider"
+                },
+                {
+                    "action": "initAgsDataProvider"
+                },
+                {
+                    "action": "initFormsDataProvider"
+                },
+                {
+                    "action": "initOverviewDataProvider"
+                },
+                {
+                    "action": "selectOverview"
+                }
+            ]
+        },
+        "loadAttachmentsAgsAndForms": {
+            "actionType": "JSFunctionAsync",
+            "method": "getAttachmentsAgsAndForms",
+            "inputData": {
+                "context": "{{props.subPanelContext.tabs[0].input}}"
+            },
+            "outputData": {
+                "attachments": "attachments",
+                "attributeGroups": "attributeGroups",
+                "forms": "forms",
+                "allDataProvidersPopulated": "allDataProvidersPopulated"
+            },
+            "deps": "js/services/ngpInformationService"
+        },
+        "initOverviewDataProvider": {
+            "actionType": "dataProvider",
+            "method": "overviewDataProvider"
+        },
+        "initAttachmentsDataProvider": {
+            "actionType": "dataProvider",
+            "method": "attachmentsDataProvider"
+        },
+        "initAgsDataProvider": {
+            "actionType": "dataProvider",
+            "method": "attributeGroupsDataProvider"
+        },
+        "initFormsDataProvider": {
+            "actionType": "dataProvider",
+            "method": "formsDataProvider"
+        },
+        "updateSelectionNgpAttachmentsAgsFormsListsPort": {
+            "actionType": "Sync",
+            "inputData": {
+                "port": "selection_ngpAttachmentsAgsFormsLists",
+                "syncObject": "{{data.eventData.selectedObjects}}"
+            }
+        },
+        "clearPreviousSelectedListItem": {
+            "actionType": "JSFunction",
+            "method": "keepSelectionInOneDataProvider",
+            "inputData": {
+                "dataProviders": ["{{data.dataProviders.overviewDataProvider}}", "{{data.dataProviders.attachmentsDataProvider}}", "{{data.dataProviders.attributeGroupsDataProvider}}", "{{data.dataProviders.formsDataProvider}}"],
+                "selectedObject": "{{data.eventData.selectedObjects}}"
+            },
+            "deps": "js/services/ngpInformationService"
+        },
+        "selectOverview": {
+            "actionType": "JSFunction",
+            "method": "setSelection",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.overviewDataProvider}}",
+                "objectsToSelect": "{{props.subPanelContext.tabs[0].input}}"
+            },
+            "deps": "js/mfeSyncUtils"
+        },
+        "selectNewlyCreatedAG": {
+            "actionType": "JSFunction",
+            "method": "setSelection",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.attributeGroupsDataProvider}}",
+                "objectsToSelect": "{{data.eventMap['ngp.AGCreated'].createdAG}}"
+            },
+            "deps": "js/mfeSyncUtils"
+        },
+        "handleSelectionAndSynchronization": {
+            "actionType": "batchJob",
+            "steps": [{
+                    "action": "clearPreviousSelectedListItem"
+                },
+                {
+                    "action": "updateSelectionNgpAttachmentsAgsFormsListsPort"
+                }
+            ]
+        },
+        "removeFromAttributeGroupsDataProvider": {
+            "actionType": "JSFunction",
+            "method": "removeFromDataProvider",
+            "inputData": {
+                "uidsToRemove": "{{data.eventMap['ngp.removedRelation'].removedRelationOf}}",
+                "dataProvider": "{{data.dataProviders.attributeGroupsDataProvider}}"
+            },
+            "deps": "js/mfeTableService"
+        },
+        "removeFromAttachmentsDataProvider": {
+            "actionType": "JSFunction",
+            "method": "removeFromDataProvider",
+            "inputData": {
+                "uidsToRemove": "{{data.eventMap['ngp.removedRelation'].removedRelationOf}}",
+                "dataProvider": "{{data.dataProviders.attachmentsDataProvider}}"
+            },
+            "deps": "js/mfeTableService"
+        },
+        "addAttributeGroupsToDataProvider": {
+            "actionType": "JSFunction",
+            "method": "addToDataProvider",
+            "inputData": {
+                "objUidToAddList": [ "{{data.eventMap['ngp.AGCreated'].createdAG.uid}}"],
+                "dataProvider": "{{data.dataProviders.attributeGroupsDataProvider}}"
+            },
+            "deps": "js/mfeTableService"
+        },
+        "postRemoveRelation": {
+            "actionType": "batchJob",
+            "steps": [{
+                    "action": "removeFromAttributeGroupsDataProvider"
+                },
+                {
+                    "action": "removeFromAttachmentsDataProvider"
+                },
+                {
+                    "action": "selectOverview"
+                }
+            ]
+        },
+        "postCreateAG": {
+            "actionType": "batchJob",
+            "steps": [{
+                    "action": "addAttributeGroupsToDataProvider"
+                },
+                {
+                    "action":"selectNewlyCreatedAG"
+                }
+            ]
+        },
+        "addNewDatasetToDataProvider": {
+            "actionType": "JSFunction",
+            "method": "addToDataProvider",
+            "inputData": {
+                "objUidToAddList": ["{{data.eventMap['ngp.datasetCreated'].dataset.uid}}"],
+                "dataProvider": "{{data.dataProviders.attachmentsDataProvider}}",
+                "selectAddedObjects": true
+            },
+            "deps": "js/mfeTableService"
+        }
+    },
+    "dataProviders": {
+        "overviewDataProvider": {
+            "dataProviderType": "Static",
+            "response": ["{{props.subPanelContext.tabs[0].input}}"],
+            "totalFound": 1,
+            "selectionModelMode": "single"
+        },
+        "attachmentsDataProvider": {
+            "dataProviderType": "Static",
+            "response": "{{data.attachments}}",
+            "totalFound": "{{data.attachments.length}}",
+            "selectionModelMode": "single"
+        },
+        "attributeGroupsDataProvider": {
+            "dataProviderType": "Static",
+            "response": "{{data.attributeGroups}}",
+            "totalFound": "{{data.attributeGroups.length}}",
+            "selectionModelMode": "single"
+        },
+        "formsDataProvider": {
+            "dataProviderType": "Static",
+            "response": "{{data.forms}}",
+            "totalFound": "{{data.forms.length}}",
+            "selectionModelMode": "single"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "loadDataForAttachmentsAgsForms",
+        "onUpdate": {
+            "action": "loadDataForAttachmentsAgsForms",
+            "observers": [ "props.subPanelContext.tabs.0.input" ]
+        }
+    },
+    "onEvent": [{
+            "eventId": "attachmentsDataProvider.selectionChangeEvent",
+            "action": "handleSelectionAndSynchronization",
+            "condition": "selectedObjects.length !== 0",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "attributeGroupsDataProvider.selectionChangeEvent",
+            "action": "handleSelectionAndSynchronization",
+            "condition": "selectedObjects.length !== 0",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "formsDataProvider.selectionChangeEvent",
+            "action": "handleSelectionAndSynchronization",
+            "condition": "selectedObjects.length !== 0",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "overviewDataProvider.selectionChangeEvent",
+            "action": "handleSelectionAndSynchronization",
+            "condition": "selectedObjects.length !== 0",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "ngp.removedObjects",
+            "action": "selectOverview",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "ngp.removedRelation",
+            "action": "postRemoveRelation",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "ngp.AGCreated",
+            "action": "postCreateAG",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "ngp.datasetCreated",
+            "action": "addNewDatasetToDataProvider",
+            "cacheEventData": true
+        }
+
+    ],
+    "i18n": {
+        "overview": ["ngpInformationMessages"],
+        "attachments": ["ngpInformationMessages"],
+        "attributeGroups": ["ngpInformationMessages"],
+        "forms": ["ngpInformationMessages"]
+    }
+}

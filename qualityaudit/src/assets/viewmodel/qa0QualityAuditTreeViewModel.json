@@ -1,0 +1,248 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],   
+    "ctx": {
+        "sublocation": {
+            "type": "object"
+        }
+    }, 
+    "actions": {
+        "loadColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableColumns",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.auditTreeDataProvider}}",
+                "data": "{{data}}"          
+            },   
+            "outputData": {
+                "dataProviders.auditTreeDataProvider.columnConfig": "columnConfig"
+            },         
+            "deps": "js/qa0AuditChecklistTreeService"
+        },        
+        "loadData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableData",
+            "inputData": {
+                "treeLoadInput": "request.treeLoadInput",
+                "dataProvider": "{{data.dataProviders.auditTreeDataProvider}}",
+                "delayTimeTree": "{{data.delayTimeTree}}",
+                "maxTreeLevel": "{{data.maxTreeLevel}}",
+                "searchSortCriteria": "{{data.columnProviders.checklistColumnProvider.sortCriteria}}"
+            },
+            "outputData": {
+                "totalFound": "result.treeLoadResult.totalChildCount",
+                "totalLoaded": "result.treeLoadResult.childNodes.length",
+                "searchResults": "result.treeLoadResult.childNodes",
+                "treeLoadResult": "result.treeLoadResult" 
+            },
+            
+            "deps": "js/qa0AuditChecklistTreeService"
+        },       
+        "loadProperties": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTreeTableProperties",
+            "inputData": {
+                "propertyLoadInput": "request.propertyLoadInput",
+                "delayTimeProperty": "{{data.delayTimeProperty}}"
+            },           
+            "deps": "js/qa0AuditChecklistTreeService"
+        },
+        "updateSelectionInPWA": {
+            "actionType": "JSFunction",
+            "method": "processPWASelection",
+            "inputData": {
+                "data": "{{data}}",
+                "selectionModel": "{{data.dataProviders.auditTreeDataProvider.selectionModel}}"
+            },
+            "deps": "js/qa0AuditChecklistTreeService"
+        },       
+        "closePanel": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [ {
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            }
+        },       
+        "updateDisplayNames": {
+            "actionType": "JSFunction",
+            "method": "updateDisplayNames",
+            "inputData": {
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/objectNavigationTreeService"
+        },
+        "preProcessForDecorators": {
+            "actionType": "JSFunction",
+            "method": "filterObjectsForDecorators",
+            "inputData": {
+                "treeNodes": "{{data.dataProviders.auditTreeDataProvider.viewModelCollection.loadedVMObjects}}",         
+                "modifiedObjects": "{{data.eventData.modifiedObjects}}"
+            },
+            "outputData": {
+                "filteredTreeNodes": "result.filteredTreeNodes",
+                "filteredModifiedObject": "result.filteredModifiedObject"
+            },
+            "events": {
+                "success": [ {
+                    "name": "processObjectsForDecorators"
+                } ]
+            },
+            "deps": "js/qa0AuditUtils"
+        },
+        "setDecoratorStylesOnModifiedObjects": {
+           "actionType": "JSFunction",
+           "method": "setDecoratorStylesOnModifiedObjects",
+           "inputData": {
+                "vmos": "{{data.filteredTreeNodes}}",
+                "modifiedObjects": "{{data.filteredModifiedObject}}"
+           },
+           "deps": "js/qa0AuditChecklistTreeService"
+        },
+        "postFindingCreationAction": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "clearRegisterContext"
+                },
+                {
+                    "action": "updateFindingsInTree"                    
+                }
+            ]
+        },
+        "clearRegisterContext":{
+            "actionType": "JSFunction",
+            "method": "clearRegisterContext",
+            "inputData": {
+                "context": "appCreateChangePanel"
+            },
+            "deps": "js/qa0AuditUtils"
+        },
+        "updateFindingsInTree": {
+            "actionType": "JSFunction",
+            "method": "updateFindings",
+            "inputData": {
+                "eventData": "{{data.eventData}}",
+                "auditTreeDataProvider": "{{data.dataProviders.auditTreeDataProvider}}"
+            },
+            "deps": "js/qa0AuditChecklistTreeService"
+        },
+        "removeFindingsFromTree": {
+            "actionType": "JSFunction",
+            "method": "removeFindingsFromTree",
+            "inputData": {
+                "eventData": "{{data.eventData}}",
+                "auditTreeDataProvider": "{{data.dataProviders.auditTreeDataProvider}}"
+            },
+            "deps": "js/qa0AuditChecklistTreeService"
+        }
+    },
+    "data": {
+        "delayTimeTree": {
+            "displayName": "",
+            "type": "INTEGER",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "20",
+            "dispValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        },
+        "maxTreeLevel": {
+            "displayName": "",
+            "type": "INTEGER",
+            "isRequired": "false",
+            "isEditable": "true",
+            "dbValue": "100",
+            "dispValue": "",
+            "labelPosition": "PROPERTY_LABEL_AT_SIDE"
+        },
+        "qa0TreeColumnName": {
+            "uiValue": "{{i18n.qa0TreeColumnName}}",
+            "type": "STRING"
+        }
+    },
+    "dataProviders": {
+        "auditTreeDataProvider": {
+            "action": "loadData",
+            "initializeAction": "loadData",
+            "nextAction": "loadData",
+            "previousAction": "loadData",            
+            "treeLoadResult": "action.result.treeLoadResult",
+            "selectionModelMode": "multiple",
+            "treePageSize": 100,
+            "inputData": {
+                "accessMode": "tree",
+                "selectionModel": "{{subPanelContext.selectionModel}}"
+            },
+            "commandsAnchor": "com.siemens.splm.clientfx.tcui.commands.modelObjectObjectNavigationCellListActionCommands"
+        },
+        "checklistPropertyProvider": {
+            "action": "loadProperties",
+            "propertyLoadResult": "action.result.propertyLoadResult"
+        }
+    },
+    "columnProviders": {
+        "checklistColumnProvider": {
+            "loadColumnAction": "loadColumns",
+            "columns": "{{auditTreeDataProvider.columnConfig.columns}}",            
+            "soaEnabled": false,
+            "sortCriteria": "{{ctx.sublocation.sortCriteria}}"
+        }
+    },
+    "grids": {
+        "qualityAuditTree": {
+            "dataProvider": "auditTreeDataProvider",
+            "propertyProvider": "checklistPropertyProvider",
+            "columnProvider": "checklistColumnProvider",
+            "addIconColumn": false,           
+            "gridOptions": {                
+                "enableGridMenu": true,
+                "enablePinning": false
+            }
+        }
+    },
+    "i18n": {
+        "qa0TreeColumnName": [
+            "qualityauditMessages"
+        ]
+    },
+    "onEvent": [ {
+            "eventId": "processPWASelection",
+            "cacheEventData": true,
+            "action": "updateSelectionInPWA"
+        },       
+        {
+            "eventId": "qa0.removeFindingSuccessEvent",
+            "cacheEventData": true,
+            "action": "removeFindingsFromTree"
+        },
+        {
+            "eventId": "createchangePanel.fireEventsAfterCreateOperation",
+            "cacheEventData": true,
+            "action": "postFindingCreationAction"
+        },
+        {
+            "eventId": "cdm.modified",
+            "cacheEventData": true,
+            "action": "preProcessForDecorators"
+        },
+        {
+            "eventId": "auditTreeDataProvider.modelObjectsUpdated",
+            "cacheEventData": true,
+            "action": "updateDisplayNames"
+        },        
+        {
+            "eventId": "vmc.modified.auditTreeDataProvider",
+            "cacheEventData": true,
+            "action": "updateDisplayNames"
+        },
+        {
+            "eventId": "processObjectsForDecorators",
+            "action": "setDecoratorStylesOnModifiedObjects"
+        }
+    ]
+}

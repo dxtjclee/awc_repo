@@ -1,0 +1,180 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "lifecycleHooks": {
+    },
+
+    "actions": {
+        "changesDoneByOthersAction": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "keepChangesDoneByOthersInfoInSessionStorage"
+                },
+                {
+                    "action": "navigateToChangesDoneByOthers",
+                    "condition": "data.showOthersChangesReport === true"
+                }
+            ]
+        },
+        "keepChangesDoneByOthersInfoInSessionStorage": {
+            "actionType": "JSFunction",
+            "method": "keepChangesDoneByOthersInfoInSessionStorage",
+            "inputData": {
+                "conflictingRequirementUIDs": "{{subPanelContext.conflictingRequirementUIDs}}"
+            },
+            "outputData": {
+                "showOthersChangesReport": ""
+            },
+            "deps": "js/Arm0SaveConflictErrorService"
+        },
+        "navigateToChangesDoneByOthers": {
+            "actionType": "Navigate",
+            "navigateTo": "#/RequirementCompareReport",
+            "navigateIn": "newTab",
+            "navigationParams": {
+                "locale": "changesDoneByOthers"
+            }
+        },
+        "yourUnsavedChangesAction": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "keepYourUnsavedChangesInfoInSessionStorage"
+                },
+                {
+                    "action": "navigateToYourUnsavedChangesAction",
+                    "condition": "data.showUnsavedChangesReport === true"
+                }
+            ]
+        },
+        "keepYourUnsavedChangesInfoInSessionStorage": {
+            "actionType": "JSFunction",
+            "method": "keepYourUnsavedChangesInfoInSessionStorage",
+            "inputData": {
+                "conflictingRequirementUIDs": "{{subPanelContext.conflictingRequirementUIDs}}"
+            },
+            "outputData": {
+                "showUnsavedChangesReport": ""
+            },
+            "deps": "js/Arm0SaveConflictErrorService"
+        },
+        "navigateToYourUnsavedChangesAction": {
+            "actionType": "Navigate",
+            "navigateTo": "#/RequirementCompareReport",
+            "navigateIn": "newTab",
+            "navigationParams": {
+                "locale": "yourUnsavedChanges"
+            }
+        },
+
+        "closePopupWindow": {
+            "actionType": "JSFunction",
+            "method": "hide",
+            "inputData": {
+                "popupId": "{{data.popupId}}",
+                "targetEvent": "{{$event}}"
+            },
+            "deps": "js/popupService"
+        },
+        "saveButtonAction": {
+            "actionType": "JSFunction",
+            "method": "createUpdateContents",
+            "deps": "js/Arm0RequirementDocumentationACEEditor",
+            "inputData": {
+                "commandContext": "",
+                "doOverWriteContent": true
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0SaveConflictErrorPopup.closePopupWindow"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "Arm0SaveConflictErrorPopup.closePopupWindow"
+                    }
+                ]
+            }
+        }
+    },
+    "data": {
+        "changesDoneByOthersProp": {
+            "displayName": "{{i18n.changesDoneByOthersLabel}}",
+            "type": "STRING"
+        },
+        "yourUnsavedChangesProp": {
+            "displayName": "{{i18n.yourUnsavedChangesLabel}}",
+            "type": "STRING"
+        }
+    },
+    "messages": {
+        "showSaveConflictErrorConflictTitleMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.showSaveConflictErrorConflictTitleMessage}}",
+            "messageTextParams": [
+            ]
+        },
+        "showSaveConflictErrorConflictMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.showSaveConflictErrorMessage}}",
+            "messageTextParams": [
+                "{{subPanelContext.conflictingRequirementNames}}",
+                "{{subPanelContext.conflictingUsers}}"
+            ]
+        },
+        "showSaveConflictErrorOverwriteMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.showSaveConflictErrorOverwriteMessage}}"
+        },
+        "showSaveConflictErrorLinkMessage": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.showSaveConflictErrorLinkMessage}}",
+            "messageTextParams": [
+            ],
+            "messageTextLinks": [
+                {
+                    "prop": "data.changesDoneByOthersProp",
+                    "action": "changesDoneByOthersAction"
+                },
+                {
+                    "prop": "data.yourUnsavedChangesProp",
+                    "action": "yourUnsavedChangesAction"
+                }
+            ]
+        }
+    },
+    "functions": {
+    },
+    "onEvent": [
+        {
+            "eventId": "Arm0SaveConflictErrorPopup.closePopupWindow",
+            "action": "closePopupWindow"
+        }
+    ],
+    "i18n": {
+        "changesDoneByOthersLabel": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "yourUnsavedChangesLabel": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "showSaveConflictErrorConflictTitleMessage": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "showSaveConflictErrorMessage": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "showSaveConflictErrorOverwriteMessage": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "showSaveConflictErrorLinkMessage": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "overWriteLabel": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "cancel": [
+            "ZeroCompileCommandMessages"
+        ]
+    }
+}

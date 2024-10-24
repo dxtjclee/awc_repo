@@ -1,0 +1,47 @@
+<div class="sw-row flex-grow">
+    <div class="sw-column w-8">
+        <aw-panel-section class="aw-viewmanagement-viewSeedSection" caption="i18n.evm1Seeds" collapsed="false">
+            <div class="sw-row justify-right">
+                <aw-command-bar context="{ data: data, recipeState: fields.recipeState }" anchor="evm1_modifySeedSelectionCmd" alignment="HORIZONTAL"></aw-command-bar>
+            </div>
+            <evm1-recipe-seeds-tree sub-panel-context="{selectionData: data.selectionData, selectionModel: selectionModels.seedTreeSelectionModel}" recipe-state="fields.recipeState"></evm1-recipe-seeds-tree>
+        </aw-panel-section>
+    </div>
+    <div class="sw-column w-4">
+        <aw-panel-section class="aw-viewmanagement-viewQuerySection" caption="i18n.inclusionRule" collapsed="false">
+            <div class="sw-row flex-grow" exist-when="fields.recipeState.showConfig">
+                <div class="sw-column flex-grow justify-center">
+                    <aw-label prop="data.configPanelLabel" class="aw-viewmanagement-configurationRow"></aw-label>
+                </div>
+                <div class="sw-column">
+                    <aw-command-bar context="{ data: data, recipeState: fields.recipeState }" anchor="evm1_modifyConfigurationCmd" alignment="HORIZONTAL"></aw-command-bar>
+                </div>
+            </div>
+            <aw-panel-section class="aw-viewmanagement-configSection" exist-when="fields.recipeState.showConfig">
+                <aw-label prop="data.revisionRule"></aw-label>
+                <aw-label prop="data.effecDate" exist-when="data.recipeState.productContextInfo"></aw-label>
+                <aw-label prop="data.effecUnits" exist-when="data.recipeState.productContextInfo"></aw-label>
+                <aw-label prop="data.variantRule" exist-when="data.recipeState.productContextInfo"></aw-label>
+            </aw-panel-section>
+            <aw-label prop="data.closureRuleValuesLabel"></aw-label>
+            <aw-widget class="aw-viewmanagement-closureRule" prop="data.closureRuleValues" max-row-count="5" labeldisplay="Headless"></aw-widget>
+        </aw-panel-section>
+    </div>
+</div>
+<div class="sw-row justify-center aw-viewmanagement-showResultsStyle">
+    <div class="sw-column justify-top">
+        <aw-checkbox prop="data.inContext" exist-when="conditions.isInScopeNavCheckboxVisible"></aw-checkbox>
+    </div>
+    <div class="sw-column justify-top">
+        <aw-button size="auto" action="generateShowResultTable" enable-when="conditions.hasViewManagementLicense && !conditions.isRecipeExecuting">
+            <aw-i18n>i18n.showResults</aw-i18n>
+        </aw-button>
+    </div>
+</div>
+<div class="sw-row">
+    <div class="sw-column flex-grow">
+        <aw-panel-section caption="i18n.results" class="aw-viewmanagement-resultsSection" collapsed="false">
+            <evm1-recipe-table sub-panel-context="{parentSelectionData: subPanelContext.selectionData, selectionData: data.selectionData, selectionModels: selectionModels}" recipe-state="fields.recipeState"></evm1-recipe-table>
+        </aw-panel-section>
+    </div>
+</div>

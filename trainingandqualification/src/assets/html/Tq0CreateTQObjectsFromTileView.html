@@ -1,0 +1,22 @@
+<aw-command-panel caption="i18n.add" context="subPanelContext">
+    <div class="aw-layout-flexColumn" >
+        <aw-add
+            include-types="{{ctx.panelContext.includeTypes}}"  
+            visible-tabs="new"
+            type-filter = "{{ctx.panelContext.includeTypes}}" 
+            load-sub-types="true"
+            auto-select-on-unique-type="true"
+            add-panel-state="fields.addPanelState"
+            active-state="data.activeState"
+            xrt-state="data.xrtState"
+            edit-handler="editHandlers.addPanelEditHandler">
+        </aw-add>
+        <aw-panel-footer>
+
+        <aw-button size="auto" default="true" action="createtqObjects" enable-when="formProp.attributes.valid" visible-when="conditions.isNewTabAddButtonVisible">
+                <aw-i18n>i18n.add</aw-i18n>
+            </aw-button>
+        </aw-panel-footer>
+    </div>
+    <aw-add-navigate active-state="data.activeState" action="actions.setActiveView"></aw-add-navigate>
+</aw-command-panel>

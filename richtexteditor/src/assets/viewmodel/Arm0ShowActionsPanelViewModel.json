@@ -1,0 +1,633 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-panel.directive",
+        "js/aw-list.directive",
+        "js/aw-include.directive"
+    ],
+    "actions": {
+        "reveal": {
+            "actionType": "JSFunction",
+            "method": "updateOptions",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "actionItems": "actionItemsList",
+                "pasteOptions":"pasteOptions"
+            },
+            "events": {
+                "success": [ {
+                    "name": "requirementDocumentation.refreshOptions"
+                },
+                {
+                    "name": "Arm0ShowActionsPanel.updateHeight"
+                }
+
+            ]
+            },
+            "deps": "js/Arm0ShowActionsPanelView"
+        },
+        "updateHeight":{
+            "actionType": "JSFunction",
+            "method": "updateHeight",
+            "inputData":
+            {
+                "data":"{{data}}"
+            },
+            "deps": "js/Arm0ShowActionsPanelView"
+        },
+        "resetPrimaryWorkArea":{
+            "actionType": "JSFunction",
+            "method": "resetPwa",
+            "inputData":
+            {
+            },
+            "deps": "js/Arm0ShowActionsPanelView"
+        },
+        "showFreeeUnfreezePopup": {
+            "actionType": "JSFunction",
+            "method": "activateCommandPanel2",
+            "deps": "js/commandPanel.service",
+            "inputData": {
+                "inputObj": {
+                    "commandId": "Arm0FreezeRevision",
+                    "location": "aw_toolsAndInfo",
+                    "context": {
+                        "selections": ["{{data.eventMap['Arm0ShowActionsPanel.showFreeeUnfreezePopup']}}"]
+                    },
+                    "config": {
+                        "width": "DOUBLEWIDE"
+                    }
+                }
+            }
+        },
+        "CopyCrossReferenceLink":
+        {
+            "actionType": "JSFunction",
+            "method": "pasteObjectDataToLocalStorageForCRL",
+            "inputData": {
+                "ctx": "{{ctx}}"
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "message": "copyCrossReferenceLinkSuccessful"
+                    }
+                ]
+            },
+            "deps": "js/Arm0ShowActionsPanelView"
+        },
+        "updateOptions": {
+            "actionType": "dataProvider",
+            "method": "actionsList"
+        },
+        "handleCommandSelection": {
+            "actionType": "JSFunction",
+            "method": "handleCommandSelection",
+            "inputData": {
+                "data": "{{data}}",
+                "selectedObject": "{{data.eventData}}",
+                "ctx":"{{ctx}}"
+            },
+            "deps": "js/Arm0ShowActionsPanelView"
+        },
+        "pasteObject": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceBom-2019-06-OccurrenceManagement",
+            "method": "addObject2",
+            "inputData": {
+                "input": {
+                    "siblingElement": "",
+                    "inputCtxt": {
+                        "productContext": "{{ctx.aceActiveContext.context.productContextInfo}}"
+                    },
+                    "parentElement": "{{data.mselected}}",
+                    "objectsToBeAdded":
+                        "{{data.objectFromClipboard}}"
+                    ,
+                    "numberOfElements": 1
+                }
+            },
+            "outputData": {
+                "addElementResponse": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.closeExistingBalloonPopup"
+                    },
+                    {
+                        "name": "resetDocumentationTab"
+                    },
+                    {
+                        "name": "Arm0ShowActionsPanel.resetPrimaryWorkArea"
+                    },
+                    {
+                        "name": "aceElementsSelectionUpdatedEvent",
+                        "eventData": {
+                            "objectsToSelect": [
+                                {
+                                    "uid": "{{data.addElementResponse.newElementInfos[0].childElement.uid}}",
+                                    "viewToReact": "{{props.subPanelContext.provider.contextKey}}"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "name": "requirementDocumentation.refreshDocPageOnMove"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "requirementDocumentation.closeExistingBalloonPopup"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "message": "handlePartialError"
+                    }
+                ]
+            }
+        },
+        "copyObjectToClipboard": {
+            "actionType": "JSFunction",
+            "method": "copyObjectToClipboard",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.closeExistingBalloonPopup"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [ {
+                    "condition": "(ctx.rmselected && ctx.rmselected.length === 1)",
+                    "message": "copySingleSuccessful"
+                },
+                {
+                    "condition": "(ctx.rmselected && ctx.rmselected.length > 1)",
+                    "message": "copyMultipleSuccessful"
+                }
+            ]
+            },
+            "deps": "js/Arm0ShowActionsPanelView"
+        },
+        "pasteObjectFromClipboard": {
+            "actionType": "JSFunction",
+            "method": "pasteObject",
+            "inputData": {
+                "data": "{{data}}",
+                "selectedRow": "{{data.eventData}}"
+            },
+            "outputData": {
+                "objectFromClipboard": "objectFromClipboard",
+                "mselected":"mselected"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.pasteObject"
+                    }
+                ]
+            },
+            "deps": "js/Arm0ShowActionsPanelView"
+        },
+        "closeExistingBalloonPopup": {
+            "actionType": "JSFunction",
+            "method": "closeExistingBalloonPopup",
+            "inputData": {},
+            "events": {
+                "success": [
+                    {
+                        "name": "showActionPopup.close"
+                    }
+                ]
+            },
+            "deps": "js/Arm0ShowActionsPanelView"
+        },
+        "closePopupWindow": {
+            "actionType": "JSFunction",
+            "method": "close",
+            "inputData": {},
+            "deps": "js/declpopupService"
+        },
+        "resetDocumentationTab": {
+            "actionType": "JSFunction",
+            "method": "fireResetDocViewEvent",
+            "inputData": {},
+            "deps": "js/Arm0ShowActionsPanelView"
+        },
+        "moveObject": {
+            "actionType": "JSFunction",
+            "method": "createInputForMoveOperation",
+            "deps": "js/Arm0ShowActionsPanelView",
+            "inputData": {
+                "data": "{{data}}",
+                "selectedRow": "{{data.eventData}}"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "MoveCommandsRequirement.MoveOperation"
+                    }
+                ]
+            }
+        },
+        "addMovedObjectInTree": {
+            "actionType": "JSFunction",
+            "method": "addMovedObjectInTree",
+            "deps": "js/moveCommandsRequirement",
+            "inputData": {
+                "data": "{{data}}"
+            }
+        },
+        "MoveOperation": {
+            "actionType": "JSFunctionAsync",
+
+            "method": "moveSelectedOccurrences",
+            "inputData": {
+                "soaInput": {
+                    "input": [ {
+                        "clientId": "ActiveWorkspaceClient",
+                        "operation": "{{data.operationType}}",
+                        "selectedElement": "{{data.newSelectedObject}}",
+                        "productContext": "{{ctx.occmgmtContext.productContextInfo}}",
+                        "inputContext": "{{function:getInputContext}}"
+                    } ]
+                }
+            },
+            "deps": "js/moveCommandsRequirement",
+            "outputData": {
+                "moveOccSoaResponse": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.replaceWidgetOnMove",
+                        "eventData": {
+                                "operationType": "{{data.operationType}}",
+                                "siblingArray":"{{data.moveOccSoaResponse.newElementInfos}}",
+                                "createdElement":"{{data.moveOccSoaResponse.ServiceData.created}}",
+                                "modelObjects":"{{data.moveOccSoaResponse.ServiceData.modelObjects}}",
+                                "movedObject":"{{data.newSelectedObject}}"
+                        }
+                    },
+                    {
+                        "name": "MoveCommandsRequirement.addMovedObjectInTree"
+                    },
+                    {
+                        "name": "requirementDocumentation.closeExistingBalloonPopup"
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "requirementDocumentation.closeExistingBalloonPopup"
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "message": "handlePartialError"
+                    }
+                ]
+            }
+        },
+        "freezeObject": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2019-06-RequirementsManagement",
+            "method": "getFullTextVersionInfo",
+            "inputData": {
+                "inputs": [
+                    {
+                        "operationType": "DERIVED",
+                        "selectedObjects": "{{ctx.rmselected}}"
+                    }
+                ]
+            },
+            "outputData": {
+                "response": ""
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "requirementDocumentation.openFreezeRevisionPanel"
+                    },
+                    {
+                        "name": "requirementDocumentation.closeExistingBalloonPopup"
+                    }
+                ]
+            }
+        },
+        "navigateToFreezeObjectPanel": {
+            "actionType": "JSFunction",
+            "method": "activateCommandPanel2",
+            "deps": "js/commandPanel.service",
+            "inputData": {
+                "inputObj": {
+                    "commandId": "Arm0FreezeRevision",
+                    "location": "aw_toolsAndInfo",
+                    "context": {
+                        "selections": "{{ctx.rmselected}}"
+                    },
+                    "config": {
+                        "width": "DOUBLEWIDE"
+                    }
+                }
+            }
+        },
+        "unfreezeObject":{
+            "actionType": "JSFunction",
+            "method": "unfreezeObject",
+            "inputData": {
+                "ctx": "{{ctx}}"
+            },
+            "deps": "js/reuseRequirementService"
+        },
+        "overwriteObject":{
+            "actionType": "JSFunction",
+            "method": "overwriteObject",
+            "inputData": {
+                "ctx": "{{ctx}}"
+            },
+            "deps": "js/reuseRequirementService"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "reveal"
+    },
+    "data": {
+        "actionItems": {
+            "isArray": "true",
+            "dbValue": [
+                {
+                    "displayName": "{{i18n.removeCommand}}",
+                    "internalName": "Remove",
+                    "iconURL": "",
+                    "iconId" : "cmdRemove"
+                },
+                {
+                    "displayName": "{{i18n.copyCommand}}",
+                    "internalName": "Copy",
+                    "iconURL": "",
+                    "iconId" : "cmdCopy"
+                },
+                {
+                    "displayName": "{{i18n.moveUpCommandTitle}}",
+                    "internalName": "Move Up",
+                    "iconURL": "",
+                    "iconId" : "cmdMoveUp"
+                },
+                {
+                    "displayName": "{{i18n.moveDownCommandTitle}}",
+                    "internalName": "Move Down",
+                    "iconURL": "",
+                    "iconId" : "cmdMoveDown"
+                },
+                {
+                    "displayName": "{{i18n.promoteCommandTitle}}",
+                    "internalName": "Promote",
+                    "iconURL": "",
+                    "iconId" : "cmdPromote"
+                },
+                {
+                    "displayName": "{{i18n.demoteCommandTitle}}",
+                    "internalName": "Demote",
+                    "iconURL": "",
+                    "iconId" : "cmdDemote"
+                },
+                {
+                    "displayName": "{{i18n.freeze}}",
+                    "internalName": "Freeze",
+                    "iconURL": "",
+                    "iconId" : "cmdFreeze"
+                },
+                {
+                    "displayName": "{{i18n.unfreeze}}",
+                    "internalName": "Unfreeze",
+                    "iconURL": "",
+                    "iconId" : "cmdUnfreeze"
+                },
+                {
+                    "displayName": "{{i18n.overWrite}}",
+                    "internalName": "Overwrite",
+                    "iconURL": "",
+                    "iconId" : "cmdOverwrite"
+                },
+                {
+                    "displayName": "{{i18n.crossReferenceTitle}}",
+                    "internalName": "Cross Reference",
+                    "iconURL": "",
+                    "iconId" : "cmdReference"
+                }
+            ]
+        },
+        "pasteOptions": {
+            "options": [
+                {
+                    "displayName": "{{i18n.pasteAsChildCommand}}",
+                    "internalName": "Paste As Child",
+                    "iconURL": "",
+                    "iconId" : "cmdPaste"
+                },
+                {
+                    "displayName": "{{i18n.pasteAsSiblingCommand}}",
+                    "internalName": "Paste As Sibling",
+                    "iconURL": "",
+                    "iconId" : "cmdPaste"
+                }
+            ]
+        }
+    },
+    "messages": {
+        "copySingleSuccessful": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.copySingleSuccessful}}",
+            "messageTextParams": [
+                "{{data.copiedObjectName}}"
+            ]
+        },
+        "copyMultipleSuccessful": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.copyMultipleSuccessful}}",
+            "messageTextParams": [
+                "{{ctx.rmselected.length}}"
+            ]
+        },
+        "copyCrossReferenceLinkSuccessful": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.copyCrossReferenceLinkSuccessful}}"
+        },
+        "handlePartialError": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "functions": {
+        "getInputContext": {
+            "functionName": "getInputContext",
+            "parameters": [
+                "{{ctx}}"
+            ]
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "MoveCommandsRequirement.addMovedObjectInTree",
+            "action": "addMovedObjectInTree"
+        },
+        {
+            "eventId": "requirementDocumentation.refreshOptions",
+            "action": "updateOptions"
+        },
+        {
+            "eventId": "requirementDocumentation.copyObjectCommand",
+            "cacheEventData": true,
+            "action": "copyObjectToClipboard"
+        },
+        {
+            "eventId": "requirementDocumentation.pasteObjectCommand",
+            "cacheEventData": true,
+            "action": "pasteObjectFromClipboard"
+        },
+        {
+            "eventId": "requirementDocumentation.closeExistingBalloonPopup",
+            "cacheEventData": true,
+            "action": "closeExistingBalloonPopup"
+        },
+        {
+            "eventId": "requirementDocumentation.pasteObject",
+            "cacheEventData": true,
+            "action": "pasteObject"
+        },
+        {
+            "eventId": "resetDocumentationTab",
+            "cacheEventData": true,
+            "action": "resetDocumentationTab"
+        },
+        {
+            "eventId": "requirementDocumentation.moveCommand",
+            "cacheEventData": true,
+            "action": "moveObject"
+        },
+        {
+            "eventId": "MoveCommandsRequirement.MoveOperation",
+            "action": "MoveOperation"
+        },
+        {
+            "eventId": "requirements.handleCommandSelection",
+            "cacheEventData": true,
+            "action": "handleCommandSelection"
+        },
+        {
+            "eventId": "requirementDocumentation.FreezeCommand",
+            "cacheEventData": true,
+            "action": "freezeObject"
+        },
+        {
+            "eventId": "requirementDocumentation.openFreezeRevisionPanel",
+            "cacheEventData": true,
+            "action": "navigateToFreezeObjectPanel"
+        },
+        {
+            "eventId": "requirementDocumentation.overwriteCommand",
+            "cacheEventData": true,
+            "action": "overwriteObject"
+        },
+        {
+            "eventId": "Arm0ShowActionsPanel.CopyCrossReferenceLink",
+            "action": "CopyCrossReferenceLink"
+        },
+        {
+            "eventId": "showActionPopup.close",
+            "action": "closePopupWindow"
+        },
+        {
+            "eventId": "Arm0ShowActionsPanel.showFreeeUnfreezePopup",
+            "action": "showFreeeUnfreezePopup"
+        },
+        {
+            "eventId":"Arm0ShowActionsPanel.updateHeight",
+            "action":"updateHeight"
+        },
+        {
+            "eventId":"Arm0ShowActionsPanel.unfreezeObject",
+            "action":"unfreezeObject"
+        },
+        {
+            "eventId":"Arm0ShowActionsPanel.resetPrimaryWorkArea",
+            "action":"resetPrimaryWorkArea"
+        }
+    ],
+    "dataProviders": {
+        "actionsList": {
+            "response": "{{data.actionItems.dbValue}}",
+            "selectionModelMode": "single"
+        }
+    },
+    "i18n": {
+        "removeCommand": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "copyCommand": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "pasteAsChildCommand": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "pasteAsSiblingCommand": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "moveUpCommandTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "moveDownCommandTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "promoteCommandTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "demoteCommandTitle": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "copySingleSuccessful": [
+            "ZeroCompileCommandMessages"
+        ],
+        "copyMultipleSuccessful": [
+            "ZeroCompileCommandMessages"
+        ],
+        "overWrite": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "unfreeze": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "freeze": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "copyCrossReferenceLinkSuccessful": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "removeSingleReqConfirmation": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "removeMultipleReqConfirmation": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "removeTitle": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "cancel": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "crossReferenceTitle": [
+            "RequirementsCommandPanelsMessages"
+        ]
+    }
+}

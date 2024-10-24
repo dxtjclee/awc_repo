@@ -1,0 +1,688 @@
+{
+  "commands": {
+    "RecipeSaveAs": {
+      "iconId": "cmdSaveAs",
+      "title": "{{i18n.RecipeSaveAs}}",
+      "description": "{{i18n.RecipeSaveAsDesc}}"
+    },
+    "evm1cellDelete": {
+      "iconId": "cmdDelete",
+      "title": "{{i18n.removeCell}}",
+      "description": "{{i18n.evm1cellDeleteDesc}}"
+    },
+    "Evm1CreateRecipe": {
+      "iconId": "cmdAdd",
+      "title": "{{i18n.CreateRecipe}}",
+      "description": "{{i18n.Evm1CreateRecipeDesc}}"
+    },
+    "Evm1ExecuteRecipe": {
+      "iconId": "cmdRecipe",
+      "title": "{{i18n.ExecuteRecipe}}",
+      "description": "{{i18n.Evm1ExecuteRecipeDesc}}"
+    },
+    "Evm1ShowRecipe": {
+      "iconId": "cmdRecipe",
+      "isGroup": false,
+      "title": "{{i18n.showRecipe}}",
+      "description": "{{i18n.Evm1ShowRecipeDesc}}"
+    },
+    "Evm1ExportToExcel": {
+      "iconId": "cmdExport",
+      "isGroup": false,
+      "title": "{{i18n.ExportToExcel}}",
+      "hasDialog": true
+    },
+    "RecipeTableViewModeGroup": {
+      "isShuttle": true,
+      "title": "{{i18n.recipeTableView}}"
+    },
+    "RecipeTableViewMode": {
+      "iconId": "cmdTableView",
+      "title": "{{i18n.Evm1ShowTableViewTitle}}"
+    },
+    "RecipeTableTreeViewMode": {
+      "iconId": "cmdTreeView",
+      "title": "{{i18n.Evm1ShowTreeViewTitle}}"
+    },
+    "Evm1RemoveSeedSelection": {
+      "iconId": "cmdRemove",
+      "isGroup": false,
+      "title": "{{i18n.removeCell}}"
+    },
+    "Evm1AddSeedSelection": {
+      "iconId": "cmdAdd",
+      "isGroup": false,
+      "title": "{{i18n.add}}"
+    },
+    "Evm1UpdateConfiguration": {
+      "iconId": "cmdEdit",
+      "isGroup": false,
+      "title": "{{i18n.evm1UpdateBtn}}"
+    }
+  },
+  "commandHandlers": {
+    "saveAsRecipeHandler": {
+      "id": "RecipeSaveAs",
+      "action": "saveAsContext",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.recipeSaveAsCmdVisible"
+      }
+    },
+    "evm1cellDeleteHandler": {
+      "id": "evm1cellDelete",
+      "action": "evm1cellDeleteAction",
+      "activeWhen": {
+        "condition": "conditions.recipeBuilderActive"
+      },
+      "visibleWhen": {
+        "condition": "conditions.recipeBuilderActive"
+      }
+    },
+    "Evm1CreateRecipeHandler": {
+      "id": "Evm1CreateRecipe",
+      "action": "createRecipeAction",
+      "activeWhen": {
+        "condition": "conditions.createRecipeFromBomSelection"
+      },
+      "visibleWhen": {
+        "condition": "conditions.createRecipeFromBomSelection"
+      }
+    },
+    "Evm1ExecuteRecipeHandler": {
+      "id": "Evm1ExecuteRecipe",
+      "action": "executeRecipeAction",
+      "activeWhen": {
+        "condition": "conditions.executeRecipeCommandCondition"
+      },
+      "visibleWhen": {
+        "condition": "conditions.executeRecipeCommandCondition"
+      }
+    },
+    "Evm1ShowRecipeCommandHandler": {
+      "id": "Evm1ShowRecipe",
+      "action": "executeShowRecipeAction",
+      "activeWhen": true,
+      "visibleWhen": true,
+      "enableWhen": {
+        "condition": "conditions.Evm1ShowRecipeCondition"
+      }
+    },
+    "Evm1OpenAwb0ElementCommandHandler": {
+      "id": "Awp0ShowObject",
+      "action": "evm1OpenAwb0Element",
+      "activeWhen": {
+        "condition": "conditions.evm1OpenAwb0ElementCommandActive"
+      },
+      "visibleWhen": {
+        "condition": "conditions.evm1OpenAwb0ElementCommandActive"
+      }
+    },
+    "Evm1OpenAwb0ElementInNewTABCommandHandler": {
+      "id": "Awp0OpenInNewTab",
+      "action": "evm1OpenAwb0ElementInNewTAB",
+      "activeWhen": {
+        "condition": "conditions.evm1OpenAwb0ElementCommandActive"
+      },
+      "visibleWhen": {
+        "condition": "conditions.evm1OpenAwb0ElementCommandActive"
+      }
+    },
+    "Evm1OpenAwb0ElementInNewWindowCommandHandler": {
+      "id": "Awp0OpenInNewWindow",
+      "action": "evm1OpenAwb0ElementInNewWindow",
+      "activeWhen": {
+        "condition": "conditions.evm1OpenAwb0ElementCommandActive"
+      },
+      "visibleWhen": {
+        "condition": "conditions.evm1OpenAwb0ElementCommandActive"
+      }
+    },
+    "Evm1OpenAwb0ElementInRACCommandHandler": {
+      "id": "Awp0OpenInRAC",
+      "action": "evm1OpenAwb0ElementInRAC",
+      "activeWhen": {
+        "condition": "conditions.evm1OpenAwb0ElementCommandActive"
+      },
+      "visibleWhen": {
+        "condition": "conditions.evm1OpenAwb0ElementCommandActive"
+      }
+    },
+    "Evm1SaveAsAwb0ElementCommandHandler": {
+      "id": "Awp0ShowSaveAs",
+      "action": "",
+      "activeWhen": {
+        "condition": "conditions.evm1SaveAsAwb0ElementCommandActive"
+      },
+      "visibleWhen": false
+    },
+    "Evm1ReviseAwb0ElementCommandHandler": {
+      "id": "Awp0ShowRevise",
+      "action": "",
+      "activeWhen": {
+        "condition": "conditions.evm1ReviseAwb0ElementCommandActive"
+      },
+      "visibleWhen": false
+    },
+    "Evm1AddChildCommandHandler": {
+      "id": "Awb0AddChildElementDeclarative",
+      "action": "",
+      "activeWhen": {
+        "condition": "conditions.evm1AceCommandActive"
+      },
+      "visibleWhen": false
+    },
+    "Evm1AddSiblingCommandHandler": {
+      "id": "Awb0AddSiblingElementDeclarative",
+      "action": "",
+      "activeWhen": {
+        "condition": "conditions.evm1AceCommandActive"
+      },
+      "visibleWhen": false
+    },
+    "Evm1SaveWorkingContextCommandHandler": {
+      "id": "Awb0SaveWorkingContext",
+      "action": "",
+      "activeWhen": {
+        "condition": "conditions.evm1AceCommandActive"
+      },
+      "visibleWhen": false
+    },
+    "Evm1CopyCommandHandler": {
+      "id": "Awp0Copy",
+      "action": "copyUnderlyingObject",
+      "activeWhen": {
+        "condition": "conditions.evm1CopyProxyCommandActive"
+      },
+      "visibleWhen": {
+        "condition": "conditions.evm1CopyProxyCommandActive"
+      }
+    },
+    "Evm1CopyCtxMenuCommandHandler": {
+      "id": "Awp0CopyContextMenu",
+      "action": "copyUnderlyingObject",
+      "activeWhen": {
+        "condition": "conditions.evm1CopyProxyCommandActive"
+      },
+      "visibleWhen": {
+        "condition": "conditions.evm1CopyProxyCommandActive"
+      }
+    },
+    "Evm1ExportToExcelCommandHandler": {
+      "id": "Evm1ExportToExcel",
+      "action": "Evm1ExportToExcelAction",
+      "activeWhen": {
+        "condition": "conditions.evm1ExportToExcelComandActive"
+      },
+      "visibleWhen": {
+        "condition": "conditions.evm1ExportToExcelComandActive"
+      }
+    },
+    "RecipeTableViewMode": {
+      "id": "RecipeTableViewMode",
+      "action": "Evm1SwitchToTableView",
+      "activeWhen": {
+        "condition": "conditions.RecipeTableTreeAnchorCommandActive"
+      },
+      "visibleWhen": {
+        "condition": "conditions.RecipeTableTreeAnchorCommandActive"
+      },
+      "selectWhen": {
+        "condition": "conditions.isRecipeResultsTableView"
+      }
+    },
+    "RecipeTableTreeViewMode": {
+      "id": "RecipeTableTreeViewMode",
+      "action": "Evm1SwitchToTreeView",
+      "activeWhen": {
+        "condition": "conditions.RecipeTableTreeAnchorCommandActive"
+      },
+      "visibleWhen": {
+        "condition": "conditions.RecipeTableTreeAnchorCommandActive"
+      },
+      "selectWhen": {
+        "condition": "conditions.isRecipeResultsTreeView"
+      }
+    },
+    "Evm1RemoveSeedSelectionCommandHandler": {
+      "id": "Evm1RemoveSeedSelection",
+      "action": "removeSeedSelectionAction",
+      "activeWhen": true,
+      "visibleWhen": true,
+      "enableWhen": {
+        "condition": "conditions.RemoveSeedSelectionCommandActive"
+      }
+    },
+    "Evm1AddSeedSelectionCommandHandler": {
+      "id": "Evm1AddSeedSelection",
+      "action": "addSeedSelectionAction",
+      "activeWhen": true,
+      "visibleWhen": true,
+      "enableWhen": {
+        "condition": "conditions.Evm1IsRecipeInEditMode"
+      }
+    },
+    "Evm1UpdateConfigurationCommandHandler": {
+      "id": "Evm1UpdateConfiguration",
+      "action": "configPanelUpdateConfirmAction",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.Evm1UpdateConfigurationCommandVisible"
+      },
+      "enableWhen": {
+        "condition": "conditions.Evm1UpdateConfigurationCommandActive"
+      }
+    }
+  },
+  "commandPlacements": {
+    "RecipeSaveAsCommandPlacement": {
+      "id": "RecipeSaveAs",
+      "uiAnchor": "aw_rightWall",
+      "priority": 660,
+      "parentGroupId": "Awp0NewGroup"
+    },
+    "evm1cellDeletePlacement": {
+      "id": "evm1cellDelete",
+      "uiAnchor": "aw_default_cell",
+      "priority": 200,
+      "cellDisplay": {
+        "selected": true,
+        "hover": true,
+        "position": "TOP_RIGHT"
+      }
+    },
+    "evm1CreateRecipePlacement": {
+      "id": "Evm1CreateRecipe",
+      "uiAnchor": "aw_rightWall",
+      "priority": 380,
+      "parentGroupId": "Awp0NewGroup"
+    },
+    "evm1ExecuteRecipePlacement": {
+      "id": "Evm1ExecuteRecipe",
+      "uiAnchor": "aw_rightWall",
+      "priority": 380,
+      "parentGroupId": "Awp0ManageGroup"
+    },
+    "Evm1ShowRecipeCmdPlacement": {
+      "id": "Evm1ShowRecipe",
+      "uiAnchor": "aw_relationsViewer",
+      "priority": 4
+    },
+    "Evm1ExportToExcelCommandPlacement": {
+      "id": "Evm1ExportToExcel",
+      "uiAnchor": "evm1ExportToExcelAnchor",
+      "priority": 100
+    },
+    "RecipeTableViewModeGroup": {
+      "id": "RecipeTableViewModeGroup",
+      "uiAnchor": "RecipeTableTreeAnchor",
+      "priority": 0
+    },
+    "RecipeTableViewMode": {
+      "id": "RecipeTableViewMode",
+      "priority": 100,
+      "parentGroupId": "RecipeTableViewModeGroup"
+    },
+    "RecipeTableTreeViewMode": {
+      "id": "RecipeTableTreeViewMode",
+      "priority": 100,
+      "parentGroupId": "RecipeTableViewModeGroup"
+    },
+    "Evm1RemoveSeedSelectionCommand": {
+      "id": "Evm1RemoveSeedSelection",
+      "uiAnchor": "evm1_modifySeedSelectionCmd",
+      "priority": 100
+    },
+    "Evm1AddSeedSelectionCommand": {
+      "id": "Evm1AddSeedSelection",
+      "uiAnchor": "evm1_modifySeedSelectionCmd",
+      "priority": 300
+    },
+    "Evm1UpdateConfigurationCommandPlacement": {
+      "id": "Evm1UpdateConfiguration",
+      "uiAnchor": "evm1_modifyConfigurationCmd",
+      "priority": 100
+    }
+  },
+  "actions": {
+    "evm1cellDeleteAction": {
+      "actionType": "JSFunction",
+      "method": "deleteSeedSelection",
+      "inputData": {
+        "0": "{{commandContext.vmo}}"
+      },
+      "deps": "js/Evm1RecipeSeedTreeTableService"
+    },
+    "removeSeedSelectionAction": {
+      "actionType": "JSFunction",
+      "method": "deleteSeedSelection",
+      "inputData": {
+        "data": "{{commandContext.data}}",
+        "recipeState": "{{commandContext.recipeState}}"
+      },
+      "events": {
+        "success": [
+          {
+            "name": "evm1seedTreeDataProvider.reset"
+          }
+        ]
+      },
+      "deps": "js/Evm1RecipeSeedTreeTableService"
+    },
+    "addSeedSelectionAction": {
+      "actionType": "dialog",
+      "inputData": {
+        "options": {
+          "view": "Evm1SeedSelectionCmdPanel",
+          "parent": ".aw-layout-workarea",
+          "placement": "right",
+          "width": "SMALL",
+          "height": "FULL",
+          "push": false,
+          "isCloseVisible": false,
+          "subPanelContext": "{{commandContext}}"
+        }
+      }
+    },
+    "createRecipeAction": {
+      "actionType": "dialog",
+      "inputData": {
+        "options": {
+          "view": "Evm1CreateRecipeFromSelection",
+          "parent": ".aw-layout-workarea",
+          "placement": "right",
+          "width": "SMALL",
+          "height": "FULL",
+          "push": false,
+          "isCloseVisible": false,
+          "subPanelContext": "{{commandContext}}"
+        }
+      }
+    },
+    "executeRecipeAction": {
+      "actionType": "dialog",
+      "inputData": {
+        "options": {
+          "view": "Evm1ExecuteRecipe",
+          "parent": ".aw-layout-workarea",
+          "placement": "right",
+          "width": "SMALL",
+          "height": "FULL",
+          "push": false,
+          "isCloseVisible": false,
+          "subPanelContext": "{{commandContext}}"
+        }
+      }
+    },
+    "executeShowRecipeAction": {
+      "actionType": "dialog",
+      "inputData": {
+        "options": {
+          "view": "Evm1ShowRecipe",
+          "parent": ".aw-layout-workarea",
+          "placement": "right",
+          "width": "SMALL",
+          "height": "FULL",
+          "push": false,
+          "isCloseVisible": false,
+          "subPanelContext": "{{commandContext}}"
+        }
+      }
+    },
+    "evm1OpenAwb0Element": {
+      "actionType": "Navigate",
+      "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+      "navigationParams": {
+        "uid": "{{ctx.selected.modelType.typeHierarchyArray.indexOf( 'Evm1RecipeResultProxy' ) > -1 ? ctx.selected.props.evm1UnderlyingObject.dbValues[ 0 ] : ctx.selected.props.awb0UnderlyingObject.dbValues[ 0 ]}}"
+      }
+    },
+    "evm1OpenAwb0ElementInNewTAB": {
+      "actionType": "Navigate",
+      "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+      "navigationParams": {
+        "uid": "{{ctx.selected.modelType.typeHierarchyArray.indexOf( 'Evm1RecipeResultProxy' ) > -1 ? ctx.selected.props.evm1UnderlyingObject.dbValues[ 0 ] : ctx.selected.props.awb0UnderlyingObject.dbValues[ 0 ]}}"
+      },
+      "navigateIn": "newTab"
+    },
+    "evm1OpenAwb0ElementInNewWindow": {
+      "actionType": "Navigate",
+      "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+      "navigationParams": {
+        "uid": "{{ctx.selected.modelType.typeHierarchyArray.indexOf( 'Evm1RecipeResultProxy' ) > -1 ? ctx.selected.props.evm1UnderlyingObject.dbValues[ 0 ] : ctx.selected.props.awb0UnderlyingObject.dbValues[ 0 ]}}"
+      },
+      "navigateIn": "newWindow",
+      "options": {
+        "top": 10,
+        "left": 10
+      }
+    },
+    "evm1OpenAwb0ElementInRAC": {
+      "actionType": "Navigate",
+      "navigateTo": "launcher/openinrac",
+      "navigationParams": {
+        "-s": "226TCSession",
+        "-o": "{{ctx.selected.modelType.typeHierarchyArray.indexOf( 'Evm1RecipeResultProxy' ) > -1 ? ctx.selected.props.evm1UnderlyingObject.dbValues[ 0 ] : ctx.selected.props.awb0UnderlyingObject.dbValues[ 0 ]}}",
+        "-attach": true
+      },
+      "navigateIn": "newTab"
+    },
+    "copyUnderlyingObject": {
+      "actionType": "JSFunction",
+      "method": "copyUnderlyingObject",
+      "deps": "js/Evm1RecipeTableService",
+      "inputData": {
+        "objectToCopy": "{{ctx.mselected}}"
+      },
+      "actionMessages": {
+        "success": [
+          {
+            "condition": "(ctx.mselected && ctx.mselected.length === 1)",
+            "message": "copySingleSuccessful"
+          },
+          {
+            "condition": "(ctx.mselected && ctx.mselected.length > 1)",
+            "message": "copyMultipleSuccessful"
+          }
+        ]
+      }
+    },
+    "Evm1ExportToExcelAction": {
+      "actionType": "JSFunction",
+      "method": "evm1ExportToExcel",
+      "inputData": {
+        "commandContext": "{{commandContext}}"
+      },
+      "deps": "js/Evm1RecipeTableService"
+    },
+    "Evm1SwitchToTableView": {
+      "actionType": "Event",
+      "method": "Event",
+      "inputData": {
+        "events": [
+          {
+            "name": "view.recipeResultViewChanged",
+            "eventData": {
+              "viewMode": "tableView"
+            },
+            "excludeLocalDataCtx": true
+          }
+        ]
+      }
+    },
+    "Evm1SwitchToTreeView": {
+      "actionType": "Event",
+      "method": "Event",
+      "inputData": {
+        "events": [
+          {
+            "name": "view.recipeResultViewChanged",
+            "eventData": {
+              "viewMode": "treeView"
+            },
+            "excludeLocalDataCtx": true
+          }
+        ]
+      }
+    },
+    "configPanelUpdateConfirmAction": {
+      "actionType": "Event",
+      "method": "Event",
+      "inputData": {
+        "events": [
+          {
+            "name": "evm1ConfigPanelConfirmationMessage"
+          }
+        ]
+      }
+    },
+    "configurationPanelAction": {
+      "actionType": "JSFunction",
+      "method": "activateCommandPanel",
+      "deps": "js/commandPanel.service",
+      "inputData": {
+        "commandId": "Evm1ConfigurationPanel",
+        "location": "aw_toolsAndInfo",
+        "context": "{{commandContext.recipeState}}"
+      }
+    }
+  },
+  "conditions": {
+    "recipeSaveAsCmdVisible": {
+      "expression": "ctx.selected.modelType.typeHierarchyArray.indexOf( 'Fnd0SearchRecipe' ) > -1 && ctx.mselected.length === 1"
+    },
+    "recipeBuilderActive": {
+      "expression": "ctx.xrtSummaryContextObject.type === 'Fnd0SearchRecipe'"
+    },
+    "createRecipeFromBomSelection": {
+      "expression": "commandContext && commandContext.occContext  && commandContext.occContext.selectedModelObjects && commandContext.occContext.selectedModelObjects.length > 0 && commandContext.occContext.topElement.modelType.typeHierarchyArray.indexOf('Fgf0ApplicationModel') === -1"
+    },
+    "Evm1ShowRecipeCondition": {
+      "expression": "commandContext.selectionState.nodes.length > 0"
+    },
+    "executeRecipeCommandCondition": {
+      "expression": "conditions.createRecipeFromBomSelection"
+    },
+    "evm1OpenAwb0ElementCommandActive": {
+      "expression": "conditions.cmdOpenBaseVisibleCondition && ctx.xrtSummaryContextObject.type === 'Fnd0SearchRecipe' && ( ctx.selected.modelType.typeHierarchyArray.indexOf( 'Awb0Element' ) > -1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'Evm1RecipeResultProxy' ) > -1 )"
+    },
+    "evm1SaveAsAwb0ElementCommandActive": {
+      "expression": "conditions.showSaveAs && ctx.xrtSummaryContextObject.type === 'Fnd0SearchRecipe' && ctx.selected.modelType.typeHierarchyArray.indexOf( 'Fnd0SearchRecipe' ) === -1"
+    },
+    "evm1ReviseAwb0ElementCommandActive": {
+      "expression": "conditions.showRevise && ctx.xrtSummaryContextObject.type === 'Fnd0SearchRecipe' && ctx.selected.modelType.typeHierarchyArray.indexOf( 'Fnd0SearchRecipe' ) === -1"
+    },
+    "evm1AceCommandActive": {
+      "expression": "ctx.xrtSummaryContextObject.type === 'Fnd0SearchRecipe' && ( ctx.selected.modelType.typeHierarchyArray.indexOf( 'Awb0Element' ) > -1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'Evm1RecipeResultProxy' ) > -1 )"
+    },
+    "evm1CopyProxyCommandActive": {
+      "expression": "conditions.cmdCopyCommandVisible && ctx.xrtSummaryContextObject.type === 'Fnd0SearchRecipe' && ctx.selected.modelType.typeHierarchyArray.indexOf( 'Evm1RecipeResultProxy' ) > -1"
+    },
+    "evm1ExportToExcelComandActive": {
+      "expression": "commandContext.showTable === true && conditions.recipeBuilderActive && conditions.isRecipeResultsTableView"
+    },
+    "isRecipeResultsTableView": {
+      "expression": "commandContext.currentDisplay === 'tableView'"
+    },
+    "isRecipeResultsTreeView": {
+      "expression": "commandContext.currentDisplay === 'treeView'"
+    },
+    "isTcReleaseAtLeast124Version": {
+      "expression": "ctx.tcSessionData.tcMajorVersion > 12 || ( ctx.tcSessionData.tcMajorVersion === 12 && ctx.tcSessionData.tcMinorVersion >= 4 )"
+    },
+    "RecipeTableTreeAnchorCommandActive": {
+      "expression": "conditions.isTcReleaseAtLeast124Version && conditions.recipeBuilderActive"
+    },
+    "RemoveSeedSelectionCommandActive": {
+      "expression": "commandContext.recipeState.childSeedSelectedInTree === true && conditions.Evm1IsRecipeInEditMode"
+    },
+    "Evm1IsRecipeInEditMode": {
+      "expression": "commandContext.recipeState.inEditMode && commandContext.recipeState.hasViewManagementLicense"
+    },
+    "Evm1UpdateConfigurationCommandActive": {
+      "expression": "!commandContext.recipeState.context && conditions.Evm1IsRecipeInEditMode"
+    },
+    "Evm1UpdateConfigurationCommandVisible": {
+      "expression": "!commandContext.recipeState.context"
+    }
+  },
+  "onEvent": [
+    {
+      "eventId": "evm1ConfigPanelConfirmationMessage",
+      "message": "confirmConfigUpdate"
+    }
+  ],
+  "messages": {
+    "confirmConfigUpdate": {
+      "messageType": "WARNING",
+      "messageText": "{{i18n.evm1UpdateSeedMsg}}",
+      "navigationOptions": [
+        {
+          "option": "Cancel",
+          "text": "{{i18n.evm1CancelBtn}}",
+          "action": ""
+        },
+        {
+          "option": "Update",
+          "text": "{{i18n.evm1UpdateBtn}}",
+          "action": "configurationPanelAction"
+        }
+      ]
+    }
+  },
+  "i18n": {
+    "RecipeSaveAs": [
+      "RecipeCommandPanelsMessages"
+    ],
+    "removeCell": [
+      "RecipeCommandPanelsMessages"
+    ],
+    "add": [
+      "RecipeCommandPanelsMessages"
+    ],
+    "CreateRecipe": [
+      "RecipeCommandPanelsMessages"
+    ],
+    "ExecuteRecipe": [
+      "RecipeCommandPanelsMessages"
+    ],
+    "showRecipe": [
+      "RecipeCommandPanelsMessages"
+    ],
+    "ExportToExcel": [
+      "RecipeCommandPanelsMessages"
+    ],
+    "Evm1ShowTreeViewTitle": [
+      "RecipeCommandPanelsMessages"
+    ],
+    "Evm1ShowTableViewTitle": [
+      "RecipeCommandPanelsMessages"
+    ],
+    "RecipeSaveAsDesc": [
+      "RecipeCommandPanelsMessages"
+    ],
+    "evm1cellDeleteDesc": [
+      "RecipeCommandPanelsMessages"
+    ],
+    "Evm1CreateRecipeDesc": [
+      "RecipeCommandPanelsMessages"
+    ],
+    "Evm1ExecuteRecipeDesc": [
+      "RecipeCommandPanelsMessages"
+    ],
+    "Evm1ShowRecipeDesc": [
+      "RecipeCommandPanelsMessages"
+    ],
+    "recipeTableView": [
+      "RecipeCommandPanelsMessages"
+    ],
+    "evm1UpdateBtn": [
+      "RecipeCommandPanelsMessages"
+    ],
+    "evm1CancelBtn": [
+      "RecipeCommandPanelsMessages"
+    ],
+    "evm1UpdateSeedMsg": [
+      "RecipeCommandPanelsMessages"
+    ]
+  }
+}

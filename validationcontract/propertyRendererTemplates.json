@@ -1,0 +1,94 @@
+{
+  "parameter_result_template": {
+    "grids": [],
+    "columns": [
+      "att1Result"
+    ],
+    "template": "",
+    "templateUrl": "",
+    "renderFunction": "parameterResultStatusFn",
+    "deps": "propRenderTemplates/Crt1ParameterResultStatus",
+    "dependentServices": [
+      "soa/kernel/clientDataModel"
+    ]
+  },
+  "result_template": {
+    "grids": [],
+    "columns": [
+      "crt1Result",
+      "crt0Result"
+    ],
+    "template": "",
+    "templateUrl": "",
+    "renderFunction": "resultStatusFn",
+    "deps": "propRenderTemplates/Crt1ParameterResultStatus",
+    "dependentServices": [
+      "soa/kernel/clientDataModel"
+    ]
+  },
+  "result_rollup_template": {
+    "grids": [],
+    "columns": [
+      "crt0RolledupResult"
+    ],
+    "template": "",
+    "templateUrl": "",
+    "renderFunction": "resultStatusFn_rollup",
+    "deps": "propRenderTemplates/Crt1ParameterResultStatus",
+    "dependentServices": [
+      "soa/kernel/clientDataModel"
+    ]
+  },
+  "measured_value_template": {
+    "grids": [],
+    "columns": [
+      "REF(att1SourceAttribute,Att0MeasurableAttributeDbl).REF(att0CurrentValue,Att0MeasureValueDbl).att0Value"
+    ],
+    "template": "",
+    "templateUrl": "",
+    "renderFunction": "measuredValFn",
+    "deps": "propRenderTemplates/Crt1ParameterResultStatus",
+    "dependentServices": [
+      "soa/kernel/clientDataModel"
+    ]
+  },
+  "release_status_template": {
+    "grids": [],
+    "columns": [
+      "REF(crt1UnderlyingObject,WorkspaceObject).release_status_list"
+    ],
+    "tooltip": [],
+    "template": "",
+    "templateUrl": "/propRenderTemplates/releaseStatusRenderer.html",
+    "renderFunction": "",
+    "dependentServices": [
+      "soa/kernel/clientDataModel"
+    ]
+  },
+  "issue_count_template": {
+    "grids": [],
+    "columns": [
+      "crt1IssueCount"
+    ],
+    "tooltip": [],
+    "template": "",
+    "templateUrl": "",
+    "renderFunction": "issuePropertyRendererFunc",
+    "headerTemplateUrl": "",
+    "deps": "propRenderTemplates/Crt1IssueCountRenderer",
+    "dependentServices": []
+  },
+  "attachment_count_template": {
+    "grids": [],
+    "columns": [
+      "crt1AttachmentCount"
+    ],
+    "tooltip": [],
+    "template": "",
+    "templateUrl": "",
+    "renderFunction": "attachmentPropertyRendererFunc",
+    "headerTemplateUrl": "",
+    "deps": "propRenderTemplates/Crt1AttachmentCountRenderer",
+    "dependentServices": []
+  }
+}

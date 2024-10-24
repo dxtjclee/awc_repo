@@ -1,0 +1,9 @@
+<aw-command-panel caption="i18n.AddBOMTitle" context="subPanelContext">
+    <aw-add visible-tabs="search,palette" type-filter="Part Revision,Design Revision"
+      add-panel-state="fields.addPanelState"></aw-add>
+    <aw-panel-footer>
+        <aw-button action="createRelationForPaletteOrSearch" visible-when="fields.addPanelState.sourceObjects.length > 0">
+            <aw-i18n>i18n.Add</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

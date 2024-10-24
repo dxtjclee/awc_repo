@@ -1,0 +1,308 @@
+{
+    "schemaVersion": "1.0.0",
+    "ports": {
+        "EpBalancingManager_getBalancingData": {
+            "syncObject": {}
+        }
+    },
+    "props": {
+        "balancing-data": {
+            "type": "object"
+        }
+    },
+    "data": {},
+    "actions": {
+        "calculateInformation": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "calculateBalancingInformation"
+                },
+                {
+                    "action": "updateBalancingData"
+                }
+            ]
+        },
+        "loadStationsAfterSetConfig": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "loadBalancingStations"
+                },
+                {
+                    "action": "updateBalancingData"
+                },
+                {
+                    "action": "unRegisterCtx"
+                }
+            ]
+        },
+        "checkSaveEvents": {
+            "actionType": "JSFunction",
+            "method": "checkSaveEvents",
+            "inputData": {
+                "saveEventsData": "{{parameters.eventData}}"
+            },
+            "outputData": {
+                "reloadStations": ""
+            },
+            "deps": "js/epBalancingService"
+        },
+        "loadStations": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "loadBalancingStations",
+                    "condition": "conditions.isEpScopeTypeOfProcessLine"
+                },
+                {
+                    "action": "calculateBalancingInformation",
+                    "condition": "conditions.isEpScopeTypeOfProcessLine"
+                },
+                {
+                    "action": "updateBalancingData",
+                    "condition": "conditions.isEpScopeTypeOfProcessLine"
+                },
+                {
+                    "action": "publishBalancingDataToPort",
+                    "condition": "conditions.isEpScopeTypeOfProcessLine"
+                },
+                {
+                    "action": "registerReloadTiles"
+                },
+                {
+                    "action": "registerReloadProperties"
+                }
+            ]
+        },
+        "loadBalancingStations": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadBalancingStations",
+            "inputData": {
+                "objectUid": "{{ctx.ep.scopeObject.uid}}"
+            },
+            "outputData": {
+                "balancingScope": "balancingScope",
+                "balancingStations": "balancingStations",
+                "scopeTaktTime": "scopeTaktTime"
+            },
+            "deps": "js/epBalancingService"
+        },
+        "calculateBalancingInformation": {
+            "actionType": "JSFunction",
+            "method": "calculateBalancingInformation",
+            "inputData": {
+                "balancingStations": "{{data.balancingStations}}",
+                "scopeTaktTime": "{{data.scopeTaktTime}}"
+            },
+            "outputData": {
+                "maxStationsCycleTime": "maxStationsCycleTime",
+                "numberOfStations": "numberOfStations",
+                "allProcessResources": "allProcessResources",
+                "numberOfUniqueProcessResources": "numberOfUniqueProcessResources",
+                "totalWaitTime": "totalWaitTime",
+                "unassignedTime": "unassignedTime",
+                "lineHasOverridingTaktTime": "lineHasOverridingTaktTime",
+                "problematicStations": "problematicStations",
+                "maxTimeInLine": "maxTimeInLine"
+            },
+            "deps": "js/epBalancingService"
+        },
+        "publishBalancingDataToPort": {
+            "actionType": "Sync",
+            "inputData": {
+                "port": "EpBalancingManager_getBalancingData",
+                "syncObject": {
+                    "balancingData": "{{props.balancingData}}"
+                }
+            }
+        },
+        "updateBalancingData": {
+            "actionType": "JSFunction",
+            "method": "mergeValueInAtomicData",
+            "inputData": {
+                "targetAtomicData": "{{props.balancingData}}",
+                "updatedValues": {
+                    "loadedData": {
+                        "balancingScope": "{{data.balancingScope}}",
+                        "balancingStations": "{{data.balancingStations}}",
+                        "scopeTaktTime": "{{data.scopeTaktTime}}",
+                        "maxStationsCycleTime": "{{data.maxStationsCycleTime}}",
+                        "numberOfStations": "{{data.numberOfStations}}",
+                        "allProcessResources": "{{data.allProcessResources}}",
+                        "numberOfUniqueProcessResources": "{{data.numberOfUniqueProcessResources}}",
+                        "totalWaitTime": "{{data.totalWaitTime}}",
+                        "unassignedTime": "{{data.unassignedTime}}",
+                        "lineHasOverridingTaktTime": "{{data.lineHasOverridingTaktTime}}",
+                        "problematicStations": "{{data.problematicStations}}",
+                        "maxTimeInLine": "{{data.maxTimeInLine}}",
+                        "loading": false
+                    }
+                }
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "registerReloadTiles": {
+            "actionType": "JSFunction",
+            "method": "registerReloadInput",
+            "inputData": {
+                "name": "StationTile",
+                "type": {
+                    "reloadTypeName": "StationTile",
+                    "object": "{{data.balancingStations}}"
+                }
+            },
+            "deps": "js/epReloadService"
+        },
+        "registerReloadProperties": {
+            "actionType": "JSFunction",
+            "method": "registerReloadInput",
+            "inputData": {
+                "name": "StationAllocatedOpsByPV",
+                "type": {
+                    "reloadTypeName": "getProperties",
+                    "object": "{{data.balancingStations}}",
+                    "propertiesToLoad": [
+                        "elb0allocatedOpsByPV",
+                        "elb0cycleTime"
+                    ]
+                }
+            },
+            "deps": "js/epReloadService"
+        },
+        "unregisterReload": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "unregisterReloadTiles"
+                },
+                {
+                    "action": "unregisterReloadProperties"
+                },
+                {
+                    "action": "unsetShouldReloadAfterPVChange"
+                }
+            ]
+        },
+        "loadBalancingStationsWhenPVChanged": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "loadBalancingStations"
+                },
+                {
+                    "action": "calculateBalancingInformation"
+                },
+                {
+                    "action": "updateBalancingData"
+                },
+                {
+                    "action": "refreshOperationsTable",
+                    "condition": "props.balancingData.selectionData.station"
+                }
+            ]
+        },
+        "unregisterReloadTiles": {
+            "actionType": "JSFunction",
+            "method": "unregisterReloadInput",
+            "inputData": {
+                "name": "StationTile"
+            },
+            "deps": "js/epReloadService"
+        },
+        "unregisterReloadProperties": {
+            "actionType": "JSFunction",
+            "method": "unregisterReloadInput",
+            "inputData": {
+                "name": "StationAllocatedOpsByPV"
+            },
+            "deps": "js/epReloadService"
+        },
+        "unsetShouldReloadAfterPVChange": {
+            "actionType": "JSFunction",
+            "method": "setShouldReloadAfterPVChange",
+            "inputData": {
+                "isShouldReloadAfterPVChange": false
+            },
+            "deps": "js/epBalancingProductVariantsService"
+        },
+        "unRegisterCtx": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "inputData": {
+                "isNotAfterSetConfigBalancing": "ep.isNotAfterSetConfigBalancing"
+            },
+            "deps": "js/appCtxService"
+        },
+        "refreshOperationsTable": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "ep.postProductVariantChanged"
+                    }
+                ]
+            }
+        }
+    },
+    "conditions": {
+        "isNotAfterSetConfigBalancing": {
+            "expression": "ctx.ep.isNotAfterSetConfigBalancing === undefined"
+        },
+        "isEpScopeTypeOfProcessLine": {
+            "expression": {
+                "$and": [
+                    {
+                        "$source": "ctx.ep.scopeObject.modelType.typeHierarchyArray",
+                        "$query": {
+                            "$in": [
+                                "Mfg0BvrProcessArea"
+                            ]
+                        }
+                    },
+                    {
+                        "$source": "ctx.ep.scopeObject.modelType.typeHierarchyArray",
+                        "$query": {
+                            "$notin": [
+                                "Mfg0BvrPlantBOP",
+                                "Mfg0BvrProcessStation",
+                                "Mfg0BvrProcessResource"
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "ep.calculateInformation",
+            "action": "calculateInformation"
+        },
+        {
+            "eventId": "ep.loadStationsAndCalculateInformation",
+            "action": "loadBalancingStationsWhenPVChanged"
+        },
+        {
+            "eventId": "ep.productVariant.changed",
+            "action": "loadBalancingStationsWhenPVChanged"
+        },
+        {
+            "eventId": "ep.saveEvents",
+            "inputArgs": {
+                "eventData": "{{eventData}}"
+            },
+            "action": "checkSaveEvents"
+        },
+        {
+            "eventId": "mfe.scopeObjectChanged",
+            "action": "loadStationsAfterSetConfig",
+            "condition": "!conditions.isNotAfterSetConfigBalancing"
+        }
+    ],
+    "lifecycleHooks": {
+        "onMount": "loadStations",
+        "onUnmount": "unregisterReload"
+    }
+}

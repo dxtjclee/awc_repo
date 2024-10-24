@@ -1,0 +1,127 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "submitInProgress": false,
+        "workflowData": {
+            "submitToWorkflow": ["1"]
+        },
+        "dataToBeRelated":{
+            "CMHasImpactedItem": ["{{props.subPanelContext.scopeObject.uid}}"]
+        },
+        "xrtState": {
+            "initialValues": {
+                "xrtTypeLoaded": ""
+            },
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "actions": {
+        "createAndSubmit": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "setSubmitInProgress"
+                },
+                {
+                    "action": "createMcnObject"
+                },
+                {
+                    "action": "refreshScopeObject",
+                    "condition": "conditions.submitInProgress"
+                },
+                {
+                    "action": "closePopupWindow",
+                    "condition": "conditions.submitInProgress"
+                }
+            ]
+        },
+        "setSubmitInProgress": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "value": true
+            },
+            "outputData":{
+                "submitInProgress":""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "refreshScopeObject": {
+            "actionType": "JSFunctionAsync",
+            "method": "refreshObjects",
+            "inputData": {
+                "modelObjects": ["{{props.subPanelContext.scopeObject}}"]
+            },
+            "deps": "js/services/ngpLoadService"
+        },
+        "createMcnObject": {
+            "actionType": "JSFunctionAsync",
+            "method": "createMcnAndSubmitToWorkflow",
+            "inputData": {
+                "viewModeData": "{{data}}",
+                "editHandler": "{{editHandlers.addPanelEditHandler}}"
+            },
+            "outputData": {
+                "submitInProgress": ""
+            },
+            "deps": "js/services/ngpChangeManagementService"
+        },
+        "closePopupWindow": {
+            "actionType": "JSFunction",
+            "method": "close",
+            "inputData": {
+                "popupId": "{{data.popupId}}"
+            },
+            "deps": "js/declpopupService"
+        },
+        "autoAssignProperty": {
+            "actionType": "JSFunction",
+            "method": "autoAssignProperty",
+            "inputData": {
+                "prop": "{{data.eventData.prop}}",
+                "operationType": "CREATE",
+                "pattern": "{{data.eventData.newPattern}}"
+            },
+
+            "deps": "js/autoAssignService"
+        }
+    },
+    "conditions": {
+        "submitInProgress": {
+            "expression": "data.submitInProgress"
+        },
+        "isXRTTypeLoaded": {
+            "expression": "data.xrtState.xrtTypeLoaded"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "awPattern.newPatternSelected",
+            "cacheEventData": true,
+            "action": "autoAssignProperty"
+        }
+    ],
+    "i18n": {
+        "cancel": ["NgpChangeMgmtMessages"],
+        "createAndSubmit": [ "NgpChangeMgmtMessages" ]
+    },
+    "lifecycleHooks": {
+        "onUpdate": {
+            "action": "performPostProcessingAfterXRTLoaded",
+            "observers": [ "viewModel.atomicData.xrtState.xrtTypeLoaded" ]
+        }
+    }
+}

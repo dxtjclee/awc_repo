@@ -1,0 +1,1985 @@
+{
+  "schemaVersion": "1.0.0",
+  "commands": {
+    "senCreateChar": {
+      "iconId": "cmdAdd",
+      "title": "{{i18n.createCharTitle}}",
+      "description": "{{i18n.createCharDescription}}"
+    },
+    "senCreateLot": {
+      "iconId": "cmdAssignLot",
+      "isGroup": false,
+      "title": "{{i18n.createLotTitle}}",
+      "description": "{{i18n.senCreateLotDesc}}"
+    },
+    "senPackUnpackGroup": {
+      "iconId": "cmdExpandBelow",
+      "isRibbon": true,
+      "title": "{{i18n.expand}}",
+      "description": "{{i18n.Awb0ExpandGroupDesc}}"
+    },
+    "senAddGroup": {
+      "iconId": "cmdAdd",
+      "title": "{{i18n.addElementBtn}}",
+      "isRibbon": true,
+      "description": "{{i18n.Awb0AddGroupDescription}}"
+    },
+    "senRemoveElement": {
+      "iconId": "cmdRemove",
+      "isRibbon": false,
+      "title": "{{i18n.senRemove}}",
+      "description": "{{i18n.Awb0RemoveElementDesc}}"
+    },
+    "senAddChildElement": {
+      "iconId": "cmdAddChild",
+      "title": "{{i18n.addChild}}",
+      "description": "{{i18n.Awb0AddChildElementDeclarativeDesc}}"
+    },
+    "senAddSiblingElement": {
+      "iconId": "cmdAddSibling",
+      "title": "{{i18n.addSibling}}",
+      "description": "{{i18n.Awb0AddSiblingElementDeclarativeDesc}}"
+    },
+    "senAddSubstituteElement": {
+      "iconId": "cmdSubstitute",
+      "title": "{{i18n.addSubstitutePWA}}",
+      "description": "{{i18n.Awb0AddSubstitutesDesc}}"
+    },
+    "senAddAlternateElement": {
+      "iconId": "cmdAlternate",
+      "title": "{{i18n.addAlternatePWA}}",
+      "description": "{{i18n.ps0AddAlternateDesc}}"
+    },
+    "senStartEditTable": {
+      "iconId": "cmdEdit",
+      "isGroup": false,
+      "title": "{{i18n.senStartEditTableTitle}}",
+      "description": "{{i18n.senStartEditTableDesc}}",
+      "isToggle": false
+    },
+    "senSbomSaveEditsPWA": {
+      "iconId": "cmdSave",
+      "isGroup": false,
+      "title": "{{i18n.saveEditsTitle}}",
+      "description": "{{i18n.saveEditsDesc}}",
+      "isToggle": false
+    },
+    "senSbomCancelEditsPWA": {
+      "iconId": "cmdCancelEdit",
+      "isGroup": false,
+      "title": "{{i18n.cancelEditsTitle}}",
+      "description": "{{i18n.cancelEditsDesc}}",
+      "isToggle": false
+    },
+    "senAssignFromEbomToSbom": {
+      "iconId": "cmdValidate",
+      "title": "{{i18n.senAssignFromEbomToSbomCmdTitle}}",
+      "description": "{{i18n.senAssignFromEbomToSbomCmdDescription}}"
+    },
+    "senOpenSbomObject": {
+      "iconId": "cmdOpen",
+      "title": "{{i18n.senOpenSbomObjectCmdTitle}}",
+      "description": "{{i18n.senOpenSbomObjectCmdDescription}}"
+    },
+    "senOpenSETaskCommandForManagePage": {
+      "iconId": "miscTaskAuthorBOELarge",
+      "title": "{{i18n.authorSbomTitle}}",
+      "extendedTooltip": {
+        "view": "MfeCommandTooltip",
+        "title": "{{i18n.authorSbomTooltipTitle}}",
+        "messages": [
+          "{{i18n.authorSbomTileDescription}}",
+          "{{i18n.authorSbomTileCriteria}}"
+        ]
+      }
+    },
+    "senSubmitToWorkflowCommand": {
+      "iconId": "cmdSubmitToWorkflow",
+      "title": "{{i18n.Workflow_Title}}",
+      "description": "{{i18n.Awp0NewWorkflowProcessDesc}}"
+    },
+    "senReviseCommand": {
+      "iconId": "cmdRevise",
+      "title": "{{i18n.senReviseCommandTitle}}",
+      "description": "{{i18n.senReviseCommandToolTip}}"
+    },
+    "senOccurrenceEffectivity": {
+      "iconId": "cmdOpenSharedEffectivity",
+      "title": "{{i18n.elementEffectivityTitle}}",
+      "description": "{{i18n.Awb0OccurrenceEffectivityDesc}}"
+    },
+    "senReleaseStatusEffectivity": {
+      "iconId": "cmdReleaseEffectivity",
+      "title": "{{i18n.effectivityTitle}}",
+      "description": "{{i18n.Awb0ReleaseStatusEffectivityDesc}}"
+    },
+    "senTreeViewGroup": {
+      "iconId": "cmdTreeView",
+      "isRibbon": true,
+      "title": "{{i18n.sen1ShowTreeViewTitle}}",
+      "description": "{{i18n.sen1ShowTreeViewDesc}}"
+    },
+    "senShowTreeSummaryView": {
+      "iconId": "cmdTreeSummary",
+      "title": "{{i18n.sen1ShowTreeSummaryViewTitle}}",
+      "description": "{{i18n.sen1ShowTreeSummaryViewDesc}}"
+    },
+    "senShowTreeView": {
+      "iconId": "cmdTreeView",
+      "title": "{{i18n.sen1ShowTreeViewTitle}}",
+      "description": "{{i18n.sen1ShowTreeViewDesc}}"
+    },
+    "senEolListView": {
+      "iconId": "cmdListView",
+      "title": "{{i18n.sen1ListTitle}}"
+    },
+    "senEolTableView": {
+      "iconId": "cmdTableView",
+      "title": "{{i18n.sen1TableTitle}}"
+    },
+    "senEOLReviseCommand": {
+      "iconId": "cmdRevise",
+      "title": "{{i18n.senReviseCommandTitle}}",
+      "description": "{{i18n.senReviseCommandToolTip}}"
+    },
+    "senEOLOpenCellCommand": {
+      "iconId": "cmdOpen",
+      "title": "{{i18n.senOpenSbomObjectCmdTitle}}"
+    },
+    "senConfigurationGroup": {
+      "iconId": "cmdConfigure",
+      "isRibbon": true,
+      "title": "{{i18n.configure}}",
+      "description": "{{i18n.Awb0ConfigurationGroupDesc}}"
+    },
+    "senConfigurationFilter": {
+      "iconId": "cmdConfiguration",
+      "title": "{{i18n.occmgmtConfigurationFilterTitle}}",
+      "description": "{{i18n.Awb0ConfigurationFilterDesc}}"
+    },
+    "senResetStructure": {
+      "iconId": "cmdReset",
+      "title": "{{i18n.resetCmdTitle}}",
+      "description": "{{i18n.Awb0ResetStructureDesc}}"
+    },
+    "senShowUnconfiguredByOccEffectivity": {
+      "title": "{{i18n.showExcluded}}",
+      "isGroup": false,
+      "selected": {
+        "title": "{{i18n.showExcluded}}"
+      },
+      "description": "{{i18n.Awb0ShowUnconfiguredByOccEffectivityDesc}}"
+    },
+    "senShowUnconfiguredByVariants": {
+      "title": "{{i18n.showExcludedByVariants}}",
+      "isGroup": false,
+      "selected": {
+        "title": "{{i18n.showExcludedByVariants}}"
+      },
+      "description": "{{i18n.Awb0ShowUnconfiguredByVariantsDesc}}"
+    },
+    "removeNBOMFromWorkpackageCommand": {
+      "iconId": "cmdRemove",
+      "title": "{{i18n.removeStructureTitle}}",
+      "isGroup": false
+    },
+    "senCommandForManageEnterpriseSBOM": {
+      "iconId": "miscTaskAuthorBOELarge",
+      "title": "{{i18n.manageEnterpriseSbomTitle}}",
+      "description": "{{i18n.manageEnterpriseSbomTitle}}"
+    }
+  },
+  "commandPlacements": {
+    "senCreateLotCommandPlacement": {
+      "id": "senCreateLot",
+      "uiAnchor": "sen_create_lot_right",
+      "priority": 100
+    },
+    "senCreateCharCmdPlacement": {
+      "id": "senCreateChar",
+      "uiAnchor": "sen_primWorkArea_left",
+      "priority": 950
+    },
+    "senReviseCommandPlacement": {
+      "id": "senReviseCommand",
+      "uiAnchor": "sen_primWorkArea_left",
+      "priority": 610
+    },
+    "senPackUnpackGroupCmdPlacement": {
+      "id": "senPackUnpackGroup",
+      "uiAnchor": "sen_primWorkArea_left",
+      "priority": 100
+    },
+    "senAddGroupCmdPlacement": {
+      "id": "senAddGroup",
+      "uiAnchor": "sen_primWorkArea_left",
+      "priority": 500
+    },
+    "senPackCmdPlacement": {
+      "id": "Awb0Pack",
+      "uiAnchor": "sen_primWorkArea_left",
+      "parentGroupId": "senPackUnpackGroup"
+    },
+    "senUnpackCmdPlacement": {
+      "id": "Awb0Unpack",
+      "uiAnchor": "sen_primWorkArea_left",
+      "parentGroupId": "senPackUnpackGroup"
+    },
+    "senPackAllCmdPlacement": {
+      "id": "Awb0PackAll",
+      "uiAnchor": "sen_primWorkArea_left",
+      "parentGroupId": "senPackUnpackGroup"
+    },
+    "senUnpackAllCmdPlacement": {
+      "id": "Awb0UnpackAll",
+      "uiAnchor": "sen_primWorkArea_left",
+      "parentGroupId": "senPackUnpackGroup"
+    },
+    "senExpandBelowCmdPlacement": {
+      "id": "Awb0ExpandBelow",
+      "uiAnchor": "sen_primWorkArea_left",
+      "parentGroupId": "senPackUnpackGroup"
+    },
+    "senCollapseBelowCmdPlacement": {
+      "id": "Awb0CollapseBelow",
+      "uiAnchor": "sen_primWorkArea_left",
+      "parentGroupId": "senPackUnpackGroup"
+    },
+    "senAddChildElementCmdPlacement": {
+      "id": "senAddChildElement",
+      "uiAnchor": "sen_primWorkArea_left",
+      "priority": 10,
+      "parentGroupId": "senAddGroup"
+    },
+    "senAddSiblingElementCmdPlacement": {
+      "id": "senAddSiblingElement",
+      "uiAnchor": "sen_primWorkArea_left",
+      "priority": 20,
+      "parentGroupId": "senAddGroup"
+    },
+    "senAddSubstituteElementCmdPlacement": {
+      "id": "senAddSubstituteElement",
+      "uiAnchor": "sen_primWorkArea_left",
+      "priority": 30,
+      "parentGroupId": "senAddGroup"
+    },
+    "senAddAlternateElementCmdPlacement": {
+      "id": "senAddAlternateElement",
+      "uiAnchor": "sen_primWorkArea_left",
+      "priority": 40,
+      "parentGroupId": "senAddGroup"
+    },
+    "senRemoveElementCmdPlacement": {
+      "id": "senRemoveElement",
+      "uiAnchor": "sen_primWorkArea_left",
+      "priority": 600
+    },
+    "senSbomStartEditTableCmdPlacement": {
+      "id": "senStartEditTable",
+      "uiAnchor": "sen_primWorkArea_left",
+      "priority": 300
+    },
+    "senSbomSaveEditsPWA": {
+      "id": "senSbomSaveEditsPWA",
+      "uiAnchor": "sen_primWorkArea_left",
+      "priority": 300
+    },
+    "senSbomCancelEditsPWA": {
+      "id": "senSbomCancelEditsPWA",
+      "uiAnchor": "sen_primWorkArea_left",
+      "priority": 400
+    },
+    "senAssignFromEbomToSbomCmdPlacement": {
+      "id": "senAssignFromEbomToSbom",
+      "uiAnchor": "sen_primWorkArea_right",
+      "priority": 100
+    },
+    "senOpenSbomObjectCmdPlacement": {
+      "id": "senOpenSbomObject",
+      "uiAnchor": "sen_primWorkArea_right",
+      "priority": 200
+    },
+    "senOpenSETaskPlacementForManagePage": {
+      "id": "senOpenSETaskCommandForManagePage",
+      "uiAnchor": "epTasksForManagePage_uiAnchor",
+      "priority": 100
+    },
+    "senSubmitToWorkflowCommandPlacement": {
+      "id": "senSubmitToWorkflowCommand",
+      "uiAnchor": "sen_primWorkArea_left",
+      "priority": 700
+    },
+    "senOccurrenceEffectivityCommandPlacement": {
+      "id": "senOccurrenceEffectivity",
+      "uiAnchor": "sen_primWorkArea_left",
+      "priority": 750
+    },
+    "senReleaseStatusEffectivityCommandPlacement": {
+      "id": "senReleaseStatusEffectivity",
+      "uiAnchor": "sen_primWorkArea_left",
+      "priority": 780
+    },
+    "senConfigurationGroupCommandPlacement": {
+      "id": "senConfigurationGroup",
+      "uiAnchor": "sen_primWorkArea_left",
+      "priority": 800
+    },
+    "senConfigurationFilterCommandPlacement": {
+      "id": "senConfigurationFilter",
+      "uiAnchor": "sen_primWorkArea_left",
+      "parentGroupId": "senConfigurationGroup",
+      "priority": 10
+    },
+    "senResetStructureCommandPlacement": {
+      "id": "senResetStructure",
+      "uiAnchor": "sen_primWorkArea_left",
+      "parentGroupId": "senConfigurationGroup",
+      "priority": 15
+    },
+    "senShowUnconfiguredByOccEffectivityCommandPlacement": {
+      "id": "senShowUnconfiguredByOccEffectivity",
+      "uiAnchor": "sen_primWorkArea_left",
+      "parentGroupId": "senConfigurationGroup",
+      "priority": 20
+    },
+    "senShowUnconfiguredByVariantsCommandPlacement": {
+      "id": "senShowUnconfiguredByVariants",
+      "uiAnchor": "sen_primWorkArea_left",
+      "parentGroupId": "senConfigurationGroup",
+      "priority": 25
+    },
+    "senTreeViewGroupCmdPlacement": {
+      "id": "senTreeViewGroup",
+      "uiAnchor": "sen_primWorkArea_left",
+      "priority": 50
+    },
+    "senShowTreeSummaryViewCmdPlacement": {
+      "id": "senShowTreeSummaryView",
+      "uiAnchor": "sen_primWorkArea_left",
+      "parentGroupId": "senTreeViewGroup"
+    },
+    "senShowTreeViewDisplay": {
+      "id": "senShowTreeView",
+      "uiAnchor": "sen_primWorkArea_left",
+      "parentGroupId": "senTreeViewGroup"
+    },
+    "senEolListViewCmdPlacement": {
+      "id": "senEolListView",
+      "uiAnchor": "senEOLSectionLeft",
+      "priority": 1
+    },
+    "senEolTableViewCmdPlacement": {
+      "id": "senEolTableView",
+      "uiAnchor": "senEOLSectionLeft",
+      "priority": 1
+    },
+    "senEOLReviseCommandPlacement": {
+      "id": "senEOLReviseCommand",
+      "uiAnchor": "senEOLSectionRight",
+      "priority": 2
+    },
+    "senEOLOpenCellCommandPlacement": {
+      "id": "senEOLOpenCellCommand",
+      "uiAnchor": "CellCommands_inEOLList",
+      "priority": 1,
+      "cellDisplay": {
+        "hover": true,
+        "position": "TOP_RIGHT",
+        "selected": true
+      }
+    },
+    "senEOLOpenCellTableCommandPlacement": {
+      "id": "senEOLOpenCellCommand",
+      "uiAnchor": "CellCommands_EOLTable",
+      "priority": 1,
+      "cellDisplay": {
+        "hover": true,
+        "position": "TOP_RIGHT",
+        "selected": true
+      }
+    },
+    "addSBOMToWorkpackageCommand": {
+      "id": "epGroupAddToWorkpackage",
+      "uiAnchor": "EpSBOM_tileAnchor",
+      "priority": 100
+    },
+    "removeSBOMFromWorkpackageCommand": {
+      "id": "removeStructureFromWorkpackageCommand",
+      "uiAnchor": "EpSBOMTile_uiAnchor",
+      "priority": 100
+    },
+    "EpAddNBOMFromWorkpackageCommand": {
+      "id": "epAddStructureToWorkpackageTileCommand",
+      "uiAnchor": "EpNBOM_tileAnchor",
+      "priority": 100
+    },
+    "EpRemoveNBOMFromWorkpackageCommand": {
+      "id": "removeNBOMFromWorkpackageCommand",
+      "uiAnchor": "EpNBOMTile_uiAnchor",
+      "priority": 100
+    },
+    "senCommandForManageEnterpriseSBOMPlacement": {
+      "id": "senCommandForManageEnterpriseSBOM",
+      "uiAnchor": "aw_rightWall",
+      "priority": 1000,
+      "parentGroupId": "Awp0ManageGroup"
+    }
+  },
+  "commandHandlers": {
+    "senCreateLotCommandHandler": {
+      "id": "senCreateLot",
+      "action": "senCreateLotAction",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.sbomSideCommandVisibleCondition"
+      }
+    },
+    "senCreateCharCmdHandler": {
+      "id": "senCreateChar",
+      "action": "senCreateChar",
+      "visibleWhen": {
+        "condition": "conditions.senCreateCharCommandActive"
+      },
+      "activeWhen": {
+        "condition": "conditions.isSbomContext"
+      },
+      "enableWhen": {
+        "condition": "conditions.isSbomContext"
+      }
+    },
+    "senReviseCommandHandler": {
+      "id": "senReviseCommand",
+      "action": "senReviseElementAction",
+      "visibleWhen": {
+        "condition": "conditions.isSbomContext"
+      },
+      "activeWhen": {
+        "condition": "conditions.isSbomContext"
+      },
+      "enableWhen": {
+        "condition": "conditions.senReviseCommandEnable"
+      }
+    },
+    "senOpenWpCmdHandler": {
+      "id": "Awp0ShowObjectCell",
+      "action": "senOpenManageWorkPackagePage",
+      "activeWhen": {
+        "condition": "conditions.senOpenWpCmdCondition"
+      },
+      "visibleWhen": {
+        "condition": "conditions.senOpenWpCmdCondition"
+      }
+    },
+    "senOpenWPHoveredCmdHandler": {
+      "id": "Awp0ShowObjectCellForObjectNavigation",
+      "action": "senOpenManageWorkPackagePage",
+      "activeWhen": {
+        "condition": "conditions.senOpenWpCmdCondition"
+      },
+      "visibleWhen": {
+        "condition": "conditions.senOpenWpCmdCondition"
+      }
+    },
+    "senOpenBaseWPCmdHandler": {
+      "id": "Awp0ShowObject",
+      "action": "senOpenManageWorkPackagePageFromRightWall",
+      "activeWhen": {
+        "condition": "conditions.senCCObjectOpenBaseVisibleCondition"
+      },
+      "visibleWhen": {
+        "condition": "conditions.senCCObjectOpenBaseVisibleCondition"
+      }
+    },
+    "senOpenWPInNewTabCmdHandler": {
+      "id": "Awp0OpenInNewTab",
+      "action": "senOpenManageWorkPackagePageInNewTab",
+      "activeWhen": {
+        "condition": "conditions.senOpenWPInNewTabOrWindowCmdCondition"
+      },
+      "visibleWhen": {
+        "condition": "conditions.senOpenWPInNewTabOrWindowCmdCondition"
+      }
+    },
+    "senOpenWPInNewWindowCmdHandler": {
+      "id": "Awp0OpenInNewWindow",
+      "action": "senOpenManageWorkPackagePageInNewWindow",
+      "activeWhen": {
+        "condition": "conditions.senOpenWPInNewTabOrWindowCmdCondition"
+      },
+      "visibleWhen": {
+        "condition": "conditions.senOpenWPInNewTabOrWindowCmdCondition"
+      }
+    },
+    "senOpenWPInIllustratorCmdHandler": {
+      "id": "openInIllustrator",
+      "action": "",
+      "activeWhen": {
+        "condition": "conditions.senCCObjectOpenBaseVisibleCondition"
+      },
+      "visibleWhen": false
+    },
+    "senOpenWPInRACCmdHandler": {
+      "id": "Awp0OpenInRAC",
+      "action": "",
+      "activeWhen": {
+        "condition": "conditions.senCCObjectOpenBaseVisibleCondition"
+      },
+      "visibleWhen": false
+    },
+    "senOpenRecentWPHandler": {
+      "id": "Awa0Open",
+      "action": "navigateToAlignEbomSbomPage",
+      "activeWhen": {
+        "condition": "conditions.senOpenWpCmdCondition"
+      },
+      "visibleWhen": {
+        "condition": "conditions.senOpenWpCmdCondition"
+      }
+    },
+    "senPackUnpackGroupHandler": {
+      "id": "senPackUnpackGroup",
+      "action": "showExpandOptions",
+      "visibleWhen": {
+        "condition": "conditions.isEbomorSbomContext"
+      },
+      "activeWhen": {
+        "condition": "conditions.isEbomorSbomContext"
+      },
+      "enableWhen": {
+        "condition": "conditions.isEbomorSbomContext"
+      }
+    },
+    "senPackHandler": {
+      "id": "Awb0Pack",
+      "action": "senPackElements",
+      "activeWhen": {
+        "condition": "conditions.isEbomorSbomContext"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isEbomorSbomContext"
+      },
+      "enableWhen": {
+        "condition": "conditions.isSenPackUnpackCmdEnable"
+      }
+    },
+    "senUnpackHandler": {
+      "id": "Awb0Unpack",
+      "action": "senUnpackElements",
+      "activeWhen": {
+        "condition": "conditions.isEbomorSbomContext"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isEbomorSbomContext"
+      },
+      "enableWhen": {
+        "condition": "conditions.isSenPackUnpackCmdEnable"
+      }
+    },
+    "senAddGroupHandler": {
+      "id": "senAddGroup",
+      "activeWhen": {
+        "condition": "conditions.isSbomContext"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isSbomContext"
+      },
+      "enableWhen": {
+        "condition": "conditions.isSbomContext"
+      }
+    },
+    "senAddChildElementCmdHandler": {
+      "id": "senAddChildElement",
+      "action": "checkForEditsAndLaunchAddPanel",
+      "activeWhen": {
+        "condition": "conditions.isSbomContext"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isSbomContext"
+      },
+      "enableWhen": {
+        "condition": "conditions.isAddSbomChildCmdEnable"
+      }
+    },
+    "senAddSiblingElementCmdHandler": {
+      "id": "senAddSiblingElement",
+      "action": "checkForEditsAndLaunchSiblingPanel",
+      "activeWhen": {
+        "condition": "conditions.isSbomContext"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isSbomContext"
+      },
+      "enableWhen": {
+        "condition": "conditions.isAddSbomSiblingCmdEnable"
+      }
+    },
+    "senAddSubstituteElementCmdHandler": {
+      "id": "senAddSubstituteElement",
+      "action": "checkForEditsAndLaunchAddSubstitutesPanel",
+      "activeWhen": {
+        "condition": "conditions.isSbomContext"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isSbomContext"
+      },
+      "enableWhen": {
+        "condition": "conditions.isAddSbomSubstituteCmdEnable"
+      }
+    },
+    "senAddAlternateElementCmdHandler": {
+      "id": "senAddAlternateElement",
+      "action": "CheckForEditsAndAddAlternateCommandAction",
+      "activeWhen": {
+        "condition": "conditions.isSbomContext"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isSbomContext"
+      },
+      "enableWhen": {
+        "condition": "conditions.isAddSbomAlternateCmdEnable"
+      }
+    },
+    "senRemoveElementCmdHandler": {
+      "id": "senRemoveElement",
+      "action": "showConfirmationMessageForRemoveFromSbomContext",
+      "activeWhen": {
+        "condition": "conditions.isSbomContext"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isSbomContext"
+      },
+      "enableWhen": {
+        "condition": "conditions.isRemoveSbomCmdEnable"
+      }
+    },
+    "senSbomStartEditTableCommandHandler": {
+      "id": "senStartEditTable",
+      "action": "senStartEdit",
+      "visibleWhen": {
+        "condition": "conditions.isSbomTreeTableEditable"
+      },
+      "activeWhen": {
+        "condition": "conditions.isSbomTreeTableEditable"
+      }
+    },
+    "senSbomSaveEditsPWAHandler": {
+      "id": "senSbomSaveEditsPWA",
+      "action": "senSbomSaveEdits",
+      "activeWhen": {
+        "condition": "conditions.isSbomTreeTableEditInProgress"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isSbomTreeTableEditInProgress"
+      }
+    },
+    "senSbomCancelEditsPWAHandler": {
+      "id": "senSbomCancelEditsPWA",
+      "action": "senCancelEditBatchAction",
+      "activeWhen": {
+        "condition": "conditions.isSbomTreeTableEditInProgress"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isSbomTreeTableEditInProgress"
+      }
+    },
+    "senAssignFromEbomToSbomCmdHandler": {
+      "id": "senAssignFromEbomToSbom",
+      "action": "assignFromEbomToSbomCommandAction",
+      "visibleWhen": {
+        "condition": "conditions.issenAssignFromEbomToSbomCmdVisible"
+      },
+      "activeWhen": {
+        "condition": "conditions.isSbomContext"
+      },
+      "enableWhen": {
+        "condition": "conditions.issenAssignFromEbomToSbomCmdEnable"
+      }
+    },
+    "senOpenSbomObjectCmdHandler": {
+      "id": "senOpenSbomObject",
+      "action": "openShowSbomPage",
+      "activeWhen": {
+        "condition": "conditions.isOpenSbomObjectCmdActive"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isOpenSbomObjectCmdActive"
+      },
+      "enableWhen": {
+        "condition": "conditions.isOpenSbomObjectCmdEnabled"
+      }
+    },
+    "senCreateNewWorkPackageHandler": {
+      "id": "createNewWorkPackage",
+      "action": "senOpenCreateWorkPackagePopup",
+      "activeWhen": {
+        "condition": "conditions.senCreateWpCmdCondition"
+      },
+      "visibleWhen": {
+        "condition": "conditions.senCreateWpCmdCondition"
+      }
+    },
+    "senOpenSETaskHandlerForManagePage": {
+      "id": "senOpenSETaskCommandForManagePage",
+      "action": "navigateToAlignEbomSbomPageFromRightWall",
+      "activeWhen": {
+        "condition": "conditions.IsSERoleSelected"
+      },
+      "visibleWhen": {
+        "condition": "conditions.IsSERoleSelected"
+      },
+      "enableWhen": {
+        "condition": "conditions.enableOpenSETaskCommand"
+      }
+    },
+    "senSubmitToWorkflowCommandHandler": {
+      "id": "senSubmitToWorkflowCommand",
+      "action": "getSubmitToWorkflowInputs",
+      "visibleWhen": {
+        "condition": "conditions.isSbomContext"
+      },
+      "activeWhen": {
+        "condition": "conditions.isSbomContext"
+      },
+      "enableWhen": {
+        "condition": "conditions.senSubmitToWorkflowCommandEnable"
+      }
+    },
+    "senOccurrenceEffectivityHandler": {
+      "id": "senOccurrenceEffectivity",
+      "action": "launchOccEffectivityPanel",
+      "activeWhen": {
+        "condition": "conditions.isSbomContext"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isSbomContext"
+      },
+      "enableWhen": {
+        "condition": "conditions.senOccurrenceEffectivityCommandEnable"
+      }
+    },
+    "senReleaseStatusEffectivityHandler": {
+      "id": "senReleaseStatusEffectivity",
+      "action": "launchRevisionEffectivityPanel",
+      "activeWhen": {
+        "condition": "conditions.senReleaseEffectivityCommandActive"
+      },
+      "visibleWhen": true,
+      "enableWhen": true
+    },
+    "senConfigurationGroupHandler": {
+      "id": "senConfigurationGroup",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.isSESublocation"
+      },
+      "enableWhen": {
+        "condition": "conditions.isSESublocation"
+      }
+    },
+    "senConfigurationFilterCommandHandler": {
+      "id": "senConfigurationFilter",
+      "action": "launchConfigurationPanel",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.senConfigurationFilterSupported"
+      }
+    },
+    "senResetStructureCommandHandler": {
+      "id": "senResetStructure",
+      "action": "showConfirmationMessageForReset",
+      "activeWhen": true,
+      "visibleWhen": true
+    },
+    "senShowUnconfiguredByOccEffectivityCommandHandler": {
+      "id": "senShowUnconfiguredByOccEffectivity",
+      "action": "toggleIneffectiveAction",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.senShowDisplayToggleCondition"
+      },
+      "selectWhen": {
+        "condition": "conditions.showUnconfigured"
+      }
+    },
+    "senShowUnconfiguredByVariantsCommandHandler": {
+      "id": "senShowUnconfiguredByVariants",
+      "action": "toggleVariantsInAction",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.senShowDisplayToggleCondition"
+      },
+      "selectWhen": {
+        "condition": "conditions.senShowUnconfiguredVariants"
+      }
+    },
+    "senTreeViewGroupHandler": {
+      "id": "senTreeViewGroup",
+      "visibleWhen": true,
+      "activeWhen": {
+        "condition": "conditions.isEbomorSbomContext"
+      },
+      "enableWhen": {
+        "condition": "conditions.isEbomorSbomContext"
+      }
+    },
+    "senShowTreeSummaryViewHandler": {
+      "id": "senShowTreeSummaryView",
+      "action": "senswitchToTreeSummaryView",
+      "activeWhen": true,
+      "visibleWhen": true,
+      "selectWhen": true
+    },
+    "senShowTreeViewHandler": {
+      "id": "senShowTreeView",
+      "action": "senswitchToTreeView",
+      "activeWhen": true,
+      "visibleWhen": true,
+      "selectWhen": true
+    },
+    "senEolListViewHandler": {
+      "id": "senEolListView",
+      "action": "senEolSwitchViews",
+      "activeWhen": {
+        "condition": "conditions.isEOLListViewEnable"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isEOLListViewEnable"
+      },
+      "enableWhen": {
+        "condition": "conditions.isEOLListViewEnable"
+      }
+    },
+    "senEolTableViewHandler": {
+      "id": "senEolTableView",
+      "action": "senEolSwitchViews",
+      "activeWhen": {
+        "condition": "conditions.isEOLTableViewEnable"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isEOLTableViewEnable"
+      },
+      "enableWhen": {
+        "condition": "conditions.isEOLTableViewEnable"
+      }
+    },
+    "senEOLReviseHandler": {
+      "id": "senEOLReviseCommand",
+      "action": "senEolReviseAction",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.sbomSideCommandVisibleCondition"
+      },
+      "enableWhen": true
+    },
+    "senEOLOpenCellCommandHandler": {
+      "id": "senEOLOpenCellCommand",
+      "action": "navigateEOLAction",
+      "activeWhen": true,
+      "visibleWhen": true
+    },
+    "removeNBOMFromWorkpackageCommandHandler": {
+      "id": "removeNBOMFromWorkpackageCommand",
+      "action": "removeNBOMFromWorkpackage",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.isNBOMSelectedForRemoveStructureContext"
+      }
+    },
+    "senCommandForManageEnterpriseSBOMHandler": {
+      "id": "senCommandForManageEnterpriseSBOM",
+      "action": "navigateToAuthorEntSbomPage",
+      "activeWhen": {
+        "condition": "conditions.isEnterpriseBOMSelected"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isEnterpriseBOMSelected"
+      },
+      "enableWhen": {
+        "condition": "conditions.isEnterpriseBOMSelected"
+      }
+    }
+  },
+  "actions": {
+    "senCreateChar": {
+      "actionType": "popup",
+      "inputData": {
+        "options": {
+          "caption": "{{i18n.Create}}",
+          "view": "SlmCreateChar",
+          "preset": "modal",
+          "height": "500",
+          "width": "450",
+          "clickOutsideToClose": false,
+          "draggable": true,
+          "enableResize": true,
+          "independent": true
+        }
+      }
+    },
+    "senCreateLotAction": {
+      "actionType": "popup",
+      "inputData": {
+        "options": {
+          "caption": "{{i18n.createLotTitle}}",
+          "view": "SlmCreateLot",
+          "preset": "modal",
+          "height": "420",
+          "width": "450",
+          "hasCloseButton": false,
+          "clickOutsideToClose": false,
+          "draggable": true,
+          "enableResize": true,
+          "independent": true,
+          "subPanelContext": {
+            "vmo": "{{ctx.sbomContext.selectedModelObjects[0]}}"
+          },
+          "data": "{{data}}"
+        }
+      }
+    },
+    "senReviseElementAction": {
+      "actionType": "Event",
+      "method": "Event",
+      "inputData": {
+        "events": [
+          {}
+        ]
+      },
+      "actionMessages": {
+        "success": [
+          {
+            "message": "senShowReviseConfirmationMessage",
+            "condition": "ctx.sbomContext.selectedModelObjects.length === 1"
+          },
+          {
+            "message": "senShowReviseMultipleElementsConfirmationMessage",
+            "condition": "ctx.sbomContext.selectedModelObjects.length > 1"
+          }
+        ]
+      }
+    },
+    "openShowSbomPage": {
+      "actionType": "Navigate",
+      "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+      "navigationParams": {
+        "uid": "{{ctx.sbomContext.selectedModelObjects[0].props.awb0UnderlyingObject.dbValues[0]}}"
+      }
+    },
+    "navigateToAlignEbomSbomPage": {
+      "actionType": "JSFunction",
+      "method": "openCCObject",
+      "inputData": {
+        "cc_uid": "{{commandContext.vmo.uid}}",
+        "cc_type": "{{commandContext.vmo.type}}",
+        "navigateIn": ""
+      },
+      "deps": "js/senOpenCCObject"
+    },
+    "navigateToAlignEbomSbomPageFromRightWall": {
+      "actionType": "JSFunction",
+      "method": "openCCObject",
+      "inputData": {
+        "cc_uid": "{{ctx.selected.uid}}",
+        "cc_type": "{{ctx.selected.type}}",
+        "navigateIn": ""
+      },
+      "deps": "js/senOpenCCObject"
+    },
+    "navigateToAlignEbomSbomPageInNewTab": {
+      "actionType": "JSFunction",
+      "method": "openCCObject",
+      "inputData": {
+        "cc_uid": "{{ctx.selected.uid}}",
+        "cc_type": "{{ctx.selected.type}}",
+        "navigateIn": "newTab"
+      },
+      "deps": "js/senOpenCCObject"
+    },
+    "navigateToAlignEbomSbomPageInNewWindow": {
+      "actionType": "JSFunction",
+      "method": "openCCObject",
+      "inputData": {
+        "cc_uid": "{{ctx.selected.uid}}",
+        "cc_type": "{{ctx.selected.type}}",
+        "navigateIn": "newWindow"
+      },
+      "deps": "js/senOpenCCObject"
+    },
+    "senStartEdit": {
+      "actionType": "batchJob",
+      "steps": [
+        {
+          "action": "senUpdateStartEditFlag"
+        },
+        {
+          "action": "senSbomStartTreeEdit"
+        }
+      ]
+    },
+    "senCancelEditBatchAction": {
+      "actionType": "batchJob",
+      "steps": [
+        {
+          "action": "checkEditStateOfSbomTreeTable"
+        },
+        {
+          "action": "senSbomCancelEditsMessage",
+          "condition": "conditions.isSbomTreeTableDirty"
+        },
+        {
+          "action": "senSbomCancelEdits",
+          "condition": "!conditions.isSbomTreeTableDirty"
+        }
+      ]
+    },
+    "senUpdateStartEditFlag": {
+      "actionType": "JSFunction",
+      "method": "registerCtx",
+      "inputData": {
+        "name": "isEditButtonClicked",
+        "value": true
+      },
+      "events": {
+        "success": [
+          {
+            "name": "senSbomTreeTable.plTable.clientRefresh"
+          }
+        ]
+      },
+      "deps": "js/appCtxService"
+    },
+    "senSbomStartTreeEdit": {
+      "actionType": "JSFunction",
+      "method": "execute",
+      "deps": "js/startEditGroupCommandService",
+      "inputData": {
+        "handleContext": "{{ctx.sbomContext.vmc.name}}",
+        "view": "{{ctx.ViewModeContext.ViewModeContext}}"
+      }
+    },
+    "senSavePLFValues": {
+      "actionType": "JSFunction",
+      "method": "savePLFValues",
+      "deps": "js/senSaveandCancelEditPLF"
+    },
+    "senSbomSaveServerEdits": {
+      "actionType": "JSFunctionAsync",
+      "method": "saveEdits",
+      "deps": "js/editHandlerService",
+      "inputData": {
+        "handleContext": "{{ctx.sbomContext.vmc.name}}"
+      }
+    },
+    "senSbomSaveEdits": {
+      "actionType": "batchJob",
+      "steps": [
+        {
+          "action": "senSavePLFValues"
+        },
+        {
+          "action": "senSbomSaveServerEdits"
+        }
+      ]
+    },
+    "senCancelPLFEdits": {
+      "actionType": "JSFunction",
+      "method": "senCancelPLFEdits",
+      "deps": "js/senSaveandCancelEditPLF"
+    },
+    "senSbomCancelEdits": {
+      "actionType": "batchJob",
+      "steps": [
+        {
+          "action": "senCancelPLFEdits"
+        },
+        {
+          "action": "isDirtyOnCancelEdits"
+        }
+      ]
+    },
+    "checkEditStateOfSbomTreeTable": {
+      "actionType": "JSFunctionAsync",
+      "method": "registerEditStateInCtx",
+      "deps": "js/senSaveandCancelEditPLF"
+    },
+    "assignFromEbomToSbomCommandAction": {
+      "actionType": "JSFunction",
+      "method": "assignFromEbomToSbom",
+      "inputData": {
+        "sourceObjects": "{{ctx.ebomContext.selectedModelObjects}}",
+        "targetObject": "{{ctx.sbomContext.selectedModelObjects[0]}}",
+        "context": "{{ctx.sbomContext}}"
+      },
+      "deps": "js/senAssignPartsHandler",
+      "events": {
+        "success": [
+          {
+            "name": "senSbomTreeTable.plTable.clientRefresh"
+          },
+          {
+            "name": "senEbomTreeTable.plTable.clientRefresh"
+          }
+        ]
+      }
+    },
+    "senOpenCreateWorkPackagePopup": {
+      "actionType": "batchJob",
+      "steps": [
+        {
+          "action": "senInitiateWorkPackagePopup"
+        },
+        {
+          "action": "senOpenCreateWorkPackage"
+        }
+      ]
+    },
+    "senInitiateWorkPackagePopup": {
+      "actionType": "JSFunction",
+      "method": "initiateWorkPackagePopup",
+      "inputData": {},
+      "deps": "js/createWorkPackagePopupUtils"
+    },
+    "senOpenCreateWorkPackage": {
+      "actionType": "popup",
+      "inputData": {
+        "options": {
+          "view": "EpCreateObject",
+          "preset": "modal",
+          "caption": "{{i18n.senCreateWorkPackageHeaderTitle}}",
+          "height": "500",
+          "width": "450",
+          "independent": true,
+          "subPanelContext": {
+            "objectBaseType": "MECollaborationContext",
+            "subTypeExclusionList": [
+              "Mei0ExecutionPlan",
+              "Ppe0PcbWorkPackage",
+              "Ap0AdvanceCollabContext",
+              "Ppe0ElectronicsWorkPackage",
+              "Mbc0InternalWorkPackage",
+              "Mei0ProductionPlan"
+            ],
+            "hideCreateAndAddMoreButton": true
+          }
+        }
+      },
+      "outputData": {
+        "popupId": ""
+      }
+    },
+    "showConfirmationMessageForRemoveFromSbomContext": {
+      "actionType": "JSFunction",
+      "method": "getDisplayName",
+      "deps": "js/typeDisplayName.service",
+      "inputData": {
+        "modelObject": "{{ctx.sbomContext.selectedModelObjects[0]}}"
+      },
+      "outputData": {
+        "displayNameOfSelectedElement": ""
+      },
+      "actionMessages": {
+        "success": [
+          {
+            "condition": "ctx.sbomContext.selectedModelObjects.length === 1",
+            "message": "removeSingleFromSbom"
+          },
+          {
+            "condition": "ctx.sbomContext.selectedModelObjects.length > 1",
+            "message": "removeMultiplefromSbom"
+          }
+        ]
+      }
+    },
+    "removeAndUpdateElements": {
+      "actionType": "batchJob",
+      "steps": [
+        {
+          "action": "removeElements"
+        },
+        {
+          "action": "sbomRemoveElements"
+        }
+      ]
+    },
+    "sbomRemoveElements": {
+      "actionType": "Event",
+      "method": "Event",
+      "inputData": {
+        "events": [
+          {
+            "name": "sen.performAccCheck"
+          }
+        ]
+      }
+    },
+    "senRevisePreProcessAction": {
+      "actionType": "JSFunction",
+      "method": "preprocessAndCreateReviseInput",
+      "deps": "js/senReviseService",
+      "inputData": {
+        "selectedObject": "{{ctx.mselected}}",
+        "parent": "{{ctx.taskPageContext.cnObject.uid}}"
+      },
+      "outputData": {
+        "reviseInput": ""
+      },
+      "events": {
+        "success": [
+          {
+            "name": "sen.revisePreProcessSucessEvent"
+          }
+        ]
+      }
+    },
+    "senReviseSoaCallAction": {
+      "actionType": "TcSoaService",
+      "serviceName": "Core-2013-05-DataManagement",
+      "method": "reviseObjects",
+      "inputData": {
+        "reviseIn": "{{data.reviseInput}}"
+      },
+      "outputData": {
+        "revisedObjects": "reviseTrees",
+        "partialErorrs": "partialErrors"
+      },
+      "events": {
+        "success": [
+          {
+            "name": "sen.reviseSoaSuccess",
+            "eventData": {
+              "selectedObjects": "{{ctx.mselected}}",
+              "revisedObjects": "{{data.revisedObjects}}"
+            }
+          }
+        ]
+      },
+      "actionMessages": {
+        "failure": [
+          {
+            "message": "reviseFailureMsg",
+            "condition": "errorCode.code===48071 || errorCode.code===51003 || errorCode.code===48020"
+          }
+        ]
+      },
+      "deps": "js/Awp0ShowSaveAsService"
+    },
+    "senPostReviseSoaSuccess": {
+      "actionType": "JSFunction",
+      "method": "reloadRevisedObjects",
+      "inputData": {
+        "eventData": "{{data.eventData}}"
+      },
+      "events": {
+        "success": [
+          {
+            "name": "sen.performAccCheck"
+          }
+        ]
+      },
+      "deps": "js/senReviseService"
+    },
+    "senswitchToTreeSummaryView": {
+      "actionType": "JSFunction",
+      "method": "changeViewMode",
+      "deps": "js/viewMode.service",
+      "inputData": {
+        "viewMode": "TreeSummaryView"
+      }
+    },
+    "senswitchToTreeView": {
+      "actionType": "JSFunction",
+      "method": "changeViewMode",
+      "deps": "js/viewMode.service",
+      "inputData": {
+        "viewMode": "TreeView"
+      }
+    },
+    "senEolSwitchViews": {
+      "actionType": "JSFunction",
+      "method": "registerCtx",
+      "inputData": {
+        "name": "eolSectionViewType",
+        "value": "{{ctx.eolSectionViewType === 'treeView' ? 'listView' : 'treeView'}}"
+      },
+      "deps": "js/appCtxService"
+    },
+    "senEolReviseAction": {
+      "actionType": "Event",
+      "method": "Event",
+      "inputData": {
+        "subPanelContext": "{{props.subPanelContext}}",
+        "data": "{{data}}",
+        "events": [
+          {}
+        ]
+      },
+      "actionMessages": {
+        "success": [
+          {
+            "message": "senEolShowReviseConfirmationMessage"
+          }
+        ]
+      }
+    },
+    "senReviseEOLSoaCallAction": {
+      "actionType": "TcSoaService",
+      "serviceName": "Core-2013-05-DataManagement",
+      "method": "reviseObjects",
+      "inputData": {
+        "reviseIn": [
+          {
+            "targetObject": {
+              "uid": "{{ctx.eolOnSelectedPart[0].uid}}",
+              "type": "{{ctx.eolOnSelectedPart[0].type}}"
+            }
+          }
+        ]
+      },
+      "policy": {
+        "types": [
+          {
+            "name": "Smr0EndOfLife",
+            "properties": [
+              {
+                "name": "smr0FromDate"
+              },
+              {
+                "name": "smr0Duration"
+              },
+              {
+                "name": "smr0DurationUnit"
+              },
+              {
+                "name": "fnd0RevisionId"
+              },
+              {
+                "name": "fnd0SiblingRevisions",
+                "modifiers": [
+                  {
+                    "name": "withProperties",
+                    "Value": "true"
+                  }
+                ]
+              },
+              {
+                "name": "release_statuses",
+                "modifiers": [
+                  {
+                    "name": "withProperties",
+                    "Value": "true"
+                  }
+                ]
+              },
+              {
+                "name": "creation_date"
+              }
+            ]
+          }
+        ]
+      },
+      "events": {
+        "success": [
+          {
+            "name": "endOfLifeSection.updated"
+          },
+          {
+            "name": "senSbomTreeTable.plTable.clientRefresh"
+          },
+          {
+            "name": "senCreateOrRemove.updateEOLOnSelectedPart"
+          }
+        ]
+      },
+      "outputData": {
+        "revisedObjects": "reviseTrees",
+        "partialErorrs": "partialErrors"
+      }
+    },
+    "navigateEOLAction": {
+      "actionType": "Navigate",
+      "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+      "navigationParams": {
+        "uid": "{{commandContext.vmo.uid}}"
+      }
+    },
+    "senSbomCancelEditsMessage": {
+      "actionType": "Event",
+      "method": "Event",
+      "inputData": {
+        "events": [
+          {}
+        ]
+      },
+      "actionMessages": {
+        "success": [
+          {
+            "message": "saveWarningMessage"
+          }
+        ]
+      }
+    },
+    "senOpenManageWorkPackagePageFromRightWall": {
+      "actionType": "Navigate",
+      "navigateTo": "manageWorkPackageNew",
+      "navigationParams": {
+        "uid": "{{commandContext.selectionData.selected[0].uid}}"
+      }
+    },
+    "senOpenManageWorkPackagePageInNewTab": {
+      "actionType": "Navigate",
+      "navigateTo": "manageWorkPackageNew",
+      "navigationParams": {
+        "uid": "{{commandContext.selectionData.selected[0].uid}}"
+      },
+      "navigateIn": "newTab"
+    },
+    "senOpenManageWorkPackagePageInNewWindow": {
+      "actionType": "Navigate",
+      "navigateTo": "manageWorkPackageNew",
+      "navigationParams": {
+        "uid": "{{commandContext.selectionData.selected[0].uid}}"
+      },
+      "navigateIn": "newWindow"
+    },
+    "senOpenManageWorkPackagePage": {
+      "actionType": "Navigate",
+      "navigateTo": "manageWorkPackageNew",
+      "navigationParams": {
+        "uid": "{{commandContext.vmo.uid}}"
+      }
+    },
+    "senPackElements": {
+      "actionType": "batchJob",
+      "steps": [
+        {
+          "action": "performPackAction"
+        },
+        {
+          "action": "registerPackFlagInCtx"
+        }
+      ]
+    },
+    "senUnpackElements": {
+      "actionType": "batchJob",
+      "steps": [
+        {
+          "action": "performUnPackAction"
+        },
+        {
+          "action": "registerPackFlagInCtx"
+        }
+      ]
+    },
+    "registerPackFlagInCtx": {
+      "actionType": "JSFunction",
+      "method": "registerCtx",
+      "inputData": {
+        "name": "senPackUnpackAction",
+        "value": true
+      },
+      "deps": "js/appCtxService"
+    },
+    "removeNBOMFromWorkpackage": {
+      "actionType": "JSFunctionAsync",
+      "method": "removeNBOM",
+      "inputData": {
+        "selectedObject": "{{ctx.epTaskPageContext.EbomStructureContext}}"
+      },
+      "deps": "js/removeNBOMService"
+    },
+    "navigateToAuthorEntSbomPage": {
+      "actionType": "JSFunction",
+      "method": "openEnterpriseSBOM",
+      "inputData": {
+        "obj_uid": "{{ctx.selected.uid}}",
+        "obj_type": "{{ctx.selected.type}}",
+        "navigateIn": ""
+      },
+      "deps": "js/senOpenEnterpriseSbom"
+    }
+  },
+  "messages": {
+    "removeSingleFromSbom": {
+      "messageType": "WARNING",
+      "messageText": "{{i18n.senRemoveSingleConfirmation}}",
+      "navigationOptions": [
+        {
+          "option": "Cancel",
+          "text": "{{i18n.cancel}}"
+        },
+        {
+          "option": "Remove",
+          "text": "{{i18n.aceRemove}}",
+          "action": "removeAndUpdateElements"
+        }
+      ],
+      "messageTextParams": [
+        "{{data.displayNameOfSelectedElement}}"
+      ]
+    },
+    "removeMultiplefromSbom": {
+      "messageType": "WARNING",
+      "messageText": "{{i18n.senRemoveMultipleConfirmation}}",
+      "navigationOptions": [
+        {
+          "option": "Cancel",
+          "text": "{{i18n.cancel}}"
+        },
+        {
+          "option": "Remove",
+          "text": "{{i18n.aceRemove}}",
+          "action": "removeAndUpdateElements"
+        }
+      ],
+      "messageTextParams": [
+        "{{ctx.sbomContext.selectedModelObjects.length}}"
+      ]
+    },
+    "senShowReviseConfirmationMessage": {
+      "messageType": "WARNING",
+      "messageText": "{{i18n.senReviseElementConfirmation}}",
+      "navigationOptions": [
+        {
+          "option": "Cancel",
+          "text": "{{i18n.cancel}}"
+        },
+        {
+          "option": "Revise",
+          "text": "{{i18n.senReviseCommandTitle}}",
+          "action": "senRevisePreProcessAction"
+        }
+      ],
+      "messageTextParams": [
+        "{{ctx.sbomContext.selectedModelObjects[0].props.object_string.uiValues[0]}}"
+      ]
+    },
+    "senEolShowReviseConfirmationMessage": {
+      "messageType": "WARNING",
+      "messageText": "{{i18n.senReviseElementConfirmation}}",
+      "navigationOptions": [
+        {
+          "option": "Cancel",
+          "text": "{{i18n.cancel}}"
+        },
+        {
+          "option": "Revise",
+          "text": "{{i18n.senReviseCommandTitle}}",
+          "action": "senReviseEOLSoaCallAction"
+        }
+      ],
+      "messageTextParams": [
+        "{{ctx.eolOnSelectedPart[0].props.object_name.dbValues[0]}}"
+      ]
+    },
+    "senShowReviseMultipleElementsConfirmationMessage": {
+      "messageType": "WARNING",
+      "messageText": "{{i18n.senReviseMultipleElementsConfirmation}}",
+      "navigationOptions": [
+        {
+          "option": "Cancel2",
+          "text": "{{i18n.cancel}}"
+        },
+        {
+          "option": "Revise",
+          "text": "{{i18n.senReviseCommandTitle}}",
+          "action": "senRevisePreProcessAction"
+        }
+      ],
+      "messageTextParams": [
+        "{{ctx.sbomContext.selectedModelObjects.length}}"
+      ]
+    },
+    "saveWarningMessage": {
+      "messageType": "WARNING",
+      "messageText": "{{i18n.saveWarningMessage}}",
+      "navigationOptions": [
+        {
+          "option": "Discard",
+          "text": "{{i18n.discard}}",
+          "action": "senSbomCancelEdits"
+        },
+        {
+          "option": "Save",
+          "text": "{{i18n.save}}",
+          "action": "senSbomSaveEdits"
+        }
+      ],
+      "messageTextParams": [
+        "{{ctx.sbomContext.topElement}}"
+      ]
+    }
+  },
+  "onEvent": [
+    {
+      "eventId": "createLot",
+      "action": "senCreateLotAction"
+    },
+    {
+      "eventId": "sen.revisePreProcessSucessEvent",
+      "action": "senReviseSoaCallAction"
+    },
+    {
+      "eventId": "sen.reviseSoaSuccess",
+      "action": "senPostReviseSoaSuccess",
+      "cacheEventData": true
+    },
+    {
+      "eventId": "senCancelEditEvent",
+      "message": "saveWarningMessage"
+    }
+  ],
+  "conditions": {
+    "sbomSideCommandVisibleCondition": {
+      "expression": " commandContext.viewKey === 'sbomContext' && ctx.sbomContext.selectedModelObjects.length ===1"
+    },
+    "senCreateCharCommandActive": {
+      "expression": {
+        "$or": [
+          {
+            "$and": [
+              {
+                "$source": "ctx.selected",
+                "$query": {
+                  "$and": [
+                    {
+                      "$source": "modelType.typeHierarchyArray",
+                      "$query": {
+                        "$in": [
+                          "Awb0Element"
+                        ]
+                      }
+                    },
+                    {
+                      "$source": "modelType.typeHierarchyArray",
+                      "$query": {
+                        "$notin": [
+                          "Smr1PhysicalInstance"
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "$or": [
+                  {
+                    "$source": {
+                      "$adapt": "ctx.selected"
+                    },
+                    "$query": {
+                      "$source": "modelType.typeHierarchyArray",
+                      "$query": {
+                        "$in": [
+                          "Part Revision"
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "$and": [
+                      {
+                        "$source": {
+                          "$adapt": "ctx.selected"
+                        },
+                        "$query": {
+                          "$source": "modelType.typeHierarchyArray",
+                          "$query": {
+                            "$in": [
+                              "ItemRevision"
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "$source": "ctx.userSession",
+                        "$query": {
+                          "$source": "props.role_name.dbValues",
+                          "$query": {
+                            "$in": [
+                              "Service Engineer"
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "$source": {
+              "$adapt": "ctx.selected"
+            },
+            "$query": {
+              "$source": "modelType.typeHierarchyArray",
+              "$query": {
+                "$in": [
+                  "Folder"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "senOpenWpCmdCondition": {
+      "expression": {
+        "$and": [
+          {
+            "$source": {
+              "$adapt": "commandContext.vmo"
+            },
+            "$query": {
+              "$source": "modelType.typeHierarchyArray",
+              "$query": {
+                "$in": [
+                  "CCObject"
+                ]
+              }
+            }
+          },
+          {
+            "$source": "conditions.IsSERoleSelected",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "conditions.cmdAwp0ShowObjectCellBaseVisibleCondition",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": "ctx.preferences.EP_WorkPackageContentType",
+            "$query": {
+              "$in": [
+                "NBOM:PSBOMViewRevision",
+                "SBOM:PSBOMViewRevision"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "senCCObjectOpenBaseVisibleCondition": {
+      "expression": "(conditions.IsSERoleSelected && ctx.selected  && ctx.mselected && ctx.mselected.length === 1 && ctx.selected.modelType.typeHierarchyArray.indexOf( 'CCObject' ) > -1)"
+    },
+    "senOpenWPInNewTabOrWindowCmdCondition": {
+      "expression": "(conditions.senCCObjectOpenBaseVisibleCondition && !ctx.aw_hosting_enabled)"
+    },
+    "IsSERoleSelected": {
+      "expression": "ctx.userSession.props.role_name.dbValues[0] === 'Service Engineer'"
+    },
+    "isSenPackUnpackCmdEnable": {
+      "expression": "commandContext.occContext.supportedFeatures.Awb0PackSimilarElementsFeature && commandContext.occContext.selectedModelObjects[0].props.awb0Parent.dbValues[0] != null "
+    },
+    "isEbomorSbomContext": {
+      "expression": "commandContext.viewKey === 'ebomContext'||commandContext.viewKey === 'sbomContext'"
+    },
+    "isSbomContext": {
+      "expression": "commandContext.viewKey === 'sbomContext'"
+    },
+    "isTypeOfAwb0PositionedElementSelectedInEbom": {
+      "expression": "ctx.ebomContext.selectedModelObjects[0].modelType && ctx.ebomContext.selectedModelObjects[0].modelType.typeHierarchyArray.indexOf('Awb0PositionedElement') > -1"
+    },
+    "isTypeOfAwb0PositionedElementSelectedInSbom": {
+      "expression": "ctx.sbomContext.selectedModelObjects[0].modelType && ctx.sbomContext.selectedModelObjects[0].modelType.typeHierarchyArray.indexOf('Awb0PositionedElement') > -1 "
+    },
+    "isAddSbomChildCmdEnable": {
+      "expression": "conditions.isTypeOfAwb0PositionedElementSelectedInSbom && commandContext.viewKey === 'sbomContext' && ctx.sbomContext.selectedModelObjects.length ===1"
+    },
+    "isAddSbomSiblingCmdEnable": {
+      "expression": "conditions.isTypeOfAwb0PositionedElementSelectedInSbom && commandContext.viewKey === 'sbomContext' && ctx.sbomContext.selectedModelObjects.length ===1 &&  ctx.mselected[0].props.awb0Parent.dbValues[0] !== null"
+    },
+    "isAddSbomSubstituteCmdEnable": {
+      "expression": "conditions.isTypeOfAwb0PositionedElementSelectedInSbom && commandContext.viewKey === 'sbomContext' && ctx.sbomContext.selectedModelObjects.length ===1 &&  ctx.mselected[0].props.awb0Parent.dbValues[0] !== null"
+    },
+    "isAddSbomAlternateCmdEnable": {
+      "expression": "conditions.isTypeOfAwb0PositionedElementSelectedInSbom && commandContext.viewKey === 'sbomContext' && ctx.sbomContext.selectedModelObjects.length ===1"
+    },
+    "isRemoveSbomCmdEnable": {
+      "expression": "conditions.isTypeOfAwb0PositionedElementSelectedInSbom && commandContext.viewKey === 'sbomContext' && ctx.sbomContext.selectedModelObjects[0].props.awb0Parent.dbValues[0] !== null"
+    },
+    "isSbomTreeTableEditable": {
+      "expression": "conditions.isSbomContext && ctx.sbomDataProvider && ctx.sbomDataProvider.canEdit && !ctx.sbomDataProvider._editing"
+    },
+    "isSbomTreeTableEditInProgress": {
+      "expression": "conditions.isSbomContext && ctx.sbomDataProvider && ctx.sbomDataProvider._editing"
+    },
+    "issenAssignFromEbomToSbomCmdVisible": {
+      "expression": "conditions.isSbomContext"
+    },
+    "issenAssignFromEbomToSbomCmdEnable": {
+      "expression": "conditions.isTypeOfAwb0PositionedElementSelectedInEbom && conditions.isTypeOfAwb0PositionedElementSelectedInSbom && commandContext.viewKey === 'sbomContext' && ctx.ebomContext.selectedModelObjects.length > 0 &&  ctx.sbomContext.selectedModelObjects.length === 1"
+    },
+    "isOpenSbomObjectCmdActive": {
+      "expression": "conditions.isSbomContext"
+    },
+    "isOpenSbomObjectCmdEnabled": {
+      "expression": "conditions.isOpenSbomObjectCmdActive && ctx.sbomContext.selectedModelObjects.length === 1"
+    },
+    "IsSEWorkspaceSelected": {
+      "expression": "ctx.workspace.workspaceId=== 'ServiceEngineeringWorkspace'"
+    },
+    "senCreateWpCmdCondition": {
+      "expression": "(conditions.IsSEWorkspaceSelected && conditions.IsSERoleSelected)"
+    },
+    "enableOpenSETaskCommand": {
+      "expression": "(conditions.IsSERoleSelected && ctx.epTaskPageContext.ebomStructure  && ctx.epTaskPageContext.mbomStructure)"
+    },
+    "senSubmitToWorkflowCommandEnable": {
+      "expression": "conditions.isTypeOfAwb0PositionedElementSelectedInSbom && ctx.sbomContext.selectedModelObjects.length > 0"
+    },
+    "senReviseCommandEnable": {
+      "expression": "conditions.isTypeOfAwb0PositionedElementSelectedInSbom && commandContext.viewKey === 'sbomContext' && ctx.sbomContext.selectedModelObjects[0].props.awb0Parent.dbValues[0] !== null"
+    },
+    "senOccurrenceEffectivityCommandEnable": {
+      "expression": "conditions.isTypeOfAwb0PositionedElementSelectedInSbom && commandContext.viewKey === 'sbomContext' && ctx.sbomContext.selectedModelObjects[0].props.awb0Parent.dbValues[0] !== null"
+    },
+    "senReleaseEffectivityCommandActive": {
+      "expression": "conditions.isSbomContext && ctx.sbomContext.selectedModelObjects[0].props.awb0ArchetypeRevRelStatus.dbValues[0] != null && ctx.sbomContext.selectedModelObjects[0].props.awb0Parent.dbValues[0] !== null"
+    },
+    "senConfigurationFilterSupported": {
+      "expression": "commandContext.occContext.supportedFeatures.Awb0EnableConfigurationPanelFeature === true"
+    },
+    "senShowDisplayToggleCondition": {
+      "expression": "commandContext.occContext.supportedFeatures.Awb0DisplayToggleFeature === true"
+    },
+    "senShowUnconfigured": {
+      "expression": "commandContext.occContext.displayToggleOptions.PSEShowUnconfigdEffPref === true"
+    },
+    "senShowUnconfiguredVariants": {
+      "expression": "commandContext.occContext.displayToggleOptions.PSEShowUnconfigdVarPref === true"
+    },
+    "isEOLListViewEnable": {
+      "expression": "ctx.eolSectionViewType === 'listView'"
+    },
+    "isEOLTableViewEnable": {
+      "expression": "ctx.eolSectionViewType === 'treeView'"
+    },
+    "isSESublocation": {
+      "expression": "ctx.sublocation.nameToken === 'ServiceEngineeringSublocation'"
+    },
+    "isSbomTreeTableDirty": {
+      "expression": "ctx.isTableDirty || ctx.EditedPLFandProps !==undefined"
+    },
+    "isNBOMSelectedForRemoveStructureContext": {
+      "expression": "ctx.epTaskPageContext.EbomStructureContext"
+    },
+    "isEnterpriseBOMSelected": {
+      "expression": "ctx.selected  && ctx.mselected && ctx.mselected.length === 1 && (ctx.selected.modelType.typeHierarchyArray.indexOf( 'Ebm0AbsPartProd' ) > -1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'Ebm0PartProductRevision' ) > -1)"
+    }
+  },
+  "i18n": {
+    "saveWarningMessage": [
+      "senMessages"
+    ],
+    "senStartEditTableTitle": [
+      "senMessages"
+    ],
+    "senStartEditTableDesc": [
+      "senMessages"
+    ],
+    "saveEditsTitle": [
+      "senMessages"
+    ],
+    "saveEditsDesc": [
+      "senMessages"
+    ],
+    "cancelEditsTitle": [
+      "senMessages"
+    ],
+    "cancelEditsDesc": [
+      "senMessages"
+    ],
+    "senCreateLotDesc": [
+      "senMessages"
+    ],
+    "createCharTitle": [
+      "senMessages"
+    ],
+    "createCharDescription": [
+      "senMessages"
+    ],
+    "Create": [
+      "senMessages"
+    ],
+    "createLotTitle": [
+      "senMessages"
+    ],
+    "senPackUnpackGroupTitle": [
+      "senMessages"
+    ],
+    "senAssignFromEbomToSbomCmdTitle": [
+      "senMessages"
+    ],
+    "senAssignFromEbomToSbomCmdDescription": [
+      "senMessages"
+    ],
+    "senOpenSbomObjectCmdTitle": [
+      "senMessages"
+    ],
+    "senOpenSbomObjectCmdDescription": [
+      "senMessages"
+    ],
+    "senCreateWorkPackageHeaderTitle": [
+      "senMessages"
+    ],
+    "authorSbomTitle": [
+      "senMessages"
+    ],
+    "authorSbomTooltipTitle": [
+      "senMessages"
+    ],
+    "authorSbomTileDescription": [
+      "senMessages"
+    ],
+    "authorSbomTileCriteria": [
+      "senMessages"
+    ],
+    "senRemove": [
+      "senMessages"
+    ],
+    "senRemoveSingleConfirmation": [
+      "senMessages"
+    ],
+    "senRemoveMultipleConfirmation": [
+      "senMessages"
+    ],
+    "senReviseCommandTitle": [
+      "senMessages"
+    ],
+    "senReviseCommandToolTip": [
+      "senMessages"
+    ],
+    "senReviseElementConfirmation": [
+      "senMessages"
+    ],
+    "senReviseMultipleElementsConfirmation": [
+      "senMessages"
+    ],
+    "sen1ShowTreeSummaryViewTitle": [
+      "senMessages"
+    ],
+    "sen1ShowTreeSummaryViewDesc": [
+      "senMessages"
+    ],
+    "sen1ShowTreeViewTitle": [
+      "senMessages"
+    ],
+    "sen1ShowTreeViewDesc": [
+      "senMessages"
+    ],
+    "sen1ListTitle": [
+      "senMessages"
+    ],
+    "sen1TableTitle": [
+      "senMessages"
+    ],
+    "manageEnterpriseSbomTitle": [
+      "entSbomMessages"
+    ]
+  }
+}

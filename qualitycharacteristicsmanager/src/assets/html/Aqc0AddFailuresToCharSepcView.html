@@ -1,0 +1,23 @@
+<aw-command-panel caption="i18n.addButtonTitle" context="subPanelContext">
+    <aw-form name="commandPanelForm">
+        <!--<aw-search-box prop="data.searchBox" placeholder="Filter" action="performSearch"></aw-search-box>-->
+        <!-- <aw-add target-object="ctx.xrtSummaryContextObject" include-types="Qc0Failure"
+            auto-select-on-unique-type="true" search-filter="Qc0Failure.qc0IsLatest=true"
+            type-filter="Qc0Failure" visible-tabs="search"></aw-add> -->
+        <aw-panel-body>
+            <aw-panel-section>
+                <aw-scrollpanel>
+                    <aw-list-filter dataprovider="data.dataProviders.failureListProvider" prop="data.filterBox">
+                        <aw-default-cell vmo="item"></aw-default-cell>
+                    </aw-list-filter>
+                </aw-scrollpanel>
+            </aw-panel-section>
+        </aw-panel-body>
+    </aw-form>
+    <aw-panel-footer>
+        <aw-button default="true" action="checkDuplicates" visible-when="dataProviders.failureListProvider.selectedObjects.length > 0">
+            <aw-i18n>i18n.addButtonTitle</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+
+</aw-command-panel>

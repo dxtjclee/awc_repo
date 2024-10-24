@@ -1,0 +1,198 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data": {
+        "diagramState": {
+            "initialValues": {
+             },
+            "meta": {}
+        },
+        "previewDiagramState": {
+            "initialValues": {
+            },
+            "meta": {}
+        },
+        "fullScreenState": {
+            "initialValues": {
+                "value":false
+            },
+            "meta": {}
+        }
+     },
+    "actions": {
+        "resetSuid": {
+            "actionType": "JSFunction",
+            "method": "resetSuid",
+            "deps": "js/Ase0ShowDiagramService"
+        },
+
+        "handleDiagramsTabLoad": {
+            "actionType": "JSFunction",
+            "method": "handleDiagramsTabLoad",
+            "inputData": {
+                "diagramState": "{{data.diagramState}}"
+            },
+            "outputData": {
+                "diagramState": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "Ase0ShowDiagram.contextset"
+                }]
+            },
+            "deps": "js/Ase0ShowDiagramService"
+        },
+        "checkForAdvancedFeaturesLicenses": {
+            "actionType": "JSFunctionAsync",
+            "method": "checkForAdvancedFeaturesLicenses",
+            "deps": "js/Ase0ShowDiagramService",
+            "events": {
+                "success": [ {
+                "name": "Ase0ShowDiagram.s_uidreset",
+                "condition": "subPanelContext.context && ctx.state.params.s_uid"
+            } ]
+            }
+        },
+        "updateDiagramViewOnCreate": {
+            "actionType": "JSFunction",
+            "method": "updateDiagramViewOnCreate",
+            "inputData": {
+                "toOpenDiagram":"{{data.eventMap['CreateDiagramSub.CreateDiagramProcessSuccess'].toOpen}}",
+                "diagramUid" : "{{data.eventMap['CreateDiagramSub.CreateDiagramProcessSuccess'].diagramUid}}",
+                "xrtSummaryContextObject":"{{subPanelContext.xrtState.xrtVMO}}"
+            },
+            "deps": "js/Ase0ShowDiagramService"
+        },
+
+        "updateDiagramViewOnMarkupCreation": {
+            "actionType": "JSFunction",
+            "method": "updateDiagramViewOnMarkupCreation",
+            "inputData": {
+                "modelObjects": "{{data.eventMap['cdm.updated'].updatedObjects}}",
+                "xrtSummaryContextObject":"{{subPanelContext.xrtState.xrtVMO}}"
+            },
+            "deps": "js/Ase0ShowDiagramService"
+        },
+
+        "openDiagram": {
+            "actionType": "Navigate",
+            "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+            "navigationParams": {
+                "uid": "{{data.eventMap['Ase0ShowDiagram.OpenDiagram'].diagramUid}}",
+                "spageId": "{{data.i18n.architectureModelerPageTitle}}",
+                "occContext":"{{subPanelContext.context.occContext}}",
+                "salectedUid":"{{subPanelContext.selected.uid}}"
+            }
+        },
+
+        "updatePanelSize": {
+            "actionType": "JSFunction",
+            "method": "updatePanelSize",
+            "inputData": {
+                "eventData": "{{data.eventData}}",
+                "previewDiagramState": "{{data.previewDiagramState}}"
+            },
+            "outputData": {
+                "diagramState": ""
+            },
+            "deps": "js/Ase0ShowDiagramService"
+
+        }
+
+    },
+
+    "lifecycleHooks": {
+        "onMount": "handleDiagramsTabLoad"
+    },
+
+    "onEvent": [
+        {
+            "eventId": "Ase0ShowDiagram.contextset",
+            "action": "checkForAdvancedFeaturesLicenses"
+        },
+        {
+            "eventId": "Ase0ShowDiagram.s_uidreset",
+            "action": "resetSuid"
+        },
+        {
+            "eventId": "CreateDiagramSub.CreateDiagramProcessSuccess",
+            "cacheEventData":true,
+            "action":"updateDiagramViewOnCreate"
+        },
+        {
+            "eventId":"Ase0ShowDiagram.OpenDiagram",
+            "cacheEventData": true,
+            "action":"openDiagram"
+        },
+        {
+            "eventId": "aw-splitter-update",
+            "action": "updatePanelSize",
+            "cacheEventData": true
+        },
+        {
+            "eventId": "cdm.updated",
+            "cacheEventData": true,
+            "condition": "subPanelContext.selected.modelType.typeHierarchyArray.indexOf( 'Ase0AssocRelationProxy' ) > -1",
+            "action":"updateDiagramViewOnMarkupCreation"
+        }
+    ],
+
+    "conditions": {
+        "showCrossSelectionViewer": {
+            "expression": "(subPanelContext.selectionData.selected.length && (subPanelContext.selectionData.selected[0].props.awb0UnderlyingObject.dbValues[0] !== subPanelContext.selected.uid) && (subPanelContext.selectionData.selected[0].uid !== subPanelContext.selected.uid))"
+        },
+        "showMessage": {
+            "expression": "(!((subPanelContext.selectionData.selected.length && (subPanelContext.selectionData.selected[0].props.awb0UnderlyingObject.dbValues[0] !== subPanelContext.selected.uid) && (subPanelContext.selectionData.selected[0].uid !== subPanelContext.selected.uid))))"
+        }
+    },
+
+    "messages": {
+
+    },
+
+
+
+    "i18n": {
+        "diagramSingleDeleteConfirmMsg": [
+            "ArchitectureModelerMessages"
+        ],
+        "diagramMultiDeleteConfirmMsg": [
+            "ArchitectureModelerMessages"
+        ],
+        "cancel": [
+            "ArchitectureModelerConstants"
+        ],
+        "delete": [
+            "ArchitectureModelerConstants"
+        ],
+        "TwistieTooltipCollapsedArc": [
+            "ArchitectureModelerConstants"
+        ],
+        "TwistieTooltipExpandedArc": [
+            "ArchitectureModelerConstants"
+        ],
+        "previewTitle": [
+            "ArchitectureModelerConstants"
+        ],
+        "selectionSummaryTitle": [
+            "ArchitectureModelerConstants"
+        ],
+        "itemsSelected": [
+            "ArchitectureModelerConstants"
+        ],
+        "contentTitle": [
+            "ArchitectureModelerConstants"
+        ],
+        "selectDiagram": [
+            "ArchitectureModelerConstants"
+        ],
+        "architectureModelerPageTitle": [
+            "ArchitectureModelerConstants"
+        ]
+    }
+}

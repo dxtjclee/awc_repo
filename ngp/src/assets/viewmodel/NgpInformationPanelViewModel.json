@@ -1,0 +1,99 @@
+{
+    "schemaVersion": "1.0.0",
+    "ports": {
+        "input_ngpInformationPanel": {
+            "syncObject": {},
+            "onChangeAction":"onInputChange"
+        }
+    },
+    "data": {
+        "policyObj": {
+            "types": [{
+                    "name": "Mdl0AttributeGroup",
+                    "properties": [{
+                        "name": "protection"
+                    }]
+                },
+                {
+                    "name":"Dataset",
+                    "properties": [{
+                        "name": "protection"
+                    }]
+                },
+                {
+                    "name": "Participant",
+                    "properties": [{
+                        "name": "fnd0AssigneeUser"
+                    }]
+                },
+                {
+                    "name": "ImanType",
+                    "properties": [{
+                        "name": "type_name"
+                    }]
+                }
+            ]
+        }
+    },
+    "actions": {
+        "onInputChange":{
+            "actionType":"batchJob",
+            "steps":[
+                {
+                    "action":"leaveEditConfirmationIfNeeded"
+                },
+                {
+                    "action":"getInitialPanelSize"
+                }
+            ]
+        },
+        "leaveEditConfirmationIfNeeded":{
+            "actionType":"JSFunctionAsync",
+            "method":"leaveConfirmation",
+            "deps":"js/editHandlerService"
+        },
+        "registerPolicy": {
+            "actionType": "JSFunction",
+            "method": "register",
+            "inputData": {
+                "name": "NgpInformationPanel",
+                "policyObj": "{{data.policyObj}}"
+            },
+            "deps": "js/mfePolicyService"
+        },
+        "unregisterPolicy": {
+            "actionType": "JSFunction",
+            "method": "unregister",
+            "inputData": {
+                "name": "NgpInformationPanel"
+            },
+            "deps": "js/mfePolicyService"
+        },
+        "registerPolicyAndGetPanelSize":{
+            "actionType":"batchJob",
+            "steps":[
+                {
+                    "action":"registerPolicy"
+                },
+                {
+                    "action":"getInitialPanelSize"
+                }
+            ]
+        },
+        "getInitialPanelSize":{
+            "actionType":"JSFunction",
+            "method":"getPanelSizes",
+            "inputData":{
+                "splitterName":"ngpInformationPanelSplitter"
+            },
+            "outputData":{
+                "attachmentsInfoPanelWidth": "width"
+            },
+            "deps":"js/services/ngpUiPanelSizingService"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "registerPolicyAndGetPanelSize",
+        "onUnmount": "unregisterPolicy"
+    }
+}

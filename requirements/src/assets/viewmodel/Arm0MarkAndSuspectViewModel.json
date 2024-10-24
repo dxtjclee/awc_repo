@@ -1,0 +1,211 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "actions": {
+        "sendToMarkSuspect":
+        {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-ActiveWorkspaceReqMgmt-2020-05-SpecNavigation",
+            "method": "markSuspect",
+            "inputData":
+            {
+                "inputData":
+                {
+                    "suspectObjectsMap": "{{function:createMapAsPerSelection}}",
+                    "note": "{{data.comment.dbValue}}",
+                    "dueDate": "{{function:getDueDate}}",
+                    "removePrevNotifications": "{{data.removePreviousNotifications.dbValue}}",
+                    "isRunInBackground": true,
+                    "requestPref": {}
+
+                }
+            },
+            "events":
+            {
+                "success":
+                [
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    },
+                    {
+                        "name" : "closeDialog"
+                    }
+                 ]
+            },
+           "deps":"js/Arm0MarkAndSuspect"
+        },
+        "closePanelDialog" : {
+            "actionType" : "JSFunction",
+            "method" : "closeDialog",
+            "inputData" : {
+                "editContext" : "INFO_PANEL_CONTEXT",
+                "popupId" : "{{subPanelContext.subPanelContext.popupOptions.popupId}}",
+                "commandContext": "{{commandContext}}"
+            },
+            "deps" : "js/dialogService"
+        },
+        "populateDateLovOptions": {
+            "actionType": "JSFunction",
+            "method": "populateDateLovOptions",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "lovDatePropOptions": "lovDatePropOptions"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "Arm0MarkAndSuspect.setData"
+                    },
+                    {
+                        "name": "Arm0MarkAndSuspect.refreshDataProvider"
+                    }
+                ]
+            },
+            "deps": "js/Arm0MarkAndSuspect"
+        },
+        "refreshDataProvider": {
+            "actionType": "dataProvider",
+            "method": "SelectedItemList"
+        },
+        "switchToSuspectSubViewView": {
+            "actionType": "JSFunction",
+            "method": "switchToSuspectSubViewView",
+            "deps": "js/Arm0MarkAndSuspect",
+            "inputData": {
+                "subPanelContext": "{{subPanelContext}}"
+            },
+            "outputData": {
+            }
+        }
+    },
+    "dataProviders": {
+        "SelectedItemList": {
+            "commandsAnchor": "show_tracelinks_command",
+            "response": "{{props.subPanelContext.selectedObj}}",
+            "selectionModelMode": "single"
+        }
+    },
+    "data": {
+        "comment": {
+            "displayName": "{{i18n.comments}}",
+            "type": "STRING",
+            "maxLength": 180,
+            "dbValue":""
+        },
+        "removePreviousNotifications": {
+            "displayName": "{{i18n.clearPreviousSuspects}}",
+            "type": "BOOLEAN",
+            "isRequired": "false",
+            "dbValue": true,
+            "labelPosition": "PROPERTY_LABEL_AT_RIGHT"
+        },
+        "lovDateProp":{
+            "type": "STRING",
+            "isRequired": "false",
+            "hasLov":true,
+            "displayName": "{{i18n.dueDate}}",
+            "dbValue": ""
+        },
+        "customDateProp":{
+            "dbValue": "",
+            "isRequired": "false",
+            "type": "DATE",
+            "displayName": "{{i18n.date}}",
+            "labelPosition": "NO_PROPERTY_LABEL"
+        },
+        "sharedData":{
+            "initialValues": {
+                "activeView": "Arm0MarkAndSuspect"
+            },
+            "meta": {}
+        }
+    },
+
+    "onEvent":
+    [
+        {
+            "eventId": "Arm0MarkAndSuspect.setData",
+            "action": "setArm0MarkAndSuspectMainData"
+        },
+        {
+            "eventId": "closeDialog",
+            "action": "closePanelDialog"
+        },
+        {
+            "eventId": "Arm0MarkAndSuspect.refreshDataProvider",
+            "action": "refreshDataProvider"
+        },
+        {
+            "eventId": "Arm0MarkAndSuspect.switchToSuspectSubViewView",
+            "action": "switchToSuspectSubViewView"
+        }
+
+    ],
+    "props": {
+        "sub-panel-context":{
+            "type": "object"
+        }
+    },
+    "functions":
+     {
+        "createMapAsPerSelection": {
+            "functionName": "createMapAsPerSelection",
+            "parameters": [
+                "{{data}}",
+                "{{subPanelContext}}"
+            ]
+        },
+        "getDueDate": {
+            "functionName": "getDueDate",
+            "parameters": [
+                "{{data}}"
+            ]
+        }
+     },
+    "i18n": {
+         "clearPreviousSuspects": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "MarkSuspect": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "date": [
+            "RichTextEditorCommandPanelsMessages"
+        ],
+        "comments": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "reviewLable": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "dueDate": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "dueDate30Days": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "dueDate60Days": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "customDate": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "noDueDate": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "selectedLinkedItems": [
+            "RequirementsCommandPanelsMessages"
+        ],
+        "notificationForSuspectRaised":[
+            "RequirementsCommandPanelsMessages"
+        ]
+    },
+    "lifecycleHooks": {
+        "onMount": "populateDateLovOptions"
+    }
+}

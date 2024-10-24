@@ -1,0 +1,29 @@
+<aw-command-panel caption="i18n.addButtonTitle" context="subPanelContext">
+    <div class="aw-layout-flexColumn" show-when="conditions.isActiveStateAddPanel">
+        <aw-add
+            is-custom-dataset-action="true"
+            target-object="ctx.xrtSummaryContextObject"
+            auto-select-on-unique-type="true"
+            include-types="Dataset,WorkspaceObject"
+            visible-tabs="new,palette,search"
+            add-panel-state="fields.addPanelState"
+            sub-panel-context="{...subPanelContext}"
+            active-state="data.activeState"
+            xrt-state="data.xrtState"
+            edit-handler="editHandlers.addPanelEditHandler"
+            project-state="data.projectState">
+        </aw-add>
+        <aw-panel-footer>
+            <!-- panel-footer button for New tab -->
+            <aw-button default="true" action="checkObject" enable-when="formProp.attributes.valid && conditions.isNewTabAddButtonVisible">
+                <aw-i18n>i18n.addButtonTitle</aw-i18n>
+            </aw-button>
+            <!-- panel-footer button for Palette and Search tab -->
+            <aw-button default="true" action="addDeliverableInstance" visible-when="conditions.isPaletteSearchTabAddButtonVisible">
+                <aw-i18n>i18n.addButtonTitle</aw-i18n>
+            </aw-button>
+        </aw-panel-footer>
+    </div>
+
+    <aw-add-navigate active-state="data.activeState" project-state="data.projectState" action="actions.setActiveView"></aw-add-navigate>
+</aw-command-panel>

@@ -1,0 +1,121 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "props": {
+        "provider": {
+            "type": "object"
+        },
+        "base-selection": {
+            "type": "object"
+        },
+        "sub-panel-context":{
+            "type":"object"
+        }
+    },
+    "actions": {
+        "initializeVRSublocationState": {
+            "actionType": "JSFunction",
+            "method": "initializeVRState",
+            "inputData": {
+                "openedObject": "{{props.subPanelContext.openedObject}}",
+                "vrSublocationState": "{{fields.vrSublocationState}}",
+                "subPanelContext":"{{subPanelContext}}"
+            },
+            "deps": "js/Crt1VRSublocationService"
+        }
+    },
+    "data": {
+        "_sublocation": {
+            "name": "com.siemens.splm.client.vrtarget.vrSubLocation",
+            "label": "Declarative Navigate",
+            "clientScopeURI": "Crt1ScopeTable",
+            "nameToken": "com.siemens.splm.client.vrtarget.vrSubLocation:Crt1VRSubLocation",
+            "context": {
+
+            },
+            "viewBase": "Crt1VRPWAScope",
+            "defaultDisplayMode": "TreeSummaryView",
+            "viewModes": {
+                "TreeView": {
+                    "primaryWorkArea": "tree",
+                    "secondaryWorkArea": false
+                },
+                "TreeSummaryView": {
+                    "primaryWorkArea": "tree",
+                    "secondaryWorkArea": true
+                }
+            },
+            "policy": {
+                "types": [ {
+                    "name": "BusinessObject",
+                    "properties": [ {
+                        "name": "object_string"
+                    } ]
+                } ]
+            }
+        },
+        "vrSublocationState": {
+            "initialValues": {
+                "mselected": [],
+                "pieChartData": {
+                    "vrTables": {}
+                },
+                "checkBoxState":{},
+                "getAllRows":false,
+                "allRows":[],
+                "ckBoxEnabled":false,
+                "treeNodeExpanded":false,
+                "CountTablesLoaded": 0,
+                "showChart": true
+            },
+            "meta": {}
+        },
+        "selectionData": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "subPanelHeaderData": {
+            "initialValues": {
+                "activeRevisionRule":"",
+                "activeVariantRule":""
+            },
+            "meta": {}
+        },
+        "sideNavLeftData": {
+            "slide": "FLOAT",
+            "direction": "RIGHT_TO_LEFT",
+            "animation": false,
+            "width": "STANDARD",
+            "height": "FULL"
+        },
+        "sideNavRightData": {
+            "slide": "PUSH",
+            "direction": "LEFT_TO_RIGHT",
+            "animation": false,
+            "width": "STANDARD",
+            "height": "FULL"
+        }
+
+    },
+    "ctx":{
+        "xrtSummaryContextObject":{
+            "type" :"object"
+        },
+        "locationContext":{
+            "type" :"object"
+        },
+        "location.titles.headerTitle": null,
+        "mselected":{
+            "type":"object"
+        },
+        "pselected":{
+            "type":"object"
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "initializeVRSublocationState"
+    },
+    "onEvent": [
+
+    ]
+}

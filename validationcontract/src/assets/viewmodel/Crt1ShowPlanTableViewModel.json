@@ -1,0 +1,530 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-splm-table.directive",
+        "js/aw-panel-section.directive"
+    ],
+    "ports": {
+        "inputParentUidsForSync": {
+            "syncObject": {}
+        }
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "lifecycleHooks": {
+        "onUpdate": [
+            {
+                "action": "createPieChartForResult",
+                "observers": [
+                    "props.subPanelContext.context.pageContext.sublocationState"
+                ]
+            },
+            {
+                "action": "createPieChartForExecution",
+                "observers": [
+                    "props.subPanelContext.context.pageContext.sublocationState"
+                ]
+            },
+            {
+                "action": "refreshSWATreeTable",
+                "observers": [
+                    "props.subPanelContext.selection"
+                ]
+            },
+            {
+                "action": "updateSelectionData",
+                "observers": [
+                    "viewModel.atomicData.selectionData"
+                ]
+            }
+        ]
+    },
+    "actions": {
+        "processSyncActionForTestResult": {
+            "actionType": "Sync",
+            "inputData": {
+                "port": "inputParentUidsForSync",
+                "syncObject": "{{data.inputData}}"
+            }
+        },
+        "updateSelectionData": {
+            "actionType": "JSFunction",
+            "method": "updateSelectionData",
+            "inputData": {
+                "subPanelContext": "{{props.subPanelContext}}",
+                "localSelData": "{{data.selectionData}}"
+            },
+            "outputData": {
+                "inputData": "inputData"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "uniformParamTableForTestResult.applySync"
+                    }
+                ]
+            },
+            "deps": "js/Crt1TestResultTreeTableService"
+        },
+        "doArrangeEvent": {
+            "actionType": "JSFunctionAsync",
+            "method": "arrangeColumns",
+            "inputData": {
+                "declViewModel": "{{data}}",
+                "eventData": "{{data.eventData}}"
+            },
+            "deps": "js/columnArrangeService"
+        },
+        "saveColumnConfigLoadData": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "saveUIColumnConfigs2",
+            "inputData": {
+                "columnConfigurations": [
+                    {
+                        "clientScopeURI": "AnalysisRequestPlanTable",
+                        "columnConfigId": "analysisRequestPlanColConfig",
+                        "columns": "{{data.dataProviders.testResultTreeTableProvider.newColumns}}",
+                        "scope": "LoginUser",
+                        "scopeName": ""
+                    }
+                ]
+            },
+            "outputData": {}
+        },
+        "resetColumnConfig": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-UiConfig",
+            "method": "getOrResetUIColumnConfigs4",
+            "inputData": {
+                "getOrResetUiConfigsIn": [
+                    {
+                        "scope": "LoginUser",
+                        "scopeName": "",
+                        "clientName": "AWClient",
+                        "resetColumnConfig": true,
+                        "columnConfigQueryInfos": [
+                            {
+                                "clientScopeURI": "AnalysisRequestPlanTable",
+                                "operationType": "configured",
+                                "typeNames": [
+                                    "WorkspaceObject"
+                                ],
+                                "columnsToExclude": []
+                            }
+                        ],
+                        "businessObjects": [
+                            {}
+                        ]
+                    }
+                ]
+            },
+            "outputData": {
+                "dataProviders.testResultTreeTableProvider.columnConfig": "columnConfigurations[0].columnConfigurations[0]"
+            }
+        },
+        "loadTestResultTreeData": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTestResultTreeData",
+            "inputData": {
+                "treeLoadInput": "request.treeLoadInput",
+                "columnProviders": "{{data.columnProviders.testResultTreeColumnProvider}}",
+                "parentUid": "{{props.subPanelContext}}",
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "totalFound": "result.treeLoadResult.totalChildCount",
+                "totalLoaded": "result.treeLoadResult.childNodes.length",
+                "searchResults": "result.treeLoadResult.childNodes"
+            },
+            "deps": "js/Crt1TestResultTreeTableService"
+        },
+        "loadTreeTableProperties": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTestResultTreeTableProperties",
+            "inputData": {
+                "propertyLoadInput": "request.propertyLoadInput",
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "dataProviders.testResultTreeTableProvider.columnConfig": "propertyLoadResult.columnConfig"
+            },
+            "deps": "js/Crt1TestResultTreeTableService"
+        },
+        "loadTreeColumns": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadTestResultTreeTableColumns",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "deps": "js/Crt1TestResultTreeTableService"
+        },
+        "createPieChartForResult": {
+            "actionType": "JSFunction",
+            "method": "createPieChartForResult",
+            "inputData": {
+                "data": "{{data}}",
+                "resultPieChart": "{{props.subPanelContext.context.pageContext.sublocationState.resultPieChart}}",
+                "sublocationState": "{{props.subPanelContext.context.pageContext.sublocationState}}"
+            },
+            "outputData": {
+                "pieChartForResult_chartPoints": "arrayOfSeriesDataForResultPieChart",
+                "redrawResult": "redrawResult",
+                "chartProviders": "chartProviders"
+            },
+            "deps": "js/Crt1TestResultTreeTableService"
+        },
+        "createPieChartForExecution": {
+            "actionType": "JSFunction",
+            "method": "createPieChartForExecution",
+            "inputData": {
+                "data": "{{data}}",
+                "executionPieChart": "{{props.subPanelContext.context.pageContext.sublocationState.executionPieChart}}"
+            },
+            "outputData": {
+                "pieChartForExecution_chartPoints": "arrayOfSeriesDataForExecutionPieChart",
+                "redrawExecution": "redrawExecution",
+                "chartProviders": "chartProviders"
+            },
+            "deps": "js/Crt1TestResultTreeTableService"
+        },
+        "filterResultAndExecutionChart": {
+            "actionType": "JSFunction",
+            "method": "filterResultAndExecutionChart",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "columnFilter": "columnFilter",
+                "clickedOnChart": "clickedOnChart",
+                "redrawExecution": "redrawExecution",
+                "unSelectedChart": "unSelectedChart",
+                "redrawResult": "redrawResult"
+            },
+            "deps": "js/Crt1TestResultTreeTableService",
+            "events": {
+                "success": [
+                    {
+                        "name": "testResultTreeTable.plTable.reload",
+                        "excludeLocalDataCtx": true
+                    }
+                ]
+            }
+        },
+        "displayAllResultAndExecution": {
+            "actionType": "JSFunction",
+            "method": "displayAllResultAndExecution",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "columnFilter": "testResultColumnFilters",
+                "clickedOnChart": "clickedOnChart",
+                "unSelectedChart": "unSelectedChart"
+            },
+            "deps": "js/Crt1TestResultTreeTableService",
+            "events": {
+                "success": [
+                    {
+                        "name": "testResultTreeTable.plTable.reload"
+                    }
+                ]
+            }
+        },
+        "drawExecutionPieChart": {
+            "actionType": "JSFunction",
+            "method": "drawExecutionPieChart",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "pieChartForExecution_chartPoints": "arrayOfSeriesDataForExecutionPieChart",
+                "redrawExecution": "redrawExecution"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "createExecutionPieChartAfterTreeTableLoaded"
+                    }
+                ]
+            },
+            "deps": "js/Crt1TestResultTreeTableService"
+        },
+        "drawResultPieChart": {
+            "actionType": "JSFunction",
+            "method": "drawResultPieChart",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "pieChartForResult_chartPoints": "arrayOfSeriesDataForResultPieChart",
+                "redrawResult": "redrawResult"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "createResultPieChartAfterTreeTableLoaded"
+                    }
+                ]
+            },
+            "deps": "js/Crt1TestResultTreeTableService"
+        },
+        "refreshSWATreeTable": {
+            "actionType": "JSFunction",
+            "method": "refreshSWATreeTable",
+            "inputData": {
+                "data": "{{data}}",
+                "selectedObjects": "{{props.subPanelContext.selection}}",
+                "occContext": "{{props.subPanelContext}}"
+            },
+            "outputData": {
+                "columnFilter": "columnFilter",
+                "redrawExecution": "redrawExecution",
+                "redrawResult": "redrawResult",
+                "clickedOnChart": "clickedOnChart"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "callGetResultAndExecutionSOAInputForPageLoad"
+                    }
+                ]
+            },
+            "deps": "js/Crt1TestResultTreeTableService"
+        },
+        "refreshTestResultTreeTable": {
+            "actionType": "dataProvider",
+            "method": "testResultTreeTableProvider"
+        },
+        "callGetResultAndExecutionSOAInputForPageLoad": {
+            "actionType": "JSFunction",
+            "method": "getResultAndExecutionSOAInputForPageLoad",
+            "inputData": {
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Crt1TestResultTreeTableService"
+        }
+    },
+    "dataProviders": {
+        "testResultTreeTableProvider": {
+            "initializeAction": "loadTestResultTreeData",
+            "nextAction": "loadTestResultTreeData",
+            "treeLoadResult": "action.result.treeLoadResult",
+            "selectionModelMode": "single",
+            "inputData": {
+                "accessMode": "tree",
+                "selectionData": "{{fields.selectionData}}"
+            },
+            "commandsAnchor": "Open_Content_command"
+        },
+        "GridTreePropertyProvider": {
+            "action": "loadTreeTableProperties",
+            "propertyLoadResult": "action.result.propertyLoadResult"
+        }
+    },
+    "columnProviders": {
+        "testResultTreeColumnProvider": {
+            "loadColumnAction": "loadTreeColumns",
+            "saveColumnAndLoadAction": "saveColumnConfigLoadData",
+            "resetColumnAction": "resetColumnConfig",
+            "columns": "{{data.columns}}",
+            "enableSorting": false,
+            "id": "AnalysisRequestPlanTable",
+            "sortCriteria": [],
+            "objectSetUri": "AnalysisRequestPlanTable"
+        }
+    },
+    "grids": {
+        "testResultTreeTable": {
+            "dataProvider": "testResultTreeTableProvider",
+            "columnProvider": "testResultTreeColumnProvider",
+            "propertyProvider": "GridTreePropertyProvider",
+            "addIconColumn": false,
+            "enableArrangeMenu": true,
+            "gridOptions": {
+                "enableSorting": true,
+                "maxRowsToShow": 20,
+                "isFilteringEnabled": false
+            }
+        }
+    },
+    "data": {
+        "chartProviders": {
+            "pieChartForResult": {
+                "chartType": "pie",
+                "chartConfig": {
+                    "isChartZoomable": true,
+                    "isYAxisLinearOrLogarithmic": "logarithmic",
+                    "xAxisLabel": "",
+                    "yAxisLabel": "",
+                    "isDataLabelOnChartEnabled": true
+                }
+            },
+            "pieChartForExecution": {
+                "chartType": "pie",
+                "chartConfig": {
+                    "isChartZoomable": true,
+                    "isYAxisLinearOrLogarithmic": "logarithmic",
+                    "xAxisLabel": "",
+                    "yAxisLabel": "",
+                    "isDataLabelOnChartEnabled": true
+                }
+            }
+        },
+        "selectionData": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "vrTestResultsTabState": {
+            "initialValues": {},
+            "meta": {}
+        },
+        "unSelectedChart": {
+            "displayName": "",
+            "type": "STRING"
+        },
+        "redrawExecution": false,
+        "redrawResult": false,
+        "clickedOnChart": false,
+        "columnFilter": {
+            "displayName": "",
+            "type": "OBJECTARRAY"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "columnArrange",
+            "cacheEventData": true,
+            "action": "doArrangeEvent"
+        },
+        {
+            "eventId": "undefined.selected",
+            "cacheEventData": true,
+            "action": "filterResultAndExecutionChart"
+        },
+        {
+            "eventId": "undefined.unselected",
+            "cacheEventData": true,
+            "action": "displayAllResultAndExecution"
+        },
+        {
+            "eventId": "uniformParamTableForTestResult.applySync",
+            "cacheEventData": true,
+            "action": "processSyncActionForTestResult"
+        },
+        {
+            "eventId": "createExecutionPieChartAfterTreeTableLoaded",
+            "action": "createPieChartForExecution"
+        },
+        {
+            "eventId": "createResultPieChartAfterTreeTableLoaded",
+            "action": "createPieChartForResult"
+        },
+        {
+            "eventId": "drawExecutionPieChart",
+            "action": "drawExecutionPieChart"
+        },
+        {
+            "eventId": "drawResultPieChart",
+            "action": "drawResultPieChart"
+        },
+        {
+            "eventId": "callGetResultAndExecutionSOAInputForPageLoad",
+            "action": "callGetResultAndExecutionSOAInputForPageLoad"
+        },
+        {
+            "eventId": "refreshTestResultTreeTable",
+            "action": "refreshTestResultTreeTable"
+        },
+        {
+            "eventId": "refreshSWATreeTable",
+            "action": "refreshSWATreeTable"
+
+        }
+    ],
+    "conditions": {
+        "crt1TcMajorMinorVersion": {
+            "expression": "data.ctx.tcSessionData.tcMajorVersion === 14 && data.ctx.tcSessionData.tcMinorVersion >= 3"
+        },
+        "noResultDataForPie": {
+            "expression": "data.pieChartForResult_chartPoints[0].keyValueDataForChart[0].value === 0 && data.pieChartForResult_chartPoints[0].keyValueDataForChart[1].value === 0 && data.pieChartForResult_chartPoints[0].keyValueDataForChart[2].value === 0 && data.pieChartForResult_chartPoints[0].keyValueDataForChart[3].value === 0 && data.pieChartForResult_chartPoints[0].keyValueDataForChart[4].value === 0"
+        },
+        "noExecutionStatusDataForPie": {
+            "expression": "data.pieChartForExecution_chartPoints[0].keyValueDataForChart[0].value === 0 && data.pieChartForExecution_chartPoints[0].keyValueDataForChart[1].value === 0 && data.pieChartForExecution_chartPoints[0].keyValueDataForChart[2].value === 0 && data.pieChartForExecution_chartPoints[0].keyValueDataForChart[3].value === 0 && data.pieChartForExecution_chartPoints[0].keyValueDataForChart[4].value === 0 && data.pieChartForExecution_chartPoints[0].keyValueDataForChart[5].value === 0 && data.pieChartForExecution_chartPoints[0].keyValueDataForChart[6].value === 0 && data.pieChartForExecution_chartPoints[0].keyValueDataForChart[7].value === 0 && data.pieChartForExecution_chartPoints[0].keyValueDataForChart[8].value === 0 && data.pieChartForExecution_chartPoints[0].keyValueDataForChart[9].value === 0 && data.pieChartForExecution_chartPoints[0].keyValueDataForChart[10].value === 0 && data.pieChartForExecution_chartPoints[0].keyValueDataForChart[11].value === 0"
+        }
+    },
+    "i18n": {
+        "attributeTitle": [
+            "Att1Messages"
+        ],
+        "testResults": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "noDataToDisplay": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "resultPieChartTitle": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "executionPieChartTitle": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Result": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "NoResult": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Fail": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Pass": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Execution": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "NotStarted": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "NotPlanned": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Planned": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Duplicate": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "InProgress": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Blocked": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Warning": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Completed": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Failed": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Caution": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Preparation": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Ready": [
+            "AnalysisRequestCommandPanelsMessages"
+        ],
+        "Paused": [
+            "AnalysisRequestCommandPanelsMessages"
+        ]
+    }
+}

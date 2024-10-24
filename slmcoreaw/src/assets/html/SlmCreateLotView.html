@@ -1,0 +1,23 @@
+<aw-popup2>
+    <aw-panel>
+        <aw-panel-body>
+            <aw-panel-section>
+                <aw-textbox prop="data.lotNumber"></aw-textbox>
+                <aw-listbox visible-when="conditions.isMfgIdLov" prop="data.manufacturerOrgIdLOV" list="data.manufacturerOrgIdList"></aw-listbox>
+                <aw-textbox visible-when="conditions.isNotMfgIdLov" prop="data.manufacturerOrgId"></aw-textbox>
+                <aw-widget prop="data.lotSize"></aw-widget>
+                <aw-widget prop="data.expirationDate"></aw-widget>
+            </aw-panel-section>
+        </aw-panel-body>
+        <aw-panel-footer>
+            <aw-flex-column align-content="end" offset-right="1f">
+                <aw-button button-type="base" action="ClosePopUpAction" size="auto">
+                    <aw-i18n>i18n.Cancel</aw-i18n>
+                </aw-button>
+            </aw-flex-column>
+            <aw-button action="createLotPanel" visible-when="conditions.enableCreateLotButton">
+                <aw-i18n>i18n.CreateLotButton</aw-i18n>
+            </aw-button>
+        </aw-panel-footer>
+    </aw-panel>
+</aw-popup2>

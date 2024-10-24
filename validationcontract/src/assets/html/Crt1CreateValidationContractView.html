@@ -1,0 +1,20 @@
+<aw-command-panel caption="i18n.Create_AR_Panel_Title" context="subPanelContext">
+    <div class="aw-layout-flexColumn" show-when="conditions.isActiveStateAddPanel">
+        <aw-add max-recent-count='3' visible-tabs="new" type-override-id="CreateAR"
+            include-types="Crt0VldnContract" add-panel-state="fields.addPanelState"
+            xrt-state="data.xrtState" edit-handler="editHandlers.addPanelEditHandler"
+            sub-panel-context="{...subPanelContext}" active-state="data.activeState"
+            project-state="data.projectState">
+        </aw-add>
+
+        <aw-checkbox prop="data.openOnCreate" visible-when="conditions.isNewTabAddButtonVisible" enable-when="!subPanelContext.panelPinned"></aw-checkbox>
+        <aw-panel-footer visible-when="data.activeView!='AssignProjectSub'&&data.activeView!='addReferenceSub'">
+            <!-- panel-footer button for New tab -->
+            <aw-button action="initCreateInputs" visible-when="formProp.attributes.valid && conditions.isNewTabAddButtonVisible">
+                <aw-i18n>i18n.Create_Button_Title</aw-i18n>
+            </aw-button>
+        </aw-panel-footer>
+    </div>
+
+    <aw-add-navigate active-state="data.activeState" project-state="data.projectState" action="actions.setActiveView"></aw-add-navigate>
+</aw-command-panel>

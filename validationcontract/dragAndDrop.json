@@ -1,0 +1,25 @@
+{
+  "actions": {
+    "dragOverCustomHighlight1": {
+      "actionType": "syncFunction",
+      "method": "dragOverCustomHighlight",
+      "deps": "js/stickyPanelService"
+    },
+    "dropCustomHighlight1": {
+      "actionType": "syncFunction",
+      "method": "dropCustomHighlight",
+      "deps": "js/stickyPanelService"
+    }
+  },
+  "dropHandlers": {
+    "dropHandlerForCustomTableHighlight1": {
+      "views": [
+        "Crt1ObjectListToAddInVR"
+      ],
+      "dropActions": {
+        "dragOver": "dragOverCustomHighlight1",
+        "drop": "dropCustomHighlight1"
+      }
+    }
+  }
+}

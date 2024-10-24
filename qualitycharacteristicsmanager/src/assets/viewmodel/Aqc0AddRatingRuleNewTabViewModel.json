@@ -1,0 +1,267 @@
+{
+    "schemaVersion" : "1.0.0",
+    "imports":[],    
+    "data":
+    {        
+        "datasetState": {
+            "initialValues": {
+                "createdObject": ""
+            },
+            "meta": {
+                "createdObject": {
+                    "field": "true",
+                    "type": "OBJECT"
+                }
+            }
+        }
+    },   
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "ctx":{
+        "selected":{
+            "type" :"object"
+        },
+        "pselected":{
+            "type": "object"
+        },
+        "panelContext":{
+            "type": "object"
+        },
+        "addObject": {
+            "type": "object"
+        }
+    },   
+    "actions": {
+        "loadCreateXRT": {
+            "actionType": "JSFunctionAsync",
+            "method": "loadCreateXrt",
+            "inputData": {
+                "type": "CREATE",
+                "activePageTitle": "",
+                "selectedObject": "",
+                "objectType": "{{subPanelContext.selectedType.dbValue}}",
+                "addPanelState": "{{subPanelContext.addPanelState}}",
+                "creationType": "{{subPanelContext.selectedType.dbValue}}",
+                "xrtState": "{{subPanelContext.xrtState}}"
+            },
+            "outputData": {
+                "xrtData": ""
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "createRatingRuleObject":{
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2008-06-DataManagement",
+            "method": "createObjects",
+            "inputData": {
+                "input": "{{function:getCreateObjectsInputforRatingRule}}"               
+            },
+            "outputData": {
+                "createdObject": "output[0].objects[0]",
+                "serviceData": "ServiceData",                                
+                "errorMessage": "{{function:populateErrorString}}"  
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "createReferenceWithChecklistSpecEvent"                        
+                    }
+                ]
+            },
+            "actionMessages": {               
+                "failure": [
+                    {
+                        "condition": "data.serviceData.partialErrors.length > 0",
+                        "message": "displayError"
+                    }
+                ]
+            },
+            "deps": "js/Aqc0ChecklistSpecService"
+        },
+        "createReferenceWithChecklistSpec": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2010-09-DataManagement",
+            "method": "setProperties",            
+            "deps": "js/Aqc0ChecklistSpecService",
+            "inputData": {
+                "info": "{{function:getSetPropertiesInfoForRatingRule}}"                
+            },
+            "outputData": {
+                "serviceData": "ServiceData",
+                "updateElementResponse": "",
+                "updatedObject": "ServiceData.updated[0]",
+                "errorMessage": "{{function:populateErrorString}}"       
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{ctx.selected}}"
+                            ],
+                            "refreshLocationFlag": true
+                        }
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{ctx.selected}}"
+                            ],
+                            "refreshLocationFlag": true
+                        }
+                    },
+                    {
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "actionMessages": {
+                "success": [
+                    {
+                        "condition": "data.updatedObject",
+                        "message": "createObjectSuccess"
+                    }
+                ],
+                "failure": [
+                    {
+                        "condition": "data.serviceData.partialErrors.length > 0",
+                        "message": "displayError"
+                    }
+                ]
+            }
+        },
+        "updateCtxVariable": {
+            "actionType": "modifyCtx",
+            "inputData": {
+                "methodType": "register",
+                "name": "addRatingRuleProgressing",
+                "value": true
+            }
+        },
+        "updateCtxVariableFalse": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "inputData": {
+                "name": "addRatingRuleProgressing"
+            },
+            "deps": "js/appCtxService"
+        },
+        "getObjCreateEditableProperties": {
+            "actionType": "JSFunction",
+            "method": "getObjCreateEditableProperties",
+            "inputData": {
+                "createType": "{{subPanelContext.selectedType.dbValue}}",
+                "type": "CREATE",
+                "propertyNames": [ "object_name", "qc0RatingRuleId", "object_desc" ],
+                "editHandler": "{{subPanelContext.editHandler}}"
+            },
+            "outputData":{
+                "object_name": "object_name",
+                "qc0RatingRuleId": "qc0RatingRuleId",
+                "object_desc": "object_desc"
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "handleObjectCreate": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "getObjCreateEditableProperties",
+                    "condition": "conditions.readyToStartCreateOperation"
+                },
+                {
+                    "action": "createRatingRuleObject",
+                    "condition": "conditions.readyToStartCreateOperation"
+                }
+            ]
+        }
+    },
+    "lifecycleHooks": {
+        "onMount": "loadCreateXRT",
+        "onUpdate": [
+            {
+                "action": "handleObjectCreate",
+                "observers": [ "viewModel.subPanelContext.triggerCreate" ]
+            }
+        ]        
+    },
+    "onEvent": [       
+        {
+            "eventId": "createReferenceWithChecklistSpecEvent",
+            "action": "createReferenceWithChecklistSpec"
+        }
+    ],
+    "functions": {
+        "getCreateObjectsInputforRatingRule": {
+            "functionName": "getCreateObjectsInputforRatingRule",
+            "parameters": [
+                "{{data}}",                
+                "{{subPanelContext}}"
+            ]
+        },   
+        "getSetPropertiesInfoForRatingRule": {
+            "functionName": "getSetPropertiesInfoForRatingRule",
+            "parameters": [
+                "{{data.createdObject}}",
+                "{{subPanelContext}}"
+            ]
+        }       
+    },
+    "conditions": {
+        "isNewTabAddButtonVisible": {
+            "expression": "subPanelContext.creationType"
+        },
+        "readyToStartCreateOperation": {
+            "expression": "subPanelContext.triggerCreate && subPanelContext.triggerCreate.dbValue"
+        }
+    },
+    "messages": {       
+        "AttachObjectSuccess": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.Aqc0RatingRuleCreateSuccessMessage}}",
+            "messageTextParams": [
+                "{{addPanelState.sourceObjects[0].props.object_name.dbValues[0]}}",
+                "{{subPanelContext.selectionData.selected[0].props.object_name.dbValue}}"
+            ]
+        },
+        "createObjectSuccess": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.Aqc0RatingRuleCreateSuccessMessage}}",
+            "messageTextParams": [
+                "{{data.createdObject.props.object_string.dbValues[0]}}",
+                "{{subPanelContext.selectionData.selected[0].props.object_name.dbValue}}"
+            ]
+        },
+        "displayError": {
+            "messageType": "ERROR",
+            "messageText": "{{i18n.Aqc0PartialError}}",
+            "messageTextParams": [
+                "{{data.errorMessage}}"
+            ]
+        }
+    },
+    "i18n": {       
+        "Aqc0PartialError": [
+            "qualitycentermanagerMessages"
+        ],      
+        "Aqc0RatingRuleCreateSuccessMessage": [
+            "qualitycentermanagerMessages"
+        ]
+    }
+}

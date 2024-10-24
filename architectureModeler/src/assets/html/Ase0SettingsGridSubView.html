@@ -1,0 +1,26 @@
+<aw-panel-body>
+    <aw-panel-section exist-when="conditions.enableSnapToGridData">
+        <aw-checkbox prop="data.snapToGridData" ></aw-checkbox>
+    </aw-panel-section>
+    <aw-panel-section>
+        <aw-checkbox prop="data.showGridData"></aw-checkbox>
+    </aw-panel-section>
+    <aw-panel-section exist-when="data.showGridData.dbValue === true">
+        <aw-column width="fill">
+            <aw-label prop="data.lineType"></aw-label>
+        </aw-column>
+        <aw-column width="fill">
+            <aw-panel-section>
+                <aw-checkbox prop="data.majorLines"> </aw-checkbox>
+            </aw-panel-section>
+            <aw-panel-section>
+                <aw-checkbox prop="data.minorLines"> </aw-checkbox>
+            </aw-panel-section>
+        </aw-column>
+    </aw-panel-section>
+</aw-panel-body>
+<aw-panel-footer>
+    <aw-button action="applySetting" enable-when="awPanelBody.$valid && awPanelBody.$dirty">
+        <aw-i18n>i18n.apply</aw-i18n>
+    </aw-button>
+</aw-panel-footer>

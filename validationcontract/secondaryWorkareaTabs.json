@@ -1,0 +1,93 @@
+{
+  "schema": "1.0.0.0",
+  "tabs": {
+    "planTitle": {
+      "name": {
+        "source": "/i18n/AnalysisRequestCommandPanelsMessages",
+        "key": "planTitle"
+      },
+      "priority": 220,
+      "view": "Crt1ShowPlanTable",
+      "visibleWhen": {
+        "condition": "conditions.planTitleCondition"
+      }
+    },
+    "Crt1TestCoverage": {
+      "name": {
+        "source": "/i18n/AnalysisRequestCommandPanelsMessages",
+        "key": "testCaseTabTitle"
+      },
+      "priority": 210,
+      "view": "Crt1TestCaseCoveragePage",
+      "visibleWhen": {
+        "condition": "conditions.testCaseTabTitleCondition"
+      }
+    }
+  },
+  "conditions": {
+    "planTitleCondition": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "selection.length",
+            "$query": {
+              "$gt": 0
+            }
+          },
+          {
+            "$source": "ctx.splitView.mode",
+            "$query": {
+              "$ne": true
+            }
+          },
+          {
+            "$source": "ctx.sublocation.clientScopeURI",
+            "$query": {
+              "$eq": "Awb0OccurrenceManagement"
+            }
+          },
+          {
+            "$source": {
+              "$adapt": "selection"
+            },
+            "$query": {
+              "$source": "modelType.typeHierarchyArray",
+              "$query": {
+                "$in": "{{ctx.preferences.PLE_Plan_Table_Allowed_Child_Types}}"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "testCaseTabTitleCondition": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "selection.length",
+            "$query": {
+              "$gt": 0
+            }
+          },
+          {
+            "$source": "ctx.sublocation.clientScopeURI",
+            "$query": {
+              "$eq": "Awb0OccurrenceManagement"
+            }
+          },
+          {
+            "$source": {
+              "$adapt": "selection"
+            },
+            "$query": {
+              "$source": "modelType.typeHierarchyArray",
+              "$query": {
+                "$in": "{{ctx.preferences.PLE_AllowedTypes_TestCaseCoverage}}"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

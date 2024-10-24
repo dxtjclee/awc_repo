@@ -1,0 +1,20 @@
+<aw-popup2>
+    <aw-panel class="aw-ngp-addPredecessorsPanel">
+        <aw-panel-body>
+                {{i18n.addCrossActivityPredecessorsInstruction}}
+                <aw-guidance-message message="infoAddCrossActivityPredecessorsMessage" closable="false" banner-style="true" show-icon="true" show-type="false"></aw-guidance-message>
+                <aw-list dataprovider="data.dataProviders.crossActivityPredecessorsToShow">
+                        <aw-default-cell vmo="item"> </aw-default-cell>
+                </aw-list>
+            </aw-panel-body>
+        <aw-panel-footer>
+                <aw-flex-column  width="fill"  align-content="end">
+                    <aw-flex-row  justify="right">
+                        <aw-button size="auto" action="closeDialog" button-type="base">{{i18n.cancel}}</aw-button>
+                        <aw-button size="auto" action="callAddBackgroundProcesses" enable-when="conditions.enableAddToBacgroundButton" >{{i18n.addToBackground}}</aw-button>
+                    </aw-flex-row>
+                </aw-flex-column>
+        </aw-panel-footer>
+    </aw-flex-row >
+</aw-panel>
+</aw-popup2>

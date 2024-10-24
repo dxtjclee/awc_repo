@@ -1,0 +1,24 @@
+<div>
+    {{data.matrixTypeDisplayName}}
+</div>
+<div class="aw-layout-workareaCommandbar aw-relationshipmatrix-commandBarIcon">
+    <aw-server-visibility-toolbar first-anchor="aw_relationshipMatrixViewer" second-anchor="aw_toolbarRight,aw_fullScreen" context="{ ...subPanelContext, ...ctx.MatrixContext }" orientation="HORIZONTAL"></aw-server-visibility-toolbar>
+</div>
+<aw-flex-row height="100%">
+    <aw-flex-column width="12">
+        <aw-flex-row height="100%">
+            <div id='aw-traceability-matrix-widget' class="aw-richtexteditor-tracelinkDashboard filter-panel">
+                <div id='matrix_container'></div>
+            </div>
+        </aw-flex-row>
+        <aw-separator exist-when="conditions.showTraclinkTable" class="aw-relationshipmatrix-separator"></aw-separator>
+        <aw-flex-row height="{{data.totalFound > 3  ? '19f' : '13f'}}" exist-when="conditions.showTraclinkTable">
+            <div class="aw-layout-row">
+                <aw-column>
+                    <aw-toolbar first-anchor="aw_reqTMCommandbar" second-anchor="aw_TMtableInMatrix" context="{dataProvider:dataProviders.traceMatrixCellPropDataProvider}" orientation="HORIZONTAL"></aw-toolbar>
+                    <aw-splm-table gridid="traceMatrixCellPropTable" aw-scrollpanel="" show-check-box="data.dataProviders.traceMatrixCellPropDataProvider.selectionModel.multiSelectEnabled"></aw-splm-table>
+                </aw-column>
+            </div>
+        </aw-flex-row>
+    </aw-flex-column>
+</aw-flex-row>

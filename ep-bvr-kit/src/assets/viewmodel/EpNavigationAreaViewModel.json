@@ -1,0 +1,195 @@
+{
+    "schemaVersion": "1.0.0",
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        },
+        "assembly-tabs-config": {
+            "type": "object"
+        },
+        "occ-context": {
+            "type": "object"
+        },
+        "missing-in-source-tabs-config": {
+            "type": "object"
+        }
+    },
+    "actions": {
+        "updateMissingInSourceTableContext": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "missingInSourceTableContext": {
+                    "tabs": "{{props.missingInSourceTabsConfig.tabs}}",
+                    "cmdDisplayOption": "menu"
+                }
+            },
+            "outputData": {
+                "missingInSourceTableContext": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "clearImpactHandledCache": {
+            "actionType": "JSFunction",
+            "method": "clearPropertyKeyCache",
+            "inputData": {
+                "name": "{{ctx.epPageContext.loadedObject.uid}}",
+                "propertyName": "ImpactHandledObjects"
+            },
+            "deps": "js/epObjectPropertyCacheService"
+        },
+        "updateContentPanelData": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "showEpManageConsumptionView",
+                    "condition": "data.manageConsumptionMode.isEnabled !== null && data.manageConsumptionMode.isEnabled"
+                },
+                {
+                    "action": "showEpAssemblyTreeView",
+                    "condition": "data.manageConsumptionMode.isEnabled !== null && !data.manageConsumptionMode.isEnabled"
+                },
+                {
+                    "action": "getAssemblyTreeContext",
+                    "condition": "data.manageConsumptionMode.isEnabled !== null"
+                }
+            ]
+        },
+        "getAssemblyTreeContext": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "assemblyTreeContext": {
+                    "tabs": "{{data.assemblyTreeContext.tabs}}",
+                    "cmdDisplayOption": "{{data.assemblyTreeContext.cmdDisplayOption}}"
+                }
+            },
+            "outputData": {
+                "assemblyTreeContext": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        },
+        "showEpManageConsumptionView": {
+            "actionType": "JSFunction",
+            "method": "updateTabPropKeyWithValueInTabs",
+            "inputData": {
+                "tabsData": "{{data.assemblyTreeContext}}",
+                "tabIndex": 0,
+                "tabPropsKeyValueMap": {
+                    "tabKey": "EpManageConsumption",
+                    "pageId": "EpManageConsumption"
+                },
+                "cmdDisplayOption": "menu"
+            },
+            "outputData": {
+                "assemblyTreeContext": ""
+            },
+            "deps": "js/epTabsService"
+        },
+        "showEpAssemblyTreeView": {
+            "actionType": "JSFunction",
+            "method": "updateTabPropKeyWithValueInTabs",
+            "inputData": {
+                "tabsData": "{{data.assemblyTreeContext}}",
+                "tabIndex": 0,
+                "tabPropsKeyValueMap": {
+                    "tabKey": "EpAssemblyTree",
+                    "pageId": "EpAssemblyTree"
+                },
+                "cmdDisplayOption": "{{props.assemblyTabsConfig.cmdDisplayOption ? props.assemblyTabsConfig.cmdDisplayOption : 'menu'}}"
+            },
+            "outputData": {
+                "assemblyTreeContext": ""
+            },
+            "deps": "js/epTabsService"
+        },
+        "saveAssemblyTabsConfigToData": {
+            "actionType": "JSFunction",
+            "method": "getValueInViewModel",
+            "inputData": {
+                "assemblyTreeContext": {
+                    "tabs": "{{props.assemblyTabsConfig.tabs}}",
+                    "cmdDisplayOption": "{{props.assemblyTabsConfig.cmdDisplayOption ? props.assemblyTabsConfig.cmdDisplayOption : 'menu'}}"
+                }
+            },
+            "outputData": {
+                "assemblyTreeContext": ""
+            },
+            "deps": "js/mfeViewModelUtils"
+        }
+    },
+    "data": {
+        "assemblyTreeContext": {
+            "cmdDisplayOption": "menu"
+        },
+        "missingInSourceTableContext": {
+            "tabs": "{{props.missingInSourceTabsConfig.tabs}}"
+        },
+        "manageConsumptionMode": {
+            "initialValues": {
+                "isEnabled": null
+            },
+            "meta": {}
+        }
+    },
+    "i18n": {
+        "assemblyTreeTitle": [
+            "AssemblyMessages"
+        ],
+        "boeTreeTitle": [
+            "AssemblyMessages"
+        ]
+    },
+    "conditions": {
+        "showMissingInSourceTabs": {
+            "expression": {
+                "$and": [
+                    {
+                        "$source": "ctx.sublocation.nameToken",
+                        "$query": {
+                            "$in": [
+                                "assemblyPlanning",
+                                "functionalPlan"
+                            ]
+                        }
+                    },
+                    {
+                        "$source": "props.subPanelContext.sharedSelectionData.isIndicationToggleOn",
+                        "$query": {
+                            "$eq": true
+                        }
+                    },
+                    {
+                        "$source": "props.missingInSourceTabsConfig.tabs.length",
+                        "$query": {
+                            "$gt": 0
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "lifecycleHooks": {
+        "onUnmount": "clearImpactHandledCache",
+        "onUpdate": [
+            {
+                "action": "updateContentPanelData",
+                "observers": [
+                    "viewModel.atomicData.manageConsumptionMode.isEnabled"
+                ]
+            },
+            {
+                "action": "updateMissingInSourceTableContext",
+                "observers": [
+                    "props.missingInSourceTabsConfig"
+                ]
+            },
+            {
+                "action": "saveAssemblyTabsConfigToData",
+                "observers": [
+                    "props.assemblyTabsConfig.tabs"
+                ]
+            }
+        ]
+    }
+}

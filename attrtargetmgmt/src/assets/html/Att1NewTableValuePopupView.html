@@ -1,0 +1,19 @@
+<aw-balloon-popup-panel>
+    <aw-panel>
+        <div>
+            <label class="aw-splm-tableHeaderCellLabel">{{i18n.tableDimensions}}</label>
+        </div>
+        <br>
+        <div>
+            <aw-numeric prop="data.NoOfRows"></aw-numeric>
+        </div>
+        <div>
+            <aw-numeric prop="data.NoOfCols"></aw-numeric>
+        </div>
+            <aw-panel-footer>
+                <aw-button button-type="base" size="auto" action="handleCancleAction"> <aw-i18n>i18n.cancel</aw-i18n></aw-button>
+                <aw-button button-type="base" size="auto" action="handleOkAction" enable-when="data.NoOfRows.dbValue !=='' && data.NoOfRows.dbValue > 0 && data.NoOfCols.dbValue !== '' && data.NoOfCols.dbValue > 0"> <aw-i18n>i18n.ok</aw-i18n></aw-button>
+            </aw-panel-footer>
+    </aw-panel>
+</aw-balloon-popup-panel>
+

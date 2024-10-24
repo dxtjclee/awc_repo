@@ -1,0 +1,19 @@
+<div class="sw-column">
+    <div class="sw-row">
+        <div exist-when="props.column.pinnedLeft !== true" class="aw-systemmodeler-variantgridHeader">
+            {props.column.displayName}
+        </div>
+        <div exist-when="props.column.pinnedLeft === true" class="aw-splm-tableMatrixPinnedHeader">
+            <ul class="aw-widgets-cellListWidget">
+                <li class="aw-widgets-cellListItem" aw-repeat="item : props.column.pinnedColumVMO">
+                    {{item.props[props.column.displayProperty].uiValues[0]}}
+                 </li>
+             </ul>
+        </div>
+    </div>
+    <div class="sw-row aw-systemmodeler-variantgridHeaderRow"  exist-when="props.column.typeIconURL">
+        <div class="sw-column">
+            <img src="{{props.column.typeIconURL}}" class="aw-systemmodeler-variantgridHeaderIcon" alt="{{props.column.displayName}}"></img>
+        </div>
+    </div>
+</div>

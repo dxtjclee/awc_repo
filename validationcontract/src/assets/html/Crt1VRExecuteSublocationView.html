@@ -1,0 +1,19 @@
+<aw-base-sublocation2 exist-when="props.provider" provider="props.provider" base-selection="props.baseSelection" sub-panel-context="props.subPanelContext">
+    <div class='aw-layout-defaultSublocation aw-layout-flexColumn'>
+        <div class='aw-layout-sublocationContainer'>
+            <aw-sidenav id='aw_navigation' config="data.sideNavRightData" sub-panel-context="{...subPanelContext ,selectionData:fields.selectionData}" exist-when='!props.provider.awSubLocationPref.hideNavigationArea'>
+            </aw-sidenav>
+            <div class='aw-layout-workarea'>
+                <div class='aw-layout-flexbox'>
+                    <!-- TODO:expression not supported with awclass { 'vertical': props.provider.awSubLocationPref.orientation==='HORIZONTAL' }]" -->
+                    <main aw-class="[{'aw-layout-workareaMain':true}]" class='aw-validationcontract-vrSubLocation'>
+                        <aw-workarea base-selection="props.baseSelection" selection-model="props.selectionModel" selection-data="fields.selectionData" sub-panel-context="{...subPanelContext,...props.provider,baseSelection:props.baseSelection}" is-horizontal-orientation="props.provider.awSubLocationPref.orientation==='HORIZONTAL'">
+                        </aw-workarea>
+                    </main>
+                    <aw-sidenav id='aw_toolsAndInfo' config="data.sideNavLeftData" sub-panel-context="{...subPanelContext,selectionData:fields.selectionData,baseSelection:props.baseSelection}" exist-when='!props.provider.awSubLocationPref || !props.provider.awSubLocationPref.hideToolsAndInfoArea'>
+                    </aw-sidenav>
+                </div>
+            </div>
+        </div>
+    </div>
+</aw-base-sublocation2>

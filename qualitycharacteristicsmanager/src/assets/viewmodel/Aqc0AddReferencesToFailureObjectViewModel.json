@@ -1,0 +1,246 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "addReference": {
+            "actionType": "JSFunctionAsync",
+            "method": "getCreateInputForCreateObject",
+            "inputData": {
+                "data": "{{data}}",
+                "creationType": "{{addPanelState.creationType}}",
+                "selectedTab": "{{addPanelState.selectedTab}}",
+                "editHandler": "{{editHandlers.addPanelEditHandler}}"
+            },
+            "outputData": {
+                "createdObjectForFailReferences": "",
+                "addElementResponse": ""
+            },
+            "events": {
+                "success": [ {
+                    "name": "getPropertiesForFailureObject"
+                }],
+                "failure": [ {
+                    "name": "addObject.addOprfailed"
+                } ]
+            },
+            "deps": "js/Aqc0UtilService"
+        },
+        "loadProperties":{
+            "actionType": "JSFunction",
+            "method": "getPropertiesforSelectedObject",
+            "inputData": {
+                "data": "{{data}}",
+                "selectedObjFProp": "{{ctx.selected}}",
+                "onlyLoadProps": false,
+                "relationProp": "Qc0FailureReferences"
+            },
+            "outputData": {
+                "createdObject":"specificationsOutput[0].newSpecification"
+            },
+            "deps": "js/Aqc0UtilService"
+        },
+        "createVersion": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-CharManagerAW-2018-12-QualityManagement",
+            "method": "createSpecificationVersion",
+            "inputData": {
+                "specificationInputs": "{{data.versionInputDataFVM}}"
+            },
+            "outputData": {
+                "createdObject":"specificationsOutput[0].newSpecification"
+             } ,
+            "events": {
+                "success": [ {
+                    "name":"cdm.relatedModified",
+                    "condition":"ctx.locationContext.modelObject === undefined",
+                    "eventData": {
+                        "relatedModified": [
+                            "{{ctx.selected}}"
+                        ]
+                    }
+                },
+                {
+                    "name": "aqc0.openNewObject",
+                    "condition":"ctx.locationContext.modelObject.modelType.typeHierarchyArray.indexOf( 'Qc0MasterCharSpec' ) > -1",
+                    "eventData":
+                    {
+                        "newObjectUid": "{{data.createdObject.uid}}"
+                    }
+                },
+                {
+                    "name":"cdm.relatedModified",
+                    "condition":"ctx.locationContext.modelObject !== undefined",
+                    "eventData":{
+                        "refreshLocationFlag":false,
+                        "relatedModified":[
+                            "{{ctx.locationContext.modelObject}}"
+                        ],
+                        "createdObjects": ["{{data.createdObject}}"]
+                    }
+                },
+                {
+                    "name":"aqc0.pushSelectedNodeInFailureContext",
+                    "condition":"ctx.mselected[0].modelType.name === 'Qc0Failure' && ctx.failureManagerContext !== undefined"
+                },
+                {
+                    "name": "aqc0.executePostVersionEventActionsForFailureSpec"
+                } ]
+            },
+            "actionMessages": {
+                "success": [ {
+                    "message": "versioningSuccessfulMessage"
+                } ]
+            },
+            "deps": "js/Aqc0UtilService"
+        },
+        "pushSelectedNodeInFailureContext":{
+            "actionType": "JSFunction",
+            "method": "pushSelectedNodeInFailureContext",
+            "inputData": {
+                "createdObject": "{{data.createdObject}}"
+            },
+
+            "deps": "js/Aqc0UtilService"
+        },
+        "executePostVersionEventActionsForFailureSpec": {
+            "actionType": "JSFunction",
+            "method": "executePostVersionEventActionsForFailureSpec",
+            "inputData":
+            {
+                "data": "{{data.createdObject}}",
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "deps": "js/Aqc0UtilService"
+        },
+        "setActiveView":{
+            "actionType": "JSFunction",
+            "method": "resetActiveView",
+            "inputData": {
+                "stateName": "{{data.activeState}}",
+                "destPanelId": "AddObjectPrimarySub"
+            },
+            "outputData": {
+                "activeState": ""
+            },
+            "deps": "js/addObjectUtils"
+        }
+    },
+    "functions": {
+        "getCreatedObject": {
+            "functionName": "getCreatedObject",
+            "parameters": []
+        },
+        "getVersionInputForRef":{
+            "functionName": "getVersionInputForRef",
+            "parameters": [
+                "{{data}}",
+                "{{ctx}}"
+            ]
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "getPropertiesForFailureObject",
+            "action": "loadProperties"
+        },
+        {
+            "eventId": "aqc0.createVersion",
+            "action": "createVersion"
+        },
+        {
+            "eventId": "aqc0.pushSelectedNodeInFailureContext",
+            "action": "pushSelectedNodeInFailureContext"
+        },
+        {
+            "eventId":"aqc0.executePostVersionEventActionsForFailureSpec",
+            "action": "executePostVersionEventActionsForFailureSpec"
+        }
+    ],
+    "messages": {
+        "versioningSuccessfulMessage": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.VersionCreated}}",
+            "messageTextParams": [
+                "{{ctx.selected.props.object_name.dbValues[0]}}"
+            ]
+        }
+    },
+    "conditions": {
+        "isPaletteSearchTabAddButtonVisible": {
+            "expression": "addPanelState.selectedTab.view!='NewTabPageSub' && addPanelState.sourceObjects.length > 0"
+        },
+        "isNewTabAddButtonVisible": {
+            "expression": "addPanelState.selectedTab.view ==='NewTabPageSub' && addPanelState.creationType && xrtState.xrtTypeLoaded"
+        },
+        "isAddButtonVisible": {
+            "expression": "conditions.isPaletteSearchTabAddButtonVisible || conditions.isNewTabAddButtonVisible"
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "data": {
+        "performAddOperation": true,
+        "addPanelState": {
+            "initialValues": {
+                "creationType": "",
+                "createdObject": "",
+                "sourceObjects": "",
+                "selectedTab": ""
+            },
+            "meta": {}
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "AddObjectPrimarySub",
+                "context": {}
+            },
+            "meta": {}
+        },
+        "projectState": {
+            "initialValues": {
+                "selectedProjects": [],
+                "triggerAssign": false
+            },
+            "meta": {
+                "selectedProjects": {
+                    "field": "true",
+                    "type": "OBJECT"
+                },
+                "triggerAssign": {
+                    "field": "true",
+                    "type": "BOOLEAN"
+                }
+            }
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "i18n": {
+        "addButtonTitle": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "VersionCreated": [
+            "qualitycharacteristicsmanagerMessages"
+        ],
+        "BACK_BUTTON_TITLE": [
+            "BaseMessages"
+        ]
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    }
+}

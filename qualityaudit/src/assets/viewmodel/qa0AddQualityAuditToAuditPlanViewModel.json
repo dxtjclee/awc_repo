@@ -1,0 +1,214 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "ctx": {
+        "selected": {
+            "type": "object"
+        }
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "data": {        
+        "activeView": "qa0AddQualityAuditToAuditPlan",        
+        "triggerCreate": {
+            "dbValue": false,
+            "type": "BOOLEAN"
+        },           
+        "addPanelState": {
+            "initialValues": {
+                "creationType": "",
+                "createdObject": "",
+                "sourceObjects": "",
+                "selectedTab": "",
+                "isDatasetCreate": ""
+            },
+            "meta": {}
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "qa0AddQualityAuditToAuditPlan",
+                "context": {}
+            },
+            "meta": {}
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        },  
+        "projectState": {
+            "initialValues": {
+                "selectedProjects": [],
+                "triggerAssign": false
+            },
+            "meta": {}
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "actions": {
+        "cleanup": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "removeEditHandler"
+                },
+                {
+                    "action": "clearAddContext"
+                }
+            ]
+        },
+        "clearAddContext": {
+            "actionType": "JSFunction",
+            "deps": "js/appCtxService",
+            "method": "unRegisterCtx",
+            "inputData": {
+                "0": "addObject"
+            },
+            "events": {
+                "success": [ {
+                    "name": "complete",
+                    "condition": "!data.isDestroyed()",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            }
+        },
+        "removeEditHandler": {
+            "actionType": "JSFunction",
+            "method": "removeEditHandler",
+            "inputData": {
+                "type": "CREATE_PANEL_CONTEXT"
+            },
+            "deps": "js/editHandlerService"
+        },
+        "createObject": {
+            "actionType": "JSFunction",
+            "method": "updateCreateTrigger",
+            "inputData": {
+                "triggerCreate": "{{data.triggerCreate}}",
+                "value": true
+            },
+            "outputData": {
+                "triggerCreate": "triggerCreate"
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "createRelationForPaletteOrSearch": {
+            "actionType": "JSFunction",
+            "method": "updateCreateTrigger",
+            "inputData": {
+                "triggerCreate": "{{data.triggerCreate}}",
+                "value": true
+            },
+            "outputData": {
+                "triggerCreate": "triggerCreate"
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "setActiveView":{
+            "actionType": "JSFunction",
+            "method": "resetActiveView",
+            "inputData": {
+                "stateName": "{{data.activeState}}",
+                "destPanelId": "AddObjectPrimarySub"
+            },
+            "outputData": {
+                "activeState": ""
+            },
+            "deps": "js/addObjectUtils"
+        },        
+        "clearAddEventProgContext": {
+            "actionType": "JSFunction",
+            "method": "unRegisterCtx",
+            "inputData": {
+                "0": "addItemEventProgressing"
+            },
+            "deps": "js/appCtxService"
+        },
+        "closePanelOnSelectionChange":{
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "cacheInitialSelection",
+                    "condition": "!data.initialSelection"
+                },
+                {
+                    "action": "closePanel"
+                }
+            ]
+        },
+        "cacheInitialSelection":{
+            "actionType": "JSFunction",
+            "method": "cacheSelection",
+            "inputData": {
+                "selectedUid": "{{props.subPanelContext.selectionData}}"
+            },
+            "outputData": {
+                "initialSelection": ""
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "closePanel":{
+            "actionType": "JSFunction",
+            "method": "closePanel",
+            "inputData": {
+                "selectedUid": "{{props.subPanelContext.selectionData}}",
+                "initialSelection": "{{data.initialSelection}}"
+            },
+            "deps": "js/addObjectUtils"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "cdm.relatedModified",
+            "action": "closePanel"
+        },
+        {
+            "eventId": "qa0AddQualityAuditToAuditPlan.contentUnloaded",
+            "action": "clearAddEventProgContext",
+            "condition": "subPanelContext.panelPinned"
+        }        
+    ],
+    "conditions": {
+        "isNewTabAddButtonVisible":
+        {
+            "expression": "addPanelState.creationType && addPanelState.selectedTab.view==='NewTabPageSub' && !addPanelState.isDatasetCreate"
+        },
+        "isPaletteSearchTabAddButtonVisible": {
+            "expression": "addPanelState.sourceObjects && addPanelState.sourceObjects.length > 0"
+        }
+    },
+    "lifecycleHooks": {
+        "onUnmount": "cleanup",
+        "onUpdate": [ 
+            {
+            "action": "closePanelOnSelectionChange",
+            "observers": [ "props.subPanelContext.selectionData.selected[0].uid" ]
+            }, 
+            {
+                "action": "closePanel",
+                "observers": [ "props.subPanelContext.selectionData.selected.length" ]
+            }
+        ]
+    },
+    "i18n": {
+        "qa0Add": [
+            "qualityauditMessages"
+        ]
+    }
+}
