@@ -1,0 +1,26 @@
+[
+  {
+    "name": {
+      "source": "/i18n/AccessmgmtConstants",
+      "key": "Am0AccessManagerSummaryMsg"
+    },
+    "priority": 10,
+    "view": "Am0AccessManagerSummaryMsg",
+    "visibleWhen": "selection.length === 0 && context.name === 'accessManagerSublocation'"
+  },
+  {
+    "name": "",
+    "priority": 20,
+    "view": "AccessManagerSWA",
+    "visibleWhen": "selection.length === 1 && selection[0].type === 'AM_tree' && context.name === 'accessManagerSublocation'"
+  },
+  {
+    "name": {
+      "source": "/i18n/AccessmgmtConstants",
+      "key": "Am0PropertyGroupsSummaryMsg"
+    },
+    "priority": 10,
+    "view": "Am0PropertyGroupsSummaryMsg",
+    "visibleWhen": "selection.length === 0 && context.name === 'propertyGroupsSublocation'"
+  }
+]

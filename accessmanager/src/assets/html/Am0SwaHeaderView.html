@@ -1,0 +1,14 @@
+<aw-flex-row height="4f" offset-bottom="2f" offset="1f">
+    <aw-flex-column width="4f" visible-when="props.subPanelContext.selection[0].iconURL">
+        <aw-pic source="props.subPanelContext.selection[0].iconURL"></aw-pic>
+    </aw-flex-column>
+    <aw-flex-column width="4f" visible-when="props.subPanelContext.selection[0].typeIconURL">
+        <aw-pic source="props.subPanelContext.selection[0].typeIconURL"></aw-pic>
+    </aw-flex-column>
+
+    <aw-flex-column justify='center' class="aw-layout-locationTitle" offset="1f">
+        {{data.headerDisplayName}}
+    </aw-flex-column>
+    <aw-server-visibility-command-bar context='props.subPanelContext' anchor='am_edit_summary_commands' alignment='HORIZONTAL'>
+    </aw-server-visibility-command-bar>
+</aw-flex-row>

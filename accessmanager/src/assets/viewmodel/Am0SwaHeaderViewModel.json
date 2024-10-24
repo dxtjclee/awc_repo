@@ -1,0 +1,83 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "headerDisplayName": ""
+    },
+    "onEvent": [ {
+        "eventId": "setSummaryHeader",
+        "action": "setSummaryHeader"
+    }
+ ],
+    "actions": {
+        "onRulePWASelectionChange": {
+            "actionType": "batchJob",
+            "steps": [ {
+                    "action": "setSummaryHeader",
+                    "condition": "(!ctx.ACCESS_EDIT_CONTEXT._editing)"
+                },
+                {
+                    "action": "leaveEditConfirmation",
+                    "condition": "ctx.ACCESS_EDIT_CONTEXT._editing"
+                }
+            ]
+        },
+        "setSummaryHeader": {
+            "actionType": "JSFunction",
+            "method": "setSummaryHeader",
+            "inputData": {
+                "context": "{{props.subPanelContext}}"
+            },
+            "outputData": {
+                "headerDisplayName": ""
+            },
+            "deps": "js/Am0RuleTreeEditService"
+        },
+        "leaveEditConfirmation": {
+            "actionType": "JSFunctionAsync",
+            "method": "leaveConfirmation",
+            "events": {
+                "success": [ {
+                    "name": "setSummaryHeader"
+                } ]
+            },
+            "deps": "js/editHandlerService"
+        }
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "ctx": {
+        "NONE": {
+            "type": "object"
+        },
+        "NONE._editing": {
+            "type": "boolean"
+        },
+        "NONE.canEdit": {
+            "type": "boolean"
+        },
+        "editInProgress": {
+            "type": "boolean"
+        }
+    },
+    "i18n": {
+    },
+    "lifecycleHooks": {
+        "onUpdate": [ {
+                "action": "onRulePWASelectionChange",
+                "observers": [
+                    "props.subPanelContext.selection"
+                ]
+            },
+            {
+                "action": "setSummaryHeader",
+                "observers": [
+                    "props.subPanelContext.selection[0].cellHeader1"
+                ]
+            }
+        ]
+    },
+    "conditions": {}
+}

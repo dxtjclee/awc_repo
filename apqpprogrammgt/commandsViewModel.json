@@ -1,0 +1,1545 @@
+{
+  "commands": {
+    "Apm0AddChecklist": {
+      "iconId": "cmdAdd",
+      "title": "{{i18n.apm0Add}}",
+      "description": "{{i18n.Psi0AddChecklistDesc}}"
+    },
+    "Apm0AddRYG": {
+      "iconId": "cmdAdd",
+      "title": "{{i18n.apm0Add}}"
+    },
+    "Apm0RemovePlanVendor": {
+      "iconId": "cmdRemove",
+      "title": "{{i18n.apm0Remove}}",
+      "description": "{{i18n.apm0RemovePlanVendorDesc}}"
+    },
+    "Apm0AddReportToQPMDashboardCmd": {
+      "iconId": "cmdAdd",
+      "title": "{{i18n.addReportToDashboard}}",
+      "description": "{{i18n.apm0AddReportTooltip}}"
+    },
+    "Apm0DeleteRYG": {
+      "iconId": "cmdDelete",
+      "isGroup": false,
+      "title": "{{i18n.deleteText}}",
+      "description": "{{i18n.Apm0DeleteRYGDesc}}"
+    },
+    "Apm0ResetManualAssessment": {
+      "iconId": "cmdReset",
+      "isGroup": false,
+      "title": "{{i18n.resetText}}",
+      "description": "{{i18n.Apm0ResetManualAssessmentDesc}}"
+    },
+    "Apm0AddQualityChecklist": {
+      "iconId": "cmdAdd",
+      "title": "{{i18n.addQualityChecklist}}",
+      "description": "{{i18n.Apm0AddQualityChecklistDesc}}"
+    },
+    "Apm0DeleteQualityChecklist": {
+      "iconId": "cmdDelete",
+      "isGroup": false,
+      "title": "{{i18n.deleteText}}",
+      "description": "{{i18n.Apm0DeleteQualityChecklistDesc}}"
+    },
+    "Apm0AddAttachmentsToQualityChecklist": {
+      "iconId": "cmdAdd",
+      "isGroup": false,
+      "title": "{{i18n.apm0Add}}"
+    },
+    "Apm0RemoveAttachmentsFromQualityChecklist": {
+      "iconId": "cmdRemove",
+      "isGroup": false,
+      "title": "{{i18n.RemoveButtonToolTip}}"
+    },
+    "Apm0AddReferencesToQualityChecklist": {
+      "iconId": "cmdAdd",
+      "isGroup": false,
+      "title": "{{i18n.apm0Add}}"
+    },
+    "Apm0RemoveReferencesFromQualityChecklist": {
+      "iconId": "cmdRemove",
+      "isGroup": false,
+      "title": "{{i18n.RemoveButtonToolTip}}"
+    },
+    "Psi0PasteChecklistQuestion": {
+      "iconId": "cmdPaste",
+      "isGroup": false,
+      "title": "{{i18n.paste}}",
+      "description": "{{i18n.PasteChecklistQuestionDesc}}"
+    },
+    "Apm0AddQuestionsToQualityChecklist": {
+      "iconId": "cmdAdd",
+      "title": "{{i18n.addQualityChecklist}}",
+      "description": "{{i18n.Apm0AddQualityChecklistDesc}}"
+    },
+    "Apm0AddQualityChecklistDelegate": {
+      "iconId": "cmdAdd",
+      "title": "{{i18n.addQualityChecklist}}",
+      "description": "{{i18n.Apm0AddQualityChecklistDesc}}"
+    },
+    "Apm0AddChecklistDelegate": {
+      "iconId": "cmdAdd",
+      "title": "{{i18n.apm0Add}}",
+      "description": "{{i18n.Psi0AddChecklistDesc}}"
+    },
+    "Apm0AddChecklistGroupCommand": {
+      "iconId": "cmdAdd",
+      "title": "{{i18n.apm0Add}}",
+      "isGroup": true
+    },
+    "Apm0RemoveDeliverablesFromQualityChecklist": {
+      "iconId": "cmdRemove",
+      "isGroup": false,
+      "title": "{{i18n.RemoveButtonToolTip}}"
+    }
+  },
+  "commandHandlers": {
+    "Apm0AddReportToQPMDashboardCmdHandler": {
+      "id": "Apm0AddReportToQPMDashboardCmd",
+      "action": "OpenAddReportToQPMPanel",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.isQPMReportDashboard"
+      }
+    },
+    "Apm0RemoveDashboardReportCommandHandler": {
+      "id": "Rb0RemoveDashboardTile",
+      "action": "getPreferenceForQPMDashboard",
+      "activeWhen": {
+        "condition": "conditions.isQPMReportDashboard"
+      },
+      "visibleWhen": true
+    },
+    "Apm0AddReportCommandHandler": {
+      "id": "Rb0AddReport",
+      "activeWhen": {
+        "condition": "conditions.isQPMReportDashboard"
+      },
+      "visibleWhen": false
+    },
+    "Apm0RemovePlanVendorHandler": {
+      "id": "Apm0RemovePlanVendor",
+      "action": "Apm0RemovePlanVendorAction",
+      "activeWhen": {
+        "condition": "conditions.apm0ShowRemovePlanVendorCmdCond"
+      },
+      "visibleWhen": {
+        "condition": "conditions.apm0ShowRemovePlanVendorCmdCond"
+      }
+    },
+    "Apm0AddQualityChecklistCommandHandler": {
+      "id": "Apm0AddQualityChecklist",
+      "action": "activateAddQualityChecklist",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.addCommandVisibilityApm0QualityChecklist"
+      }
+    },
+    "Apm0DeleteQualityChecklistCommandHandler": {
+      "id": "Apm0DeleteQualityChecklist",
+      "action": "getConfirmationForDeleteQualityChecklist",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.Apm0DeleteQualityChecklistCommandVisibility"
+      }
+    },
+    "checklistQuestionSaveEditHandler": {
+      "id": "Awp0SaveEdits",
+      "action": "checklistQuestionsaveEdits",
+      "activeWhen": {
+        "condition": "conditions.checklistQuestionSaveEditFunctionCommandActive"
+      },
+      "visibleWhen": true,
+      "enableWhen": {
+        "condition": "conditions.checklistQuestionSaveEditFunctionCommandActive"
+      }
+    },
+    "Apm0ShowObjectCellCommandHandler": {
+      "id": "Awp0ShowObjectCell",
+      "action": "Apm0ShowCellChecklistQuestion",
+      "activeWhen": {
+        "condition": "conditions.Apm0ShowCellChecklistQuestionVisibleCondition"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Apm0ShowCellChecklistQuestionVisibleCondition"
+      }
+    },
+    "Apm0Awp0ShowObjectCellForObjectNavigationChecklistQuestionCommandHandler": {
+      "id": "Awp0ShowObjectCellForObjectNavigation",
+      "action": "Apm0ShowCellChecklistQuestion",
+      "activeWhen": {
+        "condition": "conditions.Apm0Awp0ShowObjectCellForObjectNavigationChecklistQuestionVisibleCondition"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Apm0Awp0ShowObjectCellForObjectNavigationChecklistQuestionVisibleCondition"
+      }
+    },
+    "Apm0AddChecklistCommandHandler": {
+      "id": "Apm0AddChecklist",
+      "action": "Apm0AddChecklistPanel",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.Apm0AddChecklistCommandVisiblity"
+      }
+    },
+    "Apm0AddQualityActionCmdDelegateCommandHandler": {
+      "id": "Qam0AddQualityActionCmd",
+      "action": "setQualityActionTypeSubTypeRelationInfo",
+      "activeWhen": {
+        "condition": "conditions.addQualityActionCommandVisiblity"
+      },
+      "visibleWhen": {
+        "condition": "conditions.addQualityActionCommandVisiblity"
+      }
+    },
+    "Apm0AddQualityActionFromTemplateCmdDelegateCommandHandler": {
+      "id": "Qam0AddQualityActionFromTemplateCmd",
+      "action": "setQualityActionTypeSubTypeRelationInfoFromTemplate",
+      "activeWhen": {
+        "condition": "conditions.addQualityActionCommandVisiblity"
+      },
+      "visibleWhen": {
+        "condition": "conditions.addQualityActionCommandVisiblity"
+      }
+    },
+    "Apm0AddQualityActionAsTemplateDelegateCommandHandler": {
+      "id": "Qam0AddQualityActionAsTemplateCmd",
+      "action": "setQualityActionTypeSubTypeRelationInfoAsTemplate",
+      "activeWhen": {
+        "condition": "conditions.addQualityActionCommandVisiblity"
+      },
+      "visibleWhen": {
+        "condition": "conditions.addQualityActionCommandVisiblity"
+      }
+    },
+    "Apm0AddQualityActionCmdQuestionDelegateCommandHandler": {
+      "id": "Qam0AddQualityActionCmd",
+      "action": "setQualityActionTypeSubTypeRelationInfo",
+      "activeWhen": {
+        "condition": "conditions.addQualityActionQuestionCommandVisiblity"
+      },
+      "visibleWhen": {
+        "condition": "conditions.addQualityActionQuestionCommandVisiblity"
+      }
+    },
+    "Apm0AddQualityActionFromTemplateCmdQuestionDelegateCommandHandler": {
+      "id": "Qam0AddQualityActionFromTemplateCmd",
+      "action": "setQualityActionTypeSubTypeRelationInfoFromTemplate",
+      "activeWhen": {
+        "condition": "conditions.addQualityActionQuestionCommandVisiblity"
+      },
+      "visibleWhen": {
+        "condition": "conditions.addQualityActionQuestionCommandVisiblity"
+      }
+    },
+    "Apm0AddQualityActionAsTemplateCmdQuestionDelegateCommandHandler": {
+      "id": "Qam0AddQualityActionAsTemplateCmd",
+      "action": "setQualityActionTypeSubTypeRelationInfoAsTemplate",
+      "activeWhen": {
+        "condition": "conditions.addQualityActionQuestionCommandVisiblity"
+      },
+      "visibleWhen": {
+        "condition": "conditions.addQualityActionQuestionCommandVisiblity"
+      }
+    },
+    "Apm0AddRYGCommandHandler": {
+      "id": "Apm0AddRYG",
+      "action": "addRYGPanel",
+      "activeWhen": {
+        "condition": "conditions.addRYGCommandVisiblity"
+      },
+      "visibleWhen": {
+        "condition": "conditions.addRYGCommandVisiblity"
+      }
+    },
+    "apm0SetUnPinCommandHandler": {
+      "id": "Apm0SetUnPin",
+      "action": "Apm0SetUnPin",
+      "activeWhen": {
+        "condition": "conditions.isApm0PanelUnPinned"
+      },
+      "visibleWhen": {
+        "condition": "conditions.isApm0PanelUnPinned"
+      }
+    },
+    "Apm0AddQualityActionCmdInSublocationDelegateCommandHandler": {
+      "id": "Qam0AddQualityActionCmd",
+      "action": "setQualityActionTypeSubTypeRelationInfo",
+      "activeWhen": {
+        "condition": "conditions.addQualityActionInSublocationCommandVisiblity"
+      },
+      "visibleWhen": {
+        "condition": "conditions.addQualityActionInSublocationCommandVisiblity"
+      }
+    },
+    "Apm0AddQualityActionFromTemplateInSublocationDelegateCommandHandler": {
+      "id": "Qam0AddQualityActionFromTemplateCmd",
+      "action": "setQualityActionTypeSubTypeRelationInfoFromTemplate",
+      "activeWhen": {
+        "condition": "conditions.addQualityActionInSublocationCommandVisiblity"
+      },
+      "visibleWhen": {
+        "condition": "conditions.addQualityActionInSublocationCommandVisiblity"
+      }
+    },
+    "Apm0AddQualityActionAsTemplateInSublocationDelegateCommandHandler": {
+      "id": "Qam0AddQualityActionAsTemplateCmd",
+      "action": "setQualityActionTypeSubTypeRelationInfoAsTemplate",
+      "activeWhen": {
+        "condition": "conditions.addQualityActionInSublocationCommandVisiblity"
+      },
+      "visibleWhen": {
+        "condition": "conditions.addQualityActionInSublocationCommandVisiblity"
+      }
+    },
+    "Apm0AddQualityActionCmdInQuestionSublocationDelegateCommandHandler": {
+      "id": "Qam0AddQualityActionCmd",
+      "action": "setQualityActionTypeSubTypeRelationInfo",
+      "activeWhen": {
+        "condition": "conditions.addQualityActionInQuestionSublocationCommandVisiblity"
+      },
+      "visibleWhen": {
+        "condition": "conditions.addQualityActionInQuestionSublocationCommandVisiblity"
+      }
+    },
+    "Apm0AddQualityActionFromTemplateCmdInQuestionSublocationDelegateCommandHandler": {
+      "id": "Qam0AddQualityActionFromTemplateCmd",
+      "action": "setQualityActionTypeSubTypeRelationInfoFromTemplate",
+      "activeWhen": {
+        "condition": "conditions.addQualityActionInQuestionSublocationCommandVisiblity"
+      },
+      "visibleWhen": {
+        "condition": "conditions.addQualityActionInQuestionSublocationCommandVisiblity"
+      }
+    },
+    "Apm0AddQualityActionAsTemplateCmdInQuestionSublocationDelegateCommandHandler": {
+      "id": "Qam0AddQualityActionAsTemplateCmd",
+      "action": "setQualityActionTypeSubTypeRelationInfoAsTemplate",
+      "activeWhen": {
+        "condition": "conditions.addQualityActionInQuestionSublocationCommandVisiblity"
+      },
+      "visibleWhen": {
+        "condition": "conditions.addQualityActionInQuestionSublocationCommandVisiblity"
+      }
+    },
+    "Apm0CutRYGDisableDelegateCommandHandler": {
+      "id": "Awp0Cut",
+      "activeWhen": {
+        "condition": "conditions.Apm0CutDisableOnQualityPageDelegate"
+      },
+      "enableWhen": false
+    },
+    "Apm0CutCtxMenuRYGDisableDelegateCommandHandler": {
+      "id": "Awp0CutContextMenu",
+      "activeWhen": {
+        "condition": "conditions.Apm0CutDisableOnQualityPageDelegate"
+      },
+      "visibleWhen": false
+    },
+    "Apm0CopyRYGDisableDelegateCommandHandler": {
+      "id": "Awp0Copy",
+      "activeWhen": {
+        "condition": "conditions.Apm0CopyRYGDisableDelegate"
+      },
+      "enableWhen": false
+    },
+    "Apm0CopyContextMenuRYGDisableDelegateCommandHandler": {
+      "id": "Awp0CopyContextMenu",
+      "activeWhen": {
+        "condition": "conditions.Apm0CopyRYGDisableDelegate"
+      },
+      "visibleWhen": false
+    },
+    "Apm0HideAwp0ExportToExcelCommandHandler": {
+      "id": "Awp0ExportToExcel",
+      "activeWhen": {
+        "condition": "conditions.apm0HideAwp0ExportToExcelCommandCondition"
+      },
+      "visibleWhen": false
+    },
+    "Apm0HideAwp0EnableMultiSelectObjectSetCommandHandler": {
+      "id": "Awp0EnableMultiSelectObjectSet",
+      "activeWhen": {
+        "condition": "conditions.apm0HideAwp0EnableMultiSelectObjectSetCommandCondition"
+      },
+      "visibleWhen": false
+    },
+    "Apm0HideAwp0SelectAllObjectSetCommandHandler": {
+      "id": "Awp0SelectAllObjectSet",
+      "activeWhen": {
+        "condition": "conditions.apm0HideAwp0SelectAllObjectSetCommandCondition"
+      },
+      "visibleWhen": false
+    },
+    "Apm0HideAwp0DeselectAllObjectSetCommandHandler": {
+      "id": "Awp0DeselectAllObjectSet",
+      "activeWhen": {
+        "condition": "conditions.apm0HideAwp0DeselectAllObjectSetCommandCondition"
+      },
+      "visibleWhen": false
+    },
+    "Apm0DeleteRYGCommandHandler": {
+      "id": "Apm0DeleteRYG",
+      "action": "getConfirmationForDeleteRYG",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.Apm0DeleteRYGCommandVisibility"
+      }
+    },
+    "Apm0ResetManualAssessmentCommandHandler": {
+      "id": "Apm0ResetManualAssessment",
+      "action": "getConfirmationForResetAssessment",
+      "activeWhen": {
+        "condition": "conditions.Apm0ResetRYGCommandVisibility"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Apm0ResetRYGCommandVisibility"
+      }
+    },
+    "Apm0AddAttachmentsToQualityChecklistCommandHandler": {
+      "id": "Apm0AddAttachmentsToQualityChecklist",
+      "action": "Apm0AddAttachmentsToQualityChecklistObject",
+      "activeWhen": {
+        "condition": "conditions.apm0AddAttachmentsToQualityChecklist"
+      },
+      "visibleWhen": {
+        "condition": "conditions.apm0AddAttachmentsToQualityChecklist"
+      }
+    },
+    "Apm0RemoveAttachmentsFromQualityChecklistCommandHandler": {
+      "id": "Apm0RemoveAttachmentsFromQualityChecklist",
+      "action": "Apm0RemoveAttachmentsFromQualityChecklist",
+      "activeWhen": {
+        "condition": "conditions.apm0RemoveAttachmentsFromQualityChecklist"
+      },
+      "visibleWhen": {
+        "condition": "conditions.apm0RemoveAttachmentsFromQualityChecklist"
+      }
+    },
+    "Apm0AddReferencesToQualityChecklistCommandHandler": {
+      "id": "Apm0AddReferencesToQualityChecklist",
+      "action": "Apm0AddReferencesToQualityChecklistObject",
+      "activeWhen": {
+        "condition": "conditions.apm0AddReferencesToQualityChecklist"
+      },
+      "visibleWhen": {
+        "condition": "conditions.apm0AddReferencesToQualityChecklist"
+      }
+    },
+    "Apm0RemoveReferencesFromQualityChecklistCommandHandler": {
+      "id": "Apm0RemoveReferencesFromQualityChecklist",
+      "action": "Apm0RemoveReferencesFromQualityChecklist",
+      "activeWhen": {
+        "condition": "conditions.apm0RemoveReferencesFromQualityChecklist"
+      },
+      "visibleWhen": {
+        "condition": "conditions.apm0RemoveReferencesFromQualityChecklist"
+      }
+    },
+    "cutChecklistQuestionCommandDelegateHandler": {
+      "id": "Awp0Cut",
+      "action": "cutChecklistQuestionDelegate",
+      "activeWhen": {
+        "condition": "conditions.cutChecklistQuestionVisibilityDelegate"
+      },
+      "enableWhen": {
+        "condition": "conditions.cutChecklistQuestionVisibilityDelegate"
+      }
+    },
+    "cutCtxMenuChecklistQuestionCommandDelegateHandler": {
+      "id": "Awp0CutContextMenu",
+      "action": "cutChecklistQuestionDelegate",
+      "activeWhen": {
+        "condition": "conditions.cutChecklistQuestionVisibilityDelegate"
+      },
+      "visibleWhen": {
+        "condition": "conditions.cutChecklistQuestionVisibilityDelegate"
+      }
+    },
+    "Psi0PasteChecklistQuestionCommandHandler": {
+      "id": "Psi0PasteChecklistQuestion",
+      "action": "PasteOperationChecklistQuestion",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.PasteChecklistQuestionVisiblity"
+      }
+    },
+    "Psi0PasteChecklistQuestionDisableDelegate": {
+      "id": "Awp0Paste",
+      "activeWhen": {
+        "condition": "conditions.PasteChecklistQuestionDisableDelegate"
+      },
+      "visibleWhen": false
+    },
+    "Psi0PasteCtxMenuChecklistQuestionDisableDelegate": {
+      "id": "Awp0PasteContextMenu",
+      "activeWhen": {
+        "condition": "conditions.PasteChecklistQuestionDisableDelegate"
+      },
+      "visibleWhen": false
+    },
+    "Apm0AddQuestionToQualityChecklistCommandHandler": {
+      "id": "Apm0AddQuestionsToQualityChecklist",
+      "action": "activateAddQuestionsToQualityChecklistPanel",
+      "activeWhen": true,
+      "visibleWhen": {
+        "condition": "conditions.addCommandVisibilityApm0AddQuestionsToQualityChecklist"
+      }
+    },
+    "Apm0Awp0OpenInNewTabCmdHandler": {
+      "id": "Awp0OpenInNewTab",
+      "action": "Apm0OpenInNewTabCommandAction",
+      "activeWhen": {
+        "condition": "conditions.Apm0Awp0OpenInNewTabCondition"
+      },
+      "visibleWhen": true
+    },
+    "Apm0AddChecklistDelegateCommandHandler": {
+      "id": "Apm0AddChecklistDelegate",
+      "action": "Apm0AddChecklistPanel",
+      "activeWhen": {
+        "condition": "conditions.Apm0AddChecklistDelegateCommandVisiblity"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Apm0AddChecklistDelegateCommandVisiblity"
+      },
+      "enableWhen": {
+        "condition": "conditions.Apm0AddChecklistDelegateCommandEnability"
+      }
+    },
+    "Apm0AddQualityChecklistDelegateCommandHandler": {
+      "id": "Apm0AddQualityChecklistDelegate",
+      "action": "activateAddQualityChecklist",
+      "activeWhen": {
+        "condition": "conditions.Apm0AddChecklistDelegateCommandVisiblity"
+      },
+      "visibleWhen": {
+        "condition": "conditions.Apm0AddChecklistDelegateCommandVisiblity"
+      },
+      "enableWhen": {
+        "condition": "conditions.Apm0AddChecklistDelegateCommandEnability"
+      }
+    },
+    "Apm0CutQualityChecklistDisableCommandHandler": {
+      "id": "Awp0Cut",
+      "activeWhen": {
+        "condition": "conditions.Apm0CutQualityChecklistDisable"
+      },
+      "enableWhen": false
+    },
+    "Apm0CutCtxMenuQualityChecklistDisableCommandHandler": {
+      "id": "Awp0CutContextMenu",
+      "activeWhen": {
+        "condition": "conditions.Apm0CutQualityChecklistDisable"
+      },
+      "visibleWhen": false
+    },
+    "Apm0RemoveDeliverablesFromQualityChecklistCommandHandler": {
+      "id": "Apm0RemoveDeliverablesFromQualityChecklist",
+      "action": "Apm0RemoveDeliverablesFromQualityChecklist",
+      "activeWhen": {
+        "condition": "conditions.apm0RemoveDeliverablesFromQualityChecklist"
+      },
+      "visibleWhen": {
+        "condition": "conditions.apm0RemoveDeliverablesFromQualityChecklist"
+      }
+    }
+  },
+  "commandPlacements": {
+    "Apm0AddReportToQPMDashboardCmdPlacement": {
+      "id": "Apm0AddReportToQPMDashboardCmd",
+      "uiAnchor": "aw_rightWall",
+      "priority": 10,
+      "parentGroupId": "Awp0NewGroup"
+    },
+    "Apm0AddQualityChecklistCommandPlacement": {
+      "id": "Apm0AddQualityChecklist",
+      "uiAnchor": "aw_rightWall",
+      "priority": 1,
+      "parentGroupId": "Awp0NewGroup"
+    },
+    "Apm0AddChecklistCommandPlacement": {
+      "id": "Apm0AddChecklist",
+      "uiAnchor": "aw_rightWall",
+      "priority": 1,
+      "parentGroupId": "Awp0NewGroup"
+    },
+    "Apm0DeleteRYGOneStepCommandPlacement": {
+      "id": "Apm0DeleteRYG",
+      "uiAnchor": "aw_rightWall",
+      "priority": 500,
+      "parentGroupId": "Awp0EditGroup"
+    },
+    "Apm0DeleteQualityChecklistOneStepCommandPlacement": {
+      "id": "Apm0DeleteQualityChecklist",
+      "uiAnchor": "aw_rightWall",
+      "priority": 500,
+      "parentGroupId": "Awp0EditGroup"
+    },
+    "Apm0AddQuestionsToQualityChecklistCommandPlacement": {
+      "id": "Apm0AddQuestionsToQualityChecklist",
+      "uiAnchor": "aw_rightWall",
+      "priority": 1,
+      "parentGroupId": "Awp0NewGroup"
+    },
+    "Apm0Awp0OpenInNewTabCmdPlacement": {
+      "id": "Awp0OpenInNewTab",
+      "uiAnchor": "checklistspec_cell_commands_List",
+      "priority": 100,
+      "cellDisplay": {
+        "hover": true,
+        "position": "TOP_RIGHT",
+        "selected": true
+      }
+    },
+    "Apm0AddChecklistGroupCommandCommandPlacement": {
+      "id": "Apm0AddChecklistGroupCommand",
+      "uiAnchor": "aw_objectSet_right",
+      "priority": 1
+    },
+    "Apm0AddChecklistDelegateCommandPlacement": {
+      "id": "Apm0AddChecklistDelegate",
+      "priority": 100,
+      "parentGroupId": "Apm0AddChecklistGroupCommand"
+    },
+    "Apm0AddQualityChecklistDelegateCommandPlacement": {
+      "id": "Apm0AddQualityChecklistDelegate",
+      "priority": 200,
+      "parentGroupId": "Apm0AddChecklistGroupCommand"
+    }
+  },
+  "actions": {
+    "activateAddQualityChecklist": {
+      "actionType": "activateCommandPanel",
+      "inputData": {
+        "commandId": "Apm0AddQualityChecklist",
+        "location": "aw_toolsAndInfo",
+        "config": {
+          "isPinUnpinEnabled": true
+        }
+      }
+    },
+    "Apm0RemovePlanVendorAction": {
+      "actionType": "TcSoaService",
+      "serviceName": "Core-2006-03-DataManagement",
+      "method": "deleteRelations",
+      "inputData": {
+        "input": "{{function:createRemoveRelationWithPlanInput}}"
+      },
+      "outputData": {},
+      "events": {
+        "success": [
+          {
+            "name": "cdm.relatedModified",
+            "eventData": {
+              "refreshLocationFlag": false,
+              "relatedModified": [
+                "{{ctx.pselected}}"
+              ]
+            }
+          }
+        ],
+        "failure": [
+          {
+            "name": "cdm.relatedModified",
+            "eventData": {
+              "refreshLocationFlag": false,
+              "relatedModified": [
+                "{{ctx.pselected}}"
+              ]
+            }
+          }
+        ]
+      },
+      "deps": "js/Apm0ApqpProgramMgtService"
+    },
+    "OpenAddReportToQPMPanel": {
+      "actionType": "JSFunction",
+      "method": "activateCommandPanel",
+      "deps": "js/commandPanel.service",
+      "inputData": {
+        "commandId": "Apm0AddReportToQPMPanel",
+        "location": "aw_toolsAndInfo"
+      }
+    },
+    "getPreferenceForQPMDashboard": {
+      "actionType": "JSFunction",
+      "method": "getPreferenceForQPMDashboard",
+      "inputData": {
+        "data": "{{data}}"
+      },
+      "outputData": {
+        "preference_Name": "preference_Name"
+      },
+      "events": {
+        "success": [
+          {
+            "name": "apm0.removeSelectedQPMDashboardReport"
+          }
+        ]
+      },
+      "deps": "js/Apm0PropertyUpdateService"
+    },
+    "removeSelectedQPMDashboardReport": {
+      "actionType": "JSFunction",
+      "method": "removeSelectedDashboardReport",
+      "deps": "js/showMyDashboardService",
+      "inputData": {
+        "selectedReportDef": "{{commandContext.selectedReport}}",
+        "preference": "{{data.preference_Name}}"
+      }
+    },
+    "checklistQuestionsaveEdits": {
+      "actionType": "JSFunctionAsync",
+      "method": "saveEdits",
+      "deps": "js/editHandlerService",
+      "inputData": {},
+      "events": {
+        "success": [
+          {
+            "name": "updateURLParam"
+          },
+          {
+            "name": "cdm.relatedModified",
+            "eventData": {
+              "relatedModified": [
+                "{{ctx.pselected}}"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "Apm0ShowCellChecklistQuestion": {
+      "actionType": "Navigate",
+      "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+      "navigationParams": {
+        "uid": "{{commandContext.vmo.uid}}",
+        "pageId": "tc_xrt_ChecklistQuestion"
+      }
+    },
+    "Apm0AddChecklistPanel": {
+      "actionType": "activateCommandPanel",
+      "inputData": {
+        "commandId": "Psi0AddChecklist",
+        "location": "aw_toolsAndInfo",
+        "config": {
+          "isPinUnpinEnabled": true
+        }
+      }
+    },
+    "addRYGPanel": {
+      "actionType": "JSFunction",
+      "method": "activateCommandPanel",
+      "deps": "js/commandPanel.service",
+      "inputData": {
+        "commandId": "Apm0AddRYG",
+        "location": "aw_toolsAndInfo"
+      }
+    },
+    "getConfirmationForDeleteQualityChecklist": {
+      "actionType": "Event",
+      "method": "Event",
+      "inputData": {
+        "events": [
+          {}
+        ]
+      },
+      "actionMessages": {
+        "success": [
+          {
+            "condition": "ctx.mselected[0].modelType.typeHierarchyArray.indexOf( 'Apm0QualityChecklist' ) > -1 && (ctx.mselected.length < 2)",
+            "message": "deleteSingleQualityChecklistMessage"
+          },
+          {
+            "condition": "ctx.mselected[0].modelType.typeHierarchyArray.indexOf( 'Apm0QualityChecklist' ) > -1 && (ctx.mselected.length > 1)",
+            "message": "deleteMultipleQualityChecklistMessage"
+          }
+        ]
+      }
+    },
+    "deleteSelectedObj": {
+      "actionType": "TcSoaService",
+      "serviceName": "Core-2006-03-DataManagement",
+      "method": "deleteObjects",
+      "inputData": {
+        "objects": "{{function:getSelectedObjects}}"
+      },
+      "events": {
+        "success": [
+          {
+            "name": "cdm.relatedModified",
+            "condition": "!(commandContext.pageContext.primaryActiveTabId === 'tc_xrt_apqp_Quality' && ctx.selected.modelType.typeHierarchyArray.indexOf('Apm0QualityChecklist') > -1 ) ",
+            "eventData": {
+              "refreshLocationFlag": true,
+              "relatedModified": [
+                "{{ctx.xrtSummaryContextObject}}"
+              ]
+            }
+          },
+          {
+            "name": "cdm.relatedModified",
+            "condition": "!(commandContext.pageContext.primaryActiveTabId === 'tc_xrt_apqp_Quality' && ctx.selected.modelType.typeHierarchyArray.indexOf('Apm0QualityChecklist') > -1 ) ",
+            "eventData": {
+              "refreshLocationFlag": true,
+              "relatedModified": [
+                "{{ctx.pselected}}"
+              ]
+            }
+          },
+          {
+            "name": "primaryWorkarea.reset",
+            "condition": "(commandContext.pageContext.primaryActiveTabId === 'tc_xrt_apqp_Quality' && ctx.selected.modelType.typeHierarchyArray.indexOf('Apm0QualityChecklist') > -1 ) "
+          }
+        ]
+      },
+      "actionMessages": {
+        "success": [
+          {
+            "condition": "ctx.selected.modelType.typeHierarchyArray.indexOf( 'Apm0QualityChecklist' ) > -1 && (ctx.mselected.length < 2)",
+            "message": "deleteSingleQCLNotification"
+          },
+          {
+            "condition": "ctx.selected.modelType.typeHierarchyArray.indexOf( 'Apm0QualityChecklist' ) > -1 && (ctx.mselected.length > 1)",
+            "message": "deleteMultipleQCLNotification"
+          }
+        ],
+        "failure": [
+          {
+            "message": "SOAFailureMessage"
+          }
+        ]
+      },
+      "deps": "js/PrgScheduleManagerUtils"
+    },
+    "getConfirmationForDeleteRYG": {
+      "actionType": "Event",
+      "method": "Event",
+      "inputData": {
+        "events": [
+          {}
+        ]
+      },
+      "actionMessages": {
+        "success": [
+          {
+            "condition": "ctx.mselected[0].modelType.typeHierarchyArray.indexOf( 'Apm0RYG' ) > -1",
+            "message": "deleteRYGMessage"
+          }
+        ]
+      }
+    },
+    "getConfirmationForResetAssessment": {
+      "actionType": "Event",
+      "method": "Event",
+      "inputData": {
+        "events": [
+          {}
+        ]
+      },
+      "actionMessages": {
+        "success": [
+          {
+            "condition": "ctx.mselected[0].modelType.typeHierarchyArray.indexOf( 'Apm0RYG' ) > -1",
+            "message": "resetAssessmentRYGMessage"
+          }
+        ]
+      }
+    },
+    "setQualityActionTypeSubTypeRelationInfo": {
+      "actionType": "JSFunction",
+      "method": "setQualityActionTypeSubTypeRelationInfo",
+      "inputData": {
+        "ctx": "{{ctx}}"
+      },
+      "events": {
+        "success": [
+          {
+            "name": "qam0AddGenericQualityActionPanel"
+          }
+        ]
+      },
+      "deps": "js/Apm0AddGenericQualityActionService"
+    },
+    "setQualityActionTypeSubTypeRelationInfoFromTemplate": {
+      "actionType": "JSFunction",
+      "method": "setQualityActionTypeSubTypeRelationInfo",
+      "inputData": {
+        "ctx": "{{ctx}}"
+      },
+      "events": {
+        "success": [
+          {
+            "name": "qam0AddQAFromTemplatePanel"
+          }
+        ]
+      },
+      "deps": "js/Apm0AddGenericQualityActionService"
+    },
+    "setQualityActionTypeSubTypeRelationInfoAsTemplate": {
+      "actionType": "JSFunction",
+      "method": "setQualityActionTypeSubTypeRelationInfo",
+      "inputData": {
+        "ctx": "{{ctx}}"
+      },
+      "events": {
+        "success": [
+          {
+            "name": "qam0AddQualityActionAsTemplatePanel"
+          }
+        ]
+      },
+      "deps": "js/Apm0AddGenericQualityActionService"
+    },
+    "qam0AddGenericQualityActionPanel": {
+      "actionType": "activateCommandPanel",
+      "inputData": {
+        "commandId": "Qam0AddGenericQualityAction",
+        "location": "aw_toolsAndInfo",
+        "context": "{{commandContext}}",
+        "config": {
+          "isPinUnpinEnabled": true
+        }
+      }
+    },
+    "qam0AddQAFromTemplatePanel": {
+      "actionType": "activateCommandPanel",
+      "inputData": {
+        "commandId": "Qam0QAFromTemplate",
+        "location": "aw_toolsAndInfo",
+        "context": "{{commandContext}}",
+        "config": {
+          "isPinUnpinEnabled": true
+        }
+      }
+    },
+    "qam0AddQualityActionAsTemplatePanel": {
+      "actionType": "activateCommandPanel",
+      "inputData": {
+        "commandId": "Qam0AddQualityActionAsTemplate",
+        "location": "aw_toolsAndInfo",
+        "context": "{{commandContext}}",
+        "config": {
+          "isPinUnpinEnabled": true
+        }
+      }
+    },
+    "resetAssessmentSOACall": {
+      "actionType": "TcSoaService",
+      "serviceName": "Internal-ApqpProgramMgtAw-2020-12-ApqpProgramMgt",
+      "method": "resetManualAssessment",
+      "inputData": {
+        "resetAssessmentInput": "{{function:getResetAssessmentRYGObject}}",
+        "runInBackground": false
+      },
+      "deps": "js/Apm0ApqpProgramMgtService",
+      "outputData": {
+        "serviceData": "",
+        "resetManualRYGObjs": "{{function:getCountOfOverrideRollUpRYGObject}}"
+      },
+      "events": {
+        "success": [
+          {
+            "name": "cdm.relatedModified",
+            "refreshLocationFlag": true,
+            "eventData": {
+              "relatedModified": [
+                "{{ctx.pselected}}"
+              ]
+            }
+          }
+        ]
+      },
+      "actionMessages": {
+        "success": [
+          {
+            "message": "resetAssessmentAcknowledgementMessage"
+          }
+        ]
+      }
+    },
+    "Apm0AddAttachmentsToQualityChecklistObject": {
+      "actionType": "JSFunction",
+      "method": "activateCommandPanel",
+      "deps": "js/commandPanel.service",
+      "inputData": {
+        "commandId": "Apm0AddAttachmentsToQualityChecklistObject",
+        "location": "aw_toolsAndInfo",
+        "panelContext": "{{commandContext}}"
+      }
+    },
+    "Apm0RemoveAttachmentsFromQualityChecklist": {
+      "actionType": "JSFunction",
+      "method": "getPropertiesforSelectedObject",
+      "inputData": {
+        "data": "{{data}}",
+        "selectedObjFProp": "{{ctx.pselected}}",
+        "onlyLoadProps": false,
+        "relationProp": "Apm0QChecklistAttachments"
+      },
+      "deps": "js/Aqc0UtilService"
+    },
+    "Apm0AddReferencesToQualityChecklistObject": {
+      "actionType": "JSFunction",
+      "method": "activateCommandPanel",
+      "deps": "js/commandPanel.service",
+      "inputData": {
+        "commandId": "Apm0AddReferencesToQualityChecklistObject",
+        "location": "aw_toolsAndInfo",
+        "panelContext": "{{commandContext}}"
+      }
+    },
+    "Apm0RemoveReferencesFromQualityChecklist": {
+      "actionType": "JSFunction",
+      "method": "getPropertiesforSelectedObject",
+      "inputData": {
+        "data": "{{data}}",
+        "selectedObjFProp": "{{ctx.pselected}}",
+        "onlyLoadProps": false,
+        "relationProp": "Apm0QChecklistReferences"
+      },
+      "deps": "js/Aqc0UtilService"
+    },
+    "cutChecklistQuestionDelegate": {
+      "actionType": "JSFunction",
+      "method": "cutChecklistQuestionOperation",
+      "actionMessages": {
+        "success": [
+          {
+            "condition": "ctx.mselected.length==1",
+            "message": "cutChecklistQuestionSuccessfulInfoMsg"
+          },
+          {
+            "condition": "ctx.mselected.length>1",
+            "message": "cutMultipleChecklistQuestionSuccessfulInfoMsg"
+          }
+        ]
+      },
+      "outputData": {
+        "checklistName": ""
+      },
+      "deps": "js/Apm0ApqpProgramMgtService"
+    },
+    "PasteOperationChecklistQuestion": {
+      "actionType": "JSFunctionAsync",
+      "method": "pasteChecklistQuestion",
+      "inputData": {
+        "ctx": "{{ctx}}",
+        "data": "{{data}}"
+      },
+      "outputData": {
+        "createSoaInput": ""
+      },
+      "events": {
+        "success": [
+          {
+            "condition": "ctx.selected.modelType.typeHierarchyArray.indexOf( 'Psi0ChecklistQuestion' ) > -1  &&  ctx.awClipBoardProvider[ 0 ].props.psi0ParentChecklist.dbValues[ 0 ] === ctx.selected.props.psi0ParentChecklist.dbValues[ 0 ] ",
+            "name": "PasteChecklistQuestionContainer.callSoa"
+          }
+        ]
+      },
+      "deps": "js/Apm0ApqpProgramMgtService"
+    },
+    "PasteChecklistQuestionContainer": {
+      "actionType": "TcSoaService",
+      "serviceName": "Core-2010-09-DataManagement",
+      "method": "setProperties",
+      "inputData": {
+        "info": "{{data.createSoaInput}}"
+      },
+      "events": {
+        "success": [
+          {
+            "name": "cdm.relatedModified",
+            "eventData": {
+              "refreshLocationFlag": true,
+              "relations": "",
+              "relatedModified": [
+                "{{ctx.pselected}}"
+              ]
+            }
+          }
+        ]
+      },
+      "actionMessages": {
+        "failure": [
+          {
+            "message": "SOAFailureMessage"
+          }
+        ]
+      }
+    },
+    "activateAddQuestionsToQualityChecklistPanel": {
+      "actionType": "activateCommandPanel",
+      "inputData": {
+        "commandId": "Apm0AddQuestionsToQualityChecklist",
+        "location": "aw_toolsAndInfo",
+        "config": {
+          "isPinUnpinEnabled": true
+        }
+      }
+    },
+    "Apm0OpenInNewTabCommandAction": {
+      "actionType": "Navigate",
+      "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+      "navigationParams": {
+        "uid": "{{commandContext.vmo.uid}}"
+      },
+      "navigateIn": "newTab"
+    },
+    "Apm0RemoveDeliverablesFromQualityChecklist": {
+      "actionType": "JSFunction",
+      "method": "getPropertiesforSelectedObject",
+      "inputData": {
+        "data": "{{data}}",
+        "selectedObjFProp": "{{ctx.pselected}}",
+        "onlyLoadProps": false,
+        "relationProp": "Apm0QCLDeliverables"
+      },
+      "deps": "js/Aqc0UtilService"
+    }
+  },
+  "functions": {
+    "apm0getObjectsConatiner": {
+      "functionName": "getRelationInfo",
+      "parameters": [
+        "{{ctx}}"
+      ]
+    },
+    "createRemoveRelationWithPlanInput": {
+      "functionName": "createRemoveRelationWithPlanInput",
+      "parameters": [
+        "{{ctx.pselected}}",
+        "Apm0PlanVendors",
+        "{{ctx.mselected}}"
+      ]
+    },
+    "getSelectedObjects": {
+      "functionName": "getSelectedObjects",
+      "parameters": []
+    },
+    "getParentObject": {
+      "functionName": "getParentObject",
+      "parameters": []
+    },
+    "getResetAssessmentRYGObject": {
+      "functionName": "getResetAssessmentRYGObject",
+      "parameters": [
+        "{{ctx}}"
+      ]
+    },
+    "getCountOfOverrideRollUpRYGObject": {
+      "functionName": "getCountOfOverrideRollUpRYGObject",
+      "parameters": [
+        "{{response}}"
+      ]
+    },
+    "setQualityActionTypeSubTypeRelationInfo": {
+      "functionName": "setQualityActionTypeSubTypeRelationInfo",
+      "parameters": [
+        "{{ctx}}"
+      ]
+    }
+  },
+  "messages": {
+    "cutSingleQASuccessful": {
+      "messageType": "INFO",
+      "messageText": "{{i18n.cutSingleSuccessful}}",
+      "messageTextParams": [
+        "{{ctx.mselected[0].props.object_string.uiValues[0]}}",
+        "{{ctx.checklistSelectedObj}}"
+      ]
+    },
+    "cutMultipleQASuccessful": {
+      "messageType": "INFO",
+      "messageText": "{{i18n.cutMultipleSuccessful}}",
+      "messageTextParams": [
+        "{{ctx.mselected.length}}",
+        "{{ctx.checklistSelectedObj}}"
+      ]
+    },
+    "deleteSingleQCLNotification": {
+      "messageType": "INFO",
+      "messageText": "{{i18n.deleteSingleQCLNotification}}",
+      "messageTextParams": [
+        "{{ctx.mselected[0].props.object_string.dbValues[0]}}"
+      ]
+    },
+    "deleteMultipleQCLNotification": {
+      "messageType": "INFO",
+      "messageText": "{{i18n.deleteMultipleQCLNotification}}",
+      "messageTextParams": [
+        "{{ctx.mselected.length}}"
+      ]
+    },
+    "deleteRYGMessage": {
+      "messageType": "WARNING",
+      "messageText": "{{i18n.deleteSingleQualityActionConfirmation}}",
+      "messageTextParams": [
+        "{{ctx.mselected[0].props.object_string.dbValues[0]}}"
+      ],
+      "navigationOptions": [
+        {
+          "option": "Cancel",
+          "text": "{{i18n.CancelText}}",
+          "action": ""
+        },
+        {
+          "option": "Delete",
+          "text": "{{i18n.deleteText}}",
+          "action": "deleteSelectedObj"
+        }
+      ]
+    },
+    "resetAssessmentRYGMessage": {
+      "messageType": "WARNING",
+      "messageText": "{{i18n.resetAssessmentOnRYGConfirmation}}",
+      "navigationOptions": [
+        {
+          "option": "Cancel",
+          "text": "{{i18n.CancelText}}",
+          "action": ""
+        },
+        {
+          "option": "Reset",
+          "text": "{{i18n.resetText}}",
+          "action": "resetAssessmentSOACall"
+        }
+      ]
+    },
+    "deleteSingleQualityChecklistMessage": {
+      "messageType": "WARNING",
+      "messageText": "{{i18n.deleteSingleQualityChecklistConfirmation}}",
+      "messageTextParams": [
+        "{{ctx.mselected[0].props.object_string.dbValues[0]}}"
+      ],
+      "navigationOptions": [
+        {
+          "option": "Cancel",
+          "text": "{{i18n.CancelText}}",
+          "action": ""
+        },
+        {
+          "option": "Delete",
+          "text": "{{i18n.deleteText}}",
+          "action": "deleteSelectedObj"
+        }
+      ]
+    },
+    "deleteMultipleQualityChecklistMessage": {
+      "messageType": "WARNING",
+      "messageText": "{{i18n.deleteMultipleQualityChecklistConfirmation}}",
+      "messageTextParams": [
+        "{{ctx.mselected.length}}"
+      ],
+      "navigationOptions": [
+        {
+          "option": "Cancel",
+          "text": "{{i18n.CancelText}}",
+          "action": ""
+        },
+        {
+          "option": "Delete",
+          "text": "{{i18n.deleteText}}",
+          "action": "deleteSelectedObj"
+        }
+      ]
+    },
+    "resetAssessmentAcknowledgementMessage": {
+      "messageType": "INFO",
+      "messageText": "{{i18n.resetAssessmentAcknowledgement}}",
+      "messageTextParams": [
+        "{{data.resetManualRYGObjs}}"
+      ]
+    },
+    "cutChecklistQuestionSuccessfulInfoMsg": {
+      "messageType": "INFO",
+      "messageText": "{{i18n.cutChecklistQuestionSuccessful}}",
+      "messageTextParams": [
+        "{{ctx.selected.props.object_string.dbValues[0]}}",
+        "{{data.checklistName}}"
+      ]
+    },
+    "cutMultipleChecklistQuestionSuccessfulInfoMsg": {
+      "messageType": "INFO",
+      "messageText": "{{i18n.cutMultipleChecklistQuestionSuccessful}}",
+      "messageTextParams": [
+        "{{ctx.mselected.length}}",
+        "{{data.checklistName}}"
+      ]
+    }
+  },
+  "conditions": {
+    "Apm0ShowCellChecklistQuestionVisibleCondition": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.cmdAwp0ShowObjectCellBaseVisibleCondition",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": {
+              "$adapt": "commandContext.vmo"
+            },
+            "$query": {
+              "$all": {
+                "$source": "modelType.typeHierarchyArray",
+                "$query": {
+                  "$in": [
+                    "Psi0Checklist"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "$source": "ctx.state.params.pageId",
+            "$query": {
+              "$eq": "tc_xrt_apqp_Quality"
+            }
+          }
+        ]
+      }
+    },
+    "Apm0Awp0ShowObjectCellForObjectNavigationChecklistQuestionVisibleCondition": {
+      "expression": {
+        "$and": [
+          {
+            "$source": "conditions.cmdAwp0ShowObjectCellForObjectNavigationBaseVisibleCondition",
+            "$query": {
+              "$eq": true
+            }
+          },
+          {
+            "$source": {
+              "$adapt": "commandContext.vmo"
+            },
+            "$query": {
+              "$all": {
+                "$source": "modelType.typeHierarchyArray",
+                "$query": {
+                  "$in": [
+                    "Psi0Checklist"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "$source": "ctx.state.params.pageId",
+            "$query": {
+              "$eq": "tc_xrt_apqp_Quality"
+            }
+          }
+        ]
+      }
+    },
+    "Apm0AddChecklistCommandVisiblity": {
+      "expression": "!ctx.editInProgress && ctx.state.params.pageId === 'tc_xrt_apqp_Quality' && ctx.selected.modelType.typeHierarchyArray.indexOf( 'Prg0AbsEvent' ) > -1 "
+    },
+    "addQualityActionCommandVisiblity": {
+      "expression": " ((commandContext.objectSetSource==='Apm0ChecklistQualityActRel.Qam0QualityAction' && ((ctx.state.params.pageId === 'tc_xrt_apqp_Quality') || (commandContext.pageContext.secondaryActiveTabId === 'tc_xrt_Quality')|| (ctx.state.params.pageId === 'tc_xrt_Quality'))) && (ctx.selected.modelType.typeHierarchyArray.indexOf( 'Psi0Checklist' ) > -1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'Apm0QualityChecklist' ) > -1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'Qam0QualityAction' ) > -1 )) "
+    },
+    "addQualityActionQuestionCommandVisiblity": {
+      "expression": " ((commandContext.objectSetSource==='Apm0ChecklistQQualityActRel.Qam0QualityAction' && ctx.state.params.pageId === 'tc_xrt_ChecklistQuestion') && (ctx.selected.modelType.typeHierarchyArray.indexOf( 'Psi0ChecklistQuestion' ) > -1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'Qam0QualityAction' ) > -1 )) "
+    },
+    "Apm0DeleteQualityChecklistCommandVisibility": {
+      "expression": "(ctx.selected.modelType.typeHierarchyArray.indexOf( 'Apm0QualityChecklist' ) > -1 && ctx.mselected.length === 1)"
+    },
+    "addRYGCommandVisiblity": {
+      "expression": "(commandContext.pageContext.primaryActiveTabId === 'tc_xrt_Quality' || commandContext.pageContext.secondaryActiveTabId === 'tc_xrt_Quality' || commandContext.pageContext.primaryActiveTabId === 'tc_xrt_apqp_Quality' || commandContext.pageContext.secondaryActiveTabId === 'tc_xrt_apqp_Quality' ) && commandContext.objectSetSource === 'apm0RatedReference.Apm0RYG' && (commandContext.vmo.props.apm0RatedReference.dbValues[0] === ''  || commandContext.vmo.props.apm0RatedReference.dbValues[0] === undefined || commandContext.vmo.props.apm0RatedReference.dbValues[0] === null )"
+    },
+    "apm0ShowRemovePlanVendorCmdCond": {
+      "expression": "ctx.relationContext && ctx.relationContext.relationInfo[0].relationType == 'Apm0PlanVendors' && ctx.pselected.modelType.typeHierarchyArray.indexOf( 'Prg0AbsPlan' ) > -1"
+    },
+    "addQualityActionInSublocationCommandVisiblity": {
+      "expression": "commandContext.objectSetSource==='Apm0ChecklistQualityActRel.Qam0QualityAction' && !ctx.editInProgress && commandContext.pageContext.primaryActiveTabId === 'tc_xrt_Quality' &&  ctx.xrtSummaryContextObject.modelType.typeHierarchyArray.indexOf( 'Psi0Checklist' ) > -1 && ( ctx.selected.modelType.typeHierarchyArray.indexOf( 'Psi0Checklist' ) > -1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'Qam0QualityAction' ) > -1 )"
+    },
+    "addQualityActionInQuestionSublocationCommandVisiblity": {
+      "expression": "commandContext.objectSetSource==='Apm0ChecklistQQualityActRel.Qam0QualityAction' && !ctx.editInProgress && commandContext.pageContext.primaryActiveTabId === 'tc_xrt_Quality' && ctx.xrtSummaryContextObject.modelType.typeHierarchyArray.indexOf( 'Psi0ChecklistQuestion' ) > -1 && (ctx.selected.modelType.typeHierarchyArray.indexOf( 'Psi0ChecklistQuestion' ) > -1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'Qam0QualityAction' ) > -1 )"
+    },
+    "Apm0CutDisableOnQualityPageDelegate": {
+      "expression": "(ctx.selected.modelType.typeHierarchyArray.indexOf( 'Apm0RYG' ) > -1) || ((commandContext.pageContext.primaryActiveTabId === 'tc_xrt_Quality' || commandContext.pageContext.secondaryActiveTabId === 'tc_xrt_Quality' || commandContext.pageContext.primaryActiveTabId === 'tc_xrt_apqp_Quality' || commandContext.pageContext.secondaryActiveTabId === 'tc_xrt_apqp_Quality' ) && (ctx.selected.modelType.typeHierarchyArray.indexOf( 'C2IssueRevision' ) > -1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'C2CapaRevision' ) > -1))"
+    },
+    "Apm0CopyRYGDisableDelegate": {
+      "expression": "ctx.selected.modelType.typeHierarchyArray.indexOf( 'Apm0RYG' ) > -1"
+    },
+    "apm0HideAwp0ExportToExcelCommandCondition": {
+      "expression": "(commandContext.objectSetSource === 'apm0RatedReference.Apm0RYG')"
+    },
+    "apm0HideAwp0EnableMultiSelectObjectSetCommandCondition": {
+      "expression": "(commandContext.objectSetSource === 'apm0RatedReference.Apm0RYG')"
+    },
+    "apm0HideAwp0SelectAllObjectSetCommandCondition": {
+      "expression": "(commandContext.objectSetSource === 'apm0RatedReference.Apm0RYG')"
+    },
+    "apm0HideAwp0DeselectAllObjectSetCommandCondition": {
+      "expression": "(commandContext.objectSetSource === 'apm0RatedReference.Apm0RYG')"
+    },
+    "Apm0DeleteRYGCommandVisibility": {
+      "expression": "ctx.selected.modelType.typeHierarchyArray.indexOf( 'Apm0RYG' ) > -1"
+    },
+    "Apm0ResetRYGCommandVisibility": {
+      "expression": "ctx.selected.modelType.typeHierarchyArray.indexOf( 'Apm0RYG' ) > -1"
+    },
+    "checklistQuestionSaveEditFunctionCommandActive": {
+      "expression": "conditions.isNoneContextNotActive && commandContext.pageContext.secondaryActiveTabId === 'tc_xrt_ChecklistQuestion' && (ctx.selected.modelType.typeHierarchyArray.indexOf( 'Psi0Checklist' ) > -1 || ctx.selected.modelType.typeHierarchyArray.indexOf( 'Psi0ChecklistQuestion' ) > -1) "
+    },
+    "addCommandVisibilityApm0QualityChecklist": {
+      "expression": "conditions.Apm0IsTCVersion132OrLater && ((ctx.selected.modelType.typeHierarchyArray.indexOf( 'Prg0Event' ) > -1 && commandContext.pageContext.primaryActiveTabId === 'tc_xrt_apqp_Quality' ) || ((commandContext.pageContext.primaryActiveTabId === 'tc_xrt_PSP_Plan' || commandContext.pageContext.secondaryActiveTabId === 'tc_xrt_PSP_Plan') && ctx.selected.modelType.typeHierarchyArray.indexOf('C2CapaRevision') > -1)) || ((commandContext.pageContext.primaryActiveTabId === 'tc_xrt_PSP_QualityManagement' || commandContext.pageContext.secondaryActiveTabId === 'tc_xrt_PSP_QualityManagement') && ctx.selected.modelType.typeHierarchyArray.indexOf('Vendor') > -1)"
+    },
+    "Apm0IsTCVersion132OrLater": {
+      "expression": "(ctx.tcSessionData.tcMajorVersion > 13 || (ctx.tcSessionData.tcMajorVersion === 13 && ctx.tcSessionData.tcMinorVersion >= 2))"
+    },
+    "apm0AddAttachmentsToQualityChecklist": {
+      "expression": "ctx.selected.type === 'Apm0QualityChecklist'&& !(ctx.tcSessionData.tcMajorVersion <= 12 && ctx.tcSessionData.tcMinorVersion <= 3) &&  (commandContext.pageContext.secondaryActiveTabId=== 'tc_xrt_Attachments' || commandContext.pageContext.primaryActiveTabId === 'tc_xrt_Attachments') &&  (conditions.isStartEditSummaryAllowed || conditions.isStartEditAllowed)"
+    },
+    "apm0RemoveAttachmentsFromQualityChecklist": {
+      "expression": "ctx.pselected.type === 'Apm0QualityChecklist' && ctx.selected.modelType.typeHierarchyArray.indexOf('Dataset') > -1 && (commandContext.pageContext.secondaryActiveTabId=== 'tc_xrt_Attachments' || commandContext.pageContext.primaryActiveTabId === 'tc_xrt_Attachments') && (conditions.isStartEditSummaryAllowed || conditions.isStartEditAllowed)"
+    },
+    "apm0AddReferencesToQualityChecklist": {
+      "expression": "ctx.selected.type === 'Apm0QualityChecklist' && !(ctx.tcSessionData.tcMajorVersion <= 12 && ctx.tcSessionData.tcMinorVersion <= 3) && (commandContext.pageContext.secondaryActiveTabId=== 'tc_xrt_References' || commandContext.pageContext.primaryActiveTabId === 'tc_xrt_References') && (conditions.isStartEditSummaryAllowed || conditions.isStartEditAllowed)"
+    },
+    "apm0RemoveReferencesFromQualityChecklist": {
+      "expression": "ctx.pselected.type === 'Apm0QualityChecklist' && ctx.selected.modelType.typeHierarchyArray.indexOf('ItemRevision') > -1 && (commandContext.pageContext.secondaryActiveTabId=== 'tc_xrt_References' || commandContext.pageContext.primaryActiveTabId === 'tc_xrt_References') && (conditions.isStartEditSummaryAllowed || conditions.isStartEditAllowed)"
+    },
+    "isQPMReportDashboard": {
+      "expression": "ctx.sublocation.nameToken === 'com.siemens.splm.client.qualityCenterManager:showQPMDashboard'|| ctx.locationContext['ActiveWorkspace:SubLocation'] === 'showQPMDashboard'"
+    },
+    "PasteChecklistQuestionVisiblity": {
+      "expression": "ctx.awClipBoardProvider[0].modelType.typeHierarchyArray.indexOf('Psi0ChecklistQuestion') > -1 && ctx.selected.modelType.typeHierarchyArray.indexOf('Psi0ChecklistQuestion') > -1 && ctx.mselected.length === 1"
+    },
+    "PasteChecklistQuestionDisableDelegate": {
+      "expression": "( commandContext.pageContext.primaryActiveTabId === 'tc_xrt_Checklists' || commandContext.pageContext.primaryActiveTabId === 'tc_xrt_apqp_Quality') && commandContext.pageContext.secondaryActiveTabId === 'tc_xrt_ChecklistQuestion'"
+    },
+    "cutChecklistQuestionVisibilityDelegate": {
+      "expression": "ctx.selected.modelType.typeHierarchyArray.indexOf('Psi0ChecklistQuestion') > -1  && (commandContext.pageContext.secondaryActiveTabId === 'tc_xrt_ChecklistQuestion' || commandContext.pageContext.primaryActiveTabId ==='tc_xrt_ChecklistQuestion')"
+    },
+    "addCommandVisibilityApm0AddQuestionsToQualityChecklist": {
+      "expression": "conditions.Apm0IsTCVersion132OrLater && ctx.selected.modelType.typeHierarchyArray.indexOf( 'Apm0QualityChecklist' ) > -1 "
+    },
+    "Apm0Awp0OpenInNewTabCondition": {
+      "expression": "ctx.selected && ctx.mselected && ctx.mselected.length === 1 && ctx.sidenavCommandId==='Apm0AddQualityChecklist' && !ctx.aw_hosting_enabled"
+    },
+    "Apm0AddChecklistDelegateCommandVisiblity": {
+      "expression": "commandContext.pageContext.primaryActiveTabId === 'tc_xrt_Timeline' && commandContext.pageContext.secondaryActiveTabId === 'tc_xrt_apqp_Quality' && commandContext.displayTitle === 'Checklists' && commandContext.objectSetSource === 'Psi0EventChecklistRelation.Psi0Checklist,Psi0EventChecklistRelation.Apm0QualityChecklist'"
+    },
+    "Apm0AddChecklistDelegateCommandEnability": {
+      "expression": "commandContext.objectSetSource === 'Psi0EventChecklistRelation.Psi0Checklist,Psi0EventChecklistRelation.Apm0QualityChecklist' && ctx.selected.modelType.typeHierarchyArray.indexOf('Prg0Event') > -1 "
+    },
+    "Apm0CutQualityChecklistDisable": {
+      "expression": "ctx.selected.type === 'Apm0QualityChecklist' && ctx.sublocation.clientScopeURI ==='Pgp0Timeline'"
+    },
+    "apm0RemoveDeliverablesFromQualityChecklist": {
+      "expression": "ctx.pselected.type === 'Apm0QualityChecklist' && ctx.selected.modelType.typeHierarchyArray.indexOf('WorkspaceObject') > -1 && (commandContext.pageContext.secondaryActiveTabId=== 'tc_xrt_Deliverables' || commandContext.pageContext.primaryActiveTabId === 'tc_xrt_Deliverables') && (conditions.isStartEditSummaryAllowed || conditions.isStartEditAllowed)"
+    }
+  },
+  "onEvent": [
+    {
+      "eventId": "qam0AddGenericQualityActionPanel",
+      "action": "qam0AddGenericQualityActionPanel"
+    },
+    {
+      "eventId": "qam0AddQAFromTemplatePanel",
+      "action": "qam0AddQAFromTemplatePanel"
+    },
+    {
+      "eventId": "qam0AddQualityActionAsTemplatePanel",
+      "action": "qam0AddQualityActionAsTemplatePanel"
+    },
+    {
+      "eventId": "apm0.removeSelectedQPMDashboardReport",
+      "action": "removeSelectedQPMDashboardReport"
+    },
+    {
+      "eventId": "PasteChecklistQuestionContainer.callSoa",
+      "action": "PasteChecklistQuestionContainer"
+    }
+  ],
+  "i18n": {
+    "addReportToDashboard": [
+      "ApqpProgramMgmtMessages"
+    ],
+    "apm0AddReportTooltip": [
+      "ApqpProgramMgmtMessages"
+    ],
+    "apm0Add": [
+      "ApqpProgramMgmtMessages"
+    ],
+    "apm0Remove": [
+      "ApqpProgramMgmtMessages"
+    ],
+    "apm0RemovePlanVendorDesc": [
+      "ApqpProgramMgmtMessages"
+    ],
+    "Apm0AddQualityChecklistDesc": [
+      "ApqpProgramMgmtMessages"
+    ],
+    "apm0PinButtonToolTip": [
+      "ApqpProgramMgmtMessages"
+    ],
+    "apm0UnpinButtonToolTip": [
+      "ApqpProgramMgmtMessages"
+    ],
+    "apm0_oneStepPinCommands": [
+      "ApqpProgramMgmtMessages"
+    ],
+    "deleteSingleQualityActionConfirmation": [
+      "QualityActionMgmtMessages"
+    ],
+    "Apm0DeleteRYGDesc": [
+      "ApqpProgramMgmtMessages"
+    ],
+    "Apm0ResetManualAssessmentDesc": [
+      "ApqpProgramMgmtMessages"
+    ],
+    "addQualityChecklist": [
+      "ApqpProgramMgmtMessages"
+    ],
+    "resetAssessmentOnRYGConfirmation": [
+      "ApqpProgramMgmtMessages"
+    ],
+    "resetText": [
+      "ApqpProgramMgmtMessages"
+    ],
+    "resetAssessmentAcknowledgement": [
+      "ApqpProgramMgmtMessages"
+    ],
+    "Apm0DeleteQualityChecklistDesc": [
+      "ApqpProgramMgmtMessages"
+    ],
+    "deleteText": [
+      "ApqpProgramMgmtMessages"
+    ],
+    "deleteSingleQualityChecklistConfirmation": [
+      "ApqpProgramMgmtMessages"
+    ],
+    "deleteMultipleQualityChecklistConfirmation": [
+      "ApqpProgramMgmtMessages"
+    ],
+    "CancelText": [
+      "ApqpProgramMgmtMessages"
+    ],
+    "deleteSingleQCLNotification": [
+      "ApqpProgramMgmtMessages"
+    ],
+    "deleteMultipleQCLNotification": [
+      "ApqpProgramMgmtMessages"
+    ],
+    "RemoveButtonToolTip": [
+      "ApqpProgramMgmtMessages"
+    ],
+    "PasteChecklistQuestionDesc": [
+      "ApqpProgramMgmtMessages"
+    ],
+    "cutChecklistQuestionSuccessful": [
+      "ApqpProgramMgmtMessages"
+    ],
+    "cutMultipleChecklistQuestionSuccessful": [
+      "ApqpProgramMgmtMessages"
+    ]
+  }
+}

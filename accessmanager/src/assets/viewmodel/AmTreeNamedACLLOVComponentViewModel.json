@@ -1,0 +1,334 @@
+{
+    "schemaVersion": "1.0.0",
+    "actions": {
+        "render": {
+            "method": "awAm0AMTreeNamedACLLOVComponentRenderFunction",
+            "deps": "js/AmTreeNamedACLLOVComponentService"
+        },
+        "getAccessorTypeAction": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AccessManager-2022-12-AwAccessManager",
+            "method": "getAccessorTypes",
+            "inputData": {
+                "searchString": "{{function:getAccessorTypeSearchString}}",
+                "startIndex": "{{data.dataProviders.accessorTypeProvider.startIndex}}",
+                "maxToReturn": 50
+            },
+            "outputData": {
+                "accessorTypeNameInfos": "{{function:getAccessorTypeInfoNameAction}}",
+                "accessorTypeTotalFound": "totalFound"
+            },
+            "deps": "js/Am0AclTableService"
+        },
+        "getAccessorAction": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AccessManager-2022-06-AwAccessManager",
+            "method": "getAccessorsByType",
+            "inputData": {
+                "accessorType": "{{props.vmo.props.AccessorType.dbValue}}",
+                "filter": "{{function:getFilterString}}",
+                "startIndex": "{{data.dataProviders.accessorProvider.startIndex}}",
+                "maxToReturn": 50
+            },
+            "outputData": {
+                "accessorNameInfos": "{{function:getAccessorInfoNameAction}}",
+                "totalFound": "totalFound"
+            },
+            "deps": "js/Am0AclTableService"
+        },
+        "clearAccessorBatchAction": {
+            "actionType": "batchJob",
+            "steps": [
+                {
+                    "action": "updateSelectedAccessorType"
+                },
+                {
+                    "action": "getAccessorAction"
+                },
+                {
+                    "action": "clearAccessorFieldValue"
+                }
+            ]
+        },
+        "clearAccessorFieldValue":{
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "AccessorType.selectionChangeEvent",
+                        "eventData": {
+                            "accessorNameInfos": "{{response.accessors}}",
+                            "selectedRow":"{{props.vmo}}"
+                        }
+                    }
+                ]
+            }
+        },
+        "updateSelectedAccessorType":{
+            "actionType": "JSFunction",
+            "method": "updateSelectedAccessorType",
+            "inputData": {
+                "eventData": "{{eventData}}",
+                "props":"{{props.vmo}}"
+            },
+            "deps": "js/Am0AclTableService"
+        },
+        "updateSelectedAccessors":{
+            "actionType": "JSFunction",
+            "method": "updateSelectedAccessors",
+            "inputData": {
+                "eventData": "{{eventData}}",
+                "props":"{{props.vmo}}"
+            },
+            "deps": "js/Am0AclTableService"
+        },
+        "readDenyWarningMessageAction":{
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "readDenyWarningMessageEvent",
+                        "condition": "eventData.lovValue.propInternalValue === 'Deny' && !conditions.isAttributeACESelected"
+                    }
+                ]
+            }
+        },
+        "loadPropertyGroup": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "searchInput": {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "columnFilters": [],
+                    "providerName": "Am0ALSGroupProvider",
+                    "searchCriteria": {
+                        "searchString": "{{function:getPropertyGroupFilterString}}"
+                    },
+                    "searchFilterFieldSortType": "Alphabetical",
+                    "searchSortCriteria": [ {
+                        "fieldName": "fnd0AlsGroupName",
+                        "sortDirection": "ASC"
+                    } ],
+                    "searchFilterMap6": {},
+                    "startIndex": "{{data.dataProviders.propertyGroupProvider.startIndex}}"
+                },
+                "inflateProperties": false
+            },
+            "policy": {
+                "types": [{
+                    "name": "Fnd0AlsGroup",
+                    "properties": [
+                        {
+                            "name": "fnd0AlsGroupName"
+                        },
+                        {
+                            "name": "fnd0AlsGroupType"
+                        },
+                        {
+                            "name": "fnd0AlsGroupProperties"
+                        }
+                    ]
+                }]
+            },
+            "outputData": {
+                "totalPropertyGroupFound": "totalFound",
+                "propertyGroupResult": "{{function:processPropertyGroup}}"
+            },
+            "deps": "js/Am0AclTableService"
+        },
+        "updateSelectedPropertyGroup":{
+            "actionType": "JSFunction",
+            "method": "updateSelectedPropertyGroup",
+            "inputData": {
+                "eventData": "{{eventData}}",
+                "props":"{{props.vmo}}"
+            },
+            "deps": "js/Am0AclTableService"
+        },
+        "updateWritePrivilegeEvent":{
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "READ.updateWritePrivilege",
+                        "condition": "conditions.isAttributeACESelected",
+                        "eventData": {
+                            "lovValue":"{{data.eventData.lovValue}}",
+                            "selectedRow":"{{props.vmo}}"
+                        }
+                    }
+                ]
+            }
+        },
+        "updateReadPrivilegeEvent":{
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "WRITE.updateReadPrivilege",
+                        "condition": "conditions.isAttributeACESelected",
+                        "eventData": {
+                            "lovValue":"{{data.eventData.lovValue}}",
+                            "selectedRow":"{{props.vmo}}"
+                        }
+                    }
+                ]
+            }
+        }
+
+    },
+    "data": {
+        "permissionArray": [
+           {
+            "propInternalValue": "Allow",
+            "iconName": "indicatorApprovedPass16"
+           },
+           {
+            "propInternalValue": "Deny",
+            "iconName": "indicatorNo16"
+           }
+        ]
+    },
+    "conditions": {
+        "isAttributeACESelected": {
+            "expression": "props.vmo.type === 'Fnd0AlsAce'"
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "AccessorType.lovValueChanged",
+            "cacheEventData": true,
+            "action": "clearAccessorBatchAction"
+        },
+        {
+            "eventId": "Accessor.lovValueChanged",
+            "cacheEventData": true,
+            "action": "updateSelectedAccessors"
+        },
+        {
+            "eventId": "READ.lovValueChanged",
+            "cacheEventData": true,
+            "action": "readDenyWarningMessageAction"
+        },
+        {
+            "eventId": "readDenyWarningMessageEvent",
+            "message": "readDenyWarningMessage"
+        },
+        {
+            "eventId": "PropertyGroup.lovValueChanged",
+            "cacheEventData": true,
+            "action": "updateSelectedPropertyGroup"
+        },
+        {
+            "eventId": "READ.lovValueChanged",
+            "cacheEventData": true,
+            "action": "updateWritePrivilegeEvent"
+        },
+        {
+            "eventId": "WRITE.lovValueChanged",
+            "cacheEventData": true,
+            "action": "updateReadPrivilegeEvent"
+        }
+    ],
+    "messages": {
+        "readDenyWarningMessage": {
+            "messageType": "WARNING",
+            "messageText": "{{i18n.readDenyWarning}}",
+            "navigationOptions": [
+                {
+                    "option": "OK",
+                    "text": "{{i18n.OK}}"
+                }
+            ]
+        }
+    },
+    "dataProviders": {
+        "accessorTypeProvider": {
+            "action": "getAccessorTypeAction",
+            "response": "{{data.accessorTypeNameInfos.lovEntries}}",
+            "totalFound": "{{data.accessorTypeNameInfos.totalFound}}"
+        },
+        "grantPermissionProvider": {
+            "response": "{{data.permissionArray}}"
+        },
+        "accessorProvider":{
+            "action": "getAccessorAction",
+            "initializeAction": "getAccessorAction",
+            "nextAction": "getAccessorAction",
+            "totalFound": "{{data.accessorNameInfos.totalFound}}",
+            "response": "{{data.accessorNameInfos.lovEntries}}"
+        },
+        "propertyGroupProvider": {
+            "action": "loadPropertyGroup",
+            "totalFound": "{{data.propertyGroupResult.totalFound}}",
+            "response": "{{data.propertyGroupResult.lovEntries}}"
+        }
+    },
+    "functions": {
+        "getAccessorTypeInfoNameAction": {
+            "functionName": "getAccessorTypeInfoName",
+            "parameters": [
+                "{{props.vmo}}"
+            ]
+        },
+        "getAccessorInfoNameAction": {
+            "functionName": "getAccessorInfoName",
+            "parameters": [
+                "{{props.vmo.props.AccessorType.dbValue}}", "{{props.vmo}}"
+            ]
+        },
+        "getAccessorTypeSearchString": {
+            "functionName": "getFilterString",
+            "parameters": [
+                "{{props.vmo.props.AccessorType.filterString}}"
+            ]
+        },
+        "getFilterString": {
+            "functionName": "getFilterString",
+            "parameters": [
+                "{{props.vmo.props.Accessor.filterString}}"
+            ]
+        },
+        "getPropertyGroupFilterString": {
+            "functionName": "getFilterString",
+            "parameters": [
+                "{{props.vmo.props.PropertyGroup.filterString}}"
+            ]
+        },
+        "processPropertyGroup": {
+            "functionName": "processPropertyGroup",
+            "parameters": [
+                "fnd0AlsGroupName", "{{props.vmo}}"
+            ]
+        }
+    },
+    "lifecycleHooks": {
+        "render": "render"
+
+    },
+    "props":{
+        "prop":{
+            "type": "field"
+        }
+    },
+    "i18n": {
+        "allowPropDisplayValue": [
+            "AccessmgmtConstants"
+        ],
+        "denyPropDisplayValue": [
+            "AccessmgmtConstants"
+        ],
+        "readDenyWarning": [
+            "AccessmgmtConstants"
+        ],
+        "OK": [
+            "AccessmgmtConstants"
+        ]
+    }
+}
