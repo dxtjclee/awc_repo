@@ -1,0 +1,20 @@
+<aw-command-panel caption="i18n.addButtonTitle">
+    <aw-panel-body>
+        <aw-panel-section caption="i18n.Aqc0UploadFile">
+            <aw-file-upload file-change-action="startDatasetCreation">
+            </aw-file-upload>
+        </aw-panel-section>
+        <aw-panel-section exist-when="data.fileName">
+            <aw-textbox prop="data.datasetName"></aw-textbox>
+            <aw-textarea prop="data.datasetDesc" hint="textarea"></aw-textarea>
+            <aw-listbox prop="data.datasetType" visible-when="data.datasetTypeList.length>1"
+                list="data.datasetTypeList" action="updateTypeAndReferences">
+            </aw-listbox>
+        </aw-panel-section>
+    </aw-panel-body>
+    <aw-panel-footer>
+        <aw-button action="attachDatasetToQualityChecklist" visible-when="data.fileName && data.datasetName.dbValue !=='' && data.datasetName.dbValue !==null && data.datasetName.dbValue !== undefined">
+            <aw-i18n>i18n.addButtonTitle</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

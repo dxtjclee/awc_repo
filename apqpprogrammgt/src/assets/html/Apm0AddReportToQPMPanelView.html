@@ -1,0 +1,18 @@
+<aw-command-panel caption="i18n.addReportToDashboard" context="data">
+    <aw-panel>
+        <aw-panel-body scrollable="false">
+            <div class="aw-search-inContentSearchBox">
+                <aw-in-content-search-box class="aw-search-searchBox" prop="data.searchBox" action="doSearchKeepFilter"></aw-in-content-search-box>
+            </div>
+            <aw-list dataprovider="data.dataProviders.listDataProvider">
+                <aw-default-cell vmo="item"></aw-default-cell>
+            </aw-list>
+        </aw-panel-body>
+    </aw-panel>
+
+    <aw-panel-footer>
+        <aw-button action="addSelectedReportToQPMDashboard" visible-when="data.dataProviders.listDataProvider.selectedObjects.length > 0">
+            <aw-i18n>i18n.apm0Add</aw-i18n>
+        </aw-button>
+    </aw-panel-footer>
+</aw-command-panel>

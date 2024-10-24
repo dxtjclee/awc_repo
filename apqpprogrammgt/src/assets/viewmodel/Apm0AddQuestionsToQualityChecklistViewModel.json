@@ -1,0 +1,124 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "selectedType": {
+            "type": "STRING",
+            "dbValue": "Apm0QualityChecklist"
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        },
+        "activeState": {
+            "initialValues": {
+                "activeView": "AddObjectPrimarySub",
+                "context": {}
+            },
+            "meta": {}
+        },
+        "addPanelState": {
+            "initialValues": {
+                "creationType": "",
+                "createdObject": "",
+                "sourceObjects": "",
+                "selectedTab": "",
+                "isDatasetCreate": "",
+                "isAddACopy": ""
+            },
+            "meta": {}
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "actions": {
+        "createObjects": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2016-09-DataManagement",
+            "method": "createAttachAndSubmitObjects",
+            "inputData": {
+                "inputs": "{{function:getCreateObjectInputXRT}}"
+            },
+            "outputData": {
+                "createdObject": "output[0].objects[0]",
+                "serviceData": "ServiceData"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "awPanel.loadNextValues",
+                        "condition": "subPanelContext.panelPinned"
+                    },
+                    {
+                        "name": "apm0.addAdhocQualityChecklist",
+                        "eventData": {
+                            "createdObject": "{{data.createdObject}}",
+                            "pinUnpinFlag": "{{subPanelContext.panelPinned}}"
+                        }
+                    },
+                    {
+                        "name": "complete",
+                        "condition": "!subPanelContext.panelPinned",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ],
+                "failure": [
+                    {
+                        "name": "complete",
+                        "condition": "!subPanelContext.panelPinned",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "message": "SOAFailureMsg"
+                    }
+                ]
+            },
+            "deps": "js/Apm0QualityChecklistService"
+        }
+    },
+    "messages": {
+        "SOAFailureMsg": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "functions": {
+        "getCreateObjectInputXRT": {
+            "functionName": "getCreateObjectInputXRT",
+            "parameters": [
+                "{{data}}",
+                "{{data.addPanelState}}",
+                "{{editHandlers.addPanelEditHandler}}",
+                "{{props.subPanelContext.selectionData.selected}}"
+            ]
+        }
+    },
+    "onEvent": [],
+
+    "i18n": {
+        "apm0Add": ["ApqpProgramMgmtMessages"]
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    }
+}

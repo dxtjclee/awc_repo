@@ -1,0 +1,207 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/visible-when.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-list.directive",
+        "js/aw-default-cell.directive",
+        "js/aw-expandable-search-result-filter.directive",
+        "js/aw-label.directive",
+        "js/exist-when.directive"
+    ],
+
+    "conditions": {
+        "isQualityChecklistResultsTabPage": {
+            "expression": "data.selectedTab.panelId==='QualityChecklistResultsPagesSub'"
+        }
+    },
+
+    "data": {
+        "keyWordLabel": {
+            "displayName": "{{i18n.keywordsLabel}}",
+            "type": "STRING",
+            "labelPosition": "PROPERTY_LABEL_AT_TOP"
+        }
+    },
+
+    "onEvent": [ {
+            "eventId": "awPanel.reveal",
+            "condition": "conditions.isQualityChecklistResultsTabPage",
+            "action": "revealAction"
+        },
+        {
+            "eventId": "addPanel.filterChanged",
+            "action": "performSearch"
+        },
+        {
+            "eventId": "searchResultItems.doSearch",
+            "action": "performSearch"
+        },
+        {
+            "eventId": "awSearchTab.filtersRemoved",
+            "cacheEventData": true,
+            "action": "filterRemovedAction"
+        },
+        {
+            "eventId": "awPanel.reveal",
+            "condition": "conditions.isQualityChecklistResultsTabPage",
+            "action": "updateSelectionModeForDataProvider"
+        },
+        {
+            "eventId": "performSearch.selectionChangeEvent",
+            "cacheEventData": true
+        }
+    ],
+
+    "dataProviders": {
+        "performSearch": {
+            "action": "getSearch",
+            "commands": {
+                "Awp0OpenInNewTab":
+                {
+                    "id": "cmdOpenInNewTab",
+                    "title": "Open In New Tab",
+                    "areas": [ "com.siemens.splm.clientfx.ui.modelObjectListActionCommands" ],
+                    "priorities": [ 350 ],
+                    "action": "openQAInNewTab",
+                    "displayOption": "ON_HOVER_AND_SELECTION",
+                    "position": "TOP_RIGHT"
+                }
+            },
+
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "selectionModelMode": "single"
+        },
+        "checklistTypeListProvider": {
+            "action": "getSearch",
+            "commands": {
+                "Awp0OpenInNewTab":
+                {
+                    "id": "cmdOpenInNewTab",
+                    "title": "Open In New Tab",
+                    "areas": [ "com.siemens.splm.clientfx.ui.modelObjectListActionCommands" ],
+                    "priorities": [ 350 ],
+                    "action": "openQAInNewTab",
+                    "displayOption": "ON_HOVER_AND_SELECTION",
+                    "position": "TOP_RIGHT"
+                }
+            },
+
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "selectionModelMode": "single"
+        }
+    },
+    "lifecycleHooks": {
+        "onInit": "search"
+    },
+    "actions": {
+        "search": {
+            "actionType": "JSFunction",
+            "method": "findSubBusinessObjectsAndInvokeSearch",
+            "inputData": {
+                "input": "{{data}}"
+            },
+            "deps": "js/searchCommonUtils"
+        },
+        "openQAInNewTab":
+        {
+            "actionType": "Navigate",
+            "navigateTo": "com_siemens_splm_clientfx_tcui_xrt_showObject",
+            "navigationParams": {
+                "uid": {
+                    "$adapt": "{{commandContext.vmo}}",
+                    "path": "uid",
+                    "isFullyAdapted": true
+                }
+            },
+            "navigateIn": "newTab"
+        },
+        "updateSelectionModeForDataProvider": {
+            "actionType": "JSFunction",
+            "method": "updateSelectionModeForDataProvider",
+            "inputData": {
+                "dataProvider": "{{data.dataProviders.performSearch}}",
+                "selectionMode": "{{data.selectionMode}}"
+            },
+
+            "deps": "js/addObjectUtils"
+        },
+        "getSearch": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "clientScopeURI": ""
+                },
+                "inflateProperties": false,
+                "saveColumnConfigData": {},
+                "searchInput": {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Aqc0QualityBaseProvider",
+                    "searchFilterMap6": {
+                        "WorkspaceObject.object_type": []
+                    },
+                    "searchCriteria": {
+                        "searchString": "{{data.searchBox.dbValue}}",
+                        "searchStatus": "true",
+                        "objectType": "Qc0ChecklistSpecification",
+                        "catalogueObjectType": "",
+                        "objectName": "{{data.searchBox.dbValue}}",
+                        "specificationType":"{{data.checklistType.dbValue}}"
+                    },
+                    "startIndex": "{{data.dataProviders.performSearch.startIndex}}",
+                    "searchSortCriteria": [
+                        {
+                            "fieldName": "object_name",
+                            "sortDirection": "ASC"
+                        }
+                    ]
+                }
+            },
+
+            "policy": {
+                "types": [ {
+                    "name": "BusinessObject",
+                    "properties": [ {
+                        "name": "awp0CellProperties"
+                    } ]
+                } ]
+            },
+
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}",
+                "sourceSearchFilterMap": "searchFilterMap",
+                "ctx.isChecklistSpecFound": "{{function:isChecklistSpecFound}}"
+            },
+            "deps": "js/Apm0QualityChecklistService"
+        },
+        "showChecklistTypeList": {
+            "actionType": "dataProvider",
+            "method": "checklistTypeListProvider"
+        }
+    },
+    "functions": {
+        "isChecklistSpecFound": {
+            "functionName": "isChecklistSpecFound",
+            "parameters": []
+        },
+        "findSubBusinessObjectsAndInvokeSearch": {
+            "functionName": "findSubBusinessObjectsAndInvokeSearch",
+            "parameters": [
+                "{{data}}"
+            ]
+        }
+    },
+    "i18n": {
+        "Apm0NoChecklistSpecFoundMessage": [
+            "ApqpProgramMgmtMessages"
+        ]
+    }
+}

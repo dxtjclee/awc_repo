@@ -1,0 +1,116 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [],
+    "data": {
+        "i18n": {
+            "Apm0AnswerConfigUnavailable": [
+                "ApqpProgramMgmtMessages"
+            ],
+            "Apm0PreferenceUnavailable": [
+                "ApqpProgramMgmtMessages"
+            ]
+        }
+    },
+    "props": {
+        "sub-panel-context": {
+            "type": "object"
+        }
+    },
+    "ctx": {
+        "tc-session-data":{
+            "type": "object"
+        }
+    },
+    "dataProviders": {
+        "QualityChecklistAnswerOptionDataProvider": {
+            "response": "{{data.answerOptions}}"
+        }
+    },
+    "actions": {
+        "loadData": {
+            "actionType": "JSFunctionAsync",
+            "method": "bindProperties",
+            "inputData": {
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "outputData": {
+                "answerOption": ""
+            },
+            "deps": "js/Apm0QualityChecklistService"
+        },
+        "editStateChangeAction": {
+            "actionType": "JSFunctionAsync",
+            "method": "qualityChecklistEditAnswersOptions",
+            "inputData": {
+                "tcSessionData": "{{ctx.tcSessionData}}",
+                "data": "{{data}}",
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "outputData": {        
+                "answerOption": "answerOption",   
+                "answerOptions": "answerOptions"
+            },
+            "deps": "js/Apm0QualityChecklistService"
+        },
+        "qualityChecklistAnswerChangeAction": {
+            "actionType": "JSFunction",
+            "method": "qualityChecklistAnswerChangeAction",
+            "inputData": {                
+                "data": "{{data}}",
+                "subPanelContext": "{{props.subPanelContext}}"
+            },
+            "outputData": {                
+                "answerOption": ""
+            },
+            "deps": "js/Apm0QualityChecklistService"
+        },       
+        "addHtmlPanelData": {
+            "actionType": "JSFunction",
+            "method": "addHtmlPanelPropertiesInDataSource",
+            "inputData": {
+                "updatedProperties": [
+                    "{{data.answerOption}}"
+                ],
+                "type": "{{props.subPanelContext.xrtType}}"
+            },
+            "deps": "js/xrtUtilities"
+        }
+    },
+    "lifecycleHooks": {
+        "onInit": "loadData",
+        "onUpdate": [
+            {
+                "action": "addHtmlPanelData",
+                "observers": [
+                    "viewModel.data.answerOption"
+                ]
+            },
+            {
+                "action": "loadData",
+                "observers": [
+                    "props.subPanelContext.selected.props.apm0Answer.dbValue"
+                ]
+            }
+        ]        
+    },
+    "onEvent": [
+        {
+            "eventId": "editHandlerStateChange",
+            "action": "editStateChangeAction"
+        },
+        {
+            "eventId": "condition.expressionValueChanged",
+            "action": "qualityChecklistAnswerChangeAction",
+            "criteria": {
+                "condition": "conditions.answerOptionCondition"
+            },
+            "cacheEventData": true
+        }
+    ],
+    "conditions": {
+        "answerOptionCondition": {
+            "expression": "data.answerOption.dbValue",
+            "trackValues": true
+        }
+    }
+}

@@ -1,0 +1,45 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-panel-body.directive",
+        "js/aw-panel-section.directive",
+        "js/aw-filter-category.directive",
+        "js/aw-repeat.directive",
+        "js/aw-expandable-search-result-filter.directive",
+        "js/aw-filter-separator.directive",
+        "js/aw-i18n.directive",
+        "js/aw-label.directive",
+        "js/aw-filter-in-filters-searchbox.directive"
+    ],
+    "actions": {
+    },
+    "onEvent": [
+    ],
+    "i18n": {
+        "refine": [
+            "awAddDirectiveMessages"
+        ]
+    },
+
+    "conditions": {
+        "isFiltersTabPage": {
+            "expression": "data.selectedTab.panelId==='QualityChecklistFiltersPagesSub'"
+        }
+    },
+
+    "data": {
+        "keyWordLabel": {
+            "displayName": "{{i18n.keywordsLabel}}",
+            "type": "STRING",
+            "labelPosition": "PROPERTY_LABEL_AT_TOP"
+        },
+        "filterInFilterBox": {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "true"
+        }
+    },
+
+    "functions": {
+    }
+}

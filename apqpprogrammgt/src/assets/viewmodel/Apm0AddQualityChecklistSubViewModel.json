@@ -1,0 +1,535 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-panel-body.directive",
+        "js/aw-listbox.directive",
+        "js/aw-list-filter.directive",
+        "js/aw-default-cell.directive",
+        "js/aw-command-sub-panel.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-i18n.directive",
+        "js/aw-button.directive"
+    ],
+    "data": {
+        "checklistType":
+        {
+            "displayName": "{{i18n.checklistType}}",
+            "type": "STRING",
+            "hasLov": true,
+            "isEditable": "true",
+            "dataProvider": "getChecklistTypeListProvider",
+            "dbValue": "",
+            "uiValue": ""
+        },
+        "filterText": {
+            "displayName": "{{i18n.filter}}",
+            "type": "STRING"
+        },
+        "psi0ID": {
+            "type": "STRING",
+            "isRequired": "true",
+            "dbValue": "{{ctx.QualityChecklistId}}",
+            "uiValue": "{{ctx.QualityChecklistId}}"
+        }
+    },
+    "actions": {
+        "addQualityChecklist":{
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2008-06-DataManagement",
+            "method": "createObjects",
+            "inputData": {
+                "input": "{{function:getCreateInputDataForRootLevelQualityChecklist}}"
+            },
+            "outputData": {
+                "createdObject": "output[0].objects[0]",
+                "serviceData": "ServiceData",
+                "selectedNodes": "output[0].objects",
+                "rootNode":"output[0].objects[0]"
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "createRelationWithPSP",
+                        "condition": "ctx.selected.modelType.typeHierarchyArray.indexOf('C2CapaRevision') > -1 || ctx.selected.modelType.typeHierarchyArray.indexOf('C2IssueRevision') > -1 || ctx.selected.modelType.typeHierarchyArray.indexOf('CAW0Defect') > -1"
+                    },
+                    {
+                        "name": "createRelationWithVendor",
+                        "condition": "ctx.selected.modelType.typeHierarchyArray.indexOf('Vendor') > -1"
+                    },
+                    {
+                        "name": "apm0.createRelation",
+                        "condition": "!conditions.apm0CreateRelationWithAuditCondition"
+                    },
+                    {
+                        "name": "createRelationWithAuditEvent",
+                        "condition": "conditions.apm0CreateRelationWithAuditCondition"
+                    }
+                ]
+            },
+            "deps": "js/Apm0QualityChecklistService"
+        },
+        "createRelationWithAudit": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "createRelations",
+            "inputData": {
+                "input": [
+                    {
+                        "primaryObject": "{{subPanelContext.selectionData.value.selected[0]}}",
+                        "secondaryObject": "{{data.createdObject}}",
+                        "relationType": "Qa0QualityAuditChecklists",
+                        "clientId": "",
+                        "userData": {
+                            "uid": "AAAAAAAAAAAAAA",
+                            "type": "unknownType"
+                        }
+                    }
+                ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{subPanelContext.selectionData.value.selected[0]}}"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "getQualChecklistID",
+                        "condition": "!subPanelContext.panelPinned"
+                    },
+                    {
+                        "name": "complete",
+                        "condition": "!subPanelContext.panelPinned",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    },
+                    {
+                        "name": "primaryWorkarea.reset"
+                    }
+                ]
+            }
+        },
+        "createRelationWithEvent":{
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "createRelations",
+            "inputData": {
+                "input": [{
+                    "primaryObject": "{{subPanelContext.selectionData.value.selected[0]}}",
+                    "secondaryObject": "{{data.createdObject}}",
+                    "relationType": "Psi0EventChecklistRelation",
+                    "clientId": "",
+                    "userData": {
+                        "uid": "AAAAAAAAAAAAAA",
+                        "type": "unknownType"
+                    }
+                }]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{subPanelContext.selectionData.value.selected[0]}}"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "cdm.relatedModified",
+                        "condition": "subPanelContext.pageContext.primaryActiveTabId === 'tc_xrt_Timeline' && subPanelContext.pageContext.secondaryActiveTabId === 'tc_xrt_apqp_Quality'",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{ctx.xrtSummaryContextObject}}"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "getQualChecklistID",
+                        "condition": "subPanelContext.panelPinned"
+                    },
+                    {
+                        "name": "complete",
+                        "condition": "!subPanelContext.panelPinned",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    },
+                    {
+                        "name": "primaryWorkarea.reset"
+                    }
+                ]
+            }
+        },
+        "createRelationWithPSP": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "createRelations",
+            "inputData": {
+                "input": [
+                    {
+                        "primaryObject": "{{ctx.selected}}",
+                        "secondaryObject": "{{data.createdObject}}",
+                        "relationType": "CAW0QualityChecklistsRel",
+                        "clientId": "",
+                        "userData": {
+                            "uid": "AAAAAAAAAAAAAA",
+                            "type": "unknownType"
+                        }
+                    }
+                ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{ctx.pselected}}"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "getQualChecklistID",
+                        "condition": "!data.pinnedToForm.dbValue"
+                    },
+                    {
+                        "name": "complete",
+                        "condition": "data.pinnedToForm.dbValue",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    },
+                    {
+                        "name": "checklistTree.plTable.reload"
+                    }
+                ]
+            }
+        },
+        "createRelationWithVendor": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "createRelations",
+            "inputData": {
+                "input": [
+                    {
+                        "primaryObject": "{{ctx.selected}}",
+                        "secondaryObject": "{{data.createdObject}}",
+                        "relationType": "Sqm0QualityChecklistRel",
+                        "clientId": "",
+                        "userData": {
+                            "uid": "AAAAAAAAAAAAAA",
+                            "type": "unknownType"
+                        }
+                    }
+                ]
+            },
+            "events": {
+                "success": [
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{ctx.xrtSummaryContextObject}}"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "getQualChecklistID",
+                        "condition": "!data.pinnedToForm.dbValue"
+                    },
+                    {
+                        "name": "complete",
+                        "condition": "data.pinnedToForm.dbValue",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    },
+                    {
+                        "name": "checklistTree.plTable.reload"
+                    }
+                ]
+            }
+        },
+        "getQualityChecklistID":{
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2015-07-DataManagement",
+            "method": "generateNextValuesForProperties",
+            "inputData": {
+                "propertyNamingRuleInfo": [ {
+
+                    "clientId": "",
+                    "operationType": 1,
+                    "businessObjectTypeName": "Apm0QualityChecklist",
+                    "propertyNameAttachedPattern": {
+                        "psi0ID": "XXXXnnnnnnnnn"
+                    }
+                } ]
+            },
+            "outputData": {
+                "ctx.QualityChecklistId": "generatedValues[0].generatedValues.psi0ID.nextValue"
+            },
+            "events": {
+                "success": [ {
+                    "name": "updateQualityChecklistID"
+                } ]
+            }
+        },
+        "updateQualityChecklistID": {
+            "actionType": "JSFunction",
+            "method": "updateQualityChecklistID",
+            "inputData": {
+                "data": "{{data}}",
+                "ctx": "{{ctx}}"
+            },
+            "deps": "js/Apm0QualityChecklistService"
+        },
+        "search": {
+            "actionType": "JSFunction",
+            "method": "findSubBusinessObjectsAndInvokeSearch",
+            "inputData": {
+                "input": "{{data}}",
+                "subPanelContext": "{{subPanelContext}}"
+            },
+            "deps": "js/searchCommonUtils"
+        },
+        "setSelectedChecklistSpec": {
+            "actionType": "JSFunction",
+            "method": "setSelectedChecklistSpec",
+            "inputData": {
+                "ctx":"{{ctx}}",
+                "data": "{{data}}"
+            },
+            "deps": "js/Apm0QualityChecklistService"
+        },
+        "getDefaultRelationforSearch": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2016-12-DataManagement",
+            "method": "getDefaultRelation",
+            "inputData": {
+                "input": [ {
+                    "primaryType": "{{data.targetObject.type}}",
+                    "secondaryType": "{{data.eventData.selectedObjects[0].type}}"
+                } ]
+            },
+            "outputData": {
+                "defaultRelation": "output[0].defaultRelation"
+            },
+            "events": {
+                "success": [ {
+                    "name": "relations.updateRelationList"
+                } ]
+            },
+            "deps": "js/addObjectUtils"
+        },
+        "getChecklistTypes": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2013-05-LOV",
+            "method": "getInitialLOVValues",
+            "inputData": {
+                "initialData": {
+                    "propertyName": "qc0ChecklistType",
+                    "lovInput": {
+                        "operationName": "Create",
+                        "boName": "Qc0ChecklistSpecification"
+                    }
+                }
+            },
+            "outputData": {
+                "checklistGrouptypes": "{{function:getLOVList}}"
+            },
+            "events": {
+                "success": [
+                {
+                    "name": "callDataProvider"
+                }]
+            },
+            "deps": "js/Apm0QualityChecklistService"
+        },
+        "getSelectedType": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [
+                    {
+                        "name": "callDataProvider"
+                    }
+                ]
+            }
+        },
+        "getSearch": {
+            "actionType": "TcSoaService",
+            "serviceName": "Internal-AWS2-2023-06-Finder",
+            "method": "performSearchViewModel5",
+            "inputData": {
+                "columnConfigInput": {
+                    "clientName": "AWClient",
+                    "clientScopeURI": ""
+                },
+                "inflateProperties": false,
+                "saveColumnConfigData": {},
+                "searchInput": {
+                    "maxToLoad": 50,
+                    "maxToReturn": 50,
+                    "providerName": "Aqc0QualityBaseProvider",
+                    "searchFilterMap6": {
+                        "WorkspaceObject.object_type": []
+                    },
+                    "searchCriteria": {
+                        "searchStatus": "true",
+                        "objectType": "Qc0ChecklistSpecification",
+                        "objectName": "{{data.filterText.dbValue}}",
+                        "specificationType":"{{data.checklistType.dbValue}}",
+                        "isReleased":"{{function:getIsReleased}}"
+                    },
+                    "startIndex": "{{data.dataProviders.performSearch.startIndex}}",
+                    "searchSortCriteria": [
+                        {
+                            "fieldName": "object_name",
+                            "sortDirection": "ASC"
+                        }
+                    ]
+                }
+            },
+
+            "policy": {
+                "types": [ {
+                    "name": "BusinessObject",
+                    "properties": [ {
+                        "name": "awp0CellProperties"
+                    } ]
+                } ]
+            },
+
+            "outputData": {
+                "totalFound": "totalFound",
+                "searchResults": "{{json:searchResultsJSON}}",
+                "sourceSearchFilterMap": "searchFilterMap",
+                "noResultsFound" : "{{i18n.noResultsFound}}"
+            },
+            "deps": "js/Apm0QualityChecklistService"
+        },
+        "callDataProviderAction": {
+            "actionType": "dataProvider",
+            "method": "checklistTypeListProvider"
+        },
+        "showChecklistTypeList": {
+            "actionType": "dataProvider",
+            "method": "checklistTypeListProvider"
+        }
+    },
+    "dataProviders":{
+        "getChecklistTypeListProvider" : {
+            "action": "getChecklistTypes",
+            "response": "{{data.checklistGrouptypes}}"
+        },
+        "checklistTypeListProvider": {
+            "action": "getSearch",
+            "response": "{{data.searchResults}}",
+            "totalFound": "{{data.totalFound}}",
+            "selectionModelMode": "single",
+            "noResultsFound" : "{{i18n.noResultsFound}}",
+            "commandsAnchor": "checklistspec_cell_commands_List"
+        }
+    },
+    "lifecycleHooks": {
+        "onInit": "search",
+        "onMount": "getChecklistTypes"
+    },
+    "onEvent": [
+        {
+            "eventId": "checklistTypeListProvider.selectionChangeEvent",
+            "cacheEventData": true,
+            "action": "setSelectedChecklistSpec"
+        },
+        {
+            "eventId": "getDefaultRelationforSearch",
+            "action": "getDefaultRelationforSearch"
+        },
+        {
+            "eventId": "apm0.createRelation",
+            "action": "createRelationWithEvent"
+        },
+        {
+            "eventId": "createRelationWithAuditEvent",
+            "action": "createRelationWithAudit"
+        },
+        {
+            "eventId": "awPanel.reveal",
+            "action": "getQualityChecklistID"
+        },
+        {
+            "eventId": "getQualChecklistID",
+            "action": "getQualityChecklistID"
+        },
+        {
+            "eventId": "updateQualityChecklistID",
+            "action": "updateQualityChecklistID"
+        },
+        {
+            "eventId": "awPanel.reveal",
+            "action": "getChecklistTypes"
+        },
+        {
+            "eventId": "callDataProvider",
+            "action": "showChecklistTypeList"
+        },
+        {
+            "eventId": "callDataProvider",
+            "action": "callDataProviderAction"
+        },
+        {
+            "eventId": "createRelationWithPSP",
+            "action": "createRelationWithPSP"
+        },
+        {
+            "eventId": "createRelationWithVendor",
+            "action": "createRelationWithVendor"
+        }
+    ],
+    "conditions": {
+        "apm0CreateRelationWithAuditCondition":{
+            "expression": "(subPanelContext.selectionData && subPanelContext.selectionData.value && subPanelContext.selectionData.value.selected[0] && subPanelContext.selectionData.value.selected[0].modelType.typeHierarchyArray.indexOf('Qa0QualityAudit') > -1) && (subPanelContext.pageContext.primaryActiveTabId === 'tc_xrt_Quality_Audit')"
+        }
+    },
+    "functions": {
+        "findSubBusinessObjectsAndInvokeSearch": {
+            "functionName": "findSubBusinessObjectsAndInvokeSearch",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getLOVList": {
+            "functionName": "getLOVList",
+            "parameters": [
+                "{{data}}"
+            ]
+        },
+        "getCreateInputDataForRootLevelQualityChecklist":{
+            "functionName": "getCreateInputDataForRootLevelQualityChecklist",
+            "parameters":[
+                "{{data}}",
+                "{{ctx}}"
+            ]
+        },
+        "getIsReleased":{
+            "functionName": "getIsReleased",
+            "parameters":[
+                "{{ctx}}"
+            ]
+        }
+    },
+    "i18n": {
+        "apm0Add": [
+            "ApqpProgramMgmtMessages"
+        ],
+        "checklistType":[
+            "ApqpProgramMgmtMessages"
+        ],
+        "noResultsFound": ["InboxMessages"]
+    }
+}

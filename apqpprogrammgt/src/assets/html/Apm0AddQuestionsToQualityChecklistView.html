@@ -1,0 +1,23 @@
+
+<aw-command-panel caption="i18n.apm0Add" context="{...subPanelContext}">
+    <div class="aw-layout-flexColumn" show-when="data.activeState.value.activeView==='AddObjectPrimarySub'">
+        <aw-form name="commandPanelForm">
+            <aw-add
+                target-object=""
+                visible-tabs="new"
+                include-types="Apm0QualityChecklist"
+                auto-select-on-unique-type="true"
+                add-panel-state="fields.addPanelState"
+                type-filter="Apm0QualityChecklist"
+                active-state="data.activeState"
+                xrt-state="data.xrtState"
+                sub-panel-context="{ ...subPanelContext, supportsAdvancedSearch:false }"
+                edit-handler="editHandlers.addPanelEditHandler"></aw-add>
+        </aw-form>
+        <aw-panel-footer>
+            <aw-button default="true" action="createObjects" enable-when="formProp.attributes.valid">
+                <aw-i18n>i18n.apm0Add</aw-i18n>
+            </aw-button>
+        </aw-panel-footer>
+    </div>
+ </aw-command-panel>

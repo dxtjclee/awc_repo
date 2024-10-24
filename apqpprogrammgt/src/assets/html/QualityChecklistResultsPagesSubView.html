@@ -1,0 +1,12 @@
+<aw-panel-body>
+    <aw-panel-section>
+        <aw-label prop="data.keyWordLabel"></aw-label>
+    </aw-panel-section>
+    <aw-expandable-search-result-filter filters="ctx.searchIncontextInfo"></aw-expandable-search-result-filter>
+    <span exist-when="ctx.isChecklistSpecFound">{{i18n.Apm0NoChecklistSpecFoundMessage}}</span>
+    <div id="resultFilterPanel" exist-when="data.selectedTab.tabKey === 'results' || data.previousView === 'Apm0AddQualityChecklistSub' && data.dataProviders.performSearch.viewModelCollection.totalFound > 0">
+        <aw-list dataprovider="data.dataProviders.checklistTypeListProvider" visible-when="data.searchResults != undefined && data.searchResults">
+            <aw-default-cell vmo="item"></aw-default-cell>
+        </aw-list>
+    </div>
+</aw-panel-body>

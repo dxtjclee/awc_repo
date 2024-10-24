@@ -1,0 +1,137 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-command-panel.directive",
+        "js/aw-panel-footer.directive",
+        "js/visible-when.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/aw-xrt.directive"
+    ],
+    "data": {
+        "selectedType":
+        {
+            "type": "STRING",
+            "dbValue": "Apm0RYG"
+        },
+        "xrtState": {
+            "initialValues": {},
+            "meta": {
+                "xrtVMO": {
+                    "field": "true",
+                    "type": "viewModelObject"
+                }
+            }
+        }
+    },
+    "editHandlers": {
+        "addPanelEditHandler": {
+            "context": "CREATE_PANEL_CONTEXT",
+            "dataSource": {
+                "xrtVMO": "{{data.xrtState}}"
+            }
+        }
+    },
+    "actions": {
+        "createObjects": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2008-06-DataManagement",
+            "method": "createObjects",
+            "inputData": {
+                "input": "{{function:getCreateInputDataForRYG}}"
+            },
+            "outputData": {
+                "createdObject": "output[0].objects[0]",
+                "serviceData": "ServiceData",
+                "selectedNodes": "output[0].objects"
+            },
+            "events": {
+                "success": [{
+                    "name": "apm0.createRelation"
+                }]
+            },
+            "deps": "js/Apm0ApqpProgramMgtService"
+        },
+        "createRelation": {
+            "actionType": "TcSoaService",
+            "serviceName": "Core-2006-03-DataManagement",
+            "method": "createRelations",
+            "inputData": {
+                "input": [{
+                    "primaryObject": "{{ctx.xrtSummaryContextObject}}",
+                    "secondaryObject": "{{data.createdObject}}",
+                    "relationType": "apm0RatedReference",
+                    "clientId": "",
+                    "userData": {
+                        "uid": "AAAAAAAAAAAAAA",
+                        "type": "unknownType"
+                    }
+                }]
+            },
+            "events": {
+                "success": [{
+                        "name": "apm0.refereshLocation"
+                    },
+                    {
+                        "name": "cdm.relatedModified",
+                        "eventData": {
+                            "relatedModified": [
+                                "{{ctx.xrtSummaryContextObject}}"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "actionMessages": {
+                "failure": [
+                    {
+                        "message": "SOAFailureMsg"
+                    }
+                ]
+            }
+        },
+        "refereshLocation": {
+            "actionType": "Event",
+            "method": "Event",
+            "inputData": {
+                "events": [{
+                        "name": "complete",
+                        "eventData": {
+                            "source": "toolAndInfoPanel"
+                        }
+                    }
+
+                ]
+            }
+        }
+    },
+    "messages": {
+        "SOAFailureMsg": {
+            "messageType": "ERROR",
+            "messageText": "{{errorCode}}"
+        }
+    },
+    "functions": {
+        "getCreateInputDataForRYG": {
+            "functionName": "getCreateInputDataForRYG",
+            "parameters": [
+                "{{data}}",
+                "{{editHandlers.addPanelEditHandler}}"
+            ]
+        }
+    },
+    "onEvent": [
+        {
+            "eventId": "apm0.createRelation",
+            "action": "createRelation"
+        },
+        {
+            "eventId": "apm0.refereshLocation",
+            "action": "refereshLocation"
+        }
+    ],
+
+    "i18n": {
+        "apm0Add": ["ApqpProgramMgmtMessages"]
+    }
+}

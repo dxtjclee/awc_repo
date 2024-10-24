@@ -1,0 +1,45 @@
+{
+    "schemaVersion": "1.0.0",
+    "data": {
+        "_showInProgressQualityProjectsProvider": {
+            "breadcrumbConfig": {
+                "vm": "AwSearchBreadcrumb"
+            },
+            "viewModes": {
+                "ListView": {
+                    "primaryWorkArea": "list"
+                },
+                "SummaryView": {
+                    "primaryWorkArea": "list",
+                    "secondaryWorkArea": true
+                }
+            },
+            "defaultDisplayMode": "SummaryView",
+            "priority": 2,
+            "label": {
+                "source": "/i18n/ApqpProgramMgmtMessages",
+                "key": "inProgress"
+            },
+            "clientScopeURI": "",
+            "nameToken": "com.siemens.splm.client.qualityCenterManager:showInProgressQualityProjects",
+            "viewBase": "Awp0Base",
+            "context": {
+                "search": {
+                    "provider": "Apm0ApqpBaseProvider",
+                    "criteria": {
+                        "objectType": "Prg0AbsPlan",
+                        "state": "In Progress"
+                    },
+                    "isFilteringEnabled": true,
+                    "sortType": "Priority",
+                    "chartTitle": {
+                        "source": "/i18n/ApqpProgramMgmtMessages",
+                        "key": "FilterResultsChartTitle"
+                    },
+                    "maxToLoad": 250,
+                    "maxToReturn": 250
+                }
+            }
+        }       
+    }
+}

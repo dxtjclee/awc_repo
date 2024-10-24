@@ -1,0 +1,186 @@
+{
+    "schemaVersion": "1.0.0",
+    "imports": [
+        "js/aw-list.directive",
+        "js/aw-default-cell.directive",
+        "js/aw-command-panel.directive",
+        "js/aw-panel.directive",
+        "js/aw-panel-body.directive",
+        "js/aw-panel-footer.directive",
+        "js/aw-button.directive",
+        "js/aw-i18n.directive",
+        "js/aw-in-content-search-box.directive"
+    ],
+    "data": {
+        "searchBox": {
+            "displayName": "",
+            "type": "STRING",
+            "isRequired": "true",
+            "dbValue": "{{ctx.awp0SummaryReports.reportFilter}}",
+            "dispValue": "{{ctx.awp0SummaryReports.reportFilter}}"
+        }
+    },
+    "actions": {
+        "doSearchKeepFilter": {
+            "actionType": "JSFunction",
+            "method": "raiseEventToPerformFiltering",
+            "inputData": {
+                "filterVal": "{{data.searchBox.dbValue}}"
+            },
+            "deps": "js/Apm0PropertyUpdateService"
+        },
+        "reveal": {
+            "actionType": "dataProvider",
+            "method": "listDataProvider"
+        },
+        "getreportdefinitionList": {
+            "actionType": "TcSoaService",
+            "serviceName": "Reports-2008-06-CrfReports",
+            "method": "getReportDefinitions",
+            "inputData": {
+                "inputCriteria": [ {
+                        "category": "",
+                        "source": "Teamcenter"
+                    },
+                    {
+                        "category": "",
+                        "source": "Office Template"
+                    },
+                    {
+                        "category": "",
+                        "source": "Active Workspace"
+                    }
+                ]
+            },
+            "policy": {
+                "types": [ {
+                    "name": "ReportDefinition",
+                    "properties": [ {
+                            "name": "rd_style_sheets",
+                            "modifiers": [ {
+                                "name": "withProperties",
+                                "Value": "true"
+                            } ]
+                        },
+                        {
+                            "name": "rd_source"
+                        },
+                        {
+                            "name": "rd_name"
+                        },
+                        {
+                            "name": "rd_type"
+                        },
+                        {
+                            "name": "rd_id"
+                        },
+                        {
+                            "name": "rd_parameters"
+                        },
+                        {
+                            "name": "rd_param_values"
+                        },
+                        {
+                            "name": "fnd0IsAsync"
+                        },
+                        {
+                            "name": "owning_user"
+                        },
+                        {
+                            "name": "creation_date"
+                        },
+                        {
+                            "name": "rd_class"
+                        }
+                    ]
+                } ]
+            },
+            "outputData": {
+                "ctx.chartProvider": null,
+                "searchResults": "{{function:getReportDefinitionVal}}"
+            },
+            "deps": "js/Apm0PropertyUpdateService"
+        },
+        "addSelectedReportToQPMDashboard": {
+            "actionType": "JSFunction",
+            "method": "addSelectedReportToDashboard",
+            "deps": "js/showMyDashboardService",
+            "inputData": {
+                "selectedReportDef": "{{data.dataProviders.listDataProvider.selectedObjects[0]}}",
+                "preference": "{{data.preference_Name}}"
+            },
+            "actionMessages": {
+                "success": [ {
+                    "message": "addToDashboardSucessMessage"
+                } ]
+            },
+            "events": {
+                "success": [ {
+                    "name": "complete",
+                    "eventData": {
+                        "source": "toolAndInfoPanel"
+                    }
+                } ]
+            }
+        },
+        "getPreferenceForQPMDashboard": {
+            "actionType": "JSFunction",
+            "method": "getPreferenceForQPMDashboard",
+            "inputData": {
+                "data": "{{data}}"
+            },
+            "outputData": {
+                "preference_Name": "preference_Name"
+            },
+            "events": {
+                "success": [ {
+                    "name": "apm0.reveal"
+                } ]
+            },
+            "deps": "js/Apm0PropertyUpdateService"
+        }
+    },
+    "dataProviders": {
+        "listDataProvider": {
+            "action": "getreportdefinitionList",
+            "response": "{{data.searchResults.reportdefinitions}}",
+            "totalFound": "{{data.searchResults.reportdefinitions.length}}",
+            "selectionModelMode": "single"
+        }
+    },
+    "functions": {
+        "getReportDefinitionVal": {
+            "functionName": "getReportDefinitionVal",
+            "parameters": [
+                "APM0_QPMDashboard_TC_Report"
+            ]
+        }
+    },
+    "onEvent": [ {
+            "eventId": "Apm0AddReportToQPMPanel.contentLoaded",
+            "action": "getPreferenceForQPMDashboard"
+        },
+        {
+            "eventId": "apm0.reveal",
+            "action": "reveal"
+        }
+    ],
+    "i18n": {
+        "apm0Add": [
+            "ApqpProgramMgmtMessages"
+        ],
+        "addReportToDashboard": [
+            "ApqpProgramMgmtMessages"
+        ],
+        "addToDashboardSuccessMsg": [ "ReportChartMessages" ]
+    },
+    "messages": {
+        "addToDashboardSucessMessage": {
+            "messageType": "INFO",
+            "messageText": "{{i18n.addToDashboardSuccessMsg}}",
+            "messageTextParams": [
+                "{{data.dataProviders.listDataProvider.selectedObjects[0].props.rd_name.dbValues[0]}}"
+            ]
+        }
+    }
+}
